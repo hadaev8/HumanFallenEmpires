@@ -1,0 +1,310 @@
+#	Example:
+# 
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+#	Example:
+# 
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+down_primitive_teh_lvl = {
+	owner = {
+		switch = {
+			trigger = has_country_flag
+			
+			bronze_age = { }
+			
+			iron_age = {
+				remove_country_flag = iron_age
+				set_country_flag = bronze_age
+				set_primitive_age = bronze_age
+				}
+					
+			late_medieval_age = {
+				remove_country_flag = late_medieval_age
+				set_country_flag = iron_age
+				set_primitive_age = iron_age
+				}
+							
+			renaissance_age = {
+				remove_country_flag = renaissance_age
+				set_country_flag = late_medieval_age
+				set_primitive_age = late_medieval_age
+				}
+			
+			steam_age = {
+				remove_country_flag = steam_age
+				set_country_flag = renaissance_age
+				set_primitive_age = renaissance_age
+				}
+				
+			industrial_age = {
+				remove_country_flag = industrial_age
+				set_country_flag = steam_age
+				set_primitive_age = steam_age
+				}
+						
+			machine_age = {
+				remove_country_flag = machine_age
+				set_country_flag = industrial_age
+				set_primitive_age = industrial_age
+				}
+						
+			atomic_age = {
+				remove_country_flag = atomic_age
+				set_country_flag = machine_age
+				set_primitive_age = machine_age
+				}
+						
+			early_space_age = {
+				remove_country_flag = early_space_age
+				set_country_flag = atomic_age
+				set_primitive_age = atomic_age
+				}
+			}
+		}
+	}
+
+up_primitive_teh_lvl = {
+	owner = {
+		switch = {
+			trigger = has_country_flag
+			
+			bronze_age = {
+				remove_country_flag = bronze_age
+				set_country_flag = iron_age
+				set_primitive_age = iron_age
+			}
+			
+			iron_age = {
+				remove_country_flag = iron_age
+				set_country_flag = late_medieval_age
+				set_primitive_age = late_medieval_age
+				}
+					
+			late_medieval_age = {
+				remove_country_flag = late_medieval_age
+				set_country_flag = renaissance_age
+				set_primitive_age = renaissance_age
+				}
+							
+			renaissance_age = {
+				remove_country_flag = renaissance_age
+				set_country_flag = steam_age
+				set_primitive_age = steam_age
+				}
+			
+			steam_age = {
+				remove_country_flag = steam_age
+				set_country_flag = industrial_age
+				set_primitive_age = industrial_age
+				}
+				
+			industrial_age = {
+				remove_country_flag = industrial_age
+				set_country_flag = machine_age
+				set_primitive_age = machine_age
+				}
+						
+			machine_age = {
+				remove_country_flag = machine_age
+				set_country_flag =  atomic_age
+				set_primitive_age =  atomic_age
+				}
+						
+			atomic_age = {
+				remove_country_flag = atomic_age
+				set_country_flag = early_space_age
+				set_primitive_age = early_space_age
+				}
+						
+			early_space_age = {
+				remove_country_flag = early_space_age
+				set_country_type = default
+				change_country_flag = random
+				if = {
+					limit = { is_species_class = MAM }
+					set_graphical_culture = mammalian_01
+				}
+				if = {
+					limit = { is_species_class = REP }
+					set_graphical_culture = reptilian_01
+				}
+				if = {
+					limit = { is_species_class = AVI }
+					set_graphical_culture = avian_01
+				}
+				if = {
+					limit = { is_species_class = ART }
+					set_graphical_culture = arthropoid_01
+				}
+				if = {
+					limit = { is_species_class = MOL }
+					set_graphical_culture = molluscoid_01
+				}
+				if = {
+					limit = { is_species_class = FUN }
+					set_graphical_culture = fungoid_01
+				}
+				change_government = random
+				set_name = random
+				if = {
+					limit = {
+						home_planet = {
+							has_observation_outpost = yes
+						}
+					}
+					home_planet = {
+						observation_outpost_owner = {
+							country_event = { id = primitive.17 }
+						}
+					}
+				}
+				add_minerals = 1000 # enough for a spaceport and then some
+				add_energy = 500
+				capital_scope = {
+					random_tile = {
+						limit = { 
+							has_grown_pop = yes 
+							num_adjacent_tiles > 3 
+						}
+						set_building = "building_capital_2"		
+					}
+					random_tile = {
+						limit = { 
+							has_grown_pop = yes 
+							NOT = { has_building = "building_capital_2" }
+							NOT = { has_building = "building_hydroponics_farm_1" }
+							NOT = { has_building = "building_mining_network_1" }
+							NOT = { has_building = "building_power_plant_1" }
+						}
+						set_building = "building_hydroponics_farm_1"	
+						add_resource = {
+							resource = food
+							amount = 1
+							replace = yes
+						}					
+					}				
+					random_tile = {
+						limit = { 
+							has_grown_pop = yes 
+							NOT = { has_building = "building_capital_2" }
+							NOT = { has_building = "building_hydroponics_farm_1" }
+							NOT = { has_building = "building_mining_network_1" }
+							NOT = { has_building = "building_power_plant_1" }
+						}
+						set_building = "building_mining_network_1"	
+						add_resource = {
+							resource = minerals
+							amount = 1
+							replace = yes
+						}				
+					}
+					random_tile = {
+						limit = { 
+							has_grown_pop = yes 
+							NOT = { has_building = "building_capital_2" }
+							NOT = { has_building = "building_hydroponics_farm_1" }
+							NOT = { has_building = "building_mining_network_1" }
+							NOT = { has_building = "building_power_plant_1" }
+						}
+						set_building = "building_power_plant_1"	
+						add_resource = {
+							resource = energy
+							amount = 2
+							replace = yes
+						}				
+					}
+					random_tile = {
+						limit = { 
+							has_grown_pop = yes 
+							NOT = { has_building = "building_capital_2" }
+							NOT = { has_building = "building_hydroponics_farm_1" }
+							NOT = { has_building = "building_mining_network_1" }
+							NOT = { has_building = "building_power_plant_1" }
+						}
+						set_building = "building_power_plant_1"	
+						add_resource = {
+							resource = energy
+							amount = 1
+							replace = yes
+						}				
+					}				
+					every_planet_army = {
+						remove_army = yes
+					}
+					create_army = {
+						name = random
+						owner = PREV
+						species = owner_main_species
+						type = "defense_army"
+					}			
+				}
+				random_owned_ship = {
+					limit = { is_ship_size = primitive_space_station }
+					fleet = { destroy_fleet = THIS }
+				}
+			}
+		}
+	}
+}
+
+clean_vanilla_traits = {
+	modify_species = { species = root remove_trait = trait_agrarian }
+	modify_species = { species = root remove_trait = trait_thrifty }
+	modify_species = { species = root remove_trait = trait_industrious }
+	modify_species = { species = root remove_trait = trait_intelligent }
+	modify_species = { species = root remove_trait = trait_natural_engineers }
+	modify_species = { species = root remove_trait = trait_natural_physicists }
+	modify_species = { species = root remove_trait = trait_natural_sociologists }
+	modify_species = { species = root remove_trait = trait_adaptive }
+	modify_species = { species = root remove_trait = trait_extremely_adaptive }
+	modify_species = { species = root remove_trait = trait_nonadaptive }
+	modify_species = { species = root remove_trait = trait_rapid_breeders }
+	modify_species = { species = root remove_trait = trait_slow_breeders }
+	modify_species = { species = root remove_trait = trait_talented }
+	modify_species = { species = root remove_trait = trait_quick_learners }
+	modify_species = { species = root remove_trait = trait_slow_learners }
+	modify_species = { species = root remove_trait = trait_very_strong }
+	modify_species = { species = root remove_trait = trait_strong }
+	modify_species = { species = root remove_trait = trait_weak }
+	modify_species = { species = root remove_trait = trait_nomadic }
+	modify_species = { species = root remove_trait = trait_sedentary }
+	modify_species = { species = root remove_trait = trait_communal }
+	modify_species = { species = root remove_trait = trait_solitary }
+	modify_species = { species = root remove_trait = trait_charismatic }
+	modify_species = { species = root remove_trait = trait_repugnant }
+	modify_species = { species = root remove_trait = trait_uplifted }
+	modify_species = { species = root remove_trait = trait_conformists }
+	modify_species = { species = root remove_trait = trait_deviants }
+	modify_species = { species = root remove_trait = trait_venerable }
+	modify_species = { species = root remove_trait = trait_enduring }
+	modify_species = { species = root remove_trait = trait_fleeting }
+	modify_species = { species = root remove_trait = trait_decadent }
+	modify_species = { species = root remove_trait = trait_resilient }
+	modify_species = { species = root remove_trait = trait_deviants }
+	modify_species = { species = root remove_trait = trait_trait_fleeting }
+	modify_species = { species = root remove_trait = trait_robotic_1 }
+	modify_species = { species = root remove_trait = trait_robotic_2 }
+	modify_species = { species = root remove_trait = trait_robotic_3 }
+	modify_species = { species = root remove_trait = trait_mechanical }
+	}
