@@ -128,17 +128,24 @@ event = {
 		last_created_species = { save_event_target_as = human_fallen_empire_varelse_species }
 		if = {
 			limit = {
-				NOT = { any_country = { has_country_flag = future_fallen_empire } }
-			}
+				nor = {
+				has_global_flag = future_spawned
+				any_country = { has_country_flag = future_fallen_empire }
+					}
+				}
 			random_rim_system  = {
 				limit = { has_owner = no }
 				spawn_system = { initializer = "future_fallen_empire" }
 			}
+			set_global_flag = future_spawned
 		}
 		if = {
 			limit = {
-				NOT = { any_country = { has_country_flag = egypt_fallen_empire } }
-			}
+				nor = {
+				has_global_flag = egypt_spawned
+				any_country = { has_country_flag = egypt_fallen_empire }
+					}
+				}
 			random_system = {
 				limit = { has_owner = no }
 				save_event_target_as = ra_home
@@ -217,6 +224,7 @@ event = {
 				limit = { has_owner = no }
 				spawn_system = { initializer = "egypt_fallen_empire_ahet" }
 			}
+			set_global_flag = egypt_spawned
 		}
 		random_country = {
 			limit = { has_country_flag = egypt_fallen_empire }
@@ -267,13 +275,13 @@ country_event = {
 #	immediate = {
 #		every_owned_planet = {
 #		every_tile = {
-#		set_blocker = tb_human_fallen_empire_radioactive_wasteland
-#		}
+#			set_blocker = tb_human_fallen_empire_radioactive_wasteland
+#			}
 #		}
 #	}
 #}
 
-## contact
+## contact with egypt
 ship_event  = {
 	id = human_fallen_empire.4
 	hide_window = yes
@@ -283,24 +291,170 @@ ship_event  = {
 		from = {
 			exists = space_owner 
 			space_owner = {
-				is_country_type = human_fallen_empire
-						}
-					}
+				has_country_flag = egypt_fallen_empire
+				not = { has_global_flag = egypt_in_expansion }
 				}
-
-	immediate = {
-		from = { 
-			space_owner = {
-				establish_communications = fromfrom
-					}
-				}
-		fromfrom = {
-			
-			}
 			}
 		}
 
-				
+	immediate = {
+		from = {
+			space_owner = {
+				establish_communications = fromfrom
+				save_event_target_as = egypt_empire
+					}
+				}
+		fromfrom = {
+			if = {
+				limit = {
+					is_ai = no
+					not = {	has_global_flag = egypt_in_expansion }
+					}
+				country_event = {
+					id = human_fallen_empire.5
+							}
+						}
+					}
+				}
+			}
+
+
+# Incoming Transmission
+# Main dialoge egypt
+country_event = {
+	id = human_fallen_empire.5
+	title = TRANSMISSION
+	desc = "human_fallen_empire.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		portrait = event_target:egypt_empire
+		planet_background = event_target:egypt_empire
+		graphical_culture = event_target:egypt_empire
+		city_level = event_target:egypt_empire
+		room = event_target:egypt_empire
+	}
+	
+	immediate = {
+		
+	}
+	
+	option = {
+		name = human_fallen_empire.5.a
+		response_text = human_fallen_empire.5.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.b
+		response_text = human_fallen_empire.5.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.c
+		response_text = human_fallen_empire.5.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.e
+		response_text = human_fallen_empire.e.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.d
+		response_text = human_fallen_empire.d.response
+	}
+}
+
+## contact with future
+ship_event  = {
+	id = human_fallen_empire.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			exists = space_owner 
+			space_owner = {
+				has_country_flag = future_fallen_empire
+				not = { has_global_flag = future_in_expansion }
+				}
+			}
+		}
+
+	immediate = {
+		from = {
+			space_owner = {
+				establish_communications = fromfrom
+				save_event_target_as = future_empire
+					}
+				}
+		fromfrom = {
+			if = {
+				limit = {
+					is_ai = no
+					not = {	has_global_flag = future_in_expansion }
+					}
+				country_event = {
+					id = human_fallen_empire.7
+							}
+						}
+					}
+				}
+			}
+
+
+# Incoming Transmission
+# Main dialoge future
+country_event = {
+	id = human_fallen_empire.7
+	title = TRANSMISSION
+	desc = "human_fallen_empire.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		portrait = event_target:egypt_empire
+		planet_background = event_target:egypt_empire
+		graphical_culture = event_target:egypt_empire
+		city_level = event_target:egypt_empire
+		room = event_target:egypt_empire
+	}
+	
+	immediate = {
+		
+	}
+	
+	option = {
+		name = human_fallen_empire.5.a
+		response_text = human_fallen_empire.5.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.b
+		response_text = human_fallen_empire.5.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.c
+		response_text = human_fallen_empire.5.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.e
+		response_text = human_fallen_empire.e.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = human_fallen_empire.5.d
+		response_text = human_fallen_empire.d.response
+	}
+}
+
 ## egypt is in expansion
 country_event = {
 	id = human_fallen_empire.10
@@ -315,7 +469,7 @@ country_event = {
 			is_country_type = fallen_empire
 			is_country_type = human_fallen_empire
 			}
-		fleet_power > 50000
+		fleet_power > 30000
 		}
 	immediate = {
 		random_country = {
@@ -364,6 +518,10 @@ country_event = {
 				pop = {	enslave_pop = yes }
 					}
 				}
+		set_global_flag = egypt_in_expansion
+		every_country = {
+			establish_communications = this
+			}
 		every_country = {
 			limit = { is_ai = no }
 			country_event = {
@@ -385,7 +543,10 @@ country_event = {
 	
 	picture_event_data = {
 		portrait = event_target:egypt_species
-		
+		planet_background = event_target:egypt_species
+		graphical_culture = event_target:egypt_species
+		city_level = event_target:egypt_species
+		room = event_target:egypt_species
 	}
 	
 	immediate = {
@@ -394,27 +555,7 @@ country_event = {
 	
 	option = {
 		name = human_fallen_empire.5.a
-		response_text = human_fallen_empire.5.a.response
 		is_dialog_only = yes
-	}
-	option = {
-		name = human_fallen_empire.5.b
-		response_text = human_fallen_empire.5.b.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = human_fallen_empire.5.c
-		response_text = human_fallen_empire.5.c.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = human_fallen_empire.5.e
-		response_text = human_fallen_empire.e.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = human_fallen_empire.5.d
-		response_text = human_fallen_empire.d.response
 	}
 }
 
@@ -474,13 +615,17 @@ country_event = {
 			option = first_contact_attack_allowed
 			cooldown = no
 			}
+		set_global_flag = future_in_expansion
+		every_country = {
+			establish_communications = this
+			}
 		every_country = {
 			limit = { is_ai = no }
 			country_event = {
 					id = human_fallen_empire.15
 				}
 			}
-		save_event_target_as = egypt_empire
+		save_event_target_as = future_empire
 	}
 }
 
@@ -521,7 +666,7 @@ country_event = {
 	}
 }
 
-## meeting
+
 ## varelse section
 ## varlse colony anomaly
 country_event = {
@@ -553,9 +698,10 @@ planet_event = {
 				is_ai = no
 			}
 		}
-		owner = {
-			is_country_type = primitive
-			}
+		has_planet_flag = varelse_colony
+		#owner = {
+		#	is_country_type = primitive
+		#	}
 		}
 	mean_time_to_happen = {
 		months = 24
@@ -630,7 +776,7 @@ country_event = {
 					}
 				}
 	
-	option = {																			#nothing
+	option = {																					#nothing
 		name = "observation.11.a"
 	}
 }
@@ -730,15 +876,12 @@ country_event = {
 	
 	option = {
 		name = "observation.11.a"
-		hidden_effect = {
-			country_event = { id = observation.12 days = 12 random = 4 }
 			add_monthly_resource_mult = {
 				resource = engineering_research
 				value = @tier2researchreward
 				min = @tier2researchmin
 				max = @tier2researchmax
 			}
-		}
 	}	
 }
 
