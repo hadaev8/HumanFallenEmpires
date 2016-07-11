@@ -128,24 +128,24 @@ event = {
 		last_created_species = { save_event_target_as = human_fallen_empire_varelse_species }
 		if = {
 			limit = {
-				nor = {
-				has_global_flag = future_spawned
-				any_country = { has_country_flag = future_fallen_empire }
-					}
-				}
+				not = { has_global_flag = future_spawned }
+			}
 			random_rim_system  = {
 				limit = { has_owner = no }
 				spawn_system = { initializer = "future_fallen_empire" }
+			}
+			random_country = {
+				limit = { has_country_flag = future_fallen_empire }
+				country_event = {
+					id = human_fallen_empire.3
+				}
 			}
 			set_global_flag = future_spawned
 		}
 		if = {
 			limit = {
-				nor = {
-				has_global_flag = egypt_spawned
-				any_country = { has_country_flag = egypt_fallen_empire }
-					}
-				}
+				not = {	has_global_flag = egypt_spawned }
+			}
 			random_system = {
 				limit = { has_owner = no }
 				save_event_target_as = ra_home
@@ -159,6 +159,11 @@ event = {
 				min_distance = 10
 				max_distance = 20
 				initializer = "egypt_fallen_empire_gift"
+				}
+				spawn_system = {
+				min_distance = 10
+				max_distance = 20
+				initializer = "egypt_fallen_empire_ban"
 				}
 				random_system = {
 				limit = {
@@ -224,20 +229,14 @@ event = {
 				limit = { has_owner = no }
 				spawn_system = { initializer = "egypt_fallen_empire_ahet" }
 			}
-			set_global_flag = egypt_spawned
-		}
-		random_country = {
-			limit = { has_country_flag = egypt_fallen_empire }
+			random_country = {
+				limit = { has_country_flag = egypt_fallen_empire }
 				country_event = {
 					id = human_fallen_empire.2
 				}
 			}
-		random_country = {
-			limit = { has_country_flag = future_fallen_empire }
-				country_event = {
-					id = human_fallen_empire.3
-				}
-			}
+			set_global_flag = egypt_spawned
+		}
 	}
 }
 
@@ -312,11 +311,11 @@ ship_event  = {
 					}
 				country_event = {
 					id = human_fallen_empire.5
-							}
-						}
-					}
 				}
 			}
+		}
+	}
+}
 
 
 # Incoming Transmission
@@ -324,8 +323,24 @@ ship_event  = {
 country_event = {
 	id = human_fallen_empire.5
 	title = TRANSMISSION
-	desc = "human_fallen_empire.desc"
-	
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_country_flag
+
+					default = { text = anomaly.3127.desc.1 }
+					egp_step1 = { text = human_fallen_empire.5.desc.2 }
+					egp_step2 = { text = human_fallen_empire.5.desc.3 }
+					egp_step3 = { text = human_fallen_empire.5.desc.4 }
+					egp_step4 = { text = human_fallen_empire.5.desc.5 }
+					egp_stepbadend = { text = human_fallen_empire.5.desc.6 }
+				}
+			}
+		}
+	}
+
+	#show_sound = testtest
 	diplomatic = yes
 	
 	is_triggered_only = yes
@@ -344,27 +359,404 @@ country_event = {
 	
 	option = {
 		name = human_fallen_empire.5.a
-		response_text = human_fallen_empire.5.a.response
-		is_dialog_only = yes
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			or = {
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_xenophobe"
+			}
+		}
+		set_country_flag = egp_stepbadend
+		country_event = {
+			id = human_fallen_empire.5
+		}
 	}
 	option = {
-		name = human_fallen_empire.5.b
-		response_text = human_fallen_empire.5.b.response
-		is_dialog_only = yes
+		name = human_fallen_empire.5.a
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+			}
+			or = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+		set_country_flag = egp_step1
+		country_event = {
+			id = human_fallen_empire.5
+		}
 	}
 	option = {
-		name = human_fallen_empire.5.c
-		response_text = human_fallen_empire.5.c.response
-		is_dialog_only = yes
+		name = human_fallen_empire.5.a
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_xenophobe"
+			}
+			or = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+		}
+		set_country_flag = egp_step1
+		country_event = {
+			id = human_fallen_empire.5
+		}
 	}
 	option = {
-		name = human_fallen_empire.5.e
-		response_text = human_fallen_empire.e.response
-		is_dialog_only = yes
+		name = human_fallen_empire.5.a
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+		}
+		set_country_flag = egp_step1
+		country_event = {
+			id = human_fallen_empire.5
+		}
 	}
 	option = {
-		name = human_fallen_empire.5.d
-		response_text = human_fallen_empire.d.response
+		name = human_fallen_empire.5.a
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+			}
+			has_ethic = "ethic_fanatic_spiritualist"
+		}
+		set_country_flag = egp_step1
+		country_event = {
+			id = human_fallen_empire.5
+		}
+		#добавить плюс к отношениям
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			nor = {
+				has_country_flag = egp_step1
+				has_country_flag = egp_step2
+				has_country_flag = egp_step3
+				has_country_flag = egp_step4
+			}
+			has_ethic = "ethic_fanatic_militarist"
+			fleet_power > 20000
+		}
+		set_country_flag = egp_stepbadend
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_militarist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_xenophobe"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_materialist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_individualist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_pacifist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_xenophile"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_spiritualist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_collectivist"
+		}
+		remove_country_flag = egp_step1
+		set_country_flag = egp_step2
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			has_country_flag = human_1
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			has_country_flag = human_2
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			nor = {
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			species_portrait = human
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			nor = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			#тут надо поставить условие на встречу с людьми
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			nor = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			#тут надо поставить условие на посещение земли - тараканы
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			nor = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			#тут надо поставить условие на посещение земли - примитивные люди
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	##добавить фанатичного ксенофила спросить землю
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_militarist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_xenophobe"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_materialist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_individualist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_pacifist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_xenophile"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_spiritualist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step1
+			has_ethic = "ethic_collectivist"
+		}
+		remove_country_flag = egp_step3
+		set_country_flag = egp_step4
+		country_event = {
+			id = human_fallen_empire.5
+		}
 	}
 }
 
@@ -380,30 +772,30 @@ ship_event  = {
 			space_owner = {
 				has_country_flag = future_fallen_empire
 				not = { has_global_flag = future_in_expansion }
-				}
 			}
 		}
+	}
 
 	immediate = {
 		from = {
 			space_owner = {
 				establish_communications = fromfrom
 				save_event_target_as = future_empire
-					}
-				}
+			}
+		}
 		fromfrom = {
 			if = {
 				limit = {
 					is_ai = no
 					not = {	has_global_flag = future_in_expansion }
-					}
+				}
 				country_event = {
 					id = human_fallen_empire.7
-							}
-						}
-					}
 				}
 			}
+		}
+	}
+}
 
 
 # Incoming Transmission
@@ -476,10 +868,10 @@ country_event = {
 			limit = { has_country_flag = egypt_fallen_empire }
 			country_event = {
 					id = human_fallen_empire.11
-				}
 			}
 		}
 	}
+}
 
 country_event = {
 	id = human_fallen_empire.11
@@ -495,8 +887,8 @@ country_event = {
 			add_modifier = {
 				modifier = "egypt_fallen_empire_unkeep"
 				days = -1
-				}
 			}
+		}
 		country_remove_ethic = "ethic_fanatic_xenophobe"
 		country_add_ethic = "ethic_collectivist"
 		country_add_ethic = "ethic_xenophobe"
@@ -516,18 +908,18 @@ country_event = {
 					}
 				}
 				pop = {	enslave_pop = yes }
-					}
-				}
+			}
+		}
 		set_global_flag = egypt_in_expansion
 		every_country = {
 			establish_communications = this
-			}
+		}
 		every_country = {
 			limit = { is_ai = no }
 			country_event = {
-					id = human_fallen_empire.12
-				}
+				id = human_fallen_empire.12
 			}
+		}
 	}
 }
 
@@ -580,8 +972,8 @@ country_event = {
 			limit = { has_country_flag = future_fallen_empire }
 			country_event = {
 					id = human_fallen_empire.14
-				}
 			}
+		}
 	}
 }
 
@@ -599,8 +991,8 @@ country_event = {
 			add_modifier = {
 				modifier = "egypt_fallen_empire_unkeep"
 				days = -1
-				}
 			}
+		}
 		country_remove_ethic = "ethic_fanatic_xenophile"
 		country_add_ethic = "ethic_fanatic_militarist"
 		every_owned_pop = {
@@ -614,17 +1006,17 @@ country_event = {
 			policy = first_contact_protocol
 			option = first_contact_attack_allowed
 			cooldown = no
-			}
+		}
 		set_global_flag = future_in_expansion
 		every_country = {
 			establish_communications = this
-			}
+		}
 		every_country = {
 			limit = { is_ai = no }
 			country_event = {
 					id = human_fallen_empire.15
 				}
-			}
+		}
 		save_event_target_as = future_empire
 	}
 }
@@ -656,8 +1048,8 @@ country_event = {
 		trigger = { NOT = { has_country_flag = aaaa } }
 		set_country_flag = aaaa
 		country_event = {
-					id = human_fallen_empire.15
-				}
+			id = human_fallen_empire.15
+		}
 	}
 	option = {
 		name = human_fallen_empire.8.b
@@ -845,14 +1237,14 @@ country_event = {
 				every_tile = {
 					limit = { has_building = yes }
 					set_ruined = yes
-							}
-				random_pop = {
-					kill_pop = yes
-					}
-				random_pop = {
-					kill_pop = yes
-					}
 				}
+				random_pop = {
+					kill_pop = yes
+				}
+				random_pop = {
+					kill_pop = yes
+				}
+			}
 			add_monthly_resource_mult = {
 				resource = engineering_research
 				value = @tier2researchreward
@@ -881,7 +1273,7 @@ country_event = {
 				value = @tier2researchreward
 				min = @tier2researchmin
 				max = @tier2researchmax
-			}
+		}
 	}	
 }
 
@@ -973,7 +1365,7 @@ country_event = {
 
 ## pyramid
 planet_event = {
-	id = human_fallen_empire.31
+	id = human_fallen_empire.30
 	title = "colony.150.name"
 	desc = "colony.150.desc"
 	picture = GFX_evt_underground_civilization
@@ -1005,5 +1397,652 @@ planet_event = {
 	}
 	option = {
 		name = colony.150.b
+	}
+}
+
+## nothing
+planet_event = {
+	id = human_fallen_empire.31
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+## ra'ar story
+planet_event = {
+	id = human_fallen_empire.32
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		owner = { country_event = { id = human_fallen_empire.32 days = 10 } }
+	}
+}
+
+# Incoming Transmission
+country_event = {
+	id = human_fallen_empire.33
+	title = "country.256.name"
+	desc = "country.256.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+	
+	option = {
+		name = country.256.a
+		response_text = country.256.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = country.256.b
+		response_text = country.256.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = country.256.c
+		response_text = country.256.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = country.256.d
+		response_text = country.256.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = country.256.e
+		response_text = country.256.e.response
+	}
+}
+
+
+
+## obelisk
+planet_event = {
+	id = human_fallen_empire.34
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		owner = { country_event = { id = human_fallen_empire.34 days = 3 } }
+	}
+	option = {
+		name = INTERESTING
+	}
+}
+
+planet_event = {
+	id = human_fallen_empire.35
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		create_country = {
+			name = "need to rename"
+			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+			}
+		}
+		create_species = {
+			name = "Titans"
+			class = random
+			portrait = random
+			traits = random
+		}
+		create_army = {
+			name = "Enraged Guardian"
+			owner = last_created
+			species = last_created
+			type = "titanic_guardian_army"
+		}
+		create_army = {
+			name = "Enraged Titan"
+			owner = last_created
+			species = last_created
+			type = "titanic_assault_army"
+		}
+		create_army = {
+			name = "Enraged Titan"
+			owner = last_created
+			species = last_created
+			type = "titanic_assault_army"
+		}
+	}
+}
+
+## plague
+planet_event = {
+	id = human_fallen_empire.36
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		planet_event = { id = colony.2035 days = 15 }
+	}
+}
+
+## tomb
+planet_event = {
+	id = human_fallen_empire.37
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		random_list = {
+			50 = { add_modifier = { modifier = "human_fallen_empire_tomb_happy" days = 360 } }
+			50 = { add_modifier = { modifier = "human_fallen_empire_tomb_unhappy" days = 360 } }
+		}
+		##нужно добавить штраф к отношениям
+	}
+}
+
+## military warehouse
+planet_event = {
+	id = human_fallen_empire.40
+	title = "colony.150.name"
+	desc = "colony.150.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_mystic_reveal
+	location = ROOT
+	
+	trigger = {
+		not = { has_planet_flag = human_fallen_empire_military_warehouse_planet }
+		is_planet_class = pc_human_fallen_empire_memorial
+		has_owner = yes
+		owner = { is_ai = no }
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	#is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = human_fallen_empire_military_warehouse_planet
+	}
+	
+	option = {
+		name = colony.150.a
+		enable_special_project = {
+			name = "human_fallen_empire_military_warehouse_project"
+			location = this
+			owner = root
+		}
+	}
+	option = {
+		name = colony.150.b
+	}
+}
+
+## nothing
+planet_event = {
+	id = human_fallen_empire.41
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+## defense system
+planet_event = {
+	id = human_fallen_empire.42
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		add_modifier = { modifier = "human_fallen_empire_army_planet_defense_damage_mult" days = -1 }
+	}
+}
+
+## abandoned armory
+planet_event = {
+	id = human_fallen_empire.43
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		owner = {
+			add_modifier = { modifier = "human_fallen_empire_army_attack_damage_mult" days = -1 }
+		}
+	}
+}
+
+## Abandoned military Academy
+planet_event = {
+	id = human_fallen_empire.44
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		add_modifier = { modifier = "human_fallen_empire_army_academy" days = -1 }
+	}
+}
+
+## explosion of the warehouse scientist survived
+planet_event = {
+	id = human_fallen_empire.45
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+## explosion of the warehouse scientist wounded
+#planet_event = {
+#	id = human_fallen_empire.44
+#	title = "PROJECT_COMPLETE"
+#	desc = "colony.151.desc"
+#	picture = GFX_evt_archaeological_dig
+#	show_sound = event_airlock
+#	location = ROOT
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = INTERESTING
+#	}
+#}
+
+## explosion of the warehouse scientist dead
+ship_event = {
+	id = human_fallen_empire.46
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		kill_leader = {	type = scientist show_notification = no }
+	}
+}
+
+## scientific bonus
+planet_event = {
+	id = human_fallen_empire.47
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+## found cruiser
+planet_event = {
+	id = human_fallen_empire.50
+	title = "colony.150.name"
+	desc = "colony.150.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_mystic_reveal
+	location = ROOT
+
+	trigger = {
+		not = { has_planet_flag = human_fallen_empire_found_cruiser_planet }
+		is_planet_class = pc_human_fallen_empire_memorial
+		has_owner = yes
+		owner = { is_ai = no }
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	#is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = human_fallen_empire_found_cruiser_planet
+	}
+	
+	option = {
+		name = colony.150.a
+		enable_special_project = {
+			name = "human_fallen_empire_found_cruiser_project"
+			location = this
+			owner = root
+		}
+	}
+	option = {
+		name = colony.150.b
+	}
+}
+
+## nothing
+planet_event = {
+	id = human_fallen_empire.51
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+
+planet_event = {
+	id = human_fallen_empire.52
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+	option = {
+		name = INTERESTING
+		owner = {
+			add_modifier = { modifier = "human_fallen_empire_ship_weapon_range_mult" days = -1 }
+		}
+	}
+	option = {
+		name = INTERESTING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+## explosion of the cruiser
+planet_event = {
+	id = human_fallen_empire.53
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+## explosion of the cruiser scientist dead
+ship_event = {
+	id = human_fallen_empire.54
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		kill_leader = {	type = scientist show_notification = no }
+	}
+}
+
+## The cruiser has acquired a mind and became aggressive
+planet_event = {
+	id = human_fallen_empire.55
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		create_country = {
+			name = "Mad Cruiser"
+			type = faction
+		}
+		last_created_country = {
+			save_event_target_as = dimensional
+			create_fleet = { name = "Mad Cruiser"}
+			last_created_fleet = {
+				set_owner = prev
+				create_ship = {
+					name = random
+					design = "Death's Head"
+					graphical_culture = "mammalian_01"
+					prefix = no
+				}
+				set_location = root
+			}
+			set_faction_hostility = { set_hostile = yes }
+		}
+	}
+}
+
+## The cruiser has acquired a mind and became aggressive scientist dead
+ship_event = {
+	id = human_fallen_empire.56
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		kill_leader = {	type = scientist show_notification = no }
+		create_country = {
+			name = "Mad Cruiser"
+			type = faction
+		}
+		last_created_country = {
+			save_event_target_as = dimensional
+			create_fleet = { name = "Mad Cruiser"}
+			last_created_fleet = {
+				set_owner = prev
+				create_ship = {
+					name = random
+					design = "Death's Head"
+					graphical_culture = "mammalian_01"
+					prefix = no
+				}
+				set_location = root
+			}
+			set_faction_hostility = { set_hostile = yes }
+		}
+	}
+}
+
+## sputnik
+planet_event = {
+	id = human_fallen_empire.60
+	title = "colony.150.name"
+	desc = "colony.150.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_mystic_reveal
+	location = ROOT
+	
+	trigger = {
+		not = { has_planet_flag = human_fallen_empire_sputnik_planet }
+		is_planet_class = pc_human_fallen_empire_memorial
+		has_owner = yes
+		owner = { is_ai = no }
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	#is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = human_fallen_empire_sputnik_planet
+	}
+	
+	option = {
+		name = colony.150.a
+		enable_special_project = {
+			name = "human_fallen_empire_sputnik_project"
+			location = this
+			owner = root
+		}
+	}
+	option = {
+		name = colony.150.b
+	}
+}
+
+## nothing
+planet_event = {
+	id = human_fallen_empire.61
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+	}
+}
+
+## bonus to the sensors
+planet_event = {
+	id = human_fallen_empire.62
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		add_modifier = { modifier = "human_fallen_empire_army_attack_damage_mult" days = -1 }
+	}
+}
+
+## go to another events
+planet_event = {
+	id = human_fallen_empire.63
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		random_list = {
+			33 = { planet_event = { id = human_fallen_empire.30 } }
+			33 = { planet_event = { id = human_fallen_empire.40 } }
+			33 = { planet_event = { id = human_fallen_empire.50 } }
+		}
 	}
 }

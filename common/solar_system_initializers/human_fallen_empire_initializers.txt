@@ -130,7 +130,6 @@ egypt_fallen_empire = {
 					}
 			}
 			prevent_anomaly = yes
-		#	owner_species = { set_species_homeworld = this }
 			set_capital = yes
 			create_pop = {
 				species = owner_main_species
@@ -181,9 +180,6 @@ egypt_fallen_empire = {
 					ethos = owner
 				}
 			}
-			
-			
-			
 			random_tile = {
 				limit = { has_building = no has_blocker = no num_adjacent_tiles > 3 }
 				set_building = "building_capital_3"
@@ -2527,12 +2523,15 @@ egypt_fallen_empire_varelse = {
 						}
 						type = primitive
 					}
+					save_event_target_as = my_planet_homeworld
 					last_created_country = {
 						set_graphical_culture = industrial_01
 						set_country_flag = machine_age
 						set_primitive_age = machine_age
+						species = {
+							set_species_homeworld = event_target:my_planet_homeworld
+						}
 					}
-				#	owner_species = { set_species_homeworld = this }
 					set_planet_flag = varelse_colony
 					set_owner = last_created_country		
 					add_modifier = {
@@ -3081,6 +3080,64 @@ egypt_fallen_empire_memorial_04 = {
 	}
 }
 
+egypt_fallen_empire_ban = {
+	class = "rl_standard_stars"
+	
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	
+	change_orbit = 20
+	
+	planet = {
+		orbit_distance = 20
+		count = { min = 0 max = 3 }
+	}
+	
+	change_orbit = 20
+	
+	planet = {
+		#name = "Kaitain"
+		count = 1
+		orbit_distance = 10
+		class = "pc_gaia"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 25 }
+	#	tile_blockers = none
+		init_effect = {
+			add_modifier = {
+				modifier = "holy_planet"
+				days = -1
+			}
+		set_planet_flag = ban_planet
+		}
+	}
+	
+	planet = {
+		orbit_distance = 20
+		count = { min = 1 max = 4 }
+		
+		change_orbit = @base_moon_distance
+		
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	
+	planet = {
+		orbit_distance = 20
+		count = { min = 0 max = 2 }
+	}
+
+}
+
 future_fallen_empire = {
 	name = "Tartarus"
 	class = "rl_standard_stars"
@@ -3203,11 +3260,10 @@ future_fallen_empire = {
 					}
 					country_add_ethic = "ethic_fanatic_xenophile"
 					country_add_ethic = "ethic_individualist"
-					}
+				}
 				prevent_anomaly = yes
 				set_owner = last_created_country
 				set_capital = yes
-			#	owner_species = { set_species_homeworld = this }
 				random_tile = {
 					limit = { has_building = no has_blocker = no num_adjacent_tiles > 3 }
 					set_building = "building_capital_3"
@@ -4086,10 +4142,8 @@ future_fallen_empire = {
 						module = "solar_panel_network"
 					}
 				}
+			}
 		}
-		
-		}
-		
 	}
 	init_effect = {
 		every_system_planet = {
