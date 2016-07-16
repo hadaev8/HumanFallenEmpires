@@ -55,53 +55,53 @@ event = {
 			}
 			else = {
 				if = {
-				limit = { any_country = { has_country_flag = human_1 } }
-				random_country = {
-					limit = { has_country_flag = human_1 }
-					owner_species = { save_event_target_as = human_fallen_empire_egypt_species }
-					owner_species = { save_event_target_as = human_fallen_empire_future_species }
-				}
-				else = {
-				if = {
-					limit = { any_country = { is_ai = no species_portrait = human } }
+					limit = { any_country = { has_country_flag = human_1 } }
 					random_country = {
-						limit = { is_ai = no species_portrait = human }
-					owner_species = { save_event_target_as = human_fallen_empire_egypt_species }
-					owner_species = { save_event_target_as = human_fallen_empire_future_species }
-				}
-				else = {
-					create_species = {
-						name = Human
-						plural = Humans
-						class = "MAM"
-						portrait = "human_egypt_fallen_empire"
-						traits = {
-							ideal_planet_class = "pc_continental"
-							trait = trait_extremely_adaptive
-							trait = trait_slow_breeders
-							trait = trait_venerable
-							}
+						limit = { has_country_flag = human_1 }
+						owner_species = { save_event_target_as = human_fallen_empire_egypt_species }
+						owner_species = { save_event_target_as = human_fallen_empire_future_species }
+					}
+					else = {
+						if = {
+							limit = { any_country = { is_ai = no species_portrait = human } }
+							random_country = {
+								limit = { is_ai = no species_portrait = human }
+							owner_species = { save_event_target_as = human_fallen_empire_egypt_species }
+							owner_species = { save_event_target_as = human_fallen_empire_future_species }
 						}
-					last_created_species = { save_event_target_as = human_fallen_empire_egypt_species }
-					create_species = {
-						name = Human
-						plural = Humans
-						class = "MAM"
-						portrait = "human"
-						traits = {
-							ideal_planet_class = "pc_continental"
-							trait = trait_intelligent
-							trait = trait_thrifty
-							trait = trait_solitary
-							}
-						}
-					last_created_species = { save_event_target_as = human_fallen_empire_future_species }
+						else = {
+							create_species = {
+								name = Human
+								plural = Humans
+								class = "MAM"
+								portrait = "human_egypt_fallen_empire"
+								traits = {
+									ideal_planet_class = "pc_continental"
+									trait = trait_extremely_adaptive
+									trait = trait_slow_breeders
+									trait = trait_venerable
 									}
 								}
+							last_created_species = { save_event_target_as = human_fallen_empire_egypt_species }
+							create_species = {
+								name = Human
+								plural = Humans
+								class = "MAM"
+								portrait = "human"
+								traits = {
+									ideal_planet_class = "pc_continental"
+									trait = trait_intelligent
+									trait = trait_thrifty
+									trait = trait_solitary
+									}
+								}
+							last_created_species = { save_event_target_as = human_fallen_empire_future_species }
 							}
 						}
 					}
 				}
+			}
+		}
 		create_species = {
 			name = Ahet
 			class = random
@@ -110,8 +110,8 @@ event = {
 				ideal_planet_class = "pc_continental"
 				trait = trait_slow_breeders
 				trait = random_traits
-				}
 			}
+		}
 		last_created_species = { save_event_target_as = human_fallen_empire_ahet_species }
 		create_species = {
 			name = Varelse
@@ -123,15 +123,22 @@ event = {
 				trait = trait_natural_engineers
 				trait = trait_strong
 				trait = trait_repugnant
-				}
 			}
+		}
 		last_created_species = { save_event_target_as = human_fallen_empire_varelse_species }
 		if = {
 			limit = {
 				not = { has_global_flag = future_spawned }
 			}
 			random_rim_system  = {
-				limit = { has_owner = no }
+				limit = {
+					not = {
+						any_neighbor_system = {
+							exists = space_owner
+						}
+						exists = space_owner
+					}
+				}
 				spawn_system = { initializer = "future_fallen_empire" }
 			}
 			random_country = {
@@ -147,78 +154,85 @@ event = {
 				not = {	has_global_flag = egypt_spawned }
 			}
 			random_system = {
-				limit = { has_owner = no }
+				limit = {
+					not = {
+						any_neighbor_system = {
+							exists = space_owner
+						}
+						exists = space_owner
+					}
+				}
 				save_event_target_as = ra_home
 				spawn_system = { initializer = "egypt_fallen_empire" }
 				spawn_system = {
-				min_distance = 5
-				max_distance = 15
-				initializer = "egypt_fallen_empire_hope"
+					min_distance = 5
+					max_distance = 15
+					initializer = "egypt_fallen_empire_hope"
 				}
 				spawn_system = {
-				min_distance = 10
-				max_distance = 20
-				initializer = "egypt_fallen_empire_gift"
+					min_distance = 10
+					max_distance = 20
+					initializer = "egypt_fallen_empire_gift"
 				}
 				spawn_system = {
-				min_distance = 10
-				max_distance = 20
-				initializer = "egypt_fallen_empire_ban"
+					min_distance = 10
+					max_distance = 20
+					initializer = "egypt_fallen_empire_ban"
 				}
 				random_system = {
-				limit = {
-					distance = {
-						source = event_target:ra_home
-						min_distance = 30
-						max_distance = 100
+					limit = {
+						distance = {
+							source = event_target:ra_home
+							min_distance = 30
+							max_distance = 100
 						}
-					has_owner = no
+						has_owner = no
 					}
-				spawn_system = { initializer = "egypt_fallen_empire_memorial_01" }
+					spawn_system = { initializer = "egypt_fallen_empire_memorial_01" }
 				}
 				random_system = {
-				limit = {
-					distance = {
-						source = event_target:ra_home
-						min_distance = 50
-						max_distance = 150
+					limit = {
+						distance = {
+							source = event_target:ra_home
+							min_distance = 50
+							max_distance = 150
 						}
-					has_owner = no
+						has_owner = no
 					}
-				spawn_system = { initializer = "egypt_fallen_empire_memorial_02" }
+					spawn_system = { initializer = "egypt_fallen_empire_memorial_02" }
 				}
 				random_system = {
-				limit = {
-					distance = {
-						source = event_target:ra_home
-						min_distance = 80
-						max_distance = 200
+					limit = {
+						distance = {
+							source = event_target:ra_home
+							min_distance = 80
+							max_distance = 200
 						}
-					has_owner = no
+						has_owner = no
 					}
-				spawn_system = { initializer = "egypt_fallen_empire_memorial_03" }
+					spawn_system = { initializer = "egypt_fallen_empire_memorial_03" }
 				}
 				random_system = {
-				limit = {
-					distance = {
-						source = event_target:ra_home
-						min_distance = 120
-						max_distance = 250
+					limit = {
+						distance = {
+							source = event_target:ra_home
+							min_distance = 120
+							max_distance = 250
 						}
-					has_owner = no
+						has_owner = no
 					}
-				spawn_system = { initializer = "egypt_fallen_empire_memorial_04" }
+					spawn_system = { initializer = "egypt_fallen_empire_memorial_04" }
 				}
 				random_system = {
-				limit = {
-					distance = {
-						source = event_target:ra_home
-						min_distance = 200
-						max_distance = 300
+					limit = {
+						distance = {
+							source = event_target:ra_home
+							min_distance = 200
+							max_distance = 300
+							}
+						has_owner = no
 						}
-					has_owner = no
-					}
-				spawn_system = { initializer = "egypt_fallen_empire_varelse" }
+					spawn_system = { initializer = "egypt_fallen_empire_varelse" }
 				}
 			}
 			random_system = {
@@ -316,7 +330,6 @@ ship_event  = {
 		}
 	}
 }
-
 
 # Incoming Transmission
 # Main dialoge egypt
@@ -599,6 +612,28 @@ country_event = {
 		trigger = {
 			has_country_flag = egp_step2
 			nor = {
+				any_system_within_border = {
+					has_star_flag = sol
+				}
+				has_country_flag = human_1
+				has_country_flag = human_2
+			}
+			species_portrait = human
+		}
+		remove_country_flag = egp_step2
+		set_country_flag = egp_step3
+		country_event = {
+			id = human_fallen_empire.5
+		}
+	}
+	option = {
+		name = human_fallen_empire.5.a
+		trigger = {
+			has_country_flag = egp_step2
+			any_system_within_border = {
+				has_star_flag = sol
+			}
+			nor = {
 				has_country_flag = human_1
 				has_country_flag = human_2
 			}
@@ -636,7 +671,15 @@ country_event = {
 				has_country_flag = human_1
 				has_country_flag = human_2
 			}
-			#тут надо поставить условие на посещение земли - тараканы
+			any_system = {
+				has_star_flag = sol
+				has_star_flag = nuked_sol
+				is_surveyed = {
+					who = this
+					status = yes
+				}
+			}
+			#тут надо поставить условие на посещение земли - тараканы вроде готово
 		}
 		remove_country_flag = egp_step2
 		set_country_flag = egp_step3
@@ -797,7 +840,6 @@ ship_event  = {
 	}
 }
 
-
 # Incoming Transmission
 # Main dialoge future
 country_event = {
@@ -848,7 +890,7 @@ country_event = {
 }
 
 ## egypt is in expansion
-country_event = {
+event = {
 	id = human_fallen_empire.10
 	title = OK
 	desc = OK
@@ -857,17 +899,19 @@ country_event = {
 	fire_only_once = yes
 
     trigger = {
-		nor = {
-			is_country_type = fallen_empire
-			is_country_type = human_fallen_empire
+		any_country = {
+			nor = {
+				is_country_type = fallen_empire
+				is_country_type = human_fallen_empire
 			}
-		fleet_power > 30000
+			fleet_power > 30000
 		}
+	}
 	immediate = {
 		random_country = {
 			limit = { has_country_flag = egypt_fallen_empire }
 			country_event = {
-					id = human_fallen_empire.11
+				id = human_fallen_empire.11
 			}
 		}
 	}
@@ -903,16 +947,17 @@ country_event = {
 				limit = {
 					exists = pop
 					pop = {
-					NOT = { is_same_species = owner }
-					is_enslaved = no
+						NOT = { is_same_species = owner }
+						is_enslaved = no
 					}
 				}
 				pop = {	enslave_pop = yes }
 			}
 		}
 		set_global_flag = egypt_in_expansion
+		save_event_target_as = egypt_empire
 		every_country = {
-			establish_communications = this
+			establish_communications_no_message = event_target:egypt_empire
 		}
 		every_country = {
 			limit = { is_ai = no }
@@ -934,11 +979,11 @@ country_event = {
 	is_triggered_only = yes
 	
 	picture_event_data = {
-		portrait = event_target:egypt_species
-		planet_background = event_target:egypt_species
-		graphical_culture = event_target:egypt_species
-		city_level = event_target:egypt_species
-		room = event_target:egypt_species
+		portrait = event_target:egypt_empire
+		planet_background = event_target:egypt_empire
+		graphical_culture = event_target:egypt_empire
+		city_level = event_target:egypt_empire
+		room = event_target:egypt_empire
 	}
 	
 	immediate = {
@@ -947,12 +992,12 @@ country_event = {
 	
 	option = {
 		name = human_fallen_empire.5.a
-		is_dialog_only = yes
+	#	is_dialog_only = yes
 	}
 }
 
 ## future is in expansion
-country_event = {
+event = {
 	id = human_fallen_empire.13
 	title = OK
 	desc = OK
@@ -961,17 +1006,20 @@ country_event = {
 	fire_only_once = yes
 
     trigger = {
-		nor = {
-			is_country_type = fallen_empire
-			is_country_type = human_fallen_empire
+		any_country = {
+			nor = {
+				is_country_type = fallen_empire
+				is_country_type = human_fallen_empire
 			}
-		fleet_power > 50000
+			fleet_power > 50000
 		}
+	}
+	
 	immediate = {
 		random_country = {
 			limit = { has_country_flag = future_fallen_empire }
 			country_event = {
-					id = human_fallen_empire.14
+				id = human_fallen_empire.14
 			}
 		}
 	}
@@ -993,6 +1041,10 @@ country_event = {
 				days = -1
 			}
 		}
+		add_modifier = {
+			modifier = "egypt_fallen_empire_navy_size"
+			days = -1
+		}
 		country_remove_ethic = "ethic_fanatic_xenophile"
 		country_add_ethic = "ethic_fanatic_militarist"
 		every_owned_pop = {
@@ -1008,16 +1060,16 @@ country_event = {
 			cooldown = no
 		}
 		set_global_flag = future_in_expansion
+		save_event_target_as = future_empire
 		every_country = {
-			establish_communications = this
+			establish_communications_no_message = event_target:future_empire
 		}
 		every_country = {
 			limit = { is_ai = no }
 			country_event = {
-					id = human_fallen_empire.15
-				}
+				id = human_fallen_empire.15
+			}
 		}
-		save_event_target_as = future_empire
 	}
 }
 
@@ -1025,18 +1077,18 @@ country_event = {
 country_event = {
 	id = human_fallen_empire.15
 	title = TRANSMISSION
-	desc = "human_fallen_empire.desc"
+	desc = "human_fallen_empire.15.desc"
 	
 	diplomatic = yes
 	
 	is_triggered_only = yes
 	
 	picture_event_data = {
-		portrait = event_target:egypt_empire
-		planet_background = event_target:egypt_empire
-		graphical_culture = event_target:egypt_empire
-		city_level = event_target:egypt_empire
-		room = event_target:egypt_empire
+		portrait = event_target:future_empire
+		planet_background = event_target:future_empire
+		graphical_culture = event_target:future_empire
+		city_level = event_target:future_empire
+		room = event_target:future_empire
 	}
 	
 	immediate = {
@@ -1044,17 +1096,8 @@ country_event = {
 	}
 	
 	option = {
-		name = human_fallen_empire.8.a
-		trigger = { NOT = { has_country_flag = aaaa } }
-		set_country_flag = aaaa
-		country_event = {
-			id = human_fallen_empire.15
-		}
-	}
-	option = {
-		name = human_fallen_empire.8.b
-		response_text = human_fallen_empire.8.b.response
-		trigger = { has_country_flag = aaaa }
+		name = human_fallen_empire.15.1
+	#	response_text = human_fallen_empire.15.1.response
 	}
 }
 
@@ -1103,10 +1146,10 @@ planet_event = {
 		observation_outpost_owner = {
 			limit = { 
 				is_ai = no
-				}
+			}
 			country_event = { id = human_fallen_empire.21 }
 			set_country_flag = varelse_mehanicus
-			}
+		}
 	}
 }
 
@@ -1131,8 +1174,8 @@ country_event = {
 		}
 		hidden_effect = {
 			country_event = { id = human_fallen_empire.22 days = 100 random = 20 }				#lets revolt
-					}
-				}
+		}
+	}
 	option = {
 		name = "observation.11.a"
 		hidden_effect = {
@@ -1146,27 +1189,27 @@ country_event = {
 				country_event = { id = human_fallen_empire.23 days = 10 random = 5 }			#lets go to factory and destroy it
 				else = {
 					country_event = { id = human_fallen_empire.24 days = 11 random = 5 }		#lets go to factory
-							}
-						}
-					}
 				}
+			}
+		}
+	}
 	option = {
 		name = "observation.11.a"
 		hidden_effect = {
 			country_event = { id = human_fallen_empire.25 days = 12 random = 4 }				#lets go to artifact
-					}
-				}
+		}
+	}
 	option = {
 		name = "observation.11.a"
 		trigger = {
 			from = {
 				observation_outpost = { has_mission = covert_infiltration }
-				}
 			}
+		}
 		hidden_effect = {
 			country_event = { id = human_fallen_empire.26 days = 100 random = 20 }				#lets infiltrat
-					}
-				}
+		}
+	}
 	
 	option = {																					#nothing
 		name = "observation.11.a"
@@ -1181,9 +1224,9 @@ country_event = {
 	picture = GFX_evt_landing_ship
 	show_sound = event_ship_thrusters
 	location = fromfrom
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = "observation.11.a"
 		trigger = {
@@ -1200,15 +1243,15 @@ country_event = {
 				every_owned_pop = {
 					pop_remove_ethic = "ethic_spiritualist"
 					pop_add_ethic = "ethic_materialist"
-					}
 				}
+			}
 			add_monthly_resource_mult = {
 				resource = society_research
 				value = @tier2researchreward
 				min = @tier2researchmin
 				max = @tier2researchmax
 			}
-		}	
+		}
 	}
 }
 
@@ -1268,11 +1311,11 @@ country_event = {
 	
 	option = {
 		name = "observation.11.a"
-			add_monthly_resource_mult = {
-				resource = engineering_research
-				value = @tier2researchreward
-				min = @tier2researchmin
-				max = @tier2researchmax
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
 		}
 	}	
 }
@@ -1290,13 +1333,13 @@ country_event = {
 	
 	option = {
 		name = "observation.11.a"
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
 		hidden_effect = {
-			add_monthly_resource_mult = {
-				resource = society_research
-				value = @tier2researchreward
-				min = @tier2researchmin
-				max = @tier2researchmax
-			}
 			country_event = { id = human_fallen_empire.27 days = 10 }
 		}
 	}
@@ -1429,7 +1472,9 @@ planet_event = {
 	
 	option = {
 		name = INTERESTING
-		owner = { country_event = { id = human_fallen_empire.32 days = 10 } }
+		hidden_effect = {
+			owner = { country_event = { id = human_fallen_empire.32 days = 10 } }
+		}
 	}
 }
 
@@ -1473,8 +1518,6 @@ country_event = {
 	}
 }
 
-
-
 ## obelisk
 planet_event = {
 	id = human_fallen_empire.34
@@ -1515,11 +1558,12 @@ planet_event = {
 			}
 		}
 		create_species = {
-			name = "Titans"
+			name = "need to rename"
 			class = random
 			portrait = random
 			traits = random
 		}
+		#запилить новый тип армии
 		create_army = {
 			name = "Enraged Guardian"
 			owner = last_created
@@ -1571,10 +1615,13 @@ planet_event = {
 	
 	option = {
 		name = INTERESTING
-		random_list = {
-			50 = { add_modifier = { modifier = "human_fallen_empire_tomb_happy" days = 360 } }
-			50 = { add_modifier = { modifier = "human_fallen_empire_tomb_unhappy" days = 360 } }
+		hidden_effect = {
+			random_list = {
+				50 = { add_modifier = { modifier = "human_fallen_empire_tomb_happy" days = 360 } }
+				50 = { add_modifier = { modifier = "human_fallen_empire_tomb_unhappy" days = 360 } }
+			}
 		}
+		
 		##нужно добавить штраф к отношениям
 	}
 }
@@ -1730,7 +1777,9 @@ ship_event = {
 	
 	option = {
 		name = INTERESTING
-		kill_leader = {	type = scientist show_notification = no }
+		hidden_effect = {
+			kill_leader = {	type = scientist show_notification = no }
+		}
 	}
 }
 
@@ -1881,7 +1930,9 @@ ship_event = {
 	
 	option = {
 		name = INTERESTING
-		kill_leader = {	type = scientist show_notification = no }
+		hidden_effect = {
+			kill_leader = {	type = scientist show_notification = no }
+		}
 	}
 }
 
@@ -1898,24 +1949,25 @@ planet_event = {
 	
 	option = {
 		name = INTERESTING
-		create_country = {
-			name = "Mad Cruiser"
-			type = faction
-		}
-		last_created_country = {
-			save_event_target_as = dimensional
-			create_fleet = { name = "Mad Cruiser"}
-			last_created_fleet = {
-				set_owner = prev
-				create_ship = {
-					name = random
-					design = "Death's Head"
-					graphical_culture = "mammalian_01"
-					prefix = no
-				}
-				set_location = root
+		hidden_effect = {
+			create_country = {
+				name = "Mad Cruiser"
+				type = faction
 			}
-			set_faction_hostility = { set_hostile = yes }
+			last_created_country = {
+				create_fleet = { name = "Mad Cruiser"}
+				last_created_fleet = {
+					set_owner = prev
+					create_ship = {
+						name = random
+						design = "Death's Head"
+						graphical_culture = "mammalian_01"
+						prefix = no
+					}
+					set_location = root
+				}
+				set_faction_hostility = { set_hostile = yes }
+			}
 		}
 	}
 }
@@ -1928,30 +1980,32 @@ ship_event = {
 	picture = GFX_evt_archaeological_dig
 	show_sound = event_airlock
 	location = ROOT
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = INTERESTING
-		kill_leader = {	type = scientist show_notification = no }
-		create_country = {
-			name = "Mad Cruiser"
-			type = faction
-		}
-		last_created_country = {
-			save_event_target_as = dimensional
-			create_fleet = { name = "Mad Cruiser"}
-			last_created_fleet = {
-				set_owner = prev
-				create_ship = {
-					name = random
-					design = "Death's Head"
-					graphical_culture = "mammalian_01"
-					prefix = no
-				}
-				set_location = root
+		hidden_effect = {
+			kill_leader = {	type = scientist show_notification = no }
+			create_country = {
+				name = "Mad Cruiser"
+				type = faction
 			}
-			set_faction_hostility = { set_hostile = yes }
+			last_created_country = {
+				save_event_target_as = dimensional
+				create_fleet = { name = "Mad Cruiser"}
+				last_created_fleet = {
+					set_owner = prev
+					create_ship = {
+						name = random
+						design = "Death's Head"
+						graphical_culture = "mammalian_01"
+						prefix = no
+					}
+					set_location = root
+				}
+				set_faction_hostility = { set_hostile = yes }
+			}
 		}
 	}
 }
