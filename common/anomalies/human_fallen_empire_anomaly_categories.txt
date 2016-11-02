@@ -15,25 +15,37 @@
 
 
 anomaly_category = {
-	key = "egypt_fallen_empire_varelse_category"
-	desc = "egypt_fallen_empire_varelse_category_desc"
-	picture = GFX_evt_city_ruins
+	key = "human_fallen_empires_wormhole_category"
+	desc = "human_fallen_empires_wormhole_category.desc"
+	picture = GFX_evt_human_fallen_empires_wormhole
 	level = 1
 	risk = 0
 	
-	spawn_chance = {		
+	spawn_chance = {
 		modifier = {
-			add = 0
+			add = 3
+			any_country = {
+				has_country_flag = human_fallen_empires_egypt
+			}
+			not = { from.owner = { has_country_flag = human_fallen_empires_wormhole_found } }
+		}
+	}
+	
+	on_spawn = {
+		from.owner = {
+			set_country_flag = human_fallen_empires_wormhole_found
 		}
 	}
 	
 	on_success = {
+	#	human_fallen_empires.50
 	}
 
 	on_fail = {
+		ship_event = { id = anomaly_failure.1 }
 	}
 
 	on_critical_fail = {
+		ship_event = { id = anomaly_failure.400 }
 	}
 }
-
