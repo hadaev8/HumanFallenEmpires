@@ -71,6 +71,17 @@ event = {
 				limit = { has_country_flag = human_2 }
 				species = { save_event_target_as = human_fallen_empires_human_species }
 			}
+			# мэйк хуманити ундивайнедед?
+			every_country = {
+				limit = {
+					or = {
+						has_country_flag = human_1
+						has_country_flag = human_2
+						species_portrait = human
+					}
+					set_country_flag = human_fallen_empires_marcked_as_human
+				}
+			}
 			create_species = {
 				name = Human
 				plural = Humans
@@ -2827,15 +2838,15 @@ ship_event = {
 		trigger = {
 			hidden:owner = {
 				switch = {
-					trigger = species_portrait
+					trigger = has_country_flag
 
-					default = { text = human_fallen_empires.350.desc }
-					human = { text = human_fallen_empires.350.desc.1 }
+					human_fallen_empires_marcked_as_human = { text = human_fallen_empires.350.desc }
+					default = { text = human_fallen_empires.350.desc.1 }
 				}
 			}
 		}
 	}
-	picture = GFX_evt_continental
+	picture = GFX_evt_continental	# поменять картинку
 	show_sound = event_scanner
 	location = FROM
 
@@ -2862,7 +2873,7 @@ ship_event = {
 		name = human_fallen_empires.350.0
 		trigger = {
 			owner = {
-				species_portrait = human
+				has_country_flag = human_fallen_empires_marcked_as_human
 			}
 		}
 		owner = {
@@ -2879,7 +2890,8 @@ ship_event = {
 		name = human_fallen_empires.350.1
 		trigger = {
 			owner = {
-				not = { species_portrait = human }
+				# добавить ксенофилию
+				not = { has_country_flag = human_fallen_empires_marcked_as_human }
 			}
 		}
 		owner = {
