@@ -66,19 +66,20 @@ event = {
 						has_country_flag = human_2
 						species_portrait = human
 					}
-					set_country_flag = human_fallen_empires_marked_as_human
 				}
+				set_country_flag = human_fallen_empires_marked_as_human
 			}
 			random_country = {
-				limit = { is_ai = no species_portrait = human }
-				species = { save_event_target_as = human_fallen_empires_human_species }
-			}
-			random_country = {
-				limit = { has_country_flag = human_1 }
-				species = { save_event_target_as = human_fallen_empires_human_species }
-			}
-			random_country = {
-				limit = { has_country_flag = human_2 }
+				limit = {
+					or = {
+						has_country_flag = human_1
+						has_country_flag = human_2
+						and = {
+					#		is_ai = no
+							species_portrait = human
+						}
+					}
+				}
 				species = { save_event_target_as = human_fallen_empires_human_species }
 			}
 			# make humans undivided
@@ -350,11 +351,11 @@ ship_event  = {
 	is_triggered_only = yes
 
 	trigger = {
+		not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
 		from = {
 			exists = space_owner 
 			space_owner = {
 				has_country_flag = human_fallen_empires_egypt
-				not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
 			}
 		}
 	}
@@ -725,28 +726,15 @@ country_event = {
 		name = human_fallen_empires.5.2.0
 		trigger = {
 			has_country_flag = egp_step2
-			has_country_flag = human_1
-		}
-		hidden_effect = {
-			remove_country_flag = egp_step2
-			set_country_flag = egp_step3
-			country_event = {
-				id = human_fallen_empires.5
-			}
-		}
-	}
-	option = {
-		name = human_fallen_empires.5.2.0
-		trigger = {
-			has_country_flag = egp_step2
-			any_system_within_border = {
-				has_star_flag = sol
-			}
-			nor = {
+			or = {
 				has_country_flag = human_1
-				has_country_flag = human_2
+				and = {
+					any_system_within_border = {
+						has_star_flag = sol
+					}
+					species_portrait = human
+				}
 			}
-			species_portrait = human
 		}
 		hidden_effect = {
 			remove_country_flag = egp_step2
