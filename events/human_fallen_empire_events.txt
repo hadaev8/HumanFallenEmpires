@@ -70,18 +70,28 @@ country_event = {
 				}
 				set_country_flag = human_fallen_empires_marked_as_human
 			}
-			random_country = {
+			if = {
 				limit = {
-					or = {
-						has_country_flag = human_1
-						has_country_flag = human_2
-						and = {
-					#		is_ai = no
-							species_portrait = human
-						}
+					any_country = {
+						has_country_flag = human_fallen_empires_marked_as_human
+						is_ai = no
 					}
 				}
-				species = { save_event_target_as = human_fallen_empires_human_species }
+				random_country = {
+					limit = {
+						has_country_flag = human_fallen_empires_marked_as_human
+						is_ai = no
+					}
+					species = { save_event_target_as = human_fallen_empires_human_species }
+				}
+				else = {
+					random_country = {
+						limit = {
+							has_country_flag = human_fallen_empires_marked_as_human
+						}
+						species = { save_event_target_as = human_fallen_empires_human_species }
+					}
+				}
 			}
 			# make humans undivided
 			every_country = {
@@ -1227,7 +1237,7 @@ country_event = {
 	}
 }
 
-## egypt is in expansion
+# egypt is in expansion
 event = {
 	id = human_fallen_empires.10
 	title = OK
@@ -1490,6 +1500,10 @@ ship_event = {
 	location = root
 
     is_triggered_only = yes
+	
+	trigger = {
+		from = { has_planet_flag = human_fallen_empires_varelse_colony }
+	}
 
 	option = {
 		name = human_fallen_empires.100.0
