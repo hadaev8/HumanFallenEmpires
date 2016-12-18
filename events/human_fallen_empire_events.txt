@@ -1441,7 +1441,7 @@ country_event = {
 }
 
 
-# anomalys
+# anomalys and after survey on actions
 
 # wormhole to ju ahet
 ship_event = {
@@ -1490,8 +1490,7 @@ ship_event = {
 
 ## varelse section
 
-
-## varlse colony after curvey
+# varlse colony after curvey
 ship_event = {
 	id = human_fallen_empires.100
 	title = "human_fallen_empires.100.name"
@@ -1503,6 +1502,7 @@ ship_event = {
 	
 	trigger = {
 		from = { has_planet_flag = human_fallen_empires_varelse_colony }
+		from.owner = { is_country_type = primitive }
 	}
 
 	option = {
@@ -1524,9 +1524,14 @@ planet_event = {
 	trigger = {
 		has_observation_outpost = yes
 		has_planet_flag = human_fallen_empires_varelse_colony
+		exists = owner
+		owner = {
+			is_country_type = primitive
+		}
+	#	exists = observation_outpost_owner
 		observation_outpost_owner = {
-			not = { has_country_flag = varelse_mehanicus }
 			is_ai = no
+			not = { has_country_flag = human_fallen_empires_varelse_mehanicus }
 		}
 	}
 
@@ -1537,7 +1542,7 @@ planet_event = {
 	immediate = {
 		observation_outpost_owner = {
 			country_event = { id = human_fallen_empires.102 }
-			set_country_flag = varelse_mehanicus
+			set_country_flag = human_fallen_empires_varelse_mehanicus
 		}
 		save_event_target_as = human_fallen_empires_varelse_colony
 	}
@@ -2879,3 +2884,192 @@ ship_event = {
 		}
 	}
 }
+
+
+## Ahet section
+
+# ahet colonys after survey
+
+# Colony 1
+
+# var 1 (know ahet)
+ship_event = {
+	id = human_fallen_empires.401
+	title = "human_fallen_empires.401.name"
+	desc = "human_fallen_empires.401.desc"
+	picture = GFX_evt_city_ruins
+	location = root
+
+    is_triggered_only = yes
+
+	trigger = {
+		from = { has_planet_flag = human_fallen_empires_ahet_colony }
+		root.owner = { has_country_flag = human_fallen_empires_ahet_found }
+		from.owner = { is_country_type = primitive }
+	}
+
+	immediate = {
+		owner = { set_country_flag = human_fallen_empires_ahet_found }
+	}
+
+	option = {
+		name = human_fallen_empires.401.0
+	}
+}
+
+# var 2 (dont know ahet)
+ship_event = {
+	id = human_fallen_empires.402
+	title = "human_fallen_empires.401.name"
+	desc = "human_fallen_empires.402.desc"
+	picture = GFX_evt_city_ruins
+	location = root
+
+    is_triggered_only = yes
+
+	trigger = {
+		from = { has_planet_flag = human_fallen_empires_ahet_colony }
+		not = { root.owner = { has_country_flag = human_fallen_empires_ahet_found } }
+		from.owner = { is_country_type = primitive }
+	}
+	
+	immediate = {
+		owner = { set_country_flag = human_fallen_empires_ahet_found }
+	}
+
+	option = {
+		name = human_fallen_empires.402.0
+		trigger = {
+			owner = {
+				nor = {
+					has_ethic = "ethic_materialist"
+					has_ethic = "ethic_fanatic_materialist"
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.402.0
+		trigger = {
+			owner = {
+				or = {
+					has_ethic = "ethic_materialist"
+					has_ethic = "ethic_fanatic_materialist"
+				}
+			}
+		}
+	}
+}
+
+# Colony 2
+
+# var 1 (know ahet)
+ship_event = {
+	id = human_fallen_empires.403
+	title = "human_fallen_empires.403.name"
+	desc = "human_fallen_empires.403.desc"
+	picture = GFX_evt_city_ruins
+	location = root
+
+    is_triggered_only = yes
+	
+	trigger = {
+		from = { has_planet_flag = human_fallen_empires_ahet_colony_2 }
+		root.owner = { has_country_flag = human_fallen_empires_ahet_found }
+		from.owner = { is_country_type = primitive }
+	}
+
+	option = {
+		name = human_fallen_empires.403.0
+		trigger = {
+			owner = {
+				or = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.403.1
+		trigger = {
+			owner = {
+				or = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.403.2
+		trigger = {
+			owner = {
+				nor = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+	}
+}
+
+# var 2 (dont know ahet)
+ship_event = {
+	id = human_fallen_empires.404
+	title = "human_fallen_empires.403.name"
+	desc = "human_fallen_empires.404.desc"
+	picture = GFX_evt_city_ruins
+	location = root
+
+    is_triggered_only = yes
+	
+	trigger = {
+		from = { has_planet_flag = human_fallen_empires_ahet_colony_2 }
+		not = { root.owner = { has_country_flag = human_fallen_empires_ahet_found } }
+		from.owner = { is_country_type = primitive }
+	}
+	
+	immediate = {
+		owner = { set_country_flag = human_fallen_empires_ahet_found }
+	}
+
+	option = {
+		name = human_fallen_empires.404.0
+		trigger = {
+			owner = {
+				or = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.404.1
+		trigger = {
+			owner = {
+				or = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.404.2
+		trigger = {
+			owner = {
+				nor = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+	}
+}
+

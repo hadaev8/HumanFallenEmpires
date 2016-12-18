@@ -1,0 +1,169 @@
+namespace = fallen_empires_awakening
+
+# Sleepers Awake
+country_event = {
+	id = fallen_empires_awakening.1
+	title = OK
+	desc = OK
+	
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = sleepers_awake_happened }
+		NOT = { has_global_flag = guardians_of_the_galaxy_happened }
+		
+		years_passed > 100
+		
+		is_country_type = fallen_empire
+		is_at_war = no
+		fleet_power > 40000	
+
+		# Wake up if regular empire is growing too strong or has started to conquer other fallen empires
+		any_country = {
+			is_country_type = default
+			OR = {
+				AND = {
+					is_difficulty = 0
+					NOT = { is_difficulty = 1 }
+					fleet_power > 40000
+				}
+				AND = {
+					is_difficulty = 1
+					fleet_power > 50000
+				}
+				fleet_power > 60000			
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+				}
+			}
+		}
+	}	
+	
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.5
+			any_country = {
+				is_country_type = default
+				OR = {
+					AND = {
+						is_difficulty = 0
+						NOT = { is_difficulty = 1 }
+						fleet_power > 60000
+					}
+					AND = {
+						is_difficulty = 1
+						fleet_power > 80000
+					}
+					fleet_power > 100000			
+				}
+			}
+		}		
+		modifier = {
+			factor = 2
+			num_fallen_empires > 1
+			num_fallen_empires < 3
+		}
+		modifier = {
+			factor = 3
+			num_fallen_empires > 2
+			num_fallen_empires < 4
+		}
+		modifier = {
+			factor = 4
+			num_fallen_empires > 3
+		}		
+		modifier = {
+			factor = 0.1
+			any_country = {
+				is_country_type = default
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+					NOT = { is_original_owner = root }
+				}
+			}
+		}	
+		modifier = {
+			factor = 0.01
+			has_global_flag = high_awaken_chance
+		}
+	}
+
+	immediate = {
+		set_global_flag = sleepers_awake_happened
+	
+		country_event = { id = fallen_empires_awakening.3 }
+		
+		# Notify players
+		every_country = {
+			limit = {
+				is_ai = no			
+			}
+			country_event = { id = fallen_empires_awakening.2 }
+		}
+		
+		# War in Heaven
+		if = {
+			limit = { host_has_dlc = "Leviathans Story Pack" }	
+			random_list = {
+				40 = { # War in Heaven with Fallen Empire of opposing ethos
+					random_country = {
+							limit = {
+								is_country_type = fallen_empire
+								OR = {
+									AND = {
+										has_ethic = ethic_fanatic_xenophobe
+										root = { has_ethic = ethic_fanatic_xenophile }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_xenophile
+										root = { has_ethic = ethic_fanatic_xenophobe }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_spiritualist
+										root = { has_ethic = ethic_fanatic_materialist }
+									}	
+									AND = {
+										has_ethic = ethic_fanatic_materialist
+										root = { has_ethic = ethic_fanatic_spiritualist }
+									}							
+								}
+							}
+							set_country_flag = sleepers_awake_ancient_rival
+							set_timed_country_flag = { flag = timed_ancient_rival days = 3650 }
+						}				
+				}
+				20 = { # War in Heaven with Fallen Empire of different ethos
+					random = {
+						chance = 25
+						random_country = {
+							limit = {
+								is_country_type = fallen_empire
+								NOR = {
+									AND = {
+										has_ethic = ethic_fanatic_xenophobe
+										root = { has_ethic = ethic_fanatic_xenophobe }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_xenophile
+										root = { has_ethic = ethic_fanatic_xenophile }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_spiritualist
+										root = { has_ethic = ethic_fanatic_spiritualist }
+									}	
+									AND = {
+										has_ethic = ethic_fanatic_materialist
+										root = { has_ethic = ethic_fanatic_materialist }
+									}							
+								}
+							}
+							set_country_flag = sleepers_awake_ancient_rival
+							set_timed_country_flag = { flag = timed_ancient_rival days = 3650 }
+						}			
+					}				
+				}
+			}			
+		}		
+	}
+}
