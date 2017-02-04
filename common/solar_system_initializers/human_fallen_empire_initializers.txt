@@ -53,7 +53,7 @@ human_fallen_empires_egypt = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
 				name_list = "cybrxkhan_fantasy_egyptian"
-				ship_prefix = "OKK"
+				ship_prefix = ""
 				ignore_initial_colony_error = yes
 				government = transcendent_empire
 				species = event_target:human_fallen_empires_egypt_species
@@ -62,7 +62,7 @@ human_fallen_empires_egypt = {
 					set_country_flag = human_fallen_empires_egypt
 					kill_leader = {
 						type = ruler
-						show_notification = no 
+						show_notification = no
 					}
 					create_leader = {
 						name = Amonhirkhopshef
@@ -82,7 +82,7 @@ human_fallen_empires_egypt = {
 						}
 						kill_leader = {
 							type = ruler
-							show_notification = no 
+							show_notification = no
 						}
 						create_leader = {
 							name = Amonhirkhopshef
@@ -170,9 +170,11 @@ human_fallen_empires_egypt = {
 						option = slavery_allowed_xenos_only
 						cooldown = no
 					}
+					save_global_event_target_as = human_fallen_empires_egypt_country
 				}
 			}
 			set_owner = last_created_country
+			set_planet_flag = human_fallen_empires_home_of_light
 			prevent_anomaly = yes
 			set_capital = yes
 			while = {
@@ -315,7 +317,7 @@ human_fallen_empires_egypt = {
 				}
 			}
 			while = {
-				count = 4
+				count = 5
 				create_fleet = {
 					effect = {
 						set_owner = last_created_country
@@ -1039,8 +1041,8 @@ human_fallen_empires_ahet = {
 			while = {
 				count = 2
 				random_tile = {
-					limit = { 
-						has_blocker = no 
+					limit = {
+						has_blocker = no
 						has_building = no
 					}
 					set_building = "building_primitive_factory"
@@ -1066,8 +1068,8 @@ human_fallen_empires_ahet = {
 			while = {
 				count = 2
 				random_tile = {
-					limit = { 
-						has_blocker = no 
+					limit = {
+						has_blocker = no
 						has_building = no
 					}
 					set_building = "building_primitive_farm"
@@ -1218,8 +1220,8 @@ human_fallen_empires_ahet_2 = {
 			while = {
 				count = 2
 				random_tile = {
-					limit = { 
-						has_blocker = no 
+					limit = {
+						has_blocker = no
 						has_building = no
 					}
 					set_building = "building_primitive_factory"
@@ -1233,8 +1235,8 @@ human_fallen_empires_ahet_2 = {
 			while = {
 				count = 3
 				random_tile = {
-					limit = { 
-						has_blocker = no 
+					limit = {
+						has_blocker = no
 						has_building = no
 					}
 					set_building = "building_primitive_farm"
@@ -1434,8 +1436,8 @@ human_fallen_empires_varelse = {
 			while = {
 				count = 3
 				random_tile = {
-					limit = { 
-						has_blocker = no 
+					limit = {
+						has_blocker = no
 						has_building = no
 					}
 					set_building = "building_primitive_farm"
@@ -1977,6 +1979,7 @@ human_fallen_empires_future = {
 					flag = random
 					effect = {
 						set_country_flag = human_fallen_empires_future
+						set_country_flag = human_fallen_empires_coalition_leader
 						create_leader = {
 							type = admiral
 							species = event_target:human_fallen_empires_future_species
@@ -2027,8 +2030,45 @@ human_fallen_empires_future = {
 								trait = random_trait
 							}
 						}
-						country_add_ethic = "ethic_fanatic_xenophile"
-						country_add_ethic = "ethic_individualist"
+						while = {
+							limit = {
+								not = {
+									any_owned_leader = { gender = female }
+								}
+							}
+							create_leader = {
+								type = admiral
+								species = event_target:human_fallen_empires_future_species
+								name = random
+								skill = 400
+								traits = {
+									trait = random_trait
+									trait = random_trait
+								}
+							}
+						}
+						while = {
+							limit = {
+								not = {
+									any_owned_leader = {
+										not = {gender = female }
+									}
+								}
+							}
+							create_leader = {
+								type = admiral
+								species = event_target:human_fallen_empires_future_species
+								name = random
+								skill = 400
+								traits = {
+									trait = random_trait
+									trait = random_trait
+								}
+							}
+						}
+						country_add_ethic = "ethic_fanatic_pacifist"
+						country_add_ethic = "ethic_xenophile"
+						save_global_event_target_as = human_fallen_empires_future_country
 					}
 				}
 				prevent_anomaly = yes
@@ -2125,7 +2165,7 @@ human_fallen_empires_future = {
 					}
 				}
 				while = {
-					count = 4
+					count = 6
 					create_fleet = {
 						effect = {
 							set_owner = last_created_country
@@ -2134,7 +2174,7 @@ human_fallen_empires_future = {
 									is_difficulty = 2
 								}
 								while = {
-									count = 18
+									count = 20
 									create_ship = {
 										name = random
 										design = "Enterprise"
@@ -2155,7 +2195,7 @@ human_fallen_empires_future = {
 											is_difficulty = 1
 										}
 										while = {
-											count = 14
+											count = 16
 											create_ship = {
 												name = random
 												design = "Enterprise"
@@ -2172,7 +2212,7 @@ human_fallen_empires_future = {
 										}
 										else = {
 											while = {
-												count = 10
+												count = 12
 												create_ship = {
 													name = random
 													design = "Enterprise"

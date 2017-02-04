@@ -11,7 +11,7 @@
 #	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
 #   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
 
-human_fallen_empires_make_future_vassal = {
+human_fallen_empires_make_collition_member = {
 	execution_order = 1
 	
 	parameters = {
@@ -21,7 +21,19 @@ human_fallen_empires_make_future_vassal = {
 	}
 	
 	warscore_cost = {
-		base = 90
+		base = 100
+		modifier = {
+			factor = 0.5
+			parameter:country = {
+				num_owned_planets < 50
+			}
+		}
+		modifier = {
+			factor = 0.5
+			parameter:country = {
+				num_owned_planets < 25
+			}
+		}
 	}
 
 	potential = {
@@ -33,7 +45,7 @@ human_fallen_empires_make_future_vassal = {
 				}
 			}
 		}
-		has_country_flag = human_fallen_empires_future
+		has_country_flag = human_fallen_empires_coalition_leader
 		parameter:country = {
 			is_country_type = default 
 		}
@@ -201,7 +213,7 @@ human_fallen_empires_make_future_vassal = {
 	ai_weight = {
 		base = 1000
 		
-		# what is it?
+		# в первую очередь лидера войны?
 		modifier = {
 			factor = 0.5
 			NOT = { 
@@ -212,7 +224,181 @@ human_fallen_empires_make_future_vassal = {
 		}
 		modifier = {
 			factor = 0
-			NOT = { has_country_flag = human_fallen_empires_future }
+			NOT = { has_country_flag = human_fallen_empires_coalition_leader }
 		}
+	}
+}
+
+# exit from coallition
+human_fallen_empires_exit_from_coalition= {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 30
+	}
+	
+	potential = {	
+		is_subject = yes
+		is_subject_type = "human_fallen_empires_future_vassal"
+		overlord = {
+			is_country = from
+		}
+		parameter:country = {
+			is_country = from
+		}		
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	monthly_warscore = {
+		amount = {
+			base = 1
+		}
+		valid = {
+			NOT = {
+				any_country = {
+					fromfrom = {
+						is_war_participant = {
+							who = prev
+							side = root
+						}	
+					}				
+					any_owned_planet = {
+						count = all
+						controller = {
+							fromfrom = {
+								is_war_participant = {
+									who = prev
+									side = parameter:country
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		every_country = {
+			limit = {
+				is_subject = yes
+				is_subject_type = "human_fallen_empires_future_vassal"
+				overlord = { is_same_value = parameter:country }
+				fromfrom = {
+					is_war_participant = {
+						who = prev
+						side = root
+					}	
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+			country_event = { }
+		}
+	}
+
+	ai_weight = {
+		base = 1000
+	}
+}
+
+# challenge the leadership
+human_fallen_empires_challenge_coallition_leadership = {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 100
+	}
+	
+	potential = {	
+		is_subject = yes
+		is_subject_type = "human_fallen_empires_future_vassal"
+		overlord = {
+			is_country = from
+		}
+		parameter:country = {
+			is_country = from
+		}
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	monthly_warscore = {
+		amount = {
+			base = 1
+		}
+		valid = {
+			parameter:country = {
+				any_owned_planet = {
+					is_capital = yes
+					controller = {
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = root
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		root = {
+			set_subject_of = {
+				who = none
+			}
+			set_country_flag = human_fallen_empires_coalition_leader
+			country_event = { }
+		}
+		every_country = {
+			limit = {
+				is_subject = yes
+				is_subject_type = "human_fallen_empires_future_vassal"
+				overlord = { is_same_value = parameter:country }
+			}
+			set_subject_of = {
+				who = root
+				subject_type = "human_fallen_empires_future_vassal"
+			}
+		}
+		parameter:country = {
+			set_subject_of = {
+				who = root
+				subject_type = "human_fallen_empires_future_vassal"
+			}
+			remove_country_flag = human_fallen_empires_coalition_leader
+		}
+	}
+
+	ai_weight = {
+		base = 1000		
 	}
 }

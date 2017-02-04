@@ -13,7 +13,7 @@
 # ROOT = ship scope
 # Ex. on_fail, ship_event would have the planet in From.From
 
-
+# wormhole
 anomaly_category = {
 	key = "human_fallen_empires_wormhole_category"
 	desc = "human_fallen_empires_wormhole_category.desc"
@@ -25,16 +25,19 @@ anomaly_category = {
 		modifier = {
 			add = 2
 			any_country = {
-				has_country_flag = human_fallen_empires_egypt
-				# добавить условие контакта
+				has_global_flag = human_fallen_empires_egypt
+				not = { has_communications = from.owner }
 			}
-			not = { from.owner = { has_country_flag = human_fallen_empires_wormhole_found } }
+			from.owner = {
+				is_ai = no
+				not = { has_global_flag = human_fallen_empires_wormhole_found }
+			}
 		}
 	}
 
 	on_spawn = {
 		from.owner = {
-			set_country_flag = human_fallen_empires_wormhole_found
+			set_global_flag = human_fallen_empires_wormhole_found
 		}
 	}
 
@@ -48,5 +51,92 @@ anomaly_category = {
 
 	on_critical_fail = {
 		ship_event = { id = anomaly_failure.400 }
+	}
+}
+
+# cripods
+anomaly_category = {
+	key = "human_fallen_empires_cripods_category"
+	desc = "human_fallen_empires_cripods_category.desc"
+	picture = GFX_evt_human_fallen_empires_cripods
+	level = 2
+	risk = 10
+
+	spawn_chance = {
+		modifier = {
+			add = 1
+			is_planet_class = pc_continental
+			from.owner = {
+				is_ai = no
+				not = { has_global_flag = human_fallen_empires_cripods_found }
+				or = {
+					has_country_flag = human_fallen_empires_marked_as_human
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_collectivist
+					has_ethic = ethic_fanatic_collectivist
+					has_ethic = ethic_individualist
+					has_ethic = ethic_fanatic_individualist
+				}
+			}
+		}
+	}
+
+	on_spawn = {
+		from.owner = {
+			set_global_flag = human_fallen_empires_cripods_found
+		}
+	}
+
+	on_success = {
+	#	human_fallen_empires.50
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# dead worms
+anomaly_category = {
+	key = "human_fallen_empires_dead_worms_category"
+	desc = "human_fallen_empires_dead_worms_category.desc"
+	picture = GFX_evt_human_fallen_empires_dead_worms
+	level = 2
+	risk = 15
+
+	spawn_chance = {
+		modifier = {
+			add = 1
+			is_planet_class = pc_molten
+			from.owner = {
+				is_ai = no
+				not = { has_global_flag = human_fallen_empires_dead_worms_found }
+			}
+		}
+	}
+
+	on_spawn = {
+		from.owner = {
+			set_global_flag = human_fallen_empires_dead_worms_found
+		}
+	}
+
+	on_success = {
+	#	human_fallen_empires.50
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2560 }
 	}
 }

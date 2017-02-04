@@ -423,7 +423,7 @@ cede_planet = {
 
 # For War in Heaven
 total_defeat = {
-	execution_order = 1
+	execution_order = 10
 	
 	parameters = {
 		country = {
@@ -432,18 +432,18 @@ total_defeat = {
 	}
 	
 	warscore_cost = {
-		base = 75
+		base = 100
 	}
 	
 	potential = {
-		OR = {
-			is_country_type = awakened_fallen_empire
-			has_country_flag = war_in_heaven_league_leader
-		}
+	#	OR = {
+	#		is_country_type = awakened_fallen_empire
+	#		has_country_flag = war_in_heaven_league_leader
+	#	}
 		parameter:country = {
 			is_country_type = awakened_fallen_empire
 			is_country = from
-		}		
+		}
 	}
 	
 	possible = {
@@ -554,22 +554,31 @@ total_defeat = {
 				}
 			}
 			
-			if = {
-				limit = {
-					root = {
-						has_ethic = "ethic_fanatic_xenophile"
-					}
-				}
-				parameter:country = {
-					every_owned_planet = {
-						human_fallen_empires_create_primitive = yes
-					}
-				}
-				else = {
-					# Losing FE is wiped out
-					parameter:country = {
-						every_owned_planet = {
-							destroy_colony = yes
+			parameter:country = {
+				every_owned_planet = {
+					if = {
+						limit = { root = { has_ethic = "ethic_fanatic_spiritualist" } }
+						human_fallen_empires_create_vassal = yes
+						else = {
+							if = {
+								limit = { root = { has_ethic = "ethic_fanatic_xenophile" } }
+								human_fallen_empires_create_primitive = yes
+								else = {
+									if = {
+										limit = { root = { has_ethic = "ethic_fanatic_xenophobe" } }
+										set_owner = root
+										else = {
+											if = {
+												limit = { root = { has_ethic = "ethic_fanatic_materialist" } }
+												human_fallen_empires_create_primitive = yes
+												else = {
+													destroy_colony = yes
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
