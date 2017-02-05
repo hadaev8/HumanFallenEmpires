@@ -44,8 +44,10 @@ namespace = human_fallen_empires
 # spawn human fallen empires
 country_event = {
 	id = human_fallen_empires.0
-	fire_only_once = yes
 	hide_window = yes
+	#is_triggered_only = yes
+	fire_only_once = yes
+
 	immediate = {
 		if = {
 			limit = {
@@ -386,19 +388,8 @@ event = {
 	id = human_fallen_empires.3
 	hide_window = yes
 	is_triggered_only = yes
-
+	
 	immediate = {
-		# future is in expansion
-		if = {
-			limit = {
-				exists = event_target:human_fallen_empires_future_country
-			}
-			event_target:human_fallen_empires_future_country = {
-				country_event = {
-					id = human_fallen_empires.5010
-				}
-			}
-		}
 		# egypt is in expansion
 		if = {
 			limit = {
@@ -407,6 +398,17 @@ event = {
 			event_target:human_fallen_empires_egypt_country = {
 				country_event = {
 					id = human_fallen_empires.11
+				}
+			}
+		}
+		# future is in expansion
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_future_country
+			}
+			event_target:human_fallen_empires_future_country = {
+				country_event = {
+					id = human_fallen_empires.5010
 				}
 			}
 		}
@@ -420,10 +422,7 @@ ship_event  = {
 	is_triggered_only = yes
 
 	trigger = {
-		not = {
-			has_global_flag = human_fallen_empires_egypt_in_expansion
-			has_country_flag = human_fallen_empires_egypt_contacted
-		}
+		not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
 		from = {
 			exists = space_owner
 			space_owner = {
@@ -443,11 +442,13 @@ ship_event  = {
 			if = {
 				limit = {
 					is_ai = no
+					nor = {
+						has_global_flag = human_fallen_empires_egypt_in_expansion
+						has_country_flag = human_fallen_empires_egypt_contacted
+					}
 				}
 				country_event = { id = human_fallen_empires.5 }
 				set_country_flag = human_fallen_empires_egypt_contacted
-				else = {
-					
 			}
 		}
 	}
@@ -491,7 +492,9 @@ country_event = {
 				has_country_flag = egp_step2
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
-				has_country_flag = human_fallen_empires_marked_as_human
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
 			}
 			has_ethic = "ethic_fanatic_xenophobe"
 		}
@@ -534,8 +537,9 @@ country_event = {
 				has_country_flag = egp_step2
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_xenophobe"
 			}
-			human_fallen_empires_is_xenoph = no
 			has_country_flag = human_fallen_empires_marked_as_human
 		}
 		hidden_effect = {
@@ -554,7 +558,9 @@ country_event = {
 				has_country_flag = egp_step2
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
-				has_country_flag = human_fallen_empires_marked_as_human
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
 			}
 		}
 		hidden_effect = {
@@ -618,6 +624,12 @@ country_event = {
 			any_country = {
 				has_communications = root
 				not = { is_same_value = root}
+				or = {
+					is_country_type = default
+					is_country_type = human_fallen_empire
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
 				or = {
 					has_country_flag = human_fallen_empires_future
 					has_country_flag = human_fallen_empires_marked_as_human
@@ -756,7 +768,7 @@ country_event = {
 					any_system_within_border = {
 						has_star_flag = sol
 					}
-					has_country_flag = human_fallen_empires_marked_as_human
+					species_portrait = human
 				}
 			}
 		}
@@ -825,7 +837,7 @@ country_event = {
 				has_country_flag = human_1
 				has_country_flag = human_2
 			}
-			has_country_flag = human_fallen_empires_marked_as_human
+			species_portrait = human
 		}
 		hidden_effect = {
 			remove_country_flag = egp_step2
@@ -839,7 +851,7 @@ country_event = {
 		name = human_fallen_empires.5.2.4
 		trigger = {
 			has_country_flag = egp_step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
+			has_country_flag = human_fallen_empires_marked_as_human
 			any_country = {
 				is_country_type = default
 				has_communications = root
@@ -859,7 +871,7 @@ country_event = {
 		name = human_fallen_empires.5.2.5
 		trigger = {
 			has_country_flag = egp_step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
+			has_country_flag = human_fallen_empires_marked_as_human
 			any_system = {
 				has_star_flag = sol
 				is_surveyed = {
@@ -880,7 +892,7 @@ country_event = {
 		name = human_fallen_empires.5.2.6
 		trigger = {
 			has_country_flag = egp_step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
+			has_country_flag = human_fallen_empires_marked_as_human
 			any_system = {
 				has_star_flag = sol
 				has_star_flag = nuked_sol
@@ -902,7 +914,6 @@ country_event = {
 		name = human_fallen_empires.5.2.7
 		trigger = {
 			has_country_flag = egp_step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
 			any_system = {
 				has_star_flag = sol
 				has_star_flag = primitive_sol
@@ -1140,14 +1151,11 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
-		or = {
-			year_passed > 90
-			any_country = {
-				is_country_type = default
-				fleet_power > 30000
-			}
+		any_country = {
+			is_country_type = default
+			fleet_power > 30000
 		}
+		not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
 	}
 	
 	immediate = {
@@ -3707,7 +3715,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.5001.5.2
+		name = human_fallen_empires.5001.5.5
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step5
 			human_fallen_empires_is_individualist_trigger = yes
@@ -3719,7 +3727,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.5001.5.3
+		name = human_fallen_empires.5001.5.5
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step5
 			human_fallen_empires_is_xenophobe_trigger = yes
@@ -3731,7 +3739,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.5001.5.4
+		name = human_fallen_empires.5001.5.5
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step5
 			human_fallen_empires_is_xenophile_trigger = yes
@@ -3880,14 +3888,11 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		not = { has_global_flag = human_fallen_empires_future_in_expansion }
-		or = {
-			year_passed > 110
-			any_country = {
-				is_country_type = default
-				fleet_power > 50000
-			}
+		any_country = {
+			is_country_type = default
+			fleet_power > 50000
 		}
+		not = { has_global_flag = human_fallen_empires_future_in_expansion }
 	}
 
 	immediate = {
