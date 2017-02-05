@@ -422,7 +422,7 @@ ship_event  = {
 	trigger = {
 		nor = {
 			has_global_flag = human_fallen_empires_egypt_in_expansion
-			has_country_flag = human_fallen_empires_egypt_contacted
+			owner = { has_country_flag = human_fallen_empires_egypt_contacted }
 		}
 		from = {
 			exists = space_owner
@@ -444,6 +444,14 @@ ship_event  = {
 					is_ai = no
 				}
 				country_event = { id = human_fallen_empires.5 }
+				else = {
+					event_target:human_fallen_empires_egypt_country = {
+						set_closed_borders = {
+							who = root
+							status = yes
+						}
+					}
+				}
 			}
 			set_country_flag = human_fallen_empires_egypt_contacted
 		}
@@ -471,6 +479,7 @@ country_event = {
 	#show_sound = testtest
 	diplomatic = yes
 	is_triggered_only = yes
+
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_egypt_country
 		planet_background = event_target:human_fallen_empires_egypt_country
@@ -532,7 +541,7 @@ country_event = {
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
 			}
-			human_fallen_empires_is_xenoph = no
+			human_fallen_empires_is_xenophobe_trigger = no
 			has_country_flag = human_fallen_empires_marked_as_human
 		}
 		hidden_effect = {
@@ -1078,10 +1087,7 @@ country_event = {
 		name = human_fallen_empires.5.4.0
 		trigger = {
 			has_country_flag = egp_step4
-			or = {
-				has_ethic = "ethic_xenophile"
-				has_ethic = "ethic_fanatic_xenophile"
-			}
+			human_fallen_empires_is_xenophile_trigger = yes
 		}
 		hidden_effect = {
 			remove_country_flag = egp_step4
@@ -1115,7 +1121,6 @@ country_event = {
 		name = human_fallen_empires.5.4.2
 		trigger = {
 			has_country_flag = egp_step4
-			has_country_flag = human_fallen_empires_marked_as_human
 		}
 		hidden_effect = {
 			remove_country_flag = egp_step4
@@ -1139,7 +1144,7 @@ country_event = {
 	trigger = {
 		not = { has_global_flag = human_fallen_empires_egypt_in_expansion }
 		or = {
-			year_passed > 90
+			years_passed > 90
 			any_country = {
 				is_country_type = default
 				fleet_power > 30000
@@ -3879,7 +3884,7 @@ country_event = {
 	trigger = {
 		not = { has_global_flag = human_fallen_empires_future_in_expansion }
 		or = {
-			year_passed > 110
+			years_passed > 110
 			any_country = {
 				is_country_type = default
 				fleet_power > 50000
