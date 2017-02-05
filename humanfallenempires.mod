@@ -1,5 +1,5 @@
 name="Human Fallen Empires"
-path="mod/humanfallenempires"
+path="mod/humanfallenempires-master"
 tags={
 	"Diplomacy"
 	"Galaxy Generation"
