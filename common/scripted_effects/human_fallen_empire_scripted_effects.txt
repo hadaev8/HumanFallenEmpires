@@ -324,6 +324,7 @@ human_fallen_empires_create_primitive = {
 				}
 			}
 			set_owner = last_created_country
+			set_controller = last_created_country
 			random_tile = {
 				limit = { has_building = "building_colony_shelter" }
 				remove_building = yes
@@ -353,42 +354,6 @@ human_fallen_empires_create_primitive = {
 					set_blocker = tb_failing_infrastructure
 				}
 			}
-			while = {
-				count = 5
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = event_target:human_fallen_empires_species
-						ethos = owner
-					}
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						OR = {
-							has_country_flag = machine_age
-							has_country_flag = atomic_age
-							has_country_flag = early_space_age
-						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = event_target:human_fallen_empires_species
-						ethos = owner
-					}
-				}
-			}
 			if = {
 				limit = {
 					last_created_country = {
@@ -410,24 +375,6 @@ human_fallen_empires_create_primitive = {
 						resource = minerals
 						amount = 1
 						replace = yes
-					}
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						has_country_flag = early_space_age
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = event_target:human_fallen_empires_species
-						ethos = owner
 					}
 				}
 			}
@@ -605,38 +552,6 @@ human_fallen_empires_create_primitive = {
 			}
 			set_owner = last_created_country
 			random_tile = {
-				limit = {
-					has_blocker = no
-					has_grown_pop = no
-					has_growing_pop = no
-				}
-				create_pop = {
-					species = event_target:human_fallen_empires_species
-					ethos = owner
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						OR = {
-							has_country_flag = steam_age
-							has_country_flag = renaissance_age
-						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = event_target:human_fallen_empires_species
-						ethos = owner
-					}
-				}
-			}
-			random_tile = {
 				limit = { has_building = "building_colony_shelter" }
 				remove_building = yes
 			}
@@ -665,17 +580,6 @@ human_fallen_empires_create_primitive = {
 							has_country_flag = renaissance_age
 							has_country_flag = steam_age
 						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = event_target:human_fallen_empires_species
-						ethos = owner
 					}
 				}
 				random_tile = {
@@ -818,60 +722,115 @@ human_fallen_empires_create_primitive = {
 			destroy_fleet = this
 		}
 	}
+	every_country = {
+		establish_communications_no_message = last_created_country
+	}
 }
 
 human_fallen_empires_create_vassal = {
-	save_event_target_as = human_fallen_empires_planet
 	if = {
 		limit = {
-			any_country = {
-				has_country_flag = human_fallen_empires_spiritualist_liberated_country
-				num_owned_planets < 6
-			}
+			owner = { is_country = event_target:WarInHeavenLoserFE }
 		}
-		random_country = {
+		save_event_target_as = human_fallen_empires_planet
+		if = {
 			limit = {
-				has_country_flag = human_fallen_empires_spiritualist_liberated_country
-				num_owned_planets < 6
-			}
-			event_target:human_fallen_empires_planet = {
-				set_owner = prev
-				set_controller = prev
-			}
-		}
-		else = {
-			create_country = {
-				name = random
-				government = "divine_mandate"
-				released_by_country = root
-				released_from_country = event_target:human_fallen_empires_planet.owner
-				species = event_target:human_fallen_empires_planet.owner.species
-				ethos = {
-					ethic = "ethic_fanatic_spiritualist"
-					ethic = "ethic_collectivist"
+				any_country = {
+					has_country_flag = human_fallen_empires_liberated_country
+					num_owned_planets < 6
 				}
-				flag = random
-				type = default
-				day_zero_contact = no
-				effect = {
-					set_timed_country_flag = { flag = human_fallen_empires_spiritualist_liberated_country days = 10 }
-					establish_communications_no_message = root
-				#	establish_communications_no_message = fromfromfrom
-				#	establish_communications_no_message = parameter:planet.owner
-					establish_contact = { who = root location = event_target:human_fallen_empires_planet }
-				#	establish_contact = { who = fromfromfrom location = parameter:planet }
-				#	establish_contact = { who = parameter:planet.owner location = parameter:planet }
-					add_modifier = {
-						modifier = "puppet_government"
-						days = 3600
-					}
-					event_target:human_fallen_empires_planet = {
-						set_owner = prev
-						set_controller = prev
-					}
-					set_subject_of = {
-						who = root
-						subject_type = dominion
+			}
+			random_country = {
+				limit = {
+					has_country_flag = human_fallen_empires_liberated_country
+					num_owned_planets < 6
+				}
+				event_target:human_fallen_empires_planet = {
+					set_owner = prev
+					set_controller = prev
+				}
+			}
+			else = {
+				create_country = {
+					name = random
+					government = random
+					released_by_country = root
+					released_from_country = event_target:event_target:WarInHeavenLoserFE
+					species = event_target:human_fallen_empires_planet.owner.species
+					ethos = root
+					flag = random
+					type = default
+					day_zero_contact = no
+					effect = {
+						set_timed_country_flag = { flag = human_fallen_empires_liberated_country days = 1 }
+						establish_communications_no_message = root
+						#establish_communications_no_message = fromfromfrom
+						#establish_communications_no_message = parameter:planet.owner
+						establish_contact = { who = root location = event_target:human_fallen_empires_planet }
+						#establish_contact = { who = fromfromfrom location = parameter:planet }
+						#establish_contact = { who = parameter:planet.owner location = parameter:planet }
+						add_modifier = {
+							modifier = "puppet_government"
+							days = 3600
+						}
+						event_target:human_fallen_empires_planet = {
+							set_owner = prev
+							set_controller = prev
+							solar_system = {
+								every_system_planet = {
+									limit = {
+										exists = owner
+										owner = { is_country = event_target:WarInHeavenLoserFE }
+									}
+									set_owner = prevprevprev
+									set_controller = prevprevprev
+								}
+							}
+						}
+						if = {
+							limit = {
+								is_country_type = awakened_fallen_empire
+							}
+							if = {
+								limit = {
+									has_ethic = ethic_fanatic_spiritualist
+								}
+								set_subject_of = {
+									who = root
+									subject_type = dominion
+								}
+								else = {
+									if = {
+										limit = {
+											has_ethic = ethic_fanatic_xenophile
+										}
+										set_subject_of = {
+											who = root
+											subject_type = signatory
+										}
+									}
+								}
+							}
+							else = {
+								if = {
+									limit = {
+										has_country_flag = human_fallen_empires_coalition_leader
+									}
+									set_subject_of = {
+										who = root
+										subject_type = human_fallen_empires_future_vassal
+									}
+									#country_remove_ethic = ethic_fanatic_militarist
+									#country_add_ethic = ethic_militarist
+									else = {
+										set_subject_of = {
+											who = root
+											subject_type = vassal
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
