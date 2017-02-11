@@ -1345,10 +1345,9 @@ country_event = {
 	id = human_fallen_empires.102
 	title = "human_fallen_empires.102.name"
 	desc = "human_fallen_empires.102.desc"
-	picture = GFX_evt_human_fallen_empire_events_valeres_planet
-	show_sound = event_construction
+	picture = GFX_evt_human_fallen_empires_events_varelse_planet
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	option = {
@@ -1356,16 +1355,14 @@ country_event = {
 		hidden_effect = {
 			country_event = { id = human_fallen_empires.103 days = 12 random = 4 }#lets go to artifact
 		}
+		custom_tooltip = human_fallen_empires.102.0.tooltip
 	}
 	option = {
 		name = "human_fallen_empires.102.1"
 		hidden_effect = {
 			if = {
 				limit = {
-					or = {
-						has_ethic = "ethic_xenophobe"
-						has_ethic = "ethic_fanatic_xenophobe"
-					}
+					human_fallen_empires_is_xenophobe_trigger = yes
 				}
 				country_event = { id = human_fallen_empires.105 days = 10 random = 5 }#lets go to factory and destroy it
 				else = {
@@ -1373,14 +1370,12 @@ country_event = {
 				}
 			}
 		}
+		custom_tooltip = human_fallen_empires.102.1.tooltip
 	}
 	option = {
 		name = "human_fallen_empires.102.2"
 		trigger = {
-			or = {
-				has_ethic = "ethic_materialist"
-				has_ethic = "ethic_fanatic_materialist"
-			}
+			human_fallen_empires_is_materialist_trigger = yes
 		}
 		hidden_effect = {
 			country_event = { id = human_fallen_empires.107 days = 100 random = 20 }#lets revolt (materialist)
@@ -1397,7 +1392,7 @@ country_event = {
 			country_event = { id = human_fallen_empires.108 days = 100 random = 20 }#lets infiltrat
 		}
 	}
-	option = {																					#nothing
+	option = {
 		name = "human_fallen_empires.102.4"
 	}
 }
@@ -1664,8 +1659,8 @@ country_event = {
 		trigger = {
 			switch = {
 				trigger = has_country_flag
-				human_fallen_empires.152 = { text = human_fallen_empires.152.desc.2 }
-				default = { text = human_fallen_empires.152.desc.1 }
+				human_fallen_empires.152 = { text = human_fallen_empires.152.desc.1 }
+				default = { text = human_fallen_empires.152.desc.0 }
 			}
 		}
 	}
@@ -2088,7 +2083,7 @@ country_event = {
 			}
 		}
 	}
-	picture = GFX_evt_archaeological_dig # need pic
+	picture = GFX_evt_human_fallen_empires_events_explosion
 	show_sound = event_ship_explosion
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
@@ -4731,7 +4726,9 @@ event = {
 		random_country = {
 			limit = {
 				is_country_type = awakened_fallen_empire
-				not = { is_same_value = event_target:human_fallen_empires_1_awakened }
+				not = {
+					is_country = event_target:human_fallen_empires_1_awakened
+				}
 			}
 			save_event_target_as = human_fallen_empires_2_awakened
 		}
@@ -4746,8 +4743,8 @@ event = {
 				limit = {
 					is_country_type = awakened_fallen_empire
 					nor = {
-						is_same_value = event_target:human_fallen_empires_1_awakened
-						is_same_value = event_target:human_fallen_empires_2_awakened
+						is_country = event_target:human_fallen_empires_1_awakened
+						is_country = event_target:human_fallen_empires_2_awakened
 					}
 				}
 				save_event_target_as = human_fallen_empires_3_awakened
@@ -4761,9 +4758,9 @@ event = {
 				limit = {
 					is_country_type = awakened_fallen_empire
 					nor = {
-						is_same_value = event_target:human_fallen_empires_1_awakened
-						is_same_value = event_target:human_fallen_empires_2_awakened
-						is_same_value = event_target:human_fallen_empires_3_awakened
+						is_country = event_target:human_fallen_empires_1_awakened
+						is_country = event_target:human_fallen_empires_2_awakened
+						is_country = event_target:human_fallen_empires_3_awakened
 					}
 				}
 				save_event_target_as = human_fallen_empires_4_awakened
@@ -4947,16 +4944,46 @@ event = {
 # events with text
 country_event = {
 	id = human_fallen_empires.10100
-	title = war_in_heaven.4.name
-	desc = war_in_heaven.4.desc
+	title = "human_fallen_empires.10100.name"
+	desc = {
+		trigger = {
+			fail_text = {
+				text = "human_fallen_empires.10100.desc.0.0"
+				exists = event_target:human_fallen_empires_3_awakened
+			}
+			success_text = {
+				text = "human_fallen_empires.10100.desc.0.1"
+				exists = event_target:human_fallen_empires_3_awakened
+				not = { exists = event_target:human_fallen_empires_4_awakened }
+			}
+			success_text = {
+				text = "human_fallen_empires.10100.desc.0.2"
+				exists = event_target:human_fallen_empires_4_awakened
+			}
+			text = newline
+			success_text = {
+				text = "human_fallen_empires.10100.desc.1.0"
+				exists = event_target:human_fallen_empires_coalition_leader
+			}
+			success_text = {
+				text = "human_fallen_empires.10100.desc.1.1"
+				exists = event_target:human_fallen_empires_egypt_country
+				event_target:human_fallen_empires_egypt_country = {
+					not = {
+						is_country = event_target:human_fallen_empires_coalition_leader
+					}
+				}
+			}
+			text = newline
+			text = "human_fallen_empires.10100.desc.2.0"
+		}
+	}
 	picture = GFX_evt_fallen_empire_awakes
 	show_sound = event_alien_signal
-	location = from
-
 	is_triggered_only = yes
 
 	option = {
-		name = human_fallen_empires.10001.0
+		name = human_fallen_empires.10100.0
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
@@ -4970,6 +4997,8 @@ country_event = {
 				or = {
 					has_ai_personality = fanatic_purifiers
 					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
 				}
 			}
 			modifier = {
@@ -4977,44 +5006,29 @@ country_event = {
 				or = {
 					and = {
 						event_target:human_fallen_empires_1_awakened = {
-							has_ethic = ethic_fanatic_spiritualist
-						}
-						nor = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_1_awakened = {
-							has_ethic = ethic_fanatic_materialist
-						}
-						nor = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						nor = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-						#	has_ethic = ethic_xenophobe
-						#	has_ethic = ethic_fanatic_xenophobe		# ксенофобы любят ксенофобов?
-						}
+						human_fallen_empires_is_militarist_trigger = no
 					}
 					and = {
 						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						nor = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = no
 					}
+					and = {
+						event_target:human_fallen_empires_1_awakened = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_is_spiritualist_trigger = no
+					}
+					and = {
+						event_target:human_fallen_empires_1_awakened = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_is_materialist_trigger = no
+					}
+					human_fallen_empires_is_xenophobe_trigger = yes
 				}
 			}
 			modifier = {
@@ -5024,41 +5038,25 @@ country_event = {
 						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						or = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						or = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-							has_ethic = ethic_xenophobe
-							has_ethic = ethic_fanatic_xenophobe
-						}
+						human_fallen_empires_is_militarist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_materialist
 						}
-						or = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
+						human_fallen_empires_is_spiritualist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_1_awakened = {
 							has_ethic = ethic_fanatic_spiritualist
 						}
-						or = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
+						human_fallen_empires_is_materialist_trigger = yes
 					}
 				}
 			}
@@ -5122,7 +5120,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.1
+		name = human_fallen_empires.10100.1
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
@@ -5136,6 +5134,8 @@ country_event = {
 				or = {
 					has_ai_personality = fanatic_purifiers
 					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
 				}
 			}
 			modifier = {
@@ -5143,44 +5143,29 @@ country_event = {
 				or = {
 					and = {
 						event_target:human_fallen_empires_2_awakened = {
-							has_ethic = ethic_fanatic_spiritualist
-						}
-						nor = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_2_awakened = {
-							has_ethic = ethic_fanatic_materialist
-						}
-						nor = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						nor = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-						#	has_ethic = ethic_xenophobe
-						#	has_ethic = ethic_fanatic_xenophobe		# ксенофобы любят ксенофобов?
-						}
+						human_fallen_empires_is_militarist_trigger = no
 					}
 					and = {
 						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						nor = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = no
 					}
+					and = {
+						event_target:human_fallen_empires_2_awakened = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_is_spiritualist_trigger = no
+					}
+					and = {
+						event_target:human_fallen_empires_2_awakened = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_is_materialist_trigger = no
+					}
+					human_fallen_empires_is_xenophobe_trigger = yes
 				}
 			}
 			modifier = {
@@ -5190,41 +5175,25 @@ country_event = {
 						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						or = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						or = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-							has_ethic = ethic_xenophobe
-							has_ethic = ethic_fanatic_xenophobe
-						}
+						human_fallen_empires_is_militarist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_materialist
 						}
-						or = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
+						human_fallen_empires_is_spiritualist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_2_awakened = {
 							has_ethic = ethic_fanatic_spiritualist
 						}
-						or = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
+						human_fallen_empires_is_materialist_trigger = yes
 					}
 				}
 			}
@@ -5288,7 +5257,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.2
+		name = human_fallen_empires.10100.2
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
@@ -5303,6 +5272,8 @@ country_event = {
 				or = {
 					has_ai_personality = fanatic_purifiers
 					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
 				}
 			}
 			modifier = {
@@ -5310,44 +5281,29 @@ country_event = {
 				or = {
 					and = {
 						event_target:human_fallen_empires_3_awakened = {
-							has_ethic = ethic_fanatic_spiritualist
-						}
-						nor = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_3_awakened = {
-							has_ethic = ethic_fanatic_materialist
-						}
-						nor = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						nor = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-						#	has_ethic = ethic_xenophobe
-						#	has_ethic = ethic_fanatic_xenophobe		# ксенофобы любят ксенофобов?
-						}
+						human_fallen_empires_is_militarist_trigger = no
 					}
 					and = {
 						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						nor = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = no
 					}
+					and = {
+						event_target:human_fallen_empires_3_awakened = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_is_spiritualist_trigger = no
+					}
+					and = {
+						event_target:human_fallen_empires_3_awakened = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_is_materialist_trigger = no
+					}
+					human_fallen_empires_is_xenophobe_trigger = yes
 				}
 			}
 			modifier = {
@@ -5357,41 +5313,25 @@ country_event = {
 						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						or = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						or = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-							has_ethic = ethic_xenophobe
-							has_ethic = ethic_fanatic_xenophobe
-						}
+						human_fallen_empires_is_militarist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_materialist
 						}
-						or = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
+						human_fallen_empires_is_spiritualist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_3_awakened = {
 							has_ethic = ethic_fanatic_spiritualist
 						}
-						or = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
+						human_fallen_empires_is_materialist_trigger = yes
 					}
 				}
 			}
@@ -5455,12 +5395,11 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.3
+		name = human_fallen_empires.10100.3
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
 			is_country_type = default
-			has_global_flag = human_fallen_empires_war_in_heaven_4
 			exists = event_target:human_fallen_empires_4_awakened
 		}
 		ai_chance = {
@@ -5470,6 +5409,8 @@ country_event = {
 				or = {
 					has_ai_personality = fanatic_purifiers
 					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
 				}
 			}
 			modifier = {
@@ -5477,44 +5418,29 @@ country_event = {
 				or = {
 					and = {
 						event_target:human_fallen_empires_4_awakened = {
-							has_ethic = ethic_fanatic_spiritualist
-						}
-						nor = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_4_awakened = {
-							has_ethic = ethic_fanatic_materialist
-						}
-						nor = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
-					}
-					and = {
-						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						nor = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-						#	has_ethic = ethic_xenophobe
-						#	has_ethic = ethic_fanatic_xenophobe		# ксенофобы любят ксенофобов?
-						}
+						human_fallen_empires_is_militarist_trigger = no
 					}
 					and = {
 						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						nor = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = no
 					}
+					and = {
+						event_target:human_fallen_empires_4_awakened = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_is_spiritualist_trigger = no
+					}
+					and = {
+						event_target:human_fallen_empires_4_awakened = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_is_materialist_trigger = no
+					}
+					human_fallen_empires_is_xenophobe_trigger = yes
 				}
 			}
 			modifier = {
@@ -5524,41 +5450,25 @@ country_event = {
 						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_xenophobe
 						}
-						or = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_xenophile
-							has_ethic = ethic_fanatic_xenophile
-						}
+						human_fallen_empires_is_xenophile_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_xenophile
 						}
-						or = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_militarist
-							has_ethic = ethic_xenophobe
-							has_ethic = ethic_fanatic_xenophobe
-						}
+						human_fallen_empires_is_militarist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_materialist
 						}
-						or = {
-							has_ethic = ethic_spiritualist
-							has_ethic = ethic_fanatic_spiritualist
-						}
+						human_fallen_empires_is_spiritualist_trigger = yes
 					}
 					and = {
 						event_target:human_fallen_empires_4_awakened = {
 							has_ethic = ethic_fanatic_spiritualist
 						}
-						or = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_materialist
-						}
+						human_fallen_empires_is_materialist_trigger = yes
 					}
 				}
 			}
@@ -5622,7 +5532,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.4
+		name = human_fallen_empires.10100.4
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
@@ -5636,32 +5546,21 @@ country_event = {
 				or = {
 					has_ai_personality = fanatic_purifiers
 					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_egypt
 				}
 			}
 			modifier = {
 				factor = 0.5
-				nor = {
-					has_ethic = ethic_materialist
-					has_ethic = ethic_fanatic_materialist
-					has_ethic = ethic_militarist
-					has_ethic = ethic_fanatic_militarist
-					has_ethic = ethic_pacifist
-					has_ethic = ethic_fanatic_pacifist
-					has_ethic = ethic_xenophile
-					has_ethic = ethic_fanatic_xenophile
-					has_ethic = ethic_fanatic_individualist
-					has_ethic = ethic_individualist
-				}
+				human_fallen_empires_is_individualist_trigger = no
+				human_fallen_empires_is_xenophile_trigger = no
+				human_fallen_empires_is_militarist_trigger = no
 			}
 			modifier = {
 				factor = 0.1
 				or = {
-					has_ethic = ethic_xenophobe
-					has_ethic = ethic_fanatic_xenophobe
-					has_ethic = ethic_spiritualist
-					has_ethic = ethic_fanatic_spiritualist
-					has_ethic = ethic_fanatic_collectivist
-					has_ethic = ethic_collectivist
+					human_fallen_empires_is_collectivist_trigger = yes
+					human_fallen_empires_is_xenophobe_trigger = yes
+					human_fallen_empires_is_pacifist_trigger = yes
 				}
 			}
 		}
@@ -5684,7 +5583,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.5
+		name = human_fallen_empires.10100.5
 		trigger = {
 			is_subject = no
 		}
@@ -5724,33 +5623,33 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10001.6
+		name = human_fallen_empires.10100.6
 		trigger = {
 			is_subject = yes
 		}
 		if = {
 			limit = {
-				overlord = { is_same_value = event_target:human_fallen_empires_1_awakened }
+				overlord = { is_country = event_target:human_fallen_empires_1_awakened }
 			}
 			join_war = event_target:human_fallen_empires_1_awakened
 		}
 		if = {
 			limit = {
-				overlord = { is_same_value = event_target:human_fallen_empires_2_awakened }
+				overlord = { is_country = event_target:human_fallen_empires_2_awakened }
 			}
 			join_war = event_target:human_fallen_empires_2_awakened
 		}
 		if = {
 			limit = {
 				exists = event_target:human_fallen_empires_3_awakened
-				overlord = { is_same_value = event_target:human_fallen_empires_3_awakened }
+				overlord = { is_country = event_target:human_fallen_empires_3_awakened }
 			}
 			join_war = event_target:human_fallen_empires_3_awakened
 		}
 		if = {
 			limit = {
 				exists = event_target:human_fallen_empires_4_awakened
-				overlord = { is_same_value = event_target:human_fallen_empires_4_awakened }
+				overlord = { is_country = event_target:human_fallen_empires_4_awakened }
 			}
 			join_war = event_target:human_fallen_empires_4_awakened
 		}
@@ -5911,7 +5810,7 @@ country_event = {
 	id = human_fallen_empires.10021
 	title = "human_fallen_empires.10021.name"
 	desc = "human_fallen_empires.10021.desc.0"
-	picture = GFX_evt_fallen_empire_awakes
+	picture = GFX_evt_human_fallen_empires_events_ships_on_orbit
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
@@ -5924,7 +5823,7 @@ country_event = {
 	id = human_fallen_empires.10022
 	title = "human_fallen_empires.10022.name"
 	desc = "human_fallen_empires.10022.desc.0"
-	picture = GFX_evt_fallen_empire_awakes
+	picture = GFX_evt_human_fallen_empires_events_city_center
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
@@ -5968,7 +5867,7 @@ country_event = {
 	id = human_fallen_empires.10025
 	title = "human_fallen_empires.10025.name"
 	desc = "human_fallen_empires.10025.desc.0"
-	picture = GFX_evt_fallen_empire_awakes
+	picture = GFX_evt_human_fallen_empires_events_ships_on_orbit
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
@@ -5985,7 +5884,7 @@ country_event = {
 	id = human_fallen_empires.10026
 	title = "human_fallen_empires.10026.name"
 	desc = "human_fallen_empires.10026.desc.0"
-	picture = GFX_evt_fallen_empire_awakes
+	picture = GFX_evt_human_fallen_empires_events_city_center
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
