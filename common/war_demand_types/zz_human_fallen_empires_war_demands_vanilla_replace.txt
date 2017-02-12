@@ -458,6 +458,15 @@ total_defeat = {
 	}
 
 	effect = {
+		# Subjects of losing FE are freed
+		parameter:country = {
+			every_subject = {
+				set_subject_of = {
+					who = none
+				}
+				remove_modifier = human_fallen_empires_fallen_resurces_drain
+			}
+		}
 		parameter:country = { save_event_target_as = WarInHeavenLoserFE }
 		if = {
 			limit = {
@@ -549,31 +558,22 @@ total_defeat = {
 			#	remove_global_flag = war_in_heaven_planet_ceded
 			}
 
-			# Subjects of losing FE are freed
-			parameter:country = {
-				every_subject = {
-					set_subject_of = {
-						who = none
-					}
-				}
-			}
-
 			parameter:country = {
 				every_owned_planet = {
 					if = {
-						limit = { root = { has_ethic = "ethic_fanatic_spiritualist" } }
+						limit = { root = { has_ethic = ethic_fanatic_spiritualist } }
 						human_fallen_empires_create_vassal = yes
 						else = {
 							if = {
-								limit = { root = { has_ethic = "ethic_fanatic_xenophile" } }
+								limit = { root = { has_ethic = ethic_fanatic_xenophile } }
 								human_fallen_empires_create_vassal = yes
 								else = {
 									if = {
-										limit = { root = { has_ethic = "ethic_fanatic_xenophobe" } }
+										limit = { root = { has_ethic = ethic_fanatic_xenophobe } }
 										set_owner = root
 										else = {
 											if = {
-												limit = { root = { has_ethic = "ethic_fanatic_materialist" } }
+												limit = { root = { has_ethic = ethic_fanatic_materialist } }
 												human_fallen_empires_create_primitive = yes
 												else = {
 													destroy_colony = yes
@@ -593,7 +593,6 @@ total_defeat = {
 				limit = {
 					has_country_flag = war_in_heaven_winner
 				}
-
 				add_opinion_modifier = { who = root modifier = opinion_war_in_heaven_winner }
 				root = { add_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_winner } }
 			}
@@ -601,7 +600,6 @@ total_defeat = {
 				limit = {
 					has_country_flag = war_in_heaven_loser
 				}
-
 				remove_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy }
 				root = { remove_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_enemy } }
 			}
@@ -611,7 +609,6 @@ total_defeat = {
 				limit = {
 					is_ai = no
 				}
-
 				country_event = { id = war_in_heaven.5 }
 				country_event = { id = war_in_heaven.6 }
 				country_event = { id = war_in_heaven.7 }
@@ -635,22 +632,6 @@ total_defeat = {
 
 			else = {
 				country_event = { id = human_fallen_empires.10010 }
-
-				# Subjects of losing FE are freed
-				parameter:country = {
-					every_subject = {
-						set_subject_of = {
-							who = none
-						}
-					}
-				}
-
-				# Losing FE is wiped out
-			#	parameter:country = {
-			#		every_owned_planet = {
-			#			destroy_colony = yes
-			#		}
-			#	}
 			}
 		}
 	}

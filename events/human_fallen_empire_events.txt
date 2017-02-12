@@ -363,6 +363,62 @@ event = {
 				planet_event = { id = human_fallen_empires.101 days = 1 random = 365 }
 			}
 		}
+		# fallen emp drain resurces from vassals
+		if = {
+			limit = {
+				has_global_flag = human_fallen_empires_war_in_heaven_started
+				any_country = {
+					is_country_type = awakened_fallen_empire
+					is_at_war = yes
+					is_war_leader = yes
+					is_proposing_war_demands = total_defeat
+					or = {
+						any_war = {
+							any_defender = {
+								is_country = prev
+							}
+							defender_war_score < -20
+						}
+						any_war = {
+							any_defender = {
+								is_country = prev
+							}
+							attacker_war_score < -20
+						}
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = awakened_fallen_empire
+					is_at_war = yes
+					is_war_leader = yes
+					is_proposing_war_demands = total_defeat
+					or = {
+						any_war = {
+							any_defender = {
+								is_country = prev
+							}
+							defender_war_score < -20
+						}
+						any_war = {
+							any_defender = {
+								is_country = prev
+							}
+							attacker_war_score < -20
+						}
+					}
+				}
+				every_subject = {
+					limit = {
+						not = {
+							has_modifier = human_fallen_empires_fallen_resurces_drain
+						}
+					}
+					country_event = { id = human_fallen_empires.10050 }
+				}
+			}
+		}
 	}
 }
 
@@ -523,7 +579,7 @@ country_event = {
 				has_country_flag = egp_step4
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
-			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = ethic_fanatic_xenophobe
 		}
 		hidden_effect = {
 			set_country_flag = egp_stepbadend
@@ -1774,7 +1830,7 @@ ship_event = {
 	title = "human_fallen_empires.153.name"
 	desc = "human_fallen_empires.153.desc"
 	picture = GFX_evt_human_fallen_empires_obelisk
-	show_sound = event_airlock
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
@@ -4675,13 +4731,11 @@ event = {
 	}
 
 	immediate = {
-		remove_country_flag = ai_no_wars
 		every_country = {
 			limit = {
 				is_country_type = awakened_fallen_empire
 			}
-	#		save_event_target_as = human_fallen_empires_1_awakened
-	#		remove_country_flag = ai_no_wars
+			remove_country_flag = ai_no_wars
 			country_event = { id = fallen_empires.13 }
 			if = {
 				limit = {
@@ -4941,6 +4995,7 @@ event = {
 			}
 			country_event = { id = human_fallen_empires.10100 }
 		}
+		set_global_flag = human_fallen_empires_war_in_heaven_started
 	}
 }
 
@@ -5919,5 +5974,30 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.10027.0
+	}
+}
+
+
+# fallen drain resurces is losing war 10050
+country_event = {
+	id = human_fallen_empires.10050
+	title = "human_fallen_empires.10050.name"
+	desc = "human_fallen_empires.10050.desc.0"
+	picture = GFX_evt_human_fallen_empires_events_fallen_3
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.10050.0
+		add_modifier = {
+			modifier = human_fallen_empires_fallen_resurces_drain
+			days = 1825
+		}
+		overlord = {
+			add_modifier = {
+				modifier = human_fallen_empires_fallen_ship_build_buff
+				days = 1825
+			}
+		}
 	}
 }
