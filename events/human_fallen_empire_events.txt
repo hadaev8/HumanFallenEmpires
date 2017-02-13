@@ -95,14 +95,6 @@ country_event = {
 						}
 					}
 				}
-				# make humans undivided
-				every_country = {
-					limit = {
-						has_country_flag = human_fallen_empires_marked_as_human
-						species = { not = { is_same_value = event_target:human_fallen_empires_human_species } }
-					}
-					species = { set_species_identity = event_target:human_fallen_empires_human_species }
-				}
 				create_species = {
 					name = "Ju Ahet"
 					plural = "Ju Ahet"
@@ -371,7 +363,7 @@ event = {
 					is_country_type = awakened_fallen_empire
 					is_at_war = yes
 					is_war_leader = yes
-					is_proposing_war_demands = total_defeat
+					is_proposing_war_demands = yes
 					or = {
 						any_war = {
 							any_defender = {
@@ -393,7 +385,7 @@ event = {
 					is_country_type = awakened_fallen_empire
 					is_at_war = yes
 					is_war_leader = yes
-					is_proposing_war_demands = total_defeat
+					is_proposing_war_demands = yes
 					or = {
 						any_war = {
 							any_defender = {
@@ -534,7 +526,7 @@ ship_event  = {
 	}
 }
 
-# main dialoge egypt
+# meeting dialoge egypt
 country_event = {
 	id = human_fallen_empires.5
 	title = TRANSMISSION
@@ -1276,7 +1268,7 @@ country_event = {
 	}
 }
 
-# dialoge for expansion
+# go to expansion dialoge
 country_event = {
 	id = human_fallen_empires.12
 	title = "human_fallen_empires.12.name"
@@ -1298,15 +1290,9 @@ country_event = {
 }
 
 
-
-# meeting dialoge
-
-# go to expansion dialoge
-
-
 ## anomalys and after survey on actions 50 - 100
 
-# wormhole to ju ahet
+# wormhole to ju ahet 50
 ship_event = {
 	id = human_fallen_empires.50
 	title = "human_fallen_empires.50.name"
@@ -1348,11 +1334,145 @@ ship_event = {
 	}
 }
 
+# varelse fleet in time trap 51-53
+
+# start event
+ship_event = {
+	id = human_fallen_empires.51
+	title = "human_fallen_empires.51.name"
+	desc = "human_fallen_empires.51.desc"
+	picture = GFX_evt_human_fallen_empires_wormhole
+	show_sound = event_ship_thrusters
+	location = root
+    is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_has_event.51
+		}
+	}
+
+	immediate = {
+		set_global_flag = human_fallen_empires_has_event.51
+		create_ambient_object = {
+			type = loop_debris_01_object
+			location = solar_system
+		}
+		last_created_ambient_object = {
+			save_event_target_as = human_fallen_empires_varelse_fleet_location
+			enable_special_project = {
+				name = human_fallen_empires_varelse_fleet_project
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.51.0
+		trigger = {
+			is_ship_class = shipclass_science_ship
+		}
+	}
+	option = {
+		name = human_fallen_empires.51.1
+		trigger = {
+			not = {
+				is_ship_class = shipclass_science_ship
+			}
+		}
+	}
+}
+
+# project complite
+ship_event = {
+	id = human_fallen_empires.52
+	title = "human_fallen_empires.52.name"
+	desc = "human_fallen_empires.52.desc"
+	picture = GFX_evt_human_fallen_empires_wormhole
+	show_sound = event_ship_thrusters
+	location = root
+    is_triggered_only = yes
+
+	immediate = {
+		create_country = {
+			name = "Varelse Hegemony"
+			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+				set_faction_hostility = {
+					set_hostile = no
+				}
+			}
+		}
+		create_fleet = {
+			name = "11th Strike Force"
+			effect = {
+				set_owner = last_created_country
+		#		while = {
+		#			count = 30
+		#			create_ship = {
+		#				name = random
+		#				design = cruiser
+		#				graphical_culture = reptilian_01
+		#			}
+		#		}
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						design = Sunset
+						graphical_culture = "reptilian_01"
+					}
+				}
+				set_location = root #event_targe:human_fallen_empires_varelse_fleet_location
+			}
+		}
+	#	destroy_ambient_object = event_targe:human_fallen_empires_varelse_fleet_location
+	}
+
+	option = {
+		name = human_fallen_empires_at_the_sreen
+		hidden_effect = {
+			owner = {
+				country_event = { id = human_fallen_empires.53 }
+				set_country_flag = human_fallen_empires.53.0
+			}
+		}
+	}
+}
+
+# dialogue with fleet
+country_event = {
+	id = human_fallen_empires.53
+	title = "human_fallen_empires.53.name"
+	desc = {
+		trigger = {
+			success_text = {
+				text = "human_fallen_empires.53.desc.0"
+				has_country_flag = human_fallen_empires.53.0
+			}
+		}
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	# добавить сюда пикчу
+	picture_event_data = {
+		portrait = event_target:human_fallen_empires_varelse_species
+		room = human_fallen_empires_varelse_room
+	}
+
+	option = {
+		name = human_fallen_empires.53.0
+	}
+}
+
 
 
 ### varelse section 100 - 150
 
-# varlse colony after curvey
+# varlse colony after curvey 100
 ship_event = {
 	id = human_fallen_empires.100
 	title = "human_fallen_empires.100.name"
@@ -1724,7 +1844,7 @@ country_event = {
 	diplomatic = yes
 
 	picture_event_data = {
-		room = no_video_feed_room
+		room = human_fallen_empires_memorial_story_room
 	}
 
 	option = {
@@ -2436,11 +2556,17 @@ ship_event = {
 		create_country = {
 			name = "Cruiser"
 			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+				set_faction_hostility = {
+					set_hostile = no
+				}
+			}
 		}
-		last_created_country = {
-			create_fleet = { name = "Cruiser"}
-			last_created_fleet = {
-				save_event_target_as = human_fallen_empires_cruiser
+		create_fleet = {
+			name = "Cruiser"
+			effect = {
+				save_event_target_as = human_fallen_empires_cruiser # убрать, если работает owner
 				set_owner = last_created_country
 				create_ship = {
 					name = random
@@ -2471,7 +2597,7 @@ ship_event = {
 							orbit_planet = THIS
 							effect = {
 								id = "human_fallen_empires.253.effect.0"
-								event_target:human_fallen_empires_cruiser = {
+								owner = {
 									set_faction_hostility = {
 										set_hostile = yes
 									}
@@ -2484,7 +2610,6 @@ ship_event = {
 					}
 				}
 			}
-			establish_communications_no_message = root.owner
 		}
 	}
 
@@ -2510,11 +2635,17 @@ ship_event = {
 		create_country = {
 			name = "Mad Cruiser"
 			type = faction
+			effect = {
+				set_faction_hostility = {
+					set_hostile = yes
+				}
+				establish_communications_no_message = root.owner
+			}
 		}
-		last_created_country = {
-			create_fleet = { name = "Mad Cruiser"}
-			last_created_fleet = {
-				set_owner = prev
+		create_fleet = {
+			name = "Mad Cruiser"
+			effect = {
+				set_owner = last_created_country
 				create_ship = {
 					name = random
 					design = "Seth"
@@ -2534,7 +2665,7 @@ ship_event = {
 										has_research_station = yes
 									}
 									exists = controller
-									controller = { is_country = event_target:root.owner }
+									controller = { is_country = root.owner }
 								}
 							}
 							found_system = {
@@ -2549,7 +2680,7 @@ ship_event = {
 									has_research_station = yes
 								}
 								exists = controller
-								controller = { is_country = event_target:root.owner }
+								controller = { is_country = root.owner }
 							}
 							found_planet = {
 								orbit_planet = THIS
@@ -2561,10 +2692,6 @@ ship_event = {
 					}
 				}
 			}
-			set_faction_hostility = {
-				set_hostile = yes
-			}
-			establish_communications_no_message = root.owner
 		}
 	}
 
