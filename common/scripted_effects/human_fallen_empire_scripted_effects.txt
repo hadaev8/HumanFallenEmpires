@@ -1244,3 +1244,186 @@ human_fallen_empires_add_random_trait = {
 		}
 	}
 }
+
+# for fleet
+human_fallen_empires_varelse_fleet_attack_home_of_light = {
+	set_fleet_stance = aggressive
+	queue_actions = {
+		find_closest_system = {
+			trigger = {
+				id = human_fallen_empires_varelse_fleet_attack_home_of_light_trigger.0
+				any_planet = {
+					has_planet_flag = human_fallen_empires_home_of_light
+				}
+			}
+			found_system = {
+				move_to = this
+				effect = {
+					id = human_fallen_empires_varelse_fleet_attack_home_of_light_effect.1
+					if = {
+						limit = {
+							any_planet = {
+								has_planet_flag = human_fallen_empires_home_of_light
+								not = {
+									and = {
+										exists = owner
+										owner = {
+											has_country_flag = human_fallen_empires_egypt
+										}
+									}
+								}
+							}
+						}
+						event_target:human_fallen_empires_varelse_fleet = {
+							clear_fleet_actions = this
+							human_fallen_empires_varelse_fleet_find_new_home = yes
+						}
+						else = {
+							event_target:human_fallen_empires_varelse_fleet = {
+								owner = {
+									set_faction_hostility = {
+										set_hostile = yes
+									}
+								}
+							}
+						}
+					}
+				}
+				find_closest_planet = {
+					trigger = {
+						id = human_fallen_empires_varelse_fleet_attack_home_of_light_trigger.1
+						has_planet_flag = human_fallen_empires_home_of_light
+					}
+					found_planet = {
+						move_to = this
+						repeat = {
+							while = {
+								id = human_fallen_empires.53.attact_trigger.2
+								num_pops > 0
+							}
+							wait = {
+								duration = 60
+							}
+						}
+						effect = {
+							id = human_fallen_empires_varelse_fleet_attack_home_of_light_effect.2
+							event_target:human_fallen_empires_varelse_fleet = {
+								clear_fleet_actions = this
+								human_fallen_empires_varelse_fleet_find_new_home = yes
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# for fleet
+human_fallen_empires_varelse_fleet_find_new_home = {
+	queue_actions = {
+		find_closest_system = {
+			trigger = {
+				id = human_fallen_empires_find_new_home_trigger.0
+				has_owner = no
+				any_planet = {
+					or = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_desert
+					}
+				}
+			}
+			found_system = {
+				move_to = this
+				find_closest_planet = {
+					trigger = {
+						id = human_fallen_empires_find_new_home_trigger.1
+						has_owner = no
+						or = {
+							is_planet_class = pc_gaia
+							is_planet_class = pc_desert
+						}
+					}
+					found_planet = {
+						move_to = this
+						effect = {
+							id = human_fallen_empires_find_new_home_effect.0
+							create_country = {
+								name = "Varelse Hegemony"
+								type = default
+								government = random
+								species = event_target:human_fallen_empires_varelse_species
+								ethos = {
+									ethic = ethic_xenophobe
+									ethic = ethic_militarist
+									ethic = ethic_materialist
+								}
+								flag = random
+							}
+							create_colony = {
+								owner = last_created_country
+								species = owner
+								ethos = owner
+							}
+							event_target:human_fallen_empires_varelse_fleet = {
+								set_owner = last_created_country
+							}
+						}
+					}
+				}
+			}
+		}
+		find_closest_system = {
+			trigger = {
+				id = human_fallen_empires_find_new_home_trigger.2
+				any_planet = {
+					has_owner = no
+					or = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_desert
+					}
+				}
+			}
+			found_system = {
+				move_to = this
+				find_closest_planet = {
+					trigger = {
+						id = human_fallen_empires_find_new_home_trigger.3
+						has_owner = no
+						or = {
+							is_planet_class = pc_gaia
+							is_planet_class = pc_desert
+						}
+					}
+					found_planet = {
+						move_to = this
+						effect = {
+							id = human_fallen_empires_find_new_home_effect.1
+							create_country = {
+								name = "Varelse Hegemony"
+								type = default
+								government = random
+								species = event_target:human_fallen_empires_varelse_species
+								ethos = {
+									ethic = ethic_xenophobe
+									ethic = ethic_militarist
+									ethic = ethic_materialist
+								}
+								flag = random
+							}
+							create_colony = {
+								owner = last_created_country
+								species = owner
+								ethos = owner
+							}
+							event_target:human_fallen_empires_varelse_fleet = {
+								set_owner = last_created_country
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

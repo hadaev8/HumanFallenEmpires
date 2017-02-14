@@ -1339,39 +1339,44 @@ ship_event = {
 # start event
 ship_event = {
 	id = human_fallen_empires.51
-	title = "human_fallen_empires.51.name"
-	desc = "human_fallen_empires.51.desc"
-	picture = GFX_evt_human_fallen_empires_wormhole
+	title = human_fallen_empires.51.name
+	desc = human_fallen_empires.51.desc
+	picture = GFX_evt_human_fallen_empires_events_station
 	show_sound = event_ship_thrusters
-	location = root
+	location = event_target:human_fallen_empires_varelse_fleet_location
     is_triggered_only = yes
 
 	trigger = {
 		not = {
 			has_global_flag = human_fallen_empires_has_event.51
 		}
+		owner = {
+			is_ai = no
+		}
 	}
 
 	immediate = {
 		set_global_flag = human_fallen_empires_has_event.51
 		create_ambient_object = {
-			type = loop_debris_01_object
+			type = ancient_battlefield_object
 			location = solar_system
 		}
 		last_created_ambient_object = {
 			save_event_target_as = human_fallen_empires_varelse_fleet_location
-			enable_special_project = {
-				name = human_fallen_empires_varelse_fleet_project
-				location = this
-				owner = root.owner
-			}
+		}
+		enable_special_project = {
+			name = human_fallen_empires_varelse_fleet_project
+			location = event_target:human_fallen_empires_varelse_fleet_location
+			owner = root.owner
 		}
 	}
 
 	option = {
 		name = human_fallen_empires.51.0
 		trigger = {
-			is_ship_class = shipclass_science_ship
+			root = {
+				is_ship_class = shipclass_science_ship
+			}
 		}
 	}
 	option = {
@@ -1387,9 +1392,19 @@ ship_event = {
 # project complite
 ship_event = {
 	id = human_fallen_empires.52
-	title = "human_fallen_empires.52.name"
-	desc = "human_fallen_empires.52.desc"
-	picture = GFX_evt_human_fallen_empires_wormhole
+	title = human_fallen_empires.52.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.52.desc.0
+				owner = {
+					has_country_flag = human_fallen_empires_egypt_contacted
+				}
+			}
+			text = human_fallen_empires.52.desc.1
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_events_wormhole
 	show_sound = event_ship_thrusters
 	location = root
     is_triggered_only = yes
@@ -1403,20 +1418,18 @@ ship_event = {
 				set_faction_hostility = {
 					set_hostile = no
 				}
+				create_leader = {
+					type = admiral
+					species = event_target:human_fallen_empires_varelse_species
+					name = random
+					skill = 500
+				}
 			}
 		}
 		create_fleet = {
 			name = "11th Strike Force"
 			effect = {
 				set_owner = last_created_country
-		#		while = {
-		#			count = 30
-		#			create_ship = {
-		#				name = random
-		#				design = cruiser
-		#				graphical_culture = reptilian_01
-		#			}
-		#		}
 				while = {
 					count = 10
 					create_ship = {
@@ -1425,7 +1438,25 @@ ship_event = {
 						graphical_culture = "reptilian_01"
 					}
 				}
+				assign_leader = last_created_leader
+				while = {
+					count = 30
+					create_ship = {
+						name = random
+						design = Farstar
+						graphical_culture = "reptilian_01"
+					}
+				}
+				owner = {
+					every_owned_ship = {
+						add_modifier = {
+							modifier = egypt_fallen_empire_unkeep
+							days = -1
+						}
+					}
+				}
 				set_location = root #event_targe:human_fallen_empires_varelse_fleet_location
+				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
 	#	destroy_ambient_object = event_targe:human_fallen_empires_varelse_fleet_location
@@ -1445,26 +1476,146 @@ ship_event = {
 # dialogue with fleet
 country_event = {
 	id = human_fallen_empires.53
-	title = "human_fallen_empires.53.name"
+	title = TRANSMISSION
 	desc = {
 		trigger = {
 			success_text = {
-				text = "human_fallen_empires.53.desc.0"
+				text = "human_fallen_empires.53.desc.0.0"
 				has_country_flag = human_fallen_empires.53.0
+			}
+			success_text = {
+				text = "human_fallen_empires.53.desc.1.0"
+				has_country_flag = human_fallen_empires.53.0.0
+			}
+			success_text = {
+				text = "human_fallen_empires.53.desc.1.1"
+				or = {
+					has_country_flag = human_fallen_empires.53.0.1
+					has_country_flag = human_fallen_empires.53.0.2
+				}
+			}
+			success_text = {
+				text = "human_fallen_empires.53.desc.1.2"
+				or = {
+					has_country_flag = human_fallen_empires.53.0.3
+					has_country_flag = human_fallen_empires.53.0.4
+				}
 			}
 		}
 	}
 	is_triggered_only = yes
 	diplomatic = yes
 
-	# добавить сюда пикчу
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_varelse_species
 		room = human_fallen_empires_varelse_room
 	}
 
 	option = {
-		name = human_fallen_empires.53.0
+		name = human_fallen_empires.53.0.0
+		trigger = {
+			has_country_flag = human_fallen_empires.53.0
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.53.0
+			set_country_flag = human_fallen_empires.53.0.0
+			country_event = { id = human_fallen_empires.53 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.53.0.1
+		trigger = {
+			has_country_flag = human_fallen_empires.53.0
+			has_country_flag = human_fallen_empires_egypt_contacted
+			human_fallen_empires_is_xenophobe_trigger = yes
+
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.53.0
+			set_country_flag = human_fallen_empires.53.0.1
+			country_event = { id = human_fallen_empires.53 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.53.0.2
+		trigger = {
+			has_country_flag = human_fallen_empires.53.0
+			has_country_flag = human_fallen_empires_egypt_contacted
+			human_fallen_empires_is_militarist_trigger = yes
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.53.0
+			set_country_flag = human_fallen_empires.53.0.2
+			country_event = { id = human_fallen_empires.53 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.53.0.3
+		trigger = {
+			has_country_flag = human_fallen_empires.53.0
+			has_country_flag = human_fallen_empires_egypt_contacted
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.53.0
+			set_country_flag = human_fallen_empires.53.0.3
+			country_event = { id = human_fallen_empires.53 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.53.0.4
+		trigger = {
+			has_country_flag = human_fallen_empires.53.0
+			human_fallen_empires_is_pacifist_trigger = yes
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.53.0
+			set_country_flag = human_fallen_empires.53.0.4
+			country_event = { id = human_fallen_empires.53 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.53.1.0
+		trigger = {
+			or = {
+				has_country_flag = human_fallen_empires.53.0.0
+				has_country_flag = human_fallen_empires.53.0.1
+				has_country_flag = human_fallen_empires.53.0.2
+				has_country_flag = human_fallen_empires.53.0.3
+				has_country_flag = human_fallen_empires.53.0.4
+			}
+		}
+		hidden_effect = {
+			# attack home of light
+			if = {
+				limit = {
+					or = {
+						has_country_flag = human_fallen_empires.53.0.0
+						has_country_flag = human_fallen_empires.53.0.1
+						has_country_flag = human_fallen_empires.53.0.2
+					}
+				}
+				remove_country_flag = human_fallen_empires.53.0.0
+				remove_country_flag = human_fallen_empires.53.0.1
+				remove_country_flag = human_fallen_empires.53.0.2
+				event_target:human_fallen_empires_varelse_fleet = {
+					human_fallen_empires_varelse_fleet_attack_home_of_light = yes
+				}
+			}
+			# found new home
+			if = {
+				limit = {
+					or = {
+						has_country_flag = human_fallen_empires.53.0.3
+						has_country_flag = human_fallen_empires.53.0.4
+					}
+				}
+				remove_country_flag = human_fallen_empires.53.0.3
+				remove_country_flag = human_fallen_empires.53.0.4
+				event_target:human_fallen_empires_varelse_fleet = {
+					human_fallen_empires_varelse_fleet_find_new_home = yes
+				}
+			}
+		}
 	}
 }
 
