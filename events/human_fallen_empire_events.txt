@@ -330,9 +330,15 @@ country_event = {
 						has_country_flag = human_fallen_empires_discovery
 					}
 					set_country_type = human_fallen_empires_discovery
-				#	every_owned_fleet = {
-				#		destroy_fleet = this
-				#	}
+					every_owned_fleet = {
+						limit = {
+							exists = leader
+						}
+						leader = {
+							unassign_leader = this
+						}
+						destroy_fleet = this
+					}
 					random_owned_planet = {
 						solar_system = {
 							every_system_planet = {
@@ -348,8 +354,15 @@ country_event = {
 									name = Discovery
 									design = Deepvoid
 								}
+								last_created_ship = {
+									set_ship_flag = human_fallen_empires_discovery
+								}
 								set_location = prev
 							}
+						}
+						create_ship_design = {
+							design = Constructor
+							ftl = warp
 						}
 						create_fleet = {
 							name = Constructor
@@ -357,10 +370,14 @@ country_event = {
 								set_owner = prevprev
 								create_ship = {
 									name = random
-									design = Constructor
+									design = last_created_design
 								}
 								set_location = prev
 							}
+						}
+						create_ship_design = {
+							design = Prototype
+							ftl = warp
 						}
 						create_fleet = {
 							name = "Science Ship"
@@ -368,17 +385,17 @@ country_event = {
 								set_owner = prevprev
 								create_ship = {
 									name = random
-									design = Prototype
+									design = last_created_design
 								}
 								set_location = prev
 							}
 						}
-						every_owned_ship = {
-							repair_ship = yes
-							add_modifier = {
-								modifier = human_fallen_empires_unkeep
-								days = -1
-							}
+					}
+					every_owned_ship = {
+						repair_ship = yes
+						add_modifier = {
+							modifier = human_fallen_empires_unkeep
+							days = -1
 						}
 					}
 					add_minerals = 500
@@ -397,6 +414,22 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
+		# make dicovery default country
+		if = {
+			limit = {
+				any_country = {
+					is_country_type = human_fallen_empires_discovery
+					num_owned_planets > 0
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = human_fallen_empires_discovery
+					num_owned_planets > 0
+				}
+				set_country_type = default
+			}
+		}
 		# assimilation event for coalition
 		random_country = {
 			limit = { has_country_flag = human_fallen_empires_coalition_leader }
@@ -715,7 +748,7 @@ country_event = {
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
 			}
-			has_ethic = "ethic_fanatic_spiritualist"
+			has_ethic = ethic_fanatic_spiritualist
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
@@ -734,7 +767,7 @@ country_event = {
 				has_country_flag = egp_step3
 				has_country_flag = egp_step4
 			}
-			has_ethic = "ethic_fanatic_militarist"
+			has_ethic = ethic_fanatic_militarist
 			fleet_power > 20000
 		}
 		hidden_effect = {
@@ -1312,10 +1345,10 @@ country_event = {
 			modifier = human_fallen_empires_navy_size
 			days = 3650
 		}
-		country_add_ethic = "ethic_xenophobe"
+		country_add_ethic = ethic_xenophobe
 		every_owned_pop = {
-			pop_add_ethic = "ethic_xenophobe"
-			pop_add_ethic = "ethic_fanatic_spiritualist"
+			pop_add_ethic = ethic_xenophobe
+			pop_add_ethic = ethic_fanatic_spiritualist
 		}
 		set_country_type = default
 		set_global_flag = human_fallen_empires_egypt_in_expansion
@@ -1441,16 +1474,14 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.51.0
 		trigger = {
-			root = {
-				is_ship_class = shipclass_science_ship
-			}
+			is_ship_size = science
 		}
 	}
 	option = {
 		name = human_fallen_empires.51.1
 		trigger = {
 			not = {
-				is_ship_class = shipclass_science_ship
+				is_ship_size = science
 			}
 		}
 	}
@@ -1522,7 +1553,7 @@ ship_event = {
 						}
 					}
 				}
-				set_location = root #event_targe:human_fallen_empires_varelse_fleet_location
+				set_location = event_targe:human_fallen_empires_varelse_fleet_location
 				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
@@ -1744,10 +1775,11 @@ country_event = {
 	location = event_target:human_fallen_empires_varelse_colony
 	is_triggered_only = yes
 
+	#lets go to artifact
 	option = {
 		name = "human_fallen_empires.102.0"
 		hidden_effect = {
-			country_event = { id = human_fallen_empires.103 days = 12 random = 4 }#lets go to artifact
+			country_event = { id = human_fallen_empires.103 days = 12 random = 4 }
 		}
 		custom_tooltip = human_fallen_empires.102.0.tooltip
 	}
@@ -1766,15 +1798,17 @@ country_event = {
 		}
 		custom_tooltip = human_fallen_empires.102.1.tooltip
 	}
+	#lets revolt (materialist)
 	option = {
 		name = "human_fallen_empires.102.2"
 		trigger = {
 			human_fallen_empires_is_materialist_trigger = yes
 		}
 		hidden_effect = {
-			country_event = { id = human_fallen_empires.107 days = 100 random = 20 }#lets revolt (materialist)
+			country_event = { id = human_fallen_empires.107 days = 100 random = 20 }
 		}
 	}
+	#lets infiltrat
 	option = {
 		name = "human_fallen_empires.102.3"
 		trigger = {
@@ -1783,7 +1817,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			country_event = { id = human_fallen_empires.108 days = 100 random = 20 }#lets infiltrat
+			country_event = { id = human_fallen_empires.108 days = 100 random = 20 }
 		}
 	}
 	option = {
@@ -1819,9 +1853,8 @@ country_event = {
 	diplomatic = yes
 	is_triggered_only = yes
 
-	# добавить сюда пикчу
 	picture_event_data = {
-		room = no_video_feed_room
+		room = human_fallen_empires_varelse_room
 	}
 
 	option = {
@@ -2773,12 +2806,12 @@ ship_event = {
 	immediate = {
 		create_country = {
 			name = "Cruiser"
-			type = faction
+			type = neutral_faction
 			effect = {
 				establish_communications_no_message = root.owner
-				set_faction_hostility = {
-					set_hostile = no
-				}
+		#		set_faction_hostility = {
+		#			set_hostile = no
+		#		}
 			}
 		}
 		create_fleet = {
@@ -2812,7 +2845,7 @@ ship_event = {
 							has_planet_flag = human_fallen_empires_varelse_colony
 						}
 						found_planet = {
-							orbit_planet = THIS
+							orbit_planet = this
 							effect = {
 								id = "human_fallen_empires.253.effect.0"
 								owner = {
@@ -2836,7 +2869,7 @@ ship_event = {
 	}
 }
 
-# The cruiser has acquired mind and became aggressive
+# cruiser became aggressive
 ship_event = {
 	id = human_fallen_empires.254
 	title = "human_fallen_empires.254.name"
@@ -2854,9 +2887,9 @@ ship_event = {
 			name = "Mad Cruiser"
 			type = faction
 			effect = {
-				set_faction_hostility = {
-					set_hostile = yes
-				}
+		#		set_faction_hostility = {
+		#			set_hostile = yes
+		#		}
 				establish_communications_no_message = root.owner
 			}
 		}
@@ -3507,6 +3540,93 @@ country_event = {
 }
 
 
+## discovery section 550
+
+# harvest minerals
+country_event = {
+	id = human_fallen_empires.550
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_discovery
+	}
+
+	immediate = {
+		add_minerals = 50
+		fromfrom = {
+			solar_system = {
+				if = {
+					limit = {
+						exists = space_owner
+						space_owner = {
+							nor = {
+								is_country = root
+								is_hostile = root
+								is_country = from
+							}
+							is_hostile = from
+						}
+					}
+					space_owner = {
+						add_opinion_modifier = { who = root modifier = human_fallen_empires_option_discovery_kill_enemy }
+						root = {
+							add_energy = 50
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# contact
+ship_event = {
+	id = human_fallen_empires.551
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_discovery
+		}
+		exists = space_owner
+		space_owner = {
+			not = {
+				has_communications = root.owner
+			}
+		}
+	}
+
+	immediate = {
+		space_owner = {
+			establish_communications_no_message = root.owner
+		}
+
+	}
+}
+
+# trade and update
+fleet_event = {
+	id = human_fallen_empires.560
+	title = "human_fallen_empires.560.name"
+	desc = "human_fallen_empires.560.desc"
+	picture = GFX_evt_human_fallen_empires_events_holocube_2
+	location = root
+
+    is_triggered_only = yes
+
+	trigger = {
+
+
+	}
+
+	option = {
+		name = human_fallen_empires.551
+
+	}
+}
+
 
 ### Kad Republic section
 
@@ -3699,6 +3819,7 @@ country_event = {
 			human_fallen_empires_is_xenophile_trigger = yes
 		}
 		hidden_effect = {
+			remove_country_flag = human_fallen_empires.5001.step0
 			set_country_flag = human_fallen_empires.5001.step1
 			country_event = { id = human_fallen_empires.5001 }
 		}
