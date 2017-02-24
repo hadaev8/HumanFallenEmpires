@@ -103,7 +103,7 @@ country_event = {
 					name = "Ju Ahet"
 					plural = "Ju Ahet"
 					class = "MAM"
-					portrait = "human_egypt_fallen_empire"
+					portrait = human_fallen_empires_egypt_portrait
 					traits = {
 						ideal_planet_class = "pc_continental"
 						trait = trait_extremely_adaptive
@@ -138,7 +138,7 @@ country_event = {
 						name = "Ju Ahet"
 						plural = "Ju Ahet"
 						class = "MAM"
-						portrait = "human_egypt_fallen_empire"
+						portrait = human_fallen_empires_egypt_portrait
 						traits = {
 							ideal_planet_class = "pc_continental"
 							trait = trait_extremely_adaptive
@@ -146,7 +146,9 @@ country_event = {
 							trait = trait_slow_breeders
 						}
 					}
-					last_created_species = { save_global_event_target_as = human_fallen_empires_egypt_species }
+					last_created_species = {
+						save_global_event_target_as = human_fallen_empires_egypt_species
+					}
 					create_species = {
 						name = Human
 						plural = Humans
@@ -323,6 +325,7 @@ country_event = {
 				}
 				set_global_flag = human_fallen_empires_egypt_spawned
 			}
+			# discovery setup
 			if = {
 				limit = {
 					any_country = {
@@ -334,6 +337,11 @@ country_event = {
 						has_country_flag = human_fallen_empires_discovery
 					}
 					set_country_type = human_fallen_empires_discovery
+					modify_species = {
+						species = this
+						remove_trait = trait_pc_nuked_preference
+						add_trait = trait_pc_continental_preference
+					}
 					every_owned_fleet = {
 						limit = {
 							exists = leader
@@ -1332,10 +1340,10 @@ country_event = {
 		}
 		or = {
 			years_passed > 90
-			any_country = {
-							   is_country_type = default
-							   fleet_power > 30000
-						   }
+						 any_country = {
+				is_country_type = default
+				fleet_power > 30000
+			}
 		}
 	}
 
@@ -3051,14 +3059,14 @@ planet_event = {
 		has_ground_combat = no
 		num_pops > 0
 		owner = {
-					   not = {
-						   and = {
-							   has_country_flag = human_fallen_empires_has_event.301
-							   has_country_flag = human_fallen_empires_has_event.302
-							   has_country_flag = human_fallen_empires_has_event.304
-						   }
-					   }
-				   }
+			not = {
+				and = {
+					has_country_flag = human_fallen_empires_has_event.301
+					has_country_flag = human_fallen_empires_has_event.302
+					has_country_flag = human_fallen_empires_has_event.304
+				}
+			}
+		}
 	}
 
 	immediate = {
@@ -3553,6 +3561,10 @@ country_event = {
 ## discovery section 550
 
 # harvest minerals from frags
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
 country_event = {
 	id = human_fallen_empires.550
 	hide_window = yes
@@ -3560,14 +3572,112 @@ country_event = {
 
 	trigger = {
 		is_country_type = human_fallen_empires_discovery
+		fromfrom = {
+			has_ship_flag = human_fallen_empires_discovery_ship
+		}
 	}
 
 	immediate = {
-		add_minerals = 50
+		if = {
+			limit = {
+				fromfromfrom = {
+					or = {
+						is_ship_size = destroyer
+						is_ship_size = small_ship_fallen_empire
+						is_ship_size = nomad_destroyer
+						is_ship_size = pirate_destroyer
+						is_ship_size = military_station_small_ai
+						is_ship_size = ancient_destroyer
+						is_ship_size = crystal_ship_small_blue
+						is_ship_size = crystal_ship_small_green
+						is_ship_size = crystal_ship_small_yellow
+						is_ship_size = crystal_ship_small_red
+						is_ship_size = crystal_ship_small_blue_elite
+						is_ship_size = crystal_ship_small_green_elite
+						is_ship_size = crystal_ship_small_yellow_elite
+						is_ship_size = crystal_ship_small_red_elite
+					}
+				}
+			}
+			add_minerals = 100
+			else = {
+				if = {
+					limit = {
+						fromfromfrom = {
+							or = {
+								is_ship_size = cruiser
+								is_ship_size = military_station_small_fallen_empire
+								is_ship_size = pirate_cruiser
+								is_ship_size = pirate_station
+								is_ship_size = space_amoeba_mother
+								is_ship_size = crystal_ship_medium_blue
+								is_ship_size = crystal_ship_medium_green
+								is_ship_size = crystal_ship_medium_yellow
+								is_ship_size = crystal_ship_medium_red
+								is_ship_size = crystal_ship_medium_blue_elite
+								is_ship_size = crystal_ship_medium_green_elite
+								is_ship_size = crystal_ship_medium_yellow_elite
+								is_ship_size = crystal_ship_medium_red_elite
+							}
+						}
+					}
+					add_minerals = 150
+					else = {
+						if = {
+							limit = {
+								fromfromfrom = {
+									or = {
+										is_ship_size = battleship
+										is_ship_size = massive_ship_fallen_empire
+										is_ship_size = large_ship_fallen_empire
+										is_ship_size = military_station_large_fallen_empire
+										is_ship_size = large_ship_ai
+										is_ship_size = military_station_large_ai
+										is_ship_size = crystal_ship_large_blue
+										is_ship_size = crystal_ship_large_green
+										is_ship_size = crystal_ship_large_yellow
+										is_ship_size = crystal_ship_large_red
+										is_ship_size = crystal_ship_large_blue_elite
+										is_ship_size = crystal_ship_large_green_elite
+										is_ship_size = crystal_ship_large_yellow_elite
+										is_ship_size = crystal_ship_large_red_elite
+										is_ship_size = orbital_station
+									}
+								}
+							}
+							add_minerals = 200
+							else = {
+								if = {
+									limit = {
+										fromfromfrom = {
+											or = {
+												is_ship_size = massive_ship_fallen_empire
+												is_ship_size = core_ai
+												is_ship_size = crystal_station_large
+												is_ship_size = asteroid
+											}
+										}
+									}
+									add_minerals = 1000
+									else = {
+										add_minerals = 50
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		if = {
 			limit = {
 				from = {
-					is_country_type = cloud
+					or = {
+						is_country_type = cloud
+						is_country_type = extradimensional
+						is_country_type = extradimensional_2
+						is_country_type = extradimensional_3
+					}
 				}
 			}
 			add_energy = 50
@@ -3579,12 +3689,12 @@ country_event = {
 						exists = space_owner
 						space_owner = {
 							energy > 50
-							nor = {
+								   nor = {
 								is_country = root
 								is_hostile = root
 								is_country = from
 							}
-							is_hostile = from
+								   is_hostile = from
 						}
 					}
 					space_owner = {
@@ -3622,15 +3732,42 @@ ship_event = {
 		space_owner = {
 			establish_communications_no_message = root.owner
 		}
-
 	}
 }
+
+# if discovery destroed = end game
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = human_fallen_empires.552
+	title = human_fallen_empires.552.name
+	desc = human_fallen_empires.552.desc
+	location = fromfrom
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_discovery
+		fromfrom = {
+			has_ship_flag = human_fallen_empires_discovery_ship
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.552.0
+		hidden_effect = {
+			destroy_country = yes
+		}
+	}
+}
+
 
 # trade and update on planet
 # from = docking planet
 fleet_event = {
 	id = human_fallen_empires.560
-	# звук стыковки
+	show_sound = event_airlock
 	hide_window = yes
     is_triggered_only = yes
 
@@ -3678,6 +3815,7 @@ country_event = {
 		trigger = {
 			fail_text = {
 				text = human_fallen_empires.561.desc.0.0
+				#	text = human_fallen_empires.561.desc.0.1
 				or = {
 					has_country_flag = human_fallen_empires.561.weapon_menu
 					has_country_flag = human_fallen_empires.561.defense_menu
@@ -3738,21 +3876,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_damage_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -3796,15 +3928,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -3848,15 +3980,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -3900,15 +4032,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -3952,15 +4084,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -4004,15 +4136,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_damage_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_damage_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -4050,21 +4182,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -4108,15 +4234,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -4160,15 +4286,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -4212,15 +4338,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -4264,15 +4390,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -4316,15 +4442,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_fire_rate_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_fire_rate_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -4362,21 +4488,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_accuracy_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -4420,15 +4540,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -4472,15 +4592,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -4524,15 +4644,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -4576,15 +4696,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -4628,15 +4748,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_accuracy_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_accuracy_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -4674,21 +4794,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_range_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -4732,15 +4846,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -4784,15 +4898,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -4836,15 +4950,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -4888,15 +5002,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -4940,15 +5054,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_range_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_range_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -5014,21 +5128,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_hp_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -5072,15 +5180,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -5124,15 +5232,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -5176,15 +5284,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -5228,15 +5336,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -5280,15 +5388,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_hp_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_hp_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -5326,21 +5434,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_armor_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -5384,15 +5486,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -5436,15 +5538,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -5488,15 +5590,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -5540,15 +5642,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -5592,15 +5694,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_armor_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_armor_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -5638,21 +5740,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_shield_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -5696,15 +5792,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -5748,15 +5844,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -5800,15 +5896,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -5852,15 +5948,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -5904,15 +6000,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_shield_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_shield_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -5966,21 +6062,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_speed_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -6024,15 +6114,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -6076,15 +6166,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -6128,15 +6218,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -6180,15 +6270,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -6232,15 +6322,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_speed_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_speed_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -6278,21 +6368,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_warp_range_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -6336,15 +6420,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -6388,15 +6472,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -6440,15 +6524,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -6492,15 +6576,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -6544,15 +6628,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_warp_range_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_warp_range_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -6590,21 +6674,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -6648,15 +6726,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -6700,15 +6778,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -6752,15 +6830,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -6804,15 +6882,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -6857,15 +6935,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_interstellar_speed_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_interstellar_speed_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -6903,21 +6981,15 @@ country_event = {
 					has_modifier = human_fallen_empires_discovery_winddown_1
 				}
 			}
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 0
-			}
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_1
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 0
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_1
+				}
+			}
 		}
 
 		is_dialog_only = yes
@@ -6961,15 +7033,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_2
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 1
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_2
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 1
+			}
 		}
 
 		is_dialog_only = yes
@@ -7013,15 +7085,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_3
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 2
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_3
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 2
+			}
 		}
 
 		is_dialog_only = yes
@@ -7065,15 +7137,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_4
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 3
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_4
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 3
+			}
 		}
 
 		is_dialog_only = yes
@@ -7117,15 +7189,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_5
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 4
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_5
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 4
+			}
 		}
 
 		is_dialog_only = yes
@@ -7169,15 +7241,15 @@ country_event = {
 		}
 		allow = {
 			minerals > 300
-			energy > 300
-			event_target:human_fallen_empires_discovery_docking_ship = {
-						 not = {
-							 has_modifier = human_fallen_empires_discovery_winddown_6
-						 }
-					 }
-			event_target:human_fallen_empires_discovery_docking_planet = {
-						 num_spaceport_modules > 5
-					 }
+					 energy > 300
+					 event_target:human_fallen_empires_discovery_docking_ship = {
+				not = {
+					has_modifier = human_fallen_empires_discovery_winddown_6
+				}
+			}
+					 event_target:human_fallen_empires_discovery_docking_planet = {
+				num_spaceport_modules > 5
+			}
 		}
 
 		is_dialog_only = yes
@@ -7351,7 +7423,9 @@ country_event = {
 			has_country_flag = human_fallen_empires.5001.step0
 			any_country = {
 				has_communications = root
-				not = { is_country = root}
+				not = {
+					is_country = root
+				}
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 			human_fallen_empires_is_xenophobe_trigger = yes
@@ -8033,10 +8107,10 @@ country_event = {
 		}
 		or = {
 			years_passed > 110
-			any_country = {
-							   is_country_type = default
-							   fleet_power > 50000
-						   }
+						 any_country = {
+				is_country_type = default
+				fleet_power > 50000
+			}
 		}
 	}
 
@@ -9812,20 +9886,12 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			# inform others
+			# inform
 			every_country = {
 				limit = {
 					is_ai = no
-					not = { is_country = root }
 				}
 				country_event = { id = human_fallen_empires.10020 }
-			}
-			# inform root
-			country_event = { id = human_fallen_empires.10024 }
-			event_target:WarInHeavenLoserFE = {
-				every_owned_planet = {
-					human_fallen_empires_create_primitive = yes
-				}
 			}
 		}
 	}
@@ -9845,26 +9911,12 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			# inform others
+			# inform
 			every_country = {
 				limit = {
 					is_ai = no
-					not = { is_country = root }
 				}
 				country_event = { id = human_fallen_empires.10021 }
-			}
-			# inform root
-			country_event = { id = human_fallen_empires.10025 }
-			event_target:WarInHeavenLoserFE = {
-				every_owned_planet = {
-					add_threat = {
-						who = root
-						amount = 2 # scales to pops
-					}
-					set_owner = root
-					set_controller = root
-					conquer = root
-				}
 			}
 		}
 	}
@@ -9881,20 +9933,12 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			# inform event others
+			# inform
 			every_country = {
 				limit = {
 					is_ai = no
-					not = { is_country = root }
 				}
 				country_event = { id = human_fallen_empires.10022 }
-			}
-			# inform root
-			country_event = { id = human_fallen_empires.10026 }
-			event_target:WarInHeavenLoserFE = {
-				every_owned_planet = {
-					human_fallen_empires_create_vassal = yes
-				}
 			}
 		}
 	}
@@ -9909,16 +9953,13 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			# inform event others
+			# inform
 			every_country = {
 				limit = {
 					is_ai = no
-					not = { is_country = root }
 				}
 				country_event = { id = human_fallen_empires.10023 }
 			}
-			# inform root
-			country_event = { id = human_fallen_empires.10027 }
 			event_target:WarInHeavenLoserFE = {
 				every_owned_planet = {
 					add_threat = {
@@ -9932,134 +9973,158 @@ country_event = {
 	}
 }
 
-# inform others
+# inform
 country_event = {
 	id = human_fallen_empires.10020
-	title = "human_fallen_empires.10020.name"
-	desc = "human_fallen_empires.10020.desc.0"
+	title = human_fallen_empires.10020.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10020.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10020.desc.1
+				is_country = from
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_events_tech_fail
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
 	option = {
-		name = INTERESTING
+		name = human_fallen_empires.10020.0
+		trigger = {
+			is_country = from
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.10020.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
 	}
 }
+
 
 country_event = {
 	id = human_fallen_empires.10021
 	title = "human_fallen_empires.10021.name"
-	desc = "human_fallen_empires.10021.desc.0"
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10021.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10021.desc.1
+				is_country = from
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_events_ships_on_orbit
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
 	option = {
-		name = INTERESTING
+		name = human_fallen_empires.10021.0
+		trigger = {
+			is_country = from
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.10021.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
 	}
 }
 
 country_event = {
 	id = human_fallen_empires.10022
-	title = "human_fallen_empires.10022.name"
-	desc = "human_fallen_empires.10022.desc.0"
+	title = human_fallen_empires.10022.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10022.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10022.desc.1
+				is_country = from
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_events_city_center
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
 	option = {
-		name = INTERESTING
+		name = human_fallen_empires.10022.0
+		trigger = {
+			is_country = from
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.10022.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
 	}
 }
 
 country_event = {
 	id = human_fallen_empires.10023
-	title = "human_fallen_empires.10023.name"
-	desc = "human_fallen_empires.10023.desc.0"
+	title = human_fallen_empires.10023.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.100203.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10023.desc.1
+				is_country = from
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_events_ruins
 	show_sound = event_space_battle
 	is_triggered_only = yes
 
 	option = {
-		name = INTERESTING
-	}
-}
-
-# inform root
-country_event = {
-	id = human_fallen_empires.10024
-	title = "human_fallen_empires.10024.name"
-	desc = "human_fallen_empires.10024.desc.0"
-	picture = GFX_evt_human_fallen_empires_events_tech_fail
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
+		name = human_fallen_empires.10023.0
+		trigger = {
+			is_country = from
+		}
 	}
 
 	option = {
-		name = human_fallen_empires.10024.0
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10025
-	title = "human_fallen_empires.10025.name"
-	desc = "human_fallen_empires.10025.desc.0"
-	picture = GFX_evt_human_fallen_empires_events_ships_on_orbit
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10025.0
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10026
-	title = "human_fallen_empires.10026.name"
-	desc = "human_fallen_empires.10026.desc.0"
-	picture = GFX_evt_human_fallen_empires_events_city_center
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10026.0
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10027
-	title = "human_fallen_empires.10027.name"
-	desc = "human_fallen_empires.10027.desc.0"
-	picture = GFX_evt_human_fallen_empires_events_ruins
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10027.0
+		name = human_fallen_empires.10023.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
 	}
 }
 
 
-# fallen drain resurces is losing war 10050
+# fallen drain resurces if losing war 10050
 country_event = {
 	id = human_fallen_empires.10050
-	title = "human_fallen_empires.10050.name"
-	desc = "human_fallen_empires.10050.desc.0"
+	title = human_fallen_empires.10050.name
+	desc = human_fallen_empires.10050.desc.0
 	picture = GFX_evt_human_fallen_empires_events_fallen_3
 	show_sound = event_alien_signal
 	is_triggered_only = yes
