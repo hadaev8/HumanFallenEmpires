@@ -4,7 +4,7 @@
 #name_of_country_type = {
 #	can_own_empty_planets					#no by default, decides if empty planets belonging to country are automatically removed from the country.
 #	playable = yes							#if this type is available for players. used when listing countries for hot-joining players
-#	has_fortifications = yes					#does this type use planetary fortifications?
+#	as_fortifications = yes					#does this type use planetary fortifications?
 #	shuffle_pop_ethos = yes					#if pops belonging to this country type should mutate their ethos every now and then
 #	sub_title = "EXAMPLE_COUNTRY"			#sub title that will be shown for this empire. Like "Example Federation - Fallen Empire"
 #	sub_title_desc = "EXAMPLE_COUNTRY_DESC" #description for the sub title. used in tooltips
@@ -14,13 +14,17 @@
 #	can_planets_be_attacked = yes			#default yes, if no then planets owned by this country type can not be attacked
 #	colonizing_title = "COLONIZING_PLANET_DEFAULT"		#localization key for colonization view title
 #	colonizing_desc = "PLANET_VIEW_UNDER_COLONIZATION_DEFAULT_DESC"	#localization key for colonization view desc
-#	orbital_bomardment = yes				#default yes, does orbital bombardment
+#	orbital_bombardment = yes				#default yes, does orbital bombardment
 #	diplomatic_wars = no					#default no, decides if the country needs to declare war to be hostile, only works against countries who also have diplomatic wars toggled on
+#	min_navy_for_wars = 0					#default 0, decides how large a navy this country wants (out of desired size) before declaring any wars
 # 	share_communications = no				#default yes, decides if they share communciations with anyone you have contact with
 #	relations = no							#default no, this controls whether the country makes us of opinion
 #	fallen_empire = no						#default no, this controls whether the empire uses the special Fallen Empire AI
+#	awakened_fallen_empire = no				#default no, this controls whether the empire uses the special Awakened Fallen Empire AI
+# 	can_use_special_buildables = no			#default no, this controls whether this empire can build shipsizes that are defined as special buildables
 #	default_closed_borders = no				#default no, controls if the country has closed borders as default
 #	closed_borders_message_key = x			#default "NO_ACCESS_TO_COUNTRY_SYSTEMS", the message when hovering a system you don't have access to.
+#	distant_ftl_cost_mult = x 				#default 0.0, modifiers how much FTL winddown/windup a country gets from FTL to territories distant from borders
 #
 #	faction = {							#these values are copied to the country and can be changed during the game
 #		neutral = no						#if yes, fleets will never attack anything and will never be attacked
@@ -60,109 +64,49 @@
 #		standard_diplomacy_module = {}
 #		standard_technology_module = {}
 #		standard_pop_factions_module = {}
+#		standard_expansion_module = {}
 #	}
 #}
 
-human_fallen_empire = {
+drone = {
+	playable = no
+	has_leaders = no
+	needs_survey = no
+	has_capital = no
+#	orbital_bombardment = yes
+	relations = no
 	has_difficulty_bonuses = yes
-	counts_for_victory = yes
-	sub_title = "COUNTRY_FALLEN_EMPIRE"
-	sub_title_desc = "COUNTRY_FALLEN_EMPIRE_DESC"
-
-	relations = yes
-	fallen_empire = yes
-	diplomatic_wars = yes
-	default_closed_borders = no
-	closed_borders_message_key = "NO_ACCESS_TO_COUNTRY_SYSTEMS_FALLEN_EMPIRE"
-	distant_ftl_cost_mult = 1.0
-
 	ai = {
 		enabled = yes
-		declare_war = no
-		min_navy_for_wars = 0.0
-		colonizer = no
-		internal_policies = yes
-		construction = no
-		limited_construction = yes
+#		colonizer = yes
+		construction = yes
 		tech = no
+#		limited_construction = yes
 		modules = {
-			military_minister_module
-			foreign_minister_module
+			swarm_military_minister_module
 			interior_minister_module
+			foreign_minister_module
 		}
 
-		army_data = {
-			defense_army = {
-				fraction = {
-					factor = 25
-				}
+		ship_data = {
+			constructor = {
+				min = 1
+				max = 3
 			}
-
-			gene_warrior_army = {
-				fraction = {
-					factor = 75
-				}
+			human_fallen_empires_drone_outpost = {
+				min = 1
 			}
 		}
-	}
-	modules = {
-		all_technology_module = {}
-		standard_event_module = {}
-		standard_leader_module = {}
-		standard_economy_module = {}
-		exclusive_diplomacy_module = {
-			can_receive = {
-				action_declare_war
-				action_offer_peace
-				action_make_rival
-				action_end_rivalry
-				action_offer_trade_deal
-				action_cancel_trade_deal
-				action_insult
-			}
-			can_send = {
-				action_declare_war
-				action_make_rival
-				action_end_rivalry
-				action_offer_peace
-				action_offer_trade_deal
-				action_cancel_trade_deal
-				action_open_borders
-				action_close_borders
-			}
-		}
-	}
-}
-
-human_fallen_empires_discovery = {
-	#show_in_contacts_list = yes
-#	has_leaders = yes
-	playable = yes
-	relations = yes
-#	needs_survey = no
-	has_capital = no
-	#orbital_bomardment = no
-	ai = {
-		enabled = no
 	}
 	faction = {
-		auto_delete = no
-		hostile = no
-#		needs_border_access = no
-		generate_borders = yes
+		hostile = yes
+		needs_border_access = no
 		needs_colony = no
 	}
 	modules = {
-		standard_event_module = {}
+		exclusive_diplomacy_module = {} # Nothing is allowed, but we need this for relationships.
+		basic_technology_module = {}
 		standard_economy_module = {}
-		standard_leader_module = {}
-		standard_diplomacy_module = {}
-#		exclusive_diplomacy_module = {
-#			contact_rule = always
-#		}
-		standard_technology_module = {}
-#		standard_pop_factions_module = {}
-#		standard_expansion_module = {}
-#		basic_technology_module = {}
+		standard_expansion_module = {}
 	}
 }

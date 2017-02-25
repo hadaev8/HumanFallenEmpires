@@ -332,10 +332,11 @@ country_event = {
 						has_country_flag = human_fallen_empires_discovery
 					}
 				}
-				random_country = {
+				every_country = {
 					limit = {
 						has_country_flag = human_fallen_empires_discovery
 					}
+
 					set_country_type = human_fallen_empires_discovery
 					modify_species = {
 						species = this
@@ -414,6 +415,43 @@ country_event = {
 					add_energy = 500
 				}
 			}
+			# drones
+			random_country = {
+				limit = {
+					is_country_type = drone
+				}
+				create_ship_design = { design = "Drone Constructor" }
+				add_ship_design = last_created_design
+				create_ship_design = { design = "Drone outpost" }
+				add_ship_design = last_created_design
+				add_modifier = {
+					modifier = human_fallen_empires_drone_country_unkeep
+					days = -1
+				}
+				random_owned_fleet = {
+					limit = {
+						is_ship_size = homebase
+					}
+					create_fleet = {
+						name = Constructor
+						effect = {
+							set_owner = prevprev
+							create_ship = {
+								name = random
+								design = "Drone Constructor"
+								graphical_culture = "ancient_drone_01"
+							}
+							set_location = {
+								target = prev
+								distance = 20
+								angle = 270
+							}
+						}
+					}
+				}
+				add_minerals = 5000
+				add_energy = 5000
+			}
 		}
 		set_global_flag = human_fallen_empires_installed
 	}
@@ -444,13 +482,17 @@ event = {
 		}
 		# assimilation event for coalition
 		random_country = {
-			limit = { has_country_flag = human_fallen_empires_coalition_leader }
+			limit = {
+				has_country_flag = human_fallen_empires_coalition_leader
+			}
 			country_event = { id = human_fallen_empires.5020 }
 		}
 		# varelse mahanicus event
 		if = {
 			limit = {
-				not = { has_global_flag = human_fallen_empires_varelse_mehanicus }
+				not = {
+					has_global_flag = human_fallen_empires_varelse_mehanicus
+				}
 			}
 			random_planet = {
 				limit = {
@@ -501,13 +543,13 @@ event = {
 					or = {
 						any_war = {
 							any_defender = {
-								is_country = prev
+								is_country = prevprev
 							}
 							defender_war_score < -20
 						}
 						any_war = {
 							any_defender = {
-								is_country = prev
+								is_country = prevprev
 							}
 							attacker_war_score < -20
 						}
@@ -3775,7 +3817,11 @@ fleet_event = {
 		#count_fleet_ships
 		is_ship_size = deepvoid
 		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_discovery
+		}
 		from = {
+			exists = owner
 			has_spaceport = yes
 			owner = {
 				is_country_type = default
@@ -7309,6 +7355,31 @@ country_event = {
 }
 
 
+## drone country section 600
+#
+ship_event = {
+	id = human_fallen_empires.600
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = drone
+		}
+	}
+
+	immediate = {
+		from = {
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = root.owner
+				}
+			}
+		}
+	}
+}
+
 ### Kad Republic section
 
 # 5000-10000
@@ -7375,6 +7446,8 @@ ship_event  = {
 		}
 	}
 }
+
+
 
 # main dialoge
 country_event = {
