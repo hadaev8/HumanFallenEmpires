@@ -3744,27 +3744,24 @@ country_event = {
 }
 
 # contact
-ship_event = {
+country_event = {
 	id = human_fallen_empires.551
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
-		owner = {
-			is_country_type = human_fallen_empires_discovery
-		}
-		exists = space_owner
-		space_owner = {
-			not = {
-				has_communications = root.owner
+		is_country_type = human_fallen_empires_discovery
+		from = {
+			or = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
 			}
 		}
 	}
 
 	immediate = {
-		space_owner = {
-			establish_communications_no_message = root.owner
-		}
+		establish_communications = from
 	}
 }
 
@@ -3794,6 +3791,194 @@ country_event = {
 		}
 	}
 }
+
+# First Contact Empires for discovery
+country_event = {
+	id = human_fallen_empires.553
+	title = "action.10.name"
+	desc = "action.15.desc"
+	picture = GFX_evt_star_chart
+	show_sound = advisor_notification_alien_vessel_encountered
+	location = FROMFROMFROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_discovery
+		NOT = { has_country_flag = day_0 } # посмотреть что это за флаг
+		from = { NOT = { has_country_flag = day_0 } }
+		from = {
+			OR = {
+				is_country_type = default
+				and = {
+					is_country_type = amoeba
+					not = {
+						root = {
+							has_country_flag = amoeba_encountered
+						}
+					}
+				}
+				and = {
+					is_country_type = crystal
+					not = {
+						root = {
+							has_country_flag = crystal_encountered
+						}
+					}
+				}
+				and = {
+					is_country_type = drone
+					not = {
+						root = {
+							has_country_flag = drone_encountered
+						}
+					}
+				}
+				and = {
+					is_country_type = cloud
+					not = {
+						root = {
+							has_country_flag = cloud_encountered
+						}
+					}
+				}
+				and = {
+					is_country_type = tianki
+					not = {
+						root = {
+							has_country_flag = cloud_encountered
+						}
+					}
+				}
+				and = {
+					is_country_type = pirate
+					not = {
+						root = {
+							has_country_flag = pirate_encountered
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			random_owned_planet = {
+				save_event_target_as = pc_home
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = default
+				}
+			}
+			from = {
+				enable_special_project = {
+					name = "ESTABLISH_COMMUNICATIONS"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = amoeba
+				}
+			}
+			set_country_flag = amoeba_encountered
+			from = {
+				enable_special_project = {
+					name = "INVESTIGATE_SPACE_AMOEBA"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = crystal
+				}
+			}
+			set_country_flag = crystal_encountered
+			from = {
+				enable_special_project = {
+					name = "INVESTIGATE_CRYSTALS"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = drone
+				}
+			}
+			set_country_flag = drone_encountered
+			from = {
+				enable_special_project = {
+					name = "INVESTIGATE_DRONES"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = cloud
+				}
+			}
+			set_country_flag = cloud_encountered
+			from = {
+				enable_special_project = {
+					name = "INVESTIGATE_SPACE_CLOUDS"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = tiyanki
+				}
+			}
+			from = {
+				set_country_flag = tiyanki_encountered
+				enable_special_project = {
+					name = "INVESTIGATE_TIYANKI"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					is_country_type = pirate
+				}
+			}
+			from = {
+				set_country_flag = pirate_encountered
+				enable_special_project = {
+					name = "INVESTIGATE_PIRATES"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "action.10.a"
+	}
+}
+
 
 
 # trade and update on planet
@@ -5141,18 +5326,6 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = human_fallen_empires.561.defense_menu
 			country_event = { id = human_fallen_empires.561 }
-		}
-		event_target:human_fallen_empires_discovery_docking_planet_owner = {
-			add_minerals = 150
-			add_energy = 150
-			add_trust = {
-				who = root
-				amount = 5
-			}
-		}
-		add_trust = {
-			who = event_target:human_fallen_empires_discovery_docking_planet_owner
-			amount = 5
 		}
 	}
 	# hp lvl 1
@@ -7298,6 +7471,68 @@ country_event = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_6
 				days = -1
+			}
+		}
+
+		event_target:human_fallen_empires_discovery_docking_planet_owner = {
+			add_minerals = 150
+			add_energy = 150
+			add_trust = {
+				who = root
+				amount = 5
+			}
+		}
+		add_trust = {
+			who = event_target:human_fallen_empires_discovery_docking_planet_owner
+			amount = 5
+		}
+	}
+	# other menu
+	option = {
+		name = human_fallen_empires.561.3
+		trigger = {
+			nor = {
+				has_country_flag = human_fallen_empires.561.weapon_menu
+				has_country_flag = human_fallen_empires.561.defense_menu
+				has_country_flag = human_fallen_empires.561.engine_menu
+				has_country_flag = human_fallen_empires.561.other_menu
+			}
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires.561.other_menu
+			country_event = { id = human_fallen_empires.561 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.561.other_menu.0
+		trigger = {
+			has_country_flag = human_fallen_empires.561.other_menu
+		}
+		allow = {
+			minerals > 300
+			energy > 300
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.561.other_menu.0.response
+
+		add_minerals = -300
+		add_energy = -300
+		event_target:human_fallen_empires_discovery_docking_ship = {
+			create_ship_design = {
+				design = Prototype
+				ftl = warp
+			}
+			create_fleet = {
+				name = random
+				effect = {
+					set_owner = event_target:human_fallen_empires_discovery_docking_ship.owner
+					create_ship = {
+						name = random
+						design = last_created_design
+					}
+					set_location = event_target:human_fallen_empires_discovery_docking_ship
+				}
 			}
 		}
 
