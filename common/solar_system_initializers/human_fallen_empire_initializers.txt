@@ -49,6 +49,11 @@ human_fallen_empires_egypt = {
 		tile_blockers = none
 
 		init_effect = {
+			create_cluster = {
+				id = fe1_cluster
+				radius = 100
+				center = this.solar_system
+			}
 			create_country = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
@@ -1980,6 +1985,301 @@ human_fallen_empires_discovery = {
 		orbit_angle = random
 	}
 }
+# drones
+human_fallen_empires_drone_sector_01 = {
+	class = "rl_standard_stars"
+	name = "Drone Sector 01"
+	asteroids_distance = 100
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 10 max = 20 }
+	}
+
+	change_orbit = 100
+
+	planet = {
+		count = { min = 2 max = 6 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = random
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = 1
+		orbit_distance = 10
+		class = "pc_ai"
+		name = "Drone Core 01"
+		orbit_angle = random
+		size = { min = 5 max = 10 }
+		modifiers = none
+
+		init_effect = {
+			set_planet_flag = human_fallen_empires_drone_planet_1
+			create_country = {
+				name = "Harvesting Branch 42"
+				name_list = "AI"
+				type = human_fallen_empires_drone
+				flag = {
+					icon = {
+						category = "zoological"
+						file = "flag_zoological_1.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = human_fallen_empires_drone_country
+					set_graphical_culture = ancient_drone_01
+					give_technology = tech_warp_drive_1
+					create_ship_design = { design = "Drone Constructor" }
+					add_ship_design = last_created_design
+					create_ship_design = { design = "Drone Harvester" }
+					add_ship_design = last_created_design
+					create_ship_design = { design = "Drone Protector" }
+					add_ship_design = last_created_design
+					create_ship_design = { design = "Drone Destroyer" }
+					add_ship_design = last_created_design
+					add_modifier = {
+						modifier = human_fallen_empires_drone_country_unkeep
+						days = -1
+					}
+					add_minerals = 5000
+					add_energy = 5000
+					add_influence = 1000
+					set_policy = {
+						policy = orbital_bombardment
+						option = orbital_bombardment_full
+						cooldown = yes
+					}
+				}
+			}
+			set_owner = event_target:human_fallen_empires_drone_country
+			create_spaceport = {
+				owner = event_target:human_fallen_empires_drone_country
+				initial_module = "missile_weapon"
+			}
+			set_spaceport_level = 6
+			while = {
+				count = 3
+				create_fleet = {
+					name = "Drone Constructor"
+					effect = {
+						set_owner = event_target:human_fallen_empires_drone_country
+						create_ship = {
+							name = random
+							design = "Drone Constructor"
+						}
+						set_location = prev
+					}
+				}
+			}
+		}
+	}
+
+	planet = {
+		orbit_distance = 20
+		count = { min = 1 max = 3 }
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 1 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = random_non_colonizable
+		orbit_distance = 20
+		orbit_angle = random
+	}
+
+	init_effect = {
+		every_system_planet = {
+			limit = { has_deposit_for = shipclass_mining_station }
+			create_mining_station = {
+				owner = event_target:human_fallen_empires_drone_country
+			}
+		}
+		every_system_planet = {
+			surveyed = {
+				set_surveyed = yes
+				surveyor = event_target:human_fallen_empires_drone_country
+			}
+		}
+	}
+}
+
+human_fallen_empires_drone_sector_02 = {
+	class = "rl_standard_stars"
+	name = "Drone Sector 02"
+	asteroids_distance = 60
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 10 max = 20 }
+	}
+
+	change_orbit = 60
+
+	planet = {
+		count = { min = 2 max = 4 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = random
+	}
+
+	planet = {
+		count = 1
+		orbit_distance = 10
+		class = "pc_ai"
+		name = "Drone Core 02"
+		orbit_angle = random
+		size = { min = 5 max = 10 }
+		modifiers = none
+
+		init_effect = {
+			set_planet_flag = human_fallen_empires_drone_planet_2
+
+			set_owner = event_target:human_fallen_empires_drone_country
+			create_spaceport = {
+				owner = event_target:human_fallen_empires_drone_country
+				initial_module = "missile_weapon"
+			}
+			set_spaceport_level = 6
+		}
+	}
+
+	planet = {
+		orbit_distance = 20
+		count = 1
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 1 max = 5 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = random_non_colonizable
+		orbit_distance = 20
+		orbit_angle = random
+	}
+
+	init_effect = {
+		every_system_planet = {
+			limit = { has_deposit_for = shipclass_mining_station }
+			create_mining_station = {
+				owner = event_target:human_fallen_empires_drone_country
+			}
+		}
+		every_system_planet = {
+			surveyed = {
+				set_surveyed = yes
+				surveyor = event_target:human_fallen_empires_drone_country
+			}
+		}
+	}
+}
+
+human_fallen_empires_drone_sector_03 = {
+	class = "rl_standard_stars"
+	name = "Drone Sector 03"
+	asteroids_distance = 40
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+	}
+
+	change_orbit = 40
+
+	planet = {
+		count = { min = 1 max = 4 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = random
+	}
+
+	planet = {
+		count = 1
+		orbit_distance = 10
+		class = "pc_ai"
+		name = "Drone Core 03"
+		orbit_angle = random
+		size = { min = 5 max = 10 }
+		modifiers = none
+
+		init_effect = {
+			set_planet_flag = human_fallen_empires_drone_planet_3
+			set_owner = event_target:human_fallen_empires_drone_country
+			create_spaceport = {
+				owner = event_target:human_fallen_empires_drone_country
+				initial_module = "missile_weapon"
+			}
+			set_spaceport_level = 6
+		}
+	}
+
+	planet = {
+		orbit_distance = 20
+		count = 3
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 1 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 3 }
+		class = random_non_colonizable
+		orbit_distance = 30
+		orbit_angle = random
+	}
+
+	init_effect = {
+		every_system_planet = {
+			limit = { has_deposit_for = shipclass_mining_station }
+			create_mining_station = {
+				owner = event_target:human_fallen_empires_drone_country
+			}
+		}
+		every_system_planet = {
+			surveyed = {
+				set_surveyed = yes
+				surveyor = event_target:human_fallen_empires_drone_country
+			}
+		}
+	}
+}
+
 
 # future
 human_fallen_empires_future = {
@@ -2036,6 +2336,11 @@ human_fallen_empires_future = {
 			modifiers = none
 
 			init_effect = {
+				create_cluster = {
+					id = fe1_cluster
+					radius = 100
+					center = this.solar_system
+				}
 				create_country = {
 					name = "Kad Republic"
 					type = human_fallen_empire
