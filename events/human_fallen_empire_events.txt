@@ -627,46 +627,35 @@ event = {
 }
 
 # contact with egypt
-ship_event  = {
+country_event  = {
 	id = human_fallen_empires.4
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		nor = {
-			has_global_flag = human_fallen_empires_egypt_in_expansion
-			owner = { has_country_flag = human_fallen_empires_egypt_contacted }
-		}
+		is_country_type = default
 		from = {
-			exists = space_owner
-			space_owner = {
-				has_country_flag = human_fallen_empires_egypt
-			}
+			has_country_flag = human_fallen_empires_egypt
+			is_country_type = human_fallen_empire
 		}
 	}
 
 	immediate = {
-		from = {
-			space_owner = {
-				establish_communications = root.owner
+		establish_communications = from
+		set_country_flag = human_fallen_empires_egypt_contacted
+		if = {
+			limit = {
+				is_ai = no
 			}
-		}
-		owner = {
-			if = {
-				limit = {
-					is_ai = no
-				}
-				country_event = { id = human_fallen_empires.5 }
-				else = {
-					event_target:human_fallen_empires_egypt_country = {
-						set_closed_borders = {
-							who = root
-							status = yes
-						}
+			country_event = { id = human_fallen_empires.5 }
+			else = {
+				from = {
+					set_closed_borders = {
+						who = root
+						status = yes
 					}
 				}
 			}
-			set_country_flag = human_fallen_empires_egypt_contacted
 		}
 	}
 }
@@ -1405,7 +1394,9 @@ country_event = {
 		every_country = {
 			establish_communications_no_message = event_target:human_fallen_empires_egypt_country
 			if = {
-				limit = { is_ai = no }
+				limit = {
+					is_ai = no
+				}
 				country_event = {
 					id = human_fallen_empires.12
 				}
@@ -1455,16 +1446,10 @@ ship_event = {
 				has_country_flag = human_fallen_empires_egypt
 			}
 			random_owned_planet = {
-				limit = { is_capital = yes }
+				limit = {
+					is_capital = yes
+				}
 				save_event_target_as = human_fallen_empires_ra_home
-			}
-			establish_communications = root.owner
-		}
-		fleet = {
-			set_location = {
-				target = event_target:human_fallen_empires_ra_home
-				distance = 5
-				angle = random
 			}
 		}
 	}
@@ -1472,9 +1457,11 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.50.0
 		hidden_effect = {
-			root.owner = {
-				country_event = {
-					id = human_fallen_empires.5
+			fleet = {
+				set_location = {
+					target = event_target:human_fallen_empires_ra_home
+					distance = 5
+					angle = random
 				}
 			}
 		}
@@ -3860,115 +3847,8 @@ country_event = {
 	}
 
 	immediate = {
-		from = {
-			random_owned_planet = {
-				save_event_target_as = pc_home
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = default
-				}
-			}
-			from = {
-				enable_special_project = {
-					name = "ESTABLISH_COMMUNICATIONS"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = amoeba
-				}
-			}
-			set_country_flag = amoeba_encountered
-			from = {
-				enable_special_project = {
-					name = "INVESTIGATE_SPACE_AMOEBA"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = crystal
-				}
-			}
-			set_country_flag = crystal_encountered
-			from = {
-				enable_special_project = {
-					name = "INVESTIGATE_CRYSTALS"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = drone
-				}
-			}
-			set_country_flag = drone_encountered
-			from = {
-				enable_special_project = {
-					name = "INVESTIGATE_DRONES"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = cloud
-				}
-			}
-			set_country_flag = cloud_encountered
-			from = {
-				enable_special_project = {
-					name = "INVESTIGATE_SPACE_CLOUDS"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = tiyanki
-				}
-			}
-			from = {
-				set_country_flag = tiyanki_encountered
-				enable_special_project = {
-					name = "INVESTIGATE_TIYANKI"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
-		if = {
-			limit = {
-				from = {
-					is_country_type = pirate
-				}
-			}
-			from = {
-				set_country_flag = pirate_encountered
-				enable_special_project = {
-					name = "INVESTIGATE_PIRATES"
-					location = event_target:pc_home
-					owner = ROOT
-				}
-			}
-		}
+		establish_communications = from # временное решение
+		# придумать свои взаимодействия
 	}
 
 	option = {
@@ -7613,63 +7493,52 @@ ship_event = {
 # functional on actions events 5000 - 5050
 
 # contact dialoge with future 5000 - 5002
-ship_event  = {
+country_event  = {
 	id = human_fallen_empires.5000
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		nor = {
-			has_global_flag = human_fallen_empires_future_in_expansion
-			owner = {
-				has_country_flag = human_fallen_empires_future_contacted
-			}
-		}
+		is_country_type = default
 		from = {
-			exists = space_owner
-			space_owner = {
-				has_country_flag = human_fallen_empires_future
-			}
+			is_country_type = human_fallen_empire
+			has_country_flag = human_fallen_empires_future
 		}
 	}
 
 	immediate = {
 		from = {
-			space_owner = {
-				establish_communications = root.owner
-				random_owned_leader = {
-					limit = {
-						gender = female
-					}
-					save_event_target_as = human_fallen_empires_female_leader
-				}
-				random_owned_leader = {
-					limit = {
-						not = { gender = female }
-						leader_class = admiral
-					}
-					save_event_target_as = human_fallen_empires_male_leader
-				}
-			}
-		}
-		owner = {
-			if = {
+			establish_communications = root
+			random_owned_leader = {
 				limit = {
-					is_ai = no
+					gender = female
 				}
-				set_country_flag = human_fallen_empires.5001.step0
-				country_event = { id = human_fallen_empires.5001 }
-				else = {
-					event_target:human_fallen_empires_future_country = {
-						set_closed_borders = {
-							who = root.owner
-							status = yes
-						}
+				save_event_target_as = human_fallen_empires_female_leader
+			}
+			random_owned_leader = {
+				limit = {
+					not = { gender = female }
+					leader_class = admiral
+				}
+				save_event_target_as = human_fallen_empires_male_leader
+			}
+		}
+		if = {
+			limit = {
+				is_ai = no
+			}
+			set_country_flag = human_fallen_empires.5001.step0
+			country_event = { id = human_fallen_empires.5001 }
+			else = {
+				from = {
+					set_closed_borders = {
+						who = root
+						status = yes
 					}
 				}
 			}
-			set_country_flag = human_fallen_empires_future_contacted
 		}
+		set_country_flag = human_fallen_empires_future_contacted
 	}
 }
 
