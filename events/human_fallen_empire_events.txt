@@ -7386,36 +7386,32 @@ country_event = {
 			has_country_flag = human_fallen_empires.561.other_menu
 		}
 		allow = {
-			minerals > 300
-			energy > 300
+			minerals > 100
+			energy > 100
 		}
 
 		is_dialog_only = yes
 		response_text = human_fallen_empires.561.other_menu.0.response
 
-		add_minerals = -300
-		add_energy = -300
-		event_target:human_fallen_empires_discovery_docking_ship = {
-			create_ship_design = {
-				design = Prototype
-				ftl = warp
-			}
-			create_fleet = {
-				name = random
-				effect = {
-					set_owner = event_target:human_fallen_empires_discovery_docking_ship.owner
-					create_ship = {
-						name = random
-						design = last_created_design
-					}
-					set_location = event_target:human_fallen_empires_discovery_docking_ship
+		add_minerals = -100
+		add_energy = -100
+		create_ship_design = {
+			design = Prototype
+			ftl = warp
+		}
+		create_fleet = {
+			name = "Science Ship"
+			effect = {
+				set_owner = event_target:human_fallen_empires_discovery_docking_ship.owner
+				create_ship = {
+					name = random
+					design = last_created_design
 				}
+				set_location = event_target:human_fallen_empires_discovery_docking_ship
 			}
 		}
-
 		event_target:human_fallen_empires_discovery_docking_planet_owner = {
-			add_minerals = 150
-			add_energy = 150
+			add_energy = 100
 			add_trust = {
 				who = root
 				amount = 5
@@ -7473,6 +7469,14 @@ ship_event = {
 
 	immediate = {
 		from = {
+			every_neighboring_system = {
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = root.owner
+					}
+				}
+			}
 			every_system_planet = {
 				surveyed = {
 					set_surveyed = yes
@@ -7480,6 +7484,23 @@ ship_event = {
 				}
 			}
 		}
+	}
+}
+
+# look at stations
+ship_event = {
+	id = human_fallen_empires.601
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_drone
+		}
+	}
+
+	immediate = {
+		log = "Outpost builded"
 	}
 }
 
