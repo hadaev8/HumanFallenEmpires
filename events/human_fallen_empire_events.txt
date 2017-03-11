@@ -3597,6 +3597,7 @@ country_event = {
 				fromfromfrom = {
 					or = {
 						is_ship_size = destroyer
+						is_ship_size = military_station_small
 						is_ship_size = small_ship_fallen_empire
 						is_ship_size = nomad_destroyer
 						is_ship_size = pirate_destroyer
@@ -3620,6 +3621,7 @@ country_event = {
 						fromfromfrom = {
 							or = {
 								is_ship_size = cruiser
+								is_ship_size = military_station_medium
 								is_ship_size = military_station_small_fallen_empire
 								is_ship_size = pirate_cruiser
 								is_ship_size = pirate_station
@@ -3642,7 +3644,7 @@ country_event = {
 								fromfromfrom = {
 									or = {
 										is_ship_size = battleship
-										is_ship_size = massive_ship_fallen_empire
+										is_ship_size = military_station_large
 										is_ship_size = large_ship_fallen_empire
 										is_ship_size = military_station_large_fallen_empire
 										is_ship_size = large_ship_ai
@@ -3690,84 +3692,105 @@ country_event = {
 				}
 				any_country = {
 					is_at_war_with = from
-					energy > 50
+					energy > 10
 				}
 			}
 			if = {
 				limit = {
 					fromfromfrom = {
-						or = {
-							is_ship_size = destroyer
-							is_ship_size = small_ship_fallen_empire
-						}
+						is_ship_size = corvette
 					}
 				}
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						energy > 50
+						energy > 10
 					}
-					add_energy = -100
+					add_energy = -10
 					root = {
-						add_energy = 100
+						add_energy = 10
 					}
 				}
-				else = {
-					if = {
+				if = {
+					limit = {
+						fromfromfrom = {
+							or = {
+								is_ship_size = destroyer
+								is_ship_size = military_station_small
+								is_ship_size = small_ship_fallen_empire
+							}
+						}
+					}
+					random_country = {
 						limit = {
-							fromfromfrom = {
-								or = {
-									is_ship_size = cruiser
-									is_ship_size = military_station_small_fallen_empire
-								}
-							}
+							is_at_war_with = from
+							energy > 100
 						}
-						random_country = {
+						add_energy = -100
+						root = {
+							add_energy = 100
+						}
+					}
+					else = {
+						if = {
 							limit = {
-								is_at_war_with = from
-								energy > 150
+								fromfromfrom = {
+									or = {
+										is_ship_size = cruiser
+										is_ship_size = military_station_medium
+										is_ship_size = military_station_small_fallen_empire
+									}
+								}
 							}
-							add_energy = -150
-							root = {
-								add_energy = 150
-							}
-						}
-						else = {
-							if = {
+							random_country = {
 								limit = {
-									fromfromfrom = {
-										or = {
-											is_ship_size = battleship
-											is_ship_size = large_ship_fallen_empire
-											is_ship_size = military_station_large_fallen_empire
-										}
-									}
+									is_at_war_with = from
+									energy > 150
 								}
-								random_country = {
+								add_energy = -150
+								root = {
+									add_energy = 150
+								}
+							}
+							else = {
+								if = {
 									limit = {
-										is_at_war_with = from
-										energy > 200
-									}
-									add_energy = -200
-									root = {
-										add_energy = 200
-									}
-								}
-								else = {
-									if = {
-										limit = {
-											fromfromfrom = {
-												is_ship_size = massive_ship_fallen_empire
+										fromfromfrom = {
+											or = {
+												is_ship_size = battleship
+												is_ship_size = military_station_large
+												is_ship_size = orbital_station
+												is_ship_size = large_ship_fallen_empire
+												is_ship_size = military_station_large_fallen_empire
 											}
 										}
-										random_country = {
+									}
+									random_country = {
+										limit = {
+											is_at_war_with = from
+											energy > 200
+										}
+										add_energy = -200
+										root = {
+											add_energy = 200
+										}
+									}
+									else = {
+										if = {
 											limit = {
-												is_at_war_with = from
-												energy > 1000
+												fromfromfrom = {
+													is_ship_size = massive_ship_fallen_empire
+												}
 											}
-											add_energy = -1000
-											root = {
-												add_energy = 1000
+											random_country = {
+												limit = {
+													is_at_war_with = from
+													energy > 1000
+												}
+												add_energy = -1000
+												root = {
+													add_energy = 1000
+												}
 											}
 										}
 									}
@@ -3877,8 +3900,8 @@ country_event = {
 # First Contact Empires for discovery
 country_event = {
 	id = human_fallen_empires.553
-	title = "action.10.name"
-	desc = "action.15.desc"
+	title = action.10.name
+	desc = action.15.desc
 	picture = GFX_evt_star_chart
 	show_sound = advisor_notification_alien_vessel_encountered
 	location = FROMFROMFROM
@@ -4010,7 +4033,6 @@ fleet_event = {
 	}
 
 	immediate = {
-		#repair_ship = yes
 		from = {
 			save_event_target_as = human_fallen_empires_discovery_docking_planet
 			owner = {
@@ -4072,7 +4094,7 @@ country_event = {
 	location = root
 	is_triggered_only = yes
 	diplomatic = yes
-	force_open = yes
+#	force_open = yes
 
 	picture_event_data = {
 		room = human_fallen_empires_docking_room
@@ -4101,7 +4123,7 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
+			minerals > 299
 					 energy > 300
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4150,8 +4172,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_2
@@ -4202,8 +4224,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_3
@@ -4254,8 +4276,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_4
@@ -4306,8 +4328,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_5
@@ -4358,8 +4380,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_6
@@ -4407,8 +4429,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_1
@@ -4456,8 +4478,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_2
@@ -4508,8 +4530,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_3
@@ -4560,8 +4582,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_4
@@ -4612,8 +4634,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_5
@@ -4664,8 +4686,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_6
@@ -4713,8 +4735,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_1
@@ -4762,8 +4784,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_2
@@ -4814,8 +4836,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_3
@@ -4866,8 +4888,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_4
@@ -4918,8 +4940,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_5
@@ -4970,8 +4992,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_6
@@ -5019,8 +5041,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_1
@@ -5068,8 +5090,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_2
@@ -5120,8 +5142,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_3
@@ -5172,8 +5194,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_4
@@ -5224,8 +5246,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_5
@@ -5276,8 +5298,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_6
@@ -5336,8 +5358,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_1
@@ -5385,8 +5407,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_2
@@ -5437,8 +5459,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_3
@@ -5489,8 +5511,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_4
@@ -5541,8 +5563,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_5
@@ -5593,8 +5615,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_6
@@ -5642,8 +5664,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_1
@@ -5691,8 +5713,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_2
@@ -5743,8 +5765,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_3
@@ -5795,8 +5817,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_4
@@ -5847,8 +5869,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_5
@@ -5899,8 +5921,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_6
@@ -5948,8 +5970,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_1
@@ -5997,8 +6019,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_2
@@ -6049,8 +6071,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_3
@@ -6101,8 +6123,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_4
@@ -6153,8 +6175,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_5
@@ -6205,8 +6227,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_6
@@ -6265,8 +6287,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_1
@@ -6314,8 +6336,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_2
@@ -6366,8 +6388,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_3
@@ -6418,8 +6440,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_4
@@ -6470,8 +6492,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_5
@@ -6522,8 +6544,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_6
@@ -6571,8 +6593,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_1
@@ -6620,8 +6642,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_2
@@ -6672,8 +6694,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_3
@@ -6724,8 +6746,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_4
@@ -6776,8 +6798,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_5
@@ -6828,8 +6850,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_6
@@ -6877,8 +6899,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_1
@@ -6926,8 +6948,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_2
@@ -6978,8 +7000,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_3
@@ -7030,8 +7052,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_4
@@ -7082,8 +7104,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_5
@@ -7135,8 +7157,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_6
@@ -7184,8 +7206,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_1
@@ -7233,8 +7255,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_2
@@ -7285,8 +7307,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_3
@@ -7337,8 +7359,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_4
@@ -7389,8 +7411,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_5
@@ -7441,8 +7463,8 @@ country_event = {
 			}
 		}
 		allow = {
-			minerals > 300
-					 energy > 300
+			minerals > 299
+					 energy > 299
 					 event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_6
@@ -7741,6 +7763,7 @@ country_event = {
 			human_fallen_empires_trigger_discovery_docking_any_menu = no
 		}
 		allow = {
+			is_at_war = no
 			event_target:human_fallen_empires_discovery_docking_planet_owner = {
 				energy > 100
 			}
