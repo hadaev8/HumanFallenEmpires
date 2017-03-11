@@ -3574,7 +3574,7 @@ country_event = {
 
 ## discovery section 550
 
-# harvest minerals from frags
+# harvest from frags
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
@@ -3686,6 +3686,101 @@ country_event = {
 		if = {
 			limit = {
 				from = {
+					has_country_flag = human_fallen_empires_discovery_war_target
+				}
+				any_country = {
+					is_at_war_with = from
+					energy > 50
+				}
+			}
+			if = {
+				limit = {
+					fromfromfrom = {
+						or = {
+							is_ship_size = destroyer
+							is_ship_size = small_ship_fallen_empire
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						is_at_war_with = from
+						energy > 50
+					}
+					add_energy = -100
+					root = {
+						add_energy = 100
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							fromfromfrom = {
+								or = {
+									is_ship_size = cruiser
+									is_ship_size = military_station_small_fallen_empire
+								}
+							}
+						}
+						random_country = {
+							limit = {
+								is_at_war_with = from
+								energy > 150
+							}
+							add_energy = -150
+							root = {
+								add_energy = 150
+							}
+						}
+						else = {
+							if = {
+								limit = {
+									fromfromfrom = {
+										or = {
+											is_ship_size = battleship
+											is_ship_size = large_ship_fallen_empire
+											is_ship_size = military_station_large_fallen_empire
+										}
+									}
+								}
+								random_country = {
+									limit = {
+										is_at_war_with = from
+										energy > 200
+									}
+									add_energy = -200
+									root = {
+										add_energy = 200
+									}
+								}
+								else = {
+									if = {
+										limit = {
+											fromfromfrom = {
+												is_ship_size = massive_ship_fallen_empire
+											}
+										}
+										random_country = {
+											limit = {
+												is_at_war_with = from
+												energy > 1000
+											}
+											add_energy = -1000
+											root = {
+												add_energy = 1000
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
 					or = {
 						is_country_type = cloud
 						is_country_type = extradimensional
@@ -3741,6 +3836,8 @@ country_event = {
 				is_country_type = fallen_empire
 				is_country_type = awakened_fallen_empire
 				is_country_type = human_fallen_empire
+				is_country_type = nomad
+				is_country_type = enclave
 			}
 		}
 	}
@@ -3853,7 +3950,37 @@ country_event = {
 	}
 }
 
+# clean discovery war target flag after war end
+country_event = {
+	id = human_fallen_empires.554
+	hide_window = yes
+    is_triggered_only = yes
 
+	trigger = {
+		has_country_flag = human_fallen_empires_discovery_war_target
+	}
+
+	immediate = {
+		remove_country_flag = human_fallen_empires_discovery_war_target
+		fromfrom = {
+			random_war_participant = {
+				limit = {
+					is_country_type = human_fallen_empires_discovery
+				}
+				save_event_target_as = human_fallen_empires_discovery_country
+			}
+			every_war_participant = {
+				limit = {
+					has_country_flag = human_fallen_empires_discovery_war_target
+					not = {
+						is_at_war_with = event_target:human_fallen_empires_discovery_country
+					}
+				}
+				remove_country_flag = human_fallen_empires_discovery_war_target
+			}
+		}
+	}
+}
 
 # trade and update on planet
 # from = docking planet
@@ -7604,6 +7731,38 @@ country_event = {
 			add_energy = 100
 		}
 	}
+	option = {
+		name = human_fallen_empires.561.war_menu.0.0
+		trigger = {
+			#	has_country_flag = human_fallen_empires.561.war_menu
+			event_target:human_fallen_empires_discovery_docking_planet_owner = {
+				is_at_war = yes
+			}
+			human_fallen_empires_trigger_discovery_docking_any_menu = no
+		}
+		allow = {
+			event_target:human_fallen_empires_discovery_docking_planet_owner = {
+				energy > 100
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.561.war_menu.0.0.response
+
+		add_energy = 100
+		join_war = event_target:human_fallen_empires_discovery_docking_planet_owner
+		event_target:human_fallen_empires_discovery_docking_planet_owner = {
+			add_energy = -100
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_at_war_with = event_target:human_fallen_empires_discovery_docking_planet_owner
+				}
+				set_country_flag = human_fallen_empires_discovery_war_target
+			}
+		}
+	}
 	# return
 	option = {
 		name =  modmenu_return
@@ -7689,6 +7848,24 @@ ship_event = {
 
 	immediate = {
 		log = "Outpost builded"
+	}
+}
+
+# destroy drone planet
+planet_event = {
+	id = human_fallen_empires.602
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_drone
+		}
+	}
+
+	immediate = {
+		destroy_colony = yes
+		change_pc = pc_molten
 	}
 }
 
