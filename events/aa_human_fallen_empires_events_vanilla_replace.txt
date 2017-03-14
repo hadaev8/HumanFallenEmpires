@@ -1,0 +1,325 @@
+namespace = fallen_empires_awakening
+
+# Sleepers Awake
+country_event = {
+	id = fallen_empires_awakening.1
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+	#	NOT = { has_global_flag = sleepers_awake_happened }
+	#	NOT = { has_global_flag = guardians_of_the_galaxy_happened }
+
+		years_passed > 100
+
+		is_country_type = fallen_empire
+		is_at_war = no
+	#	fleet_power > 40000
+
+		# Wake up if regular empire is growing too strong or has started to conquer other fallen empires
+		any_country = {
+			is_country_type = default
+			OR = {
+				AND = {
+					is_difficulty = 0
+					NOT = { is_difficulty = 1 }
+					fleet_power > 40000
+				}
+				AND = {
+					is_difficulty = 1
+					fleet_power > 50000
+				}
+				fleet_power > 60000
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.5
+			any_country = {
+				is_country_type = default
+				OR = {
+					AND = {
+						is_difficulty = 0
+						NOT = { is_difficulty = 1 }
+						fleet_power > 60000
+					}
+					AND = {
+						is_difficulty = 1
+						fleet_power > 80000
+					}
+					fleet_power > 100000
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			num_fallen_empires > 1
+			num_fallen_empires < 3
+		}
+		modifier = {
+			factor = 3
+			num_fallen_empires > 2
+			num_fallen_empires < 4
+		}
+		modifier = {
+			factor = 4
+			num_fallen_empires > 3
+		}
+		modifier = {
+			factor = 0.1
+			any_country = {
+				is_country_type = default
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+					NOT = { is_original_owner = root }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.01
+			has_global_flag = high_awaken_chance
+		}
+	}
+
+	immediate = {
+		set_global_flag = sleepers_awake_happened
+
+		country_event = { id = fallen_empires_awakening.3 }
+
+		# Notify players
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			establish_communications_no_message = root
+			country_event = { id = fallen_empires_awakening.2 }
+		}
+	}
+}
+
+namespace = pirate
+
+# Birth of Space Piracy
+country_event = {
+	id = pirate.1
+	title = "pirate.1.name"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_space_battle
+
+	desc = { # Spiritual
+		text = pirate.1.desc_01
+		trigger = {
+			OR = {
+				has_government = theocratic_republic
+				has_government = transcendent_republic
+				has_government = theocratic_oligarchy
+				has_government = transcendent_oligarchy
+				has_government = divine_mandate
+				has_government = transcendent_empire
+			}
+		}
+	}
+
+	desc = { # Militarist
+		text = pirate.1.desc_02
+		trigger = {
+			OR = {
+				has_government = military_dictatorship
+				has_government = martial_empire
+				has_government = military_junta
+				has_government = ordered_stratocracy
+				has_government = military_republic
+				has_government = martial_demarchy
+			}
+		}
+	}
+
+	desc = { # Materialist
+		text = pirate.1.desc_03
+		trigger = {
+			OR = {
+				has_government = despotic_hegemony
+				has_government = ai_overlordship
+				has_government = science_directorate
+				has_government = illuminated_technocracy
+				has_government = direct_democracy
+				has_government = subconscious_consensus
+			}
+		}
+	}
+
+	desc = { # Pacifist
+		text = pirate.1.desc_04
+		trigger = {
+			OR = {
+				has_government = moral_democracy
+				has_government = irenic_democracy
+				has_government = peaceful_bureaucracy
+				has_government = irenic_protectorate
+				has_government = enlightened_monarchy
+				has_government = irenic_monarchy
+			}
+		}
+	}
+
+	desc = { # Generic Autocracy
+		text = pirate.1.desc_05
+		trigger = {
+			OR = {
+				has_government = despotic_empire
+				has_government = star_empire
+			}
+		}
+	}
+
+	desc = { # Generic Oligarchy
+		text = pirate.1.desc_06
+		trigger = {
+			OR = {
+				has_government = plutocratic_oligarchy
+				has_government = mega_corporation
+			}
+		}
+	}
+
+	desc = { # Generic Democracy
+		text = pirate.1.desc_07
+		trigger = {
+			OR = {
+				has_government = indirect_democracy
+				has_government = democratic_utopia
+			}
+		}
+	}
+
+	trigger = {
+		NOT = { has_global_flag = privateers_destroyed }
+		is_country_type = default
+		NOT = { has_country_flag = birth_of_piracy }
+		num_owned_planets > 1
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		log = "pirates"
+		set_country_flag = birth_of_piracy
+		set_country_flag = pirate_encountered
+		every_country = {
+			limit = {
+				or = {
+					is_country_type = pirate
+					is_country_type = human_fallen_empires_pirate
+				}
+			}
+			establish_communications_no_message = root
+		}
+		save_event_target_as = pirate_target
+		random_system = {
+			limit = {
+				distance = {
+					source = event_target:pirate_target.capital_scope
+					min_distance = 5
+					max_distance = 60
+				}
+				OR = {
+					has_owner = no
+					is_owned_by = ROOT
+				}
+			}
+			spawn_system = {
+				initializer = human_fallen_empires_pirate_sector
+			}
+		}
+	}
+
+	option = {
+		name = pirate.2.a
+		trigger = {
+			OR = {
+				has_government = theocratic_republic
+				has_government = transcendent_republic
+				has_government = theocratic_oligarchy
+				has_government = transcendent_oligarchy
+				has_government = divine_mandate
+				has_government = transcendent_empire
+			}
+		}
+	}
+	option = {
+		name = pirate.2.b
+		trigger = {
+			OR = {
+				has_government = military_dictatorship
+				has_government = martial_empire
+				has_government = military_junta
+				has_government = ordered_stratocracy
+				has_government = military_republic
+				has_government = martial_demarchy
+			}
+		}
+	}
+	option = {
+		name = pirate.2.c
+		trigger = {
+			OR = {
+				has_government = despotic_hegemony
+				has_government = ai_overlordship
+				has_government = science_directorate
+				has_government = illuminated_technocracy
+				has_government = direct_democracy
+				has_government = subconscious_consensus
+			}
+		}
+	}
+	option = {
+		name = pirate.2.d
+		trigger = {
+			OR = {
+				has_government = moral_democracy
+				has_government = irenic_democracy
+				has_government = peaceful_bureaucracy
+				has_government = irenic_protectorate
+				has_government = enlightened_monarchy
+				has_government = irenic_monarchy
+			}
+		}
+	}
+	option = {
+		name = pirate.2.e
+		trigger = {
+			OR = {
+				has_government = despotic_empire
+				has_government = star_empire
+			}
+		}
+	}
+	option = {
+		name = pirate.2.f
+		trigger = {
+			OR = {
+				has_government = plutocratic_oligarchy
+				has_government = mega_corporation
+			}
+		}
+	}
+	option = {
+		name = pirate.2.g
+		trigger = {
+			OR = {
+				has_government = indirect_democracy
+				has_government = democratic_utopia
+			}
+		}
+	}
+	option = {
+		name = INTERESTING
+	}
+}

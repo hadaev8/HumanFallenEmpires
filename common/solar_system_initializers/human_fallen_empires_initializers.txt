@@ -63,6 +63,9 @@ human_fallen_empires_egypt = {
 				government = transcendent_empire
 				species = event_target:human_fallen_empires_egypt_species
 				flag = random
+				ethos = {
+					ethic = ethic_fanatic_spiritualist
+				}
 				effect = {
 					set_country_flag = human_fallen_empires_egypt
 					kill_leader = {
@@ -168,8 +171,6 @@ human_fallen_empires_egypt = {
 							trait = random_trait
 						}
 					}
-					country_add_ethic = "ethic_xenophobe"
-					country_add_ethic = "ethic_fanatic_spiritualist"
 					set_policy = {
 						policy = slavery
 						option = slavery_allowed_xenos_only
@@ -2045,14 +2046,6 @@ human_fallen_empires_drone_sector_01 = {
 					save_global_event_target_as = human_fallen_empires_drone_country
 					set_graphical_culture = ancient_drone_01
 					give_technology = tech_warp_drive_1
-					create_ship_design = { design = "Drone Constructor" }
-					add_ship_design = last_created_design
-					create_ship_design = { design = "Drone Harvester" }
-					add_ship_design = last_created_design
-					create_ship_design = { design = "Drone Protector" }
-					add_ship_design = last_created_design
-					create_ship_design = { design = "Drone Destroyer" }
-					add_ship_design = last_created_design
 					add_modifier = {
 						modifier = human_fallen_empires_drone_country_unkeep
 						days = -1
@@ -2065,6 +2058,18 @@ human_fallen_empires_drone_sector_01 = {
 						option = orbital_bombardment_full
 						cooldown = yes
 					}
+					create_ship_design = {
+						design = "Drone Protector"
+						ftl = warp
+					}
+					add_ship_design = last_created_design
+					add_global_ship_design = "Drone Harvester"
+				#	add_global_ship_design = "Drone Protector"
+					add_global_ship_design = "Drone Destroyer"
+					add_global_ship_design = "Drone Constructor"
+				#	add_global_ship_design = "Pirate Looter"
+				#	add_global_ship_design = "Pirate Tirant"
+				#	add_global_ship_design = "Pirate Harvester"
 				}
 			}
 			set_owner = event_target:human_fallen_empires_drone_country
@@ -2293,15 +2298,114 @@ human_fallen_empires_drone_sector_03 = {
 	}
 }
 
+# pirates
+human_fallen_empires_pirate_sector = {
+	name = "Pirate Sector"
+	class = "rl_standard_stars"
+	asteroids_distance = 100
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 10 max = 20 }
+	}
+
+	change_orbit = 100
+
+	planet = {
+		count = { min = 1 max = 3 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = random
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = 1
+		orbit_distance = 10
+		class = "pc_ai"
+		name = Hideout
+		orbit_angle = random
+		size = { min = 5 max = 10 }
+		modifiers = none
+
+		init_effect = {
+			set_planet_flag = human_fallen_empires_pirate_planet
+			create_country = {
+				name = Pirates
+				type = human_fallen_empires_pirate
+				species = event_target:pirate_target.species
+				name_list = PRT1
+				government = pirate_codex
+				released_from_country = event_target:pirate_target
+				ethos = {
+					ethic = ethic_fanatic_militarist
+					ethic = ethic_individualist
+				}
+				flag = {
+					icon = {
+						category = "pirate"
+						file = "flag_pirate_7.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors ={
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					add_modifier = {
+						modifier = human_fallen_empires_pirate_country_unkeep
+						days = -1
+					}
+					set_graphical_culture = pirate_01
+					add_minerals = 1000
+					add_energy = 1000
+					add_influence = 1000
+					set_policy = {
+						policy = orbital_bombardment
+						option = orbital_bombardment_full
+						cooldown = yes
+					}
+					set_relation_flag = {
+						who = event_target:pirate_target
+						flag = pirate_relation
+					}
+				#	establish_communications_no_message = ROOT
+				}
+			}
+			set_owner = last_created_country
+			create_spaceport = {
+				owner = last_created_country
+				initial_module = missile_weapon
+			}
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = random_non_colonizable
+		orbit_distance = 20
+		orbit_angle = random
+	}
+}
 
 # future
 human_fallen_empires_future = {
-	name = "Tartarus"
+	name = Tartarus
 	class = "rl_standard_stars"
 	asteroids_distance = 70
 
 	planet = {
-		name = "Tartarus"
+		name = Tartarus
 		count = 1
 		class = "pc_b_star"
 		orbit_distance = 0
@@ -2311,7 +2415,7 @@ human_fallen_empires_future = {
 	}
 
 	planet = {
-		name = "Typhon"
+		name = Typhon
 		count = 1
 		class = star
 		orbit_distance = 50
