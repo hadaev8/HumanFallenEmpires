@@ -3860,7 +3860,11 @@ country_event = {
     is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		or = {
+			is_country_type = human_fallen_empires_discovery
+			is_country_type = human_fallen_empires_drone
+			is_country_type = human_fallen_empires_pirate
+		}
 		from = {
 			or = {
 				is_country_type = default
@@ -7865,7 +7869,7 @@ ship_event = {
 	}
 }
 
-# look at stations
+# add bonus for outposts
 ship_event = {
 	id = human_fallen_empires.601
 	hide_window = yes
@@ -7879,12 +7883,38 @@ ship_event = {
 
 	immediate = {
 		log = "Outpost builded"
+		owner = {
+			add_modifier = {
+				modifier = human_fallen_empires_drone_outpost
+				days = -1
+			}
+		}
+	}
+}
+
+# remove bonus
+# add bonus for outposts
+country_event = {
+	id = human_fallen_empires.602
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_drone
+		fromfrom = {
+			is_ship_size = outpost_station
+		}
+	}
+
+	immediate = {
+		log = "Outpost removed"
+		remove_modifier = human_fallen_empires_drone_outpost
 	}
 }
 
 # destroy drone planet
 planet_event = {
-	id = human_fallen_empires.602
+	id = human_fallen_empires.603
 	hide_window = yes
     is_triggered_only = yes
 
@@ -7905,25 +7935,31 @@ planet_event = {
 
 # pirates 650 - 700
 
-# pirates fleet logic set by ship build on action
+# pirates gain resurces
 ship_event = {
 	id = human_fallen_empires.650
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
-		owner = {
-			is_country_type = human_fallen_empires_pirate
+		is_country_type = human_fallen_empires_pirate
+		fromfromfrom = {
+			or = {
+				is_ship_size = wormhole_station
+				is_ship_size = research_station
+				is_ship_size = mining_station
+				is_ship_size = observation_station
+				is_ship_size = outpost_station
+			}
 		}
-		is_ship_class = shipclass_military
 	}
 
 	immediate = {
-		ship_event = { id = human_fallen_empires.651 days = 10 }
+		add_minerals = 100
 	}
 }
 
-# pirates fleet logic
+# pirates fleet logic set by ship build on action
 ship_event = {
 	id = human_fallen_empires.651
 	hide_window = yes
