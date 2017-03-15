@@ -200,7 +200,7 @@ country_event = {
 	}
 
 	trigger = {
-		NOT = { has_global_flag = privateers_destroyed }
+	#	NOT = { has_global_flag = privateers_destroyed }
 		is_country_type = default
 		NOT = { has_country_flag = birth_of_piracy }
 		num_owned_planets > 1
@@ -209,7 +209,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		log = "pirates"
+		log = "pirates spawned"
 		set_country_flag = birth_of_piracy
 		set_country_flag = pirate_encountered
 		every_country = {
@@ -237,6 +237,17 @@ country_event = {
 			spawn_system = {
 				initializer = human_fallen_empires_pirate_sector
 			}
+		}
+		last_created_country = {
+			save_event_target_as = pirate_band
+			add_opinion_modifier = {
+				who = root
+				modifier = human_fallen_empires_option_pirate_pay_for_protect
+			}
+		}
+		add_opinion_modifier = {
+			who = event_target:pirate_band
+			modifier = human_fallen_empires_option_pirate_pay_for_protect
 		}
 	}
 

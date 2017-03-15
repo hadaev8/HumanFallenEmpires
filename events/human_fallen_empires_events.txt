@@ -455,6 +455,14 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
+		# spawn pirates
+		random_country = {
+			limit = {
+				is_country_type = default
+				num_owned_planets > 2
+			}
+			country_event = { id = pirate.1 days = 1 random = 365 }
+		}
 		# make discovery default country
 		if = {
 			limit = {
@@ -7882,7 +7890,10 @@ planet_event = {
 
 	trigger = {
 		owner = {
-			is_country_type = human_fallen_empires_drone
+			or = {
+				is_country_type = human_fallen_empires_drone
+				is_country_type = human_fallen_empires_pirate
+			}
 		}
 	}
 
@@ -7892,7 +7903,147 @@ planet_event = {
 	}
 }
 
+# pirates 650 - 700
 
+# pirates fleet logic set by ship build on action
+ship_event = {
+	id = human_fallen_empires.650
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+		is_ship_class = shipclass_military
+	}
+
+	immediate = {
+		ship_event = { id = human_fallen_empires.651 days = 10 }
+	}
+}
+
+# pirates fleet logic
+ship_event = {
+	id = human_fallen_empires.651
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+		is_ship_class = shipclass_military
+		fleet = {
+			num_ships > 4
+		}
+		any_system = {
+			any_ship_in_system = {
+				or = {
+					is_ship_size = wormhole_station
+					is_ship_size = research_station
+					is_ship_size = mining_station
+					is_ship_size = observation_station
+					is_ship_size = outpost_station
+				}
+				exists = owner
+				owner = {
+					is_hostile = root.owner
+				}
+			}
+			not = {
+				any_ship_in_system = {
+					or = {
+						is_ship_size = orbital_station
+						is_ship_class = shipclass_military
+						is_ship_class = shipclass_military_station
+					}
+					exists = owner
+					owner = {
+						is_hostile = root.owner
+					}
+					root.fleet = {
+						num_ships < 15
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		fleet = {
+			log = "pirate fleet logic"
+			clear_fleet_actions = this
+			queue_actions = {
+				repeat = {
+					find_closest_system = {
+						trigger = {
+							id = "human_fallen_empires.651.trigger.0"
+							any_planet = {
+								or = {
+									has_mining_station = yes
+									has_research_station = yes
+								}
+								exists = controller
+								controller = {
+									is_hostile = root.owner
+								}
+							}
+						}
+						found_system = {
+							move_to = this
+						}
+					}
+					find_closest_planet = {
+						trigger = {
+							id = "human_fallen_empires.651.trigger.1"
+							or = {
+								has_mining_station = yes
+								has_research_station = yes
+							}
+						}
+						found_planet = {
+							orbit_planet = this
+							wait = {
+								duration = 20
+							}
+						}
+					}
+					find_random_system = {
+						trigger = {
+							id = "human_fallen_empires.651.trigger.2"
+							any_planet = {
+								exists = owner
+								owner = {
+									is_country = root.owner
+								}
+							}
+						}
+						found_system = {
+							move_to = this
+						}
+					}
+					find_closest_planet = {
+						trigger = {
+							id = "human_fallen_empires.651.trigger.3"
+							exists = owner
+							owner = {
+								is_country = root.owner
+							}
+						}
+						found_planet = {
+							orbit_planet = THIS
+							wait = {
+								duration = 200
+								random = 150
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
 
 
 ### Kad Republic section
