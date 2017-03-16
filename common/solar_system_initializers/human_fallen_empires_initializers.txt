@@ -1906,7 +1906,7 @@ human_fallen_empires_too_ideal_planet = {
 	name = Copernicus
 	planet = {
 		count = 1
-		orbit_distance = 50
+		orbit_distance = 0
 		class = "pc_gaia"
 		orbit_angle = random
 		size = 25
@@ -1926,6 +1926,12 @@ human_fallen_empires_too_ideal_planet = {
 		}
 	}
 
+	planet = {
+		count = 1
+		class = random_asteroid
+		orbit_distance = 200
+		orbit_angle = random
+	}
 }
 
 # discovery
@@ -1986,6 +1992,7 @@ human_fallen_empires_discovery = {
 		orbit_angle = random
 	}
 }
+
 # drones
 human_fallen_empires_drone_sector_01 = {
 	class = "rl_standard_stars"
@@ -2327,7 +2334,7 @@ human_fallen_empires_pirate_sector = {
 		count = 1
 		orbit_distance = 10
 		class = "pc_ai"
-		name = Hideout
+	#	name = Hideout
 		orbit_angle = random
 		size = { min = 5 max = 10 }
 		modifiers = none
@@ -2335,11 +2342,11 @@ human_fallen_empires_pirate_sector = {
 		init_effect = {
 			set_planet_flag = human_fallen_empires_pirate_planet
 			create_country = {
-				name = Pirates
+				name = random
 				type = human_fallen_empires_pirate
 				species = event_target:pirate_target.species
-				name_list = PRT1
-				government = pirate_codex
+				name_list = human_fallen_empires_pirate_namelist
+				government = human_fallen_empires_government_pirate_codex
 				released_from_country = event_target:pirate_target
 				ethos = random
 				flag = random
@@ -2376,6 +2383,20 @@ human_fallen_empires_pirate_sector = {
 						country_add_ethic = ethic_fanatic_militarist
 					}
 				}
+			}
+			create_colony = {
+				owner = last_created_country
+				species = event_target:pirate_target.species
+				ethos = owner
+			}
+			every_owned_pop = {
+				kill_pop = yes
+			}
+			random_tile = {
+				limit = {
+					has_building = building_colony_shelter
+				}
+				remove_building = yes
 			}
 			set_owner = last_created_country
 			create_spaceport = {
