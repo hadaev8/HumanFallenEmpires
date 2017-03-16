@@ -2341,26 +2341,8 @@ human_fallen_empires_pirate_sector = {
 				name_list = PRT1
 				government = pirate_codex
 				released_from_country = event_target:pirate_target
-				ethos = {
-					ethic = ethic_fanatic_militarist
-					ethic = ethic_individualist
-				}
-				flag = {
-					icon = {
-						category = "pirate"
-						file = "flag_pirate_7.dds"
-					}
-					background = {
-						category = "backgrounds"
-						file = "00_solid.dds"
-					}
-					colors ={
-						"red"
-						"red"
-						"null"
-						"null"
-					}
-				}
+				ethos = random
+				flag = random
 				effect = {
 					add_modifier = {
 						modifier = human_fallen_empires_pirate_country_unkeep
@@ -2379,7 +2361,20 @@ human_fallen_empires_pirate_sector = {
 						who = event_target:pirate_target
 						flag = pirate_relation
 					}
-				#	establish_communications_no_message = ROOT
+					if = {
+						limit = {
+							has_ethic = ethic_pacifist
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_militarist
+					}
+					if = {
+						limit = {
+							has_ethic = ethic_fanatic_pacifist
+						}
+						country_remove_ethic = ethic_fanatic_pacifist
+						country_add_ethic = ethic_fanatic_militarist
+					}
 				}
 			}
 			set_owner = last_created_country

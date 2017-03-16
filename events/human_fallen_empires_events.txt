@@ -459,7 +459,7 @@ event = {
 		random_country = {
 			limit = {
 				is_country_type = default
-				num_owned_planets > 2
+				num_owned_planets > 3
 			}
 			country_event = { id = pirate.1 days = 1 random = 365 }
 		}
@@ -7936,7 +7936,7 @@ planet_event = {
 # pirates 650 - 700
 
 # pirates gain resurces
-ship_event = {
+country_event = {
 	id = human_fallen_empires.650
 	hide_window = yes
     is_triggered_only = yes
@@ -7955,7 +7955,11 @@ ship_event = {
 	}
 
 	immediate = {
-		add_minerals = 100
+		add_minerals = 90
+		add_physics_research = 10
+		add_society_research = 10
+		add_engineering_research = 10
+		log = "pirates kill station"
 	}
 }
 
@@ -7999,7 +8003,7 @@ ship_event = {
 						is_hostile = root.owner
 					}
 					root.fleet = {
-						num_ships < 15
+						num_ships < 30
 					}
 				}
 			}
@@ -8022,7 +8026,24 @@ ship_event = {
 								}
 								exists = controller
 								controller = {
-									is_hostile = root.owner
+									is_country_type = default
+							#		is_hostile = root.fleet.owner
+								}
+							}
+							not = {
+								any_ship_in_system = {
+									or = {
+										is_ship_size = orbital_station
+										is_ship_class = shipclass_military
+										is_ship_class = shipclass_military_station
+									}
+								#	exists = owner
+								#	owner = {
+								#		is_hostile = root.owner
+								#	}
+									root.fleet = {
+										num_ships < 30
+									}
 								}
 							}
 						}
