@@ -463,6 +463,14 @@ event = {
 			}
 			country_event = { id = pirate.1 days = 1 random = 365 }
 		}
+		# kill pirates
+		random_country = {
+			limit = {
+				is_country_type = human_fallen_empires_pirate
+				num_owned_planets = 0
+			}
+			destroy_country = yes
+		}
 		# make discovery default country
 		if = {
 			limit = {
@@ -3864,6 +3872,7 @@ country_event = {
 			is_country_type = human_fallen_empires_discovery
 			is_country_type = human_fallen_empires_drone
 			is_country_type = human_fallen_empires_pirate
+			has_country_flag = human_fallen_empires_discovery
 		}
 		from = {
 			or = {
@@ -3882,7 +3891,7 @@ country_event = {
 	}
 }
 
-# if discovery destroed = end game
+# if discovery destroyed = end game
 # This = owner of ship 1 (destroyed)
 # From = owner of ship 2 (combatant)
 # FromFrom = ship 1
@@ -3920,7 +3929,10 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		or = {
+			is_country_type = human_fallen_empires_discovery
+			has_country_flag = human_fallen_empires_discovery
+		}
 		from = {
 			OR = {
 				and = {
@@ -4026,7 +4038,6 @@ fleet_event = {
     is_triggered_only = yes
 
 	trigger = {
-		#count_fleet_ships
 		is_ship_size = human_fallen_empires_deepvoid
 		exists = owner
 		owner = {
@@ -7832,10 +7843,6 @@ country_event = {
 	}
 }
 
-
-
-
-
 ## drone country section 600
 #
 ship_event = {
@@ -7893,7 +7900,6 @@ ship_event = {
 }
 
 # remove bonus
-# add bonus for outposts
 country_event = {
 	id = human_fallen_empires.602
 	hide_window = yes
@@ -7955,6 +7961,12 @@ country_event = {
 	}
 
 	immediate = {
+		from = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirates_kill_station
+				days = 200
+			}
+		}
 		add_minerals = 90
 		add_physics_research = 10
 		add_society_research = 10
@@ -7989,6 +8001,12 @@ ship_event = {
 				exists = owner
 				owner = {
 					is_hostile = root.owner
+					not = {
+						has_opinion_modifier = {
+							who = root.owner
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
 				}
 			}
 			not = {
@@ -8018,7 +8036,7 @@ ship_event = {
 				repeat = {
 					find_closest_system = {
 						trigger = {
-							id = "human_fallen_empires.651.trigger.0"
+							id = human_fallen_empires.651.trigger.0
 							any_planet = {
 								or = {
 									has_mining_station = yes
@@ -8027,7 +8045,13 @@ ship_event = {
 								exists = controller
 								controller = {
 									is_country_type = default
-							#		is_hostile = root.fleet.owner
+									not = {
+										has_opinion_modifier = {
+											who = root.owner
+											modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+										}
+									}
+									#		is_hostile = root.fleet.owner
 								}
 							}
 							not = {
@@ -8053,7 +8077,7 @@ ship_event = {
 					}
 					find_closest_planet = {
 						trigger = {
-							id = "human_fallen_empires.651.trigger.1"
+							id = human_fallen_empires.651.trigger.1
 							or = {
 								has_mining_station = yes
 								has_research_station = yes
@@ -8068,7 +8092,7 @@ ship_event = {
 					}
 					find_random_system = {
 						trigger = {
-							id = "human_fallen_empires.651.trigger.2"
+							id = human_fallen_empires.651.trigger.2
 							any_planet = {
 								exists = owner
 								owner = {
@@ -8082,7 +8106,7 @@ ship_event = {
 					}
 					find_closest_planet = {
 						trigger = {
-							id = "human_fallen_empires.651.trigger.3"
+							id = human_fallen_empires.651.trigger.3
 							exists = owner
 							owner = {
 								is_country = root.owner
@@ -8102,6 +8126,69 @@ ship_event = {
 	}
 }
 
+# pirate diplomacy
+country_event = {
+	id = human_fallen_empires.660
+	title = "TRANSMISSION"
+	desc = human_fallen_empires.660.desc.0
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			is_country_type = human_fallen_empires_pirate
+		}
+	}
+
+	picture_event_data = {
+		portrait = from
+		room = from
+	}
+
+	option = {
+		name = human_fallen_empires.660.0
+		allow = {
+			custom_tooltip_fail = {
+				text = human_fallen_empires.660.0.tooltip_fail
+				not = {
+					has_opinion_modifier = {
+						who = from
+						modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+					}
+				}
+			}
+			energy > 500
+			minerals > 500
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.660.0.response
+
+		add_energy = -500
+		add_minerals = -500
+		from = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			add_opinion_modifier = {
+				who = from
+				modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+			}
+			from = {
+				add_opinion_modifier = {
+					who = root
+					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+				}
+			}
+		}
+	}
+
+	option = {
+		name = modmenu_exit
+	}
+}
 
 ### Kad Republic section
 
