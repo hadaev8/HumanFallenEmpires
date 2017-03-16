@@ -186,7 +186,7 @@ country_event = {
 					}
 				}
 				spawn_system = {
-					initializer = "human_fallen_empires_future"
+					initializer = human_fallen_empires_future
 				}
 				set_global_flag = human_fallen_empires_future_spawned
 			}
@@ -233,22 +233,22 @@ country_event = {
 					}
 				}
 				spawn_system = {
-					initializer = "human_fallen_empires_egypt"
+					initializer = human_fallen_empires_egypt
 				}
 				spawn_system = {
 					#		min_distance = 0
 					#		max_distance = 15
-					initializer = "human_fallen_empires_hope"
+					initializer = human_fallen_empires_hope
 				}
 				spawn_system = {
 					#		min_distance = 10
 					#		max_distance = 20
-					initializer = "human_fallen_empires_gift"
+					initializer = human_fallen_empires_gift
 				}
 				spawn_system = {
 					min_distance = 10
 					max_distance = 20
-					initializer = "human_fallen_empires_ban"
+					initializer = human_fallen_empires_ban
 				}
 				set_global_flag = human_fallen_empires_egypt_spawned
 			}
@@ -256,49 +256,49 @@ country_event = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_memorial_01" }
+				spawn_system = { initializer = human_fallen_empires_memorial_01 }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_memorial_02" }
+				spawn_system = { initializer = human_fallen_empires_memorial_02 }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_memorial_03" }
+				spawn_system = { initializer = human_fallen_empires_memorial_03 }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_memorial_04" }
+				spawn_system = { initializer = human_fallen_empires_memorial_04 }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_varelse" }
+				spawn_system = { initializer = human_fallen_empires_varelse }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_ahet" }
+				spawn_system = { initializer = human_fallen_empires_ahet }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_ahet_2" }
+				spawn_system = { initializer = human_fallen_empires_ahet_2 }
 			}
 			random_system = {
 				limit = {
 					has_owner = no
 				}
-				spawn_system = { initializer = "human_fallen_empires_too_ideal_planet" }
+				spawn_system = { initializer = human_fallen_empires_too_ideal_planet }
 			}
 			# discovery setup
 			if = {
@@ -408,17 +408,17 @@ country_event = {
 				spawn_system = {
 					min_distance = 0
 					max_distance = 10
-					initializer = "human_fallen_empires_drone_sector_01"
+					initializer = human_fallen_empires_drone_sector_01
 				}
 				spawn_system = {
 					min_distance = 0
 					max_distance = 10
-					initializer = "human_fallen_empires_drone_sector_02"
+					initializer = human_fallen_empires_drone_sector_02
 				}
 				spawn_system = {
 					min_distance = 0
 					max_distance = 10
-					initializer = "human_fallen_empires_drone_sector_03"
+					initializer = human_fallen_empires_drone_sector_03
 				}
 			}
 		}
@@ -598,7 +598,6 @@ event = {
 				}
 			}
 		}
-
 		# future is in expansion
 		if = {
 			limit = {
@@ -7960,13 +7959,31 @@ ship_event = {
     is_triggered_only = yes
 
 	trigger = {
+		is_ship_class = shipclass_military
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
-		is_ship_class = shipclass_military
+	}
+
+	immediate = {
 		fleet = {
-			num_ships > 4
+			fleet_event = { id = human_fallen_empires.652 }
 		}
+	}
+}
+
+# pirates fleet logic
+fleet_event = {
+	id = human_fallen_empires.652
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+		num_ships > 4
+		has_hp_percentage > 0.9
 		any_system = {
 			any_ship_in_system = {
 				or = {
@@ -7998,7 +8015,7 @@ ship_event = {
 					owner = {
 						is_hostile = root.owner
 					}
-					root.fleet = {
+					root = {
 						num_ships < 30
 					}
 				}
@@ -8007,55 +8024,108 @@ ship_event = {
 	}
 
 	immediate = {
-		fleet = {
-			log = "pirate fleet logic"
-			clear_fleet_actions = this
-			queue_actions = {
-				repeat = {
-					find_closest_system = {
-						trigger = {
-							id = human_fallen_empires.651.trigger.0
-							any_planet = {
-								or = {
-									has_mining_station = yes
-									has_research_station = yes
-								}
-								exists = controller
-								controller = {
-									is_country_type = default
-									not = {
-										has_opinion_modifier = {
-											who = root.owner
-											modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-										}
-									}
-									#		is_hostile = root.fleet.owner
-								}
-							}
-							not = {
-								any_ship_in_system = {
-									or = {
-										is_ship_size = orbital_station
-										is_ship_class = shipclass_military
-										is_ship_class = shipclass_military_station
-									}
-								#	exists = owner
-								#	owner = {
-								#		is_hostile = root.owner
-								#	}
-									root.fleet = {
-										num_ships < 30
-									}
-								}
+		log = "pirate fleet logic"
+		clear_fleet_actions = this
+		queue_actions = {
+			repeat = {
+				find_closest_system = {
+					trigger = {
+						id = human_fallen_empires.652.trigger.0
+						any_country = {
+							has_opinion_modifier = {
+								who = root.owner
+								modifier = human_fallen_empires_opinion_pirate_prior_target
 							}
 						}
-						found_system = {
-							move_to = this
+						any_planet = {
+							or = {
+								has_mining_station = yes
+								has_research_station = yes
+							}
+							exists = controller
+							controller = {
+								is_country_type = default
+								is_hostile = root.owner
+							}
+						}
+						not = {
+							any_ship_in_system = {
+								or = {
+									is_ship_size = orbital_station
+									is_ship_class = shipclass_military
+									is_ship_class = shipclass_military_station
+								}
+								exists = owner
+								owner = {
+									is_hostile = root.owner
+								}
+								root = {
+									num_ships < 30
+								}
+							}
 						}
 					}
+					found_system = {
+						move_to = this
+					}
+					failed = {
+						find_closest_system = {
+							trigger = {
+								id = human_fallen_empires.652.trigger.1
+								any_planet = {
+									or = {
+										has_mining_station = yes
+										has_research_station = yes
+									}
+									exists = controller
+									controller = {
+										is_country_type = default
+										not = {
+											has_opinion_modifier = {
+												who = root.owner
+												modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+											}
+										}
+									}
+								}
+								not = {
+									any_ship_in_system = {
+										or = {
+											is_ship_size = orbital_station
+											is_ship_class = shipclass_military
+											is_ship_class = shipclass_military_station
+										}
+										exists = owner
+										owner = {
+											is_hostile = root.owner
+										}
+										root = {
+											num_ships < 30
+										}
+									}
+								}
+							}
+							found_system = {
+								move_to = this
+							}
+							failed = {
+								wait = 200
+								effect = {
+									id = human_fallen_empires.651.effect.1
+									clear_fleet_actions = root
+									root = {
+										fleet_event = { id = human_fallen_empires.652 }
+									}
+								}
+							}
+						}
+					}
+				}
+				repeat = {
+					max_iterations = 10
 					find_closest_planet = {
 						trigger = {
-							id = human_fallen_empires.651.trigger.1
+							id = human_fallen_empires.652.trigger.2
 							or = {
 								has_mining_station = yes
 								has_research_station = yes
@@ -8068,34 +8138,34 @@ ship_event = {
 							}
 						}
 					}
-					find_random_system = {
-						trigger = {
-							id = human_fallen_empires.651.trigger.2
-							any_planet = {
-								exists = owner
-								owner = {
-									is_country = root.owner
-								}
-							}
-						}
-						found_system = {
-							move_to = this
-						}
-					}
-					find_closest_planet = {
-						trigger = {
-							id = human_fallen_empires.651.trigger.3
+				}
+				find_random_system = {
+					trigger = {
+						id = human_fallen_empires.652.trigger.3
+						any_planet = {
 							exists = owner
 							owner = {
 								is_country = root.owner
 							}
 						}
-						found_planet = {
-							orbit_planet = THIS
-							wait = {
-								duration = 200
-								random = 150
-							}
+					}
+					found_system = {
+						move_to = this
+					}
+				}
+				find_closest_planet = {
+					trigger = {
+						id = human_fallen_empires.652.trigger.4
+						exists = owner
+						owner = {
+							is_country = root.owner
+						}
+					}
+					found_planet = {
+						orbit_planet = this
+						wait = {
+							duration = 200
+							random = 150
 						}
 					}
 				}
