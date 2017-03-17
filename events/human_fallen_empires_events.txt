@@ -7828,9 +7828,11 @@ ship_event = {
     is_triggered_only = yes
 
 	trigger = {
+		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_drone
 		}
+		exists = from
 	}
 
 	immediate = {
@@ -7860,6 +7862,7 @@ ship_event = {
     is_triggered_only = yes
 
 	trigger = {
+		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_drone
 		}
@@ -7884,6 +7887,7 @@ country_event = {
 
 	trigger = {
 		is_country_type = human_fallen_empires_drone
+		exists = fromfrom
 		fromfrom = {
 			is_ship_size = outpost_station
 		}
@@ -7902,6 +7906,7 @@ planet_event = {
     is_triggered_only = yes
 
 	trigger = {
+		exists = owner
 		owner = {
 			or = {
 				is_country_type = human_fallen_empires_drone
@@ -7913,6 +7918,7 @@ planet_event = {
 	immediate = {
 		destroy_colony = yes
 		change_pc = pc_molten
+		log = "colony killed on [Root.GetStarName]"
 	}
 }
 
@@ -7926,6 +7932,7 @@ country_event = {
 
 	trigger = {
 		is_country_type = human_fallen_empires_pirate
+		exists = fromfromfrom
 		fromfromfrom = {
 			or = {
 				is_ship_size = wormhole_station
@@ -7959,10 +7966,11 @@ ship_event = {
     is_triggered_only = yes
 
 	trigger = {
-		is_ship_class = shipclass_military
+		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
+		is_ship_class = shipclass_military
 	}
 
 	immediate = {
@@ -7979,6 +7987,7 @@ fleet_event = {
     is_triggered_only = yes
 
 	trigger = {
+		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
@@ -7987,7 +7996,7 @@ fleet_event = {
 		any_system = {
 			any_ship_in_system = {
 				or = {
-					is_ship_size = wormhole_station
+				#	is_ship_size = wormhole_station
 					is_ship_size = research_station
 					is_ship_size = mining_station
 					is_ship_size = observation_station
@@ -8038,10 +8047,7 @@ fleet_event = {
 							}
 						}
 						any_planet = {
-							or = {
-								has_mining_station = yes
-								has_research_station = yes
-							}
+							has_orbital_station = yes
 							exists = controller
 							controller = {
 								is_country_type = default
@@ -8073,10 +8079,7 @@ fleet_event = {
 							trigger = {
 								id = human_fallen_empires.652.trigger.1
 								any_planet = {
-									or = {
-										has_mining_station = yes
-										has_research_station = yes
-									}
+									has_orbital_station = yes
 									exists = controller
 									controller = {
 										is_country_type = default
@@ -8126,10 +8129,7 @@ fleet_event = {
 					find_closest_planet = {
 						trigger = {
 							id = human_fallen_empires.652.trigger.2
-							or = {
-								has_mining_station = yes
-								has_research_station = yes
-							}
+							has_orbital_station = yes
 						}
 						found_planet = {
 							orbit_planet = this
@@ -8174,6 +8174,32 @@ fleet_event = {
 	}
 }
 
+# kill pirate base
+country_event = {
+	id = human_fallen_empires.653
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_pirate
+		exists = fromfrom
+		fromfrom = {
+			is_ship_size = orbital_station
+		}
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				solar_system = {
+					is_same_value = fromfrom.solar_system
+				}
+			}
+			destroy_colony = yes
+		}
+	}
+}
+
 # pirate diplomacy
 country_event = {
 	id = human_fallen_empires.660
@@ -8184,6 +8210,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = from
 		from = {
 			is_country_type = human_fallen_empires_pirate
 		}
@@ -8194,6 +8221,7 @@ country_event = {
 		room = from
 	}
 
+	# pay for protect
 	option = {
 		name = human_fallen_empires.660.0
 		allow = {
@@ -8232,9 +8260,10 @@ country_event = {
 			}
 		}
 	}
+	# pay for prior target
 
 	option = {
-		name = modmenu_exit
+		name = human_fallen_empires_end_transmission
 	}
 }
 
@@ -8252,6 +8281,7 @@ country_event  = {
 
 	trigger = {
 		is_country_type = default
+		exists = from
 		from = {
 			is_country_type = human_fallen_empire
 			has_country_flag = human_fallen_empires_future
