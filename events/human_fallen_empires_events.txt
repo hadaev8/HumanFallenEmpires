@@ -8052,6 +8052,10 @@ fleet_event = {
 							controller = {
 								is_country_type = default
 								is_hostile = root.owner
+								has_opinion_modifier = {
+									who = root.owner
+									modifier = human_fallen_empires_opinion_pirate_prior_target
+								}
 							}
 						}
 						not = {
@@ -8200,14 +8204,11 @@ country_event = {
 	}
 }
 
-# pirate diplomacy
+# pirate diplomacy start
 country_event = {
 	id = human_fallen_empires.660
-	title = "TRANSMISSION"
-	desc = human_fallen_empires.660.desc.0
-	diplomatic = yes
-	custom_gui = "enclave_trader_window"
-	is_triggered_only = yes
+	hide_window = yes
+    is_triggered_only = yes
 
 	trigger = {
 		exists = from
@@ -8216,20 +8217,57 @@ country_event = {
 		}
 	}
 
+	immediate = {
+		from = {
+			save_event_target_as = human_fallen_empires_pirate_country
+		}
+		country_event = { id = human_fallen_empires.661 }
+	}
+}
+
+# pirate diplomacy main menu
+country_event = {
+	id = human_fallen_empires.661
+	title = "TRANSMISSION"
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.661.desc.0
+				human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			}
+			success_text = {
+				text = human_fallen_empires.661.raid_menu.desc.0
+				has_country_flag = human_fallen_empires.661.raid_menu
+				human_fallen_empires_trigger_exists_any_event_target = yes
+			}
+			success_text = {
+				text = human_fallen_empires.661.raid_menu.desc.1
+				has_country_flag = human_fallen_empires.661.raid_menu
+				human_fallen_empires_trigger_exists_any_event_target = no
+			}
+		}
+	}
+	diplomatic = yes
+#	custom_gui = "enclave_trader_window"
+	is_triggered_only = yes
+
 	picture_event_data = {
-		portrait = from
-		room = from
+		portrait = event_target:human_fallen_empires_pirate_country
+		room = event_target:human_fallen_empires_pirate_country
 	}
 
 	# pay for protect
 	option = {
-		name = human_fallen_empires.660.0
+		name = human_fallen_empires.661.0
+		trigger = {
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+		}
 		allow = {
 			custom_tooltip_fail = {
-				text = human_fallen_empires.660.0.tooltip_fail
+				text = human_fallen_empires.661.0.tooltip_fail
 				not = {
 					has_opinion_modifier = {
-						who = from
+						who = event_target:human_fallen_empires_pirate_country
 						modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 					}
 				}
@@ -8239,20 +8277,20 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.660.0.response
+		response_text = human_fallen_empires.661.0.response
 
 		add_energy = -500
 		add_minerals = -500
-		from = {
+		event_target:human_fallen_empires_pirate_country = {
 			add_energy = 500
 			add_minerals = 500
 		}
 		hidden_effect = {
 			add_opinion_modifier = {
-				who = from
+				who = event_target:human_fallen_empires_pirate_country
 				modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 			}
-			from = {
+			event_target:human_fallen_empires_pirate_country = {
 				add_opinion_modifier = {
 					who = root
 					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
@@ -8261,9 +8299,522 @@ country_event = {
 		}
 	}
 	# pay for prior target
+	option = {
+		name = human_fallen_empires.661.1
+		trigger = {
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_country_type = default
+					has_communications = root
+					is_rival = root
+					not = {
+						is_country = root
+					}
+					not = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+				human_fallen_empires_effect_save_event_target = yes
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_domineering_to = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_hostile_to = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_dismissive_to = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_unfriendly_to = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_threatened_to = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						not = {
+							is_country = root
+						}
+						not = {
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+			set_country_flag = human_fallen_empires.661.raid_menu
+			country_event = { id = human_fallen_empires.661 }
+		}
+	}
+	# select target menu
+	option = {
+		name = human_fallen_empires.661.raid_menu.0
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_0
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
 
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.0.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_0 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_0
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.661.raid_menu.1
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_1
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.1.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_1 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_1
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.661.raid_menu.2
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_2
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.2.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_2 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_2
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.661.raid_menu.3
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_3
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.3.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_3 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_3
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.661.raid_menu.4
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_4
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.4.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_4 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_4
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.661.raid_menu.5
+		trigger = {
+			has_country_flag = human_fallen_empires.661.raid_menu
+			exists = event_target:human_fallen_empires_event_target_5
+		}
+		allow = {
+			energy > 500
+			minerals > 500
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				not = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+						}
+					}
+				}
+			}
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				not = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_opinion_modifier = {
+							who = event_target:human_fallen_empires_pirate_country
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.raid_menu.5.response
+
+		add_energy = -500
+		add_minerals = -500
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 500
+			add_minerals = 500
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_event_target_5 = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_pirate_country
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = event_target:human_fallen_empires_event_target_5
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	option = {
+		name = modmenu_return
+		trigger = {
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = yes
+		}
+		hidden_effect = {
+			remove_country_flag = has_country_flag = human_fallen_empires.661.raid_menu
+		}
+	}
+	# exit
 	option = {
 		name = human_fallen_empires_end_transmission
+		hidden_effect = {
+			remove_country_flag = has_country_flag = human_fallen_empires.661.raid_menu
+		}
 	}
 }
 
