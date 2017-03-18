@@ -26,7 +26,7 @@
 #	}
 #
 
-human_fallen_empires_down_primitive_teh_lvl = {
+human_fallen_empires_effect_down_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
@@ -84,7 +84,7 @@ human_fallen_empires_down_primitive_teh_lvl = {
 	}
 }
 
-human_fallen_empires_up_primitive_teh_lvl = {
+human_fallen_empires_effect_up_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
@@ -268,7 +268,7 @@ human_fallen_empires_up_primitive_teh_lvl = {
 	}
 }
 
-human_fallen_empires_create_primitive = {
+human_fallen_empires_effect_create_primitive = {
 	add_threat = {
 		who = root
 		amount = 1 # scales to pops
@@ -731,7 +731,7 @@ human_fallen_empires_create_primitive = {
 	}
 }
 
-human_fallen_empires_create_vassal = {
+human_fallen_empires_effect_create_vassal = {
 	add_threat = {
 		who = root
 		amount = 1 # scales to pops
@@ -847,7 +847,7 @@ human_fallen_empires_create_vassal = {
 }
 
 # for pop
-human_fallen_empires_add_random_trait = {
+human_fallen_empires_effect_add_random_trait = {
 	random_list = {
 		1 = {
 			modifier = {
@@ -1247,12 +1247,13 @@ human_fallen_empires_add_random_trait = {
 }
 
 # for fleet
-human_fallen_empires_varelse_fleet_attack_home_of_light = {
+human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 	set_fleet_stance = aggressive
+	clear_fleet_actions = this
 	queue_actions = {
 		find_closest_system = {
 			trigger = {
-				id = human_fallen_empires_varelse_fleet_attack_home_of_light_trigger.0
+				id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_trigger.0
 				any_planet = {
 					has_planet_flag = human_fallen_empires_home_of_light
 				}
@@ -1260,7 +1261,7 @@ human_fallen_empires_varelse_fleet_attack_home_of_light = {
 			found_system = {
 				move_to = this
 				effect = {
-					id = human_fallen_empires_varelse_fleet_attack_home_of_light_effect.1
+					id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.1
 					if = {
 						limit = {
 							any_planet = {
@@ -1276,8 +1277,7 @@ human_fallen_empires_varelse_fleet_attack_home_of_light = {
 							}
 						}
 						event_target:human_fallen_empires_varelse_fleet = {
-							clear_fleet_actions = this
-							human_fallen_empires_varelse_fleet_find_new_home = yes
+							human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 						}
 						else = {
 							event_target:human_fallen_empires_varelse_fleet = {
@@ -1292,7 +1292,7 @@ human_fallen_empires_varelse_fleet_attack_home_of_light = {
 				}
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires_varelse_fleet_attack_home_of_light_trigger.1
+						id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_trigger.1
 						has_planet_flag = human_fallen_empires_home_of_light
 					}
 					found_planet = {
@@ -1307,10 +1307,10 @@ human_fallen_empires_varelse_fleet_attack_home_of_light = {
 							}
 						}
 						effect = {
-							id = human_fallen_empires_varelse_fleet_attack_home_of_light_effect.2
+							id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.2
 							event_target:human_fallen_empires_varelse_fleet = {
 								clear_fleet_actions = this
-								human_fallen_empires_varelse_fleet_find_new_home = yes
+								human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 							}
 						}
 					}
@@ -1321,7 +1321,8 @@ human_fallen_empires_varelse_fleet_attack_home_of_light = {
 }
 
 # for fleet
-human_fallen_empires_varelse_fleet_find_new_home = {
+human_fallen_empires_effect_varelse_fleet_find_new_home = {
+	clear_fleet_actions = this
 	queue_actions = {
 		find_closest_system = {
 			trigger = {
@@ -1336,64 +1337,94 @@ human_fallen_empires_varelse_fleet_find_new_home = {
 			}
 			found_system = {
 				move_to = this
-				find_closest_planet = {
+			}
+			failed = {
+				find_closest_system = {
 					trigger = {
 						id = human_fallen_empires_find_new_home_trigger.1
-						has_owner = no
-						or = {
-							is_planet_class = pc_gaia
-							is_planet_class = pc_desert
+						any_planet = {
+							has_owner = no
+							or = {
+								is_planet_class = pc_gaia
+								is_planet_class = pc_desert
+							}
 						}
 					}
-					found_planet = {
+					found_system = {
 						move_to = this
-						effect = {
-							id = human_fallen_empires_find_new_home_effect.0
-							create_country = {
-								name = "Varelse Hegemony"
-								type = default
-								government = random
-								species = event_target:human_fallen_empires_varelse_species
-								ethos = {
-									ethic = ethic_xenophobe
-									ethic = ethic_militarist
-									ethic = ethic_materialist
+					}
+					failed = {
+						find_closest_system = {
+							trigger = {
+								id = human_fallen_empires_find_new_home_trigger.2
+								any_planet = {
+									has_owner = no
+									or = {
+										is_planet_class = pc_tropical
+										is_planet_class = pc_arid
+										is_planet_class = pc_ocean
+										is_planet_class = pc_tundra
+										is_planet_class = pc_arctic
+										is_planet_class = pc_continental
+										is_planet_class = pc_alpine
+										is_planet_class = pc_savannah
+									}
 								}
-								flag = random
-							}
-							create_colony = {
-								owner = last_created_country
-								species = owner
-								ethos = owner
-							}
-							event_target:human_fallen_empires_varelse_fleet = {
-								set_owner = last_created_country
 							}
 						}
 					}
 				}
 			}
 		}
-		find_closest_system = {
+		find_closest_planet = {
 			trigger = {
-				id = human_fallen_empires_find_new_home_trigger.2
-				any_planet = {
-					has_owner = no
-					or = {
-						is_planet_class = pc_gaia
-						is_planet_class = pc_desert
+				id = human_fallen_empires_find_new_home_trigger.3
+				has_owner = no
+				or = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_desert
+				}
+			}
+			found_planet = {
+				move_to = this
+				effect = {
+					id = human_fallen_empires_find_new_home_effect.0
+					create_country = {
+						name = "Varelse Hegemony"
+						type = default
+						government = random
+						species = event_target:human_fallen_empires_varelse_species
+						ethos = {
+							ethic = ethic_xenophobe
+							ethic = ethic_militarist
+							ethic = ethic_materialist
+						}
+						flag = random
+					}
+					create_colony = {
+						owner = last_created_country
+						species = owner
+						ethos = owner
+					}
+					event_target:human_fallen_empires_varelse_fleet = {
+						set_owner = last_created_country
 					}
 				}
 			}
-			found_system = {
-				move_to = this
+			failed = {
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires_find_new_home_trigger.3
+						id = human_fallen_empires_find_new_home_trigger.4
 						has_owner = no
 						or = {
-							is_planet_class = pc_gaia
-							is_planet_class = pc_desert
+							is_planet_class = pc_tropical
+							is_planet_class = pc_arid
+							is_planet_class = pc_ocean
+							is_planet_class = pc_tundra
+							is_planet_class = pc_arctic
+							is_planet_class = pc_continental
+							is_planet_class = pc_alpine
+							is_planet_class = pc_savannah
 						}
 					}
 					found_planet = {

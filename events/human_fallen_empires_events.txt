@@ -1717,7 +1717,7 @@ country_event = {
 				remove_country_flag = human_fallen_empires.53.0.1
 				remove_country_flag = human_fallen_empires.53.0.2
 				event_target:human_fallen_empires_varelse_fleet = {
-					human_fallen_empires_varelse_fleet_attack_home_of_light = yes
+					human_fallen_empires_effect_varelse_fleet_attack_home_of_light = yes
 				}
 			}
 			# found new home
@@ -1731,7 +1731,7 @@ country_event = {
 				remove_country_flag = human_fallen_empires.53.0.3
 				remove_country_flag = human_fallen_empires.53.0.4
 				event_target:human_fallen_empires_varelse_fleet = {
-					human_fallen_empires_varelse_fleet_find_new_home = yes
+					human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 				}
 			}
 		}
@@ -1936,7 +1936,7 @@ country_event = {
 	immediate = {
 		event_target:human_fallen_empires_varelse_colony = {
 			owner = {
-				human_fallen_empires_down_primitive_teh_lvl = yes
+				human_fallen_empires_effect_down_primitive_teh_lvl = yes
 			}
 			every_tile = {
 				limit = { has_building = yes }
@@ -1985,7 +1985,7 @@ country_event = {
 	immediate = {
 		event_target:human_fallen_empires_varelse_colony = {
 			owner = {
-				human_fallen_empires_up_primitive_teh_lvl = yes
+				human_fallen_empires_effect_up_primitive_teh_lvl = yes
 				country_remove_ethic = "ethic_spiritualist"
 				country_add_ethic = "ethic_materialist"
 				every_owned_pop = {
@@ -2307,7 +2307,7 @@ planet_event = {
 
 	immediate = {
 		every_owned_pop = {
-			human_fallen_empires_add_random_trait = yes
+			human_fallen_empires_effect_add_random_trait = yes
 		}
 	}
 
@@ -8076,6 +8076,20 @@ fleet_event = {
 						}
 					}
 					found_system = {
+						effect = {
+							id = human_fallen_empires.652.effect.0
+							root = {
+								if = {
+									limit = {
+										or = {
+											num_ships < 5
+													  has_hp_percentage < 0.9
+										}
+									}
+									clear_fleet_actions = this
+								}
+							}
+						}
 						move_to = this
 					}
 					failed = {
@@ -8118,9 +8132,9 @@ fleet_event = {
 							failed = {
 								wait = 200
 								effect = {
-									id = human_fallen_empires.651.effect.1
-									clear_fleet_actions = root
+									id = human_fallen_empires.652.effect.1
 									root = {
+										clear_fleet_actions = this
 										fleet_event = { id = human_fallen_empires.652 }
 									}
 								}
@@ -8193,6 +8207,23 @@ country_event = {
 	}
 
 	immediate = {
+		if = {
+			limit = {
+				num_owned_planets = 1
+			}
+			random_country = {
+				limit = {
+					is_country_type = human_fallen_empires_pirate
+					not = {
+						is_country = root
+					}
+				}
+				save_event_target_as = human_fallen_empires_pirate_new_owner
+			}
+			every_owned_fleet = {
+				set_owner = event_target:human_fallen_empires_pirate_new_owner
+			}
+		}
 		random_owned_planet = {
 			limit = {
 				solar_system = {
@@ -8228,7 +8259,7 @@ country_event = {
 # pirate diplomacy main menu
 country_event = {
 	id = human_fallen_empires.661
-	title = "TRANSMISSION"
+	title = TRANSMISSION
 	desc = {
 		trigger = {
 			success_text = {
@@ -8248,7 +8279,6 @@ country_event = {
 		}
 	}
 	diplomatic = yes
-#	custom_gui = "enclave_trader_window"
 	is_triggered_only = yes
 
 	picture_event_data = {
@@ -8806,14 +8836,14 @@ country_event = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = yes
 		}
 		hidden_effect = {
-			remove_country_flag = has_country_flag = human_fallen_empires.661.raid_menu
+			remove_country_flag = human_fallen_empires.661.raid_menu
 		}
 	}
 	# exit
 	option = {
 		name = human_fallen_empires_end_transmission
 		hidden_effect = {
-			remove_country_flag = has_country_flag = human_fallen_empires.661.raid_menu
+			remove_country_flag = human_fallen_empires.661.raid_menu
 		}
 	}
 }
