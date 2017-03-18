@@ -441,13 +441,13 @@ event = {
 			}
 			country_event = { id = pirate.1 days = 1 random = 365 }
 		}
-		# kill pirates
+		# pirates make new bases
 		random_country = {
 			limit = {
 				is_country_type = human_fallen_empires_pirate
-				num_owned_planets = 0
+				energy > 1000
 			}
-			destroy_country = yes
+			country_event = { id = human_fallen_empires.655 days = 1 random = 365 }
 		}
 		# make discovery default country
 		if = {
@@ -7947,15 +7947,15 @@ country_event = {
 	immediate = {
 		from = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirates_kill_station
+				flag = human_fallen_empires_pirates_attacked
 				days = 200
 			}
 		}
 		add_minerals = 90
 		add_energy = 10
-	#	add_physics_research = 10
-	#	add_society_research = 10
-	#	add_engineering_research = 10
+		add_physics_research = 5
+		add_society_research = 5
+		add_engineering_research = 5
 		log = "pirates kill station"
 	}
 }
@@ -7995,26 +7995,26 @@ fleet_event = {
 		num_ships > 4
 		has_hp_percentage > 0.9
 		any_system = {
-			any_ship_in_system = {
+			any_planet = {
 				or = {
-				#	is_ship_size = wormhole_station
-					is_ship_size = research_station
-					is_ship_size = mining_station
-					is_ship_size = observation_station
-					is_ship_size = outpost_station
-				}
-				exists = owner
-				owner = {
-					is_hostile = root.owner
-					not = {
-						has_opinion_modifier = {
-							who = root.owner
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+					and = {
+						has_orbital_station = yes
+						exists = controller
+						controller = {
+							is_country_type = default
+							is_hostile = root.owner
+						}
+					}
+					and = {
+						exists = owner
+						owner = {
+							is_country_type = default
+							is_hostile = root.owner
 						}
 					}
 				}
 			}
-			not = {
+			nor = {
 				any_ship_in_system = {
 					or = {
 						is_ship_size = orbital_station
@@ -8048,18 +8048,33 @@ fleet_event = {
 							}
 						}
 						any_planet = {
-							has_orbital_station = yes
-							exists = controller
-							controller = {
-								is_country_type = default
-								is_hostile = root.owner
-								has_opinion_modifier = {
-									who = root.owner
-									modifier = human_fallen_empires_opinion_pirate_prior_target
+							or = {
+								and = {
+									has_orbital_station = yes
+									exists = controller
+									controller = {
+										is_country_type = default
+										is_hostile = root.owner
+										has_opinion_modifier = {
+											who = root.owner
+											modifier = human_fallen_empires_opinion_pirate_prior_target
+										}
+									}
+								}
+								and = {
+									exists = owner
+									owner = {
+										is_country_type = default
+										is_hostile = root.owner
+										has_opinion_modifier = {
+											who = root.owner
+											modifier = human_fallen_empires_opinion_pirate_prior_target
+										}
+									}
 								}
 							}
 						}
-						not = {
+						nor = {
 							any_ship_in_system = {
 								or = {
 									is_ship_size = orbital_station
@@ -8098,19 +8113,37 @@ fleet_event = {
 							trigger = {
 								id = human_fallen_empires.652.trigger.1
 								any_planet = {
-									has_orbital_station = yes
-									exists = controller
-									controller = {
-										is_country_type = default
-										not = {
-											has_opinion_modifier = {
-												who = root.owner
-												modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+									or = {
+										and = {
+											has_orbital_station = yes
+											exists = controller
+											controller = {
+												is_country_type = default
+												is_hostile = root.owner
+												not = {
+													has_opinion_modifier = {
+														who = root.owner
+														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+													}
+												}
+											}
+										}
+										and = {
+											exists = owner
+											owner = {
+												is_country_type = default
+												is_hostile = root.owner
+												not = {
+													has_opinion_modifier = {
+														who = root.owner
+														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+													}
+												}
 											}
 										}
 									}
 								}
-								not = {
+								nor = {
 									any_ship_in_system = {
 										or = {
 											is_ship_size = orbital_station
@@ -8148,7 +8181,10 @@ fleet_event = {
 					find_closest_planet = {
 						trigger = {
 							id = human_fallen_empires.652.trigger.2
-							has_orbital_station = yes
+							or = {
+								has_orbital_station = yes
+								exists = owner
+							}
 						}
 						found_planet = {
 							orbit_planet = this
@@ -8234,6 +8270,120 @@ country_event = {
 		}
 	}
 }
+
+# pirate bombard colony
+planet_event = {
+	id = human_fallen_empires.654
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		num_pops > 0
+		exists = owner
+		exists = from
+		from = {
+			is_country_type = human_fallen_empires_pirate
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirates_attacked
+				days = 200
+			}
+		}
+		from = {
+			add_minerals = 90
+			add_energy = 10
+			add_physics_research = 5
+			add_society_research = 5
+			add_engineering_research = 5
+		}
+		random_tile = {
+			limit = {
+				has_building = yes
+			}
+			set_ruined = yes
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.655
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		energy > 1000
+	}
+
+	immediate = {
+		every_owned_planet = {
+			random_system = {
+				limit = {
+					distance = {
+						source = prev
+						min_distance = 5
+						max_distance = 50
+					}
+					nor = {
+						any_planet = {
+							exists = owner
+						}
+						has_star_flag = hostile_system
+					}
+					any_planet = {
+						is_asteroid = yes
+						nor = {
+							exists = controller
+							exists = owner
+						}
+					}
+					root = {
+						energy > 1000
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_asteroid = yes
+						nor = {
+							exists = controller
+							exists = owner
+						}
+					}
+					create_colony = {
+						owner = last_created_country
+						species = root.species
+						ethos = owner
+					}
+					every_owned_pop = {
+						kill_pop = yes
+					}
+					random_tile = {
+						limit = {
+							has_building = building_colony_shelter
+						}
+						remove_building = yes
+					}
+					create_spaceport = {
+						owner = root
+						initial_module = missile_weapon
+					}
+					root = {
+						add_energy = -1000
+					}
+					add_modifier = {
+						modifier = human_fallen_empires_pirate_base
+						days = -1
+					}
+					log = "pirate created new base on [This.GetStarName]"
+				}
+			}
+		}
+	}
+}
+
 
 # pirate diplomacy start
 country_event = {
