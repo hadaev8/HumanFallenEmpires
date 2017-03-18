@@ -8151,9 +8151,7 @@ fleet_event = {
 						}
 						found_planet = {
 							orbit_planet = this
-							wait = {
-								duration = 20
-							}
+							wait = 30
 						}
 					}
 				}
@@ -8275,6 +8273,10 @@ country_event = {
 				text = human_fallen_empires.661.raid_menu.desc.1
 				has_country_flag = human_fallen_empires.661.raid_menu
 				human_fallen_empires_trigger_exists_any_event_target = no
+			}
+			success_text = {
+				text = human_fallen_empires.661.traid_menu.desc.0
+				has_country_flag = human_fallen_empires.661.traid_menu
 			}
 		}
 	}
@@ -8830,20 +8832,58 @@ country_event = {
 			}
 		}
 	}
+	# traid menu
+	option = {
+		name = human_fallen_empires.661.2
+		trigger = {
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires.661.traid_menu
+			country_event = { id = human_fallen_empires.661 }
+		}
+	}
+	# energy for minerals
+	option = {
+		name = human_fallen_empires.661.traid_menu.0
+		trigger = {
+			has_country_flag = human_fallen_empires.661.traid_menu
+		}
+		allow = {
+			minerals > 150
+			custom_tooltip_fail = {
+				text = human_fallen_empires.661.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > 100
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.661.traid_menu.0.response
+
+		add_energy = 100
+		add_minerals = -150
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = -100
+			add_minerals = 150
+		}
+	}
+
 	option = {
 		name = modmenu_return
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = yes
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.661.raid_menu
+			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
 		}
 	}
 	# exit
 	option = {
 		name = human_fallen_empires_end_transmission
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.661.raid_menu
+			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
 		}
 	}
 }
