@@ -42,6 +42,8 @@ namespace = human_fallen_empires
 
 @human_fallen_empires_discovery_docking_update_minerals_cost = 100
 @human_fallen_empires_discovery_docking_update_energy_cost = 100
+@human_fallen_empires_pirate_base_cost = 2000
+@human_fallen_empires_pirate_base_cost_minus = -2000
 
 # functional section 0 - 50
 
@@ -445,9 +447,9 @@ event = {
 		random_country = {
 			limit = {
 				is_country_type = human_fallen_empires_pirate
-				energy > 1000
+				energy > @human_fallen_empires_pirate_base_cost
 			}
-			country_event = { id = human_fallen_empires.655 days = 1 random = 365 }
+			country_event = { id = human_fallen_empires.656 days = 1 random = 365 }
 		}
 		# make discovery default country
 		if = {
@@ -631,6 +633,9 @@ country_event  = {
 			has_country_flag = human_fallen_empires_egypt
 			is_country_type = human_fallen_empire
 		}
+	#	not = {
+	#		has_country_flag = human_fallen_empires_egypt_wormhole
+	#	}
 	}
 
 	immediate = {
@@ -661,7 +666,7 @@ country_event = {
 		trigger = {
 			switch = {
 				trigger = has_country_flag
-				egp_wormhole = { text = human_fallen_empires.5.desc }
+				human_fallen_empires_egypt_wormhole = { text = human_fallen_empires.5.desc }
 				default = { text = human_fallen_empires.5.desc.1 }
 				egp_step1 = { text = human_fallen_empires.5.desc.2 }
 				egp_step2 = { text = human_fallen_empires.5.desc.3 }
@@ -671,13 +676,12 @@ country_event = {
 			}
 		}
 	}
-	#show_sound = testtest
 	diplomatic = yes
 	is_triggered_only = yes
 
-	immediate = {
-		remove_country_flag = egp_wormhole
-	}
+#	immediate = {
+
+#	}
 
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_egypt_country
@@ -699,6 +703,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_stepbadend
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -721,6 +726,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -740,6 +746,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -758,6 +765,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -776,6 +784,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -796,6 +805,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_stepbadend
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -822,6 +832,7 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = egp_step1
+			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.5
 			}
@@ -1420,8 +1431,8 @@ country_event = {
 # wormhole to ju ahet 50
 ship_event = {
 	id = human_fallen_empires.50
-	title = "human_fallen_empires.50.name"
-	desc = "human_fallen_empires.50.desc"
+	title = human_fallen_empires.50.name
+	desc = human_fallen_empires.50.desc
 	picture = GFX_evt_human_fallen_empires_wormhole
 	show_sound = event_ship_thrusters
 	location = root
@@ -1439,6 +1450,9 @@ ship_event = {
 				save_event_target_as = human_fallen_empires_ra_home
 			}
 		}
+		owner = {
+			set_country_flag = human_fallen_empires_egypt_wormhole
+		}
 	}
 
 	option = {
@@ -1451,6 +1465,7 @@ ship_event = {
 					angle = random
 				}
 			}
+		#	remove_country_flag = human_fallen_empires_egypt_wormhole
 		}
 	}
 }
@@ -8025,8 +8040,8 @@ fleet_event = {
 					owner = {
 						is_hostile = root.owner
 					}
-					root = {
-						num_ships < 30
+					root.owner = {
+						fleet_power > 2000
 					}
 				}
 			}
@@ -8046,6 +8061,9 @@ fleet_event = {
 								who = root.owner
 								modifier = human_fallen_empires_opinion_pirate_prior_target
 							}
+						}
+						root = {
+							has_hp_percentage > 0.9
 						}
 						any_planet = {
 							or = {
@@ -8085,8 +8103,8 @@ fleet_event = {
 								owner = {
 									is_hostile = root.owner
 								}
-								root = {
-									num_ships < 30
+								root.owner = {
+									fleet_power > 2000
 								}
 							}
 						}
@@ -8113,6 +8131,9 @@ fleet_event = {
 						find_closest_system = {
 							trigger = {
 								id = human_fallen_empires.652.trigger.1
+								root = {
+									has_hp_percentage > 0.9
+								}
 								any_planet = {
 									or = {
 										and = {
@@ -8155,8 +8176,8 @@ fleet_event = {
 										owner = {
 											is_hostile = root.owner
 										}
-										root = {
-											num_ships < 30
+										root.owner = {
+											fleet_power > 2000
 										}
 									}
 								}
@@ -8185,6 +8206,9 @@ fleet_event = {
 							or = {
 								has_orbital_station = yes
 								exists = owner
+							}
+							root = {
+								has_hp_percentage > 0.9
 							}
 						}
 						found_planet = {
@@ -8259,6 +8283,8 @@ country_event = {
 			every_owned_fleet = {
 				set_owner = event_target:human_fallen_empires_pirate_new_owner
 			}
+			destroy_country = yes
+			break = yes
 		}
 		random_owned_planet = {
 			limit = {
@@ -8288,6 +8314,7 @@ planet_event = {
 	}
 
 	immediate = {
+		log = "pirate bombarding on [Root.GetStarName]"
 		owner = {
 			set_timed_country_flag = {
 				flag = human_fallen_empires_pirates_attacked
@@ -8310,13 +8337,33 @@ planet_event = {
 	}
 }
 
-country_event = {
+# cleet fleet actions after emercy ftl
+fleet_event = {
 	id = human_fallen_empires.655
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
-		energy > 1000
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+	}
+
+	immediate = {
+		log = "pirate fleet emercy ftl"
+		clear_fleet_actions = this
+	}
+}
+
+# pirate build base
+country_event = {
+	id = human_fallen_empires.656
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		energy > @human_fallen_empires_pirate_base_cost
 	}
 
 	immediate = {
@@ -8342,7 +8389,7 @@ country_event = {
 						}
 					}
 					root = {
-						energy > 1000
+						energy > @human_fallen_empires_pirate_base_cost
 					}
 				}
 				random_system_planet = {
@@ -8353,8 +8400,9 @@ country_event = {
 							exists = owner
 						}
 					}
+					change_pc = pc_human_fallen_empires_pirate_base
 					create_colony = {
-						owner = last_created_country
+						owner = root
 						species = root.species
 						ethos = owner
 					}
@@ -8372,7 +8420,7 @@ country_event = {
 						initial_module = missile_weapon
 					}
 					root = {
-						add_energy = -1000
+						add_energy = @human_fallen_empires_pirate_base_cost_minus
 					}
 					add_modifier = {
 						modifier = human_fallen_empires_pirate_base
