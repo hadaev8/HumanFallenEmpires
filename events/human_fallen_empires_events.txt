@@ -47,7 +47,7 @@ namespace = human_fallen_empires
 
 # functional section 0 - 50
 
-# spawn human fallen empires
+# spawn human fallen empires and others
 country_event = {
 	id = human_fallen_empires.0
 	fire_only_once = yes
@@ -178,7 +178,7 @@ country_event = {
 						any_system = {
 							distance = {
 								source = prev
-								max_distance = 50
+								max_distance = 60
 								min_distance = 0
 							}
 							exists = space_owner
@@ -238,13 +238,13 @@ country_event = {
 					initializer = human_fallen_empires_egypt
 				}
 				spawn_system = {
-					#		min_distance = 0
-					#		max_distance = 15
+					min_distance = 0
+					max_distance = 10
 					initializer = human_fallen_empires_hope
 				}
 				spawn_system = {
-					#		min_distance = 10
-					#		max_distance = 20
+					min_distance = 0
+					max_distance = 10
 					initializer = human_fallen_empires_gift
 				}
 				spawn_system = {
@@ -450,9 +450,75 @@ event = {
 				energy > @human_fallen_empires_pirate_base_cost
 			}
 			country_event = { id = human_fallen_empires.656 days = 1 random = 365 }
+			# kick buildings
+			every_owned_planet = {
+				limit = {
+					free_building_tiles > 0
+				}
+				every_tile = {
+					limit = {
+						exists = pop
+						not = {
+							has_building = human_fallen_empires_pirate_slave_pit
+						}
+					}
+					add_building_construction = human_fallen_empires_pirate_slave_pit
+				}
+				every_owned_pop = {
+					enslave_pop = yes
+				}
+			}
+			# also cheat for better drives
+			if = {
+				limit = {
+					years_passed > 20
+				}
+				if = {
+					limit = {
+						has_technology = tech_warp_drive_1
+					}
+					give_technology = tech_warp_drive_2
+				}
+				if = {
+					limit = {
+						has_technology = tech_wormhole_generation_1
+					}
+					give_technology = tech_wormhole_generation_2
+				}
+				if = {
+					limit = {
+						has_technology = tech_hyper_drive_1
+					}
+					give_technology = tech_hyper_drive_2
+				}
+			}
+			if = {
+				limit = {
+					years_passed > 40
+				}
+				if = {
+					limit = {
+						has_technology = tech_warp_drive_2
+					}
+					give_technology = tech_warp_drive_3
+				}
+				if = {
+					limit = {
+						has_technology = tech_wormhole_generation_2
+					}
+					give_technology = tech_wormhole_generation_3
+				}
+				if = {
+					limit = {
+						has_technology = tech_hyper_drive_2
+					}
+					give_technology = tech_hyper_drive_3
+				}
+			}
 		}
 	}
 }
+
 # functional events for bi yearly pulse
 event = {
 	id = human_fallen_empires.2
@@ -3886,6 +3952,8 @@ country_event = {
 			#	is_country_type = primitive
 				# has own contact rul for default empires
 				is_country_type = human_fallen_empire
+				# pirates will cnow pirates, why not
+				is_country_type = human_fallen_empires_pirate
 			}
 		}
 	}
@@ -7898,10 +7966,11 @@ ship_event = {
 	immediate = {
 		log = "Outpost builded"
 		owner = {
-			add_modifier = {
-				modifier = human_fallen_empires_drone_outpost
-				days = -1
+			change_variable = {
+				which = human_fallen_empires_drone_outpost
+				value = 1
 			}
+			human_fallen_empires_effect_drone_calc_outpost = yes
 		}
 	}
 }
@@ -7921,37 +7990,46 @@ country_event = {
 	}
 
 	immediate = {
-		log = "Outpost removed"
-		remove_modifier = human_fallen_empires_drone_outpost
+		log = "Outpost killed"
+		change_variable = {
+			which = human_fallen_empires_drone_outpost
+			value = -1
+		}
+		human_fallen_empires_effect_drone_calc_outpost = yes
 	}
 }
 
 # destroy drone planet
-planet_event = {
+country_event = {
 	id = human_fallen_empires.603
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
-		exists = owner
-		owner = {
-			or = {
-				is_country_type = human_fallen_empires_drone
-				is_country_type = human_fallen_empires_pirate
-			}
+		is_country_type = human_fallen_empires_drone
+		exists = fromfrom
+		fromfrom = {
+			is_ship_size = orbital_station
 		}
 	}
 
 	immediate = {
-		destroy_colony = yes
-		change_pc = pc_molten
-		log = "colony killed on [Root.GetStarName]"
+		random_owned_planet = {
+			limit = {
+				solar_system = {
+					is_same_value = fromfrom.solar_system
+				}
+			}
+			destroy_colony = yes
+			change_pc = pc_molten
+			log = "colony killed on [Root.GetStarName]"
+		}
 	}
 }
 
 # pirates 650 - 700
 
-# pirates gain resurces
+# pirates gain resurces after kill station
 country_event = {
 	id = human_fallen_empires.650
 	hide_window = yes
@@ -8004,6 +8082,7 @@ ship_event = {
 	immediate = {
 		fleet = {
 			fleet_event = { id = human_fallen_empires.652 }
+			fleet_event = { id = human_fallen_empires.652 days = 20 }
 		}
 	}
 }
@@ -8052,8 +8131,8 @@ fleet_event = {
 					owner = {
 						is_hostile = root.owner
 					}
-					root.owner = {
-						fleet_power > 2000
+					root = {
+						num_ships > 30
 					}
 				}
 			}
@@ -8118,8 +8197,8 @@ fleet_event = {
 								owner = {
 									is_hostile = root.owner
 								}
-								root.owner = {
-									fleet_power > 2000
+								root = {
+									num_ships > 30
 								}
 							}
 						}
@@ -8194,8 +8273,8 @@ fleet_event = {
 										owner = {
 											is_hostile = root.owner
 										}
-										root.owner = {
-											fleet_power > 2000
+										root = {
+											num_ships > 30
 										}
 									}
 								}
@@ -8355,6 +8434,30 @@ planet_event = {
 				has_building = yes
 			}
 			set_ruined = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_sentient = yes
+			}
+			save_event_target_as = human_fallen_empires_pirates_pop
+			from = {
+				if = {
+					limit = {
+						any_owned_planet = {
+							free_pop_tiles > 0
+						}
+					}
+					random_owned_planet = {
+						limit = {
+							free_pop_tiles > 0
+						}
+						create_pop = {
+							species = human_fallen_empires_pirates_pop.species
+						}
+					}
+				}
+			}
+			kill_pop = yes
 		}
 	}
 }
