@@ -428,9 +428,9 @@ country_event = {
 	}
 }
 
-# functional events for bi yearly pulse
+# functional events for yearly pulse
 event = {
-	id = human_fallen_empires.2
+	id = human_fallen_empires.1
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -439,7 +439,7 @@ event = {
 		random_country = {
 			limit = {
 				is_country_type = default
-				num_owned_planets > 3
+				num_owned_planets > 2
 			}
 			country_event = { id = pirate.1 days = 1 random = 365 }
 		}
@@ -451,6 +451,15 @@ event = {
 			}
 			country_event = { id = human_fallen_empires.656 days = 1 random = 365 }
 		}
+	}
+}
+# functional events for bi yearly pulse
+event = {
+	id = human_fallen_empires.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
 		# make discovery default country
 		if = {
 			limit = {
@@ -3860,20 +3869,23 @@ country_event = {
     is_triggered_only = yes
 
 	trigger = {
+		# mods stuff auto contact with vanilla stuff
 		or = {
 			is_country_type = human_fallen_empires_discovery
+			has_country_flag = human_fallen_empires_discovery
 			is_country_type = human_fallen_empires_drone
 			is_country_type = human_fallen_empires_pirate
-			has_country_flag = human_fallen_empires_discovery
 		}
 		from = {
 			or = {
 				is_country_type = default
 				is_country_type = fallen_empire
 				is_country_type = awakened_fallen_empire
-				is_country_type = human_fallen_empire
 				is_country_type = nomad
 				is_country_type = enclave
+			#	is_country_type = primitive
+				# has own contact rul for default empires
+				is_country_type = human_fallen_empire
 			}
 		}
 	}
@@ -8082,7 +8094,10 @@ fleet_event = {
 								and = {
 									exists = owner
 									owner = {
-										is_country_type = default
+										or = {
+											is_country_type = default
+											is_country_type = primitive
+										}
 										is_hostile = root.owner
 										has_opinion_modifier = {
 											who = root.owner
@@ -8121,7 +8136,7 @@ fleet_event = {
 										}
 									}
 									clear_fleet_actions = this
-									log = "123"
+									log = "pirate fleet stop operation due low hp"
 								}
 							}
 						}
@@ -8153,7 +8168,10 @@ fleet_event = {
 										and = {
 											exists = owner
 											owner = {
-												is_country_type = default
+												or = {
+													is_country_type = default
+													is_country_type = primitive
+												}
 												is_hostile = root.owner
 												not = {
 													has_opinion_modifier = {
@@ -8191,7 +8209,8 @@ fleet_event = {
 									id = human_fallen_empires.652.effect.1
 									root = {
 										clear_fleet_actions = this
-										fleet_event = { id = human_fallen_empires.652 }
+										fleet_event = { id = human_fallen_empires.652 } # days = 200 }
+										log = "pirate fleet stop operation due no targets"
 									}
 								}
 							}
@@ -8213,7 +8232,7 @@ fleet_event = {
 						}
 						found_planet = {
 							orbit_planet = this
-							wait = 30
+							wait = 31
 						}
 					}
 				}
@@ -8284,6 +8303,9 @@ country_event = {
 				set_owner = event_target:human_fallen_empires_pirate_new_owner
 			}
 			destroy_country = yes
+			random_owned_planet = {
+				change_pc = pc_asteroid
+			}
 			break = yes
 		}
 		random_owned_planet = {
