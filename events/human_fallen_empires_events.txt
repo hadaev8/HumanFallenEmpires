@@ -1,5 +1,7 @@
 namespace = human_fallen_empires
 
+
+
 @tier1materialreward = 6
 @tier1materialmin = 100
 @tier1materialmax = 500
@@ -44,10 +46,12 @@ namespace = human_fallen_empires
 @human_fallen_empires_discovery_docking_update_energy_cost = 100
 @human_fallen_empires_pirate_base_cost = 2000
 @human_fallen_empires_pirate_base_cost_minus = -2000
+@human_fallen_empires_pirate_slave_cost = 300
+@human_fallen_empires_pirate_slave_cost_minus = -300
 
 # functional section 0 - 50
 
-# spawn human fallen empires and others
+# install mod
 country_event = {
 	id = human_fallen_empires.0
 	fire_only_once = yes
@@ -59,6 +63,10 @@ country_event = {
 				not = {
 					has_global_flag = human_fallen_empires_installed
 				}
+			}
+			# prevent spawn vanilla pirates
+			every_country = {
+				set_country_flag = birth_of_piracy
 			}
 			if = {
 				limit = {
@@ -109,7 +117,7 @@ country_event = {
 					class = "MAM"
 					portrait = human_fallen_empires_egypt_portrait
 					traits = {
-						ideal_planet_class = "pc_continental"
+						ideal_planet_class = pc_continental
 						trait = trait_extremely_adaptive
 						trait = trait_venerable
 						trait = trait_slow_breeders
@@ -126,7 +134,7 @@ country_event = {
 					class = "MAM"
 					portrait = "human"
 					traits = {
-						ideal_planet_class = "pc_continental"
+						ideal_planet_class = pc_continental
 						trait = trait_intelligent
 						trait = trait_thrifty
 						trait = trait_strong
@@ -144,7 +152,7 @@ country_event = {
 						class = "MAM"
 						portrait = human_fallen_empires_egypt_portrait
 						traits = {
-							ideal_planet_class = "pc_continental"
+							ideal_planet_class = pc_continental
 							trait = trait_extremely_adaptive
 							trait = trait_venerable
 							trait = trait_slow_breeders
@@ -159,7 +167,7 @@ country_event = {
 						class = "MAM"
 						portrait = "human"
 						traits = {
-							ideal_planet_class = "pc_continental"
+							ideal_planet_class = pc_continental
 							trait = trait_intelligent
 							trait = trait_thrifty
 							trait = trait_strong
@@ -198,7 +206,7 @@ country_event = {
 				class = "REP"
 				portrait = random
 				traits = {
-					ideal_planet_class = "pc_tropical"
+					ideal_planet_class = pc_tropical
 					trait = trait_slow_breeders
 					trait = trait_strong
 					trait = random_traits
@@ -211,7 +219,7 @@ country_event = {
 				class = "REP"
 				portrait = random
 				traits = {
-					ideal_planet_class = "pc_desert"
+					ideal_planet_class = pc_desert
 					trait = trait_industrious
 					trait = trait_natural_engineers
 					trait = trait_strong
@@ -235,6 +243,8 @@ country_event = {
 					}
 				}
 				spawn_system = {
+					min_distance = 0
+					max_distance = 10
 					initializer = human_fallen_empires_egypt
 				}
 				spawn_system = {
@@ -441,80 +451,14 @@ event = {
 				is_country_type = default
 				num_owned_planets > 2
 			}
-			country_event = { id = pirate.1 days = 1 random = 365 }
+			country_event = { id = human_fallen_empires.650 days = 1 random = 365 }
 		}
-		# pirates make new bases
-		random_country = {
+		# pirates life
+		every_country = {
 			limit = {
 				is_country_type = human_fallen_empires_pirate
-				energy > @human_fallen_empires_pirate_base_cost
 			}
-			country_event = { id = human_fallen_empires.656 days = 1 random = 365 }
-			# kick buildings
-			every_owned_planet = {
-				limit = {
-					free_building_tiles > 0
-				}
-				every_tile = {
-					limit = {
-						exists = pop
-						not = {
-							has_building = human_fallen_empires_pirate_slave_pit
-						}
-					}
-					add_building_construction = human_fallen_empires_pirate_slave_pit
-				}
-				every_owned_pop = {
-					enslave_pop = yes
-				}
-			}
-			# also cheat for better drives
-			if = {
-				limit = {
-					years_passed > 20
-				}
-				if = {
-					limit = {
-						has_technology = tech_warp_drive_1
-					}
-					give_technology = tech_warp_drive_2
-				}
-				if = {
-					limit = {
-						has_technology = tech_wormhole_generation_1
-					}
-					give_technology = tech_wormhole_generation_2
-				}
-				if = {
-					limit = {
-						has_technology = tech_hyper_drive_1
-					}
-					give_technology = tech_hyper_drive_2
-				}
-			}
-			if = {
-				limit = {
-					years_passed > 40
-				}
-				if = {
-					limit = {
-						has_technology = tech_warp_drive_2
-					}
-					give_technology = tech_warp_drive_3
-				}
-				if = {
-					limit = {
-						has_technology = tech_wormhole_generation_2
-					}
-					give_technology = tech_wormhole_generation_3
-				}
-				if = {
-					limit = {
-						has_technology = tech_hyper_drive_2
-					}
-					give_technology = tech_hyper_drive_3
-				}
-			}
+			country_event = { id = human_fallen_empires.651 days = 1 random = 365 }
 		}
 	}
 }
@@ -8027,47 +7971,401 @@ country_event = {
 	}
 }
 
-# pirates 650 - 700
+# functional and life simulation stuff 650 - 675
 
-# pirates gain resurces after kill station
+# spawn pirates
 country_event = {
 	id = human_fallen_empires.650
+	title = pirate.1.name
+	picture = GFX_evt_exploding_ship
+	show_sound = event_space_battle
+
+	desc = { # Spiritual
+		text = pirate.1.desc_01
+		trigger = {
+			OR = {
+				has_government = theocratic_republic
+				has_government = transcendent_republic
+				has_government = theocratic_oligarchy
+				has_government = transcendent_oligarchy
+				has_government = divine_mandate
+				has_government = transcendent_empire
+			}
+		}
+	}
+
+	desc = { # Militarist
+		text = pirate.1.desc_02
+		trigger = {
+			OR = {
+				has_government = military_dictatorship
+				has_government = martial_empire
+				has_government = military_junta
+				has_government = ordered_stratocracy
+				has_government = military_republic
+				has_government = martial_demarchy
+			}
+		}
+	}
+
+	desc = { # Materialist
+		text = pirate.1.desc_03
+		trigger = {
+			OR = {
+				has_government = despotic_hegemony
+				has_government = ai_overlordship
+				has_government = science_directorate
+				has_government = illuminated_technocracy
+				has_government = direct_democracy
+				has_government = subconscious_consensus
+			}
+		}
+	}
+
+	desc = { # Pacifist
+		text = pirate.1.desc_04
+		trigger = {
+			OR = {
+				has_government = moral_democracy
+				has_government = irenic_democracy
+				has_government = peaceful_bureaucracy
+				has_government = irenic_protectorate
+				has_government = enlightened_monarchy
+				has_government = irenic_monarchy
+			}
+		}
+	}
+
+	desc = { # Generic Autocracy
+		text = pirate.1.desc_05
+		trigger = {
+			OR = {
+				has_government = despotic_empire
+				has_government = star_empire
+			}
+		}
+	}
+
+	desc = { # Generic Oligarchy
+		text = pirate.1.desc_06
+		trigger = {
+			OR = {
+				has_government = plutocratic_oligarchy
+				has_government = mega_corporation
+			}
+		}
+	}
+
+	desc = { # Generic Democracy
+		text = pirate.1.desc_07
+		trigger = {
+			OR = {
+				has_government = indirect_democracy
+				has_government = democratic_utopia
+			}
+		}
+	}
+
+	trigger = {
+		is_country_type = default
+		not = {
+			has_country_flag = human_fallen_empires_birth_of_piracy
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		log = "pirates spawned"
+		set_country_flag = human_fallen_empires_birth_of_piracy
+		set_country_flag = pirate_encountered
+		every_country = {
+			limit = {
+				is_country_type = pirate
+			}
+			establish_communications_no_message = root
+		}
+		save_event_target_as = human_fallen_empires_pirate_target
+		random_system = {
+			limit = {
+				distance = {
+					source = root.capital_scope
+					min_distance = 5
+					max_distance = 50
+				}
+				nor = {
+					any_planet = {
+						exists = owner
+					}
+					has_star_flag = hostile_system
+				}
+				any_planet = {
+					is_asteroid = yes
+					nor = {
+						exists = controller
+						exists = owner
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_asteroid = yes
+					nor = {
+						exists = controller
+						exists = owner
+					}
+				}
+				human_fallen_empires_effect_create_pirate = yes
+				human_fallen_empires_effect_create_pirate_base = yes
+			}
+		}
+	}
+
+	option = {
+		name = pirate.2.a
+		trigger = {
+			OR = {
+				has_government = theocratic_republic
+				has_government = transcendent_republic
+				has_government = theocratic_oligarchy
+				has_government = transcendent_oligarchy
+				has_government = divine_mandate
+				has_government = transcendent_empire
+			}
+		}
+	}
+	option = {
+		name = pirate.2.b
+		trigger = {
+			OR = {
+				has_government = military_dictatorship
+				has_government = martial_empire
+				has_government = military_junta
+				has_government = ordered_stratocracy
+				has_government = military_republic
+				has_government = martial_demarchy
+			}
+		}
+	}
+	option = {
+		name = pirate.2.c
+		trigger = {
+			OR = {
+				has_government = despotic_hegemony
+				has_government = ai_overlordship
+				has_government = science_directorate
+				has_government = illuminated_technocracy
+				has_government = direct_democracy
+				has_government = subconscious_consensus
+			}
+		}
+	}
+	option = {
+		name = pirate.2.d
+		trigger = {
+			OR = {
+				has_government = moral_democracy
+				has_government = irenic_democracy
+				has_government = peaceful_bureaucracy
+				has_government = irenic_protectorate
+				has_government = enlightened_monarchy
+				has_government = irenic_monarchy
+			}
+		}
+	}
+	option = {
+		name = pirate.2.e
+		trigger = {
+			OR = {
+				has_government = despotic_empire
+				has_government = star_empire
+			}
+		}
+	}
+	option = {
+		name = pirate.2.f
+		trigger = {
+			OR = {
+				has_government = plutocratic_oligarchy
+				has_government = mega_corporation
+			}
+		}
+	}
+	option = {
+		name = pirate.2.g
+		trigger = {
+			OR = {
+				has_government = indirect_democracy
+				has_government = democratic_utopia
+			}
+		}
+	}
+	option = {
+		name = INTERESTING
+	}
+}
+
+# pirate life simulation
+country_event = {
+	id = human_fallen_empires.651
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
 		is_country_type = human_fallen_empires_pirate
-		exists = fromfromfrom
-		fromfromfrom = {
-			or = {
-				is_ship_size = wormhole_station
-				is_ship_size = research_station
-				is_ship_size = mining_station
-				is_ship_size = observation_station
-				is_ship_size = outpost_station
-			}
-		}
 	}
 
 	immediate = {
-		from = {
-			set_timed_country_flag = {
-				flag = human_fallen_empires_pirates_attacked
-				days = 200
+		# build new bases
+		country_event = { id = human_fallen_empires.652 }
+		# send fleet logic for unstuck fleets
+		every_owned_fleet = {
+#			fleet_event = { id = human_fallen_empires.675 }
+		}
+		# kick buildings
+		every_owned_planet = {
+			limit = {
+				free_building_tiles > 0
+			}
+			every_tile = {
+				limit = {
+					exists = pop
+					not = {
+						has_building = human_fallen_empires_pirate_slave_pit
+					}
+				}
+				add_building_construction = human_fallen_empires_pirate_slave_pit
+			}
+			every_owned_pop = {
+				enslave_pop = yes
 			}
 		}
-		add_minerals = 90
-		add_energy = 10
-		add_physics_research = 5
-		add_society_research = 5
-		add_engineering_research = 5
-		log = "pirates kill station"
+		# also cheat for better drives
+		if = {
+			limit = {
+				years_passed > 20
+			}
+			if = {
+				limit = {
+					has_technology = tech_warp_drive_1
+					not = {
+						has_technology = tech_warp_drive_2
+					}
+				}
+				give_technology = tech_warp_drive_2
+			}
+			if = {
+				limit = {
+					has_technology = tech_wormhole_generation_1
+					not = {
+						has_technology = tech_wormhole_generation_2
+					}
+				}
+				give_technology = tech_wormhole_generation_2
+			}
+			if = {
+				limit = {
+					has_technology = tech_hyper_drive_1
+					not = {
+						has_technology = tech_wormhole_generation_3
+					}
+				}
+				give_technology = tech_hyper_drive_2
+			}
+		}
+		if = {
+			limit = {
+				years_passed > 40
+			}
+			if = {
+				limit = {
+					has_technology = tech_warp_drive_2
+					not = {
+						has_technology = tech_warp_drive_3
+					}
+				}
+				give_technology = tech_warp_drive_3
+			}
+			if = {
+				limit = {
+					has_technology = tech_wormhole_generation_2
+					not = {
+						has_technology = tech_wormhole_generation_3
+					}
+				}
+				give_technology = tech_wormhole_generation_3
+			}
+			if = {
+				limit = {
+					has_technology = tech_hyper_drive_2
+					not = {
+						has_technology = tech_hyper_drive_3
+					}
+				}
+				give_technology = tech_hyper_drive_3
+			}
+		}
+	}
+}
+
+# pirate build base
+country_event = {
+	id = human_fallen_empires.652
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		energy > @human_fallen_empires_pirate_base_cost
+	}
+
+	immediate = {
+		save_event_target_as = pirate_band
+		every_owned_planet = {
+			random_system = {
+				limit = {
+					distance = {
+						source = prev
+						min_distance = 5
+						max_distance = 50
+					}
+					nor = {
+						any_planet = {
+							exists = owner
+						}
+						has_star_flag = hostile_system
+					}
+					any_planet = {
+						is_asteroid = yes
+						nor = {
+							exists = controller
+							exists = owner
+						}
+					}
+					root = {
+						energy > @human_fallen_empires_pirate_base_cost
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_asteroid = yes
+						nor = {
+							exists = controller
+							exists = owner
+						}
+					}
+					human_fallen_empires_effect_create_pirate_base = yes
+					root = {
+						add_energy = @human_fallen_empires_pirate_base_cost_minus
+					}
+				}
+			}
+		}
 	}
 }
 
 # pirates fleet logic set by ship build on action
 ship_event = {
-	id = human_fallen_empires.651
+	id = human_fallen_empires.653
 	hide_window = yes
     is_triggered_only = yes
 
@@ -8081,15 +8379,66 @@ ship_event = {
 
 	immediate = {
 		fleet = {
-			fleet_event = { id = human_fallen_empires.652 }
-			fleet_event = { id = human_fallen_empires.652 days = 20 }
+		#	fleet_event = { id = human_fallen_empires.675 }
+			fleet_event = { id = human_fallen_empires.675 days = 20 }
 		}
 	}
 }
 
+# kill pirate base
+country_event = {
+	id = human_fallen_empires.654
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_pirate
+		exists = fromfrom
+		fromfrom = {
+			is_ship_size = orbital_station
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				num_owned_planets = 1
+			}
+			random_country = {
+				limit = {
+					is_country_type = human_fallen_empires_pirate
+					not = {
+						is_country = root
+					}
+				}
+				save_event_target_as = human_fallen_empires_pirate_new_owner
+			}
+			every_owned_fleet = {
+				set_owner = event_target:human_fallen_empires_pirate_new_owner
+			}
+			random_owned_planet = {
+				change_pc = pc_asteroid
+			}
+			destroy_country = yes
+			break = yes
+		}
+		random_owned_planet = {
+			limit = {
+				solar_system = {
+					is_same_value = fromfrom.solar_system
+				}
+			}
+			destroy_colony = yes
+			change_pc = pc_asteroid
+		}
+	}
+}
+
+# functional fleet stuff stuff 675 - 700
+
 # pirates fleet logic
 fleet_event = {
-	id = human_fallen_empires.652
+	id = human_fallen_empires.675
 	hide_window = yes
     is_triggered_only = yes
 
@@ -8114,7 +8463,10 @@ fleet_event = {
 					and = {
 						exists = owner
 						owner = {
-							is_country_type = default
+							or = {
+								is_country_type = default
+								is_country_type = primitive
+							}
 							is_hostile = root.owner
 						}
 					}
@@ -8137,6 +8489,15 @@ fleet_event = {
 				}
 			}
 		}
+		nor = {
+			has_fleet_order = upgrade_design_fleet_order
+			has_fleet_order = merge_fleet_order
+			has_fleet_order = move_to_system_point_order
+			has_fleet_order = orbit_planet_order
+			has_fleet_order = repair_ship_fleet_order
+			has_fleet_order = return_fleet_order
+			has_fleet_order = upgrade_design_fleet_order
+		}
 	}
 
 	immediate = {
@@ -8146,7 +8507,7 @@ fleet_event = {
 			repeat = {
 				find_closest_system = {
 					trigger = {
-						id = human_fallen_empires.652.trigger.0
+						id = human_fallen_empires.675.trigger.0
 						any_country = {
 							has_opinion_modifier = {
 								who = root.owner
@@ -8205,7 +8566,7 @@ fleet_event = {
 					}
 					found_system = {
 						effect = {
-							id = human_fallen_empires.652.effect.0
+							id = human_fallen_empires.675.effect.0
 							root = {
 								if = {
 									limit = {
@@ -8224,7 +8585,7 @@ fleet_event = {
 					failed = {
 						find_closest_system = {
 							trigger = {
-								id = human_fallen_empires.652.trigger.1
+								id = human_fallen_empires.675.trigger.1
 								root = {
 									has_hp_percentage > 0.9
 								}
@@ -8285,10 +8646,10 @@ fleet_event = {
 							failed = {
 								wait = 200
 								effect = {
-									id = human_fallen_empires.652.effect.1
+									id = human_fallen_empires.675.effect.1
 									root = {
 										clear_fleet_actions = this
-										fleet_event = { id = human_fallen_empires.652 } # days = 200 }
+										fleet_event = { id = human_fallen_empires.675 } # days = 200 }
 										log = "pirate fleet stop operation due no targets"
 									}
 								}
@@ -8300,7 +8661,7 @@ fleet_event = {
 					max_iterations = 5
 					find_closest_planet = {
 						trigger = {
-							id = human_fallen_empires.652.trigger.2
+							id = human_fallen_empires.675.trigger.2
 							or = {
 								has_orbital_station = yes
 								exists = owner
@@ -8317,7 +8678,7 @@ fleet_event = {
 				}
 				find_random_system = {
 					trigger = {
-						id = human_fallen_empires.652.trigger.3
+						id = human_fallen_empires.675.trigger.3
 						any_planet = {
 							exists = owner
 							owner = {
@@ -8331,7 +8692,7 @@ fleet_event = {
 				}
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires.652.trigger.4
+						id = human_fallen_empires.675.trigger.4
 						exists = owner
 						owner = {
 							is_country = root.owner
@@ -8350,58 +8711,64 @@ fleet_event = {
 	}
 }
 
-# kill pirate base
+# cleet fleet actions after emercy ftl
+fleet_event = {
+	id = human_fallen_empires.676
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+	}
+
+	immediate = {
+		log = "pirate fleet emercy ftl"
+		clear_fleet_actions = this
+	}
+}
+
+# pirates gain resurces after kill station
 country_event = {
-	id = human_fallen_empires.653
+	id = human_fallen_empires.677
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
 		is_country_type = human_fallen_empires_pirate
-		exists = fromfrom
-		fromfrom = {
-			is_ship_size = orbital_station
+		exists = fromfromfrom
+		fromfromfrom = {
+			or = {
+				is_ship_size = wormhole_station
+				is_ship_size = research_station
+				is_ship_size = mining_station
+				is_ship_size = observation_station
+				is_ship_size = outpost_station
+			}
 		}
 	}
 
 	immediate = {
-		if = {
-			limit = {
-				num_owned_planets = 1
+		from = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirates_attacked
+				days = 200
 			}
-			random_country = {
-				limit = {
-					is_country_type = human_fallen_empires_pirate
-					not = {
-						is_country = root
-					}
-				}
-				save_event_target_as = human_fallen_empires_pirate_new_owner
-			}
-			every_owned_fleet = {
-				set_owner = event_target:human_fallen_empires_pirate_new_owner
-			}
-			destroy_country = yes
-			random_owned_planet = {
-				change_pc = pc_asteroid
-			}
-			break = yes
 		}
-		random_owned_planet = {
-			limit = {
-				solar_system = {
-					is_same_value = fromfrom.solar_system
-				}
-			}
-			destroy_colony = yes
-			change_pc = pc_asteroid
-		}
+		add_minerals = 90
+		add_energy = 10
+		add_physics_research = 5
+		add_society_research = 5
+		add_engineering_research = 5
+		log = "pirates kill station"
 	}
 }
 
 # pirate bombard colony
 planet_event = {
-	id = human_fallen_empires.654
+	id = human_fallen_empires.678
 	hide_window = yes
     is_triggered_only = yes
 
@@ -8462,106 +8829,11 @@ planet_event = {
 	}
 }
 
-# cleet fleet actions after emercy ftl
-fleet_event = {
-	id = human_fallen_empires.655
-	hide_window = yes
-    is_triggered_only = yes
+# pirate diplomacy 700-750
 
-	trigger = {
-		exists = owner
-		owner = {
-			is_country_type = human_fallen_empires_pirate
-		}
-	}
-
-	immediate = {
-		log = "pirate fleet emercy ftl"
-		clear_fleet_actions = this
-	}
-}
-
-# pirate build base
+# start event
 country_event = {
-	id = human_fallen_empires.656
-	hide_window = yes
-    is_triggered_only = yes
-
-	trigger = {
-		energy > @human_fallen_empires_pirate_base_cost
-	}
-
-	immediate = {
-		every_owned_planet = {
-			random_system = {
-				limit = {
-					distance = {
-						source = prev
-						min_distance = 5
-						max_distance = 50
-					}
-					nor = {
-						any_planet = {
-							exists = owner
-						}
-						has_star_flag = hostile_system
-					}
-					any_planet = {
-						is_asteroid = yes
-						nor = {
-							exists = controller
-							exists = owner
-						}
-					}
-					root = {
-						energy > @human_fallen_empires_pirate_base_cost
-					}
-				}
-				random_system_planet = {
-					limit = {
-						is_asteroid = yes
-						nor = {
-							exists = controller
-							exists = owner
-						}
-					}
-					change_pc = pc_human_fallen_empires_pirate_base
-					create_colony = {
-						owner = root
-						species = root.species
-						ethos = owner
-					}
-					every_owned_pop = {
-						kill_pop = yes
-					}
-					random_tile = {
-						limit = {
-							has_building = building_colony_shelter
-						}
-						remove_building = yes
-					}
-					create_spaceport = {
-						owner = root
-						initial_module = missile_weapon
-					}
-					root = {
-						add_energy = @human_fallen_empires_pirate_base_cost_minus
-					}
-					add_modifier = {
-						modifier = human_fallen_empires_pirate_base
-						days = -1
-					}
-					log = "pirate created new base on [This.GetStarName]"
-				}
-			}
-		}
-	}
-}
-
-
-# pirate diplomacy start
-country_event = {
-	id = human_fallen_empires.660
+	id = human_fallen_empires.700
 	hide_window = yes
     is_triggered_only = yes
 
@@ -8576,33 +8848,47 @@ country_event = {
 		from = {
 			save_event_target_as = human_fallen_empires_pirate_country
 		}
-		country_event = { id = human_fallen_empires.661 }
+		country_event = { id = human_fallen_empires.701 }
 	}
 }
 
 # pirate diplomacy main menu
 country_event = {
-	id = human_fallen_empires.661
+	id = human_fallen_empires.701
 	title = TRANSMISSION
 	desc = {
 		trigger = {
+			# start
 			success_text = {
-				text = human_fallen_empires.661.desc.0
+				text = human_fallen_empires.701.desc.0
 				human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 			}
+			# raid
 			success_text = {
-				text = human_fallen_empires.661.raid_menu.desc.0
-				has_country_flag = human_fallen_empires.661.raid_menu
+				text = human_fallen_empires.701.raid_menu.desc.0
+				has_country_flag = human_fallen_empires.701.raid_menu
 				human_fallen_empires_trigger_exists_any_event_target = yes
 			}
 			success_text = {
-				text = human_fallen_empires.661.raid_menu.desc.1
-				has_country_flag = human_fallen_empires.661.raid_menu
+				text = human_fallen_empires.701.raid_menu.desc.1
+				has_country_flag = human_fallen_empires.701.raid_menu
 				human_fallen_empires_trigger_exists_any_event_target = no
 			}
+			# traid
 			success_text = {
-				text = human_fallen_empires.661.traid_menu.desc.0
-				has_country_flag = human_fallen_empires.661.traid_menu
+				text = human_fallen_empires.701.traid_menu.desc.0
+				has_country_flag = human_fallen_empires.701.traid_menu
+			}
+			# slave
+			success_text = {
+				text = human_fallen_empires.701.slave_menu.desc.0
+				has_country_flag = human_fallen_empires.701.slave_menu
+				human_fallen_empires_trigger_exists_any_slave_target = no
+			}
+			success_text = {
+				text = human_fallen_empires.701.slave_menu.desc.1
+				has_country_flag = human_fallen_empires.701.slave_menu
+				human_fallen_empires_trigger_exists_any_slave_target = yes
 			}
 		}
 	}
@@ -8616,13 +8902,13 @@ country_event = {
 
 	# pay for protect
 	option = {
-		name = human_fallen_empires.661.0
+		name = human_fallen_empires.701.0
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
 		allow = {
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.0.tooltip_fail
+				text = human_fallen_empires.701.0.tooltip_fail
 				not = {
 					has_opinion_modifier = {
 						who = event_target:human_fallen_empires_pirate_country
@@ -8635,7 +8921,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.0.response
+		response_text = human_fallen_empires.701.0.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -8658,7 +8944,7 @@ country_event = {
 	}
 	# pay for prior target
 	option = {
-		name = human_fallen_empires.661.1
+		name = human_fallen_empires.701.1
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
@@ -8811,22 +9097,23 @@ country_event = {
 					human_fallen_empires_effect_save_event_target = yes
 				}
 			}
-			set_country_flag = human_fallen_empires.661.raid_menu
-			country_event = { id = human_fallen_empires.661 }
+			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires.701.raid_menu
+			country_event = { id = human_fallen_empires.701 }
 		}
 	}
 	# select target menu
 	option = {
-		name = human_fallen_empires.661.raid_menu.0
+		name = human_fallen_empires.701.raid_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_0
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_0 = {
 						has_opinion_modifier = {
@@ -8837,7 +9124,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_0 = {
 						has_opinion_modifier = {
@@ -8850,7 +9137,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.0.response
+		response_text = human_fallen_empires.701.raid_menu.0.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -8874,16 +9161,16 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.661.raid_menu.1
+		name = human_fallen_empires.701.raid_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_1
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_1 = {
 						has_opinion_modifier = {
@@ -8894,7 +9181,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_1 = {
 						has_opinion_modifier = {
@@ -8907,7 +9194,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.1.response
+		response_text = human_fallen_empires.701.raid_menu.1.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -8931,16 +9218,16 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.661.raid_menu.2
+		name = human_fallen_empires.701.raid_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_2
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_2 = {
 						has_opinion_modifier = {
@@ -8951,7 +9238,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_2 = {
 						has_opinion_modifier = {
@@ -8964,7 +9251,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.2.response
+		response_text = human_fallen_empires.701.raid_menu.2.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -8988,16 +9275,16 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.661.raid_menu.3
+		name = human_fallen_empires.701.raid_menu.3
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_3
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_3 = {
 						has_opinion_modifier = {
@@ -9008,7 +9295,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_3 = {
 						has_opinion_modifier = {
@@ -9021,7 +9308,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.3.response
+		response_text = human_fallen_empires.701.raid_menu.3.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -9045,16 +9332,16 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.661.raid_menu.4
+		name = human_fallen_empires.701.raid_menu.4
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_4
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_4 = {
 						has_opinion_modifier = {
@@ -9065,7 +9352,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_4 = {
 						has_opinion_modifier = {
@@ -9078,7 +9365,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.4.response
+		response_text = human_fallen_empires.701.raid_menu.4.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -9102,16 +9389,16 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.661.raid_menu.5
+		name = human_fallen_empires.701.raid_menu.5
 		trigger = {
-			has_country_flag = human_fallen_empires.661.raid_menu
+			has_country_flag = human_fallen_empires.701.raid_menu
 			exists = event_target:human_fallen_empires_event_target_5
 		}
 		allow = {
 			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_pay_for_protect
+				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
 				not = {
 					event_target:human_fallen_empires_event_target_5 = {
 						has_opinion_modifier = {
@@ -9122,7 +9409,7 @@ country_event = {
 				}
 			}
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.raid_menu.fail_prior_target
+				text = human_fallen_empires.701.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_5 = {
 						has_opinion_modifier = {
@@ -9135,7 +9422,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.raid_menu.5.response
+		response_text = human_fallen_empires.701.raid_menu.5.response
 
 		add_energy = -500
 		add_minerals = -500
@@ -9160,25 +9447,26 @@ country_event = {
 	}
 	# traid menu
 	option = {
-		name = human_fallen_empires.661.2
+		name = human_fallen_empires.701.2
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires.661.traid_menu
-			country_event = { id = human_fallen_empires.661 }
+			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires.701.traid_menu
+			country_event = { id = human_fallen_empires.701 }
 		}
 	}
 	# energy for minerals
 	option = {
-		name = human_fallen_empires.661.traid_menu.0
+		name = human_fallen_empires.701.traid_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires.661.traid_menu
+			has_country_flag = human_fallen_empires.701.traid_menu
 		}
 		allow = {
 			minerals > 150
 			custom_tooltip_fail = {
-				text = human_fallen_empires.661.traid_menu.fail
+				text = human_fallen_empires.701.traid_menu.fail
 				event_target:human_fallen_empires_pirate_country = {
 					energy > 100
 				}
@@ -9186,7 +9474,7 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires.661.traid_menu.0.response
+		response_text = human_fallen_empires.701.traid_menu.0.response
 
 		add_energy = 100
 		add_minerals = -150
@@ -9195,7 +9483,368 @@ country_event = {
 			add_minerals = 150
 		}
 	}
+	# buy slave
+	option = {
+		name = human_fallen_empires.701.traid_menu.1
+		trigger = {
+			has_country_flag = human_fallen_empires.701.traid_menu
+		}
+		hidden_effect = {
+			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires.701.slave_menu
+			event_target:human_fallen_empires_pirate_country = {
+				human_fallen_empires_effect_save_slave_target = yes
+			}
+			country_event = { id = human_fallen_empires.701 }
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.0
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			event_target:human_fallen_empires_pirate_country = {
+				human_fallen_empires_trigger_is_individualist = yes
+			}
+		}
 
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.0.response
+	}
+	# select slave menu
+	option = {
+		name = human_fallen_empires.701.slave_menu.1
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_0
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.1.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					free_pop_tiles > 0
+				}
+				create_pop = {
+					species = event_target:human_fallen_empires_slave_target_0
+				}
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.2
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_1
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.2.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					}
+					save_event_target_as = human_fallen_empires_pirates_pop
+					root = {
+						random_owned_planet = {
+							limit = {
+								free_pop_tiles > 0
+							}
+							create_pop = {
+								species = human_fallen_empires_pirates_pop.species
+							}
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.3
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_2
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.3.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+					}
+					save_event_target_as = human_fallen_empires_pirates_pop
+					root = {
+						random_owned_planet = {
+							limit = {
+								free_pop_tiles > 0
+							}
+							create_pop = {
+								species = human_fallen_empires_pirates_pop.species
+							}
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.4
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_3
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.4.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+					}
+					save_event_target_as = human_fallen_empires_pirates_pop
+					root = {
+						random_owned_planet = {
+							limit = {
+								free_pop_tiles > 0
+							}
+							create_pop = {
+								species = human_fallen_empires_pirates_pop.species
+							}
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.5
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_4
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.5.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+					}
+					save_event_target_as = human_fallen_empires_pirates_pop
+					root = {
+						random_owned_planet = {
+							limit = {
+								free_pop_tiles > 0
+							}
+							create_pop = {
+								species = human_fallen_empires_pirates_pop.species
+							}
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.701.slave_menu.6
+		trigger = {
+			has_country_flag = human_fallen_empires.701.slave_menu
+			exists = event_target:human_fallen_empires_slave_target_5
+		}
+		allow = {
+			energy > @human_fallen_empires_pirate_slave_cost
+				   minerals > @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_space
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+				   custom_tooltip_fail = {
+				text = human_fallen_empires.701.slave_menu.fail_havent_slave
+				event_target:human_fallen_empires_pirate_country = {
+					any_owned_pop = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_5
+					}
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.701.slave_menu.6.response
+
+		add_energy = @human_fallen_empires_pirate_slave_cost_minus
+		add_minerals = @human_fallen_empires_pirate_slave_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_pirate_slave_cost
+			add_minerals = @human_fallen_empires_pirate_slave_cost
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_pirate_country = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = event_target:human_fallen_empires_slave_target_5
+					}
+					save_event_target_as = human_fallen_empires_pirates_pop
+					root = {
+						random_owned_planet = {
+							limit = {
+								free_pop_tiles > 0
+							}
+							create_pop = {
+								species = human_fallen_empires_pirates_pop.species
+							}
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+	}
+	# return
 	option = {
 		name = modmenu_return
 		trigger = {
@@ -9203,7 +9852,7 @@ country_event = {
 		}
 		hidden_effect = {
 			human_fallen_empires_effect_pirates_diplomacy_remove_flags = yes
-			country_event = { id = human_fallen_empires.661 }
+			country_event = { id = human_fallen_empires.701 }
 		}
 	}
 	# exit

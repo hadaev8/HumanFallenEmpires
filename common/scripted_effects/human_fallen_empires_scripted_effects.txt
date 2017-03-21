@@ -1487,7 +1487,7 @@ human_fallen_empires_effect_clean_crew_modifier = {
 	}
 }
 
-# for country
+# for country return 6 event targets
 human_fallen_empires_effect_save_event_target = {
 	if = {
 		limit = {
@@ -1551,8 +1551,9 @@ human_fallen_empires_effect_save_event_target = {
 
 # for country
 human_fallen_empires_effect_pirates_diplomacy_remove_flags = {
-	remove_country_flag = human_fallen_empires.661.raid_menu
-	remove_country_flag = human_fallen_empires.661.traid_menu
+	remove_country_flag = human_fallen_empires.701.raid_menu
+	remove_country_flag = human_fallen_empires.701.traid_menu
+	remove_country_flag = human_fallen_empires.701.slave_menu
 }
 
 # for country
@@ -1659,6 +1660,170 @@ human_fallen_empires_effect_drone_calc_outpost = {
 		add_modifier = {
 			modifier = human_fallen_empires_drone_outpost_7
 			days = -1
+		}
+	}
+}
+
+# create pirates
+# return event target pirate_band, need event target human_fallen_empires_pirate_target
+human_fallen_empires_effect_create_pirate = {
+	create_country = {
+		name = random
+		type = human_fallen_empires_pirate
+		species = event_target:human_fallen_empires_pirate_target.species
+		name_list = human_fallen_empires_pirate_namelist
+		government = human_fallen_empires_government_pirate_codex
+		released_from_country = event_target:human_fallen_empires_pirate_target
+		ethos = random
+		flag = random
+		effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_pirate_country_unkeep
+				days = -1
+			}
+			set_graphical_culture = pirate_01
+			add_minerals = 2000
+			add_energy = 200
+			add_influence = 200
+			set_policy = {
+				policy = orbital_bombardment
+				option = orbital_bombardment_full
+				cooldown = yes
+			}
+			set_relation_flag = {
+				who = event_target:human_fallen_empires_pirate_target
+				flag = pirate_relation
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+				}
+				country_remove_ethic = ethic_pacifist
+				country_add_ethic = ethic_militarist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_fanatic_pacifist
+				}
+				country_remove_ethic = ethic_fanatic_pacifist
+				country_add_ethic = ethic_fanatic_militarist
+			}
+			save_event_target_as = pirate_band
+			every_country = {
+				limit = {
+					is_country_type = primitive
+				}
+				establish_communications_no_message = event_target:pirate_band
+			}
+			give_technology = tech_human_fallen_empires_pirate_local_harvest
+		}
+	}
+}
+
+# for planet, asteroid ideally, need event target pirate_band
+human_fallen_empires_effect_create_pirate_base = {
+	change_pc = pc_human_fallen_empires_pirate_base
+	create_colony = {
+		owner = event_target:pirate_band
+		species = event_target:pirate_band.species
+		ethos = owner
+	}
+	every_owned_pop = {
+		kill_pop = yes
+	}
+	random_tile = {
+		limit = {
+			has_building = building_colony_shelter
+		}
+		remove_building = yes
+	}
+	create_spaceport = {
+		owner = event_target:pirate_band
+		initial_module = missile_weapon
+	}
+	add_modifier = {
+		modifier = human_fallen_empires_pirate_base
+		days = -1
+	}
+	log = "pirate created new base on [This.GetStarName]"
+	set_planet_flag = human_fallen_empires_pirate_base
+}
+
+# for country, return 6 event targets of not same species
+human_fallen_empires_effect_save_slave_target = {
+	every_owned_pop = {
+		if = {
+			limit = {
+				not = {
+					exists = event_target:human_fallen_empires_slave_target_0
+				}
+			}
+			save_event_target_as = human_fallen_empires_slave_target_0
+			else = {
+				if = {
+					limit = {
+						nor = {
+							exists = event_target:human_fallen_empires_slave_target_1
+							is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+						}
+					}
+					save_event_target_as = human_fallen_empires_slave_target_1
+					else = {
+						if = {
+							limit = {
+								nor = {
+									exists = event_target:human_fallen_empires_slave_target_2
+									is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+									is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+								}
+							}
+							save_event_target_as = human_fallen_empires_slave_target_2
+							else = {
+								if = {
+									limit = {
+										nor = {
+											exists = event_target:human_fallen_empires_slave_target_3
+											is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+											is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+											is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+										}
+									}
+									save_event_target_as = human_fallen_empires_slave_target_3
+									else = {
+										if = {
+											limit = {
+												nor = {
+													exists = event_target:human_fallen_empires_slave_target_4
+													is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+													is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+													is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+													is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+												}
+											}
+											save_event_target_as = human_fallen_empires_slave_target_4
+											else = {
+												if = {
+													limit = {
+														nor = {
+															exists = event_target:human_fallen_empires_slave_target_5
+															is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+															is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+															is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+															is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+															is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+														}
+													}
+													save_event_target_as = human_fallen_empires_slave_target_5
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
