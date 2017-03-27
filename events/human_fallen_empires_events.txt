@@ -39,19 +39,23 @@ namespace = human_fallen_empires
 @tier4researchmin = 150
 @tier4researchmax = 500
 
-
+# discovery
 @human_fallen_empires_discovery_docking_update_minerals_cost = 300
 @human_fallen_empires_discovery_docking_update_energy_cost = 300
 @human_fallen_empires_discovery_docking_update_minerals_cost_minus = -300
 @human_fallen_empires_discovery_docking_update_energy_cost_minus = -300
 @human_fallen_empires_discovery_docking_update_minerals_dock_owner = 150
 @human_fallen_empires_discovery_docking_update_energy_dock_owner = 150
+@human_fallen_empires_discovery_contract_pirate_hunt_reward = 500
+@human_fallen_empires_discovery_contract_pirate_hunt_reward_minus = -500
+@human_fallen_empires_discovery_contract_embassy_reward = 100
+@human_fallen_empires_discovery_contract_embassy_reward_minus = -100
+
+# pirate
 @human_fallen_empires_pirate_base_cost = 3000
 @human_fallen_empires_pirate_base_cost_minus = -3000
 @human_fallen_empires_pirate_slave_cost = 300
 @human_fallen_empires_pirate_slave_cost_minus = -300
-@human_fallen_empires_discovery_contract_pirate_hunt_reward = 500
-@human_fallen_empires_discovery_contract_pirate_hunt_reward_minus = -500
 
 # functional section 0 - 50
 
@@ -422,9 +426,9 @@ country_event = {
 						exists = space_owner
 						is_fe_cluster = yes
 					}
-					any_planet = {
-						is_rim_system = no
-					}
+				#	any_planet = {
+				#		is_rim_system = no
+				#	}
 				}
 				spawn_system = {
 					min_distance = 0
@@ -1379,6 +1383,18 @@ country_event = {
 	#сделать бонусную ветку
 }
 
+# kill country event
+country_event  = {
+	id = human_fallen_empires.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_country = yes
+	}
+}
+
+
 # make egypt default country
 country_event = {
 	id = human_fallen_empires.11
@@ -1788,15 +1804,25 @@ country_event = {
 # varlse colony after curvey 100
 ship_event = {
 	id = human_fallen_empires.100
-	title = "human_fallen_empires.100.name"
-	desc = "human_fallen_empires.100.desc"
+	title = human_fallen_empires.100.name
+	desc = human_fallen_empires.100.desc
 	picture = GFX_evt_human_fallen_empire_events_valeres_planet
 	location = root
     is_triggered_only = yes
 
 	trigger = {
-		from = { has_planet_flag = human_fallen_empires_varelse_colony }
-		from.owner = { is_country_type = primitive }
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+		exists = from
+		from = {
+			has_planet_flag = human_fallen_empires_varelse_colony
+		}
+		exists = from.owner
+		from.owner = {
+			is_country_type = primitive
+		}
 	}
 
 	option = {
@@ -3633,23 +3659,14 @@ country_event = {
 	immediate = {
 		if = {
 			limit = {
-				has_event_chain = human_fallen_empires_discovery_pirate_hunt_contract
-				fromfromfrom = {
-					is_ship_size = orbital_station
-					fleet = {
-						has_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target
-					}
+				not = {
+					has_event_chain = human_fallen_empires_discovery_kill_count
 				}
-			#	from = {
-			#		is_country_type = human_fallen_empires_pirate
-			#	}
 			}
-			end_event_chain = human_fallen_empires_discovery_pirate_hunt_contract
-		#	event_target:human_fallen_empires_discovery_pirate_hunt_hirer = {
-		#		add_energy = @human_fallen_empires_discovery_contract_pirate_hunt_reward_minus
-		#		log = "321"
-		#	}
-			add_energy = @human_fallen_empires_discovery_contract_pirate_hunt_reward
+			begin_event_chain = {
+				event_chain = human_fallen_empires_discovery_kill_count
+				target = root
+			}
 		}
 		if = {
 			limit = {
@@ -3674,6 +3691,11 @@ country_event = {
 				}
 			}
 			add_minerals = 100
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_discovery_kill_count
+				counter = human_fallen_empires_discovery_kill_count_t1
+				amount = 1
+			}
 			else = {
 				if = {
 					limit = {
@@ -3697,6 +3719,11 @@ country_event = {
 						}
 					}
 					add_minerals = 150
+					add_event_chain_counter = {
+						event_chain = human_fallen_empires_discovery_kill_count
+						counter = human_fallen_empires_discovery_kill_count_t2
+						amount = 1
+					}
 					else = {
 						if = {
 							limit = {
@@ -3721,6 +3748,11 @@ country_event = {
 								}
 							}
 							add_minerals = 200
+							add_event_chain_counter = {
+								event_chain = human_fallen_empires_discovery_kill_count
+								counter = human_fallen_empires_discovery_kill_count_t3
+								amount = 1
+							}
 							else = {
 								if = {
 									limit = {
@@ -3734,8 +3766,18 @@ country_event = {
 										}
 									}
 									add_minerals = 1000
+									add_event_chain_counter = {
+										event_chain = human_fallen_empires_discovery_kill_count
+										counter = human_fallen_empires_discovery_kill_count_t4
+										amount = 1
+									}
 									else = {
 										add_minerals = 50
+										add_event_chain_counter = {
+											event_chain = human_fallen_empires_discovery_kill_count
+											counter = human_fallen_empires_discovery_kill_count_t0
+											amount = 1
+										}
 									}
 								}
 							}
@@ -3753,6 +3795,11 @@ country_event = {
 					is_at_war_with = from
 					energy > 10
 				}
+			}
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_discovery_kill_count
+				counter = human_fallen_empires_discovery_kill_count_reward
+				amount = 1
 			}
 			if = {
 				limit = {
@@ -3872,6 +3919,11 @@ country_event = {
 				}
 			}
 			add_energy = 50
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_discovery_kill_count
+				counter = human_fallen_empires_discovery_kill_count_energy
+				amount = 1
+			}
 		}
 		fromfrom = {
 			solar_system = {
@@ -3897,6 +3949,11 @@ country_event = {
 						add_energy = -50
 						root = {
 							add_energy = 50
+							add_event_chain_counter = {
+								event_chain = human_fallen_empires_discovery_kill_count
+								counter = human_fallen_empires_discovery_kill_count_reward
+								amount = 1
+							}
 						}
 					}
 				}
@@ -4086,6 +4143,69 @@ country_event = {
 	}
 }
 
+# make default country if have planets, kill desovery ship
+country_event = {
+	id = human_fallen_empires.555
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = human_fallen_empires_discovery
+		is_country_type = human_fallen_empires_discovery
+	}
+
+	immediate = {
+	}
+}
+
+# kill check for contracts for on actions
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = human_fallen_empires.556
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_discovery
+		has_event_chain = human_fallen_empires_discovery_contract_pirate_hunt
+	#	exists = from
+	#	exists = fromfrom
+		exists = fromfromfrom
+	#	fromfrom = {
+	#		has_ship_flag = human_fallen_empires_discovery_ship
+	#	}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_event_chain = human_fallen_empires_discovery_contract_pirate_hunt
+				fromfromfrom = {
+					is_ship_size = orbital_station
+					fleet = {
+						has_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target
+					}
+				}
+			}
+			end_event_chain = human_fallen_empires_discovery_contract_pirate_hunt
+			random_country = {
+				limit = {
+					has_relation_flag = {
+						who = root
+						flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer
+					}
+				}
+				add_energy = @human_fallen_empires_discovery_contract_pirate_hunt_reward_minus
+				log = "321"
+			}
+			add_energy = @human_fallen_empires_discovery_contract_pirate_hunt_reward
+		}
+	}
+}
+
 # trade and update on planet
 # from = docking planet
 fleet_event = {
@@ -4124,6 +4244,66 @@ fleet_event = {
 				has_ship_flag = human_fallen_empires_discovery_ship
 			}
 			save_event_target_as = human_fallen_empires_discovery_docking_ship
+		}
+		if = {
+			limit = {
+				from = {
+					has_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+				}
+				owner = {
+					has_event_chain = human_fallen_empires_discovery_contract_embassy
+				}
+			}
+			from = {
+				remove_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+			}
+			owner = {
+				random_country = {
+					limit = {
+						has_relation_flag = {
+							who = root.owner
+							flag = human_fallen_empires_discovery_contract_embassy_hirer
+						}
+					}
+					save_event_target_as = human_fallen_empires_discovery_contract_embassy_hirer
+					add_energy = @human_fallen_empires_discovery_contract_embassy_reward_minus
+					log = "embassy reward minus"
+				}
+				random_list = {
+					1 = {
+						set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_success days = 1 }
+						event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
+							add_opinion_modifier = {
+								who = event_target:human_fallen_empires_discovery_docking_planet_owner
+								modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
+							}
+						}
+						event_target:human_fallen_empires_discovery_docking_planet_owner = {
+							add_opinion_modifier = {
+								who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
+								modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
+							}
+						}
+					}
+					1 = {
+						set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_fail days = 1 }
+						event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
+							add_opinion_modifier = {
+								who = event_target:human_fallen_empires_discovery_docking_planet_owner
+								modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
+							}
+						}
+						event_target:human_fallen_empires_discovery_docking_planet_owner = {
+							add_opinion_modifier = {
+								who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
+								modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
+							}
+						}
+					}
+				}
+				end_event_chain = human_fallen_empires_discovery_contract_embassy
+				add_energy = @human_fallen_empires_discovery_contract_embassy_reward
+			}
 		}
 		owner = {
 			country_event = { id = human_fallen_empires.561 }
@@ -4165,6 +4345,26 @@ country_event = {
 			success_text = {
 				text = human_fallen_empires.561.contract_menu.desc.0
 				has_country_flag = human_fallen_empires.561.contract_menu
+			}
+			# quests
+			# no quest
+			success_text = {
+				text = human_fallen_empires.561.1.0
+				human_fallen_empires_trigger_discovery_docking_any_menu = no
+				human_fallen_empires_trigger_discovery_docking_any_quest = no
+			}
+			# embassy
+			# embassy success
+			success_text = {
+				text = human_fallen_empires.561.contract_menu.desc.1.0
+				human_fallen_empires_trigger_discovery_docking_any_menu = no
+				has_country_flag = human_fallen_empires_discovery_contract_embassy_success
+			}
+			# embassy fail
+			success_text = {
+				text = human_fallen_empires.561.contract_menu.desc.1.1
+				human_fallen_empires_trigger_discovery_docking_any_menu = no
+				has_country_flag = human_fallen_empires_discovery_contract_embassy_fail
 			}
 		}
 	}
@@ -8287,11 +8487,9 @@ country_event = {
 		}
 		allow = {
 			custom_tooltip_fail = {
-				text = human_fallen_empires.561.fail_has_pirate_hunt_contract
+				text = human_fallen_empires.561.fail_has_contract_pirate_hunt
 				not = {
-					root = {
-						has_event_chain = human_fallen_empires_discovery_pirate_hunt_contract
-					}
+					has_event_chain = human_fallen_empires_discovery_contract_pirate_hunt
 				}
 			}
 		}
@@ -8300,13 +8498,17 @@ country_event = {
 		response_text = human_fallen_empires.561.contract_menu.0.response
 
 		begin_event_chain = {
-			event_chain = human_fallen_empires_discovery_pirate_hunt_contract
+			event_chain = human_fallen_empires_discovery_contract_pirate_hunt
 			target = root
 		}
 		hidden_effect = {
 			event_target:human_fallen_empires_discovery_docking_planet = {
 				owner = {
 					save_event_target_as = human_fallen_empires_discovery_pirate_hunt_hirer
+					set_relation_flag = {
+						who = root
+						flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer
+					}
 				}
 				closest_system = {
 					limit = {
@@ -8322,7 +8524,6 @@ country_event = {
 							is_ship_size = orbital_station
 						}
 						set_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target
-						log = "123"
 					}
 					random_system_planet = {
 						limit = {
@@ -8337,10 +8538,77 @@ country_event = {
 			}
 			create_point_of_interest = {
 				id = human_fallen_empires_discovery_pirate_hunt_point.0
-				name = human_fallen_empires_discovery_pirate_hunt.name
-				desc = human_fallen_empires_discovery_pirate_hunt.desc
-				event_chain = human_fallen_empires_discovery_pirate_hunt_contract
+				name = human_fallen_empires_discovery_contract_pirate_hunt.name
+				desc = human_fallen_empires_discovery_contract_pirate_hunt.desc
+				event_chain = human_fallen_empires_discovery_contract_pirate_hunt
 				location = event_target:human_fallen_empires_discovery_pirate_hunt_target
+			}
+		}
+	}
+	# contract embassy mission
+	option = {
+		name = human_fallen_empires.561.contract_menu.1
+		trigger = {
+			has_country_flag = human_fallen_empires.561.contract_menu
+			any_country = {
+				or = {
+					is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+					is_dismissive_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+					is_angry_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+					is_unfriendly_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+				# почему-то в логе ошибка	is_rival_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+					is_disloyal_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+				}
+				nor = {
+					is_hostile = root
+					has_closed_borders = root
+				}
+			}
+		}
+		allow = {
+			custom_tooltip_fail = {
+				text = human_fallen_empires.561.fail_has_contract_embassy
+				not = {
+					has_event_chain = human_fallen_empires_discovery_contract_embassy
+				}
+			}
+		}
+
+		is_dialog_only = yes
+		response_text = human_fallen_empires.561.contract_menu.1.response
+
+		begin_event_chain = {
+			event_chain = human_fallen_empires_discovery_contract_embassy
+			target = root
+		}
+		hidden_effect = {
+			random_country = {
+				limit = {
+					or = {
+						is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+						is_dismissive_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+						is_angry_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+						is_unfriendly_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+						is_rival_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+						is_disloyal_to = event_target:human_fallen_empires_discovery_docking_planet_owner
+					}
+					nor = {
+						is_hostile = root
+						has_closed_borders = root
+					}
+				}
+			#	save_event_target_as = human_fallen_empires_discovery_embassy_target_country
+				capital_scope = {
+					set_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+					save_event_target_as = human_fallen_empires_discovery_embassy_target
+				}
+			}
+			create_point_of_interest = {
+				id = human_fallen_empires_discovery_contract_embassy_point.0
+				name = human_fallen_empires_discovery_contract_embassy.name
+				desc = human_fallen_empires_discovery_contract_embassy.desc
+				event_chain = human_fallen_empires_discovery_contract_embassy
+				location = event_target:human_fallen_empires_discovery_embassy_target
 			}
 		}
 	}
@@ -9059,22 +9327,34 @@ country_event = {
 				limit = {
 					num_owned_planets = 1
 				}
-				random_country = {
+				if = {
 					limit = {
-						is_country_type = human_fallen_empires_pirate
-						not = {
-							is_country = root
+						any_country = {
+							is_country_type = human_fallen_empires_pirate
+							not = {
+								is_country = root
+							}
 						}
 					}
-					save_event_target_as = human_fallen_empires_pirate_new_owner
-				}
-				every_owned_fleet = {
-					set_owner = event_target:human_fallen_empires_pirate_new_owner
+					random_country = {
+						limit = {
+							is_country_type = human_fallen_empires_pirate
+							not = {
+								is_country = root
+							}
+						}
+						save_event_target_as = human_fallen_empires_pirate_new_owner
+					}
+					every_owned_fleet = {
+						set_owner = event_target:human_fallen_empires_pirate_new_owner
+					}
 				}
 				random_owned_planet = {
 					change_pc = pc_asteroid
 				}
-				destroy_country = yes
+				# destroy contry later for fix errors in log
+				country_event = { id = human_fallen_empires.9 days = 2 }
+			#	destroy_country = yes
 				break = yes
 			}
 			random_owned_planet = {
