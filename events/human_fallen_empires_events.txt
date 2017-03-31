@@ -465,13 +465,125 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# spawn pirates
+		# spawn pirate
 		random_country = {
 			limit = {
 				is_country_type = default
 				num_owned_planets > 2
 			}
 			country_event = { id = human_fallen_empires.650 days = 1 random = 365 }
+		}
+		# spawn pirate again
+		if = {
+			limit = {
+				any_country = {
+					is_country_type = default
+					has_country_flag = human_fallen_empires_birth_of_piracy
+					not = {
+						has_country_flag = human_fallen_empires_pirate_spawned
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+					has_country_flag = human_fallen_empires_birth_of_piracy
+					not = {
+						has_country_flag = human_fallen_empires_pirate_spawned
+					}
+				}
+				random_list = {
+					100 = { }
+					1 = {
+						modifier = {
+							factor = 2
+							is_at_war = yes
+						}
+						modifier = {
+							factor = 2
+							any_owned_planet = {
+								is_occupied_flag = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							any_owned_planet = {
+								is_capital = yes
+								is_occupied_flag = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									defender_war_score < -20
+								}
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									attacker_war_score < -20
+								}
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									defender_war_score < -40
+								}
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									attacker_war_score < -40
+								}
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									defender_war_score < -60
+								}
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									attacker_war_score < -60
+								}
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									defender_war_score < -80
+								}
+								any_war = {
+									any_defender = {
+										is_country = prev
+									}
+									attacker_war_score < -80
+								}
+							}
+						}
+						country_event = { id = human_fallen_empires.655 }
+					}
+				}
+			}
 		}
 		# pirates life
 		every_country = {
@@ -4186,7 +4298,7 @@ country_event = {
 
 # functional and life simulation stuff 650 - 675
 
-# spawn pirates
+# spawn pirate birth of piracy
 country_event = {
 	id = human_fallen_empires.650
 	title = pirate.1.name
@@ -4678,6 +4790,69 @@ country_event = {
 		}
 	}
 }
+
+# spawn pirate during game
+country_event = {
+	id = human_fallen_empires.655
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		not = {
+			has_country_flag = human_fallen_empires_pirate_spawned
+		}
+	}
+
+	immediate = {
+		log = "pirates spawned again"
+		set_timed_country_flag = { flag = human_fallen_empires_pirate_spawned days = 1500 }
+		save_event_target_as = human_fallen_empires_pirate_target
+		random_system = {
+			limit = {
+				nor = {
+					any_planet = {
+						exists = owner
+					}
+					has_star_flag = hostile_system
+				}
+				any_planet = {
+					is_asteroid = yes
+					not = {
+						exists = controller
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_asteroid = yes
+					nor = {
+						exists = controller
+						exists = owner
+					}
+				}
+				human_fallen_empires_effect_create_pirate = yes
+				human_fallen_empires_effect_create_pirate_base = yes
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+				has_country_flag = pirate_encountered
+			}
+			every_country = {
+				limit = {
+					or = {
+						is_country_type = pirate
+						is_country_type = human_fallen_empires_pirate
+					}
+				}
+				establish_communications_no_message = prev
+			}
+		}
+	}
+}
+
 
 # functional fleet stuff 675 - 700
 
