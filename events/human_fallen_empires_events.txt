@@ -1823,7 +1823,7 @@ ship_event = {
 	id = human_fallen_empires.100
 	title = human_fallen_empires.100.name
 	desc = human_fallen_empires.100.desc
-	picture = GFX_evt_human_fallen_empires_valeres_planet
+	picture = GFX_evt_human_fallen_empires_varelse_planet
 	location = root
     is_triggered_only = yes
 
@@ -1941,7 +1941,6 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_valeres_planet
 	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	option = {
@@ -1994,7 +1993,6 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_valeres_planet
 	show_sound = event_cityscape
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	option = {
@@ -2016,7 +2014,6 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_valeres_planet
 	show_sound = event_cityscape
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	immediate = {
@@ -2065,7 +2062,6 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_valeres_planet
 	show_sound = event_planetary_riot
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	immediate = {
@@ -2104,7 +2100,6 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_valeres_planet
 	show_sound = event_primitive_civilization
 	location = event_target:human_fallen_empires_varelse_colony
-
 	is_triggered_only = yes
 
 	immediate = {
@@ -2122,7 +2117,7 @@ country_event = {
 
 
 
-### memorial section 150 - 350
+# memorial section 150 - 350
 
 
 ## pyramid events 150 - 200
@@ -2134,12 +2129,17 @@ planet_event = {
 	desc = human_fallen_empires.150.desc
 	picture = GFX_evt_human_fallen_empires_pyramid_2
 	show_sound = event_mystic_reveal
-	location = ROOT
+	location = root
 	is_triggered_only = yes
 
 	trigger = {
-		not = { has_planet_flag = human_fallen_empires_planet_pyramid }
 		has_modifier = human_fallen_empires_memorial
+		nor = {
+			has_planet_flag = human_fallen_empires_planet_pyramid
+			any_planet = {
+				has_planet_flag = human_fallen_empires_pyramid_project
+			}
+		}
 		exists = owner
 		owner = {
 			is_ai = no
@@ -2159,7 +2159,10 @@ planet_event = {
 			location = root
 			owner = root.owner
 		}
-		save_event_target_as = human_fallen_empires_memorial_planet
+		hidden_effect = {
+			set_planet_flag = human_fallen_empires_pyramid_project
+			save_event_target_as = human_fallen_empires_memorial_planet
+		}
 	}
 	option = {
 		name = human_fallen_empires_not_interested
@@ -2176,10 +2179,24 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_pyramid_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_pyramid_project
+		}
+	}
+
 	option = {
 		name = human_fallen_empires.151.0
 		hidden_effect = {
-			root.owner = {
+			owner = {
 				country_event = { id = human_fallen_empires.152 }
 				set_country_flag = human_fallen_empires_has_event.151
 			}
@@ -2314,9 +2331,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.153
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_pyramid_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_pyramid_project
 		}
 		event_target:human_fallen_empires_memorial_planet = {
 			create_country = {
@@ -2369,9 +2397,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.154
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_pyramid_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_pyramid_project
 		}
 		event_target:human_fallen_empires_memorial_planet = {
 			planet_event = { id = human_fallen_empires.155 days = 15 }
@@ -2392,6 +2431,10 @@ planet_event = {
 	show_sound = event_airlock
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+	}
 
 	immediate = {
 		every_owned_pop = {
@@ -2415,9 +2458,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.156
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_pyramid_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_pyramid_project
 		}
 	}
 
@@ -2455,14 +2509,17 @@ planet_event = {
 	desc = human_fallen_empires.200.desc
 	picture = GFX_evt_human_fallen_empires_weapon_storage
 	show_sound = event_mystic_reveal
-	location = ROOT
+	location = root
 	is_triggered_only = yes
 
 	trigger = {
+		has_modifier = human_fallen_empires_memorial
 		not = {
 			has_planet_flag = human_fallen_empires_military_warehouse_planet
+			any_planet = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
 		}
-		has_modifier = human_fallen_empires_memorial
 		exists = owner
 		owner = {
 			is_ai = no
@@ -2482,7 +2539,10 @@ planet_event = {
 			location = root
 			owner = root.owner
 		}
-		save_event_target_as = human_fallen_empires_memorial_planet
+		hidden_effect = {
+			set_planet_flag = human_fallen_empires_military_warehouse_project
+			save_event_target_as = human_fallen_empires_memorial_planet
+		}
 	}
 
 	option = {
@@ -2507,6 +2567,13 @@ ship_event = {
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.201
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
 		}
 	}
 
@@ -2539,6 +2606,13 @@ ship_event = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.202
 		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
+		}
 	}
 
 	option = {
@@ -2570,6 +2644,13 @@ ship_event = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.203
 		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
+		}
 	}
 
 	option = {
@@ -2600,6 +2681,13 @@ ship_event = {
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.204
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
 		}
 	}
 
@@ -2649,6 +2737,13 @@ country_event = {
 
 	immediate = {
 		set_country_flag = human_fallen_empires_has_event.205
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
+		}
 		if = {
 			limit = {
 				has_country_flag = human_fallen_empires.205.1
@@ -2740,9 +2835,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.206
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
 		}
 	}
 
@@ -2770,9 +2876,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.207
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_military_warehouse_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_military_warehouse_project
 		}
 	}
 
@@ -2797,14 +2914,21 @@ planet_event = {
 	desc = human_fallen_empires.250.desc
 	picture = GFX_evt_human_fallen_empires_ship_old
 	show_sound = event_mystic_reveal
-	location = ROOT
+	location = root
 	is_triggered_only = yes
 
 	trigger = {
-		not = { has_planet_flag = human_fallen_empires_found_cruiser_planet }
 		has_modifier = human_fallen_empires_memorial
-		has_owner = yes
-		owner = { is_ai = no }
+		nor = {
+			has_planet_flag = human_fallen_empires_found_cruiser_planet
+			any_planet = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
 		has_ground_combat = no
 		num_pops > 0
 	}
@@ -2820,7 +2944,10 @@ planet_event = {
 			location = root
 			owner = root.owner
 		}
-		save_event_target_as = human_fallen_empires_memorial_planet
+		hidden_effect = {
+			set_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			save_event_target_as = human_fallen_empires_memorial_planet
+		}
 	}
 
 	option = {
@@ -2838,9 +2965,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.251
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_found_cruiser_project_planet
 		}
 	}
 
@@ -2889,9 +3027,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.252
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_found_cruiser_project_planet
 		}
 	}
 
@@ -2911,11 +3060,11 @@ ship_event = {
 		trigger = {
 			fail_text = {
 				text = human_fallen_empires.253.desc.0
-				has_country_flag = human_fallen_empires_egypt_country
+				has_country_flag = human_fallen_empires_egypt_contacted
 			}
 			success_text = {
 				text = human_fallen_empires.253.desc.1
-				has_country_flag = human_fallen_empires_egypt_country
+				has_country_flag = human_fallen_empires_egypt_contacted
 			}
 		}
 	}
@@ -2924,9 +3073,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.253
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_found_cruiser_project_planet
 		}
 	}
 
@@ -3006,9 +3166,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.254
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_found_cruiser_project_planet
 		}
 		create_country = {
 			name = "Mad Cruiser"
@@ -3088,9 +3259,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.255
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_found_cruiser_project_planet
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_found_cruiser_project_planet
 		}
 		create_fleet = {
 			name = "Marvin"
@@ -3164,15 +3346,16 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		not = { has_planet_flag = human_fallen_empires_sputnik_planet }
 		has_modifier = human_fallen_empires_memorial
-		has_owner = yes
+		nor = {
+			has_planet_flag = human_fallen_empires_sputnik_planet
+			any_planet = {
+				has_planet_flag = human_fallen_empires_sputnik_project
+			}
+		}
+		exists = owner
 		owner = {
 			is_ai = no
-		}
-		has_ground_combat = no
-		num_pops > 0
-		owner = {
 			not = {
 				and = {
 					has_country_flag = human_fallen_empires_has_event.301
@@ -3181,6 +3364,8 @@ planet_event = {
 				}
 			}
 		}
+		has_ground_combat = no
+		num_pops > 0
 	}
 
 	immediate = {
@@ -3194,7 +3379,10 @@ planet_event = {
 			location = root
 			owner = root.owner
 		}
-		save_event_target_as = human_fallen_empires_memorial_planet
+		hidden_effect = {
+			set_planet_flag = human_fallen_empires_sputnik_project
+			save_event_target_as = human_fallen_empires_memorial_planet
+		}
 	}
 
 	option = {
@@ -3212,9 +3400,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.301
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_sputnik_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_sputnik_project
 		}
 	}
 
@@ -3239,9 +3438,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.302
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_sputnik_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_sputnik_project
 		}
 	}
 
@@ -3295,6 +3505,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_sputnik_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_sputnik_project
+		}
+	}
+
 	option = {
 		name = human_fallen_empires.303.0
 		owner = {
@@ -3308,7 +3532,7 @@ ship_event = {
 	}
 }
 
-# eng bonus
+# engineering bonus
 ship_event = {
 	id = human_fallen_empires.304
 	title = human_fallen_empires.304.name
@@ -3318,9 +3542,20 @@ ship_event = {
 	location = event_target:human_fallen_empires_memorial_planet
 	is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
 	immediate = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.304
+		}
+		random_planet = {
+			limit = {
+				has_planet_flag = human_fallen_empires_sputnik_project
+			}
+			save_event_target_as = human_fallen_empires_memorial_planet
+			remove_planet_flag = human_fallen_empires_sputnik_project
 		}
 	}
 
@@ -3924,7 +4159,30 @@ country_event = {
 	}
 }
 
+# drone bombardment event for on_monthly_orbital_bombardment
+country_event = {
+	id = human_fallen_empires.606
+	hide_window = yes
+    is_triggered_only = yes
 
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				num_pops > 0
+			}
+			random_owned_pop = {
+				kill_pop = yes
+			}
+			else = {
+				destroy_colony = yes
+			}
+		}
+	}
+}
 
 # functional and life simulation stuff 650 - 675
 
