@@ -1403,7 +1403,6 @@ country_event  = {
 	}
 }
 
-
 # make egypt default country
 country_event = {
 	id = human_fallen_empires.11
@@ -1456,6 +1455,13 @@ country_event = {
 				}
 				set_country_flag = human_fallen_empires_egypt_contacted
 			}
+		}
+		random_country = {
+			limit = {
+				is_country_type = default
+				fleet_power > 30000
+			}
+			log = "egypt awekened by [This.GetName]"
 		}
 	}
 }
@@ -1600,12 +1606,12 @@ ship_event = {
 	immediate = {
 		create_country = {
 			name = "Varelse Hegemony"
-			type = neutral_faction
+			type = faction
 			effect = {
 				establish_communications_no_message = root.owner
-				#set_faction_hostility = {
-				#	set_hostile = no
-				#}
+				set_faction_hostility = {
+					set_hostile = no
+				}
 				create_leader = {
 					type = admiral
 					species = event_target:human_fallen_empires_varelse_species
@@ -1643,7 +1649,7 @@ ship_event = {
 						}
 					}
 				}
-				set_location = event_targe:human_fallen_empires_varelse_fleet_location
+				set_location = root
 				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
@@ -1652,6 +1658,7 @@ ship_event = {
 
 	option = {
 		name = human_fallen_empires_at_the_sreen
+		custom_tooltip = human_fallen_empires.53.0.tooltip
 		hidden_effect = {
 			owner = {
 				country_event = { id = human_fallen_empires.53 }
@@ -4023,12 +4030,6 @@ country_event = {
 		log = "pirates spawned"
 		set_country_flag = human_fallen_empires_birth_of_piracy
 		set_country_flag = pirate_encountered
-		every_country = {
-			limit = {
-				is_country_type = pirate
-			}
-			establish_communications_no_message = root
-		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		random_system = {
 			limit = {
@@ -4066,6 +4067,21 @@ country_event = {
 				}
 				human_fallen_empires_effect_create_pirate = yes
 				human_fallen_empires_effect_create_pirate_base = yes
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+				has_country_flag = pirate_encountered
+			}
+			every_country = {
+				limit = {
+					or = {
+						is_country_type = pirate
+						is_country_type = human_fallen_empires_pirate
+					}
+				}
+				establish_communications_no_message = prev
 			}
 		}
 	}
@@ -4936,6 +4952,10 @@ country_event = {
 					who = root
 					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
+				}
 			}
 		}
 	}
@@ -4946,11 +4966,12 @@ country_event = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
+			#	human_fallen_empires_effect_clear_event_target = yes
 			every_country = {
 				limit = {
 					is_country_type = default
 					has_communications = root
-					is_rival = root
+					is_at_war_with = root
 					nor = {
 						is_country = root
 						has_opinion_modifier = {
@@ -4960,6 +4981,26 @@ country_event = {
 					}
 				}
 				human_fallen_empires_effect_save_event_target = yes
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_exists_all_event_targets = no
+				}
+				every_country = {
+					limit = {
+						is_country_type = default
+						has_communications = root
+						is_rival = root
+						nor = {
+							is_country = root
+							has_opinion_modifier = {
+								who = event_target:human_fallen_empires_pirate_country
+								modifier = human_fallen_empires_opinion_pirate_prior_target
+							}
+						}
+					}
+					human_fallen_empires_effect_save_event_target = yes
+				}
 			}
 			if = {
 				limit = {
@@ -5093,7 +5134,7 @@ country_event = {
 			exists = event_target:human_fallen_empires_event_target_0
 		}
 		allow = {
-			energy < 500
+			energy > 500
 			minerals > 500
 			custom_tooltip_fail = {
 				text = human_fallen_empires.701.raid_menu.fail_pay_for_protect
@@ -5139,6 +5180,10 @@ country_event = {
 				add_opinion_modifier = {
 					who = event_target:human_fallen_empires_event_target_0
 					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
 				}
 			}
 		}
@@ -5197,6 +5242,10 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_1
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
+				}
 			}
 		}
 	}
@@ -5253,6 +5302,10 @@ country_event = {
 				add_opinion_modifier = {
 					who = event_target:human_fallen_empires_event_target_2
 					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
 				}
 			}
 		}
@@ -5311,6 +5364,10 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_3
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
+				}
 			}
 		}
 	}
@@ -5368,6 +5425,10 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_4
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
+				}
 			}
 		}
 	}
@@ -5424,6 +5485,10 @@ country_event = {
 				add_opinion_modifier = {
 					who = event_target:human_fallen_empires_event_target_5
 					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+				every_owned_fleet = {
+					clear_fleet_actions = this
+					fleet_event = { id = human_fallen_empires.675 }
 				}
 			}
 		}
@@ -5903,8 +5968,6 @@ country_event  = {
 		set_country_flag = human_fallen_empires_future_contacted
 	}
 }
-
-
 
 # main dialoge
 country_event = {
@@ -6640,6 +6703,9 @@ country_event = {
 			any_country = {
 				is_country_type = default
 				fleet_power > 50000
+			#	not = {
+			#		has_country_flag = human_fallen_empires_egypt
+			#	}
 			}
 		}
 	}
@@ -6681,6 +6747,16 @@ country_event = {
 				limit = { is_ai = no }
 				country_event = { id = human_fallen_empires.5011 }
 			}
+		}
+		random_country = {
+			limit = {
+				is_country_type = default
+				fleet_power > 30000
+				not = {
+					is_country = root
+				}
+			}
+			log = "future awekened by [This.GetName]"
 		}
 	}
 }
@@ -8815,18 +8891,6 @@ country_event = {
 	}
 
 	immediate = {
-		from = {
-			if = {
-				limit = {
-					or = {
-						is_country_type = enclave
-					#	is_guardian_country = yes
-					}
-				}
-			}
-			establish_communications_no_message = root
-			break = yes
-		}
 		establish_communications = from
 	}
 }

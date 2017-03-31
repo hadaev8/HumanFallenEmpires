@@ -1350,8 +1350,8 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 						any_planet = {
 							has_owner = no
 							or = {
-								is_planet_class = pc_gaia
-								is_planet_class = pc_desert
+								is_planet_class = pc_arid
+								is_planet_class = pc_savannah
 							}
 						}
 					}
@@ -1366,14 +1366,21 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 									has_owner = no
 									or = {
 										is_planet_class = pc_tropical
-										is_planet_class = pc_arid
 										is_planet_class = pc_ocean
 										is_planet_class = pc_tundra
 										is_planet_class = pc_arctic
 										is_planet_class = pc_continental
 										is_planet_class = pc_alpine
-										is_planet_class = pc_savannah
 									}
+								}
+							}
+							found_system = {
+								move_to = this
+							}
+							failed = {
+								effect = {
+									id = human_fallen_empires_find_new_home_effect.0
+									human_fallen_empires_effect_varelse_fleet_attack_home_of_light = yes
 								}
 							}
 						}
@@ -1393,7 +1400,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 			found_planet = {
 				move_to = this
 				effect = {
-					id = human_fallen_empires_find_new_home_effect.0
+					id = human_fallen_empires_find_new_home_effect.1
 					create_country = {
 						name = "Varelse Hegemony"
 						type = default
@@ -1422,20 +1429,14 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 						id = human_fallen_empires_find_new_home_trigger.4
 						has_owner = no
 						or = {
-							is_planet_class = pc_tropical
 							is_planet_class = pc_arid
-							is_planet_class = pc_ocean
-							is_planet_class = pc_tundra
-							is_planet_class = pc_arctic
-							is_planet_class = pc_continental
-							is_planet_class = pc_alpine
 							is_planet_class = pc_savannah
 						}
 					}
 					found_planet = {
 						move_to = this
 						effect = {
-							id = human_fallen_empires_find_new_home_effect.1
+							id = human_fallen_empires_find_new_home_effect.2
 							create_country = {
 								name = "Varelse Hegemony"
 								type = default
@@ -1458,6 +1459,48 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							}
 						}
 					}
+					failed = {
+						find_closest_planet = {
+							trigger = {
+								id = human_fallen_empires_find_new_home_trigger.5
+								has_owner = no
+								or = {
+									is_planet_class = pc_tropical
+									is_planet_class = pc_ocean
+									is_planet_class = pc_tundra
+									is_planet_class = pc_arctic
+									is_planet_class = pc_continental
+									is_planet_class = pc_alpine
+								}
+							}
+							found_planet = {
+								move_to = this
+								effect = {
+									id = human_fallen_empires_find_new_home_effect.3
+									create_country = {
+										name = "Varelse Hegemony"
+										type = default
+										government = random
+										species = event_target:human_fallen_empires_varelse_species
+										ethos = {
+											ethic = ethic_xenophobe
+											ethic = ethic_militarist
+											ethic = ethic_materialist
+										}
+										flag = random
+									}
+									create_colony = {
+										owner = last_created_country
+										species = owner
+										ethos = owner
+									}
+									event_target:human_fallen_empires_varelse_fleet = {
+										set_owner = last_created_country
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1476,7 +1519,8 @@ human_fallen_empires_effect_save_event_target = {
 		else = {
 			if = {
 				limit = {
-					not = {
+					nor = {
+						is_same_value = event_target:human_fallen_empires_event_target_0
 						exists = event_target:human_fallen_empires_event_target_1
 					}
 				}
@@ -1484,7 +1528,9 @@ human_fallen_empires_effect_save_event_target = {
 				else = {
 					if = {
 						limit = {
-							not = {
+							nor = {
+								is_same_value = event_target:human_fallen_empires_event_target_0
+								is_same_value = event_target:human_fallen_empires_event_target_1
 								exists = event_target:human_fallen_empires_event_target_2
 							}
 						}
@@ -1492,7 +1538,10 @@ human_fallen_empires_effect_save_event_target = {
 						else = {
 							if = {
 								limit = {
-									not = {
+									nor = {
+										is_same_value = event_target:human_fallen_empires_event_target_0
+										is_same_value = event_target:human_fallen_empires_event_target_1
+										is_same_value = event_target:human_fallen_empires_event_target_2
 										exists = event_target:human_fallen_empires_event_target_3
 									}
 								}
@@ -1500,7 +1549,11 @@ human_fallen_empires_effect_save_event_target = {
 								else = {
 									if = {
 										limit = {
-											not = {
+											nor = {
+												is_same_value = event_target:human_fallen_empires_event_target_0
+												is_same_value = event_target:human_fallen_empires_event_target_1
+												is_same_value = event_target:human_fallen_empires_event_target_2
+												is_same_value = event_target:human_fallen_empires_event_target_3
 												exists = event_target:human_fallen_empires_event_target_4
 											}
 										}
@@ -1508,7 +1561,12 @@ human_fallen_empires_effect_save_event_target = {
 										else = {
 											if = {
 												limit = {
-													not = {
+													nor = {
+														is_same_value = event_target:human_fallen_empires_event_target_0
+														is_same_value = event_target:human_fallen_empires_event_target_1
+														is_same_value = event_target:human_fallen_empires_event_target_2
+														is_same_value = event_target:human_fallen_empires_event_target_3
+														is_same_value = event_target:human_fallen_empires_event_target_4
 														exists = event_target:human_fallen_empires_event_target_5
 													}
 												}
@@ -1524,6 +1582,15 @@ human_fallen_empires_effect_save_event_target = {
 			}
 		}
 	}
+}
+
+human_fallen_empires_effect_clear_event_target = {
+	clear_global_event_target = human_fallen_empires_event_target_0
+	clear_global_event_target = human_fallen_empires_event_target_1
+	clear_global_event_target = human_fallen_empires_event_target_2
+	clear_global_event_target = human_fallen_empires_event_target_3
+	clear_global_event_target = human_fallen_empires_event_target_4
+	clear_global_event_target = human_fallen_empires_event_target_5
 }
 
 # discovery
