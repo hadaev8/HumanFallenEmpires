@@ -60,12 +60,13 @@ human_fallen_empires_egypt = {
 				name_list = "cybrxkhan_fantasy_egyptian"
 				ship_prefix = ""
 				ignore_initial_colony_error = yes
-				government = transcendent_empire
 				species = event_target:human_fallen_empires_egypt_species
 				flag = random
 				ethos = {
 					ethic = ethic_fanatic_spiritualist
 				}
+				authority = auth_imperial
+				civics = random
 				effect = {
 					set_country_flag = human_fallen_empires_egypt
 					kill_leader = {
@@ -170,11 +171,6 @@ human_fallen_empires_egypt = {
 							trait = random_trait
 							trait = random_trait
 						}
-					}
-					set_policy = {
-						policy = slavery
-						option = slavery_allowed_xenos_only
-						cooldown = no
 					}
 					save_global_event_target_as = human_fallen_empires_egypt_country
 				}
@@ -996,11 +992,12 @@ human_fallen_empires_ahet = {
 			set_planet_flag = human_fallen_empires_ahet_colony
 			save_event_target_as = my_planet_homeworld
 			create_country = {
-				name = random
+				name = "Ahet Community"
 				type = primitive
-				government = fragmented_nations
-				species = event_target:human_fallen_empires_ahet_species
 				ethos = random
+				authority = random
+				civics = random
+				species = event_target:human_fallen_empires_ahet_species
 				flag = {
 					icon = {
 						category = "spherical"
@@ -1031,6 +1028,10 @@ human_fallen_empires_ahet = {
 				owner = last_created_country
 				species = event_target:human_fallen_empires_ahet_species
 				ethos = owner
+			}
+			random_tile = {
+				limit = { has_building = "building_colony_shelter" }
+				remove_building = yes
 			}
 			while = {
 				count = 2
@@ -1073,10 +1074,6 @@ human_fallen_empires_ahet = {
 						replace = yes
 					}
 				}
-			}
-			random_tile = {
-				limit = { has_building = "building_colony_shelter" }
-				remove_building = yes
 			}
 			every_tile = {
 				limit = {
@@ -1167,7 +1164,7 @@ human_fallen_empires_ahet_2 = {
 				portrait = random
 				traits = {
 					trait = random_traits
-					ideal_planet_class = "pc_continental"
+					ideal_planet_class = pc_continental
 				}
 			}
 			save_event_target_as = my_planet_homeworld
@@ -1175,14 +1172,16 @@ human_fallen_empires_ahet_2 = {
 				set_species_homeworld = event_target:my_planet_homeworld
 			}
 			create_country = {
-				name = random
+				name = "Eternal Foundation"
 				type = primitive
-				government = fragmented_nations
-				species = last_created_species
 				ethos = {
-					ethic = "ethic_fanatic_xenophile"
-					ethic = "ethic_collectivist"
+					ethic = ethic_fanatic_xenophile
+					ethic = ethic_authoritarian
 				}
+				authority = random
+				civics = random
+				species = last_created_species
+
 				flag = {
 					icon = {
 						category = "spherical"
@@ -1346,23 +1345,24 @@ human_fallen_empires_varelse = {
 		name = "Colony Beta"
 		count = 1
 		orbit_distance = 0
-		class = "pc_desert"
+		class = pc_desert
 		orbit_angle = { min = 90 max = 270 }
 		size = { min = 15 max = 25 }
 		tile_blockers = none
 		init_effect = {
 			save_event_target_as = my_planet_homeworld
 			create_country = {
-				name = random
+				name = "Colony"
 				type = primitive
-				government = fragmented_nations
 				ignore_initial_colony_error = yes
 				species = event_target:human_fallen_empires_varelse_species
 				ethos = {
-					ethic = "ethic_militarist"
-					ethic = "ethic_xenophobe"
-					ethic = "ethic_spiritualist"
+					ethic = ethic_militarist
+					ethic = ethic_xenophobe
+					ethic = ethic_spiritualist
 				}
+				authority = random
+				civics = random
 				flag = {
 					icon = {
 						category = "spherical"
@@ -1906,7 +1906,8 @@ human_fallen_empires_ban = {
 
 # too ideal planet
 human_fallen_empires_too_ideal_planet = {
-#	class = "rl_standard_stars"
+	#	class = "rl_standard_stars"
+	flags = { human_fallen_empires_too_ideal_planet }
 	name = Copernicus
 	planet = {
 		count = 1
@@ -1917,10 +1918,7 @@ human_fallen_empires_too_ideal_planet = {
 		modifiers = none
 		init_effect = {
 			set_planet_flag = human_fallen_empires_too_ideal_planet
-			add_modifier = {
-				modifier = stone_age_civilization
-				days = -1
-			}
+
 		}
 		moon = {
 			class = "pc_g_star"
@@ -2056,7 +2054,7 @@ human_fallen_empires_drone_sector_01 = {
 				effect = {
 					save_global_event_target_as = human_fallen_empires_drone_country
 					set_graphical_culture = ancient_drone_01
-					give_technology = tech_hyper_drive_1
+					give_technology = { tech = tech_hyper_drive_1 }
 					add_modifier = {
 						modifier = human_fallen_empires_drone_country_unkeep
 						days = -1
@@ -2372,7 +2370,12 @@ human_fallen_empires_future = {
 					name_list = Human
 					ship_prefix = "USS"
 					ignore_initial_colony_error = yes
-					government = irenic_democracy
+					ethos = {
+						ethic = ethic_fanatic_pacifist
+						ethic = ethic_xenophile
+					}
+					authority = auth_democratic
+					civics = random
 					species = event_target:human_fallen_empires_future_species
 					flag = random
 					effect = {
@@ -2464,8 +2467,6 @@ human_fallen_empires_future = {
 								}
 							}
 						}
-						country_add_ethic = "ethic_fanatic_pacifist"
-						country_add_ethic = "ethic_xenophile"
 						save_global_event_target_as = human_fallen_empires_future_country
 						save_global_event_target_as = human_fallen_empires_coalition_leader
 					}

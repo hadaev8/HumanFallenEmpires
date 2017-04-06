@@ -32,7 +32,13 @@ human_fallen_empires_effect_down_primitive_teh_lvl = {
 		switch = {
 			trigger = has_country_flag
 
-			bronze_age = { }
+			stone_age = { }
+
+			bronze_age = {
+				remove_country_flag = bronze_age
+				set_country_flag = stone_age
+				set_primitive_age = stone_age
+			}
 
 			iron_age = {
 				remove_country_flag = iron_age
@@ -89,6 +95,12 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
+
+			stone_age = {
+				remove_country_flag = stone_age
+				set_country_flag = bronze_age
+				set_primitive_age = bronze_age
+			}
 
 			bronze_age = {
 				remove_country_flag = bronze_age
@@ -166,7 +178,10 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 					limit = { is_species_class = FUN }
 					set_graphical_culture = fungoid_01
 				}
-				change_government = random
+				change_government = {
+					authority = random
+					civics = random
+				}
 				set_name = random
 				if = {
 					limit = {
@@ -182,82 +197,157 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 				}
 				add_minerals = 1000 # enough for a spaceport and then some
 				add_energy = 500
+				add_influence = 300
 				capital_scope = {
-					random_tile = {
+					every_tile = {
 						limit = {
-							has_grown_pop = yes
-							num_adjacent_tiles > 3
+							has_blocker = yes
+							NOR = {
+								has_blocker = tb_decrepit_dwellings
+								has_blocker = tb_failing_infrastructure
+							}
 						}
-						set_building = "building_capital_2"
+						remove_blocker = yes
 					}
-					random_tile = {
-						limit = {
-							has_grown_pop = yes
-							NOT = { has_building = "building_capital_2" }
-							NOT = { has_building = "building_hydroponics_farm_1" }
-							NOT = { has_building = "building_mining_network_1" }
-							NOT = { has_building = "building_power_plant_1" }
-						}
-						set_building = "building_hydroponics_farm_1"
-						add_resource = {
-							resource = food
-							amount = 1
-							replace = yes
-						}
-					}
-					random_tile = {
-						limit = {
-							has_grown_pop = yes
-							NOT = { has_building = "building_capital_2" }
-							NOT = { has_building = "building_hydroponics_farm_1" }
-							NOT = { has_building = "building_mining_network_1" }
-							NOT = { has_building = "building_power_plant_1" }
-						}
-						set_building = "building_mining_network_1"
-						add_resource = {
-							resource = minerals
-							amount = 1
-							replace = yes
+					while = {
+						limit = { num_pops < 8 }
+						random_tile = {
+							limit = {
+								has_grown_pop = no
+							}
+							create_pop = {
+								species = owner
+							}
 						}
 					}
 					random_tile = {
 						limit = {
 							has_grown_pop = yes
-							NOT = { has_building = "building_capital_2" }
-							NOT = { has_building = "building_hydroponics_farm_1" }
-							NOT = { has_building = "building_mining_network_1" }
-							NOT = { has_building = "building_power_plant_1" }
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
 						}
-						set_building = "building_power_plant_1"
-						add_resource = {
-							resource = energy
-							amount = 2
-							replace = yes
-						}
+						clear_deposits = yes
+						add_deposit = d_mineral_food_deposit
+						set_building = building_capital_2
 					}
 					random_tile = {
 						limit = {
 							has_grown_pop = yes
-							NOT = { has_building = "building_capital_2" }
-							NOT = { has_building = "building_hydroponics_farm_1" }
-							NOT = { has_building = "building_mining_network_1" }
-							NOT = { has_building = "building_power_plant_1" }
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
 						}
-						set_building = "building_power_plant_1"
-						add_resource = {
-							resource = energy
-							amount = 1
-							replace = yes
-						}
+						clear_deposits = yes
+						add_deposit = d_mineral_deposit
+						set_building = building_mining_network_1
 					}
-					every_planet_army = {
-						remove_army = yes
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_mineral_deposit
+						set_building = building_mining_network_1
+					}
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_farmland_deposit
+						set_building = building_hydroponics_farm_1
+					}
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_farmland_deposit
+						set_building = building_hydroponics_farm_1
+					}
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_energy_deposit
+						set_building = building_power_plant_1
+					}
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_energy_deposit
+						set_building = building_power_plant_1
+					}
+					random_tile = {
+						limit = {
+							has_grown_pop = yes
+							OR = {
+								has_building = building_primitive_farm
+								has_building = building_primitive_factory
+								has_building = no
+							}
+						}
+						clear_deposits = yes
+						add_deposit = d_energy_deposit
+						set_building = building_power_plant_1
+					}
+					remove_all_armies = yes
+					create_army = {
+						name = random
+						owner = PREV
+						species = owner_main_species
+						type = defense_army
 					}
 					create_army = {
 						name = random
 						owner = PREV
 						species = owner_main_species
-						type = "defense_army"
+						type = defense_army
+					}
+					create_army = {
+						name = random
+						owner = PREV
+						species = owner_main_species
+						type = defense_army
+					}
+					create_army = {
+						name = random
+						owner = PREV
+						species = owner_main_species
+						type = defense_army
 					}
 				}
 				random_owned_ship = {
@@ -270,7 +360,7 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 }
 
 # for war in heavens
-# for contry
+# for planet
 human_fallen_empires_effect_create_primitive = {
 	add_threat = {
 		who = root
@@ -286,10 +376,23 @@ human_fallen_empires_effect_create_primitive = {
 	random_list = {
 		# Industrial Civilization
 		50 = {
+			create_species = {
+				name = random
+				class = random
+				portrait = random
+				homeworld = THIS
+				traits = {
+					trait = random_traits
+				}
+			}
 			create_country = {
 				name = random
-				government = fragmented_nations
-				species = event_target:human_fallen_empires_species
+				authority = random
+				civics = {
+					civic = civic_increasing_urbanization
+					civic = civic_atmospheric_pollution
+				}
+				species = last_created
 				ethos = random
 				flag = {
 					icon = {
@@ -332,23 +435,13 @@ human_fallen_empires_effect_create_primitive = {
 			}
 			set_owner = last_created_country
 			set_controller = last_created_country
-			random_tile = {
-				limit = { has_building = "building_colony_shelter" }
-				remove_building = yes
-			}
-			every_tile = {
-				limit = {
-					has_blocker = yes
-				}
-				remove_blocker = yes
-			}
 			while = {
 				count = 3
 				random_tile = {
 					limit = {
 						has_blocker = no
 						has_building = no
-					#	has_grown_pop = no
+						has_grown_pop = no
 					}
 					set_blocker = tb_decrepit_dwellings
 				}
@@ -356,9 +449,43 @@ human_fallen_empires_effect_create_primitive = {
 					limit = {
 						has_blocker = no
 						has_building = no
-					#	has_grown_pop = no
+						has_grown_pop = no
 					}
 					set_blocker = tb_failing_infrastructure
+				}
+			}
+			while = {
+				count = 5
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_grown_pop = no
+						has_growing_pop = no
+					}
+					create_pop = {
+						species = last_created
+					}
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						OR = {
+							has_country_flag = machine_age
+							has_country_flag = atomic_age
+							has_country_flag = early_space_age
+						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_grown_pop = no
+						has_growing_pop = no
+					}
+					create_pop = {
+						species = last_created
+					}
 				}
 			}
 			if = {
@@ -382,6 +509,23 @@ human_fallen_empires_effect_create_primitive = {
 						resource = minerals
 						amount = 1
 						replace = yes
+					}
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						has_country_flag = early_space_age
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_grown_pop = no
+						has_growing_pop = no
+					}
+					create_pop = {
+						species = last_created
 					}
 				}
 			}
@@ -446,7 +590,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Industrial Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "industrial_army"
 							}
 						}
@@ -460,7 +604,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Industrial Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "industrial_army"
 							}
 						}
@@ -474,7 +618,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Post-Atomic Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "postatomic_army"
 							}
 						}
@@ -488,16 +632,16 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Post-Atomic Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "postatomic_army"
 							}
 						}
 						create_fleet = {
-							name = "Space Station"
+							name = "NAME_Space_Station"
 							effect = {
 								set_owner = last_created_country
 								create_ship = {
-									name = "Space Station"
+									name = "NAME_Space_Station"
 									design = "Space Station"
 								}
 								set_location = PREV
@@ -509,10 +653,23 @@ human_fallen_empires_effect_create_primitive = {
 		}
 		# Medieval Civilization
 		50 = {
+			create_species = {
+				name = random
+				class = random
+				portrait = random
+				homeworld = THIS
+				traits = {
+					trait = random_traits
+				}
+			}
 			create_country = {
 				name = random
-				government = primitive_feudalism
-				species = event_target:human_fallen_empires_species
+				authority = random
+				civics = {
+					civic = civic_landed_nobility
+					civic = civic_flat_world_theory
+				}
+				species = last_created
 				ethos = random
 				flag = {
 					icon = {
@@ -536,8 +693,26 @@ human_fallen_empires_effect_create_primitive = {
 				set_graphical_culture = preindustrial_01
 				random_list = {
 					20 = {
+						set_country_flag = stone_age
+						set_primitive_age = stone_age
+						change_government = {
+							authority = random
+							civics = {
+								civic = civic_secret_of_fire
+								civic = civic_the_wheel
+							}
+						}
+					}
+					20 = {
 						set_country_flag = bronze_age
 						set_primitive_age = bronze_age
+						change_government = {
+							authority = random
+							civics = {
+								civic = civic_secret_of_fire
+								civic = civic_the_wheel
+							}
+						}
 					}
 					20 = {
 						set_country_flag = iron_age
@@ -558,6 +733,37 @@ human_fallen_empires_effect_create_primitive = {
 				}
 			}
 			set_owner = last_created_country
+			set_controller = last_created_country
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_grown_pop = no
+					has_growing_pop = no
+				}
+				create_pop = {
+					species = last_created
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						OR = {
+							has_country_flag = steam_age
+							has_country_flag = renaissance_age
+						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_grown_pop = no
+						has_growing_pop = no
+					}
+					create_pop = {
+						species = last_created
+					}
+				}
+			}
 			random_tile = {
 				limit = { has_building = "building_colony_shelter" }
 				remove_building = yes
@@ -581,12 +787,35 @@ human_fallen_empires_effect_create_primitive = {
 			if = {
 				limit = {
 					last_created_country = {
+						has_country_flag = stone_age
+					}
+				}
+				every_tile = {
+					limit = {
+						has_building = "building_primitive_farm"
+					}
+					remove_building = yes
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
 						OR = {
 							has_country_flag = iron_age
 							has_country_flag = late_medieval_age
 							has_country_flag = renaissance_age
 							has_country_flag = steam_age
 						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_grown_pop = no
+						has_growing_pop = no
+					}
+					create_pop = {
+						species = last_created
 					}
 				}
 				random_tile = {
@@ -648,12 +877,23 @@ human_fallen_empires_effect_create_primitive = {
 			}
 			last_created_country = {
 				if = {
+					limit = { has_country_flag = stone_age }
+					PREV = {
+						create_army = {
+							name = "Primitive Army"
+							owner = last_created
+							species = last_created
+							type = "primitive_army"
+						}
+					}
+				}
+				if = {
 					limit = { has_country_flag = bronze_age }
 					PREV = {
 						create_army = {
 							name = "Primitive Army"
 							owner = last_created
-							species = event_target:human_fallen_empires_species
+							species = last_created
 							type = "primitive_army"
 						}
 					}
@@ -666,7 +906,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Primitive Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "primitive_army"
 							}
 						}
@@ -680,7 +920,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Primitive Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "primitive_army"
 							}
 						}
@@ -694,7 +934,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Primitive Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "primitive_army"
 							}
 						}
@@ -708,7 +948,7 @@ human_fallen_empires_effect_create_primitive = {
 							create_army = {
 								name = "Industrial Army"
 								owner = last_created
-								species = event_target:human_fallen_empires_species
+								species = last_created
 								type = "industrial_army"
 							}
 						}
@@ -764,7 +1004,8 @@ human_fallen_empires_effect_create_vassal = {
 			else = {
 				create_country = {
 					name = random
-					government = random
+					authority = random
+civics = random
 					released_by_country = root
 					released_from_country = event_target:event_target:WarInHeavenLoserFE
 					species = event_target:human_fallen_empires_planet.owner.species
@@ -1404,7 +1645,8 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 					create_country = {
 						name = "Varelse Hegemony"
 						type = default
-						government = random
+						authority = random
+civics = random
 						species = event_target:human_fallen_empires_varelse_species
 						ethos = {
 							ethic = ethic_xenophobe
@@ -1440,7 +1682,8 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							create_country = {
 								name = "Varelse Hegemony"
 								type = default
-								government = random
+								authority = random
+civics = random
 								species = event_target:human_fallen_empires_varelse_species
 								ethos = {
 									ethic = ethic_xenophobe
@@ -1480,7 +1723,8 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 									create_country = {
 										name = "Varelse Hegemony"
 										type = default
-										government = random
+										authority = random
+civics = random
 										species = event_target:human_fallen_empires_varelse_species
 										ethos = {
 											ethic = ethic_xenophobe
@@ -1757,7 +2001,8 @@ human_fallen_empires_effect_create_pirate = {
 		type = human_fallen_empires_pirate
 		species = event_target:human_fallen_empires_pirate_target.species
 		name_list = human_fallen_empires_pirate_namelist
-		government = human_fallen_empires_government_pirate_codex
+		authority = random
+			civics = random
 		released_from_country = event_target:human_fallen_empires_pirate_target
 		ethos = random
 		flag = random

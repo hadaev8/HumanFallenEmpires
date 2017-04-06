@@ -27,9 +27,12 @@ cede_planet = {
 
 		modifier = {
 			factor = 2.0
-			NOT = {
-				parameter:planet.owner = {
-					is_same_value = from
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				NOT = {
+					parameter:planet.owner = {
+						is_same_value = from
+					}
 				}
 			}
 		}
@@ -38,12 +41,6 @@ cede_planet = {
 			scope = parameter:planet
 			add = 0.4
 			calc = pop_count
-		}
-
-		scaled_modifier = {
-			scope = parameter:planet.owner
-			div = 0.05
-			calc = planets_in_country
 		}
 
 		scaled_modifier = {
@@ -59,15 +56,10 @@ cede_planet = {
 			}
 		}
 
-		modifier = {
-			factor = 0.5
-			OR = {
-				is_country_type = fallen_empire
-				is_country_type = awakened_fallen_empire
-				parameter:planet.owner = { is_country_type = fallen_empire }
-				parameter:planet.owner = { is_country_type = awakened_fallen_empire }
-			}
-		}
+		modifier = { factor = 0.5 	is_country_type = fallen_empire }
+		modifier = { factor = 0.5 	is_country_type = awakened_fallen_empire }
+		modifier = { factor = 0.5	parameter:planet.owner = { is_country_type = fallen_empire } }
+		modifier = { factor = 0.5	parameter:planet.owner = { is_country_type = awakened_fallen_empire } }
 
 		modifier = {
 			factor = 0.8
@@ -81,28 +73,6 @@ cede_planet = {
 					any_pop = {
 						is_same_species = root
 					}
-				}
-			}
-		}
-
-		modifier = {
-			factor = 1.5
-			has_ethic = "ethic_pacifist"
-			parameter:planet = {
-				NOR = {
-					is_original_owner = root
-					is_majority_species = root
-				}
-			}
-		}
-
-		modifier = {
-			factor = 2.0
-			has_ethic = "ethic_fanatic_pacifist"
-			parameter:planet = {
-				NOR = {
-					is_original_owner = root
-					is_majority_species = root
 				}
 			}
 		}
@@ -137,28 +107,36 @@ cede_planet = {
 			}
 		}
 
-		# Tech - Galactic Ambitions
+		# Tech - Interstellar Campaigns
 		modifier = {
-			factor = 0.95
+			factor = 0.75
 			custom_tooltip = {
-				text = "war_demand_tech_galactic_ambitions"
-				has_technology = tech_galactic_ambitions
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
 			}
 		}
 
-		# Tech - Manifest Destiny
+		# Tech - Galactic Campaigns
 		modifier = {
-			factor = 0.95
+			factor = 0.75
 			custom_tooltip = {
-				text = "war_demand_tech_manifest_destiny"
-				has_technology = tech_manifest_destiny
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_supremacy_right_of_conquest"
+				has_tradition = tr_supremacy_right_of_conquest
 			}
 		}
 	}
 
 	potential = {
-		custom_tooltip_fail = {
-			text = "war_demand_cede_planet_no_vassals"
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_no_vassals"
 			OR = {
 				is_subject = no
 				NOT = {
@@ -171,8 +149,8 @@ cede_planet = {
 				}
 			}
 		}
-		custom_tooltip_fail = {
-			text = "war_demand_cede_planet_liberation_war"
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_liberation_war"
 			OR = {
 				NOT = { exists = overlord }
 				overlord = {
@@ -180,8 +158,8 @@ cede_planet = {
 				}
 			}
 		}
-		custom_tooltip_fail = {
-			text = "war_demand_cede_planet_belongs_to_opponent"
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_belongs_to_opponent"
 			parameter:planet = {
 				owner = {
 					OR = {
@@ -209,8 +187,8 @@ cede_planet = {
 				}
 			}
 		}
-		custom_tooltip_fail = {
-			text = human_fallen_empires_war_demand_cede_planet_discovery
+		custom_tooltip = {
+			fail_text = human_fallen_empires_war_demand_cede_planet_discovery
 			not = {
 				is_country_type = human_fallen_empires_discovery
 			}
@@ -218,12 +196,25 @@ cede_planet = {
 	}
 
 	possible = {
-		always = yes
+		hidden_trigger = {
+			parameter:planet.owner = {
+				OR = {
+					war_demand_counter = {
+						type = num_country_wargoals
+						value < 1
+					}
+					war_demand_counter = {
+						type = num_owned_planets
+						value > 1
+					}
+				}
+			}
+		}
 	}
 
 	proposable = {
-		custom_tooltip_fail = {
-			text = "war_demand_war_philosophy"
+		custom_tooltip = {
+			fail_text = "war_demand_war_philosophy"
 			OR = {
 				has_policy_flag = unrestricted_wars
 				parameter:planet = {
@@ -233,14 +224,20 @@ cede_planet = {
 					is_majority_species = root
 				}
 				parameter:planet = {
-					owner = { is_country_type = awakened_fallen_empire }
+					owner = {
+						OR = {
+							is_country_type = awakened_fallen_empire
+							is_country_type = fallen_empire
+							has_authority = auth_hive_mind
+						}
+					}
 				}
 			}
 		}
 
 		hidden:parameter:planet = {
-			custom_tooltip_fail = {
-				text = "war_demand_cede_or_liberate"
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
 				war_demand_counter = {
 					type = ceded_or_liberated
 					value < 1
@@ -250,8 +247,8 @@ cede_planet = {
 	}
 
 	demandable = {
-		custom_tooltip_fail = {
-			text = "war_demand_cede_planet_not_under_our_control"
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_not_under_our_control"
 			parameter:planet = {
 				controller = {
 					OR = {
@@ -280,48 +277,10 @@ cede_planet = {
 					amount = 3 # scales to pops
 				}
 
-				# Create nationalists
 				fromfromfrom = {
-					if = {
-						limit = {
-							count_pop_factions = {
-								limit = {
-									is_pop_faction_type = nationalist
-									check_pop_faction_parameter = {
-										which = country
-										value = parameter:planet.owner
-									}
-								}
-								count > 0
-							}
-						}
-						random_pop_faction = {
-							limit = {
-								is_pop_faction_type = nationalist
-								check_pop_faction_parameter = {
-									which = country
-									value = parameter:planet.owner
-								}
-							}
-							parameter:planet = {
-								every_owned_pop = {
-									set_pop_faction = prevprev
-								}
-							}
-						}
-						else = {
-							create_pop_faction = {
-								type = nationalist
-								pop = parameter:planet.unhappiest_pop
-								parameter:country = parameter:planet.owner
-							}
-							parameter:planet = {
-								every_owned_pop = {
-									enslave_pop = no
-									set_pop_faction = last_created_pop_faction
-								}
-							}
-						}
+					set_timed_country_flag = {
+						flag = imperialist_conquest_timed_flag
+						days = 7200 # 20 years
 					}
 				}
 
@@ -398,12 +357,6 @@ cede_planet = {
 			scope = parameter:planet
 			div = 2
 			calc = planet_distance_empire
-		}
-
-		scaled_modifier = {
-			scope = parameter:planet
-			add = 2
-			calc = planets_in_country
 		}
 
 		modifier = {

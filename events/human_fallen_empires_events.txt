@@ -1116,7 +1116,7 @@ country_event = {
 		name = human_fallen_empires.47.1.3
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step1
-			human_fallen_empires_trigger_is_individualist = yes
+			human_fallen_empires_trigger_is_egalitarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.47.step1
@@ -1172,7 +1172,7 @@ country_event = {
 		name = human_fallen_empires.47.1.7
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step1
-			human_fallen_empires_trigger_is_collectivist = yes
+			human_fallen_empires_trigger_is_authoritarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.47.step1
@@ -1463,7 +1463,7 @@ country_event = {
 		name = human_fallen_empires.47.3.3
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step3
-			human_fallen_empires_trigger_is_individualist = yes
+			human_fallen_empires_trigger_is_egalitarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.47.step3
@@ -1519,7 +1519,7 @@ country_event = {
 		name = human_fallen_empires.47.3.7
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step3
-			human_fallen_empires_trigger_is_collectivist = yes
+			human_fallen_empires_trigger_is_authoritarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.47.step3
@@ -1614,10 +1614,6 @@ country_event = {
 			days = 3650
 		}
 		country_add_ethic = ethic_xenophobe
-		every_owned_pop = {
-			pop_add_ethic = ethic_xenophobe
-			pop_add_ethic = ethic_fanatic_spiritualist
-		}
 		set_country_type = default
 		set_global_flag = human_fallen_empires_egypt_in_expansion
 		ruler = {
@@ -2071,22 +2067,15 @@ country_event = {
 		}
 		custom_tooltip = human_fallen_empires.102.0.tooltip
 	}
+	# lets go to factory
 	option = {
 		name = human_fallen_empires.102.1
 		hidden_effect = {
-			if = {
-				limit = {
-					human_fallen_empires_trigger_is_xenophobe = yes
-				}
-				country_event = { id = human_fallen_empires.105 days = 10 random = 5 }#lets go to factory and destroy it
-				else = {
-					country_event = { id = human_fallen_empires.106 days = 11 random = 5 }#lets go to factory
-				}
-			}
+			country_event = { id = human_fallen_empires.105 days = 10 random = 5 }
 		}
 		custom_tooltip = human_fallen_empires.102.1.tooltip
 	}
-	#lets revolt (materialist)
+	# lets revolt (materialist)
 	option = {
 		name = human_fallen_empires.102.2
 		trigger = {
@@ -2096,7 +2085,7 @@ country_event = {
 			country_event = { id = human_fallen_empires.107 days = 100 random = 20 }
 		}
 	}
-	#lets infiltrat
+	# lets infiltrat
 	option = {
 		name = human_fallen_empires.102.3
 		trigger = {
@@ -2107,7 +2096,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			country_event = { id = human_fallen_empires.108 days = 100 random = 20 }
+			country_event = { id = human_fallen_empires.108 days = 10 random = 20 }
 		}
 	}
 	option = {
@@ -2168,18 +2157,57 @@ country_event = {
 	}
 }
 
-# lets go to factory сделать это 1 эвентом
+# lets go to factory
 country_event = {
 	id = human_fallen_empires.105
 	title = human_fallen_empires.105.name
-	desc = human_fallen_empires.105.desc
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.105.desc.0
+				human_fallen_empires_trigger_is_xenophobe = no
+			}
+			success_text = {
+				text = human_fallen_empires.105.desc.1
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_varelse_planet
 	show_sound = event_cityscape
 	location = event_target:human_fallen_empires_varelse_colony
 	is_triggered_only = yes
 
+	immediate = {
+		if = {
+			limit = {
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+			event_target:human_fallen_empires_varelse_colony = {
+				owner = {
+					human_fallen_empires_effect_down_primitive_teh_lvl = yes
+				}
+				every_tile = {
+					limit = {
+						has_building = yes
+					}
+					set_ruined = yes
+				}
+				random_pop = {
+					kill_pop = yes
+				}
+				random_pop = {
+					kill_pop = yes
+				}
+			}
+		}
+	}
+
 	option = {
 		name = human_fallen_empires_good_job
+		trigger = {
+			human_fallen_empires_trigger_is_xenophobe = no
+		}
 		add_monthly_resource_mult = {
 			resource = engineering_research
 			value = @tier2researchreward
@@ -2187,40 +2215,8 @@ country_event = {
 			max = @tier2researchmax
 		}
 	}
-}
-
-# lets go to factory and destroy it
-country_event = {
-	id = human_fallen_empires.106
-	title = human_fallen_empires.105.name
-	desc = human_fallen_empires.106.desc
-	picture = GFX_evt_human_fallen_empires_varelse_planet
-	show_sound = event_cityscape
-	location = event_target:human_fallen_empires_varelse_colony
-	is_triggered_only = yes
-
-	immediate = {
-		event_target:human_fallen_empires_varelse_colony = {
-			owner = {
-				human_fallen_empires_effect_down_primitive_teh_lvl = yes
-			}
-			every_tile = {
-				limit = {
-					has_building = yes
-				}
-				set_ruined = yes
-			}
-			random_pop = {
-				kill_pop = yes
-			}
-			random_pop = {
-				kill_pop = yes
-			}
-		}
-	}
-
 	option = {
-		name = human_fallen_empires.106.0
+		name = human_fallen_empires.105.1
 		trigger = {
 			human_fallen_empires_trigger_is_xenophobe = yes
 		}
@@ -2255,10 +2251,6 @@ country_event = {
 				human_fallen_empires_effect_up_primitive_teh_lvl = yes
 				country_remove_ethic = ethic_spiritualist
 				country_add_ethic = ethic_materialist
-				every_owned_pop = {
-					pop_remove_ethic = ethic_spiritualist
-					pop_add_ethic = ethic_materialist
-				}
 			}
 		}
 	}
@@ -3846,7 +3838,7 @@ ship_event = {
 		trigger = {
 			owner = {
 				human_fallen_empires_trigger_is_xenophile = yes
-				human_fallen_empires_trigger_is_collectivist = yes
+				human_fallen_empires_trigger_is_authoritarian = yes
 				not = { has_country_flag = human_fallen_empires_marked_as_human }
 			}
 		}
@@ -4386,59 +4378,31 @@ country_event = {
 	picture = GFX_evt_exploding_ship
 	show_sound = event_space_battle
 
-	desc = { # Spiritual
+		desc = { # Spiritual
 		text = pirate.1.desc_01
 		trigger = {
-			OR = {
-				has_government = theocratic_republic
-				has_government = transcendent_republic
-				has_government = theocratic_oligarchy
-				has_government = transcendent_oligarchy
-				has_government = divine_mandate
-				has_government = transcendent_empire
-			}
+			has_spiritualist_government = yes
 		}
 	}
 
 	desc = { # Militarist
 		text = pirate.1.desc_02
 		trigger = {
-			OR = {
-				has_government = military_dictatorship
-				has_government = martial_empire
-				has_government = military_junta
-				has_government = ordered_stratocracy
-				has_government = military_republic
-				has_government = martial_demarchy
-			}
+			has_militarist_government = yes
 		}
 	}
 
 	desc = { # Materialist
 		text = pirate.1.desc_03
 		trigger = {
-			OR = {
-				has_government = despotic_hegemony
-				has_government = ai_overlordship
-				has_government = science_directorate
-				has_government = illuminated_technocracy
-				has_government = direct_democracy
-				has_government = subconscious_consensus
-			}
+			has_materialist_government = yes
 		}
 	}
 
 	desc = { # Pacifist
 		text = pirate.1.desc_04
 		trigger = {
-			OR = {
-				has_government = moral_democracy
-				has_government = irenic_democracy
-				has_government = peaceful_bureaucracy
-				has_government = irenic_protectorate
-				has_government = enlightened_monarchy
-				has_government = irenic_monarchy
-			}
+			has_pacifist_government = yes
 		}
 	}
 
@@ -4446,8 +4410,10 @@ country_event = {
 		text = pirate.1.desc_05
 		trigger = {
 			OR = {
-				has_government = despotic_empire
-				has_government = star_empire
+				has_government = gov_despotic_empire
+				has_government = gov_constitutional_dictatorship
+				has_government = gov_enlightened_monarchy
+				has_government = gov_enlightened_dictatorship
 			}
 		}
 	}
@@ -4456,8 +4422,8 @@ country_event = {
 		text = pirate.1.desc_06
 		trigger = {
 			OR = {
-				has_government = plutocratic_oligarchy
-				has_government = mega_corporation
+				has_government = gov_megacorporation
+				has_government = gov_plutocratic_oligarchy
 			}
 		}
 	}
@@ -4465,10 +4431,7 @@ country_event = {
 	desc = { # Generic Democracy
 		text = pirate.1.desc_07
 		trigger = {
-			OR = {
-				has_government = indirect_democracy
-				has_government = democratic_utopia
-			}
+			has_government = gov_representative_democracy
 		}
 	}
 
@@ -4541,64 +4504,38 @@ country_event = {
 		}
 	}
 
-	option = {
+option = {
 		name = pirate.2.a
 		trigger = {
-			OR = {
-				has_government = theocratic_republic
-				has_government = transcendent_republic
-				has_government = theocratic_oligarchy
-				has_government = transcendent_oligarchy
-				has_government = divine_mandate
-				has_government = transcendent_empire
-			}
+			has_spiritualist_government = yes
 		}
 	}
 	option = {
 		name = pirate.2.b
 		trigger = {
-			OR = {
-				has_government = military_dictatorship
-				has_government = martial_empire
-				has_government = military_junta
-				has_government = ordered_stratocracy
-				has_government = military_republic
-				has_government = martial_demarchy
-			}
+			has_militarist_government = yes
 		}
 	}
 	option = {
 		name = pirate.2.c
 		trigger = {
-			OR = {
-				has_government = despotic_hegemony
-				has_government = ai_overlordship
-				has_government = science_directorate
-				has_government = illuminated_technocracy
-				has_government = direct_democracy
-				has_government = subconscious_consensus
-			}
+			has_materialist_government = yes
 		}
 	}
 	option = {
 		name = pirate.2.d
 		trigger = {
-			OR = {
-				has_government = moral_democracy
-				has_government = irenic_democracy
-				has_government = peaceful_bureaucracy
-				has_government = irenic_protectorate
-				has_government = enlightened_monarchy
-				has_government = irenic_monarchy
-			}
+			has_pacifist_government = yes
 		}
 	}
 	option = {
 		name = pirate.2.e
 		trigger = {
 			OR = {
-				has_government = despotic_empire
-				has_government = star_empire
+				has_government = gov_despotic_empire
+				has_government = gov_constitutional_dictatorship
+				has_government = gov_enlightened_monarchy
+				has_government = gov_enlightened_dictatorship
 			}
 		}
 	}
@@ -4606,18 +4543,15 @@ country_event = {
 		name = pirate.2.f
 		trigger = {
 			OR = {
-				has_government = plutocratic_oligarchy
-				has_government = mega_corporation
+				has_government = gov_megacorporation
+				has_government = gov_plutocratic_oligarchy
 			}
 		}
 	}
 	option = {
 		name = pirate.2.g
 		trigger = {
-			OR = {
-				has_government = indirect_democracy
-				has_government = democratic_utopia
-			}
+			has_government = gov_representative_democracy
 		}
 	}
 	option = {
@@ -4672,7 +4606,7 @@ country_event = {
 						has_technology = tech_warp_drive_2
 					}
 				}
-				give_technology = tech_warp_drive_2
+				give_technology = { tech = tech_warp_drive_2 }
 			}
 			if = {
 				limit = {
@@ -4681,7 +4615,7 @@ country_event = {
 						has_technology = tech_wormhole_generation_2
 					}
 				}
-				give_technology = tech_wormhole_generation_2
+				give_technology = { tech = tech_wormhole_generation_2 }
 			}
 			if = {
 				limit = {
@@ -4690,7 +4624,7 @@ country_event = {
 						has_technology = tech_wormhole_generation_3
 					}
 				}
-				give_technology = tech_hyper_drive_2
+				give_technology = { tech = tech_hyper_drive_2 }
 			}
 		}
 		if = {
@@ -4704,7 +4638,7 @@ country_event = {
 						has_technology = tech_warp_drive_3
 					}
 				}
-				give_technology = tech_warp_drive_3
+				give_technology = { tech = tech_warp_drive_3 }
 			}
 			if = {
 				limit = {
@@ -4713,7 +4647,7 @@ country_event = {
 						has_technology = tech_wormhole_generation_3
 					}
 				}
-				give_technology = tech_wormhole_generation_3
+				give_technology = { tech = tech_wormhole_generation_3 }
 			}
 			if = {
 				limit = {
@@ -4722,7 +4656,7 @@ country_event = {
 						has_technology = tech_hyper_drive_3
 					}
 				}
-				give_technology = tech_hyper_drive_3
+				give_technology = { tech = tech_hyper_drive_3 }
 			}
 		}
 	}
@@ -4951,15 +4885,7 @@ fleet_event = {
 		}
 		num_ships > 4
 		has_hp_percentage > 0.99
-		nor = {
-			has_fleet_order = upgrade_design_fleet_order
-			has_fleet_order = merge_fleet_order
-			has_fleet_order = move_to_system_point_order
-			has_fleet_order = orbit_planet_order
-			has_fleet_order = repair_ship_fleet_order
-			has_fleet_order = return_fleet_order
-			has_fleet_order = upgrade_design_fleet_order
-		}
+		is_fleet_idle = yes
 		any_system = {
 			any_planet = {
 				or = {
@@ -6070,7 +5996,7 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires.701.slave_menu
 			event_target:human_fallen_empires_pirate_country = {
-				human_fallen_empires_trigger_is_individualist = yes
+				human_fallen_empires_trigger_is_egalitarian = yes
 			}
 		}
 
@@ -6468,12 +6394,12 @@ country_event = {
 			if = {
 				limit = {
 					any_country = {
-						is_species_class = ASA
+						is_species_class = HUM
 					}
 				}
 				random_country = {
 					limit = {
-						is_species_class = ASA
+						is_species_class = HUM
 					}
 					save_event_target_as = human_fallen_empires_4999_target
 				}
@@ -6909,7 +6835,7 @@ country_event = {
 		name = human_fallen_empires.5001.3.1
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step3
-			human_fallen_empires_trigger_is_collectivist = yes
+			human_fallen_empires_trigger_is_authoritarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step3
@@ -6921,7 +6847,7 @@ country_event = {
 		name = human_fallen_empires.5001.3.3
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step3
-			human_fallen_empires_trigger_is_individualist = yes
+			human_fallen_empires_trigger_is_egalitarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step3
@@ -7020,7 +6946,7 @@ country_event = {
 		name = human_fallen_empires.5001.4.1
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step4
-			human_fallen_empires_trigger_is_collectivist = yes
+			human_fallen_empires_trigger_is_authoritarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step4
@@ -7032,7 +6958,7 @@ country_event = {
 		name = human_fallen_empires.5001.4.4
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step4
-			human_fallen_empires_trigger_is_individualist = yes
+			human_fallen_empires_trigger_is_egalitarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step4
@@ -7131,7 +7057,7 @@ country_event = {
 		name = human_fallen_empires.5001.5.1
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step5
-			human_fallen_empires_trigger_is_collectivist = yes
+			human_fallen_empires_trigger_is_authoritarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step5
@@ -7143,7 +7069,7 @@ country_event = {
 		name = human_fallen_empires.5001.5.2
 		trigger = {
 			has_country_flag = human_fallen_empires.5001.step5
-			human_fallen_empires_trigger_is_individualist = yes
+			human_fallen_empires_trigger_is_egalitarian = yes
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.5001.step5
@@ -7333,18 +7259,22 @@ country_event = {
 		}
 		country_remove_ethic = ethic_fanatic_pacifist
 		country_add_ethic = ethic_fanatic_militarist
-		country_add_ethic = ethic_individualist
+		country_add_ethic = ethic_egalitarian
+		change_government = {
+			authority = auth_democratic
+			civics = random
+		}
 		every_owned_pop = {
-			pop_remove_ethic = ethic_fanatic_pacifist
-			pop_add_ethic = ethic_fanatic_militarist
-			pop_add_ethic = ethic_individualist
+			limit = {
+				pop_has_ethic = ethic_fanatic_pacifist
+			}
+			pop_change_ethic = ethic_fanatic_militarist
 		}
 		kill_leader = {
 			type = ruler
 			show_notification = no
 		}
 		set_country_type = default
-		change_government = martial_demarchy
 		set_empire_name = "Kad Republic"
 		set_global_flag = human_fallen_empires_future_in_expansion
 		ruler = {
@@ -7537,21 +7467,21 @@ country_event = {
 				}
 				human_fallen_empires_trigger_is_xenophile = yes
 			}
-			# collectivist
+			# authoritarian
 			success_text = {
 				text = human_fallen_empires.5051.step3.desc.5
 				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
-				human_fallen_empires_trigger_is_collectivist = yes
+				human_fallen_empires_trigger_is_authoritarian = yes
 			}
-			# individualist
+			# egalitarian
 			success_text = {
 				text = human_fallen_empires.5051.step3.desc.6
 				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
-				human_fallen_empires_trigger_is_individualist = yes
+				human_fallen_empires_trigger_is_egalitarian = yes
 			}
 		}
 	}
@@ -7637,8 +7567,8 @@ country_event = {
 		trigger = {
 			not = { has_country_flag = human_fallen_empires_marked_as_human }
 			or = {
-				has_ethic = ethic_collectivist
-				has_ethic = ethic_fanatic_collectivist
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
 			}
 		}
 		event_target:human_fallen_empires_criopods_planet = {
@@ -7654,8 +7584,8 @@ country_event = {
 		trigger = {
 			not = { has_country_flag = human_fallen_empires_marked_as_human }
 			or = {
-				has_ethic = ethic_individualist
-				has_ethic = ethic_fanatic_individualist
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
 			}
 		}
 		hidden_effect = {
@@ -7669,7 +7599,7 @@ country_event = {
 	}
 }
 
-# step 2 for individualist
+# step 2 for egalitarian
 country_event = {
 	id = human_fallen_empires.5052
 	title = human_fallen_empires.5052.name
@@ -7715,10 +7645,11 @@ country_event = {
 				name = random
 				type = default
 				species = event_target:human_fallen_empires_future_species
-				government = random
+				authority = random
+civics = random
 				flag = random
 				ethos = {
-					ethic = ethic_fanatic_individualist
+					ethic = ethic_fanatic_egalitarian
 					ethic = ethic_militarist
 				}
 				effect = {
@@ -7745,10 +7676,11 @@ country_event = {
 				name = random
 				type = default
 				species = event_target:human_fallen_empires_future_species
-				government = random
+				authority = random
+civics = random
 				flag = random
 				ethos = {
-					ethic = ethic_fanatic_individualist
+					ethic = ethic_fanatic_egalitarian
 					ethic = ethic_militarist
 				}
 				effect = {
@@ -7776,10 +7708,11 @@ country_event = {
 				name = random
 				type = default
 				species = event_target:human_fallen_empires_future_species
-				government = random
+				authority = random
+civics = random
 				flag = random
 				ethos = {
-					ethic = ethic_fanatic_individualist
+					ethic = ethic_fanatic_egalitarian
 					ethic = ethic_militarist
 				}
 				effect = {
@@ -7990,7 +7923,7 @@ country_event = {
 		trigger = {
 			or = {
 				human_fallen_empires_trigger_is_xenophobe = yes
-				human_fallen_empires_trigger_is_collectivist = yes
+				human_fallen_empires_trigger_is_authoritarian = yes
 			}
 			has_policy_flag = ai_full_rights
 		}
@@ -8031,7 +7964,7 @@ country_event = {
 		name = human_fallen_empires.5100.2
 		trigger = {
 			human_fallen_empires_trigger_is_xenophobe = no
-			human_fallen_empires_trigger_is_collectivist = no
+			human_fallen_empires_trigger_is_authoritarian = no
 			has_policy_flag = ai_full_rights
 		}
 		response_text = human_fallen_empires.5100.no.response
@@ -8200,15 +8133,13 @@ country_event = {
 
 	trigger = {
 		host_has_dlc = "Leviathans Story Pack"
-		count_countries = {
-			limit = {
-				is_country_type = awakened_fallen_empire
-				or = {
-					is_at_war = no
-					has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
-				}
-				fleet_power > 40000
+		any_country = {
+			is_country_type = awakened_fallen_empire
+			or = {
+				is_at_war = no
+				has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
 			}
+			fleet_power > 40000
 			count > 1
 		}
 	}
@@ -9331,14 +9262,14 @@ country_event = {
 			}
 			modifier = {
 				factor = 0.5
-				human_fallen_empires_trigger_is_individualist = no
+				human_fallen_empires_trigger_is_egalitarian = no
 				human_fallen_empires_trigger_is_xenophile = no
 				human_fallen_empires_trigger_is_militarist = no
 			}
 			modifier = {
 				factor = 0.1
 				or = {
-					human_fallen_empires_trigger_is_collectivist = yes
+					human_fallen_empires_trigger_is_authoritarian = yes
 					human_fallen_empires_trigger_is_xenophobe = yes
 					human_fallen_empires_trigger_is_pacifist = yes
 				}
@@ -9477,8 +9408,8 @@ country_event = {
 			}
 			modifier = {
 				factor = 0
-				human_fallen_empires_trigger_is_collectivist = no
-				human_fallen_empires_trigger_is_individualist = no
+				human_fallen_empires_trigger_is_authoritarian = no
+				human_fallen_empires_trigger_is_egalitarian = no
 			}
 		}
 		hidden_effect = {
@@ -9789,7 +9720,6 @@ country_event = {
 	title = action.10.name
 	desc = action.15.desc
 	picture = GFX_evt_star_chart
-	show_sound = advisor_notification_alien_vessel_encountered
 	location = FROMFROMFROM
 	is_triggered_only = yes
 
