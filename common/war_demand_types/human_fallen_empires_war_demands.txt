@@ -11,6 +11,8 @@
 #	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
 #   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
 
+# coalition cb
+# invite to coalition
 human_fallen_empires_make_collition_member = {
 	execution_order = 1
 
@@ -400,5 +402,113 @@ human_fallen_empires_challenge_coallition_leadership = {
 
 	ai_weight = {
 		base = 1000
+	}
+}
+
+# migration cb
+human_fallen_empires_cb_migration = {
+	execution_order = 1
+
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+
+	warscore_cost = {
+		base = 10
+	}
+
+	potential = {
+		has_policy_flag = migration_allowed_all
+		parameter:country = {
+			nor = {
+				has_policy_flag = migration_allowed_all
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		or = {
+			is_subject = no
+			not = {
+				overlord = {
+					is_same_value = from
+				}
+			}
+		}
+	#	parameter:country = {
+	#		is_country = from
+	#	}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_not_opponent"
+			parameter:country = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		is_country_type = default
+		hidden:parameter:country = {
+			is_country_type = default
+		}
+		hidden:parameter:country = {
+			custom_tooltip_fail = {
+				text = "war_demand_open_borders_no_planets"
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+			}
+		}
+	}
+
+	proposable = {
+		always = yes
+	}
+
+	effect = {
+		fromfromfrom = {
+			add_influence = 50
+		}
+		parameter:country = {
+			hidden_effect = {
+				set_policy = {
+					policy = migration
+					option = migration_allowed_all
+					cooldown = yes
+				}
+				every_subject = {
+					set_policy = {
+						policy = migration
+						option = migration_allowed_all
+						cooldown = yes
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		base = 9
 	}
 }

@@ -427,7 +427,7 @@ cede_planet = {
 	AI_invasion_target = yes
 }
 
-# For War in Heaven
+# For War in Heaven # стоит ли вынести в отдельный кб?
 total_defeat = {
 	execution_order = 0
 
@@ -456,11 +456,13 @@ total_defeat = {
 	}
 
 	possible = {
-		always = yes
+		exists = root
+		exists = from
 	}
 
 	proposable = {
-		always = yes
+		exists = root
+		exists = from
 	}
 
 	effect = {
@@ -473,10 +475,14 @@ total_defeat = {
 				remove_modifier = human_fallen_empires_fallen_resurces_drain
 			}
 		}
-		parameter:country = { save_event_target_as = WarInHeavenLoserFE }
+		parameter:country = {
+			save_event_target_as = WarInHeavenLoserFE
+		}
 		if = {
 			limit = {
-				root = { is_country_type = awakened_fallen_empire }
+				root = {
+					is_country_type = awakened_fallen_empire
+				}
 			}
 
 			# переделать ванильные механики. какие-то они громоздкие
@@ -490,7 +496,9 @@ total_defeat = {
 			every_country = {
 				limit = {
 					is_subject = yes
-					overlord = { is_same_value = parameter:country }
+					overlord = {
+						is_same_value = parameter:country
+					}
 				}
 				set_timed_country_flag = { flag = war_in_heaven_loser days = 1 }
 			}
@@ -531,55 +539,64 @@ total_defeat = {
 						conquer = event_target:conqueror
 						set_owner = event_target:conqueror
 					}
-
 					set_country_flag = war_in_heaven_planet_was_given
-				#	set_global_flag = war_in_heaven_planet_ceded
 				}
-
 				# May decide to be nice to a late joiner
-				if =  {
-					limit = { NOT = { has_global_flag = war_in_heaven_planet_ceded } }
-					random = {
-						chance = 50
-						random_country = {
-							limit = {
-								has_country_flag = war_in_heaven_winner
-								NOT = { has_country_flag = war_in_heaven_picked_side }
-								event_target:planet_to_cede = { is_neighbor_of = prev }
-							}
-
-							save_event_target_as = conqueror
-							event_target:planet_to_cede = {
-								owner = {
-									set_country_flag = war_in_heaven_planet_was_taken
-								}
-								conquer = event_target:conqueror
-								set_owner = event_target:conqueror
-							}
-
-							set_country_flag = war_in_heaven_planet_was_given
+				random = {
+					chance = 30
+					random_country = {
+						limit = {
+							has_country_flag = war_in_heaven_winner
+							NOT = { has_country_flag = war_in_heaven_picked_side }
+							event_target:planet_to_cede = { is_neighbor_of = prev }
 						}
+
+						save_event_target_as = conqueror
+						event_target:planet_to_cede = {
+							owner = {
+								set_country_flag = war_in_heaven_planet_was_taken
+							}
+							conquer = event_target:conqueror
+							set_owner = event_target:conqueror
+						}
+
+						set_country_flag = war_in_heaven_planet_was_given
 					}
 				}
-			#	remove_global_flag = war_in_heaven_planet_ceded
 			}
 
 			parameter:country = {
 				every_owned_planet = {
 					if = {
-						limit = { root = { has_ethic = ethic_fanatic_spiritualist } }
+						limit = {
+							root = {
+								has_ethic = ethic_fanatic_spiritualist
+							}
+						}
 						human_fallen_empires_effect_create_vassal = yes
 						else = {
 							if = {
-								limit = { root = { has_ethic = ethic_fanatic_xenophile } }
+								limit = {
+									root = {
+										has_ethic = ethic_fanatic_xenophile
+									}
+								}
 								human_fallen_empires_effect_create_vassal = yes
 								else = {
 									if = {
-										limit = { root = { has_ethic = ethic_fanatic_xenophobe } }
+										limit = {
+											root = {
+												has_ethic = ethic_fanatic_xenophobe
+											}
+										}
 										set_owner = root
 										else = {
 											if = {
-												limit = { root = { has_ethic = ethic_fanatic_materialist } }
+												limit = {
+													root = {
+														has_ethic = ethic_fanatic_materialist
+													}
+												}
 												human_fallen_empires_effect_create_primitive = yes
 												else = {
 													destroy_colony = yes
@@ -599,8 +616,16 @@ total_defeat = {
 				limit = {
 					has_country_flag = war_in_heaven_winner
 				}
-				add_opinion_modifier = { who = root modifier = opinion_war_in_heaven_winner }
-				root = { add_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_winner } }
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_winner
+				}
+				root = {
+					add_opinion_modifier = {
+						who = prev
+						modifier = opinion_war_in_heaven_winner
+					}
+				}
 			}
 			every_country = {
 				limit = {
@@ -609,17 +634,23 @@ total_defeat = {
 				remove_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy }
 				root = { remove_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_enemy } }
 			}
-
-			# War in Heaven victory event
-			every_country = {
+			if = {
 				limit = {
-					is_ai = no
+					root = {
+						is_at_war = no
+					}
 				}
-				country_event = { id = war_in_heaven.5 }
-				country_event = { id = war_in_heaven.6 }
-				country_event = { id = war_in_heaven.7 }
-				country_event = { id = war_in_heaven.8 }
-				country_event = { id = war_in_heaven.9 }
+				# War in Heaven victory event
+				every_country = {
+					limit = {
+						is_ai = no
+					}
+					country_event = { id = war_in_heaven.5 }
+					country_event = { id = war_in_heaven.6 }
+					country_event = { id = war_in_heaven.7 }
+					country_event = { id = war_in_heaven.8 }
+					country_event = { id = war_in_heaven.9 }
+				}
 			}
 
 			# Cleanup

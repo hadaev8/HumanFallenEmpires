@@ -1922,3 +1922,39 @@ human_fallen_empires_effect_save_slave_target = {
 		}
 	}
 }
+
+# total war cb, need 2 event targets
+human_fallen_empires_effect_declare_total_war = {
+	if = {
+		limit = {
+			not = {
+				event_target:human_fallen_empires_war_attaker = {
+					is_at_war_with = event_target:human_fallen_empires_war_defender
+				}
+			}
+		}
+		event_target:human_fallen_empires_war_attaker = {
+			declare_war = {
+				who = event_target:human_fallen_empires_war_defender
+				major_war = yes
+				name = "Total War"
+			}
+			add_war_demand = {
+				type = total_defeat
+				parameter:country = event_target:human_fallen_empires_war_defender
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_defender
+			}
+		}
+		event_target:human_fallen_empires_war_defender = {
+			add_war_demand = {
+				type = total_defeat
+				parameter:country = event_target:human_fallen_empires_war_attaker
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_attaker
+			}
+		}
+	}
+}
