@@ -1,0 +1,130 @@
+#This rule is a condition for bombarding planets
+#Root = fleet, potential attacker
+#From = planet, potential target
+can_orbital_bombard = {
+	exists = FROM.OWNER
+	OR = {
+		AND = {
+			ROOT.OWNER = {
+				NOT = { has_communications = FROM.OWNER }
+			}
+			FROM.OWNER = {
+				NOT = { is_country_type = primitive }
+			}
+		}
+		AND = {
+			ROOT.OWNER = {
+				NOR = {
+					has_policy_flag = interference_passive
+					has_policy_flag = interference_active
+				}
+			}
+			FROM.OWNER = { is_country_type = primitive }
+		}
+		ROOT.OWNER = { is_at_war_with = FROM.CONTROLLER }
+		FROM = { is_planet_class = pc_infested }
+		FROM.CONTROLLER = { is_country_type = swarm }
+		ROOT.OWNER = {
+			OR = {
+				is_country_type = extradimensional
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+				is_country_type = swarm
+				is_country_type = human_fallen_empires_pirate
+				is_country_type = human_fallen_empires_drone
+			}
+		}
+	}
+}
+
+#Root = country
+#This = pop
+#also evaluates true if pop_can_live_planet is false on current planet
+can_auto_migrate_pop = {
+	root = { is_country_type = default }
+	is_sentient = yes
+	is_enslaved = no
+	is_being_purged = no
+	or = {
+		root = {
+			has_country_edict = human_fallen_empires_migration_allow_for_caste
+		}
+		has_migration_control = no
+	}
+	is_robot_pop = no
+	NOT = { has_modifier = recently_migrated }
+	NOT = { has_modifier = recent_refugee }
+}
+
+#Root = planet
+#This = pop
+pop_can_live_on_planet = {
+	OR = {
+		is_robot_pop = yes
+		AND = {
+			exists = owner
+			owner = { NOT = { is_country_type = default } }
+		}
+		AND = {
+			OR = {
+				NOT = { has_citizenship_type = { type = citizenship_purge } }
+				NOT = { has_purge_type = { type = purge_displacement } }
+			}
+			OR = {
+				# everyone may live in sectors
+				planet = { sector_controlled = yes }
+
+				# citizens may always live in core worlds
+				OR = {
+					has_citizenship_type = { type = citizenship_full }
+					has_citizenship_type = { type = citizenship_caste_system }
+				}
+
+				# core_worlds_all / hive minds let everyone live in core worlds
+				AND = {
+					exists = owner
+					OR = {
+						owner = { has_policy_flag = core_worlds_all }
+						owner = { has_authority = auth_hive_mind }
+					}
+				}
+
+				# core_worlds_citizens_and_slaves lets slaves live in core worlds
+				AND = {
+					is_enslaved = yes
+					exists = owner
+					owner = { has_policy_flag = core_worlds_citizens_and_slaves }
+				}
+			}
+		}
+	}
+	nor = {
+		planet = {
+			has_planet_edict = human_fallen_empires_migration_evacuate
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_yellow_ring
+			}
+			human_fallen_empires_trigger_is_thrifty = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_red_ring
+			}
+			human_fallen_empires_trigger_is_industrious = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_green_ring
+			}
+			human_fallen_empires_trigger_is_agrarian = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_blue_ring
+			}
+			human_fallen_empires_trigger_is_clever = no
+		}
+	}
+}

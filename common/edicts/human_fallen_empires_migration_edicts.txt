@@ -1,0 +1,325 @@
+# migration
+# country edicts
+country_edict = {
+	name = human_fallen_empires_migration_allow_for_caste
+	influence_cost = 1
+	potential = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = {
+		allows_slavery = yes
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+
+# planet edicts
+
+# set rings
+planet_edict = {
+	name = human_fallen_empires_migration_yellow_ring
+	influence_cost = 0
+	length = 0
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_yellow_ring
+			has_modifier = human_fallen_empires_migration_red_ring
+			has_modifier = human_fallen_empires_migration_green_ring
+			has_modifier = human_fallen_empires_migration_blue_ring
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_migration_yellow_ring
+				days = -1
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+planet_edict = {
+	name = human_fallen_empires_migration_red_ring
+	influence_cost = 0
+	length = 0
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_yellow_ring
+			has_modifier = human_fallen_empires_migration_red_ring
+			has_modifier = human_fallen_empires_migration_green_ring
+			has_modifier = human_fallen_empires_migration_blue_ring
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_migration_red_ring
+				days = -1
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+planet_edict = {
+	name = human_fallen_empires_migration_green_ring
+	influence_cost = 0
+	length = 0
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_yellow_ring
+			has_modifier = human_fallen_empires_migration_red_ring
+			has_modifier = human_fallen_empires_migration_green_ring
+			has_modifier = human_fallen_empires_migration_blue_ring
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_migration_green_ring
+				days = -1
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+planet_edict = {
+	name = human_fallen_empires_migration_blue_ring
+	influence_cost = 0
+	length = 0
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_yellow_ring
+			has_modifier = human_fallen_empires_migration_red_ring
+			has_modifier = human_fallen_empires_migration_green_ring
+			has_modifier = human_fallen_empires_migration_blue_ring
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_migration_blue_ring
+				days = -1
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# evacuate
+planet_edict = {
+	name = human_fallen_empires_migration_evacuate
+	influence_cost = 100
+	length = 0
+	potential = {
+		nor = {
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+		owner = {
+			any_owned_planet = {
+				free_pop_tiles > 0
+			}
+		}
+	}
+	allow = { }
+	effect = {
+		every_owned_pop = {
+			limit = {
+				exists = owner
+				is_growing = no
+			}
+			owner = {
+				if = {
+					limit = {
+						any_owned_planet = {
+							habitability = {
+								who = prevprev
+								value > 0.4
+							}
+							not = {
+								is_planet = root
+							}
+							free_pop_tiles > 0
+						}
+					}
+					random_owned_planet = {
+						limit = {
+							habitability = {
+								who = prevprev
+								value > 0.4
+							}
+							not = {
+								is_planet = root
+							}
+							free_pop_tiles > 0
+						}
+						save_event_target_as = human_fallen_empires_migration_evacuate_planet
+					}
+					else = {
+						random_owned_planet = {
+							limit = {
+								not = {
+									is_planet = root
+								}
+								free_pop_tiles > 0
+							}
+							save_event_target_as = human_fallen_empires_migration_evacuate_planet
+						}
+					}
+				}
+			}
+			resettle_pop = {
+				pop = this
+				planet = event_target:human_fallen_empires_migration_evacuate_planet
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# road to eden
+planet_edict = {
+	name = human_fallen_empires_migration_road_to_eden
+	influence_cost = 100
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_ban_auto_migrate
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	modifier = {
+		planet_migration_all_pull = -0.7
+		pop_migration_speed = 1
+	}
+
+	length = 3600
+
+	allow = { }
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# ban migration
+planet_edict = {
+	name = human_fallen_empires_migration_ban_auto_migrate
+	influence_cost = 0
+	length = 0
+	potential = {
+		nor = {
+			has_modifier = human_fallen_empires_migration_ban_auto_migrate
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = human_fallen_empires_migration_ban_auto_migrate
+				days = -1
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# clear all
+planet_edict = {
+	name = human_fallen_empires_migration_clear_planet_edicts
+	influence_cost = 0
+	length = 0
+	potential = {
+		or = {
+			has_modifier = human_fallen_empires_migration_yellow_ring
+			has_modifier = human_fallen_empires_migration_red_ring
+			has_modifier = human_fallen_empires_migration_green_ring
+			has_modifier = human_fallen_empires_migration_blue_ring
+			has_modifier = human_fallen_empires_migration_ban_auto_migrate
+		}
+		nor = {
+			has_global_flag = human_fallen_empires_migration_hide_edicts
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+	allow = { }
+
+	effect = {
+		hidden_effect = {
+			remove_modifier = human_fallen_empires_migration_yellow_ring
+			remove_modifier = human_fallen_empires_migration_red_ring
+			remove_modifier = human_fallen_empires_migration_green_ring
+			remove_modifier = human_fallen_empires_migration_blue_ring
+			remove_modifier = human_fallen_empires_migration_ban_auto_migrate
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# hide all
+planet_edict = {
+	name = human_fallen_empires_migration_hide_planet_edicts
+	influence_cost = 0
+	length = 0
+	potential = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				has_global_flag = human_fallen_empires_migration_hide_edicts
+			}
+			remove_global_flag  = human_fallen_empires_migration_hide_edicts
+			else = {
+				set_global_flag = human_fallen_empires_migration_hide_edicts
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}

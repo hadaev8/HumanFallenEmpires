@@ -1,0 +1,123 @@
+namespace = human_fallen_empires_migration
+
+# set modifiler on planet by pop by on actions
+pop_event = {
+	id = human_fallen_empires_migration.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = planet
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+
+	immediate = {
+		planet = {
+			planet_event = { id = human_fallen_empires_migration.1 }
+		}
+	}
+}
+
+# set modifiler on planet by on actions
+planet_event = {
+	id = human_fallen_empires_migration.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+
+	immediate = {
+		planet_event = { id = human_fallen_empires_migration.2 }
+		planet_event = { id = human_fallen_empires_migration.3 }
+		planet_event = { id = human_fallen_empires_migration.4 }
+		planet_event = { id = human_fallen_empires_migration.5 }
+	}
+}
+
+# set overpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles < 2
+		not = {
+			has_modifier = human_fallen_empires_migration_overpopulated_planet
+		}
+		exists = owner
+		owner = {
+			is_country_type = default
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_migration_overpopulated_planet
+			days = -1
+		}
+	}
+}
+
+# remove overpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 1
+		has_modifier = human_fallen_empires_migration_overpopulated_planet
+	}
+
+	immediate = {
+		remove_modifier = human_fallen_empires_migration_overpopulated_planet
+	}
+}
+
+# set unpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 4
+		not = {
+			has_modifier = human_fallen_empires_migration_unpopulated_planet
+		}
+		exists = owner
+		owner = {
+			is_country_type = default
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_migration_unpopulated_planet
+			days = -1
+		}
+	}
+}
+
+# remove unpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles < 5
+		has_modifier = human_fallen_empires_migration_unpopulated_planet
+	}
+
+	immediate = {
+		remove_modifier = human_fallen_empires_migration_unpopulated_planet
+	}
+}

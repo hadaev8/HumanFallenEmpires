@@ -346,8 +346,46 @@ country_event = {
 						}
 						destroy_fleet = this
 					}
+					#every_owned_leader = {
+					#	limit = {
+					#		not = {
+					#			leader_class = ruler
+					#		}
+					#	}
+					#	kill_leader = { show_notification = no }
+					#}
+					create_leader = {
+						type = scientist
+						species = prev
+						name = random
+						skill = 0
+					}
 					random_owned_planet = {
 						destroy_colony = yes
+						create_ship_design = {
+							design = Prototype
+							ftl = warp
+						}
+						create_fleet = {
+							name = "Science Ship"
+							effect = {
+								set_owner = prevprev
+								create_ship = {
+									name = random
+									design = last_created_design
+								}
+								set_location = prev
+								assign_leader = last_created_leader
+							}
+						}
+						prev = {
+							create_leader = {
+								type = admiral
+								species = this
+								name = random
+								skill = 0
+							}
+						}
 						create_fleet = {
 							name = Discovery
 							effect = {
@@ -359,6 +397,8 @@ country_event = {
 								last_created_ship = {
 									set_ship_flag = human_fallen_empires_discovery_ship
 								}
+
+								assign_leader = last_created_leader
 								set_location = prev
 							}
 						}
@@ -377,25 +417,21 @@ country_event = {
 						#			set_location = prev
 						#		}
 						#	}
-						create_ship_design = {
-							design = Prototype
-							ftl = warp
-						}
-						create_fleet = {
-							name = "Science Ship"
-							effect = {
-								set_owner = prevprev
-								create_ship = {
-									name = random
-									design = last_created_design
-								}
-								set_location = prev
-							}
-						}
 					}
 					every_owned_planet = {
 						destroy_colony = yes
 					}
+					#kill_leader = { type = ruler show_notification = no }
+					#while = {
+					#	count = 4
+					#	create_leader = {
+					#		type = scientist
+					#		species = this
+					#		name = random
+					#		skill = 0
+					#	}
+					#	assign_leader = last_created_leader
+					#}
 					every_owned_ship = {
 						repair_ship = yes
 						add_modifier = {
@@ -422,9 +458,9 @@ country_event = {
 						exists = space_owner
 						is_fe_cluster = yes
 					}
-					#	any_planet = {
-					#		is_rim_system = no
-					#	}
+					#any_planet = {
+					#	is_rim_system = no
+					#}
 				}
 				spawn_system = {
 					min_distance = 0
@@ -490,7 +526,7 @@ event = {
 					}
 					random_list = {
 						100 = { }
-						1 = {
+						2 = {
 							modifier = {
 								factor = 2
 								is_at_war = yes
