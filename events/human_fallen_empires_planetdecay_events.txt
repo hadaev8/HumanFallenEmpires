@@ -1,0 +1,155 @@
+#
+namespace = human_fallen_empires_planetdecay
+
+# set events
+planet_event = {
+	id = human_fallen_empires_planetdecay.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_planet_decay
+		}
+		colony_age > 3600
+		exists = owner
+	}
+
+	immediate = {
+		planet_event = { id = human_fallen_empires_planetdecay.1 }
+		planet_event = { id = human_fallen_empires_planetdecay.3 }
+	}
+}
+
+
+# clean resource
+planet_event = {
+	id = human_fallen_empires_planetdecay.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_tile = {
+			has_any_resource = yes
+		}
+	}
+
+	immediate = {
+		random_tile = {
+			limit = {
+				has_any_resource = yes
+			}
+			clear_resources = yes
+		}
+		planet_event = { id = human_fallen_empires_planetdecay.2 days = 1 random = 15 }
+	}
+}
+
+# inform
+planet_event = {
+	id = human_fallen_empires_planetdecay.2
+	title = human_fallen_empires_planetdecay.2.name
+	desc = human_fallen_empires_planetdecay.2.desc
+	picture = GFX_evt_human_fallen_empires_wormhole # поменять картинку
+#	show_sound = event_ship_thrusters
+	location = root
+    is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+		not = {
+			has_planet_flag = human_fallen_empires_planet_decay_start
+		}
+	}
+
+	immediate = {
+		set_planet_flag = human_fallen_empires_planet_decay_start
+	}
+
+	option = {
+		name = human_fallen_empires_planetdecay.2.0
+	}
+}
+
+# degradate pop
+planet_event = {
+	id = human_fallen_empires_planetdecay.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		or = {
+			is_planet_class = pc_ringworld_habitable
+			is_planet_class = pc_gaia
+			is_planet_class = pc_habitat
+		}
+		any_owned_pop = {
+			is_being_purged = no
+			not = {
+				pop_has_trait = trait_mechanical
+			}
+			root = {
+				is_ideal_planet_class = {
+					who = prev
+					status = no
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_owned_pop =  {
+			limit = {
+				is_being_purged = no
+				not = {
+					pop_has_trait = trait_mechanical
+				}
+				root = {
+					is_ideal_planet_class = {
+						who = prev
+						status = no
+					}
+				}
+				exists = owner
+			}
+			modify_species = {
+				species = this
+				ideal_planet_class = root
+			}
+		}
+		planet_event = { id = human_fallen_empires_planetdecay.2 days = 1 random = 16 }
+	}
+}
+
+
+# inform
+planet_event = {
+	id = human_fallen_empires_planetdecay.4
+	title = human_fallen_empires_planetdecay.4.name
+	desc = human_fallen_empires_planetdecay.4.desc
+	picture = GFX_evt_human_fallen_empires_wormhole # поменять картинку
+#	show_sound = event_ship_thrusters
+	location = root
+    is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+		not = {
+			has_planet_flag = human_fallen_empires_planet_degradate_start
+		}
+	}
+
+	immediate = {
+		set_planet_flag = human_fallen_empires_planet_degradate_start
+	}
+
+	option = {
+		name = WORRYING
+	}
+}

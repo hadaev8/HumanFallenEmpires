@@ -41,19 +41,47 @@ can_orbital_bombard = {
 #This = pop
 #also evaluates true if pop_can_live_planet is false on current planet
 can_auto_migrate_pop = {
-	root = { is_country_type = default }
-	is_sentient = yes
-	is_enslaved = no
-	is_being_purged = no
 	or = {
-		root = {
-			has_country_edict = human_fallen_empires_migration_allow_for_caste
+		and = {
+			root = { is_country_type = default }
+			is_sentient = yes
+			is_enslaved = no
+			is_being_purged = no
+			or = {
+				root = {
+					has_country_edict = human_fallen_empires_migration_allow_for_caste
+				}
+				has_migration_control = no
+			}
+			is_robot_pop = no
+			NOT = { has_modifier = recently_migrated }
+			NOT = { has_modifier = recent_refugee }
 		}
-		has_migration_control = no
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_yellow_ring
+			}
+			human_fallen_empires_trigger_is_thrifty = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_red_ring
+			}
+			human_fallen_empires_trigger_is_industrious = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_green_ring
+			}
+			human_fallen_empires_trigger_is_agrarian = no
+		}
+		and = {
+			planet = {
+				has_modifier = human_fallen_empires_migration_blue_ring
+			}
+			human_fallen_empires_trigger_is_clever = no
+		}
 	}
-	is_robot_pop = no
-	NOT = { has_modifier = recently_migrated }
-	NOT = { has_modifier = recent_refugee }
 }
 
 #Root = planet
@@ -99,9 +127,6 @@ pop_can_live_on_planet = {
 		}
 	}
 	nor = {
-		planet = {
-			has_planet_edict = human_fallen_empires_migration_evacuate
-		}
 		and = {
 			planet = {
 				has_modifier = human_fallen_empires_migration_yellow_ring
