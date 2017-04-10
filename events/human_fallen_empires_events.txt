@@ -4259,7 +4259,7 @@ planet_event = {
 country_event = {
 	id = human_fallen_empires.650
 	title = pirate.1.name
-	picture = GFX_evt_exploding_ship
+	picture = GFX_evt_human_fallen_empires_pirate
 	show_sound = event_space_battle
 
 		desc = { # Spiritual
@@ -4570,6 +4570,9 @@ country_event = {
 						any_planet = {
 							exists = owner
 						}
+						any_ship_in_system = {
+							is_ship_class = shipclass_military_station
+						}
 						has_star_flag = hostile_system
 					}
 					any_planet = {
@@ -4804,7 +4807,7 @@ fleet_event = {
 						is_hostile = root.owner
 					}
 					root = {
-						num_ships > 40
+						fleet_power < 4000
 					}
 				}
 			}
@@ -4871,7 +4874,7 @@ fleet_event = {
 									is_hostile = root.owner
 								}
 								root = {
-									num_ships < 40
+									fleet_power < 4000
 								}
 							}
 						}
@@ -4948,7 +4951,7 @@ fleet_event = {
 											is_hostile = root.owner
 										}
 										root = {
-											num_ships < 40
+											fleet_power < 4000
 										}
 									}
 								}
@@ -5104,7 +5107,7 @@ planet_event = {
 			}
 		}
 		from = {
-			add_minerals = 90
+			add_minerals = 50
 			add_energy = 10
 			add_physics_research = 5
 			add_society_research = 5
@@ -5123,6 +5126,10 @@ planet_event = {
 				}
 				root = {
 					random_owned_pop = {
+						limit = {
+							is_growing = no
+							is_sentient = yes
+						}
 						resettle_pop = {
 							pop = this
 							planet = event_target:human_fallen_empires_pirate_planet
@@ -5235,7 +5242,7 @@ country_event = {
 
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_pirate_country
-		room = event_target:human_fallen_empires_pirate_country
+		room = human_fallen_empires_pirate_room
 	}
 
 	# pay for protect
@@ -7477,36 +7484,36 @@ country_event = {
 	title = human_fallen_empires.5051.name
 	desc = {
 		trigger = {
-			# step 1
+			# step 0
 			# have contact
 			success_text = {
-				text = human_fallen_empires.5051.step1.desc.1
+				text = human_fallen_empires.5051.desc.0.0
 				has_country_flag = human_fallen_empires_future_contacted
 			}
 			# havent contact
 			fail_text = {
-				text = human_fallen_empires.5051.step1.desc.2
+				text = human_fallen_empires.5051.desc.0.1
 				has_country_flag = human_fallen_empires_future_contacted
 			}
 			# human addition
 			success_text = {
-				text = human_fallen_empires.5051.step1.desc.3
+				text = human_fallen_empires.5051.desc.0.2
 				not = { has_country_flag = human_fallen_empires_future_contacted }
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
+			# step 1
+			text = human_fallen_empires.5051.desc.1.0
 			# step 2
-			text = human_fallen_empires.5051.step2.desc.1
-			# step 3
 			# human
 			# have contact
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.1
+				text = human_fallen_empires.5051.desc.2.0
 				has_country_flag = human_fallen_empires_future_contacted
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 			# havent contact
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.2
+				text = human_fallen_empires.5051.desc.2.1
 				not = {
 					has_country_flag = human_fallen_empires_future_contacted
 				}
@@ -7515,7 +7522,7 @@ country_event = {
 			# non human
 			# xenophobe
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.3
+				text = human_fallen_empires.5051.desc.2.2
 				nor = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
@@ -7523,7 +7530,7 @@ country_event = {
 			}
 			# xenophile
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.4
+				text = human_fallen_empires.5051.desc.2.3
 				nor = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
@@ -7531,22 +7538,22 @@ country_event = {
 			}
 			# authoritarian
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.5
-				nor = {
+				text = human_fallen_empires.5051.desc.2.4
+				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
-					human_fallen_empires_trigger_is_xenophobe = yes
-					human_fallen_empires_trigger_is_xenophile = yes
 				}
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
 				human_fallen_empires_trigger_is_authoritarian = yes
 			}
 			# egalitarian
 			success_text = {
-				text = human_fallen_empires.5051.step3.desc.6
-				nor = {
+				text = human_fallen_empires.5051.desc.2.5
+				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
-					human_fallen_empires_trigger_is_xenophobe = yes
-					human_fallen_empires_trigger_is_xenophile = yes
 				}
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
 				human_fallen_empires_trigger_is_egalitarian = yes
 			}
 		}
