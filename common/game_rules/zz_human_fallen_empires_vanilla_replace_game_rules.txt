@@ -41,6 +41,16 @@ can_orbital_bombard = {
 #This = pop
 #also evaluates true if pop_can_live_planet is false on current planet
 can_auto_migrate_pop = {
+	not = {
+		and = {
+			root = {
+				has_country_edict = human_fallen_empires_plague_quarantine
+			}
+			planet = {
+				has_planet_flag = human_fallen_empires_plague_planet
+			}
+		}
+	}
 	or = {
 		and = {
 			root = { is_country_type = default }
@@ -151,5 +161,46 @@ pop_can_live_on_planet = {
 			}
 			human_fallen_empires_trigger_is_clever = no
 		}
+	}
+}
+
+#Root = country
+#This = pop
+can_colonize_with_pop = {
+	has_colonization_control = no
+	if = {
+		limit = {
+			OR = {
+				has_modifier = culture_shock_stone_age
+				has_modifier = culture_shock_bronze_age
+				has_modifier = culture_shock_iron_age
+				has_modifier = culture_shock_late_medieval_age
+				has_modifier = culture_shock_renaissance_age
+				has_modifier = culture_shock_steam_age
+				has_modifier = culture_shock_industrial_age
+				has_modifier = culture_shock_machine_age
+				has_modifier = culture_shock_atomic_age
+				has_modifier = culture_shock_early_space_age
+				is_sentient = no
+				has_pop_flag = human_fallen_empires_plague_pop
+			}
+		}
+		custom_tooltip = {
+			always = no
+		}
+		else = {
+			always = yes
+		}
+	}
+}
+
+# Determines if notification messages should be sent after a ground combat
+# this: planet
+# from: winner
+# root: loser
+show_notification_for_ground_combat = {
+	NOT = {
+		has_planet_flag = slave_revolt
+		has_planet_flag = revolt_in_progress
 	}
 }

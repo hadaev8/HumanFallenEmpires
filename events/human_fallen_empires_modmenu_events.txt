@@ -182,6 +182,56 @@ country_event = {
 			country_event = { id = human_fallen_empires_menu.1 }
 		}
 	}
+	# disable planet decay
+	option = {
+		name = human_fallen_empires_menu.5.on
+		trigger = {
+			has_global_flag = human_fallen_empires_disable_plague
+		}
+		custom_tooltip = human_fallen_empires_menu.5.on.tooltip
+		hidden_effect = {
+			remove_global_flag = human_fallen_empires_disable_plague
+			country_event = { id = human_fallen_empires_menu.1 }
+		}
+	}
+	option = {
+		name = human_fallen_empires_menu.5.off
+		trigger = {
+			not = {
+				has_global_flag = human_fallen_empires_disable_plague
+			}
+		}
+		custom_tooltip = human_fallen_empires_menu.5.off.tooltip
+		hidden_effect = {
+			set_global_flag = human_fallen_empires_disable_plague
+			remove_global_flag = human_fallen_empires_plague_srarted
+			remove_global_flag = human_fallen_empires_plague_lvl_2
+			remove_global_flag = human_fallen_empires_plague_lvl_3
+			every_planet = {
+				limit = {
+					or = {
+						has_planet_flag = human_fallen_empires_plague_planet
+						has_modifier = human_fallen_empires_plague_lvl_1
+						has_modifier = human_fallen_empires_plague_lvl_2
+						has_modifier = human_fallen_empires_plague_lvl_3
+					}
+				}
+				remove_planet_flag = human_fallen_empires_plague_planet
+				remove_modifier = human_fallen_empires_plague_lvl_1
+				remove_modifier = human_fallen_empires_plague_lvl_2
+				remove_modifier = human_fallen_empires_plague_lvl_3
+			}
+			every_country = {
+				if = {
+					limit = {
+						is_country_type = human_fallen_empires_plague_zombie
+					}
+					destroy_country = yes
+				}
+			}
+			country_event = { id = human_fallen_empires_menu.1 }
+		}
+	}
 	option = {
 		name = modmenu_exit
 	}
