@@ -1,0 +1,366 @@
+namespace = human_fallen_empires_brainworm
+
+# start by civic 0
+country_event = {
+	id = human_fallen_empires_brainworm.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_civic = human_fallen_empires_civic_brainworm
+	}
+
+	immediate = {
+		modify_species = {
+			species = this
+			add_trait = human_fallen_empires_trait_brainworm
+			add_traits_at_start_of_list = yes
+		}
+		change_dominant_species = last_created_species
+	}
+}
+
+# functional events 1 - 50
+
+# kick events by pop by on_pop_migration_end
+# A pop has finished migrating to another planet
+# Root = pop
+# From = Tile on the new planet
+# FromFrom = Tile on the old planet
+pop_event = {
+	id = human_fallen_empires_brainworm.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = planet
+		not = {
+			has_trait = trait_mechanical
+		}
+		or = {
+			has_trait = human_fallen_empires_trait_brainworm
+			planet = {
+				any_owned_pop = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				exists = fromfrom.owner
+				fromfrom.owner = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+			fromfrom.owner = {
+				# notification for worm owner
+				country_event = { id = human_fallen_empires_brainworm.50 }
+			}
+		}
+		planet = {
+			# assimilate all
+			planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+			# change owner if needed
+			planet_event = { id = human_fallen_empires_brainworm.5 }
+		}
+	}
+}
+
+# kick events by pop by on_pop_resettled on_pop_birth
+pop_event = {
+	id = human_fallen_empires_brainworm.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = planet
+		not = {
+			has_trait = trait_mechanical
+		}
+		or = {
+			has_trait = human_fallen_empires_trait_brainworm
+			planet = {
+				any_owned_pop = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+		}
+	}
+
+	immediate = {
+		planet = {
+			# assimilate all
+			planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+			# change owner if needed
+			planet_event = { id = human_fallen_empires_brainworm.5 }
+		}
+	}
+}
+
+# kick events by planet by on actions
+planet_event = {
+	id = human_fallen_empires_brainworm.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_pop = {
+			nor = {
+				has_trait = human_fallen_empires_trait_brainworm
+				has_trait = trait_mechanical
+			}
+		}
+		any_owned_pop = {
+			has_trait = human_fallen_empires_trait_brainworm
+		}
+	}
+
+	immediate = {
+		# assimilate all
+		planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+		# change owner if needed
+		planet_event = { id = human_fallen_empires_brainworm.5 }
+	}
+}
+
+# assimilate someone on planet
+planet_event = {
+	id = human_fallen_empires_brainworm.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_pop = {
+			nor = {
+				has_trait = human_fallen_empires_trait_brainworm
+				has_trait = trait_mechanical
+			}
+		}
+		any_owned_pop = {
+			has_trait = human_fallen_empires_trait_brainworm
+		}
+		exists = owner
+	}
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					not = {
+						has_trait = human_fallen_empires_trait_brainworm
+					}
+				}
+				random_list = {
+					95 = { }
+					5 = {
+						set_country_flag = human_fallen_empires_brainworm_discovered
+						# notification for owner
+						country_event = { id = human_fallen_empires_brainworm.51 }
+						# notification for brainworms
+						every_country = {
+							limit = {
+								has_trait = human_fallen_empires_trait_brainworm
+							}
+							country_event = { id = human_fallen_empires_brainworm.52 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_trait = trait_hive_mind
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+			random_owned_pop = {
+				limit = {
+					nor = {
+						has_trait = human_fallen_empires_trait_brainworm
+						has_trait = trait_mechanical
+					}
+				}
+				modify_species = {
+					species = this
+					add_trait = trait_hive_mind
+					add_trait = human_fallen_empires_trait_brainworm
+					add_traits_at_start_of_list = yes
+				}
+			}
+			else = {
+				random_owned_pop = {
+					limit = {
+						nor = {
+							has_trait = human_fallen_empires_trait_brainworm
+							has_trait = trait_mechanical
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = human_fallen_empires_trait_brainworm
+						add_traits_at_start_of_list = yes
+					}
+				}
+			}
+		}
+		# assimilate again
+		planet_event = { id = human_fallen_empires_brainworm.4 days = 60 random = 60 }
+	}
+}
+
+# add planet to brainworm empire
+planet_event = {
+	id = human_fallen_empires_brainworm.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pop_percentage = {
+			percentage > 0.8
+			limit = {
+				has_trait = human_fallen_empires_trait_brainworm
+			}
+		}
+		exists = owner
+		owner = {
+			not = {
+				has_trait = human_fallen_empires_trait_brainworm
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_country = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+			random_country = {
+				limit = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+				save_event_target_as = human_fallen_empires_brainworm_country
+			}
+			else = {
+				random_owned_pop = {
+					limit = {
+						has_trait = human_fallen_empires_trait_brainworm
+					}
+					create_country = {
+						name = random
+						type = default
+						species = prev
+						name_list = random
+						flag = random
+						effect = {
+							save_event_target_as = human_fallen_empires_brainworm_country
+						}
+					}
+				}
+			}
+		}
+		# need notification for old owner
+		planet_event = { id = human_fallen_empires_brainworm.53 }
+		set_owner = event_target:human_fallen_empires_brainworm_country
+		set_controller = event_target:human_fallen_empires_brainworm_country
+		# need notification for new owner
+		planet_event = { id = human_fallen_empires_brainworm.54 }
+	}
+}
+
+# notifications 50 - 100
+
+# pop migrated 50
+country_event = {
+	id = human_fallen_empires_brainworm.50
+	title = human_fallen_empires_brainworm.50.name
+	desc = human_fallen_empires_brainworm.50.desc
+	picture = GFX_evt_star_chart
+	location = from
+    is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_brainworm.50.0
+	}
+}
+
+# know brain worm 51
+country_event = {
+	id = human_fallen_empires_brainworm.51
+	title = human_fallen_empires_brainworm.51.name
+	desc = human_fallen_empires_brainworm.51.desc
+	picture = GFX_evt_star_chart
+	location = from
+    is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_brainworm.51.0
+	}
+}
+
+# know brain worm notification for worms 52
+country_event = {
+	id = human_fallen_empires_brainworm.52
+	title = human_fallen_empires_brainworm.52.name
+	desc = human_fallen_empires_brainworm.52.desc
+	picture = GFX_evt_star_chart
+	location = from
+    is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_brainworm.52.0
+	}
+}
+
+# planet lose 53
+planet_event = {
+	id = human_fallen_empires_brainworm.53
+	title = human_fallen_empires_brainworm.53.name
+	desc = human_fallen_empires_brainworm.53.desc
+	picture = GFX_evt_star_chart
+	location = root
+    is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_brainworm.53.0
+	}
+}
+
+# planet gain 54
+planet_event = {
+	id = human_fallen_empires_brainworm.54
+	title = human_fallen_empires_brainworm.54.name
+	desc = human_fallen_empires_brainworm.54.desc
+	picture = GFX_evt_star_chart
+	location = root
+    is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_brainworm.54.0
+	}
+}
