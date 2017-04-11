@@ -1,0 +1,56 @@
+#Scope layout:
+# this = the country who owns the borders we a re coloring
+# from = the country who we are coloring for, usually the player
+
+#example = {
+#	icon = "GFX_some_icon"		-- which icon to use in the main gui
+#	hardcoded_tooltip = opinion -- override tooltip generation with a hardcoded method. Currently supported: opinion
+#	can_change_point_of_view = yes	-- can the player click on other empires to see the map mode from their point of view?
+#	enable_terra_incognita = yes	-- should terra incognita be rendered when this map mode is active?
+#
+#	color = {						-- the bread and butter of the map modes. A country will be colored with the first color block who's condition is met
+#		value = rgb { 1.0 0.0 0.0 1.0 }	-- you can also use hsv {...}
+#		custom_tooltip = "SOME_STRING"	-- Tooltip to be shown if this is the selected color. suports [This.GetName] etc
+#		condition = {
+#			...							-- simple AND trigger for evaluation. Will also generate a tooltip if neither hardcoded_tooltip or custom_tooltip is defined
+#		}
+#	}
+#}
+
+human_fallen_empires_plague_map_mode = {
+	icon = "GFX_map_mode_default"
+	enable_terra_incognita = no
+	can_change_point_of_view = no
+	#shortcut = "CTRL+z"
+
+	color = {
+		value = hsv { 0.0 0.0 0.8 0.7 }
+		custom_tooltip = "MAP_MODE_NO_CONTACT"
+		condition = {
+			NOT = { has_established_contact = FROM }
+			#always = no
+		}
+	}
+	# haven't plague
+	color = {
+		value = hsv { 0.25 1 0.6 1.0 }
+		custom_tooltip = human_fallen_empires_plague_map_mode_not_infected
+		condition = {
+			not = {
+				any_owned_planet = {
+					has_planet_flag = human_fallen_empires_plague_planet
+				}
+			}
+		}
+	}
+	# have plague
+	color = {
+		value = hsv { 0.0 0.9 0.6 1.0 }
+		custom_tooltip = human_fallen_empires_plague_map_mode_infected
+		condition = {
+			any_owned_planet = {
+				has_planet_flag = human_fallen_empires_plague_planet
+			}
+		}
+	}
+}

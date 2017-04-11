@@ -46,6 +46,7 @@ namespace = human_fallen_empires
 @human_fallen_empires_pirate_base_cost_minus = -4000
 @human_fallen_empires_pirate_slave_cost = 300
 @human_fallen_empires_pirate_slave_cost_minus = -300
+@pirate_fleet_power_minimum = 4000
 
 # functional section 0 - 50
 
@@ -4755,7 +4756,6 @@ country_event = {
 	}
 }
 
-
 # functional fleet stuff 675 - 700
 
 # pirate fleet logic
@@ -4807,7 +4807,7 @@ fleet_event = {
 						is_hostile = root.owner
 					}
 					root = {
-						fleet_power < 4000
+						fleet_power < @pirate_fleet_power_minimum
 					}
 				}
 			}
@@ -4819,6 +4819,7 @@ fleet_event = {
 		clear_fleet_actions = this
 		queue_actions = {
 			repeat = {
+				# try found prior target
 				find_closest_system = {
 					trigger = {
 						id = human_fallen_empires.675.trigger.0
@@ -4847,6 +4848,11 @@ fleet_event = {
 								}
 								and = {
 									human_fallen_empires_primitive_planet = no
+									root.owner = {
+										any_owned_planet = {
+											free_pop_tiles > 0
+										}
+									}
 									exists = owner
 									owner = {
 										or = {
@@ -4881,7 +4887,7 @@ fleet_event = {
 					}
 					found_system = {
 						effect = {
-							id = human_fallen_empires.675.effect.0
+							id = human_fallen_empires.675.effect.0.0
 							root = {
 								if = {
 									limit = {
@@ -4898,6 +4904,7 @@ fleet_event = {
 						move_to = this
 					}
 					failed = {
+						# then try found other target
 						find_closest_system = {
 							trigger = {
 								id = human_fallen_empires.675.trigger.1
@@ -4923,6 +4930,11 @@ fleet_event = {
 										and = {
 											exists = owner
 											human_fallen_empires_primitive_planet = no
+											root.owner = {
+												any_owned_planet = {
+													free_pop_tiles > 0
+												}
+											}
 											owner = {
 												or = {
 													is_country_type = default
@@ -4951,22 +4963,100 @@ fleet_event = {
 											is_hostile = root.owner
 										}
 										root = {
-											fleet_power < 4000
+											fleet_power < @pirate_fleet_power_minimum
 										}
 									}
 								}
 							}
 							found_system = {
+								effect = {
+									id = human_fallen_empires.675.effect.0.1
+									root = {
+										if = {
+											limit = {
+												or = {
+													num_ships < 5
+													has_hp_percentage < 0.99
+												}
+											}
+											clear_fleet_actions = this
+											log = "pirate fleet stop operation due low hp"
+										}
+									}
+								}
 								move_to = this
 							}
 							failed = {
-								wait = 200
-								effect = {
-									id = human_fallen_empires.675.effect.1
-									root = {
-										clear_fleet_actions = this
-										fleet_event = { id = human_fallen_empires.675 } # days = 200 }
-										log = "pirate fleet stop operation due no targets"
+								# then try found planet if havent other targets
+								find_closest_system = {
+									trigger = {
+										id = human_fallen_empires.675.trigger.0.2
+										root = {
+											has_hp_percentage > 0.99
+										}
+										any_planet = {
+											exists = owner
+											human_fallen_empires_primitive_planet = no
+											owner = {
+												or = {
+													is_country_type = default
+													is_country_type = primitive
+												}
+												is_hostile = root.owner
+												not = {
+													has_opinion_modifier = {
+														who = root.owner
+														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+													}
+												}
+											}
+										}
+										not = {
+											any_ship_in_system = {
+												or = {
+													is_ship_size = orbital_station
+													is_ship_class = shipclass_military
+													is_ship_class = shipclass_military_station
+												}
+												exists = owner
+												owner = {
+													is_hostile = root.owner
+												}
+												root = {
+													fleet_power < @pirate_fleet_power_minimum
+												}
+											}
+										}
+									}
+									found_system = {
+										effect = {
+											id = human_fallen_empires.675.effect.0.2
+											root = {
+												if = {
+													limit = {
+														or = {
+															num_ships < 5
+															has_hp_percentage < 0.99
+														}
+													}
+													clear_fleet_actions = this
+													log = "pirate fleet stop operation due low hp"
+												}
+											}
+										}
+										move_to = this
+									}
+									# then wait
+									failed = {
+										wait = 200
+										effect = {
+											id = human_fallen_empires.675.effect.0.3
+											root = {
+												clear_fleet_actions = this
+												fleet_event = { id = human_fallen_empires.675 } # days = 200 }
+												log = "pirate fleet stop operation due no targets"
+											}
+										}
 									}
 								}
 							}
@@ -7307,9 +7397,9 @@ country_event = {
 			any_country = {
 				is_country_type = default
 				fleet_power > 50000
-			#	not = {
-			#		has_country_flag = human_fallen_empires_egypt
-			#	}
+				#	not = {
+				#		has_country_flag = human_fallen_empires_egypt
+				#	}
 			}
 		}
 	}
@@ -7723,7 +7813,7 @@ country_event = {
 				type = default
 				species = event_target:human_fallen_empires_future_species
 				authority = random
-civics = random
+				civics = random
 				flag = random
 				ethos = {
 					ethic = ethic_fanatic_egalitarian
@@ -7754,7 +7844,7 @@ civics = random
 				type = default
 				species = event_target:human_fallen_empires_future_species
 				authority = random
-civics = random
+				civics = random
 				flag = random
 				ethos = {
 					ethic = ethic_fanatic_egalitarian
@@ -7784,7 +7874,7 @@ civics = random
 				type = default
 				species = event_target:human_fallen_empires_future_species
 				authority = random
-civics = random
+				civics = random
 				flag = random
 				ethos = {
 					ethic = ethic_fanatic_egalitarian
