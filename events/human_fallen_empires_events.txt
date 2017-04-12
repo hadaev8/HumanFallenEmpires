@@ -1138,11 +1138,15 @@ country_event = {
 		name = human_fallen_empires.47.2.4
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
+			not = {
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
 			any_country = {
 				is_country_type = default
 				has_communications = root
-				not = { is_country = root}
+				not = {
+					is_country = root
+				}
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 		}
@@ -1158,7 +1162,9 @@ country_event = {
 		name = human_fallen_empires.47.2.5
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step2
-			not = { has_country_flag = human_fallen_empires_marked_as_human }
+			not = {
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
 			or = {
 				not = {
 					any_system = {
@@ -3987,15 +3993,18 @@ ship_event = {
 			is_country_type = human_fallen_empires_drone
 		}
 		exists = from
+		exists = fromfrom
 	}
 
 	immediate = {
 		from = {
 			every_neighbor_system = {
-				every_system_planet = {
-					surveyed = {
-						set_surveyed = yes
-						surveyor = fromfrom
+				every_neighbor_system = {
+					every_system_planet = {
+						surveyed = {
+							set_surveyed = yes
+							surveyor = fromfrom
+						}
 					}
 				}
 			}
@@ -4263,7 +4272,7 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_pirate
 	show_sound = event_space_battle
 
-		desc = { # Spiritual
+	desc = { # Spiritual
 		text = pirate.1.desc_01
 		trigger = {
 			has_spiritualist_government = yes
@@ -4330,6 +4339,12 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		random_list = {
+			1 = { }
+			2 = {
+				break = yes
+			}
+		}
 		log = "pirate spawned"
 		set_country_flag = human_fallen_empires_birth_of_piracy
 		set_country_flag = pirate_encountered
@@ -5161,7 +5176,7 @@ country_event = {
 		from = {
 			set_timed_country_flag = {
 				flag = human_fallen_empires_attacked_by_pirate
-				days = 200
+				days = 365
 			}
 		}
 		add_minerals = 90
@@ -5248,6 +5263,7 @@ ship_event = {
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
+		is_ship_class = shipclass_military
 		fleet = {
 			not = {
 				has_fleet_flag = human_fallen_empires_clear_action_on_order
@@ -5256,7 +5272,7 @@ ship_event = {
 	}
 
 	immediate = {
-		log = "clear ship order by ai comand"
+		log = "clear ship order by ai comand owner [Owner.GetName] location [This.GetStarName]"
 		fleet = {
 			set_timed_fleet_flag = { flag = human_fallen_empires_clear_action_on_order days = 365 }
 			clear_fleet_actions = this
