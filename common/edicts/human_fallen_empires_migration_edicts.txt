@@ -149,6 +149,9 @@ planet_edict = {
 		}
 		owner = {
 			any_owned_planet = {
+				not = {
+					is_planet = root
+				}
 				free_pop_tiles > 0
 			}
 		}
@@ -160,49 +163,9 @@ planet_edict = {
 				exists = owner
 				is_growing = no
 			}
+			save_event_target_as = human_fallen_empires_settle_pop_target
 			owner = {
-				if = {
-					limit = {
-						any_owned_planet = {
-							habitability = {
-								who = prevprev
-								value > 0.4
-							}
-							not = {
-								is_planet = root
-							}
-							free_pop_tiles > 0
-						}
-					}
-					random_owned_planet = {
-						limit = {
-							habitability = {
-								who = prevprev
-								value > 0.4
-							}
-							not = {
-								is_planet = root
-							}
-							free_pop_tiles > 0
-						}
-						save_event_target_as = human_fallen_empires_migration_evacuate_planet
-					}
-					else = {
-						random_owned_planet = {
-							limit = {
-								not = {
-									is_planet = root
-								}
-								free_pop_tiles > 0
-							}
-							save_event_target_as = human_fallen_empires_migration_evacuate_planet
-						}
-					}
-				}
-			}
-			resettle_pop = {
-				pop = this
-				planet = event_target:human_fallen_empires_migration_evacuate_planet
+				human_fallen_empires_effect_settle_pop = yes
 			}
 		}
 	}

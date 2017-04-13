@@ -404,3 +404,159 @@ human_fallen_empires_challenge_coallition_leadership = {
 		base = 1000
 	}
 }
+
+# slave raid
+human_fallen_empires_slave_raid = {
+	execution_order = 1
+
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+
+	warscore_cost = {
+		base = 30
+
+		scaled_modifier = {
+			scope = parameter:country
+			add = 0.01
+			calc = pop_count
+		}
+		scaled_modifier = {
+			scope = root
+			div = 0.01
+			calc = pop_count
+		}
+	}
+
+	potential = {
+		OR = {
+			is_subject = no
+			NOT = {
+				overlord = {
+					is_same_value = from
+				}
+			}
+		}
+		allows_slavery = yes
+		parameter:country = {
+			is_country_type = default
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_not_opponent"
+			parameter:country = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+
+				}
+			}
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_overlord_in_war"
+			OR = {
+				NOT = {
+					exists = parameter:country.overlord
+				}
+				AND = {
+					exists = fromfrom
+					fromfrom = {
+						NOT = {
+							is_war_participant = {
+								who = parameter:country.overlord
+								side = root
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = fromfrom }
+					parameter:country.overlord = {
+						NOT = {
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = root
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		hidden:parameter:country = {
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_liberated"
+				war_demand_counter = {
+					type = liberated_or_vassalized
+					value < 1
+				}
+			}
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_no_planets"
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+			}
+		}
+	}
+
+	proposable = {
+		parameter:country = {
+			num_pops > 0
+		}
+	}
+
+	effect = {
+		add_threat = {
+			who = fromfromfrom
+			amount = 0.05 # scales to pops
+		}
+		parameter:country = {
+			every_owned_pop = {
+				random_list = {
+					9 = { }
+					1 = {
+						save_event_target_as = human_fallen_empires_settle_pop_target
+						fromfromfrom = {
+							human_fallen_empires_effect_settle_pop = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		base = 10
+		modifier = {
+			factor = 0.5
+			NOT = {
+				parameter:country = {
+					is_same_value = from
+				}
+			}
+		}
+	}
+}
