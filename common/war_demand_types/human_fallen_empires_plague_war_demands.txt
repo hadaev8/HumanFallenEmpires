@@ -151,9 +151,39 @@ human_fallen_empires_plague_clean = {
 				}
 			}
 		}
-		war_demand_counter = {
-			type = ceded_or_liberated
-			value < 1
+	}
+
+	proposable = {
+		custom_tooltip = {
+			fail_text = "war_demand_war_philosophy"
+			OR = {
+				has_policy_flag = unrestricted_wars
+				parameter:planet = {
+					is_original_owner = root
+				}
+				parameter:planet = {
+					is_majority_species = root
+				}
+				parameter:planet = {
+					owner = {
+						OR = {
+							is_country_type = awakened_fallen_empire
+							is_country_type = fallen_empire
+							has_authority = auth_hive_mind
+						}
+					}
+				}
+			}
+		}
+
+		hidden:parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
+				war_demand_counter = {
+					type = ceded_or_liberated
+					value < 1
+				}
+			}
 		}
 	}
 

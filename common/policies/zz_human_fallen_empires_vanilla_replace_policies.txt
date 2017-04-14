@@ -1,0 +1,66 @@
+##########################################################################
+# Empire Policies
+#
+# #####
+#
+# AI:
+# Base AI-weight is 100, if unchanged
+# AI will grab whatever policy-option has the highest weight
+#
+# #####
+#
+##########################################################################
+
+slavery = {
+	potential = {
+		NOT = { has_ethic = "ethic_hive_mind" }
+	}
+
+	option = {
+		name = "slavery_not_allowed"
+
+		policy_flags = {
+			slavery_not_allowed
+		}
+	}
+
+	option = {
+		name = "slavery_allowed"
+
+		valid = {
+			NOT = { is_subject_type = signatory }
+			NOR = {
+				has_ethic = "ethic_egalitarian"
+				has_ethic = "ethic_fanatic_egalitarian"
+			}
+		}
+
+		policy_flags = {
+			slavery_allowed
+		}
+		modifier = {}
+
+		AI_weight = {
+			factor = 10
+			modifier = {
+				factor = 0
+				has_valid_ai_personality = yes
+				NOT = { has_ai_personality_behaviour = slaver }
+			}
+			modifier = {
+				factor = 0
+				has_valid_ai_personality = no
+				NOR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			modifier = {
+				factor = 10
+				is_country_type = human_fallen_empires_pirate
+			}
+		}
+	}
+}
