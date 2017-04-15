@@ -2,10 +2,70 @@
 # OPINION MODIFIERS
 ##########################################################################
 
+# если у фром что-то есть. то мы относимся к фром так-то
 # same class
 human_fallen_empires_opinion_same_species_class = {
 	trigger = {
 		is_same_species_class = from
+		not = {
+			is_same_species = from
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+# same species
+human_fallen_empires_opinion_same_species = {
+	trigger = {
+		is_same_species = from
+	}
+
+	opinion = {
+		base = 20
+		modifier = {
+			factor = 2
+			human_fallen_empires_trigger_is_xenophobe = yes
+			from = {
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+		}
+	}
+}
+
+# in war with same enemy
+human_fallen_empires_opinion_same_enemy = {
+	trigger = {
+		any_country = {
+			is_at_war_with = prev
+			is_at_war_with = from
+		}
+	}
+
+	opinion = {
+		base = 10
+		modifier = {
+			add = 10
+			human_fallen_empires_trigger_is_militarist = yes
+			from = {
+				human_fallen_empires_trigger_is_pacifist = no
+			}
+		}
+	}
+}
+
+# save from slavery
+human_fallen_empires_opinion_save_from_slavery = {
+	trigger = {
+		human_fallen_empires_trigger_is_egalitarian = yes
+		from = {
+			allows_slavery = no
+			any_owned_pop = {
+				has_modifier = pop_saved_from_slavery
+			}
+		}
 	}
 
 	opinion = {
@@ -53,7 +113,7 @@ human_fallen_empires_opinion_egypt_vs_memorial_owner = {
 	}
 }
 
-# dont like memorial owner
+# dont like if have event 156
 human_fallen_empires_opinion_egypt_vs_has_event.156 = {
 	trigger = {
 		has_country_flag = human_fallen_empires_egypt

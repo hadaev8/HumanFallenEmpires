@@ -476,20 +476,15 @@ country_event = {
 						}
 						every_owned_pop = {
 							limit = {
-								or = {
-									has_citizenship_type = { type = citizenship_full country = root }
-									has_citizenship_type = { type = citizenship_caste_system country = root }
-									and = {
-										or = {
-											has_citizenship_type = { type = citizenship_limited country = root }
-											has_citizenship_type = { type = citizenship_caste_system_limited country = root }
-										}
-										root = { has_policy_flag = refugees_allowed }
-									}
+								not = {
+									has_citizenship_type = { type = citizenship_purge country = root }
 								}
 							}
 							save_event_target_as = human_fallen_empires_settle_pop_target
-							human_fallen_empires_effect_settle_pop = yes
+							root = {
+								human_fallen_empires_effect_settle_pop = yes
+								human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+							}
 						}
 					}
 					# добавить перемещение к любой другой империи
@@ -512,20 +507,15 @@ country_event = {
 					}
 					every_owned_pop = {
 						limit = {
-							or = {
-								has_citizenship_type = { type = citizenship_full country = root }
-								has_citizenship_type = { type = citizenship_caste_system country = root }
-								and = {
-									or = {
-										has_citizenship_type = { type = citizenship_limited country = root }
-										has_citizenship_type = { type = citizenship_caste_system_limited country = root }
-									}
-									root = { has_policy_flag = refugees_allowed }
-								}
+							not = {
+								has_citizenship_type = { type = citizenship_purge country = root }
 							}
 						}
 						save_event_target_as = human_fallen_empires_settle_pop_target
-						human_fallen_empires_effect_settle_pop = yes
+						root = {
+							human_fallen_empires_effect_settle_pop = yes
+							human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+						}
 					}
 				}
 				# добавить перемещение к любой другой империи
@@ -1107,7 +1097,7 @@ ship_event = {
 	}
 }
 
-# pirate diplomacy 700-750
+# pirate diplomacy 100-150
 
 # start event diplomacy
 country_event = {
@@ -1185,8 +1175,8 @@ country_event = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
 		allow = {
-			custom_tooltip_fail = {
-				text = human_fallen_empires_pirate.101.0.tooltip_fail
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.0.tooltip_fail
 				not = {
 					has_opinion_modifier = {
 						who = event_target:human_fallen_empires_pirate_country
@@ -1877,6 +1867,7 @@ country_event = {
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.2
@@ -1918,11 +1909,12 @@ country_event = {
 					limit = {
 						is_exact_same_species = event_target:human_fallen_empires_slave_target_1
 					}
-					save_event_target_as = human_fallen_empires_pirate_slave
+					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.3
@@ -1969,6 +1961,7 @@ country_event = {
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.4
@@ -2015,6 +2008,7 @@ country_event = {
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.5
@@ -2061,6 +2055,7 @@ country_event = {
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.6
@@ -2107,6 +2102,7 @@ country_event = {
 			}
 		}
 		human_fallen_empires_effect_settle_pop = yes
+		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
 	# return
 	option = {
@@ -2127,3 +2123,6 @@ country_event = {
 		}
 	}
 }
+
+# other pirate related event 150
+# notify then save pops from bases
