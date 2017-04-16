@@ -132,7 +132,9 @@ planet_event = {
 				modifier = human_fallen_empires_plague_lvl_3
 				days = 3650
 			}
-			planet_event = { id = human_fallen_empires_plague.55 days = 1 random = 15 }
+			owner = {
+				country_event = { id = human_fallen_empires_plague.55 days = 1 random = 15 }
+			}
 			else = {
 				if = {
 					limit = {
@@ -142,13 +144,17 @@ planet_event = {
 						modifier = human_fallen_empires_plague_lvl_2
 						days = 3650
 					}
-					planet_event = { id = human_fallen_empires_plague.54 days = 1 random = 15 }
+					owner = {
+						country_event = { id = human_fallen_empires_plague.54 days = 1 random = 15 }
+					}
 					else = {
 						add_modifier = {
 							modifier = human_fallen_empires_plague_lvl_1
 							days = 3650
 						}
-						planet_event = { id = human_fallen_empires_plague.53 days = 1 random = 15 }
+						owner = {
+							country_event = { id = human_fallen_empires_plague.53 days = 1 random = 15 }
+						}
 					}
 				}
 			}
@@ -232,7 +238,9 @@ planet_event = {
 				owner = event_target:human_fallen_empires_plague_zombie_country
 				type = human_fallen_empires_plague_zombie_army
 			}
-			planet_event = { id = human_fallen_empires_plague.55 days = 1 }
+			owner = {
+				country_event = { id = human_fallen_empires_plague.55 days = 1 }
+			}
 			every_country = {
 				limit = {
 					has_event_chain = human_fallen_empires_plague_count
@@ -844,65 +852,87 @@ country_event = {
 }
 
 # plague on our planet lvl 1
-planet_event = {
+country_event = {
 	id = human_fallen_empires_plague.53
 	title = human_fallen_empires_plague.53.name
 	desc = human_fallen_empires_plague.53.desc
 	picture = GFX_evt_news_room
 	show_sound = event_administrative_work
 	is_triggered_only = yes
-	location = root
+	location = from
 
 	trigger = {
-		owner = {
-			is_ai = no
+		is_ai = no
+		not = {
+			has_country_flag = human_fallen_empires_plague_block_planet
 		}
-	}
-
-	option = {
+	}	option = {
 		name = human_fallen_empires_plague.53.0
+	}
+	option = {
+		name = human_fallen_empires_plague_block
+		custom_tooltip = human_fallen_empires_plague_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague_block_planet
+		}
 	}
 }
 
 # plague on our planet lvl 2
-planet_event = {
+country_event = {
 	id = human_fallen_empires_plague.54
 	title = human_fallen_empires_plague.54.name
 	desc = human_fallen_empires_plague.54.desc
 	picture = GFX_evt_human_fallen_empires_plague
 	show_sound = event_air_raid_siren
 	is_triggered_only = yes
-	location = root
+	location = from
 
 	trigger = {
-		owner = {
-			is_ai = no
+		is_ai = no
+		not = {
+			has_country_flag = human_fallen_empires_plague_block_planet
 		}
 	}
 
 	option = {
 		name = human_fallen_empires_plague.54.0
 	}
+	option = {
+		name = human_fallen_empires_plague_block
+		custom_tooltip = human_fallen_empires_plague_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague_block_planet
+		}
+	}
 }
 
 # plague on our planet lvl 3
-planet_event = {
+country_event = {
 	id = human_fallen_empires_plague.55
 	title = human_fallen_empires_plague.55.name
 	desc = human_fallen_empires_plague.55.desc
 	picture = GFX_evt_human_fallen_empires_zombie
 	show_sound = event_air_raid_siren
 	is_triggered_only = yes
-	location = root
+	location = from
 
 	trigger = {
-		owner = {
-			is_ai = no
+		is_ai = no
+		not = {
+			has_country_flag = human_fallen_empires_plague_block_planet
 		}
 	}
 
 	option = {
 		name = human_fallen_empires_plague.55.0
+	}
+	option = {
+		name = human_fallen_empires_plague_block
+		custom_tooltip = human_fallen_empires_plague_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague_block_planet
+		}
 	}
 }
 
@@ -919,7 +949,7 @@ country_event = {
 	trigger = {
 		is_ai = no
 		nor = {
-			has_country_flag = human_fallen_empires_plague_block
+			has_country_flag = human_fallen_empires_plague_block_pulse
 			has_global_flag = human_fallen_empires_plague_lvl_3
 		}
 	}
@@ -931,7 +961,7 @@ country_event = {
 		name = human_fallen_empires_plague_block
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_plague_block
+			set_country_flag = human_fallen_empires_plague_block_pulse
 		}
 	}
 }
@@ -950,7 +980,7 @@ planet_event = {
 		owner = {
 			is_ai = no
 			not = {
-				has_country_flag = human_fallen_empires_plague_block
+				has_country_flag = human_fallen_empires_plague_block_pulse
 			}
 		}
 	}
@@ -963,7 +993,7 @@ planet_event = {
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
 			owner = {
-				set_country_flag = human_fallen_empires_plague_block
+				set_country_flag = human_fallen_empires_plague_block_pulse
 			}
 		}
 	}

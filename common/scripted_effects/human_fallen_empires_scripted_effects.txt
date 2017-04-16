@@ -2059,6 +2059,149 @@ human_fallen_empires_effect_add_unity_high = {
 	}
 }
 
+
+# for country need settle pop event target
+human_fallen_empires_effect_settle_pop = {
+	if = {
+		limit = {
+			any_owned_planet = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.4
+				}
+				free_pop_tiles > 0
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.4
+				}
+				free_pop_tiles > 0
+			}
+			resettle_pop = {
+				pop = event_target:human_fallen_empires_settle_pop_target
+				planet = this
+			}
+		}
+		else = {
+			random_owned_planet = {
+				limit = {
+					free_pop_tiles > 0
+				}
+				resettle_pop = {
+					pop = event_target:human_fallen_empires_settle_pop_target
+					planet = this
+				}
+			}
+		}
+	}
+}
+
+# for country need settle pop event target, root saver country
+human_fallen_empires_effect_settle_pop_from_slavery_buff = {
+	event_target:human_fallen_empires_settle_pop_target = {
+		if = {
+			limit = {
+				or = {
+					has_citizenship_type = { country = root type = citizenship_full }
+					has_citizenship_type = { country = root type = citizenship_limited }
+					is_same_species = root
+				}
+			}
+			add_modifier = {
+				modifier = pop_saved_from_slavery
+				days = 3650
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_create_egypt_fleet = {
+	event_target:human_fallen_empires_egypt_country = {
+		create_leader = {
+			type = admiral
+			species = event_target:human_fallen_empires_egypt_species
+			name = random
+			skill = 1000
+			traits = {
+				trait = random_trait
+				trait = random_trait
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:human_fallen_empires_egypt_country
+			while = {
+				count = 18
+				create_ship = {
+					name = random
+					design = "Set"
+					graphical_culture = "mammalian_01"
+				}
+			}
+			while = {
+				count = 32
+				create_ship = {
+					name = random
+					design = "Inhert"
+					graphical_culture = "mammalian_01"
+				}
+			}
+			set_location = {
+				target = event_target:human_fallen_empires_egypt_country.capital_scope
+				distance = 90
+				angle = random
+			}
+			assign_leader = last_created_leader
+		}
+	}
+}
+
+human_fallen_empires_effect_create_future_fleet = {
+	event_target:human_fallen_empires_future_country = {
+		create_leader = {
+			type = admiral
+			species = event_target:human_fallen_empires_future_species
+			name = random
+			skill = 1000
+			traits = {
+				trait = random_trait
+				trait = random_trait
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:human_fallen_empires_future_country
+			while = {
+				count = 20
+				create_ship = {
+					name = random
+					design = "Peacemaker"
+					graphical_culture = "mammalian_01"
+				}
+			}
+			while = {
+				count = 60
+				create_ship = {
+					name = random
+					design = "Peacekeeper"
+					graphical_culture = "mammalian_01"
+				}
+			}
+			set_location = {
+				target = event_target:human_fallen_empires_future_country.capital_scope
+				distance = 90
+				angle = random
+			}
+			assign_leader = last_created_leader
+		}
+	}
+}
+
 human_fallen_empires_effect_authoritarian_attraction_low = {
 	if = {
 		limit = {
@@ -2076,9 +2219,280 @@ human_fallen_empires_effect_authoritarian_attraction_low = {
 				days = 365
 			}
 			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_authoritarian_attraction_low
-					days = 365
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_authoritarian_attraction_low
+					}
+					remove_modifier = human_fallen_empires_authoritarian_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_authoritarian_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_authoritarian_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_egalitarian_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_egalitarian_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_egalitarian_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_egalitarian_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_egalitarian_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_egalitarian_attraction_low
+					}
+					remove_modifier = human_fallen_empires_egalitarian_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_egalitarian_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_egalitarian_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_xenophobe_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_xenophobe_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_xenophobe_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_xenophobe_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_xenophobe_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_xenophobe_attraction_low
+					}
+					remove_modifier = human_fallen_empires_xenophobe_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_xenophobe_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_xenophobe_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_xenophile_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_xenophile_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_xenophile_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_xenophile_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_xenophile_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_xenophile_attraction_low
+					}
+					remove_modifier = human_fallen_empires_xenophile_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_xenophile_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_xenophile_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_militarist_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_militarist_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_militarist_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_militarist_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_militarist_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_militarist_attraction_low
+					}
+					remove_modifier = human_fallen_empires_militarist_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_militarist_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_militarist_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_pacifist_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_pacifist_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_pacifist_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_pacifist_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_pacifist_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_pacifist_attraction_low
+					}
+					remove_modifier = human_fallen_empires_pacifist_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_pacifist_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_pacifist_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_spiritualist_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_spiritualist_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_spiritualist_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_spiritualist_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_spiritualist_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_spiritualist_attraction_low
+					}
+					remove_modifier = human_fallen_empires_spiritualist_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_spiritualist_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_spiritualist_attraction_low
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+human_fallen_empires_effect_materialist_attraction_low = {
+	if = {
+		limit = {
+			not = {
+				has_modifier = human_fallen_empires_materialist_attraction_high
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = human_fallen_empires_materialist_attraction_middle
+			}
+			remove_modifier = human_fallen_empires_materialist_attraction_middle
+			add_modifier = {
+				modifier = human_fallen_empires_materialist_attraction_high
+				days = 365
+			}
+			else = {
+				if = {
+					limit = {
+						has_modifier = human_fallen_empires_materialist_attraction_low
+					}
+					remove_modifier = human_fallen_empires_materialist_attraction_low
+					add_modifier = {
+						modifier = human_fallen_empires_materialist_attraction_middle
+						days = 365
+					}
+					else = {
+						add_modifier = {
+							modifier = human_fallen_empires_materialist_attraction_low
+							days = 365
+						}
+					}
 				}
 			}
 		}
@@ -2139,32 +2553,6 @@ human_fallen_empires_effect_authoritarian_attraction_high = {
 	}
 }
 
-human_fallen_empires_effect_egalitarian_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_egalitarian_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_egalitarian_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_egalitarian_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_egalitarian_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_egalitarian_attraction_low
-					days = 365
-				}
-			}
-		}
-	}
-}
-
 human_fallen_empires_effect_egalitarian_attraction_middle = {
 	human_fallen_empires_effect_add_unity_middle = yes
 	if = {
@@ -2215,32 +2603,6 @@ human_fallen_empires_effect_egalitarian_attraction_high = {
 		add_modifier = {
 			modifier = human_fallen_empires_egalitarian_attraction_high
 			days = 365
-		}
-	}
-}
-
-human_fallen_empires_effect_xenophobe_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_xenophobe_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_xenophobe_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_xenophobe_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_xenophobe_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_xenophobe_attraction_low
-					days = 365
-				}
-			}
 		}
 	}
 }
@@ -2299,32 +2661,6 @@ human_fallen_empires_effect_xenophobe_attraction_high = {
 	}
 }
 
-human_fallen_empires_effect_xenophile_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_xenophile_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_xenophile_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_xenophile_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_xenophile_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_xenophile_attraction_low
-					days = 365
-				}
-			}
-		}
-	}
-}
-
 human_fallen_empires_effect_xenophile_attraction_middle = {
 	human_fallen_empires_effect_add_unity_middle = yes
 	if = {
@@ -2375,32 +2711,6 @@ human_fallen_empires_effect_xenophile_attraction_high = {
 		add_modifier = {
 			modifier = human_fallen_empires_xenophile_attraction_high
 			days = 365
-		}
-	}
-}
-
-human_fallen_empires_effect_militarist_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_militarist_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_militarist_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_militarist_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_militarist_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_militarist_attraction_low
-					days = 365
-				}
-			}
 		}
 	}
 }
@@ -2459,32 +2769,6 @@ human_fallen_empires_effect_militarist_attraction_high = {
 	}
 }
 
-human_fallen_empires_effect_pacifist_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_pacifist_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_pacifist_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_pacifist_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_pacifist_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_pacifist_attraction_low
-					days = 365
-				}
-			}
-		}
-	}
-}
-
 human_fallen_empires_effect_pacifist_attraction_middle = {
 	human_fallen_empires_effect_add_unity_middle = yes
 	if = {
@@ -2535,32 +2819,6 @@ human_fallen_empires_effect_pacifist_attraction_high = {
 		add_modifier = {
 			modifier = human_fallen_empires_pacifist_attraction_high
 			days = 365
-		}
-	}
-}
-
-human_fallen_empires_effect_spiritualist_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_spiritualist_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_spiritualist_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_spiritualist_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_spiritualist_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_spiritualist_attraction_low
-					days = 365
-				}
-			}
 		}
 	}
 }
@@ -2619,32 +2877,6 @@ human_fallen_empires_effect_spiritualist_attraction_high = {
 	}
 }
 
-human_fallen_empires_effect_materialist_attraction_low = {
-	if = {
-		limit = {
-			not = {
-				has_modifier = human_fallen_empires_materialist_attraction_high
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_materialist_attraction_middle
-			}
-			remove_modifier = human_fallen_empires_materialist_attraction_middle
-			add_modifier = {
-				modifier = human_fallen_empires_materialist_attraction_high
-				days = 365
-			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_materialist_attraction_low
-					days = 365
-				}
-			}
-		}
-	}
-}
-
 human_fallen_empires_effect_materialist_attraction_middle = {
 	human_fallen_empires_effect_add_unity_middle = yes
 	if = {
@@ -2695,64 +2927,6 @@ human_fallen_empires_effect_materialist_attraction_high = {
 		add_modifier = {
 			modifier = human_fallen_empires_materialist_attraction_high
 			days = 365
-		}
-	}
-}
-
-# for country need settle pop event target
-human_fallen_empires_effect_settle_pop = {
-	if = {
-		limit = {
-			any_owned_planet = {
-				habitability = {
-					who = event_target:human_fallen_empires_settle_pop_target
-					value > 0.4
-				}
-				free_pop_tiles > 0
-			}
-		}
-		random_owned_planet = {
-			limit = {
-				habitability = {
-					who = event_target:human_fallen_empires_settle_pop_target
-					value > 0.4
-				}
-				free_pop_tiles > 0
-			}
-			resettle_pop = {
-				pop = event_target:human_fallen_empires_settle_pop_target
-				planet = this
-			}
-		}
-		else = {
-			random_owned_planet = {
-				limit = {
-					free_pop_tiles > 0
-				}
-				resettle_pop = {
-					pop = event_target:human_fallen_empires_settle_pop_target
-					planet = this
-				}
-			}
-		}
-	}
-}
-
-# for country need settle pop event target, root saver country
-human_fallen_empires_effect_settle_pop_from_slavery_buff = {
-	event_target:human_fallen_empires_settle_pop_target = {
-		if = {
-			limit = {
-				or = {
-					has_citizenship_type = { country = root type = citizenship_full }
-					has_citizenship_type = { country = root type = citizenship_limited }
-					is_same_species = root
-				}
-			}
-			add_modifier = {
-				modifier = pop_saved_from_slavery
-				days = 3650
-			}
 		}
 	}
 }

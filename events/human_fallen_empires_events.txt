@@ -612,10 +612,6 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# plague
-		random_country = {
-			country_event = { id = human_fallen_empires_plague.0 }
-		}
 		# planet decay feature
 		if = {
 			limit = {
@@ -694,8 +690,12 @@ event = {
 				country_event = { id = human_fallen_empires.48 days = 1 random = 3650 }
 			}
 		}
-		# war in heavens trigger
 		random_country = {
+			# plague start
+			country_event = { id = human_fallen_empires_plague.0 days = 1 random = 3650 }
+			# awake fallen
+			country_event = { id = human_fallen_empires.10000 days = 1 random = 3650 }
+			# war in heavens trigger
 			country_event = { id = human_fallen_empires.10010 days = 1 random = 3650 }
 		}
 	}
@@ -4201,6 +4201,26 @@ country_event = {
 	immediate = {
 		from = {
 			establish_communications = root
+			while = {
+				limit = {
+					nand = {
+						any_owned_leader = {
+							gender = female
+						}
+						any_owned_leader = {
+							not = {
+								gender = female
+							}
+						}
+					}
+				}
+				create_leader = {
+					type = admiral
+					species = this
+					name = random
+					skill = 100
+				}
+			}
 			random_owned_leader = {
 				limit = {
 					gender = female
@@ -5746,7 +5766,7 @@ country_event = {
 #10000 - 15000
 
 # awake event
-event = {
+country_event = {
 	id = human_fallen_empires.10000
 	hide_window = yes
 	is_triggered_only = yes
@@ -5761,7 +5781,7 @@ event = {
 			is_country_type = default
 			OR = {
 				and = {
-					is_difficulty = 0
+					is_difficulty = 2
 					fleet_power > 40000
 				}
 				and = {
@@ -5777,68 +5797,66 @@ event = {
 	}
 
 	immediate = {
-		random_country = {
-			random_list = {
-				400 = { }
-				100 = {
-					modifier = {
-						factor = 2
-						any_country = {
-							is_country_type = default
-							OR = {
-								AND = {
-									is_difficulty = 2
-									fleet_power > 60000
-								}
-								AND = {
-									is_difficulty = 1
-									fleet_power > 80000
-								}
-								fleet_power > 100000
+		random_list = {
+			400 = { }
+			100 = {
+				modifier = {
+					factor = 2
+					any_country = {
+						is_country_type = default
+						OR = {
+							AND = {
+								is_difficulty = 2
+								fleet_power > 60000
 							}
-						}
-					}
-					modifier = {
-						factor = 0.5
-						num_fallen_empires > 1
-						num_fallen_empires < 3
-					}
-					modifier = {
-						factor = 0.5
-						num_fallen_empires > 2
-						num_fallen_empires < 4
-					}
-					modifier = {
-						factor = 0.25
-						num_fallen_empires > 3
-					}
-					modifier = {
-						factor = 10
-						any_country = {
-							is_country_type = default
-							any_owned_planet = {
-								has_planet_flag = fallen_empire_world
+							AND = {
+								is_difficulty = 1
+								fleet_power > 80000
 							}
+							fleet_power > 100000
 						}
 					}
-					modifier = {
-						factor = 100
-						has_global_flag = high_awaken_chance
-					}
-					modifier = {
-						factor = 2
-						has_global_flag = galactic_crisis_happened
-					}
-					# awake random fallen
-					random_country = {
-						limit = {
-							is_country_type = fallen_empire
+				}
+				modifier = {
+					factor = 0.5
+					num_fallen_empires > 1
+					num_fallen_empires < 3
+				}
+				modifier = {
+					factor = 0.5
+					num_fallen_empires > 2
+					num_fallen_empires < 4
+				}
+				modifier = {
+					factor = 0.25
+					num_fallen_empires > 3
+				}
+				modifier = {
+					factor = 10
+					any_country = {
+						is_country_type = default
+						any_owned_planet = {
+							has_planet_flag = fallen_empire_world
 						}
-						set_global_flag = sleepers_awake_happened
-						set_global_flag = human_fallen_empires_sleepers_awake_happened
-						country_event = { id = fallen_empires_awakening.3 }
-						country_event = { id = human_fallen_empires.10001 }
 					}
+				}
+				modifier = {
+					factor = 100
+					has_global_flag = high_awaken_chance
+				}
+				modifier = {
+					factor = 4
+					has_global_flag = galactic_crisis_happened
+				}
+				# awake random fallen
+				random_country = {
+					limit = {
+						is_country_type = fallen_empire
+					}
+					set_global_flag = sleepers_awake_happened
+					set_global_flag = human_fallen_empires_sleepers_awake_happened
+					country_event = { id = fallen_empires_awakening.3 }
+					country_event = { id = human_fallen_empires.10001 }
 				}
 			}
 		}
@@ -5871,14 +5889,17 @@ country_event = {
 
 	trigger = {
 		host_has_dlc = "Leviathans Story Pack"
+		not = {
+			has_global_flag = human_fallen_empires_war_in_heaven_started
+		}
 		any_country = {
+			count > 2 # лол почему-то больше считается как больше или равно
 			is_country_type = awakened_fallen_empire
 			or = {
 				is_at_war = no
 				has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
 			}
 			fleet_power > 40000
-			count > 1
 		}
 	}
 
@@ -5897,6 +5918,7 @@ country_event = {
 				}
 			}
 		}
+		set_global_flag = human_fallen_empires_war_in_heaven_started
 		every_country = {
 			limit = {
 				is_country_type = awakened_fallen_empire
