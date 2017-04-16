@@ -57,11 +57,18 @@ human_fallen_empires_trigger_exists_any_slave_target = {
 	}
 }
 
-# for planet, pirate will ignore planets of mod's primitives
-human_fallen_empires_primitive_planet = {
-	or = {
-		has_planet_flag = human_fallen_empires_ahet_colony
-		has_planet_flag = human_fallen_empires_ahet_colony_2
-		has_planet_flag = human_fallen_empires_varelse_colony
+# valid pirate target planet for fleet logic, root.owner is pirate, owner planet's owner
+human_fallen_empires_pirate_valid_target_planet = {
+	human_fallen_empires_primitive_planet = no
+	not = {
+		has_modifier = human_fallen_empires_pirate_ravaged_planet
+	}
+	exists = owner
+	owner = {
+		or = {
+			is_country_type = default
+			is_country_type = primitive
+		}
+		is_hostile = root.owner
 	}
 }
