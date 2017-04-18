@@ -14,4 +14,5 @@ Best mod for Stellaris in your life.
 2. Файл humanfallenempires.mod из папки переместить в Paradox Interactive\Stellaris\mod\
 
 Новая игра не требуется, если на карте есть место для новых падших империй.
+
 Полное описание http://steamcommunity.com/sharedfiles/filedetails/?id=901039859&tscn=1492536073
