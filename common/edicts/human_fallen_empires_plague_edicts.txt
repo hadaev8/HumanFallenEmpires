@@ -45,11 +45,12 @@ planet_edict = {
 	potential = {
 		owner = {
 			has_ascension_perk = ap_transcendence
+			has_technology = tech_human_fallen_empires_plague_study
 		}
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = human_fallen_empires_plague_psi_clear_fail
+			fail_text = human_fallen_empires_plague_clear_fail
 			has_planet_flag = human_fallen_empires_plague_planet
 		}
 	}
@@ -62,16 +63,51 @@ planet_edict = {
 
 	ai_weight = {
 		weight = 300
-		# modifier = {
-		# 	factor = 0
-		# 	not = {
-		# 		and = {
-		# 			has_global_flag = human_fallen_empires_plague_lvl_2
-		# 			any_owned_planet = {
-		# 				has_planet_flag = human_fallen_empires_plague_planet
-		# 			}
-		# 		}
-		# 	}
-		# }
+	}
+}
+
+planet_edict = {
+	name = human_fallen_empires_plague_bombardment_planet
+	influence_cost = 30
+	length = 0
+	potential = {
+		always = no
+		owner = {
+			allows_purge = yes
+			has_technology = tech_human_fallen_empires_plague_study
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = human_fallen_empires_plague_clear_fail
+			has_planet_flag = human_fallen_empires_plague_planet
+		}
+	}
+
+	effect = {
+		save_event_target_as = human_fallen_empires_plague_bombardment_planet
+		enable_special_project = {
+			name = human_fallen_empires_plague_bombardment
+			owner = owner
+			location = this
+		}
+	}
+
+	ai_weight = {
+		weight = 300
+		modifier = {
+			factor = 0
+			owner = {
+				human_fallen_empires_trigger_is_xenophobe = no
+			}
+			pop_percentage = {
+				percentage < 0.74
+				limit = {
+					not = {
+						is_same_species = root.owner
+					}
+				}
+			}
+		}
 	}
 }

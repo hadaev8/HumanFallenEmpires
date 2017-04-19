@@ -27,3 +27,187 @@ slavery_military = {
 		}
 	}
 }
+
+purge_normal = {
+	token = purge_normal
+
+	allow = {
+		hidden_trigger = { exists = from }
+		if = {
+			limit = { is_lonely_hive_mind_pop = yes }
+			always = yes
+
+			else = {
+				custom_tooltip = {
+					fail_text = "HIVE_MIND_PURGE_ALWAYS_PROCESSING"
+					NOR = {
+						from = {
+							has_authority = auth_hive_mind
+						}
+					}
+				}
+				OR = {
+					custom_tooltip = {
+						success_text = default
+						from = { has_civic = civic_fanatic_purifiers }
+					}
+					from = {
+						has_policy_flag = purge_allowed
+						or = {
+							human_fallen_empires_trigger_is_xenophobe = yes
+							not = {
+								is_country_type = default
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 3
+	}
+}
+
+purge_neutering = {
+	token = purge_neutering
+
+	allow = {
+		host_has_dlc = "Utopia"
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
+			is_lonely_hive_mind_pop = no
+		}
+		custom_tooltip = {
+			fail_text = "HIVE_MIND_PURGE_ALWAYS_PROCESSING"
+			NOR = {
+				from = {
+					has_authority = auth_hive_mind
+				}
+			}
+		}
+		OR = {
+			custom_tooltip = {
+				success_text = default
+				from = { has_civic = civic_fanatic_purifiers }
+			}
+			from = { has_policy_flag = purge_allowed }
+		}
+	}
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 0
+			from = {
+				NOR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+	}
+}
+
+purge_displacement = {
+	token = purge_displacement
+
+	allow = {
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
+			is_lonely_hive_mind_pop = no
+		}
+		custom_tooltip = {
+			fail_text = "FANATIC_PURIFIERS_MUST_PURIFY"
+			OR = {
+				NOT = { from = { has_civic = civic_fanatic_purifiers } }
+				is_same_species = from
+			}
+		}
+		OR = {
+			AND = {
+				from = { has_policy_flag = purge_allowed }
+				host_has_dlc = "Utopia"
+			}
+			from = { has_policy_flag = purge_displacement_only }
+		}
+	}
+	ai_will_do = {
+		factor = 1
+	}
+}
+
+purge_labor_camps = {
+	token = purge_labor_camps
+
+	allow = {
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
+			is_lonely_hive_mind_pop = no
+		}
+		custom_tooltip = {
+			fail_text = "HIVE_MIND_PURGE_ALWAYS_PROCESSING"
+			NOR = {
+				from = {
+					has_authority = auth_hive_mind
+				}
+			}
+		}
+		OR = {
+			custom_tooltip = {
+				success_text = default
+				from = { has_civic = civic_fanatic_purifiers }
+			}
+			from = {
+				has_policy_flag = purge_allowed
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+		}
+		host_has_dlc = "Utopia"
+	}
+	ai_will_do = {
+		factor = 5
+		modifier = {
+			factor = 0
+			from = { allows_slavery = no }
+		}
+	}
+}
+
+purge_processing = {
+	token = purge_processing
+
+	allow = {
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
+			is_lonely_hive_mind_pop = no
+		}
+		OR = {
+			custom_tooltip = {
+				success_text = default
+				from = { has_authority = auth_hive_mind }
+			}
+			custom_tooltip = {
+				success_text = default
+				from = { has_civic = civic_fanatic_purifiers }
+			}
+			from = {
+				has_policy_flag = purge_allowed
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+		}
+		host_has_dlc = "Utopia"
+	}
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 0
+			from = {
+				NOT = { has_ethic = ethic_hive_mind }
+			}
+		}
+	}
+}
