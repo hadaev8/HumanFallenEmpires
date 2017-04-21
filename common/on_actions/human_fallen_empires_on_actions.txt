@@ -67,6 +67,8 @@ empire_init_create_ships = {
 on_tech_increased = {
 	events = {
 		human_fallen_empires_plague.9
+		# gain scientist
+		human_fallen_empires_leaders.20
 	}
 }
 
@@ -118,6 +120,8 @@ on_survey = {
 		human_fallen_empires.100
 		human_fallen_empires.400
 		human_fallen_empires.401
+		# gain scientist
+		human_fallen_empires_leaders.21
 	}
 }
 
@@ -167,6 +171,17 @@ on_ship_destroyed_victim = {
 	}
 }
 
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_perp = {
+	events = {
+		# gain admiral
+		human_fallen_empires_leaders.30
+	}
+}
+
 # A ship has been built
 # Root = Ship
 # From = Planet
@@ -174,6 +189,8 @@ on_ship_built = {
 	events = {
 		# pirate logic
 		human_fallen_empires_pirate.4
+		# gain admiral
+		human_fallen_empires_leaders.31
 	}
 }
 
@@ -202,6 +219,7 @@ on_ship_order = {
 # immediately before station is created
 on_building_outpost_station = {
 	events = {
+		# drone
 		human_fallen_empires.601
 	}
 }
@@ -236,7 +254,6 @@ on_war_beginning = {
 		human_fallen_empires.10011
 	}
 }
-
 
 # A war has been won
 # Root = Winner Warleader
@@ -278,6 +295,28 @@ on_war_lost_forced = {
 	}
 }
 
+# Triggers country_event for the attacker upon victory
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+on_planet_attackers_win = {
+	events = {
+		# gain general
+		human_fallen_empires_leaders.40
+	}
+}
+
+# Triggers country_event for the defender upon victory
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		# gain general
+		human_fallen_empires_leaders.40
+	}
+}
+
 # A pop has finished migrating to another planet
 # Root = pop
 # From = Tile on the new planet
@@ -300,7 +339,6 @@ on_pop_resettled = {
 		human_fallen_empires_migration.0
 		# brainworm
 		human_fallen_empires_brainworm.2
-
 	}
 }
 
@@ -311,7 +349,28 @@ on_pop_birth = {
 		human_fallen_empires_migration.0
 		# brainworm
 		human_fallen_empires_brainworm.2
+		# gain governor
+	human_fallen_empires_leaders.13
+	}
+}
 
+#A building construction has been completed.
+# This = Planet
+# From = Tile
+on_building_complete = {
+	events = {
+	# gain governor
+	human_fallen_empires_leaders.10
+	}
+}
+
+# A building construction has been completed, which is an upgrade of previous building.
+# This = Planet
+# From = Tile
+on_building_upgraded = {
+	events = {
+	# gain governor
+	human_fallen_empires_leaders.11
 	}
 }
 
@@ -320,6 +379,8 @@ on_pop_birth = {
 on_colonized = {
 	events = {
 		human_fallen_empires_migration.1
+		# gain governor
+		human_fallen_empires_leaders.12
 	}
 }
 
@@ -328,6 +389,8 @@ on_colonized = {
 on_blocker_cleared = {
 	events = {
 		human_fallen_empires_migration.1
+		# gain governor
+		human_fallen_empires_leaders.10
 	}
 }
 

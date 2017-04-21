@@ -1,0 +1,515 @@
+#	Example:
+#
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+#	Example:
+#
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+# for country
+human_fallen_empires_leaders_calc_leaders_num = {
+	log = "calc all leaders"
+	set_variable = {
+		which = human_fallen_empires_leaders_governor_num
+		value = 0
+	}
+	set_variable = {
+		which = human_fallen_empires_leaders_scientist
+		value = 0
+	}
+	set_variable = {
+		which = human_fallen_empires_leaders_admiral
+		value = 0
+	}
+	set_variable = {
+		which = human_fallen_empires_leaders_general
+		value = 0
+	}
+	every_owned_leader = {
+		if = {
+			limit = {
+				leader_class = governor
+			}
+			root = {
+				change_variable = {
+					which = human_fallen_empires_leaders_governor_num
+					value = 1
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						leader_class = scientist
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_leaders_scientist
+							value = 1
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								leader_class = admiral
+							}
+							root = {
+								change_variable = {
+									which = human_fallen_empires_leaders_admiral
+									value = 1
+								}
+							}
+
+							else = {
+								if = {
+									limit = {
+										leader_class = general
+									}
+									root = {
+										change_variable = {
+											which = human_fallen_empires_leaders_general
+											value = 1
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_leaders_calc_governor_num = {
+	log = "calc governor num"
+	set_variable = {
+		which = human_fallen_empires_leaders_governor_num
+		value = 0
+	}
+	every_owned_leader = {
+		limit = {
+			leader_class = governor
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_governor_num
+				value = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_leaders_calc_governor_capacity = {
+	log = "calc governor capacity"
+	set_variable = {
+		which = human_fallen_empires_leaders_governor_capacity
+		value = 1
+	}
+	every_owned_planet = {
+		limit = {
+			sector_controlled = no
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_governor_capacity
+				value = 0.7
+			}
+		}
+	}
+	every_sector = {
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_governor_capacity
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_pacifist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_fanatic_pacifist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_domination_colonial_viceroys
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_harmony_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_expansion_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_prosperity_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_governor_capacity
+			value = 0.5
+		}
+	}
+	log = "[This.human_fallen_empires_leaders_governor_capacity]"
+	subtract_variable = {
+		which = human_fallen_empires_leaders_governor_capacity
+		value = human_fallen_empires_leaders_governor_num
+	}
+	log = "[This.human_fallen_empires_leaders_governor_capacity]"
+}
+
+human_fallen_empires_leaders_calc_scientist_num = {
+	# log = "calc scientist num"
+	set_variable = {
+		which = human_fallen_empires_leaders_scientist_num
+		value = 0
+	}
+	every_owned_leader = {
+		limit = {
+			leader_class = scientist
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_scientist_num
+				value = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_leaders_calc_scientist_capacity = {
+	# log = "calc scientist capacity"
+	set_variable = {
+		which = human_fallen_empires_leaders_scientist_capacity
+		value = 5
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_materialist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_fanatic_materialist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_discovery_science_division
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_expansion_adopt
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_expansion_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_prosperity_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_scientist_capacity
+			value = 0.5
+		}
+	}
+	subtract_variable = {
+		which = human_fallen_empires_leaders_scientist_capacity
+		value = human_fallen_empires_leaders_scientist_num
+	}
+}
+
+human_fallen_empires_leaders_calc_admiral_num = {
+	# log = "calc admiral num"
+	set_variable = {
+		which = human_fallen_empires_leaders_admiral_num
+		value = 0
+	}
+	every_owned_leader = {
+		limit = {
+			leader_class = admiral
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_admiral_num
+				value = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_leaders_calc_admiral_capacity = {
+	# log = "calc admiral capacity"
+	set_variable = {
+		which = human_fallen_empires_leaders_admiral_capacity
+		value = 1
+	}
+	if = {
+		limit = {
+			fleet_power > 1000
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_num_fleets
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			fleet_power > 5000
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_admiral_capacity
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			fleet_power > 20000
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			fleet_power > 50000
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			fleet_power > 100000
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+
+	}
+	if = {
+		limit = {
+			fleet_power > 200000
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_militarist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_fanatic_militarist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_supremacy_war_games
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_expansion_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_domination_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_admiral_capacity
+			value = 1
+		}
+	}
+	subtract_variable = {
+		which = human_fallen_empires_leaders_admiral_capacity
+		value = human_fallen_empires_leaders_admiral_num
+	}
+}
+
+human_fallen_empires_leaders_calc_general_num = {
+	# log = "calc general num"
+	set_variable = {
+		which = human_fallen_empires_leaders_general_num
+		value = 0
+	}
+	every_owned_leader = {
+		limit = {
+			leader_class = general
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_general_num
+				value = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_leaders_calc_general_capacity = {
+	# log = "calc general capacity"
+	set_variable = {
+		which = human_fallen_empires_leaders_general_capacity
+		value = 1
+	}
+	every_owned_army = {
+		limit = {
+			nor = {
+				army_type = defense_army
+				army_type = garrison_army
+			}
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_general_capacity
+				value = 0.08
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_militarist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_general_capacity
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_fanatic_militarist
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_general_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_supremacy_war_games
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_general_capacity
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_expansion_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_general_capacity
+			value = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_domination_finish
+		}
+		change_variable = {
+			which = human_fallen_empires_leaders_general_capacity
+			value = 1
+		}
+	}
+	subtract_variable = {
+		which = human_fallen_empires_leaders_general_capacity
+		value = human_fallen_empires_leaders_general_num
+	}
+}

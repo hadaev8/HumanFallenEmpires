@@ -196,10 +196,7 @@ cede_planet = {
 		custom_tooltip = {
 			fail_text = human_fallen_empires_war_demand_cede_planet_fallen
 			parameter:planet.owner = {
-				nor = {
-					is_country_type = fallen_empire
-					is_country_type = awakened_fallen_empire
-				}
+				human_fallen_empires_trigger_any_fallen = no
 			}
 		}
 	}
@@ -409,13 +406,20 @@ total_defeat = {
 	#		has_country_flag = war_in_heaven_league_leader
 	#	}
 		parameter:country = {
-			or = {
-				is_country_type = fallen_empire
-				is_country_type = awakened_fallen_empire
-				has_country_flag = human_fallen_empires_egypt
-				has_country_flag = human_fallen_empires_future
-			}
 			is_country = from
+			or = {
+				human_fallen_empires_trigger_any_fallen = yes
+				and = {
+					root = {
+						has_technology = tech_human_fallen_empires_total_war
+					}
+					relative_power = {
+						who = root
+						category = fleet
+						value > superior
+					}
+				}
+			}
 		}
 	}
 

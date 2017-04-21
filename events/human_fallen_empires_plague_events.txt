@@ -290,102 +290,96 @@ planet_event = {
 			limit = {
 				has_global_flag = human_fallen_empires_plague_lvl_2
 			}
-			random_owned_pop = {
-				limit = {
-					nor = {
-						has_trait = human_fallen_empires_trait_immune
-						has_trait = trait_mechanical
-					}
-				}
-				random_list = {
-					# die
-					90 = {
-						root = {
-							#set_timed_planet_falg = { flag = human_fallen_empires_plague_planet days = 1 }
-							create_army = {
-								name = Zombies
-								owner = event_target:human_fallen_empires_plague_zombie_country
-								type = human_fallen_empires_plague_zombie_army
-							}
-						}
+			random_list = {
+				# die
+				90 = {
+					owner = {
+						country_event = { id = human_fallen_empires_plague.56 days = 1 }
 						if = {
-							limit = {
-								has_global_flag = human_fallen_empires_plague_lvl_3
-							}
-							owner = {
-								country_event = { id = human_fallen_empires_plague.57 days = 1 }
-							}
-						}
-						every_country = {
 							limit = {
 								has_event_chain = human_fallen_empires_plague_count
 							}
 							add_event_chain_counter = {
 								event_chain = human_fallen_empires_plague_count
-								counter = human_fallen_empires_plague_kill_pop_count_total
+								counter = human_fallen_empires_plague_kill_pop_count
 								amount = 1
 							}
-							if = {
-								limit = {
-									has_global_flag = human_fallen_empires_plague_lvl_3
-								}
-								add_event_chain_counter = {
-									event_chain = human_fallen_empires_plague_count
-									counter = human_fallen_empires_plague_zombie_count_total
-									amount = 1
-								}
+						}
+					}
+					every_country = {
+						limit = {
+							has_event_chain = human_fallen_empires_plague_count
+						}
+						add_event_chain_counter = {
+							event_chain = human_fallen_empires_plague_count
+							counter = human_fallen_empires_plague_kill_pop_count_total
+							amount = 1
+						}
+						if = {
+							limit = {
+								has_global_flag = human_fallen_empires_plague_lvl_3
+							}
+							add_event_chain_counter = {
+								event_chain = human_fallen_empires_plague_count
+								counter = human_fallen_empires_plague_zombie_count_total
+								amount = 1
 							}
 						}
-						root.owner = {
-							if = {
-								limit = {
-									has_event_chain = human_fallen_empires_plague_count
-								}
-								add_event_chain_counter = {
-									event_chain = human_fallen_empires_plague_count
-									counter = human_fallen_empires_plague_kill_pop_count
-									amount = 1
-								}
+					}
+					create_army = {
+					 	name = Zombies
+					 	owner = event_target:human_fallen_empires_plague_zombie_country
+					 	type = human_fallen_empires_plague_zombie_army
+					}
+					random_owned_pop = {
+						limit = {
+							nor = {
+								has_trait = human_fallen_empires_trait_immune
+								has_trait = trait_mechanical
 							}
-							country_event = { id = human_fallen_empires_plague.56 days = 1 }
 						}
 						kill_pop = yes
 					}
-					# get immune
-					1 = {
-						modifier = {
-							factor = 4
-							owner = {
-								is_ai = yes
+				}
+				# get immune
+				1 = {
+					modifier = {
+						factor = 4
+						owner = {
+							is_ai = yes
+						}
+					}
+					owner = {
+						country_event = { id = human_fallen_empires_plague.58 days = 1 }
+					}
+					random_owned_pop = {
+						limit = {
+							nor = {
+								has_trait = human_fallen_empires_trait_immune
+								has_trait = trait_mechanical
 							}
 						}
 						modify_species = {
 							species = this
 							add_trait = human_fallen_empires_trait_immune
 						}
-						owner = {
-							country_event = { id = human_fallen_empires_plague.58 days = 1 }
-						}
 					}
-					# nothing
-					9 = {
-						modifier = {
-							factor = 1.2
-							root = {
-								has_building = building_clinic
-							}
-						}
-						modifier = {
-							factor = 1.4
-							root = {
-								has_building = building_hospital
-							}
-						}
+				}
+				# nothing
+				9 = {
+					modifier = {
+						factor = 1.2
+						has_building = building_clinic
+
+					}
+					modifier = {
+						factor = 1.4
+						has_building = building_hospital
+
 					}
 				}
 			}
 		}
-		#
 		# if = {
 		# 	limit = {
 		# 		has_planet_flag = human_fallen_empires_plague_planet_pop_killed
@@ -772,7 +766,21 @@ country_event = {
 country_event = {
 	id = human_fallen_empires_plague.9
 	title = human_fallen_empires_plague.9.name
-	desc = human_fallen_empires_plague.9.desc
+	desc = {
+		trigger = {
+			text = human_fallen_empires_plague.9.desc.0
+			success_text = {
+				text = human_fallen_empires_plague.9.desc.1
+				any_owned_planet = {
+					or = {
+						is_planet_class = pc_habitat
+						is_planet_class = pc_ringworld_habitable
+					}
+				}
+			}
+			text = human_fallen_empires_plague.9.desc.2
+		}
+	}
 	show_sound = event_laboratory_sound
 	is_triggered_only = yes
 	diplomatic = yes
@@ -797,6 +805,7 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires_plague.9.0
+		custom_tooltip = human_fallen_empires_plague.9.0.tooltip
 		hidden_effect = {
 			country_event = { id = human_fallen_empires_plague.10 days = 2 }
 		}
@@ -1010,6 +1019,22 @@ country_event = {
 	id = human_fallen_empires_plague.53
 	title = human_fallen_empires_plague.53.name
 	desc = human_fallen_empires_plague.53.desc
+	# {
+	# 	trigger = {
+	# 		fail_text = {
+	# 			text = human_fallen_empires_plague.53.desc.0
+	# 			has_global_flag = human_fallen_empires_plague_lvl_2
+	# 		}
+	# 		fail_text = {
+	# 			text = human_fallen_empires_plague.53.desc.1
+	# 			has_global_flag = human_fallen_empires_plague_lvl_3
+	# 		}
+	# 		success_text = {
+	# 			text = human_fallen_empires_plague.53.desc.2
+	# 			has_global_flag = human_fallen_empires_plague_lvl_23
+	# 		}
+	# 	}
+	# }
 	picture = GFX_evt_news_room
 	show_sound = event_administrative_work
 	is_triggered_only = yes
@@ -1020,11 +1045,13 @@ country_event = {
 		not = {
 			has_country_flag = human_fallen_empires_plague_block_planet
 		}
-	}	option = {
+	}
+
+	option = {
 		name = human_fallen_empires_plague.53.0
 	}
 	option = {
-		name = human_fallen_empires_plague_block
+		name = human_fallen_empires_block
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_plague_block_planet
@@ -1053,7 +1080,7 @@ country_event = {
 		name = human_fallen_empires_plague.54.0
 	}
 	option = {
-		name = human_fallen_empires_plague_block
+		name = human_fallen_empires_block
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_plague_block_planet
@@ -1082,7 +1109,7 @@ country_event = {
 		name = human_fallen_empires_plague.55.0
 	}
 	option = {
-		name = human_fallen_empires_plague_block
+		name = human_fallen_empires_block
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_plague_block_planet
@@ -1090,42 +1117,23 @@ country_event = {
 	}
 }
 
-# plague on our planet lvl 2 pulse
+# plague on our planet pulse
 country_event = {
 	id = human_fallen_empires_plague.56
 	title = human_fallen_empires_plague.56.name
-	desc = human_fallen_empires_plague.56.desc
+	desc = {
+		trigger = {
+			fail_text = {
+				text = human_fallen_empires_plague.56.desc.0
+				has_global_flag = human_fallen_empires_plague_lvl_3
+			}
+			success_text = {
+				text = human_fallen_empires_plague.56.desc.1
+				has_global_flag = human_fallen_empires_plague_lvl_3
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_plague
-	show_sound = event_air_raid_siren
-	is_triggered_only = yes
-	location = from
-
-	trigger = {
-		is_ai = no
-		nor = {
-			has_country_flag = human_fallen_empires_plague_block_pulse
-			has_global_flag = human_fallen_empires_plague_lvl_3
-		}
-	}
-
-	option = {
-		name = human_fallen_empires_plague.56.0
-	}
-	option = {
-		name = human_fallen_empires_plague_block
-		custom_tooltip = human_fallen_empires_plague_block.tooltip
-		hidden_effect = {
-			set_country_flag = human_fallen_empires_plague_block_pulse
-		}
-	}
-}
-
-# plague on our planet lvl 3 pulse
-country_event = {
-	id = human_fallen_empires_plague.57
-	title = human_fallen_empires_plague.57.name
-	desc = human_fallen_empires_plague.57.desc
-	picture = GFX_evt_human_fallen_empires_zombie
 	show_sound = event_air_raid_siren
 	is_triggered_only = yes
 	location = from
@@ -1138,16 +1146,56 @@ country_event = {
 	}
 
 	option = {
-		name = human_fallen_empires_plague.57.0
+		name = human_fallen_empires_plague.56.0
+		trigger = {
+			not = {
+				has_global_flag = human_fallen_empires_plague_lvl_3
+			}
+		}
 	}
 	option = {
-		name = human_fallen_empires_plague_block
+		name = human_fallen_empires_plague.56.1
+		trigger = {
+			has_global_flag = human_fallen_empires_plague_lvl_3
+		}
+	}
+	option = {
+		name = human_fallen_empires_block
 		custom_tooltip = human_fallen_empires_plague_block.tooltip
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_plague_block_pulse
 		}
 	}
 }
+
+# # plague on our planet lvl 3 pulse
+# country_event = {
+# 	id = human_fallen_empires_plague.57
+# 	title = human_fallen_empires_plague.57.name
+# 	desc = human_fallen_empires_plague.57.desc
+# 	picture = GFX_evt_human_fallen_empires_zombie
+# 	show_sound = event_air_raid_siren
+# 	is_triggered_only = yes
+# 	location = from
+
+# 	trigger = {
+# 		is_ai = no
+# 		not = {
+# 			has_country_flag = human_fallen_empires_plague_block_pulse
+# 		}
+# 	}
+
+# 	option = {
+# 		name = human_fallen_empires_plague.57.0
+# 	}
+# 	option = {
+# 		name = human_fallen_empires_block
+# 		custom_tooltip = human_fallen_empires_plague_block.tooltip
+# 		hidden_effect = {
+# 			set_country_flag = human_fallen_empires_plague_block_pulse
+# 		}
+# 	}
+# }
 
 # pop gain immune
 country_event = {
@@ -1163,7 +1211,7 @@ country_event = {
 		not = {
 			has_technology = tech_human_fallen_empires_plague_immune
 		}
-	 }
+	}
 
 	option = {
 		name = human_fallen_empires_plague.58.0
