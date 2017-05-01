@@ -895,6 +895,23 @@ ship_event = {
 	}
 }
 
+has_country_flag = human_fallen_empires_discovery
+is_country_type = human_fallen_empires_discovery
+
+any_owned_ship = {
+	is_ship_size = human_fallen_empires_deepvoid
+	exists = orbit
+	exists = orbit.planet
+	exists = orbit.planet.spaceport
+	exists = orbit.planet.owner
+	orbit.planet.owner = {
+		is_country_type = default
+		not = {
+			is_hostile = root
+		}
+	}
+}
+
 # trade and update on planet
 # from = docking planet
 fleet_event = {
@@ -922,85 +939,20 @@ fleet_event = {
 	}
 
 	immediate = {
+		owner = {
+			save_event_target_as = human_fallen_empires_discovery_owner
+		}
 		from = {
 			save_event_target_as = human_fallen_empires_discovery_docking_planet
 			owner = {
 				save_event_target_as = human_fallen_empires_discovery_docking_planet_owner
 			}
 		}
-		random_owned_ship = {
-			limit = {
-				has_ship_flag = human_fallen_empires_discovery_ship
-			}
-			save_event_target_as = human_fallen_empires_discovery_docking_ship
-		}
-		if = {
-			limit = {
-				from = {
-					has_planet_flag = human_fallen_empires_discovery_contract_embassy_target
-				}
-				owner = {
-					has_event_chain = human_fallen_empires_discovery_contract_embassy
-				}
-			}
-			from = {
-				remove_planet_flag = human_fallen_empires_discovery_contract_embassy_target
-			}
-			owner = {
-				random_country = {
-					limit = {
-						has_relation_flag = {
-							who = root.owner
-							flag = human_fallen_empires_discovery_contract_embassy_hirer
-						}
-					}
-					save_event_target_as = human_fallen_empires_discovery_contract_embassy_hirer
-					add_energy = @human_fallen_empires_discovery_contract_embassy_reward_minus
-					log = "embassy reward minus"
-				}
-				random_list = {
-					1 = {
-						set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_success days = 1 }
-						event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
-							add_opinion_modifier = {
-								who = event_target:human_fallen_empires_discovery_docking_planet_owner
-								modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
-							}
-						}
-						event_target:human_fallen_empires_discovery_docking_planet_owner = {
-							add_opinion_modifier = {
-								who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
-								modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
-							}
-						}
-					}
-					1 = {
-						set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_fail days = 1 }
-						event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
-							add_opinion_modifier = {
-								who = event_target:human_fallen_empires_discovery_docking_planet_owner
-								modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
-							}
-						}
-						event_target:human_fallen_empires_discovery_docking_planet_owner = {
-							add_opinion_modifier = {
-								who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
-								modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
-							}
-						}
-					}
-				}
-				end_event_chain = human_fallen_empires_discovery_contract_embassy
-				add_energy = @human_fallen_empires_discovery_contract_embassy_reward
-			}
-		}
-		owner = {
-			country_event = { id = human_fallen_empires_discovery.151 }
-		}
+		human_fallen_empires_effect_discovery_diplomacy_start = yes
 	}
 }
 
-# discovery docking menu
+# discovery docking menu diplo
 country_event = {
 	id = human_fallen_empires_discovery.151
 	title = human_fallen_empires_discovery.151.name
@@ -1064,6 +1016,10 @@ country_event = {
 
 	picture_event_data = {
 		room = human_fallen_empires_docking_room
+	}
+
+	after = {
+		remove_country_flag = human_fallen_empires_discovery.151.block
 	}
 
 	# update weapons menu

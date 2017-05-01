@@ -1,0 +1,156 @@
+#	Example:
+#
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+#	Example:
+#
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+
+# for country
+human_fallen_empires_effect_discovery_diplomacy_remove_flags = {
+	remove_country_flag = human_fallen_empires_discovery.151.1
+	remove_country_flag = human_fallen_empires_discovery.151.2
+	remove_country_flag = human_fallen_empires_discovery.151.3
+	remove_country_flag = human_fallen_empires_discovery.151.4
+	remove_country_flag = human_fallen_empires_discovery.151.crew_menu
+	remove_country_flag = human_fallen_empires_discovery.151.contract_menu
+}
+
+# for country
+human_fallen_empires_effect_clean_crew_modifier = {
+	if = {
+		limit = {
+			has_modifier = human_fallen_empires_discovery_crew_1
+		}
+		remove_modifier = human_fallen_empires_discovery_crew_1
+	}
+	if = {
+		limit = {
+			has_modifier = human_fallen_empires_discovery_crew_2
+		}
+		remove_modifier = human_fallen_empires_discovery_crew_2
+	}
+	if = {
+		limit = {
+			has_modifier = human_fallen_empires_discovery_crew_3
+		}
+		remove_modifier = human_fallen_empires_discovery_crew_3
+	}
+	if = {
+		limit = {
+			has_modifier = human_fallen_empires_discovery_crew_4
+		}
+		remove_modifier = human_fallen_empires_discovery_crew_4
+	}
+}
+
+human_fallen_empires_effect_discovery_diplomacy_start = {
+	event_target:human_fallen_empires_discovery_owner = {
+		random_owned_ship = {
+			limit = {
+				has_ship_flag = human_fallen_empires_discovery_ship
+			}
+			save_event_target_as = human_fallen_empires_discovery_docking_ship
+		}
+	}
+	if = {
+		limit = {
+			event_target:human_fallen_empires_discovery_docking_planet = {
+				has_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+			}
+			event_target:human_fallen_empires_discovery_owner = {
+				has_event_chain = human_fallen_empires_discovery_contract_embassy
+			}
+		}
+		event_target:human_fallen_empires_discovery_docking_planet = {
+			remove_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+		}
+		event_target:human_fallen_empires_discovery_owner = {
+			random_country = {
+				limit = {
+					has_relation_flag = {
+						who = event_target:human_fallen_empires_discovery_owner
+						flag = human_fallen_empires_discovery_contract_embassy_hirer
+					}
+				}
+				save_event_target_as = human_fallen_empires_discovery_contract_embassy_hirer
+				add_energy = @human_fallen_empires_discovery_contract_embassy_reward_minus
+				log = "embassy reward minus"
+			}
+			random_list = {
+				1 = {
+					set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_success days = 1 }
+					event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
+						add_opinion_modifier = {
+							who = event_target:human_fallen_empires_discovery_docking_planet_owner
+							modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
+						}
+					}
+					event_target:human_fallen_empires_discovery_docking_planet_owner = {
+						add_opinion_modifier = {
+							who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
+							modifier = human_fallen_empires_opinion_discovery_contract_embassy_success
+						}
+					}
+				}
+				1 = {
+					set_timed_country_flag = { flag = human_fallen_empires_discovery_contract_embassy_fail days = 1 }
+					event_target:human_fallen_empires_discovery_contract_embassy_hirer = {
+						add_opinion_modifier = {
+							who = event_target:human_fallen_empires_discovery_docking_planet_owner
+							modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
+						}
+					}
+					event_target:human_fallen_empires_discovery_docking_planet_owner = {
+						add_opinion_modifier = {
+							who = event_target:human_fallen_empires_discovery_contract_embassy_hirer
+							modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
+						}
+					}
+				}
+			}
+			end_event_chain = human_fallen_empires_discovery_contract_embassy
+			add_energy = @human_fallen_empires_discovery_contract_embassy_reward
+		}
+	}
+	event_target:human_fallen_empires_discovery_owner = {
+		country_event = { id = human_fallen_empires_discovery.151 }
+	}
+}
