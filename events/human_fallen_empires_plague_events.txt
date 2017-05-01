@@ -73,7 +73,7 @@ country_event = {
 			}
 			else = {
 				random_planet = {
-					save_global_event_target_as = human_fallen_empires_plague_count
+					save_event_target_as = human_fallen_empires_plague_count
 				}
 			}
 		}
@@ -118,7 +118,7 @@ country_event = {
 			species = last_created_species
 			type = human_fallen_empires_plague_zombie
 			effect = {
-				save_global_event_target_as = human_fallen_empires_plague_zombie_country
+				save_event_target_as = human_fallen_empires_plague_zombie_country
 			}
 		}
 	}
@@ -243,8 +243,9 @@ planet_event = {
 				country_event = { id = human_fallen_empires_plague.52 days = 1 }
 			}
 		}
-		# pulse event
+		# pulse events
 		planet_event = { id = human_fallen_empires_plague.2 }
+		planet_event = { id = human_fallen_empires_plague.6 }
 		owner = {
 			save_event_target_as = human_fallen_empires_plague_planet_owner
 			if = {
@@ -263,7 +264,7 @@ planet_event = {
 	}
 }
 
-# planet pulse
+# kill pop pulse
 planet_event = {
 	id = human_fallen_empires_plague.2
 	hide_window = yes
@@ -286,6 +287,7 @@ planet_event = {
 	immediate = {
 		planet_event = { id = human_fallen_empires_plague.2 days = 180 random = 180 }
 		#	log = "Plague pulse on planet [Root.GetName] owner: [Root.Owner.GetName]"
+		# kill someone
 		if = {
 			limit = {
 				has_global_flag = human_fallen_empires_plague_lvl_2
@@ -326,10 +328,19 @@ planet_event = {
 							}
 						}
 					}
-					create_army = {
-					 	name = Zombies
-					 	owner = event_target:human_fallen_empires_plague_zombie_country
-					 	type = human_fallen_empires_plague_zombie_army
+					if = {
+						limit = {
+							has_global_flag = human_fallen_empires_plague_lvl_3
+							count_planet_army = {
+								count < 20
+							}
+						}
+						human_fallen_empires_plague_get_zombie = yes
+						create_army = {
+					 		name = Zombies
+					 		owner = event_target:human_fallen_empires_plague_zombie_country
+					 		type = human_fallen_empires_plague_zombie_army
+						}
 					}
 					random_owned_pop = {
 						limit = {
@@ -370,26 +381,169 @@ planet_event = {
 					modifier = {
 						factor = 1.2
 						has_building = building_clinic
-
 					}
 					modifier = {
 						factor = 1.4
 						has_building = building_hospital
-
 					}
 				}
 			}
 		}
-		# if = {
-		# 	limit = {
-		# 		has_planet_flag = human_fallen_empires_plague_planet_pop_killed
-		# 	}
-		# 	create_army = {
-		# 		name = Zombies
-		# 		owner = event_target:human_fallen_empires_plague_zombie_country
-		# 		type = human_fallen_empires_plague_zombie_army
-		# 	}
-		# }
+	}
+}
+
+# start by migration
+pop_event = {
+	id = human_fallen_empires_plague.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_pop_flag = human_fallen_empires_plague_pop
+		exists = planet
+	}
+
+	immediate = {
+		planet = {
+			planet_event = { id = human_fallen_empires_plague.1 }
+			log = "Plague migration on planet [This.GetName] owner: [Root.Owner.GetName]"
+		}
+	}
+}
+
+# reduce the counter after 10 years
+planet_event = {
+	id = human_fallen_empires_plague.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_event_chain = human_fallen_empires_plague_count
+			}
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_plague_count
+				counter = human_fallen_empires_plague_infested_planet_total
+				amount = -1
+			}
+		}
+		if = {
+			limit = {
+				exists = owner
+				owner = {
+					not = {
+						is_country_type = human_fallen_empires_plague_zombie
+					}
+				}
+			}
+			owner = {
+				if = {
+					limit = {
+						has_event_chain = human_fallen_empires_plague_count
+					}
+					add_event_chain_counter = {
+						event_chain = human_fallen_empires_plague_count
+						counter = human_fallen_empires_plague_infested_planet
+						amount = -1
+					}
+				}
+			}
+			else = {
+				every_country = {
+					limit = {
+						has_event_chain = human_fallen_empires_plague_count
+					}
+					add_event_chain_counter = {
+						event_chain = human_fallen_empires_plague_count
+						counter = human_fallen_empires_plague_kill_planet_count_total
+						amount = 1
+					}
+				}
+				event_target:human_fallen_empires_plague_planet_owner = {
+					country_event = { id = human_fallen_empires_plague.61 }
+					if = {
+						limit = {
+							has_event_chain = human_fallen_empires_plague_count
+						}
+						add_event_chain_counter = {
+							event_chain = human_fallen_empires_plague_count
+							counter = human_fallen_empires_plague_kill_planet_count
+							amount = 1
+						}
+						add_event_chain_counter = {
+							event_chain = human_fallen_empires_plague_count
+							counter = human_fallen_empires_plague_infested_planet
+							amount = -1
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# zombies take planet for on_planet_occupied
+planet_event = {
+	id = human_fallen_empires_plague.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		exists = fromfrom
+		fromfrom = {
+			is_country_type = human_fallen_empires_plague_zombie
+		}
+	}
+
+	immediate = {
+		log = "Plague zombies take planet [This.GetName] owner: [From.GetName]"
+		owner = {
+			country_event = { id = human_fallen_empires_plague.62 }
+		}
+		fromfrom = {
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+		}
+		every_planet_army = {
+			limit = {
+				not = {
+					army_type = human_fallen_empires_plague_zombie_army
+				}
+			}
+			remove_army = yes
+		}
+		every_owned_pop = {
+			kill_pop = yes
+		}
+		set_owner = fromfrom
+	}
+}
+
+# send plague pulse 6
+planet_event = {
+	id = human_fallen_empires_plague.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_plague
+		}
+		exists = owner
+		has_planet_flag = human_fallen_empires_plague_planet
+		any_owned_pop = {
+			nor = {
+				has_trait = human_fallen_empires_trait_immune
+				has_trait = trait_mechanical
+			}
+		}
+	}
+
+	immediate = {
+		planet_event = { id = human_fallen_empires_plague.6 days = 720 random = 180 }
 		# send plague
 		random_system = {
 			limit = {
@@ -448,7 +602,7 @@ planet_event = {
 				}
 				random_list = {
 					# nothing
-					20 = {
+					10 = {
 						modifier = {
 							factor = 1.1
 							has_building = building_clinic
@@ -514,185 +668,6 @@ planet_event = {
 	}
 }
 
-# start by migration
-pop_event = {
-	id = human_fallen_empires_plague.3
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		has_pop_flag = human_fallen_empires_plague_pop
-		exists = planet
-	}
-
-	immediate = {
-		planet = {
-			planet_event = { id = human_fallen_empires_plague.1 }
-			log = "Plague migration on planet [This.GetName] owner: [Root.Owner.GetName]"
-		}
-	}
-}
-
-# reduce the counter after 10 years
-planet_event = {
-	id = human_fallen_empires_plague.4
-	hide_window = yes
-	is_triggered_only = yes
-
-	immediate = {
-		every_country = {
-			limit = {
-				has_event_chain = human_fallen_empires_plague_count
-			}
-			add_event_chain_counter = {
-				event_chain = human_fallen_empires_plague_count
-				counter = human_fallen_empires_plague_infested_planet_total
-				amount = -1
-			}
-		}
-		if = {
-			limit = {
-				exists = owner
-			}
-			owner = {
-				if = {
-					limit = {
-						has_event_chain = human_fallen_empires_plague_count
-					}
-					add_event_chain_counter = {
-						event_chain = human_fallen_empires_plague_count
-						counter = human_fallen_empires_plague_infested_planet
-						amount = -1
-					}
-				}
-			}
-			else = {
-				every_country = {
-					limit = {
-						has_event_chain = human_fallen_empires_plague_count
-					}
-					add_event_chain_counter = {
-						event_chain = human_fallen_empires_plague_count
-						counter = human_fallen_empires_plague_kill_planet_count_total
-						amount = 1
-					}
-				}
-				event_target:human_fallen_empires_plague_planet_owner = {
-					country_event = { id = human_fallen_empires_plague.61 }
-					if = {
-						limit = {
-							has_event_chain = human_fallen_empires_plague_count
-						}
-						add_event_chain_counter = {
-							event_chain = human_fallen_empires_plague_count
-							counter = human_fallen_empires_plague_kill_planet_count
-							amount = 1
-						}
-					}
-					if = {
-						limit = {
-							has_event_chain = human_fallen_empires_plague_count
-						}
-						add_event_chain_counter = {
-							event_chain = human_fallen_empires_plague_count
-							counter = human_fallen_empires_plague_infested_planet
-							amount = -1
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-# zombies take planet for on_planet_occupied
-planet_event = {
-	id = human_fallen_empires_plague.5
-	title = human_fallen_empires_plague.5.name
-	desc = human_fallen_empires_plague.5.desc
-	picture = GFX_evt_human_fallen_empires_zombie
-	show_sound = event_ghost_town
-	is_triggered_only = yes
-	location = root
-
-	trigger = {
-		exists = fromfrom
-		fromfrom = {
-			is_country_type = human_fallen_empires_plague_zombie
-		}
-	}
-
-	immediate = {
-		fromfrom = {
-			every_owned_fleet = {
-				destroy_fleet = this
-			}
-		}
-		every_planet_army = {
-			limit = {
-				not = {
-					army_type = human_fallen_empires_plague_zombie_army
-				}
-			}
-			remove_army = yes
-		}
-		purge = yes
-		log = "Plague zombies take planet [This.GetName] owner: [From.GetName]"
-	}
-
-	option = {
-		name = human_fallen_empires_plague.5.0
-	}
-}
-
-# set owner zombie then purge done
-planet_event = {
-	id = human_fallen_empires_plague.6
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		num_pops = 0
-		exists = controller
-		controller = {
-			is_country_type = human_fallen_empires_plague_zombie
-		}
-	}
-
-	immediate = {
-		log = "zombie take planet [This.GetName]"
-		every_country = {
-			limit = {
-				has_event_chain = human_fallen_empires_plague_count
-			}
-			add_event_chain_counter = {
-				event_chain = human_fallen_empires_plague_count
-				counter = human_fallen_empires_plague_kill_planet_count_total
-				amount = 1
-			}
-		}
-		owner = {
-			country_event = { id = human_fallen_empires_plague.61 }
-			if = {
-				limit = {
-					has_event_chain = human_fallen_empires_plague_count
-				}
-				add_event_chain_counter = {
-					event_chain = human_fallen_empires_plague_count
-					counter = human_fallen_empires_plague_kill_planet_count
-					amount = 1
-				}
-			}
-		}
-		set_owner = controller
-		owner = {
-			every_owned_fleet = {
-				destroy_fleet = this
-			}
-		}
-	}
-}
-
 # retake zombie planet for on_planet_occupied
 planet_event = {
 	id = human_fallen_empires_plague.7
@@ -709,14 +684,15 @@ planet_event = {
 			is_country_type = human_fallen_empires_plague_zombie
 		}
 		exists = fromfrom
-		fromfrom = {
-			not = {
-				is_country_type = human_fallen_empires_plague_zombie
-			}
-		}
+		# fromfrom = {
+		# 	not = {
+		# 		is_country_type = human_fallen_empires_plague_zombie
+		# 	}
+		# }
 	}
 
 	immediate = {
+		log = "Take planet[This.GetName] from zombies new owner: [Root.Owner.GetName]"
 		every_planet_army = {
 			limit = {
 				army_type = human_fallen_empires_plague_zombie_army
@@ -724,41 +700,10 @@ planet_event = {
 			remove_army = yes
 		}
 		set_owner = fromfrom
-		log = "Take planet[This.GetName] from zombies new owner: [Root.Owner.GetName]"
 	}
 
 	option = {
 		name = human_fallen_empires_plague.7.0
-	}
-}
-
-# remove purge then planet returned
-country_event = {
-	id = human_fallen_empires_plague.8
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		exists = fromfrom
-		fromfrom = {
-			controller = {
-				is_country_type = human_fallen_empires_plague_zombie
-			}
-		}
-	}
-
-	immediate = {
-		fromfrom = {
-			every_planet_army = {
-				limit = {
-					army_type = human_fallen_empires_plague_zombie_army
-				}
-				remove_army = yes
-			}
-			every_owned_pop = {
-				purge = no
-			}
-		}
 	}
 }
 
@@ -818,13 +763,274 @@ country_event = {
 	title = human_fallen_empires_plague.10.name
 	desc = {
 		trigger = {
-			text = human_fallen_empires_plague.10.desc.0.0
-			fail_text = {
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.0.0
+				human_fallen_empires_trigger_is_xenophobe = yes
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.0.1
+				human_fallen_empires_trigger_is_xenophobe = yes
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.0.2
+				human_fallen_empires_trigger_is_xenophobe = yes
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.0.3
+				human_fallen_empires_trigger_is_xenophobe = yes
+				has_authority = auth_imperial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.1.0
+				human_fallen_empires_trigger_is_xenophile = yes
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.1.1
+				human_fallen_empires_trigger_is_xenophile = yes
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.1.2
+				human_fallen_empires_trigger_is_xenophile = yes
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.1.3
+				human_fallen_empires_trigger_is_xenophile = yes
+				has_authority = auth_imperial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.2.0
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.2.1
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.2.2
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.2.3
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_imperial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.3.0
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.3.1
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.3.2
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.3.3
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_imperial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.4.0
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.4.1
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.4.2
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.4.3
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_imperial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.5.0
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_democratic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.5.1
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_oligarchic
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.5.2
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_dictatorial
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.5.3
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+				has_authority = auth_imperial
+			}
+			# other for now xenophiles
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.0.1.0
+				has_militarist_government = no
+				has_pacifist_government = no
+				has_spiritualist_government = no
+				has_materialist_government = no
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
 				text = human_fallen_empires_plague.10.desc.1.0
-				has_policy_flag = refugees_not_allowed
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.1
+				human_fallen_empires_trigger_is_xenophile = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.2
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.3
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.4
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.5
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			# other for now xenophiles
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.1.3
+				has_militarist_government = no
+				has_pacifist_government = no
+				has_spiritualist_government = no
+				has_materialist_government = no
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
 			}
 			success_text = {
 				text = human_fallen_empires_plague.10.desc.2.0
+				has_policy_flag = refugees_allowed
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.0
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.1
+				human_fallen_empires_trigger_is_xenophile = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.2
+				has_militarist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.3
+				has_pacifist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.4
+				has_spiritualist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.5
+				has_materialist_government = yes
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			# other for now xenophiles
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.3.3
+				has_militarist_government = no
+				has_pacifist_government = no
+				has_spiritualist_government = no
+				has_materialist_government = no
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.4.0
+				has_authority = auth_democratic
+				allows_purge = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.4.1
+				has_authority = auth_oligarchic
+				allows_purge = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.4.2
+				has_authority = auth_dictatorial
+				allows_purge = yes
+			}
+			success_text = {
+				text = human_fallen_empires_plague.10.desc.4.3
+				has_authority = auth_imperial
 				allows_purge = yes
 			}
 		}
@@ -832,6 +1038,10 @@ country_event = {
 	show_sound = event_celebration
 	is_triggered_only = yes
 	diplomatic = yes
+
+	trigger = {
+		human_fallen_empires_trigger_is_hive = no
+	}
 
 	immediate = {
 		random_owned_leader = {
@@ -1019,22 +1229,6 @@ country_event = {
 	id = human_fallen_empires_plague.53
 	title = human_fallen_empires_plague.53.name
 	desc = human_fallen_empires_plague.53.desc
-	# {
-	# 	trigger = {
-	# 		fail_text = {
-	# 			text = human_fallen_empires_plague.53.desc.0
-	# 			has_global_flag = human_fallen_empires_plague_lvl_2
-	# 		}
-	# 		fail_text = {
-	# 			text = human_fallen_empires_plague.53.desc.1
-	# 			has_global_flag = human_fallen_empires_plague_lvl_3
-	# 		}
-	# 		success_text = {
-	# 			text = human_fallen_empires_plague.53.desc.2
-	# 			has_global_flag = human_fallen_empires_plague_lvl_23
-	# 		}
-	# 	}
-	# }
 	picture = GFX_evt_news_room
 	show_sound = event_administrative_work
 	is_triggered_only = yes
@@ -1254,10 +1448,49 @@ country_event = {
 				has_planet_flag = human_fallen_empires_plague_bombardment_planet
 			}
 		}
+		not = {
+			has_country_flag = human_fallen_empires_plague_block_all_die
+		}
 	}
 
 	option = {
 		name = human_fallen_empires_plague.61.0
+	}
+
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_plague_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague_block_all_die
+		}
+	}
+}
+
+# everyone die on planet notification for owner
+country_event = {
+	id = human_fallen_empires_plague.62
+	title = human_fallen_empires_plague.62.name
+	desc = human_fallen_empires_plague.62.desc
+	picture = GFX_evt_human_fallen_empires_zombie
+	is_triggered_only = yes
+	location = from
+
+	trigger = {
+		is_ai = no
+		not = {
+			has_country_flag = human_fallen_empires_plague_block_zombie
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_plague.62.0
+	}
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_plague_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague_block_zombie
+		}
 	}
 }
 

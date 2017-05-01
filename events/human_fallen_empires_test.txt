@@ -1,5 +1,5 @@
+#
 namespace = human_fallen_empires_test
-
 
 country_event = {
 	id = human_fallen_empires_test.1
@@ -10,14 +10,12 @@ country_event = {
 		# mutate_species
 		every_owned_pop = {
 			limit = {
-				is_same_species = root
-				not = {
-					has_trait = trait_psionic
-				}
+				has_trait = trait_psionic
+				has_trait = trait_latent_psionic
 			}
 			modify_species = {
 				species = this
-				add_trait = trait_psionic
+				remove_trait = trait_latent_psionic
 			}
 		}
 		log = "true"
@@ -30,10 +28,81 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		ruler = {
+			save_event_target_as = test2
+			log = "[This.GetName]"
+		}
 		every_pool_leader = {
 			exile_leader_as = test
 			root = {
 				set_leader = test
+			}
+		}
+		log = "[This.Ruler.GetName]"
+		#unassign_leader = this.leader
+		log = "[This.Ruler.GetName]"
+		event_target:test2 = {
+			exile_leader_as = test3
+		}
+
+		#assign_leader = event_target:testtest
+		log = "[test2.GetName]"
+		log = "[This.Ruler.GetName]"
+		#set_leader = test1
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_test.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			1 = {
+				modifier = {
+					factor = 0
+					always = yes
+					log = "1"
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					always = yes
+					log = "2"
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_test.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		log = "[This.human_fallen_empires_leaders_governor_num] governor num"
+		log = "[This.human_fallen_empires_leaders_governor_capacity] governor capacity"
+		log = "[This.human_fallen_empires_leaders_scientist_num] scientist num"
+		log = "[This.human_fallen_empires_leaders_scientist_capacity] scientist capacity"
+		log = "[This.human_fallen_empires_leaders_admiral_num] admiral num"
+		log = "[This.human_fallen_empires_leaders_admiral_capacity] admiral capacity"
+		log = "[This.human_fallen_empires_leaders_general_num] general num"
+		log = "[This.human_fallen_empires_leaders_general_capacity] general capacity"
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_test.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_planet = {
+			random_tile = {
+				set_building = human_fallen_empires_building_thoth_module_food
 			}
 		}
 	}
