@@ -1671,7 +1671,6 @@ ship_event = {
 }
 
 # varelse fleet in time trap 51-53
-
 # start event
 ship_event = {
 	id = human_fallen_empires.51
@@ -1958,9 +1957,7 @@ country_event = {
 }
 
 
-
-### varelse section 100 - 150
-
+## varelse section 100 - 150
 # varlse colony after curvey 100
 ship_event = {
 	id = human_fallen_empires.100
@@ -1991,11 +1988,8 @@ ship_event = {
 }
 
 
-## observation outpost events
-
-
-## varelse mehanicus
-
+# observation outpost events
+# varelse mehanicus
 # start event
 planet_event = {
 	id = human_fallen_empires.101
@@ -3652,10 +3646,9 @@ ship_event = {
 
 
 
-### Ahet section 400 - 401
+## Ahet section 400 - 401
 
 # ahet colonys after survey
-
 # сolony 1 400
 ship_event = {
 	id = human_fallen_empires.400
@@ -3780,10 +3773,292 @@ ship_event = {
 	}
 }
 
-# ahet home events
+# ahet home events 410 - 413
+# enter system
+ship_event = {
+	id = human_fallen_empires.410
+	title = human_fallen_empires.410.name
+	desc = human_fallen_empires.410.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_star_flag = human_fallen_empires_ahet_home
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = human_fallen_empires_chain_ahet_home
+			target = root.owner
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.410.0
+	}
+}
+
+# explore planet
+ship_event = {
+	id = human_fallen_empires.411
+	title = human_fallen_empires.411.name
+	desc = human_fallen_empires.411.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			or = {
+				has_planet_flag = human_fallen_empires_ahet_home_planet # убрать потом
+				has_planet_flag = human_fallen_empires_ahet_home
+			}
+		}
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		from = {
+			save_event_target_as = human_fallen_empires_target_ahet_home
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.411.0
+		enable_special_project = {
+			name = human_fallen_empires_project_ahet_home
+			location = from
+			owner = root.owner
+		}
+	}
+	option = {
+		name = human_fallen_empires.411.1
+		owner = {
+			end_event_chain = human_fallen_empires_chain_ahet_home
+		}
+	}
+}
+
+# project complite remove scientist
+ship_event = {
+	id = human_fallen_empires.412
+	title = human_fallen_empires.412.name
+	desc = human_fallen_empires.412.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.412.0
+		hidden_effect = {
+			leader = {
+				exile_leader_as = human_fallen_empires.412.scientist
+			}
+			owner = {
+				country_event = { id = human_fallen_empires.413 days = 18250 random = 3650 }
+				#country_event = { id = human_fallen_empires.413 days = 1 }
+			}
+		}
+	}
+}
+
+# scientist returns after 50 - 60 years
+country_event = {
+	id = human_fallen_empires.413
+	title = human_fallen_empires.413.name
+	desc = {
+		trigger = {
+			text = human_fallen_empires.413.desc.0
+			success_text = {
+				text = human_fallen_empires.413.desc.1.0
+				or = {
+					human_fallen_empires_trigger_is_xenophobe = yes
+					human_fallen_empires_trigger_is_militarist = yes
+					human_fallen_empires_trigger_is_authoritarian = yes
+				}
+			}
+			fail_text = {
+				text = human_fallen_empires.413.desc.1.1
+				or = {
+					human_fallen_empires_trigger_is_xenophobe = yes
+					human_fallen_empires_trigger_is_militarist = yes
+					human_fallen_empires_trigger_is_authoritarian = yes
+				}
+			}
+			text = human_fallen_empires.413.desc.2
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.413.0
+		hidden_effect = {
+			create_fleet = {
+				name = "Science Ship"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = random
+						random_existing_design = science
+					}
+					set_location = root.capital_scope
+					set_leader = human_fallen_empires.412.scientist
+					leader = {
+						save_event_target_as = human_fallen_empires.413.scientist
+						unassign_leader = this
+					}
+					delete_fleet = this
+				}
+			}
+			event_target:human_fallen_empires_target_ahet_home = {
+				change_pc = pc_shielded
+			}
+		}
+		if = {
+			limit = {
+				or = {
+					human_fallen_empires_trigger_is_xenophobe = yes
+					human_fallen_empires_trigger_is_militarist = yes
+					human_fallen_empires_trigger_is_authoritarian = yes
+				}
+			}
+			human_fallen_empires_effect_xenophobe_attraction_middle = yes
+		}
+		if = {
+			limit = {
+				nor = {
+					human_fallen_empires_trigger_is_xenophobe = yes
+					human_fallen_empires_trigger_is_militarist = yes
+					human_fallen_empires_trigger_is_authoritarian = yes
+				}
+			}
+			human_fallen_empires_effect_xenophile_attraction_middle = yes
+		}
+		if = {
+			limit = {
+				human_fallen_empires_trigger_is_materialist = no
+				not = {
+					has_technology = tech_psionic_theory
+				}
+			}
+			if = {
+				limit = {
+					has_tech_option = tech_psionic_theory
+				}
+				add_tech_progress = {
+					tech = tech_psionic_theory
+					progress = 0.5
+				}
+				else = {
+					add_research_option = tech_psionic_theory
+				}
+			}
+			if = {
+				limit = {
+					human_fallen_empires_trigger_is_spiritualist = no
+					not = {
+						has_technology = tech_sentient_ai
+					}
+				}
+				if = {
+					limit = {
+						has_tech_option = tech_sentient_ai
+					}
+					add_tech_progress = {
+						tech = tech_sentient_ai
+						progress = 0.5
+					}
+					else = {
+						add_research_option = tech_sentient_ai
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							human_fallen_empires_trigger_is_spiritualist = no
+							not = {
+								has_technology = tech_synthetic_workers
+							}
+						}
+						if = {
+							limit = {
+								has_tech_option = tech_synthetic_workers
+							}
+							add_tech_progress = {
+								tech = tech_synthetic_workers
+								progress = 0.5
+							}
+							else = {
+								add_research_option = tech_synthetic_workers
+							}
+						}
+						else = {
+							if = {
+								limit = {
+									not = {
+										has_technology = tech_epigenetic_triggers
+									}
+								}
+								if = {
+									limit = {
+										has_tech_option = tech_epigenetic_triggers
+									}
+									add_tech_progress = {
+										tech = tech_epigenetic_triggers
+										progress = 0.5
+									}
+									else = {
+										add_research_option = tech_epigenetic_triggers
+									}
+								}
+								else = {
+									if = {
+										limit = {
+											not = {
+												has_technology = tech_gene_tailoring
+											}
+										}
+										if = {
+											limit = {
+												has_tech_option = tech_gene_tailoring
+											}
+											add_tech_progress = {
+												tech = tech_gene_tailoring
+												progress = 0.5
+											}
+											else = {
+												add_research_option = tech_gene_tailoring
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		end_event_chain = human_fallen_empires_chain_ahet_home
+	}
+}
+
 
 # Ra'ar story (then home of light captured) 500 - 501
-
 # start event
 planet_event = {
 	id = human_fallen_empires.500
@@ -4002,7 +4277,7 @@ country_event = {
 					is_same_value = fromfrom.solar_system
 				}
 			}
-			destroy_colony = yes
+			destroy_colony = { keep_buildings = no }
 			change_pc = pc_molten
 			log = "drone base killed on [Root.GetStarName]"
 		}
@@ -4089,7 +4364,7 @@ country_event = {
 			has_country_flag = human_fallen_empires.605.step2
 			human_fallen_empires_trigger_is_clever_for_event = yes
 		}
-		human_fallen_empires_effect_materialist_attraction_high = yes
+		human_fallen_empires_effect_materialist_attraction_middle = yes
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.605.step2
 			set_country_flag = human_fallen_empires.605.step3
@@ -4171,7 +4446,7 @@ planet_event = {
 				kill_pop = yes
 			}
 			else = {
-				destroy_colony = yes
+				destroy_colony = { keep_buildings = no }
 			}
 		}
 	}
@@ -4670,7 +4945,7 @@ country_event = {
 			}
 			success_text = {
 				text = human_fallen_empires.703.desc.7
-				has_country_flag = human_fallen_empires.702.7
+				has_country_flag = human_fallen_empires.703.7
 			}
 			success_text = {
 				text = human_fallen_empires.703.desc.goodend
@@ -4901,7 +5176,7 @@ country_event = {
 			}
 		}
 		country_event = { id = human_fallen_empires.711 }
-		set_country_flag = human_fallen_empires.711.block
+		# set_country_flag = human_fallen_empires.711.block
 	}
 }
 
@@ -5192,7 +5467,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.711.4.6
+			remove_country_flag = human_fallen_empires.711.4.5
 			set_country_flag = human_fallen_empires.711.dialogue.0.complite
 		}
 	}
@@ -5217,25 +5492,25 @@ country_event = {
 		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.0
-				has_country_flag = human_fallen_empires.712.0.module_ordered
+				has_country_flag = human_fallen_empires.711.0.module_ordered
 			}
 		}
 		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.1
-				has_country_flag = human_fallen_empires.712.1.module_ordered
+				has_country_flag = human_fallen_empires.711.1.module_ordered
 			}
 		}
 		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.2
-				has_country_flag = human_fallen_empires.712.2.module_ordered
+				has_country_flag = human_fallen_empires.711.2.module_ordered
 			}
 		}
 		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.3
-				has_country_flag = human_fallen_empires.712.3.module_ordered
+				has_country_flag = human_fallen_empires.711.3.module_ordered
 			}
 		}
 	}
@@ -5249,7 +5524,7 @@ country_event = {
 	immediate = {
 		if = {
 			limit = {
-				has_country_flag = human_fallen_empires.712.0.module_ordered
+				has_country_flag = human_fallen_empires.711.0.module_ordered
 			}
 			change_variable = {
 				which = human_fallen_empires_building_thoth_module_energy
@@ -5258,7 +5533,7 @@ country_event = {
 		}
 		if = {
 			limit = {
-				has_country_flag = human_fallen_empires.712.1.module_ordered
+				has_country_flag = human_fallen_empires.711.1.module_ordered
 			}
 			change_variable = {
 				which = human_fallen_empires_building_thoth_module_mineral
@@ -5267,7 +5542,7 @@ country_event = {
 		}
 		if = {
 			limit = {
-				has_country_flag = human_fallen_empires.712.2.module_ordered
+				has_country_flag = human_fallen_empires.711.2.module_ordered
 			}
 			change_variable = {
 				which = human_fallen_empires_building_thoth_module_food
@@ -5276,13 +5551,21 @@ country_event = {
 		}
 		if = {
 			limit = {
-				has_country_flag = human_fallen_empires.712.3.module_ordered
+				has_country_flag = human_fallen_empires.711.3.module_ordered
 			}
 			change_variable = {
 				which = human_fallen_empires_building_thoth_module_science
 				value = 1
 			}
 		}
+	}
+
+	after = {
+		remove_country_flag = human_fallen_empires.711.module_ordered
+		remove_country_flag = human_fallen_empires.711.0.module_ordered
+		remove_country_flag = human_fallen_empires.711.1.module_ordered
+		remove_country_flag = human_fallen_empires.711.2.module_ordered
+		remove_country_flag = human_fallen_empires.711.3.module_ordered
 	}
 
 	option = {
@@ -5298,13 +5581,6 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.712.1
-		hidden_effect = {
-			remove_country_flag = human_fallen_empires.711.module_ordered
-			remove_country_flag = human_fallen_empires.711.0.module_ordered
-			remove_country_flag = human_fallen_empires.711.1.module_ordered
-			remove_country_flag = human_fallen_empires.711.2.module_ordered
-			remove_country_flag = human_fallen_empires.711.3.module_ordered
-		}
 	}
 }
 
@@ -8557,7 +8833,7 @@ country_event = {
 						who = root
 						amount = 3 # scales to pops
 					}
-					destroy_colony = yes
+					destroy_colony = { keep_buildings = no }
 				}
 			}
 		}
