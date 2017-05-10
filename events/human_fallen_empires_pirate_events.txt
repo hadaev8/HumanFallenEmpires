@@ -440,6 +440,7 @@ country_event = {
 		fromfromfrom = {
 			is_ship_size = orbital_station
 		}
+		exists = fromfromfrom.orbit.planet
 	}
 
 	immediate = {
@@ -447,82 +448,46 @@ country_event = {
 			if = {
 				limit = {
 					num_owned_planets = 1
+					any_country = {
+						is_country_type = human_fallen_empires_pirate
+					}
 				}
-				if = {
+				random_country = {
 					limit = {
-						any_country = {
-							is_country_type = human_fallen_empires_pirate
-							not = {
-								is_country = root
-							}
-						}
+						is_country_type = human_fallen_empires_pirate
 					}
-					random_country = {
-						limit = {
-							is_country_type = human_fallen_empires_pirate
-							not = {
-								is_country = root
-							}
-						}
-						save_event_target_as = human_fallen_empires_pirate_new_owner
-					}
-					every_owned_fleet = {
-						set_owner = event_target:human_fallen_empires_pirate_new_owner
-					}
+					# попробовать через from и prevprev назначить владельца
+					save_event_target_as = human_fallen_empires_pirate_new_owner
 				}
-				random_owned_planet = {
-					if = {
-						limit = {
-							num_pops > 0
-						}
-						every_owned_pop = {
-							limit = {
-								not = {
-									has_citizenship_type = { type = citizenship_purge country = root }
-								}
-							}
-							save_event_target_as = human_fallen_empires_settle_pop_target
-							root = {
-								human_fallen_empires_effect_settle_pop = yes
-								human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
-							}
-						}
-					}
-					# добавить перемещение к любой другой империи
-					change_pc = pc_asteroid
+				every_owned_fleet = {
+					set_owner = event_target:human_fallen_empires_pirate_new_owner
 				}
-				# destroy contry later for fix errors in log
-				country_event = { id = human_fallen_empires.9 days = 2 }
-				#	destroy_country = yes
-				break = yes
 			}
-			random_owned_planet = {
+			# destroy contry later for fix errors in log
+			country_event = { id = human_fallen_empires.9 days = 2 }
+			#	destroy_country = yes
+		}
+		fromfromfrom.orbit.planet = {
+			if = {
 				limit = {
-					solar_system = {
-						is_same_value = fromfromfrom.solar_system
-					}
+					num_pops > 0
 				}
-				if = {
+				every_owned_pop = {
 					limit = {
-						num_pops > 0
+						not = {
+							has_citizenship_type = { type = citizenship_purge country = root }
+						}
 					}
-					every_owned_pop = {
-						limit = {
-							not = {
-								has_citizenship_type = { type = citizenship_purge country = root }
-							}
-						}
-						save_event_target_as = human_fallen_empires_settle_pop_target
-						root = {
-							human_fallen_empires_effect_settle_pop = yes
-							human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
-						}
+					save_event_target_as = human_fallen_empires_settle_pop_target
+					root = {
+						human_fallen_empires_effect_settle_pop = yes
+						human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 					}
 				}
-				# добавить перемещение к любой другой империи
-				destroy_colony = { keep_buildings = no }
-				change_pc = pc_asteroid
 			}
+			# добавить перемещение к любой другой империи
+			destroy_colony = { keep_buildings = no }
+			change_pc = pc_asteroid
 		}
 	}
 }
@@ -983,7 +948,7 @@ country_event = {
 		add_physics_research = 5
 		add_society_research = 5
 		add_engineering_research = 5
-		log = "pirate kill station"
+		#log = "pirate kill station"
 	}
 }
 
@@ -1062,22 +1027,23 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		always = no
 		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
 		is_ship_class = shipclass_military
-		fleet = {
-			not = {
-				has_fleet_flag = human_fallen_empires_clear_action_on_order
-			}
-		}
+		# fleet = {
+		# 	not = {
+		# 		has_fleet_flag = human_fallen_empires_clear_action_on_order
+		# 	}
+		# }
 	}
 
 	immediate = {
 		log = "clear ship order by ai comand owner [Owner.GetName] location [This.GetStarName]"
 		fleet = {
-			set_timed_fleet_flag = { flag = human_fallen_empires_clear_action_on_order days = 365 }
+			#set_timed_fleet_flag = { flag = human_fallen_empires_clear_action_on_order days = 365 }
 			clear_fleet_actions = this
 		}
 	}
