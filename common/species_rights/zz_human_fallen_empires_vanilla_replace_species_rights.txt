@@ -1,82 +1,3 @@
-# from = country
-# this = species
-# citizenship_slavery = {
-# 	token = citizenship_slavery
-
-# 	allow = {
-# 		hidden_trigger = { exists = from }
-# 		NOT = { is_same_species = from }
-# 		custom_tooltip = {
-# 			fail_text = "lonely_hive_mind_pops_kill_them_selves_citizenship"
-# 			is_lonely_hive_mind_pop = no
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = "HIVE_MIND_MAIN_SPECIES_ALWAYS_CITIZEN"
-# 			NAND = {
-# 				from = { has_authority = auth_hive_mind }
-# 				is_same_species = from
-# 			}
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = "HIVE_MIND_SPECIES_CITIZENS_ONLY"
-# 			OR = {
-# 				NOT = { from = { has_authority = auth_hive_mind } }
-# 				has_trait = trait_hive_mind
-# 			}
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = "FANATIC_PURIFIERS_MUST_PURIFY"
-# 			OR = {
-# 				NOT = { from = { has_civic = civic_fanatic_purifiers } }
-# 				is_same_species = from
-# 			}
-# 		}
-# 		from = {
-# 			allows_slavery = yes
-# 			OR = {
-# 				has_ethic = ethic_xenophobe
-# 				has_ethic = ethic_fanatic_xenophobe
-# 			}
-# 		}
-# 		OR = {
-# 			NOT = { from = { has_civic = civic_citizen_service } }
-# 			NOT = { has_military_service_type = { type = military_service_full country = from } }
-# 		}
-# 	}
-# 	ai_will_do = {
-# 		factor = 15
-# 	}
-# }
-
-# slavery_military1 = {
-# 	token = slavery_military
-
-# 	modifier = {
-# 		army_damage_mult = 0.5
-# 	}
-
-# 	allow = {
-# 		hidden_trigger = { exists = from }
-# 		# from = {
-# 		# 	log = "[This.GetName]"
-# 		# }
-# 		custom_tooltip = {
-# 			or = {
-# 				has_citizenship_type = { country = from type = citizenship_caste_system_limited }
-# 				has_citizenship_type = { country = from type = citizenship_slavery }
-# 			}
-# 			text = is_slaves_tooltip
-# 		}
-# 		host_has_dlc = "Utopia"
-# 	}
-# 	ai_will_do = {
-# 		factor = 5
-# 		modifier = {
-# 			factor = 0
-# 			NOT = { has_trait = trait_very_strong }
-# 		}
-# 	}
-# }
 
 slavery_military = {
 	token = slavery_military
@@ -87,14 +8,9 @@ slavery_military = {
 
 	allow = {
 		hidden_trigger = { exists = from }
-		# from = {
-		# 	log = "[This.GetName]"
-		# }
 		custom_tooltip = {
-			or = {
-				has_citizenship_type = { country = from type = citizenship_caste_system_limited }
-				has_citizenship_type = { country = from type = citizenship_slavery }
-			}
+			has_citizenship_type = { country = from type = citizenship_slavery }
+			has_citizenship_type = { country = from type = citizenship_caste_system_limited }
 			text = is_slaves_tooltip
 		}
 		host_has_dlc = "Utopia"
@@ -104,55 +20,6 @@ slavery_military = {
 		modifier = {
 			factor = 0
 			NOT = { has_trait = trait_very_strong }
-		}
-	}
-}
-
-purge_normal = {
-	token = purge_normal
-
-	allow = {
-		hidden_trigger = { exists = from }
-		if = {
-			limit = { is_lonely_hive_mind_pop = yes }
-			always = yes
-
-			else = {
-				custom_tooltip = {
-					fail_text = "HIVE_MIND_PURGE_ALWAYS_PROCESSING"
-					NOR = {
-						from = {
-							has_authority = auth_hive_mind
-						}
-					}
-				}
-				OR = {
-					custom_tooltip = {
-						success_text = default
-						from = { has_civic = civic_fanatic_purifiers }
-					}
-					from = {
-						has_policy_flag = purge_allowed
-						or = {
-							human_fallen_empires_trigger_is_xenophobe = yes
-							not = {
-								is_country_type = default
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	ai_will_do = {
-		factor = 3
-		modifier = {
-			factor = 10
-			not = {
-				from = {
-					is_country_type = default
-				}
-			}
 		}
 	}
 }
@@ -178,9 +45,10 @@ purge_neutering = {
 		OR = {
 			custom_tooltip = {
 				success_text = default
-				from = { has_civic = civic_fanatic_purifiers }
+				from = { has_valid_civic = civic_fanatic_purifiers }
 			}
 			from = { has_policy_flag = purge_allowed }
+			from = { has_policy_flag = purge_displacement_only }
 		}
 	}
 	ai_will_do = {
@@ -192,109 +60,6 @@ purge_neutering = {
 					has_ethic = ethic_egalitarian
 					has_ethic = ethic_fanatic_egalitarian
 				}
-			}
-		}
-	}
-}
-
-purge_displacement = {
-	token = purge_displacement
-
-	allow = {
-		hidden_trigger = { exists = from }
-		custom_tooltip = {
-			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
-			is_lonely_hive_mind_pop = no
-		}
-		custom_tooltip = {
-			fail_text = "FANATIC_PURIFIERS_MUST_PURIFY"
-			OR = {
-				NOT = { from = { has_civic = civic_fanatic_purifiers } }
-				is_same_species = from
-			}
-		}
-		OR = {
-			AND = {
-				from = { has_policy_flag = purge_allowed }
-				host_has_dlc = "Utopia"
-			}
-			from = { has_policy_flag = purge_displacement_only }
-		}
-	}
-	ai_will_do = {
-		factor = 1
-	}
-}
-
-purge_labor_camps = {
-	token = purge_labor_camps
-
-	allow = {
-		hidden_trigger = { exists = from }
-		custom_tooltip = {
-			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
-			is_lonely_hive_mind_pop = no
-		}
-		custom_tooltip = {
-			fail_text = "HIVE_MIND_PURGE_ALWAYS_PROCESSING"
-			NOR = {
-				from = {
-					has_authority = auth_hive_mind
-				}
-			}
-		}
-		OR = {
-			custom_tooltip = {
-				success_text = default
-				from = { has_civic = civic_fanatic_purifiers }
-			}
-			from = {
-				has_policy_flag = purge_allowed
-				human_fallen_empires_trigger_is_xenophobe = yes
-			}
-		}
-		host_has_dlc = "Utopia"
-	}
-	ai_will_do = {
-		factor = 5
-		modifier = {
-			factor = 0
-			from = { allows_slavery = no }
-		}
-	}
-}
-
-purge_processing = {
-	token = purge_processing
-
-	allow = {
-		hidden_trigger = { exists = from }
-		custom_tooltip = {
-			fail_text = "lonely_hive_mind_pops_kill_them_selves_purge_type"
-			is_lonely_hive_mind_pop = no
-		}
-		OR = {
-			custom_tooltip = {
-				success_text = default
-				from = { has_authority = auth_hive_mind }
-			}
-			custom_tooltip = {
-				success_text = default
-				from = { has_civic = civic_fanatic_purifiers }
-			}
-			from = {
-				has_policy_flag = purge_allowed
-				human_fallen_empires_trigger_is_xenophobe = yes
-			}
-		}
-		host_has_dlc = "Utopia"
-	}
-	ai_will_do = {
-		factor = 10
-		modifier = {
-			factor = 0
-			from = {
-				NOT = { has_ethic = ethic_hive_mind }
 			}
 		}
 	}

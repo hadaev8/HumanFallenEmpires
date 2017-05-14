@@ -25,13 +25,25 @@ cede_planet = {
 	warscore_cost = {
 		base = 15
 
+
+		# mod
+		scaled_modifier = {
+			scope = root
+			div = 0.01
+			calc = planets_in_country
+		}
+
 		modifier = {
 			factor = 2.0
 			custom_tooltip = {
 				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
-				NOT = {
-					parameter:planet.owner = {
+				parameter:planet.owner = {
+					NOR = {
 						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
 					}
 				}
 			}
@@ -43,23 +55,12 @@ cede_planet = {
 			calc = pop_count
 		}
 
-		scaled_modifier = {
-			scope = root
-			div = 0.01
-			calc = planets_in_country
-		}
-
 		modifier = {
 			factor = 1.25
 			hidden:parameter:planet = {
 				is_capital = yes
 			}
 		}
-
-		modifier = { factor = 0.5 	is_country_type = fallen_empire }
-		modifier = { factor = 0.5 	is_country_type = awakened_fallen_empire }
-		modifier = { factor = 0.5	parameter:planet.owner = { is_country_type = fallen_empire } }
-		modifier = { factor = 0.5	parameter:planet.owner = { is_country_type = awakened_fallen_empire } }
 
 		modifier = {
 			factor = 0.8
@@ -132,6 +133,12 @@ cede_planet = {
 				has_tradition = tr_supremacy_right_of_conquest
 			}
 		}
+
+		# Awakened Fallen Empires
+		modifier = {
+			factor = 0.66
+			is_country_type = awakened_fallen_empire
+		}
 	}
 
 	potential = {
@@ -187,6 +194,8 @@ cede_planet = {
 				}
 			}
 		}
+
+		# mod
 		custom_tooltip = {
 			fail_text = human_fallen_empires_war_demand_cede_planet_discovery
 			not = {
@@ -385,6 +394,8 @@ cede_planet = {
 
 	AI_invasion_target = yes
 }
+
+
 
 # For War in Heaven # стоит ли вынести в отдельный кб?
 total_defeat = {

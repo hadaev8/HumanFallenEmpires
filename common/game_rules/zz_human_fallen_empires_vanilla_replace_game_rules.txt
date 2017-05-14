@@ -100,12 +100,25 @@ can_auto_migrate_pop = {
 
 #Root = planet
 #This = pop
+#Root = planet
+#This = pop
 pop_can_live_on_planet = {
+	OR = {
+		root = { NOT = { habitability = { who = prev value < 0.4 } } }
+		AND = {
+			has_citizenship_type = { type = citizenship_purge }
+			NOT = { has_purge_type = { type = purge_displacement } }
+		}
+	}
 	OR = {
 		is_robot_pop = yes
 		AND = {
 			exists = owner
 			owner = { NOT = { is_country_type = default } }
+		}
+		AND = {
+			has_citizenship_type = { type = citizenship_purge }
+			NOT = { has_purge_type = { type = purge_displacement } }
 		}
 		AND = {
 			OR = {
@@ -133,8 +146,8 @@ pop_can_live_on_planet = {
 
 				# core_worlds_citizens_and_slaves lets slaves live in core worlds
 				AND = {
-					is_enslaved = yes
 					exists = owner
+					has_citizenship_type = { type = citizenship_slavery }
 					owner = { has_policy_flag = core_worlds_citizens_and_slaves }
 				}
 			}
@@ -173,6 +186,7 @@ pop_can_live_on_planet = {
 		}
 	}
 }
+
 
 #Root = country
 #This = pop
@@ -246,3 +260,9 @@ can_pop_procreate = {
 		}
 	}
 }
+
+# Checks if a growing pop should be killed
+# This = Pop
+# should_kill_growing_pop = {
+# 	has_population_control = yes
+# }

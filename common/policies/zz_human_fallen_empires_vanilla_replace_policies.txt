@@ -30,14 +30,10 @@ slavery = {
 		valid = {
 			NOT = { is_subject_type = signatory }
 			or = {
-				or = {
-					human_fallen_empires_trigger_is_egalitarian = no
-					human_fallen_empires_trigger_is_xenophobe = yes
-				}
-				# nor = {
-				# 	has_ethic = "ethic_egalitarian"
-				# 	has_ethic = "ethic_fanatic_egalitarian"
-				# }
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
 				is_country_type = human_fallen_empires_pirate
 			}
 		}
@@ -67,95 +63,6 @@ slavery = {
 			modifier = {
 				factor = 10
 				is_country_type = human_fallen_empires_pirate
-			}
-		}
-	}
-}
-
-purge = {
-	potential = {
-		NOT = { has_ethic = "ethic_hive_mind" }
-		NOT = { has_civic = civic_fanatic_purifiers }
-	}
-
-	option = {
-		name = "purge_not_allowed"
-
-		valid = {
-			NOT = {
-				has_authority = auth_hive_mind
-			}
-		}
-
-		policy_flags = {
-			purge_not_allowed
-		}
-	}
-
-	option = {
-		name = "purge_displacement_only"
-
-		policy_flags = {
-			purge_displacement_only
-		}
-		modifier = {}
-
-		valid = {
-			NOT = {
-				is_subject_type = signatory
-				has_authority = auth_hive_mind
-			}
-			OR = {
-				has_ethic = ethic_xenophobe
-				has_ethic = ethic_fanatic_xenophobe
-				has_ethic = ethic_authoritarian
-				has_ethic = ethic_fanatic_authoritarian
-			}
-
-		}
-
-		AI_weight = {
-			factor = 5
-			modifier = {
-				factor = 0
-				has_valid_ai_personality = yes
-				has_ai_personality_behaviour = multispecies
-			}
-		}
-	}
-
-	option = {
-		name = "purge_allowed"
-
-		policy_flags = {
-			purge_allowed
-		}
-		modifier = {}
-
-		valid = {
-			NOT = { is_subject_type = signatory }
-			OR = {
-				has_authority = auth_hive_mind
-				has_ethic = ethic_xenophobe
-				has_ethic = ethic_fanatic_xenophobe
-				human_fallen_empires_trigger_is_authoritarian = yes
-				is_country_type = human_fallen_empires_plague_zombie
-				is_country_type = swarm
-			}
-		}
-
-		AI_weight = {
-			factor = 10
-			modifier = {
-				factor = 0
-				nor = {
-					and = {
-						has_valid_ai_personality = yes
-						has_ai_personality_behaviour = purger
-					}
-					is_country_type = human_fallen_empires_plague_zombie
-					is_country_type = swarm
-				}
 			}
 		}
 	}
