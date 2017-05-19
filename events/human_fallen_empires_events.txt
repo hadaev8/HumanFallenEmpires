@@ -116,41 +116,30 @@ country_event = {
 						}
 					}
 				}
-				create_species = {
-					name = "Ju Ahet"
-					plural = "Ju Ahet"
-					class = "HUM"
-					portrait = human_fallen_empires_egypt_portrait
-					traits = {
-						ideal_planet_class = pc_continental
-						trait = trait_extremely_adaptive
-						trait = trait_venerable
-						trait = trait_slow_breeders
-						trait = trait_psionic
-					}
-					immortal = yes
+			}
+			create_species = {
+				name = "Ju Ahet"
+				plural = "Ju Ahet"
+				class = "HUM"
+				portrait = human_fallen_empires_egypt_portrait
+				traits = {
+					ideal_planet_class = pc_continental
+					trait = trait_extremely_adaptive
+					trait = trait_venerable
+					trait = trait_slow_breeders
+					trait = trait_psionic
+				}
+				immortal = yes
+			}
+			last_created_species = {
+				save_global_event_target_as = human_fallen_empires_egypt_species
+			}
+			if = {
+				limit = {
+					exists = event_target:human_fallen_empires_human_species
 				}
 				last_created_species = {
 					set_species_identity = event_target:human_fallen_empires_human_species
-					save_global_event_target_as = human_fallen_empires_egypt_species
-				}
-				else = {
-					create_species = {
-						name = "Ju Ahet"
-						plural = "Ju Ahet"
-						class = "HUM"
-						portrait = human_fallen_empires_egypt_portrait
-						traits = {
-							ideal_planet_class = pc_continental
-							trait = trait_extremely_adaptive
-							trait = trait_venerable
-							trait = trait_slow_breeders
-							trait = trait_psionic
-						}
-					}
-					last_created_species = {
-						save_global_event_target_as = human_fallen_empires_egypt_species
-					}
 				}
 			}
 			create_species = {
@@ -236,7 +225,7 @@ country_event = {
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 5
 					initializer = human_fallen_empires_egypt
 				}
 				spawn_system = {
@@ -246,7 +235,7 @@ country_event = {
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 15
 					initializer = human_fallen_empires_gift
 				}
 				set_global_flag = human_fallen_empires_egypt_spawned
@@ -338,9 +327,6 @@ country_event = {
 						exists = space_owner
 						is_fe_cluster = yes
 					}
-					#any_planet = {
-					#	is_rim_system = no
-					#}
 				}
 				spawn_system = {
 					min_distance = 0
@@ -741,43 +727,22 @@ country_event = {
 	}
 }
 
-# biobomb feature
-planet_event = {
+# fix psi traits
+country_event = {
 	id = human_fallen_empires.10
 	hide_window = yes
 	is_triggered_only = yes
 
-	trigger = {
-		exists = owner
-		owner = {
-			has_ascension_perk = human_fallen_empires_ap_biobomb
-		}
-		free_pop_tiles > 0
-	}
 	immediate = {
-		create_species = {
-			name = random
-			class = random
-			portrait = random
-			traits = random
-			homeworld = root
-		}
-		if = {
+		every_owned_pop = {
 			limit = {
-				owner = {
-					has_trait = trait_hive_mind
-				}
+				has_trait = trait_latent_psionic
+				has_trait = trait_psionic
 			}
 			modify_species = {
-				species = last_created_species
-				add_trait = trait_hive_mind
+				species = this
+				remove_trait = trait_latent_psionic
 			}
-			last_created_species = {
-				set_citizenship_type = { country = root.owner type = citizenship_full cooldown = no }
-			}
-		}
-		create_pop = {
-			species = last_created_species
 		}
 	}
 }
@@ -1304,13 +1269,11 @@ country_event = {
 				has_country_flag = human_fallen_empires_marked_as_human
 				human_fallen_empires_trigger_is_xenophile = yes
 			}
-			or = {
-				any_system = {
-					has_star_flag = sol
-					is_surveyed = {
-						who = root
-						status = no
-					}
+			any_system = {
+				has_star_flag = sol
+				is_surveyed = {
+					who = root
+					status = no
 				}
 			}
 		}
@@ -6501,17 +6464,17 @@ country_event = {
 	desc = {
 		trigger = {
 			success_text = {
-				text = "human_fallen_empires.5001.desc.6.1"
+				text = human_fallen_empires.5001.desc.6.1
 				has_country_flag = human_fallen_empires.5001.step6
 				is_species_class = HUM
 			}
 			success_text = {
-				text = "human_fallen_empires.5001.desc.6.2"
+				text = human_fallen_empires.5001.desc.6.2
 				has_country_flag = human_fallen_empires.5001.step6
 				not = { is_species_class = HUM }
 			}
 			success_text = {
-				text = "human_fallen_empires.5001.desc.7"
+				text = human_fallen_empires.5001.desc.7
 				has_country_flag = human_fallen_empires.5001.step7
 			}
 		}
@@ -6641,7 +6604,7 @@ country_event = {
 		# 	show_notification = no
 		# }
 		set_country_type = default
-		set_empire_name = "Kad Republic"
+		#set_empire_name = "Kad Republic"
 		set_global_flag = human_fallen_empires_future_in_expansion
 		ruler = {
 			save_event_target_as = human_fallen_empires_future_ruler
@@ -7730,12 +7693,10 @@ country_event = {
 				text = human_fallen_empires.10050.desc.0.2
 				exists = event_target:human_fallen_empires_event_target_3
 			}
-			text = newline
 			success_text = {
 				text = human_fallen_empires.10050.desc.1.0
 				exists = event_target:human_fallen_empires_coalition_leader
 			}
-			text = newline
 			success_text = {
 				text = human_fallen_empires.10050.desc.1.1
 				exists = event_target:human_fallen_empires_egypt_country
@@ -7745,7 +7706,6 @@ country_event = {
 					}
 				}
 			}
-			text = newline
 			text = human_fallen_empires.10050.desc.2.0
 		}
 	}

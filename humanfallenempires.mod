@@ -1,13 +1,13 @@
 name="Human Fallen Empires"
-path="mod/humanfallenempires-master"
+path="mod/humanfallenempires"
 tags={
 	"Diplomacy"
 	"Galaxy Generation"
 	"Events"
 	"Overhaul"
 	"Gameplay"
-	"Sound"
 	"Species"
-	"Spaceships"
 }
-supported_version="1.5.*"
+picture="humanfallenempires.jpg"
+remote_file_id="901039859"
+supported_version="1.6.*"

@@ -1,0 +1,111 @@
+#
+namespace = human_fallen_empires_features
+
+# biobomb feature
+planet_event = {
+	id = human_fallen_empires_features.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			has_ascension_perk = human_fallen_empires_ap_biobomb
+		}
+		free_pop_tiles > 0
+	}
+	immediate = {
+		create_species = {
+			name = random
+			class = random
+			portrait = random
+			traits = random
+			homeworld = root
+		}
+		if = {
+			limit = {
+				owner = {
+					has_trait = trait_hive_mind
+				}
+			}
+			modify_species = {
+				species = last_created_species
+				add_trait = trait_hive_mind
+			}
+			last_created_species = {
+				set_citizenship_type = { country = root.owner type = citizenship_full cooldown = no }
+			}
+		}
+		create_pop = {
+			species = last_created_species
+		}
+	}
+}
+
+# make synth feature
+planet_event = {
+	id = human_fallen_empires_features.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		any_owned_pop = {
+			not = {
+				has_trait = trait_mechanical
+			}
+		}
+	}
+
+	immediate = {
+		every_owned_pop = {
+			limit = {
+				not = {
+					has_trait = trait_mechanical
+				}
+			}
+			change_species = root.owner
+		}
+	}
+}
+
+# exodus feature
+planet_event = {
+	id = human_fallen_empires_features.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_features_exodus
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_type = default
+			remove_modifier = human_fallen_empires_discovery_translator
+			while = {
+				limit = {
+					check_variable = {
+						which = human_fallen_empires_features_exodus_pop
+						value > 0
+					}
+					root = {
+						free_pop_tiles > 0
+					}
+				}
+				change_variable = {
+					which = human_fallen_empires_features_exodus_pop
+					value = -1
+				}
+				root = {
+					create_pop = {
+						species = root.owner
+					}
+				}
+			}
+		}
+	}
+}
