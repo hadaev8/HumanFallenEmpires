@@ -716,6 +716,19 @@ event = {
 	}
 }
 
+# install mod by on game start on actions
+event = {
+	id = human_fallen_empires.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			country_event = { id = human_fallen_empires.0 }
+		}
+	}
+}
+
 # kill country event for avoid errors in log
 country_event = {
 	id = human_fallen_empires.9
@@ -1586,7 +1599,7 @@ country_event = {
 	}
 }
 
-## anomalys and after survey on actions 50 - 100
+# anomalys and after survey on actions 50 - 100
 
 # wormhole to ju ahet 50
 ship_event = {
@@ -1916,8 +1929,7 @@ country_event = {
 	}
 }
 
-
-## varelse section 100 - 150
+# varelse section 100 - 150
 # varlse colony after curvey 100
 ship_event = {
 	id = human_fallen_empires.100
@@ -1946,7 +1958,6 @@ ship_event = {
 		name = human_fallen_empires.100.0
 	}
 }
-
 
 # observation outpost events
 # varelse mehanicus
@@ -2029,7 +2040,6 @@ country_event = {
 	id = human_fallen_empires.103
 	title = human_fallen_empires.103.name
 	desc = human_fallen_empires.103.desc
-	# картинка скрижали?
 	picture = GFX_evt_human_fallen_empires_varelse_planet
 	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_varelse_colony
@@ -2214,13 +2224,8 @@ country_event = {
 	}
 }
 
-
-
 # memorial section 150 - 350
-
-
-## pyramid events 150 - 200
-
+# pyramid events 150 - 200
 # start
 planet_event = {
 	id = human_fallen_empires.150
@@ -2561,8 +2566,7 @@ ship_event = {
 }
 
 
-## military warehouse events 200 - 250
-
+# military warehouse events 200 - 250
 # start
 planet_event = {
 	id = human_fallen_empires.200
@@ -2911,8 +2915,7 @@ ship_event = {
 }
 
 
-## found cruiser 250 - 300
-
+# found cruiser 250 - 300
 # start
 planet_event = {
 	id = human_fallen_empires.250
@@ -3264,40 +3267,8 @@ ship_event = {
 	}
 }
 
-# new cruiser
-#ship_event = {
-#	id = human_fallen_empires.257
-#	title = "human_fallen_empires.257.name"
-#	desc = "human_fallen_empires.257.desc"
-#	picture = GFX_evt_archaeological_dig
-#	show_sound = event_airlock
-#	location = event_target:human_fallen_empires_memorial_planet
-#
-#	is_triggered_only = yes
-#
-#	immediate = {
-#		create_fleet = { name = "Cruiser"}
-#		last_created_fleet = {
-#			set_owner = root.owner
-#			create_ship = {
-#				name = random
-#				design = "Seth"
-#				graphical_culture = "mammalian_01"
-#				prefix = no
-#			}
-#			set_location = root
-#			set_fleet_stance = aggressive
-#		}
-#	}
-#
-#	option = {
-#		name = "human_fallen_empires.257.0"
-#	}
-#}
 
-
-## sputnik 300 - 350
-
+# sputnik 300 - 350
 # start
 planet_event = {
 	id = human_fallen_empires.300
@@ -3498,8 +3469,7 @@ ship_event = {
 	}
 }
 
-
-## find sol 350
+# find sol 350
 ship_event = {
 	id = human_fallen_empires.350
 	title = human_fallen_empires.350.name
@@ -3604,9 +3574,299 @@ ship_event = {
 	}
 }
 
+# copernicus event 355 - 365
+# enter system
+ship_event = {
+	id = human_fallen_empires.355
+	title = human_fallen_empires.355.name
+	desc = human_fallen_empires.355.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = {
+			has_star_flag = human_fallen_empires_too_ideal_planet
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = human_fallen_empires_chain_copernicus
+			target = root.owner
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.355.0
+	}
+}
+
+# explore planet
+ship_event = {
+	id = human_fallen_empires.356
+	title = human_fallen_empires.356.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.356.desc.0
+				from = {
+					exists = owner
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				owner = {
+					not = {
+						has_completed_event_chain_counter = {
+							event_chain = human_fallen_empires_chain_copernicus
+							counter = scans
+						}
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.356.desc.1
+				from = {
+					exists = owner
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				owner = {
+					has_completed_event_chain_counter = {
+						event_chain = human_fallen_empires_chain_copernicus
+						counter = scans
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.356.desc.2
+				from = {
+					exists = owner
+					owner = {
+						not = {
+							is_country_type = primitive
+						}
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.356.desc.4
+				from = {
+					has_owner = no
+				}
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = {
+			has_planet_flag = human_fallen_empires_too_ideal_planet.0
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_chain_copernicus
+				counter = scans
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.356.0
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = human_fallen_empires_chain_copernicus
+							counter = scans
+						}
+					}
+					country_event = { id = human_fallen_empires.358 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# scan asteroid
+ship_event = {
+	id = human_fallen_empires.357
+	title = human_fallen_empires.357.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.357.desc.0
+				owner = {
+					not = {
+						has_completed_event_chain_counter = {
+							event_chain = human_fallen_empires_chain_copernicus
+							counter = scans
+						}
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.357.desc.1
+				owner = {
+					has_completed_event_chain_counter = {
+						event_chain = human_fallen_empires_chain_copernicus
+						counter = scans
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = {
+			has_planet_flag = human_fallen_empires_too_ideal_planet.1
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_chain_copernicus
+				counter = scans
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.357.0
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = human_fallen_empires_chain_copernicus
+							counter = scans
+						}
+					}
+					country_event = { id = human_fallen_empires.358 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# start project
+country_event = {
+	id = human_fallen_empires.358
+	title = human_fallen_empires.358.name
+	desc = human_fallen_empires.358.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.358.0
+		enable_special_project = {
+			name = human_fallen_empires_project_copernicus
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+# project complite
+country_event = {
+	id = human_fallen_empires.359
+	title = human_fallen_empires.359.name
+	desc = human_fallen_empires.359.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.359.0
+		# награда
+	}
+}
+
+# observation outpost event
+# start
+planet_event = {
+	id = human_fallen_empires.360
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_observation_outpost = yes
+	}
+
+	immediate = {
+		set_country_flag = human_fallen_empires_has_event.360
+		observation_outpost_owner = {
+			country_event = { id = human_fallen_empires.361 }
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.361
+	title = human_fallen_empires.361.name
+	desc = human_fallen_empires.361.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.361.0
+	}
+}
+
+# then gain planet
+planet_event = {
+	id = human_fallen_empires.362
+	title = human_fallen_empires.362.name
+	desc = human_fallen_empires.362.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = human_fallen_empires_varelse_mehanicus
+		save_event_target_as = human_fallen_empires_varelse_colony
+		observation_outpost_owner = {
+			country_event = { id = human_fallen_empires.102 }
+		}
+	}
+}
 
 
-## Ahet section 400 - 401
+# ahet section 400 - 401
 
 # ahet colonys after survey
 # сolony 1 400
@@ -3898,16 +4158,18 @@ country_event = {
 				}
 			}
 			human_fallen_empires_effect_xenophobe_attraction_middle = yes
-		}
-		if = {
-			limit = {
-				nor = {
-					human_fallen_empires_trigger_is_xenophobe = yes
-					human_fallen_empires_trigger_is_militarist = yes
-					human_fallen_empires_trigger_is_authoritarian = yes
+			else = {
+				if = {
+					limit = {
+						nor = {
+							human_fallen_empires_trigger_is_xenophobe = yes
+							human_fallen_empires_trigger_is_militarist = yes
+							human_fallen_empires_trigger_is_authoritarian = yes
+						}
+					}
+					human_fallen_empires_effect_xenophile_attraction_middle = yes
 				}
 			}
-			human_fallen_empires_effect_xenophile_attraction_middle = yes
 		}
 		if = {
 			limit = {
@@ -4016,7 +4278,6 @@ country_event = {
 		end_event_chain = human_fallen_empires_chain_ahet_home
 	}
 }
-
 
 # Ra'ar story (then home of light captured) 500 - 501
 # start event
@@ -4128,8 +4389,7 @@ country_event = {
 	}
 }
 
-
-## drone country section 600
+# drone country section 600
 # cheat for survey
 ship_event = {
 	id = human_fallen_empires.600
