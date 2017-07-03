@@ -3658,7 +3658,7 @@ ship_event = {
 				}
 			}
 			success_text = {
-				text = human_fallen_empires.356.desc.4
+				text = human_fallen_empires.356.desc.3
 				from = {
 					has_owner = no
 				}
@@ -3781,26 +3781,34 @@ ship_event = {
 	}
 }
 
-# start project
-country_event = {
+# scan star
+ship_event = {
 	id = human_fallen_empires.358
 	title = human_fallen_empires.358.name
 	desc = human_fallen_empires.358.desc
 	picture = GFX_evt_human_fallen_empires_black_hole
 	show_sound = event_scanner
+	location = root
 	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = {
+			has_planet_flag = human_fallen_empires_too_ideal_planet.2
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
 
 	option = {
 		name = human_fallen_empires.358.0
-		enable_special_project = {
-			name = human_fallen_empires_project_copernicus
-			location = root.capital_scope
-			owner = root
-		}
 	}
 }
 
-# project complite
+
+# start project
 country_event = {
 	id = human_fallen_empires.359
 	title = human_fallen_empires.359.name
@@ -3811,6 +3819,25 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.359.0
+		enable_special_project = {
+			name = human_fallen_empires_project_copernicus
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+# project complite
+country_event = {
+	id = human_fallen_empires.360
+	title = human_fallen_empires.360.name
+	desc = human_fallen_empires.360.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.360.0
 		# награда
 	}
 }
@@ -3818,7 +3845,7 @@ country_event = {
 # observation outpost event
 # start
 planet_event = {
-	id = human_fallen_empires.360
+	id = human_fallen_empires.361
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -3827,28 +3854,14 @@ planet_event = {
 	}
 
 	immediate = {
-		set_country_flag = human_fallen_empires_has_event.360
+		set_country_flag = human_fallen_empires_has_event.361
 		observation_outpost_owner = {
-			country_event = { id = human_fallen_empires.361 }
+			country_event = { id = human_fallen_empires.362 }
 		}
 	}
 }
 
 country_event = {
-	id = human_fallen_empires.361
-	title = human_fallen_empires.361.name
-	desc = human_fallen_empires.361.desc
-	picture = GFX_evt_human_fallen_empires_black_hole
-	show_sound = event_scanner
-	is_triggered_only = yes
-
-	option = {
-		name = human_fallen_empires.361.0
-	}
-}
-
-# then gain planet
-planet_event = {
 	id = human_fallen_empires.362
 	title = human_fallen_empires.362.name
 	desc = human_fallen_empires.362.desc
@@ -3856,12 +3869,35 @@ planet_event = {
 	show_sound = event_scanner
 	is_triggered_only = yes
 
-	immediate = {
-		set_global_flag = human_fallen_empires_varelse_mehanicus
-		save_event_target_as = human_fallen_empires_varelse_colony
-		observation_outpost_owner = {
-			country_event = { id = human_fallen_empires.102 }
+	# return
+	option = {
+		name = human_fallen_empires.362.0
+		trigger = {
+			human_fallen_empires_trigger_is_xenophobe = no
 		}
+		human_fallen_empires_effect_xenophile_attraction_middle = yes
+	}
+	# use
+	option = {
+		name = human_fallen_empires.362.1
+		trigger = {
+			human_fallen_empires_trigger_is_xenophile = no
+		}
+		#наука
+	}
+}
+
+# then gain planet
+planet_event = {
+	id = human_fallen_empires.363
+	title = human_fallen_empires.363.name
+	desc = human_fallen_empires.363.desc
+	picture = GFX_evt_human_fallen_empires_black_hole
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.363.0
 	}
 }
 
@@ -7552,14 +7588,6 @@ country_event = {
 }
 
 
-
-
-
-
-
-
-
-
 # The War in Heavens by Human Fallen Empires
 #10000 - 15000
 
@@ -7705,7 +7733,7 @@ country_event = {
 		log = "war in heavens started"
 		random_list = {
 			1 = { }
-			4 = {
+			3 = {
 				if = {
 					limit = {
 						not = {
