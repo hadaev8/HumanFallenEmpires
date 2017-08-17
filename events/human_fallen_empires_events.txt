@@ -67,9 +67,17 @@ country_event = {
 					has_global_flag = human_fallen_empires_installed
 				}
 			}
-			# prevent spawn vanilla pirate
 			every_country = {
+				# prevent spawn vanilla pirate
 				set_country_flag = birth_of_piracy
+				# exodus civic start
+				country_event = {
+					id = human_fallen_empires_features.4
+				}
+				# dicovery start
+				country_event = {
+					id = human_fallen_empires_discovery.0
+				}
 			}
 			# prevent vanilla awake
 			set_global_flag = sleepers_awake_happened
@@ -225,17 +233,17 @@ country_event = {
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 5
+					max_distance = 10
 					initializer = human_fallen_empires_egypt
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 15
 					initializer = human_fallen_empires_hope
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 15
+					max_distance = 20
 					initializer = human_fallen_empires_gift
 				}
 				set_global_flag = human_fallen_empires_egypt_spawned
@@ -310,7 +318,7 @@ country_event = {
 						exists = space_owner
 					}
 				}
-				spawn_system = { initializer = human_fallen_empires_too_ideal_planet }
+				spawn_system = { initializer = human_fallen_empires_copernicus }
 			}
 			# drone
 			random_system = {
@@ -330,17 +338,17 @@ country_event = {
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 15
 					initializer = human_fallen_empires_drone_sector_01
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 20
 					initializer = human_fallen_empires_drone_sector_02
 				}
 				spawn_system = {
 					min_distance = 0
-					max_distance = 10
+					max_distance = 25
 					initializer = human_fallen_empires_drone_sector_03
 				}
 			}
@@ -559,6 +567,31 @@ event = {
 					}
 				}
 				planet_event = { id = human_fallen_empires.101 days = 1 random = 355 }
+			}
+		}
+		# copernicus observation event
+		if = {
+			limit = {
+				not = {
+					has_global_flag = human_fallen_empires_has_event.362
+				}
+			}
+			random_planet = {
+				limit = {
+					has_planet_flag = human_fallen_empires_copernicus.0
+					has_observation_outpost = yes
+					exists = owner
+					owner = {
+						is_country_type = primitive
+					}
+					observation_outpost_owner = {
+						is_ai = no
+					}
+					not = {
+						has_planet_flag = human_fallen_empires_has_event.362
+					}
+				}
+				planet_event = { id = human_fallen_empires.361 days = 1 random = 355 }
 			}
 		}
 		# fallen emp drain resurces from vassals
@@ -1306,12 +1339,11 @@ country_event = {
 					has_star_flag = sol
 				}
 				save_event_target_as = human_fallen_empires_sol
-				set_star_flag = human_fallen_empires_sol_target
+				set_star_flag = human_fallen_empires_sol_target@root
 			}
-			set_country_flag = human_fallen_empires_sol_search
 			create_point_of_interest = {
 				id = human_fallen_empires_sol.1
-				name = "sol_1_poi"
+				name = sol_1_poi
 				desc = human_fallen_empires_find_sol_chain_desc.1
 				event_chain = human_fallen_empires_find_sol_chain
 				location = event_target:human_fallen_empires_sol
@@ -2078,12 +2110,7 @@ country_event = {
 	option = {
 		name = human_fallen_empires.104.2
 		response_text = human_fallen_empires.104.2.response
-		add_monthly_resource_mult = {
-			resource = physics_research
-			value = @tier2researchreward
-			min = @tier2researchmin
-			max = @tier2researchmax
-		}
+		human_fallen_empires_effect_add_physics_research.2 = yes
 	}
 }
 
@@ -2138,12 +2165,7 @@ country_event = {
 		trigger = {
 			human_fallen_empires_trigger_is_xenophobe = no
 		}
-		add_monthly_resource_mult = {
-			resource = engineering_research
-			value = @tier2researchreward
-			min = @tier2researchmin
-			max = @tier2researchmax
-		}
+		human_fallen_empires_effect_add_engineering_research.2 = yes
 	}
 	option = {
 		name = human_fallen_empires.105.1
@@ -2151,18 +2173,8 @@ country_event = {
 			human_fallen_empires_trigger_is_xenophobe = yes
 		}
 		human_fallen_empires_effect_xenophobe_attraction_middle = yes
-		add_monthly_resource_mult = {
-			resource = engineering_research
-			value = @tier2researchreward
-			min = @tier2researchmin
-			max = @tier2researchmax
-		}
-		add_monthly_resource_mult = {
-			resource = society_research
-			value = @tier2researchreward
-			min = @tier2researchmin
-			max = @tier2researchmax
-		}
+		human_fallen_empires_effect_add_engineering_research.2 = yes
+		human_fallen_empires_effect_add_society_research.1 = yes
 	}
 }
 
@@ -2192,12 +2204,7 @@ country_event = {
 			human_fallen_empires_trigger_is_materialist = yes
 		}
 		human_fallen_empires_effect_materialist_attraction_high = yes
-		add_monthly_resource_mult = {
-			resource = society_research
-			value = @tier2researchreward
-			min = @tier2researchmin
-			max = @tier2researchmax
-		}
+		human_fallen_empires_effect_add_society_research.1 = yes
 	}
 }
 
@@ -2872,12 +2879,7 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.206.0
 		owner = {
-			add_monthly_resource_mult = {
-				resource = engineering_research
-				value = @tier3researchreward
-				min = @tier3researchmin
-				max = @tier3researchmax
-			}
+			human_fallen_empires_effect_add_engineering_research.3 = yes
 			set_country_flag = human_fallen_empires_military_warehouse_events_6
 		}
 	}
@@ -2981,34 +2983,19 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.251.0
 		owner = {
-			add_monthly_resource_mult = {
-				resource = minerals
-				value = @tier2materialreward
-				min = @tier2materialmin
-				max = @tier2materialmax
-			}
+			human_fallen_empires_effect_add_minerals.2 = yes
 		}
 	}
 	option = {
 		name = human_fallen_empires.251.1
 		owner = {
-			add_monthly_resource_mult = {
-				resource = energy
-				value = @tier2materialreward
-				min = @tier2materialmin
-				max = @tier2materialmax
-			}
+			human_fallen_empires_effect_add_energy.2 = yes
 		}
 	}
 	option = {
 		name = human_fallen_empires.251.2
 		owner = {
-			add_monthly_resource_mult = {
-				resource = physics_research
-				value = @tier3researchreward
-				min = @tier3researchmin
-				max = @tier3researchmax
-			}
+			human_fallen_empires_effect_add_physics_research.2 = yes
 		}
 	}
 }
@@ -3426,12 +3413,7 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.303.0
 		owner = {
-			add_monthly_resource_mult = {
-				resource = engineering_research
-				value = @tier1researchreward
-				min = @tier1researchmin
-				max = @tier1researchmax
-			}
+			human_fallen_empires_effect_add_engineering_research.1 = yes
 		}
 	}
 }
@@ -3459,12 +3441,7 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.304.0
 		owner = {
-			add_monthly_resource_mult = {
-				resource = engineering_research
-				value = @tier3researchreward
-				min = @tier3researchmin
-				max = @tier3researchmax
-			}
+			human_fallen_empires_effect_add_engineering_research.3 = yes
 		}
 	}
 }
@@ -3476,15 +3453,35 @@ ship_event = {
 	desc = {
 		trigger = {
 			success_text = {
-				text = human_fallen_empires.350.desc.0
+				text = human_fallen_empires.350.desc.0.0
 				owner = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
 			}
 			fail_text = {
-				text = human_fallen_empires.350.desc.1
+				text = human_fallen_empires.350.desc.0.1
 				owner = {
 					has_country_flag = human_fallen_empires_marked_as_human
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.350.desc.1.0
+				from = {
+					nor = {
+						has_star_flag = nuked_sol
+						any_planet = {
+							exists = owner
+							owner = {
+								is_country_type = default
+							}
+						}
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.350.desc.1.1
+				from = {
+					has_star_flag = nuked_sol
 				}
 			}
 		}
@@ -3495,19 +3492,22 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		from = { has_star_flag = human_fallen_empires_sol_target }
-		owner = { has_country_flag = human_fallen_empires_sol_search }
+		exists = from
+		from = {
+			has_star_flag = human_fallen_empires_sol_target@root.owner
+		}
+		exists = owner
+		owner = {
+			has_event_chain = human_fallen_empires_find_sol_chain
+		}
 	}
 
 	immediate = {
-		from = { remove_star_flag = human_fallen_empires_sol_target }
+		from = {
+			remove_star_flag = human_fallen_empires_sol_target@root.owner
+		}
 		owner = {
-			remove_country_flag = human_fallen_empires_sol_search
-			add_event_chain_counter = {
-				event_chain = human_fallen_empires_find_sol_chain
-				counter = found
-				amount = 1
-			}
+			end_event_chain = human_fallen_empires_find_sol_chain
 		}
 	}
 
@@ -3517,14 +3517,25 @@ ship_event = {
 			owner = {
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
+			from = {
+				not = {
+					has_star_flag = nuked_sol
+				}
+			}
 		}
 		owner = {
-			add_monthly_resource_mult = {
-				resource = influence
-				value = @tier2influencereward
-				min = @tier2influencemin
-				max = @tier2influencemax
+			human_fallen_empires_effect_add_influence.2 = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires.350.1
+		trigger = {
+			from = {
+				has_star_flag = nuked_sol
 			}
+		}
+		owner = {
+			human_fallen_empires_effect_add_influence.2 = yes
 		}
 	}
 	option = {
@@ -3536,15 +3547,15 @@ ship_event = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
 			}
-		}
-		human_fallen_empires_effect_xenophile_attraction_low = yes
-		owner = {
-			add_monthly_resource_mult = {
-				resource = influence
-				value = @tier2influencereward
-				min = @tier2influencemin
-				max = @tier2influencemax
+			from = {
+				not = {
+					has_star_flag = nuked_sol
+				}
 			}
+		}
+		owner = {
+			human_fallen_empires_effect_xenophile_attraction_low = yes
+			human_fallen_empires_effect_add_influence.2 = yes
 		}
 	}
 	option = {
@@ -3557,20 +3568,42 @@ ship_event = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
 			}
-		}
-		human_fallen_empires_effect_xenophile_attraction_low = yes
-		human_fallen_empires_effect_authoritarian_attraction_low = yes
-		owner = {
-			add_monthly_resource_mult = {
-				resource = influence
-				value = @tier2influencereward
-				min = @tier2influencemin
-				max = @tier2influencemax
+			from = {
+				not = {
+					has_star_flag = nuked_sol
+				}
 			}
 		}
+		owner = {
+			human_fallen_empires_effect_xenophile_attraction_low = yes
+			human_fallen_empires_effect_authoritarian_attraction_low = yes
+			human_fallen_empires_effect_add_influence.2 = yes
+		}
 	}
-	after = {
-		owner = { end_event_chain = "human_fallen_empires_find_sol_chain" }
+}
+
+# abort chain if contacted with sol owner 351, not enabled for now
+country_event = {
+	id = human_fallen_empires.351
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = human_fallen_empires_find_sol_chain
+		exists = from
+		from = {
+
+		}
+	}
+
+	immediate = {
+		end_event_chain = human_fallen_empires_find_sol_chain
+		random_system = {
+			limit = {
+				has_star_flag = human_fallen_empires_sol_target@root
+			}
+			remove_star_flag = human_fallen_empires_sol_target@root
+		}
 	}
 }
 
@@ -3579,8 +3612,24 @@ ship_event = {
 ship_event = {
 	id = human_fallen_empires.355
 	title = human_fallen_empires.355.name
-	desc = human_fallen_empires.355.desc
-	picture = GFX_evt_human_fallen_empires_black_hole
+	desc = {
+		trigger = {
+			text = human_fallen_empires.355.desc.0
+			fail_text = {
+				text = human_fallen_empires.355.desc.1.0
+				owner = {
+					has_country_flag = human_fallen_empires_copernicus_has_owner
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.355.desc.1.1
+				owner = {
+					has_country_flag = human_fallen_empires_copernicus_has_owner
+				}
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	location = root
 	is_triggered_only = yes
@@ -3588,7 +3637,7 @@ ship_event = {
 	trigger = {
 		exists = from
 		from = {
-			has_star_flag = human_fallen_empires_too_ideal_planet
+			has_star_flag = human_fallen_empires_copernicus
 		}
 		exists = owner
 		owner = {
@@ -3597,75 +3646,108 @@ ship_event = {
 	}
 
 	immediate = {
-		begin_event_chain = {
-			event_chain = human_fallen_empires_chain_copernicus
-			target = root.owner
+		from = {
+			save_global_event_target_as = human_fallen_empires_copernicus
+			random_system_planet = {
+				limit = {
+					has_planet_flag = human_fallen_empires_copernicus.0
+				}
+				if = {
+					limit = {
+						exists = owner
+						owner = {
+							is_country_type = default
+						}
+					}
+					save_event_target_as = human_fallen_empires_copernicus_owner
+					# set flag if stop event chain
+					root.owner = {
+						set_country_flag = human_fallen_empires_copernicus_has_owner
+					}
+					else = {
+						begin_event_chain = {
+							event_chain = human_fallen_empires_chain_copernicus
+							target = root.owner
+						}
+						if = {
+							limit = {
+								owner = {
+									is_country_type = primitive
+								}
+							}
+							owner = {
+								#establish_communications_no_message = root.owner
+								species = {
+									save_global_event_target_as = human_fallen_empires_copernicus_species
+								}
+							}
+							root.owner = {
+								set_country_flag = human_fallen_empires_copernicus_has_primitive
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
 	option = {
 		name = human_fallen_empires.355.0
+		trigger = {
+			owner = {
+				has_event_chain = human_fallen_empires_chain_copernicus
+			}
+		}
+		tooltip = {
+			begin_event_chain = {
+				event_chain = human_fallen_empires_chain_copernicus
+				target = root.owner
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.355.1
+		trigger = {
+			owner = {
+				not = {
+					has_event_chain = human_fallen_empires_chain_copernicus
+				}
+			}
+		}
+		tooltip = {
+			owner = {
+				end_event_chain = human_fallen_empires_chain_copernicus
+			}
+		}
 	}
 }
 
-# explore planet
+# scan planet
 ship_event = {
 	id = human_fallen_empires.356
 	title = human_fallen_empires.356.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = human_fallen_empires.356.desc.0
-				from = {
-					exists = owner
-					owner = {
-						is_country_type = primitive
-					}
-				}
-				owner = {
-					not = {
-						has_completed_event_chain_counter = {
-							event_chain = human_fallen_empires_chain_copernicus
-							counter = scans
-						}
-					}
-				}
-			}
+			text = human_fallen_empires.356.desc.0
 			success_text = {
 				text = human_fallen_empires.356.desc.1
-				from = {
-					exists = owner
-					owner = {
-						is_country_type = primitive
-					}
-				}
 				owner = {
-					has_completed_event_chain_counter = {
-						event_chain = human_fallen_empires_chain_copernicus
-						counter = scans
-					}
+					has_country_flag = human_fallen_empires_copernicus_has_primitive
 				}
 			}
 			success_text = {
 				text = human_fallen_empires.356.desc.2
-				from = {
-					exists = owner
-					owner = {
-						not = {
-							is_country_type = primitive
-						}
+				owner = {
+					has_country_flag = human_fallen_empires_copernicus_has_primitive
+					has_completed_event_chain_counter = {
+						event_chain = human_fallen_empires_chain_copernicus
+						counter = human_fallen_empires_scans
 					}
-				}
-			}
-			success_text = {
-				text = human_fallen_empires.356.desc.3
-				from = {
-					has_owner = no
 				}
 			}
 		}
 	}
-	picture = GFX_evt_human_fallen_empires_black_hole
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	location = root
 	is_triggered_only = yes
@@ -3673,11 +3755,12 @@ ship_event = {
 	trigger = {
 		exists = from
 		from = {
-			has_planet_flag = human_fallen_empires_too_ideal_planet.0
+			has_planet_flag = human_fallen_empires_copernicus.0
 		}
 		exists = owner
 		owner = {
 			is_ai = no
+			has_event_chain = human_fallen_empires_chain_copernicus
 		}
 	}
 
@@ -3685,24 +3768,24 @@ ship_event = {
 		owner = {
 			add_event_chain_counter = {
 				event_chain = human_fallen_empires_chain_copernicus
-				counter = scans
+				counter = human_fallen_empires_scans
 				amount = 1
 			}
 		}
 	}
 
 	option = {
-		name = human_fallen_empires.356.0
+		name = INTERESTING
 		hidden_effect = {
 			owner = {
 				if = {
 					limit = {
 						has_completed_event_chain_counter = {
 							event_chain = human_fallen_empires_chain_copernicus
-							counter = scans
+							counter = human_fallen_empires_scans
 						}
 					}
-					country_event = { id = human_fallen_empires.358 days = 5 }
+					country_event = { id = human_fallen_empires.359 days = 5 }
 				}
 			}
 		}
@@ -3715,29 +3798,20 @@ ship_event = {
 	title = human_fallen_empires.357.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = human_fallen_empires.357.desc.0
-				owner = {
-					not = {
-						has_completed_event_chain_counter = {
-							event_chain = human_fallen_empires_chain_copernicus
-							counter = scans
-						}
-					}
-				}
-			}
+			text = human_fallen_empires.357.desc.0
 			success_text = {
 				text = human_fallen_empires.357.desc.1
 				owner = {
+					has_country_flag = human_fallen_empires_copernicus_has_primitive
 					has_completed_event_chain_counter = {
 						event_chain = human_fallen_empires_chain_copernicus
-						counter = scans
+						counter = human_fallen_empires_scans
 					}
 				}
 			}
 		}
 	}
-	picture = GFX_evt_human_fallen_empires_black_hole
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	location = root
 	is_triggered_only = yes
@@ -3745,11 +3819,12 @@ ship_event = {
 	trigger = {
 		exists = from
 		from = {
-			has_planet_flag = human_fallen_empires_too_ideal_planet.1
+			has_planet_flag = human_fallen_empires_copernicus.1
 		}
 		exists = owner
 		owner = {
 			is_ai = no
+			has_event_chain = human_fallen_empires_chain_copernicus
 		}
 	}
 
@@ -3757,24 +3832,25 @@ ship_event = {
 		owner = {
 			add_event_chain_counter = {
 				event_chain = human_fallen_empires_chain_copernicus
-				counter = scans
+				counter = human_fallen_empires_scans
 				amount = 1
 			}
 		}
 	}
 
 	option = {
-		name = human_fallen_empires.357.0
+		name = CURIOUS
 		hidden_effect = {
 			owner = {
+				remove_country_flag = human_fallen_empires_has_event.356
 				if = {
 					limit = {
 						has_completed_event_chain_counter = {
 							event_chain = human_fallen_empires_chain_copernicus
-							counter = scans
+							counter = human_fallen_empires_scans
 						}
 					}
-					country_event = { id = human_fallen_empires.358 days = 5 }
+					country_event = { id = human_fallen_empires.359 days = 5 }
 				}
 			}
 		}
@@ -3786,7 +3862,7 @@ ship_event = {
 	id = human_fallen_empires.358
 	title = human_fallen_empires.358.name
 	desc = human_fallen_empires.358.desc
-	picture = GFX_evt_human_fallen_empires_black_hole
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	location = root
 	is_triggered_only = yes
@@ -3794,26 +3870,26 @@ ship_event = {
 	trigger = {
 		exists = from
 		from = {
-			has_planet_flag = human_fallen_empires_too_ideal_planet.2
+			has_planet_flag = human_fallen_empires_copernicus.2
 		}
 		exists = owner
 		owner = {
 			is_ai = no
+			has_event_chain = human_fallen_empires_chain_copernicus
 		}
 	}
 
 	option = {
-		name = human_fallen_empires.358.0
+		name = ASTOUNDING
 	}
 }
-
 
 # start project
 country_event = {
 	id = human_fallen_empires.359
 	title = human_fallen_empires.359.name
 	desc = human_fallen_empires.359.desc
-	picture = GFX_evt_human_fallen_empires_black_hole
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	is_triggered_only = yes
 
@@ -3831,14 +3907,50 @@ country_event = {
 country_event = {
 	id = human_fallen_empires.360
 	title = human_fallen_empires.360.name
-	desc = human_fallen_empires.360.desc
-	picture = GFX_evt_human_fallen_empires_black_hole
+	desc = {
+		trigger = {
+			text = human_fallen_empires.360.desc.0
+			success_text = {
+				text = human_fallen_empires.360.desc.1.0
+				has_country_flag = human_fallen_empires_copernicus_has_primitive
+			}
+			fail_text = {
+				text = human_fallen_empires.360.desc.1.1
+				has_country_flag = human_fallen_empires_copernicus_has_primitive
+			}
+			success_text = {
+				text = human_fallen_empires.360.desc.2.0
+				has_country_flag = human_fallen_empires_egypt_contacted
+			}
+			fail_text = {
+				text = human_fallen_empires.360.desc.2.1
+				has_country_flag = human_fallen_empires_egypt_contacted
+			}
+			success_text = {
+				text = human_fallen_empires.360.desc.3.0
+				human_fallen_empires_trigger_is_xenophile = yes
+			}
+			success_text = {
+				text = human_fallen_empires.360.desc.3.1
+				human_fallen_empires_trigger_is_xenophobe = yes
+			}
+			success_text = {
+				text = human_fallen_empires.360.desc.4
+				has_country_flag = human_fallen_empires_copernicus_has_primitive
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
 	is_triggered_only = yes
 
 	option = {
-		name = human_fallen_empires.360.0
-		# награда
+		name = AMAZING
+		human_fallen_empires_effect_add_influence.2 = yes
+		end_event_chain = human_fallen_empires_chain_copernicus
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires_copernicus_has_primitive
+		}
 	}
 }
 
@@ -3851,10 +3963,33 @@ planet_event = {
 
 	trigger = {
 		has_observation_outpost = yes
+		observation_outpost = {
+			or = {
+				has_mission = specimen_collection
+				has_mission = passive_observation
+				has_mission = technological_enlightenment_1
+				has_mission = technological_enlightenment_2
+				has_mission = technological_enlightenment_3
+				has_mission = technological_enlightenment_4
+				has_mission = technological_enlightenment_5
+				has_mission = technological_enlightenment_6
+				has_mission = technological_enlightenment_7
+				has_mission = technological_enlightenment_8
+				has_mission = technological_enlightenment_9
+			}
+		}
+		not = {
+			has_planet_flag = human_fallen_empires_has_event.362
+		}
+		observation_outpost_owner = {
+			is_ai = no
+			not = {
+				has_country_flag = human_fallen_empires_has_event.362
+			}
+		}
 	}
 
 	immediate = {
-		set_country_flag = human_fallen_empires_has_event.361
 		observation_outpost_owner = {
 			country_event = { id = human_fallen_empires.362 }
 		}
@@ -3864,16 +3999,62 @@ planet_event = {
 country_event = {
 	id = human_fallen_empires.362
 	title = human_fallen_empires.362.name
-	desc = human_fallen_empires.362.desc
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.362.desc.0
+				from = {
+					observation_outpost = {
+						has_mission = passive_observation
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.362.desc.1
+				from = {
+					observation_outpost = {
+						has_mission = specimen_collection
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.362.desc.2
+				from = {
+					observation_outpost = {
+						or = {
+							has_mission = technological_enlightenment_1
+							has_mission = technological_enlightenment_2
+							has_mission = technological_enlightenment_3
+							has_mission = technological_enlightenment_4
+							has_mission = technological_enlightenment_5
+							has_mission = technological_enlightenment_6
+							has_mission = technological_enlightenment_7
+							has_mission = technological_enlightenment_8
+							has_mission = technological_enlightenment_9
+						}
+					}
+				}
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_black_hole
 	show_sound = event_scanner
 	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = human_fallen_empires_has_event.362
+	}
 
 	# return
 	option = {
 		name = human_fallen_empires.362.0
 		trigger = {
 			human_fallen_empires_trigger_is_xenophobe = no
+			from = {
+				observation_outpost = {
+					has_mission = passive_observation
+				}
+			}
 		}
 		human_fallen_empires_effect_xenophile_attraction_middle = yes
 	}
@@ -3882,28 +4063,109 @@ country_event = {
 		name = human_fallen_empires.362.1
 		trigger = {
 			human_fallen_empires_trigger_is_xenophile = no
+			from = {
+				observation_outpost = {
+					has_mission = passive_observation
+				}
+			}
 		}
-		#наука
+		human_fallen_empires_effect_add_engineering_research.3 = yes
+		hidden_effect = {
+			from = {
+				set_planet_flag = human_fallen_empires_has_event.362
+				set_global_flag = human_fallen_empires_has_event.362
+			}
+		}
+	}
+	# good job
+	option = {
+		name = human_fallen_empires_good_job
+		trigger = {
+			from = {
+				observation_outpost = {
+					has_mission = specimen_collection
+				}
+			}
+		}
+		human_fallen_empires_effect_add_engineering_research.3 = yes
+		hidden_effect = {
+			from = {
+				set_planet_flag = human_fallen_empires_has_event.362
+				set_global_flag = human_fallen_empires_has_event.362
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires_good_job
+		trigger = {
+			from = {
+				observation_outpost = {
+					or = {
+						has_mission = technological_enlightenment_1
+						has_mission = technological_enlightenment_2
+						has_mission = technological_enlightenment_3
+						has_mission = technological_enlightenment_4
+						has_mission = technological_enlightenment_5
+						has_mission = technological_enlightenment_6
+						has_mission = technological_enlightenment_7
+						has_mission = technological_enlightenment_8
+						has_mission = technological_enlightenment_9
+					}
+				}
+			}
+		}
+		human_fallen_empires_effect_add_engineering_research.3 = yes
+		from = {
+			observation_outpost = {
+				add_mission_progress = 0.5
+			}
+		}
+		hidden_effect = {
+			from = {
+				set_planet_flag = human_fallen_empires_has_event.362
+				set_global_flag = human_fallen_empires_has_event.362
+			}
+		}
 	}
 }
 
 # then gain planet
 planet_event = {
 	id = human_fallen_empires.363
-	title = human_fallen_empires.363.name
+	title = human_fallen_empires.362.name
 	desc = human_fallen_empires.363.desc
 	picture = GFX_evt_human_fallen_empires_black_hole
 	show_sound = event_scanner
 	is_triggered_only = yes
 
+	trigger = {
+		has_planet_flag = human_fallen_empires_too_ideal_planet.0
+		not = {
+			has_planet_flag = human_fallen_empires_has_event.362
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		set_planet_flag = human_fallen_empires_has_event.362
+	}
+
 	option = {
-		name = human_fallen_empires.363.0
+		name = human_fallen_empires_good_job
+		owner = {
+			human_fallen_empires_effect_add_engineering_research.3 = yes
+			hidden_effect = {
+				set_country_flag = human_fallen_empires_has_event.362
+				set_global_flag = human_fallen_empires_has_event.362
+			}
+		}
 	}
 }
 
-
 # ahet section 400 - 401
-
 # ahet colonys after survey
 # сolony 1 400
 ship_event = {
@@ -4739,7 +5001,7 @@ ship_event = {
 			random_system_planet = {
 				save_global_event_target_as = human_fallen_empires_thoth_location
 				create_country = {
-					name = "Station AI"
+					name = "Station AI £notch"
 					type = human_fallen_empires_thoth
 					flag = random
 					#ignore_initial_colony_error = yes
@@ -5089,6 +5351,9 @@ country_event = {
 						}
 					}
 					establish_communications_no_message = root
+					root = {
+						set_country_flag = human_fallen_empires_egypt_contacted
+					}
 				}
 				random_owned_fleet = {
 					limit = {

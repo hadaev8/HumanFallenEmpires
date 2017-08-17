@@ -107,5 +107,81 @@ planet_event = {
 				}
 			}
 		}
+		# need this to fix game's broken economy bug
+		set_capital = yes
+	}
+}
+
+# exodus civic feature 4-5
+country_event = {
+	id = human_fallen_empires_features.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_civic = human_fallen_empires_civic_features_exodus
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_discovery_translator
+			days = -1
+		}
+		set_country_type = human_fallen_empires_features_exodus
+		add_influence = 100
+		every_owned_pop = {
+			prev = {
+				change_variable = {
+					which = human_fallen_empires_features_exodus_pop
+					value = 1
+				}
+				add_energy = 50
+				add_minerals = 50
+			}
+			kill_pop = yes
+		}
+		every_owned_planet = {
+			create_fleet = {
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "New Hope"
+						random_existing_design = colonizer
+					}
+					set_location = prev
+					add_modifier = {
+						modifier = human_fallen_empires_unkeep
+						days = -1
+					}
+				}
+			}
+			destroy_colony = {
+				keep_buildings = no
+			}
+			change_pc = pc_molten
+		}
+	}
+}
+
+
+planet_event = {
+	id = human_fallen_empires_features.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_civic = human_fallen_empires_civic_features_exodus
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = custom_start_screen
+			give_technology = {
+				message = no
+				tech = tech_human_fallen_empires_features_exodus
+			}
+		}
 	}
 }

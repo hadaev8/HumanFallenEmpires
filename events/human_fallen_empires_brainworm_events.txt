@@ -1,24 +1,50 @@
 namespace = human_fallen_empires_brainworm
 
 # start by civic 0
-country_event = {
+planet_event = {
 	id = human_fallen_empires_brainworm.0
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_civic = human_fallen_empires_civic_brainworm
+		owner = {
+			has_civic = human_fallen_empires_civic_brainworm
+		}
 	}
 
 	immediate = {
-		modify_species = {
-			species = this
-			add_trait = human_fallen_empires_trait_brainworm
-			add_traits_at_start_of_list = yes
+		every_owned_pop = {
+			modify_species = {
+				species = this
+				add_trait = human_fallen_empires_trait_brainworm
+				add_traits_at_start_of_list = yes
+			}
 		}
-		change_dominant_species = last_created_species
-		#every_owned_leader
-		# проверить умирают ли стартовые лидеры.
+		random_tile = {
+			limit = {
+				has_pop = no
+			}
+			if = {
+				limit = {
+					has_blocker = yes
+				}
+				remove_blocker = yes
+			}
+			set_building = human_fallen_empires_brainworm_reservation_0
+			create_pop = {
+				species = root.owner
+			}
+		}
+		owner = {
+			every_owned_leader = {
+				change_species = last_created_species
+			}
+			every_pool_leader = {
+				change_species = last_created_species
+			}
+			change_dominant_species = last_created_species
+			set_country_flag = custom_start_screen
+		}
 	}
 }
 
@@ -36,26 +62,33 @@ pop_event = {
 
 	trigger = {
 		exists = planet
-		not = {
-			has_trait = trait_mechanical
-		}
 		or = {
-			has_trait = human_fallen_empires_trait_brainworm
+			human_fallen_empires_trigger_is_brainworm = yes
+			human_fallen_empires_trigger_is_brainworm_target = yes
 			planet = {
 				any_owned_pop = {
-					has_trait = human_fallen_empires_trait_brainworm
+					or = {
+						human_fallen_empires_trigger_is_brainworm = yes
+						human_fallen_empires_trigger_is_brainworm_target = yes
+					}
 				}
 			}
 		}
 	}
 
 	immediate = {
-		log = "worm pigrate to [Planet.GetName]"
+		#log = "worm migrate to [Planet.GetName]"
 		if = {
 			limit = {
+				exists = from.owner
 				exists = fromfrom.owner
 				fromfrom.owner = {
 					has_trait = human_fallen_empires_trait_brainworm
+				}
+				not = {
+					fromfrom.owner = {
+						is_country = from.owner
+					}
 				}
 			}
 			fromfrom.owner = {
@@ -65,7 +98,7 @@ pop_event = {
 		}
 		planet = {
 			# assimilate all
-			planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+			planet_event = { id = human_fallen_empires_brainworm.4 days = 90 random = 30 }
 			# change owner if needed
 			planet_event = { id = human_fallen_empires_brainworm.5 }
 		}
@@ -80,14 +113,15 @@ pop_event = {
 
 	trigger = {
 		exists = planet
-		not = {
-			has_trait = trait_mechanical
-		}
 		or = {
-			has_trait = human_fallen_empires_trait_brainworm
+			human_fallen_empires_trigger_is_brainworm = yes
+			human_fallen_empires_trigger_is_brainworm_target = yes
 			planet = {
 				any_owned_pop = {
-					has_trait = human_fallen_empires_trait_brainworm
+					or = {
+						human_fallen_empires_trigger_is_brainworm = yes
+						human_fallen_empires_trigger_is_brainworm_target = yes
+					}
 				}
 			}
 		}
@@ -96,7 +130,7 @@ pop_event = {
 	immediate = {
 		planet = {
 			# assimilate all
-			planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+			planet_event = { id = human_fallen_empires_brainworm.4 days = 90 random = 30 }
 			# change owner if needed
 			planet_event = { id = human_fallen_empires_brainworm.5 }
 		}
@@ -111,19 +145,16 @@ planet_event = {
 
 	trigger = {
 		any_owned_pop = {
-			nor = {
-				has_trait = human_fallen_empires_trait_brainworm
-				has_trait = trait_mechanical
+			or = {
+				human_fallen_empires_trigger_is_brainworm = yes
+				human_fallen_empires_trigger_is_brainworm_target = yes
 			}
-		}
-		any_owned_pop = {
-			has_trait = human_fallen_empires_trait_brainworm
 		}
 	}
 
 	immediate = {
 		# assimilate all
-		planet_event = { id = human_fallen_empires_brainworm.4 days = 30 random = 30 }
+		planet_event = { id = human_fallen_empires_brainworm.4 days = 90 random = 30 }
 		# change owner if needed
 		planet_event = { id = human_fallen_empires_brainworm.5 }
 	}
@@ -137,16 +168,17 @@ planet_event = {
 
 	trigger = {
 		any_owned_pop = {
-			nor = {
-				has_trait = human_fallen_empires_trait_brainworm
-				has_trait = trait_mechanical
-			}
-			is_growing = no
+			human_fallen_empires_trigger_is_brainworm_target = yes
 		}
 		any_owned_pop = {
-			has_trait = human_fallen_empires_trait_brainworm
+			human_fallen_empires_trigger_is_brainworm = yes
 		}
 		exists = owner
+		owner = {
+			not = {
+				has_policy_flag = human_fallen_empires_brainworm_policies_0.1
+			}
+		}
 	}
 
 	immediate = {
@@ -183,11 +215,7 @@ planet_event = {
 			}
 			random_owned_pop = {
 				limit = {
-					nor = {
-						has_trait = human_fallen_empires_trait_brainworm
-						has_trait = trait_mechanical
-					}
-					is_growing = no
+					human_fallen_empires_trigger_is_brainworm_target = yes
 					exists = tile
 					tile = {
 						nor = {
@@ -206,11 +234,7 @@ planet_event = {
 			else = {
 				random_owned_pop = {
 					limit = {
-						nor = {
-							has_trait = human_fallen_empires_trait_brainworm
-							has_trait = trait_mechanical
-						}
-						is_growing = no
+						human_fallen_empires_trigger_is_brainworm_target = yes
 						exists = tile
 						tile = {
 							nor = {
@@ -228,7 +252,7 @@ planet_event = {
 			}
 		}
 		# assimilate again
-		planet_event = { id = human_fallen_empires_brainworm.4 days = 60 random = 60 }
+		planet_event = { id = human_fallen_empires_brainworm.4 days = 90 random = 60 }
 		# change owner again
 		planet_event = { id = human_fallen_empires_brainworm.5 }
 	}
@@ -241,17 +265,23 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		pop_percentage = {
-			percentage > 0.8
-			limit = {
-				has_trait = human_fallen_empires_trait_brainworm
-			}
-		}
 		exists = owner
 		owner = {
 			nor = {
 				is_country_type = human_fallen_empires_pirate
 				has_trait = human_fallen_empires_trait_brainworm
+			}
+		}
+		any_owned_pop = {
+			human_fallen_empires_trigger_is_brainworm = yes
+		}
+		pop_percentage = {
+			percentage > 0.8
+			limit = {
+				or = {
+					human_fallen_empires_trigger_is_brainworm = yes
+					is_non_sentient_robot = yes
+				}
 			}
 		}
 	}
@@ -288,11 +318,11 @@ planet_event = {
 				}
 			}
 		}
-		# need notification for old owner
+		# notification for old owner
 		planet_event = { id = human_fallen_empires_brainworm.53 }
 		set_owner = event_target:human_fallen_empires_brainworm_country
 		set_controller = event_target:human_fallen_empires_brainworm_country
-		# need notification for new owner
+		# notification for new owner
 		planet_event = { id = human_fallen_empires_brainworm.54 }
 	}
 }
@@ -385,12 +415,12 @@ planet_event = {
 
 	trigger = {
 		exists = owner
-		owner = {
-			is_ai = no
-		}
 	}
 
 	option = {
 		name = human_fallen_empires_brainworm.54.0
+		owner = {
+			human_fallen_empires_effect_add_unity.1 = yes
+		}
 	}
 }

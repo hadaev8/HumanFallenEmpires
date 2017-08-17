@@ -110,7 +110,7 @@ country_event = {
 	}
 
 	immediate = {
-		#set_country_type = human_fallen_empires_discovery
+		set_country_type = human_fallen_empires_discovery
 		add_modifier = {
 			modifier = human_fallen_empires_discovery_translator
 			days = -1
@@ -120,7 +120,6 @@ country_event = {
 			species = this
 			remove_trait = trait_pc_nuked_preference
 			add_trait = trait_pc_continental_preference
-			# ideal_planet_class = root
 		}
 		change_government = {
 			authority = auth_oligarchic
@@ -129,39 +128,13 @@ country_event = {
 				civic = human_fallen_empires_discovery_civic_habitat
 			}
 		}
-		# change_dominant_species = last_created_species
-		every_owned_fleet = {
-			limit = {
-				exists = leader
-			}
-			leader = {
-				unassign_leader = this
-			}
-			destroy_fleet = this
-		}
 		capital_scope = {
 			save_event_target_as = human_fallen_empires_discovery_start_location
-			destroy_colony = { keep_buildings = no }
-		}
-		set_custom_capital_location = event_target:human_fallen_empires_discovery_start_location
-		create_leader = {
-			type = scientist
-			species = this
-			name = random
-			skill = 0
-		}
-		create_fleet = {
-			name = "Science Ship"
-			effect = {
-				set_owner = prev
-				create_ship = {
-					name = random
-					random_existing_design = science
-				}
-				assign_leader = last_created_leader
-				set_location = event_target:human_fallen_empires_discovery_start_location
+			destroy_colony = {
+				keep_buildings = no
 			}
 		}
+		#set_custom_capital_location = event_target:human_fallen_empires_discovery_start_location
 		create_leader = {
 			type = admiral
 			species = this
@@ -184,21 +157,6 @@ country_event = {
 				set_location = event_target:human_fallen_empires_discovery_start_location
 			}
 		}
-		# create_ship_design = {
-		# 	design = Constructor
-		# 	ftl = warp
-		# }
-		# create_fleet = {
-		# 	name = Constructor
-		# 	effect = {
-		# 		set_owner = prevprev
-		# 		create_ship = {
-		# 			name = random
-		# 			design = last_created_design
-		# 		}
-		# 		set_location = event_target:human_fallen_empires_discovery_start_location
-		# 	}
-		# }
 		every_owned_ship = {
 			repair_ship = yes
 			add_modifier = {
@@ -208,40 +166,6 @@ country_event = {
 		}
 		add_minerals = 500
 		add_energy = 500
-	}
-}
-
-# kill leaders for new agandas
-country_event = {
-	id = human_fallen_empires_discovery.1
-	hide_window = yes
-    is_triggered_only = yes
-
-	trigger = {
-		has_country_flag = human_fallen_empires_discovery
-	}
-
-	immediate = {
-		set_country_type = human_fallen_empires_discovery
-		every_owned_leader = {
-			#limit = {
-			#	not = {
-			#		leader_class = ruler
-			#	}
-			#}
-			kill_leader = { show_notification = no }
-		}
-		#kill_leader = { type = ruler show_notification = no }
-		while = {
-			count = 4
-			create_leader = {
-				type = scientist
-				species = this
-				name = random
-				skill = 0
-			}
-			assign_leader = last_created_leader
-		}
 	}
 }
 
@@ -262,6 +186,7 @@ country_event = {
 		}
 		from = {
 			or = {
+				has_modifier = human_fallen_empires_discovery_translator
 				is_guardian_country = yes
 				is_country_type = default
 				is_country_type = fallen_empire
@@ -279,6 +204,17 @@ country_event = {
 
 	immediate = {
 		establish_communications = from
+		if = {
+			limit = {
+				from = {
+					is_country_type = default
+				}
+			}
+			country_event = {
+				id = human_fallen_empires_discovery.55
+				days = 5
+			}
+		}
 	}
 }
 
@@ -389,38 +325,30 @@ country_event = {
 }
 
 # clear discovery war target flag after war end
+# проверить работает ли
 country_event = {
 	id = human_fallen_empires_discovery.53
 	hide_window = yes
     is_triggered_only = yes
 
 	trigger = {
-		has_country_flag = human_fallen_empires_discovery_war_target
+		is_country_type = human_fallen_empires_discovery
 	}
 
 	immediate = {
-		remove_country_flag = human_fallen_empires_discovery_war_target
-		fromfrom = {
-			random_war_participant = {
-				limit = {
-					is_country_type = human_fallen_empires_discovery
+		every_country = {
+			limit = {
+				has_country_flag = human_fallen_empires_discovery_war_target@root
+				not = {
+					is_at_war_with = root
 				}
-				save_event_target_as = human_fallen_empires_discovery_country
 			}
-			every_war_participant = {
-				limit = {
-					has_country_flag = human_fallen_empires_discovery_war_target
-					not = {
-						is_at_war_with = event_target:human_fallen_empires_discovery_country
-					}
-				}
-				remove_country_flag = human_fallen_empires_discovery_war_target
-			}
+			remove_country_flag = human_fallen_empires_discovery_war_target@root
 		}
 	}
 }
 
-# make default country if have planets, kill desovery ship
+# make default country if have planets, kill decovery ship
 country_event = {
 	id = human_fallen_empires_discovery.54
 	hide_window = yes
@@ -441,6 +369,57 @@ country_event = {
 		# 	}
 
 		# }
+	}
+}
+
+# instruction to dock event
+country_event = {
+	id = human_fallen_empires_discovery.55
+	title = human_fallen_empires_discovery.55.name
+	desc = human_fallen_empires_discovery.55.desc
+	picture = GFX_evt_star_chart
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_country_flag = human_fallen_empires_discovery_has_event.55
+		}
+	}
+
+	immediate = {
+		set_country_flag = human_fallen_empires_discovery_has_event.55
+	}
+
+	option = {
+		name = human_fallen_empires_discovery.55.0
+	}
+}
+
+# faction of pegions event
+country_event = {
+	id = human_fallen_empires_discovery.56
+	title = human_fallen_empires_discovery.56.name
+	desc = human_fallen_empires_discovery.56.desc
+	picture = GFX_evt_star_chart
+    is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_discovery
+		not = {
+			has_country_flag = human_fallen_empires_discovery_has_event.56
+		}
+		num_communications > 5
+		from = {
+			is_country_type = default
+		}
+	}
+
+	immediate = {
+		set_country_flag = human_fallen_empires_discovery_has_event.56
+	}
+
+	option = {
+		name = human_fallen_empires_discovery.56.0
 	}
 }
 
@@ -599,7 +578,7 @@ country_event = {
 		if = {
 			limit = {
 				from = {
-					has_country_flag = human_fallen_empires_discovery_war_target
+					has_country_flag = human_fallen_empires_discovery_war_target@root
 				}
 				any_country = {
 					is_at_war_with = from
@@ -774,7 +753,7 @@ country_event = {
 					space_owner = {
 						add_opinion_modifier = {
 							who = root
-							modifier = human_fallen_empires_opinion_discovery_contract_embassy_fail
+							modifier = human_fallen_empires_opinion_discovery_kill_reward
 						}
 						add_energy = @human_fallen_empires_discovery_kill_reward
 						root = {
@@ -805,7 +784,7 @@ country_event = {
 		fromfromfrom = {
 			is_ship_size = orbital_station
 			fleet = {
-				has_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target
+				has_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target@root
 			}
 		}
 	}
@@ -838,7 +817,7 @@ country_event = {
 		exists = fromfromfrom
 		fromfromfrom = {
 			solar_system = {
-				has_star_flag = human_fallen_empires_discovery_contract_clear_system_target
+				has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
 				not = {
 					any_ship_in_system = {
 						exists = owner
@@ -855,13 +834,13 @@ country_event = {
 		end_event_chain = human_fallen_empires_discovery_contract_clear_system
 		fromfromfrom = {
 			solar_system = {
-				remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target
+				remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
 			}
 		}
 	}
 }
 
-# check enemys in target system, for on_entering_system
+# check enemys in target system for on_entering_system
 ship_event = {
 	id = human_fallen_empires_discovery.103
 	hide_window = yes
@@ -875,7 +854,7 @@ ship_event = {
 		}
 		exists = from
 		from = {
-			has_star_flag = human_fallen_empires_discovery_contract_clear_system_target
+			has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
 			not = {
 				any_ship_in_system = {
 					exists = owner
@@ -892,11 +871,10 @@ ship_event = {
 			end_event_chain = human_fallen_empires_discovery_contract_clear_system
 		}
 		from = {
-			remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target
+			remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
 		}
 	}
 }
-
 
 # trade and update on planet
 # from = docking planet
@@ -1333,11 +1311,11 @@ country_event = {
 							}
 						}
 					}
-					every_fleet_in_system = {
+					random_fleet_in_system = {
 						limit = {
 							is_ship_size = orbital_station
 						}
-						set_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target
+						set_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target@root
 					}
 					random_system_planet = {
 						limit = {
@@ -1366,6 +1344,7 @@ country_event = {
 			has_country_flag = human_fallen_empires_discovery.151.contract_menu
 			any_country = {
 				has_communications = root
+				is_country_type = default
 				or = {
 					is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
 					is_dismissive_to = event_target:human_fallen_empires_discovery_docking_planet_owner
@@ -1407,6 +1386,7 @@ country_event = {
 			random_country = {
 				limit = {
 					has_communications = root
+					is_country_type = default
 					or = {
 						is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
 						is_dismissive_to = event_target:human_fallen_empires_discovery_docking_planet_owner
@@ -1423,7 +1403,7 @@ country_event = {
 				}
 				#	save_event_target_as = human_fallen_empires_discovery_embassy_target_country
 				capital_scope = {
-					set_planet_flag = human_fallen_empires_discovery_contract_embassy_target
+					set_planet_flag = human_fallen_empires_discovery_contract_embassy_target@root
 					save_event_target_as = human_fallen_empires_discovery_embassy_target
 				}
 			}
@@ -1486,6 +1466,7 @@ country_event = {
 						}
 					}
 					save_event_target_as = human_fallen_empires_discovery_clear_system_target
+					set_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
 				}
 			}
 			create_point_of_interest = {
@@ -1526,7 +1507,7 @@ country_event = {
 				limit = {
 					is_at_war_with = root
 				}
-				set_country_flag = human_fallen_empires_discovery_war_target
+				set_country_flag = human_fallen_empires_discovery_war_target@root
 			}
 		}
 	}

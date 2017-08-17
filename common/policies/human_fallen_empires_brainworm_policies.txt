@@ -1,0 +1,105 @@
+##########################################################################
+# Empire Policies
+#
+# #####
+#
+# AI:
+# Base AI-weight is 100, if unchanged
+# AI will grab whatever policy-option has the highest weight
+#
+# #####
+#
+##########################################################################
+
+human_fallen_empires_brainworm_policies_0 = {
+	potential = {
+		or = {
+			has_country_flag = human_fallen_empires_brainworm_discovered
+			has_trait = human_fallen_empires_trait_brainworm
+		}
+	}
+
+	# adopt
+	option = {
+		name = human_fallen_empires_brainworm_policies_0.0
+
+		policy_flags = {
+			human_fallen_empires_brainworm_policies_0.0
+		}
+
+		AI_weight = {
+			factor = 10
+			modifier = {
+				factor = 0
+				nor = {
+					has_trait = human_fallen_empires_trait_brainworm
+					and = {
+						exists = ruler
+						ruler = {
+							species = {
+								has_trait = human_fallen_empires_trait_brainworm
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# isolate
+	option = {
+		name = human_fallen_empires_brainworm_policies_0.1
+
+		policy_flags = {
+			human_fallen_empires_brainworm_policies_0.1
+		}
+
+		valid = {
+			custom_tooltip = {
+				fail_text = human_fallen_empires_brainworm_policies_is_worm
+				not = {
+					has_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+		}
+
+		AI_weight = {
+			factor = 10
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_pacifist = no
+				human_fallen_empires_trigger_is_xenophile = no
+			}
+		}
+	}
+
+	# clean
+	option = {
+		name = human_fallen_empires_brainworm_policies_0.2
+
+		policy_flags = {
+			human_fallen_empires_brainworm_policies_0.2
+		}
+
+		valid = {
+			nor = {
+				is_subject_type = signatory
+				has_trait = human_fallen_empires_trait_brainworm
+			}
+			human_fallen_empires_trigger_is_pacifist = no
+			or = {
+				human_fallen_empires_trigger_is_xenophile = no
+				human_fallen_empires_trigger_is_militarist = yes
+			}
+		}
+
+		AI_weight = {
+			factor = 10
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_pacifist = yes
+				human_fallen_empires_trigger_is_xenophile = yes
+			}
+		}
+	}
+}

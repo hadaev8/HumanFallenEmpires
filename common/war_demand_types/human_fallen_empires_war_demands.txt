@@ -564,3 +564,261 @@ human_fallen_empires_slave_raid = {
 		}
 	}
 }
+
+# loot raid
+human_fallen_empires_loot_raid = {
+	execution_order = 1
+
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+
+	warscore_cost = {
+		base = 10
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 1000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 2000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 3000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 4000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 5000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 6000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 7000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 8000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				energy > 9000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 1000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 3000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 5000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 7000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 9000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 11000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 13000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 15000
+			}
+		}
+		modifier = {
+			add = 5
+			parameter:country = {
+				minerals > 17000
+			}
+		}
+	}
+
+	potential = {
+		OR = {
+			is_subject = no
+			NOT = {
+				overlord = {
+					is_same_value = from
+				}
+			}
+		}
+		parameter:country = {
+			or = {
+				energy > 100
+				minerals > 100
+			}
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_not_opponent"
+			parameter:country = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+
+				}
+			}
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_overlord_in_war"
+			OR = {
+				NOT = {
+					exists = parameter:country.overlord
+				}
+				AND = {
+					exists = fromfrom
+					fromfrom = {
+						NOT = {
+							is_war_participant = {
+								who = parameter:country.overlord
+								side = root
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = fromfrom }
+					parameter:country.overlord = {
+						NOT = {
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = root
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		hidden:parameter:country = {
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_liberated"
+				war_demand_counter = {
+					type = liberated_or_vassalized
+					value < 1
+				}
+			}
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_no_planets"
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+			}
+		}
+	}
+
+	proposable = {
+		parameter:country = {
+			num_pops > 0
+		}
+	}
+
+	effect = {
+		parameter:country = {
+			while = {
+				limit = {
+					energy > 100
+				}
+				add_energy = -100
+				fromfromfrom = {
+					add_energy = 100
+				}
+			}
+			while = {
+				limit = {
+					minerals > 100
+				}
+				add_minerals = -100
+				fromfromfrom = {
+					add_minerals = 100
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		base = 10
+		modifier = {
+			factor = 0.5
+			NOT = {
+				parameter:country = {
+					is_same_value = from
+				}
+			}
+		}
+	}
+}

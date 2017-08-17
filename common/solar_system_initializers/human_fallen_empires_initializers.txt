@@ -62,7 +62,6 @@ human_fallen_empires_egypt = {
 				ship_prefix = ""
 				ignore_initial_colony_error = yes
 				species = event_target:human_fallen_empires_egypt_species
-				#room = human_fallen_empires_discovery_room
 				flag = random
 				ethos = {
 					ethic = ethic_fanatic_spiritualist
@@ -1848,9 +1847,9 @@ human_fallen_empires_ahet_home = {
 }
 
 # too ideal planet
-human_fallen_empires_too_ideal_planet = {
+human_fallen_empires_copernicus = {
 	#	class = "rl_standard_stars"
-	flags = { human_fallen_empires_too_ideal_planet }
+	flags = { human_fallen_empires_copernicus }
 	name = Copernicus
 	planet = {
 		count = 1
@@ -1860,7 +1859,7 @@ human_fallen_empires_too_ideal_planet = {
 		size = 25
 		modifiers = none
 		init_effect = {
-			set_planet_flag = human_fallen_empires_too_ideal_planet.0
+			set_planet_flag = human_fallen_empires_copernicus.0
 			create_species = {
 				name = random
 				class = random
@@ -1931,7 +1930,7 @@ human_fallen_empires_too_ideal_planet = {
 			orbit_angle = random
 			size = 3
 			init_effect = {
-				set_planet_flag = human_fallen_empires_too_ideal_planet.2
+				set_planet_flag = human_fallen_empires_copernicus.2
 			}
 		}
 	}
@@ -1939,7 +1938,7 @@ human_fallen_empires_too_ideal_planet = {
 	planet = {
 		count = 1
 		init_effect = {
-			set_planet_flag = human_fallen_empires_too_ideal_planet.1
+			set_planet_flag = human_fallen_empires_copernicus.1
 		}
 		class = random_asteroid
 		orbit_distance = 200
@@ -2033,7 +2032,7 @@ human_fallen_empires_drone_sector_01 = {
 
 	planet = {
 		count = 1
-		orbit_distance = 10
+		orbit_distance = 101
 		class = pc_ai
 		name = "Drone Core 01"
 		orbit_angle = random
@@ -2042,6 +2041,9 @@ human_fallen_empires_drone_sector_01 = {
 
 		init_effect = {
 			set_planet_flag = human_fallen_empires_drone_planet_1
+			every_tile = {
+				set_blocker = tb_mountain_range
+			}
 			create_country = {
 				name = "Harvesting Branch 42"
 				name_list = AI
@@ -2073,6 +2075,11 @@ human_fallen_empires_drone_sector_01 = {
 					add_minerals = 5000
 					add_energy = 5000
 					add_influence = 1000
+					set_policy = {
+						policy = orbital_bombardment
+						option = orbital_bombardment_full
+						cooldown = yes
+					}
 					set_policy = {
 						policy = orbital_bombardment
 						option = orbital_bombardment_full
@@ -2110,6 +2117,17 @@ human_fallen_empires_drone_sector_01 = {
 				initial_module = laser_weapon
 			}
 			set_spaceport_level = 6
+			# create_fleet = {
+			# 	name = "Unit 001"
+			# 	effect = {
+			# 		set_owner = event_target:human_fallen_empires_drone_country
+			# 		create_ship = {
+			# 			name = "Unit 001"
+			# 			random_existing_design = human_fallen_empires_drone_constructor
+			# 		}
+			# 		set_location = prev
+			# 	}
+			# }
 		}
 	}
 
@@ -2154,6 +2172,16 @@ human_fallen_empires_drone_sector_01 = {
 				surveyor = event_target:human_fallen_empires_drone_country
 			}
 		}
+		every_neighbor_system = {
+			every_neighbor_system = {
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = event_target:human_fallen_empires_drone_country
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -2189,8 +2217,10 @@ human_fallen_empires_drone_sector_02 = {
 		modifiers = none
 
 		init_effect = {
+			every_tile = {
+				set_blocker = tb_mountain_range
+			}
 			set_planet_flag = human_fallen_empires_drone_planet_2
-
 			set_owner = event_target:human_fallen_empires_drone_country
 			create_spaceport = {
 				owner = event_target:human_fallen_empires_drone_country
@@ -2276,6 +2306,9 @@ human_fallen_empires_drone_sector_03 = {
 		modifiers = none
 
 		init_effect = {
+			every_tile = {
+				set_blocker = tb_mountain_range
+			}
 			set_planet_flag = human_fallen_empires_drone_planet_3
 			set_owner = event_target:human_fallen_empires_drone_country
 			create_spaceport = {
@@ -2407,6 +2440,7 @@ human_fallen_empires_future = {
 					effect = {
 						set_country_flag = human_fallen_empires_future
 						set_country_flag = human_fallen_empires_coalition_leader
+						set_country_flag = human_fallen_empires_brainworm_discovered
 						create_leader = {
 							type = admiral
 							species = event_target:human_fallen_empires_future_species

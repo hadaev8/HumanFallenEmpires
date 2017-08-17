@@ -3,8 +3,8 @@
 #From = planet, potential target
 can_orbital_bombard = {
 	exists = FROM.OWNER
-	OR = {
-		AND = {
+	or = {
+		and = {
 			ROOT.OWNER = {
 				NOT = { has_communications = FROM.OWNER }
 			}
@@ -12,9 +12,9 @@ can_orbital_bombard = {
 				NOT = { is_country_type = primitive }
 			}
 		}
-		AND = {
+		and = {
 			ROOT.OWNER = {
-				NOR = {
+				Nor = {
 					has_policy_flag = interference_passive
 					has_policy_flag = interference_active
 				}
@@ -25,11 +25,12 @@ can_orbital_bombard = {
 		FROM = { is_planet_class = pc_infested }
 		FROM.CONTROLLER = { is_country_type = swarm }
 		ROOT.OWNER = {
-			OR = {
+			or = {
 				is_country_type = extradimensional
 				is_country_type = extradimensional_2
 				is_country_type = extradimensional_3
 				is_country_type = swarm
+				# mod
 				is_country_type = human_fallen_empires_pirate
 				is_country_type = human_fallen_empires_drone
 			}
@@ -41,6 +42,17 @@ can_orbital_bombard = {
 #This = pop
 #also evaluates true if pop_can_live_planet is false on current planet
 can_auto_migrate_pop = {
+	# brainworm
+	nand = {
+		exists = tile
+		tile = {
+			or = {
+				has_building = human_fallen_empires_brainworm_reservation_0
+				has_building = human_fallen_empires_brainworm_reservation_1
+			}
+		}
+	}
+	# plague
 	nand = {
 		root = {
 			has_country_edict = human_fallen_empires_plague_quarantine
@@ -49,140 +61,136 @@ can_auto_migrate_pop = {
 			has_planet_flag = human_fallen_empires_plague_planet
 		}
 	}
-	or = {
-		and = {
-			root = { is_country_type = default }
-			is_sentient = yes
-			is_enslaved = no
-			is_being_purged = no
-			or = {
-				root = {
-					has_country_edict = human_fallen_empires_migration_allow_for_caste
-				}
-				has_migration_control = no
-			}
-			is_robot_pop = no
-			NOT = { has_modifier = recently_migrated }
-			NOT = { has_modifier = recent_refugee }
-		}
-		and = {
-			planet = {
-				has_modifier = human_fallen_empires_migration_yellow_ring
-			}
-			human_fallen_empires_trigger_is_thrifty = no
-		}
-		and = {
-			planet = {
-				has_modifier = human_fallen_empires_migration_red_ring
-			}
-			human_fallen_empires_trigger_is_industrious = no
-		}
-		and = {
-			planet = {
-				has_modifier = human_fallen_empires_migration_green_ring
-			}
-			human_fallen_empires_trigger_is_agrarian = no
-		}
-		and = {
-			planet = {
-				has_modifier = human_fallen_empires_migration_blue_ring
-			}
-			human_fallen_empires_trigger_is_clever = no
-		}
-		and = {
-			planet = {
-				has_modifier = human_fallen_empires_migration_grey_ring
-			}
-			human_fallen_empires_trigger_is_synthetic = no
+	# migration
+	planet = {
+		not = {
+			has_modifier = human_fallen_empires_migration_ban_auto_migrate
 		}
 	}
+	root = {
+		is_country_type = default
+	}
+	is_sentient = yes
+	is_enslaved = no
+	is_being_purged = no
+	# проверить
+	or = {
+		and = {
+			has_citizenship_type = { type = citizenship_caste_system country = root }
+			root = {
+				has_country_edict = human_fallen_empires_migration_allow_for_caste
+			}
+		}
+		has_migration_control = no
+	}
+	is_robot_pop = no
+	NOT = { has_modifier = recently_migrated }
+	NOT = { has_modifier = recent_refugee }
 }
 
 #Root = planet
 #This = pop
-#Root = planet
-#This = pop
 pop_can_live_on_planet = {
-	OR = {
-		root = { NOT = { habitability = { who = prev value < 0.4 } } }
-		AND = {
-			has_citizenship_type = { type = citizenship_purge }
-			NOT = { has_purge_type = { type = purge_displacement } }
+	# or = {
+	# 	exists = owner
+	# 	is_sentient = no
+	# }
+	nand = {
+		has_citizenship_type = { type = citizenship_purge }
+		has_purge_type = { type = purge_displacement }
+	}
+	or = {
+		root = {
+			not = {
+				habitability = {
+					who = prev value < 0.4
+				}
+			}
+		}
+		is_robot_pop = yes
+		and = {
+			exists = owner
+			owner = {
+				not = {
+					is_country_type = default
+				}
+			}
 		}
 	}
-	OR = {
-		is_robot_pop = yes
-		AND = {
+	or = {
+		# everyone may live in sectors
+		root = {
+			sector_controlled = yes
+		}
+
+		# citizens may always live in core worlds
+		or = {
+			has_citizenship_type = { type = citizenship_full }
+			has_citizenship_type = { type = citizenship_caste_system }
+		}
+
+		# core_worlds_all / hive minds let everyone live in core worlds
+		and = {
 			exists = owner
-			owner = { NOT = { is_country_type = default } }
-		}
-		AND = {
-			has_citizenship_type = { type = citizenship_purge }
-			NOT = { has_purge_type = { type = purge_displacement } }
-		}
-		AND = {
-			OR = {
-				NOT = { has_citizenship_type = { type = citizenship_purge } }
-				NOT = { has_purge_type = { type = purge_displacement } }
-			}
-			OR = {
-				# everyone may live in sectors
-				planet = { sector_controlled = yes }
-
-				# citizens may always live in core worlds
-				OR = {
-					has_citizenship_type = { type = citizenship_full }
-					has_citizenship_type = { type = citizenship_caste_system }
-				}
-
-				# core_worlds_all / hive minds let everyone live in core worlds
-				AND = {
-					exists = owner
-					OR = {
-						owner = { has_policy_flag = core_worlds_all }
-						owner = { has_authority = auth_hive_mind }
+			or = {
+				owner = { has_policy_flag = core_worlds_all }
+				owner = { has_authority = auth_hive_mind }
+				owner = {
+					not = {
+						is_country_type = default
 					}
 				}
-
-				# core_worlds_citizens_and_slaves lets slaves live in core worlds
-				AND = {
-					exists = owner
-					has_citizenship_type = { type = citizenship_slavery }
-					owner = { has_policy_flag = core_worlds_citizens_and_slaves }
-				}
 			}
 		}
+
+		# core_worlds_citizens_and_slaves lets slaves live in core worlds
+		and = {
+			has_citizenship_type = { type = citizenship_slavery }
+			exists = owner
+			owner = { has_policy_flag = core_worlds_citizens_and_slaves }
+		}
 	}
+	# migration
 	nor = {
 		and = {
-			planet = {
+			root = {
 				has_modifier = human_fallen_empires_migration_yellow_ring
 			}
 			human_fallen_empires_trigger_is_thrifty = no
 		}
 		and = {
-			planet = {
+			root = {
 				has_modifier = human_fallen_empires_migration_red_ring
 			}
 			human_fallen_empires_trigger_is_industrious = no
 		}
 		and = {
-			planet = {
+			root = {
 				has_modifier = human_fallen_empires_migration_green_ring
 			}
 			human_fallen_empires_trigger_is_agrarian = no
 		}
 		and = {
-			planet = {
+			root = {
 				has_modifier = human_fallen_empires_migration_blue_ring
 			}
 			human_fallen_empires_trigger_is_clever = no
 		}
 		and = {
-			planet = {
+			root = {
 				has_modifier = human_fallen_empires_migration_grey_ring
 			}
 			human_fallen_empires_trigger_is_synthetic = no
+		}
+		and = {
+			root = {
+				has_modifier = human_fallen_empires_migration_ban_auto_migrate
+			}
+			planet = {
+				not = {
+					is_planet = root
+				}
+			}
 		}
 	}
 }
@@ -194,7 +202,7 @@ can_colonize_with_pop = {
 	has_colonization_control = no
 	if = {
 		limit = {
-			OR = {
+			or = {
 				has_modifier = culture_shock_stone_age
 				has_modifier = culture_shock_bronze_age
 				has_modifier = culture_shock_iron_age
@@ -262,9 +270,3 @@ can_pop_procreate = {
 		}
 	}
 }
-
-# Checks if a growing pop should be killed
-# This = Pop
-# should_kill_growing_pop = {
-# 	has_population_control = yes
-# }
