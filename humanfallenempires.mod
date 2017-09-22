@@ -11,4 +11,4 @@ tags={
 }
 picture="humanfallenempires.jpg"
 remote_file_id="901039859"
-supported_version="1.7.*"
+supported_version="1.8.*"
