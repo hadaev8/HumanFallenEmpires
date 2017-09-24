@@ -23,13 +23,21 @@ can_orbital_bombard = {
 		}
 		ROOT.OWNER = { is_at_war_with = FROM.CONTROLLER }
 		FROM = { is_planet_class = pc_infested }
-		FROM.CONTROLLER = { is_country_type = swarm }
+		FROM.CONTROLLER = {
+			OR = {
+				is_country_type = swarm
+				is_country_type = ai_empire
+				is_country_type = cybrex_empire
+			}
+		}
 		ROOT.OWNER = {
 			or = {
 				is_country_type = extradimensional
 				is_country_type = extradimensional_2
 				is_country_type = extradimensional_3
 				is_country_type = swarm
+				is_country_type = ai_empire
+				is_country_type = cybrex_empire
 				# mod
 				is_country_type = human_fallen_empires_pirate
 				is_country_type = human_fallen_empires_drone
@@ -42,14 +50,14 @@ can_orbital_bombard = {
 #This = pop
 #also evaluates true if pop_can_live_planet is false on current planet
 can_auto_migrate_pop = {
+	exists = root
+	exists = planet
+	exists = tile
 	# brainworm
-	nand = {
-		exists = tile
-		tile = {
-			or = {
-				has_building = human_fallen_empires_brainworm_reservation_0
-				has_building = human_fallen_empires_brainworm_reservation_1
-			}
+	tile = {
+		nor = {
+			has_building = human_fallen_empires_brainworm_reservation_0
+			has_building = human_fallen_empires_brainworm_reservation_1
 		}
 	}
 	# plague
@@ -71,19 +79,23 @@ can_auto_migrate_pop = {
 		is_country_type = default
 	}
 	is_sapient = yes
-	is_enslaved = no
-	is_being_purged = no
 	# проверить
 	or = {
 		and = {
-			has_citizenship_type = { type = citizenship_caste_system country = root }
+			has_citizenship_type = {
+				type = citizenship_caste_system
+				country = root
+			}
 			root = {
 				has_country_edict = human_fallen_empires_migration_allow_for_caste
 			}
 		}
-		has_migration_control = no
+		is_enslaved = no
 	}
+	is_being_purged = no
+	has_migration_control = no
 	is_robot_pop = no
+	NOT = { has_trait = trait_self_modified }
 	NOT = { has_modifier = recently_migrated }
 	NOT = { has_modifier = recent_refugee }
 }
@@ -103,7 +115,8 @@ pop_can_live_on_planet = {
 		root = {
 			not = {
 				habitability = {
-					who = prev value < 0.4
+					who = prev
+					value < 0.2
 				}
 			}
 		}
@@ -122,19 +135,19 @@ pop_can_live_on_planet = {
 		root = {
 			sector_controlled = yes
 		}
-
 		# citizens may always live in core worlds
 		or = {
 			has_citizenship_type = { type = citizenship_full }
 			has_citizenship_type = { type = citizenship_caste_system }
+			has_citizenship_type = { type = citizenship_full_machine }
+			has_citizenship_type = { type = citizenship_organic_trophy }
 		}
-
 		# core_worlds_all / hive minds let everyone live in core worlds
 		and = {
 			exists = owner
 			or = {
 				owner = { has_policy_flag = core_worlds_all }
-				owner = { has_authority = auth_hive_mind }
+				owner = { has_ethic = ethic_gestalt_consciousness }
 				owner = {
 					not = {
 						is_country_type = default
@@ -142,13 +155,17 @@ pop_can_live_on_planet = {
 				}
 			}
 		}
-
 		# core_worlds_citizens_and_slaves lets slaves live in core worlds
 		and = {
 			has_citizenship_type = { type = citizenship_slavery }
 			exists = owner
 			owner = { has_policy_flag = core_worlds_citizens_and_slaves }
 		}
+		# stop non-citizens from moving to planets with recent land appropriation
+		NAND = {
+			root = { has_modifier = land_appropriation }
+			planet = { NOT = { is_same_value = root } }
+ 		}
 	}
 	# migration
 	nor = {
@@ -200,19 +217,11 @@ pop_can_live_on_planet = {
 #This = pop
 can_colonize_with_pop = {
 	has_colonization_control = no
+	NOT = { has_trait = trait_self_modified }
 	if = {
 		limit = {
-			or = {
-				has_modifier = culture_shock_stone_age
-				has_modifier = culture_shock_bronze_age
-				has_modifier = culture_shock_iron_age
-				has_modifier = culture_shock_late_medieval_age
-				has_modifier = culture_shock_renaissance_age
-				has_modifier = culture_shock_steam_age
-				has_modifier = culture_shock_industrial_age
-				has_modifier = culture_shock_machine_age
-				has_modifier = culture_shock_atomic_age
-				has_modifier = culture_shock_early_space_age
+			OR = {
+				has_culture_shock = yes
 				is_sapient = no
 				# mod
 				has_pop_flag = human_fallen_empires_plague_pop
@@ -255,6 +264,14 @@ can_colonize_planet = {
 can_pop_procreate = {
 	is_sapient = yes
 	is_being_purged = no
+	has_culture_shock = no
+	pop_can_reproduce = yes
+	exists = planet
+	OR = {
+		planet = { NOT = { has_modifier = land_appropriation } }
+		has_citizenship_rights = yes
+	}
+	# mod
 	not = {
 		has_trait = human_fallen_empires_trait_brainworm
 	}

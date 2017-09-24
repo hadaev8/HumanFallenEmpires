@@ -126,10 +126,35 @@ cede_planet = {
 		}
 
 		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "tr_purity_the_chosen"
+				has_swapped_tradition = tr_purity_the_chosen
+			}
+		}
+
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}
+
+		modifier = {
 			factor = 0.75
 			custom_tooltip = {
 				text = "tr_supremacy_right_of_conquest"
-				has_tradition = tr_supremacy_right_of_conquest
+				has_non_swapped_tradition = tr_supremacy_right_of_conquest
+			}
+		}
+
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = tr_supremacy_right_of_conquest_machine
+				has_swapped_tradition = tr_supremacy_right_of_conquest_machine
 			}
 		}
 
@@ -137,6 +162,13 @@ cede_planet = {
 		modifier = {
 			factor = 0.66
 			is_country_type = awakened_fallen_empire
+		}
+
+		# Machine FE
+		modifier = {
+			factor = 2.0
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
 		}
 	}
 
@@ -238,13 +270,10 @@ cede_planet = {
 					is_majority_species = root
 				}
 				parameter:planet = {
-					owner = {
-						OR = {
-							is_country_type = awakened_fallen_empire
-							is_country_type = fallen_empire
-							has_authority = auth_hive_mind
-						}
-					}
+					planet_can_be_liberated_from_owner = no
+				}
+				parameter:planet = {
+					pops_on_planet_can_form_government = no
 				}
 			}
 		}
@@ -354,10 +383,14 @@ cede_planet = {
 		}
 
 		modifier = {
+			factor = 0
+			root = { is_fallen_machine_empire = yes }
+		}
+
+		modifier = {
 			factor = 0.1
 			NOR = {
 				has_ai_personality_behaviour = conqueror
-				has_ai_personality_behaviour = purger	# is ok to take planets since they'll be cleansed soon enough
 				parameter:planet = {
 					is_original_owner = root
 				}
@@ -452,6 +485,7 @@ total_defeat = {
 		}
 		parameter:country = {
 			save_event_target_as = WarInHeavenLoserFE
+			set_country_flag = silence_destroy_event
 		}
 		if = {
 			limit = {

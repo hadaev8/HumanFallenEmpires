@@ -49,6 +49,18 @@ namespace = human_fallen_empires_pirate
 @human_fallen_empires_pirate_fleet_power_minimum = 4000
 @human_fallen_empires_pirate_ravaged_planet_time = 365
 
+@human_fallen_empires_blackjack_bet_0 = 100
+@human_fallen_empires_blackjack_bet_1 = 250
+@human_fallen_empires_blackjack_bet_2 = 500
+@human_fallen_empires_blackjack_bet_3 = 1000
+@human_fallen_empires_blackjack_bet_4 = 5000
+
+@human_fallen_empires_blackjack_bet_0_minus = -100
+@human_fallen_empires_blackjack_bet_1_minus = -250
+@human_fallen_empires_blackjack_bet_2_minus = -500
+@human_fallen_empires_blackjack_bet_3_minus = -1000
+@human_fallen_empires_blackjack_bet_4_minus = -5000
+
 # spawn pirate birth of piracy
 country_event = {
 	id = human_fallen_empires_pirate.1
@@ -62,28 +74,28 @@ country_event = {
 			has_spiritualist_government = yes
 		}
 	}
-	
+
 	desc = { # Militarist
 		text = pirate.1.desc_02
 		trigger = {
 			has_militarist_government = yes
 		}
 	}
-	
+
 	desc = { # Materialist
 		text = pirate.1.desc_03
 		trigger = {
 			has_materialist_government = yes
 		}
 	}
-	
+
 	desc = { # Pacifist
 		text = pirate.1.desc_04
 		trigger = {
 			has_pacifist_government = yes
 		}
 	}
-	
+
 	desc = { # Generic Autocracy
 		text = pirate.1.desc_05
 		trigger = {
@@ -96,7 +108,7 @@ country_event = {
 			}
 		}
 	}
-	
+
 	desc = { # Generic Oligarchy
 		text = pirate.1.desc_06
 		trigger = {
@@ -106,7 +118,7 @@ country_event = {
 			}
 		}
 	}
-	
+
 	desc = { # Generic Democracy
 		text = pirate.1.desc_07
 		trigger = {
@@ -1116,6 +1128,11 @@ country_event = {
 				has_country_flag = human_fallen_empires_pirate.101.slave_menu
 				human_fallen_empires_trigger_exists_any_slave_target = yes
 			}
+			# casino
+			success_text = {
+				text = human_fallen_empires_pirate.101.casino_menu.desc.0
+				has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			}
 		}
 	}
 	diplomatic = yes
@@ -2068,6 +2085,164 @@ country_event = {
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 	}
+	# casino menu
+	option = {
+		name = human_fallen_empires_pirate.101.3
+		trigger = {
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+		}
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			country_event = { id = human_fallen_empires_pirate.101 }
+		}
+	}
+	# select bet
+	option = {
+		name = human_fallen_empires_pirate.101.casino_menu.bet.0
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+		}
+		allow = {
+			energy > @human_fallen_empires_blackjack_bet_0
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > @human_fallen_empires_blackjack_bet_0
+				}
+			}
+		}
+		add_energy = @human_fallen_empires_blackjack_bet_0_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_blackjack_bet_0_minus
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_bet_0
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			event_target:human_fallen_empires_pirate_country = {
+				set_country_flag = human_fallen_empires_blackjack_bet_0
+				save_event_target_as = human_fallen_empires_blackjack_target_1
+				save_event_target_as = human_fallen_empires_blackjack_target_enemy
+			}
+			human_fallen_empires_effect_blackjack_turn_0 = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires_pirate.101.casino_menu.bet.1
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+		}
+		allow = {
+			energy > @human_fallen_empires_blackjack_bet_1
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > @human_fallen_empires_blackjack_bet_1
+				}
+			}
+		}
+		add_energy = @human_fallen_empires_blackjack_bet_1_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_blackjack_bet_1_minus
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_bet_1
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			event_target:human_fallen_empires_pirate_country = {
+				set_country_flag = human_fallen_empires_blackjack_bet_1
+				save_event_target_as = human_fallen_empires_blackjack_target_1
+				save_event_target_as = human_fallen_empires_blackjack_target_enemy
+			}
+			human_fallen_empires_effect_blackjack_turn_0 = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires_pirate.101.casino_menu.bet.2
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+		}
+		allow = {
+			energy > @human_fallen_empires_blackjack_bet_2
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > @human_fallen_empires_blackjack_bet_2
+				}
+			}
+		}
+		add_energy = @human_fallen_empires_blackjack_bet_2_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_blackjack_bet_2_minus
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_bet_2
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			event_target:human_fallen_empires_pirate_country = {
+				set_country_flag = human_fallen_empires_blackjack_bet_2
+				save_event_target_as = human_fallen_empires_blackjack_target_1
+				save_event_target_as = human_fallen_empires_blackjack_target_enemy
+			}
+			human_fallen_empires_effect_blackjack_turn_0 = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires_pirate.101.casino_menu.bet.3
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+		}
+		allow = {
+			energy > @human_fallen_empires_blackjack_bet_3
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > @human_fallen_empires_blackjack_bet_3
+				}
+			}
+		}
+		add_energy = @human_fallen_empires_blackjack_bet_3_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_blackjack_bet_3_minus
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_bet_3
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			event_target:human_fallen_empires_pirate_country = {
+				set_country_flag = human_fallen_empires_blackjack_bet_3
+				save_event_target_as = human_fallen_empires_blackjack_target_1
+				save_event_target_as = human_fallen_empires_blackjack_target_enemy
+			}
+			human_fallen_empires_effect_blackjack_turn_0 = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires_pirate.101.casino_menu.bet.4
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+		}
+		allow = {
+			energy > @human_fallen_empires_blackjack_bet_4
+			custom_tooltip = {
+				fail_text = human_fallen_empires_pirate.101.traid_menu.fail
+				event_target:human_fallen_empires_pirate_country = {
+					energy > @human_fallen_empires_blackjack_bet_4
+				}
+			}
+		}
+		add_energy = @human_fallen_empires_blackjack_bet_4_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = @human_fallen_empires_blackjack_bet_4_minus
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_bet_4
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			event_target:human_fallen_empires_pirate_country = {
+				set_country_flag = human_fallen_empires_blackjack_bet_4
+				save_event_target_as = human_fallen_empires_blackjack_target_1
+				save_event_target_as = human_fallen_empires_blackjack_target_enemy
+			}
+			human_fallen_empires_effect_blackjack_turn_0 = yes
+		}
+	}
 	# return
 	option = {
 		name = modmenu_return
@@ -2088,5 +2263,154 @@ country_event = {
 	}
 }
 
-# other pirate related event 150
+# blackjack event 150 - 200
+# main blackjack event
+country_event = {
+	id = human_fallen_empires_pirate.150
+	title = TRANSMISSION
+	desc = {
+		trigger = {
+			success_text = {
+				text = "We win!"
+				has_country_flag = human_fallen_empires_blackjack_end_win
+			}
+			success_text = {
+				text = "We stay!"
+				has_country_flag = human_fallen_empires_blackjack_end_stay
+			}
+			success_text = {
+				text = "We lose!"
+				has_country_flag = human_fallen_empires_blackjack_end
+				nor = {
+					has_country_flag = human_fallen_empires_blackjack_end_win
+					has_country_flag = human_fallen_empires_blackjack_end_stay
+				}
+			}
+			text = human_fallen_empires_blackjack_show_my_stats
+			text = human_fallen_empires_newline_3
+			fail_text = {
+				text = human_fallen_empires_blackjack_show_enemy_stats_hide
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
+			success_text = {
+				text = human_fallen_empires_blackjack_show_enemy_stats
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
+		}
+	}
+	diplomatic = yes
+	is_triggered_only = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:human_fallen_empires_blackjack_target_enemy
+		planet_background = event_target:human_fallen_empires_blackjack_target_enemy
+		graphical_culture = event_target:human_fallen_empires_blackjack_target_enemy
+		city_level = event_target:human_fallen_empires_blackjack_target_enemy
+		room = event_target:human_fallen_empires_blackjack_target_enemy.ruler
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				event_target:human_fallen_empires_blackjack_target_0 = {
+					has_country_flag = human_fallen_empires_blackjack_stand
+				}
+				event_target:human_fallen_empires_blackjack_target_1 = {
+					has_country_flag = human_fallen_empires_blackjack_stand
+				}
+			}
+			human_fallen_empires_effect_blackjack_calc_winner = yes
+		}
+	}
+
+	option = {
+		name = "Hit"
+		trigger = {
+			not = {
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				text = human_fallen_empires_blackjack_have_21
+				check_variable = {
+					which = blackjack_calc
+					value < 21
+				}
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				check_variable = {
+					which = blackjack_calc
+					value > 16
+				}
+			}
+		}
+		hidden_effect = {
+			human_fallen_empires_effect_blackjack_get_card = yes
+			human_fallen_empires_effect_blackjack_calc_cards = yes
+			human_fallen_empires_effect_blackjack_take_cards_in_place = yes
+			human_fallen_empires_effect_blackjack_next_turn = yes
+		}
+	}
+	option = {
+		name = "Stand"
+		trigger = {
+			not = {
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				check_variable = {
+					which = blackjack_calc
+					value < 17
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_stand
+			human_fallen_empires_effect_blackjack_next_turn = yes
+		}
+	}
+	option = {
+		name = "End"
+		trigger = {
+			has_country_flag = human_fallen_empires_blackjack_end
+		}
+		ai_chance = {
+			factor = 100
+		}
+		human_fallen_empires_effect_blackjack_calc_bet = yes
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_blackjack_end_shown
+			human_fallen_empires_effect_blackjack_next_turn = yes
+		}
+	}
+	option = {
+		name = modmenu_exit
+		trigger = {
+			always = no
+		}
+		ai_chance = {
+			factor = 0
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_blackjack_target_0 = {
+				human_fallen_empires_effect_blackjack_clean_all = yes
+			}
+			event_target:human_fallen_empires_blackjack_target_1 = {
+				human_fallen_empires_effect_blackjack_clean_all = yes
+			}
+		}
+	}
+}
+
+# other pirate related event
 # notify then save pops from bases
