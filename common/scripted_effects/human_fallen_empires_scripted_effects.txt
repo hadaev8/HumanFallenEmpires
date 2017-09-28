@@ -2360,13 +2360,33 @@ human_fallen_empires_effect_settle_pop = {
 			}
 		}
 		else = {
-			random_owned_planet = {
+			if = {
 				limit = {
-					free_pop_tiles > 0
+					any_owned_planet = {
+						free_pop_tiles > 0
+					}
 				}
-				resettle_pop = {
-					pop = event_target:human_fallen_empires_settle_pop_target
-					planet = this
+				random_owned_planet = {
+					limit = {
+						free_pop_tiles > 0
+					}
+					resettle_pop = {
+						pop = event_target:human_fallen_empires_settle_pop_target
+						planet = this
+					}
+				}
+				else = {
+					event_target:human_fallen_empires_settle_pop_target = {
+						if = {
+							limit = {
+								is_valid_refugee_pop = yes
+							}
+							refugee_pop_effect = yes
+							else = {
+								kill_pop = yes
+							}
+						}
+					}
 				}
 			}
 		}

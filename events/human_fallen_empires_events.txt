@@ -380,15 +380,20 @@ event = {
 			random_list = {
 				2 = { }
 				1 = {
+					modifier = {
+						factor = 3
+						is_difficulty = 2
+					}
+					modifier = {
+						factor = 2
+						is_difficulty = 1
+					}
 					random_country = {
 						limit = {
 							is_country_type = default
 							num_owned_planets > 2
-							nor = {
-								has_country_flag = human_fallen_empires_egypt
-								has_country_flag = human_fallen_empires_future
-								has_authority = auth_hive_mind
-							}
+							human_fallen_empires_trigger_is_human_fallen = no
+							human_fallen_empires_trigger_is_hive = no
 						}
 						country_event = { id = human_fallen_empires_pirate.1 days = 1 random = 355 }
 					}
@@ -416,6 +421,14 @@ event = {
 					random_list = {
 						98 = { }
 						2 = {
+							modifier = {
+								factor = 3
+								is_difficulty = 2
+							}
+							modifier = {
+								factor = 2
+								is_difficulty = 1
+							}
 							modifier = {
 								factor = 2
 								is_at_war = yes
@@ -1917,6 +1930,7 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires_end_transmission
+		default_hide_option = yes
 		trigger = {
 			or = {
 				has_country_flag = human_fallen_empires.53.0.0
@@ -4932,6 +4946,7 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires_end_transmission
+		default_hide_option = yes
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.605.step0
 			remove_country_flag = human_fallen_empires.605.step1
@@ -5776,6 +5791,7 @@ country_event = {
 	}
 	is_triggered_only = yes
 	diplomatic = yes
+	force_open = yes
 
 	picture_event_data = {
 		room = human_fallen_empires_thoth_room
@@ -6006,6 +6022,7 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires_end_transmission
+		default_hide_option = yes
 	}
 }
 
@@ -6019,20 +6036,14 @@ country_event = {
 				text = human_fallen_empires.712.desc.0
 				has_country_flag = human_fallen_empires.711.0.module_ordered
 			}
-		}
-		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.1
 				has_country_flag = human_fallen_empires.711.1.module_ordered
 			}
-		}
-		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.2
 				has_country_flag = human_fallen_empires.711.2.module_ordered
 			}
-		}
-		trigger = {
 			success_text = {
 				text = human_fallen_empires.712.desc.3
 				has_country_flag = human_fallen_empires.711.3.module_ordered
@@ -6041,6 +6052,7 @@ country_event = {
 	}
 	is_triggered_only = yes
 	diplomatic = yes
+	force_open = yes
 
 	picture_event_data = {
 		room = human_fallen_empires_thoth_room
@@ -6085,14 +6097,6 @@ country_event = {
 		}
 	}
 
-	after = {
-		remove_country_flag = human_fallen_empires.711.module_ordered
-		remove_country_flag = human_fallen_empires.711.0.module_ordered
-		remove_country_flag = human_fallen_empires.711.1.module_ordered
-		remove_country_flag = human_fallen_empires.711.2.module_ordered
-		remove_country_flag = human_fallen_empires.711.3.module_ordered
-	}
-
 	option = {
 		name = human_fallen_empires.712.0
 		hidden_effect = {
@@ -6106,6 +6110,13 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.712.1
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires.711.module_ordered
+			remove_country_flag = human_fallen_empires.711.0.module_ordered
+			remove_country_flag = human_fallen_empires.711.1.module_ordered
+			remove_country_flag = human_fallen_empires.711.2.module_ordered
+			remove_country_flag = human_fallen_empires.711.3.module_ordered
+		}
 	}
 }
 
@@ -7869,6 +7880,7 @@ country_event = {
 	trigger = {
 		years_passed > 100
 		any_country = {
+			NOT = { has_ethic = ethic_gestalt_consciousness }
 			is_country_type = fallen_empire
 			is_at_war = no
 		}
@@ -7946,6 +7958,7 @@ country_event = {
 				# awake random fallen
 				random_country = {
 					limit = {
+						NOT = { has_ethic = ethic_gestalt_consciousness }
 						is_country_type = fallen_empire
 					}
 					set_global_flag = sleepers_awake_happened
