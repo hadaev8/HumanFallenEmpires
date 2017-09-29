@@ -2799,7 +2799,6 @@ country_event = {
 				}
 			}
 		}
-		# имя лидера будет некорректно отображаться, если корабля нет
 		if = {
 			limit = {
 				has_country_flag = human_fallen_empires.205.2
@@ -2811,10 +2810,29 @@ country_event = {
 				event_target:human_fallen_empires_ship = {
 					fleet = {
 						set_leader = human_fallen_empires_scientist_wounded
+						leader = {
+							save_event_target_as = human_fallen_empires.205.scientist
+						}
 					}
 				}
 				else = {
-					set_leader = human_fallen_empires_scientist_wounded
+					create_fleet = {
+						name = "Science Ship"
+						effect = {
+							set_owner = root
+							create_ship = {
+								name = random
+								random_existing_design = science
+							}
+							set_location = root.capital_scope
+							set_leader = human_fallen_empires_scientist_wounded
+							leader = {
+								unassign_leader = this
+								save_event_target_as = human_fallen_empires.205.scientist
+							}
+							delete_fleet = this
+						}
+					}
 				}
 			}
 		}
