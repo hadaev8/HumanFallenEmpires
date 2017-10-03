@@ -10,10 +10,9 @@
 # purger -> Will they purge alien pops?
 # robot_exploiter -> Will they use robots for menial labor?
 # robot_liberator -> Will they give rights to robots?
-# migrator -> Will they want to migrate to other empires?
 # propagator -> Will they only get aggressive once boxed in?
-# ideologue -> Will they be extra-aggressive against other ethoses?
 # multispecies -> Will they give rights to aliens?
+# species_mod_priority = {}		define weights for how much the AI should try to modify a given species (root=country, this=species)
 
 ##### Modifiers:
 # aggressiveness -> Chance of declaring wars
@@ -21,10 +20,22 @@
 # bravery -> Affects the chance that they will pick rivals & war targets of similar strength instead of picking on the weak
 # military_spending -> Affects mineral & energy budget that goes to navies and armies
 # colony_spending -> Affects mineral & energy budget that goes to new colonies
+# threat_modifier -> Affects how much threat is generated for this empire when others are conquered
+# threat_others_modifier -> Afffects how much threat is generated for other empires when this empire is conquered
+# friction_modifier -> Affects border friction
+
+# Ships
+# armor_ratio -> Amount of armor they should aim for on ships
+# shields_ratio -> Amount of shields they should aim for on ships
 
 ##### Diplomacy:
-# alliance_acceptance -> Added directly to chance of accepting an alliance
 # federation_acceptance -> Added directly to chance of accepting to form/join a federation
+# nap_acceptance -> Added directly to chance of accepting to form a non-aggression pact
+# migration_pact_acceptance -> Added directly to chance of accepting to form a migration pact
+# defensive_pact_acceptance -> Added directly to chance of accepting to form a defensive pact
+
+##### Diplomacy:
+# advanced_start_chance -> Likelyhood of this empire being an advanced start (higher = better chance of being one of empires selected for advanced start)
 
 # NOTE: Weight is additive!
 
@@ -51,6 +62,7 @@ human_fallen_empires_egypt = {
 		propagator = no
 		multispecies = no
 		isolationist = yes
+		crisis_fighter = yes
 	}
 
 	allow = {
@@ -87,6 +99,7 @@ human_fallen_empires_future = {
 		propagator = no
 		multispecies = yes
 		isolationist = yes
+		crisis_fighter = yes
 	}
 
 	allow = {
@@ -104,6 +117,7 @@ human_fallen_empires_egypt_awakened = {
 	aggressiveness = 6
 	trade_willingness = 0.7
 	bravery = 3
+	combat_bravery = 2.0	# rarely ever retreat in battle
 
 	military_spending = 2
 	colony_spending = 10
@@ -129,12 +143,14 @@ human_fallen_empires_egypt_awakened = {
 		slaver = yes
 		uplifter = yes
 		purger = no
+		displacer = no
 		infiltrator = yes
 		dominator = yes
 		robot_exploiter = no
 		robot_liberator = no
 		propagator = no
 		multispecies = no
+		crisis_fighter = yes
 	}
 
 	allow = {
@@ -151,6 +167,7 @@ human_fallen_empires_future_awakened = {
 	aggressiveness = 6
 	trade_willingness = 1
 	bravery = 3
+	combat_bravery = 2.0	# rarely ever retreat in battle
 
 	military_spending = 2
 	colony_spending = 10
@@ -162,8 +179,8 @@ human_fallen_empires_future_awakened = {
 	migration_pact_acceptance = 30
 
 	weapon_preferences = weapon_type_energy
-	armor_ratio = 0.5
-	shields_ratio = 0.5
+	armor_ratio = 0.2
+	shields_ratio = 0.8
 
 	threat_modifier = 0.75
 	threat_others_modifier = 0.5
@@ -177,17 +194,68 @@ human_fallen_empires_future_awakened = {
 		slaver = no
 		uplifter = yes
 		purger = no
+		displacer = no
 		infiltrator = yes
 		dominator = yes
 		robot_exploiter = yes
 		robot_liberator = no
 		propagator = no
 		multispecies = yes
+		crisis_fighter = yes
 	}
 
 	allow = {
 		has_country_flag = human_fallen_empires_future
 		human_fallen_empires_trigger_is_awake = yes
+	}
+
+	weight_modifier = {
+		weight = 100000
+	}
+}
+
+human_fallen_empires_varelse_country = {
+	aggressiveness = 1.75
+	trade_willingness = 0.7
+	bravery = 1.5
+	combat_bravery = 2.0	# rarely ever retreat in battle
+
+	military_spending = 1
+	colony_spending = 1.5
+
+	federation_acceptance = -10
+	nap_acceptance = -50
+	defensive_pact_acceptance = -20
+	migration_pact_acceptance = -30
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.5
+	friction_modifier = 1.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = yes
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = yes
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_same_species = event_target:human_fallen_empires_varelse_species
 	}
 
 	weight_modifier = {
@@ -206,6 +274,10 @@ human_fallen_empires_drone_country = {
 
 	federation_acceptance = -1000
 
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
 	threat_modifier = 10
 	friction_modifier = 10
 
@@ -218,11 +290,12 @@ human_fallen_empires_drone_country = {
 		uplifter = no
 		purger = no
 		infiltrator = no
-		dominator = yes
+		dominator = no
 		robot_exploiter = no
 		robot_liberator = no
 		propagator = no
 		multispecies = no
+		crisis_fighter = no
 	}
 
 	allow = {

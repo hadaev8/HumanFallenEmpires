@@ -254,6 +254,12 @@ human_fallen_empires_egypt = {
 					species = event_target:human_fallen_empires_ahet_species
 					ethos = owner
 				}
+				last_created_pop = {
+					modify_species = {
+						species = this
+						add_trait = human_fallen_empires_species_trait_happy_slave
+					}
+				}
 			}
 			while = {
 				count = 12
@@ -296,14 +302,19 @@ human_fallen_empires_egypt = {
 			human_fallen_empires_effect_create_egypt_fleet = yes
 			if = {
 				limit = {
-					is_difficulty = 2
+					is_difficulty > 0
 				}
-				human_fallen_empires_effect_create_egypt_fleet = yes
 				human_fallen_empires_effect_create_egypt_fleet = yes
 			}
 			if = {
 				limit = {
-					is_difficulty = 1
+					is_difficulty > 1
+				}
+				human_fallen_empires_effect_create_egypt_fleet = yes
+			}
+			if = {
+				limit = {
+					is_difficulty > 2
 				}
 				human_fallen_empires_effect_create_egypt_fleet = yes
 			}
@@ -311,7 +322,7 @@ human_fallen_empires_egypt = {
 				every_owned_ship = {
 					repair_ship = yes
 					add_modifier = {
-						modifier = human_fallen_empires_unkeep
+						modifier = human_fallen_empires_unkeep_80
 						days = -1
 					}
 				}
@@ -1972,6 +1983,17 @@ human_fallen_empires_drone_sector_01 = {
 					# add_ship_design = "Drone Protector"
 					# add_ship_design = "Drone Destroyer"
 					# add_ship_design = "Drone Constructor"
+					every_country = {
+						limit = {
+							is_country_type = enclave
+						}
+						set_faction_hostility = {
+							target = prev
+							set_hostile = no
+							set_neutral = no
+							set_friendly = yes
+						}
+					}
 				}
 			}
 			set_owner = event_target:human_fallen_empires_drone_country
@@ -2449,14 +2471,19 @@ human_fallen_empires_future = {
 				human_fallen_empires_effect_create_future_fleet = yes
 				if = {
 					limit = {
-						is_difficulty = 2
+						is_difficulty > 0
 					}
-					human_fallen_empires_effect_create_future_fleet = yes
 					human_fallen_empires_effect_create_future_fleet = yes
 				}
 				if = {
 					limit = {
-						is_difficulty = 1
+						is_difficulty > 1
+					}
+					human_fallen_empires_effect_create_future_fleet = yes
+				}
+				if = {
+					limit = {
+						is_difficulty > 2
 					}
 					human_fallen_empires_effect_create_future_fleet = yes
 				}
@@ -2464,7 +2491,7 @@ human_fallen_empires_future = {
 					every_owned_ship = {
 						repair_ship = yes
 						add_modifier = {
-							modifier = human_fallen_empires_unkeep
+							modifier = human_fallen_empires_unkeep_80
 							days = -1
 						}
 					}

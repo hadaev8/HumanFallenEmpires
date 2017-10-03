@@ -381,12 +381,16 @@ event = {
 				2 = { }
 				1 = {
 					modifier = {
-						factor = 3
-						is_difficulty = 2
+						factor = 2
+						is_difficulty > 2
 					}
 					modifier = {
 						factor = 2
-						is_difficulty = 1
+						is_difficulty > 1
+					}
+					modifier = {
+						factor = 2
+						is_difficulty > 0
 					}
 					random_country = {
 						limit = {
@@ -422,12 +426,16 @@ event = {
 						98 = { }
 						2 = {
 							modifier = {
-								factor = 3
-								is_difficulty = 2
+								factor = 2
+								is_difficulty > 2
 							}
 							modifier = {
 								factor = 2
-								is_difficulty = 1
+								is_difficulty > 1
+							}
+							modifier = {
+								factor = 2
+								is_difficulty > 0
 							}
 							modifier = {
 								factor = 2
@@ -1552,33 +1560,43 @@ country_event = {
 			has_global_flag = galactic_crisis_happened
 			and = {
 				or = {
-					years_passed > 90
+					years_passed > 140
 					any_country = {
 						is_country_type = default
-						fleet_power > 30000
+						fleet_power > 100000
 					}
 				}
-				is_difficulty = 2
+				is_difficulty = 0
+			}
+			and = {
+				or = {
+					years_passed > 130
+					any_country = {
+						is_country_type = default
+						fleet_power > 90000
+					}
+				}
+				is_difficulty > 0
 			}
 			and = {
 				or = {
 					years_passed > 120
 					any_country = {
 						is_country_type = default
-						fleet_power > 50000
+						fleet_power > 80000
 					}
 				}
-				is_difficulty = 1
+				is_difficulty > 1
 			}
 			and = {
 				or = {
-					years_passed > 150
+					years_passed > 110
 					any_country = {
 						is_country_type = default
 						fleet_power > 70000
 					}
 				}
-				is_difficulty = 0
+				is_difficulty > 2
 			}
 		}
 	}
@@ -1598,9 +1616,6 @@ country_event = {
 		country_add_ethic = ethic_xenophobe
 		set_country_type = default
 		set_global_flag = human_fallen_empires_egypt_in_expansion
-		ruler = {
-			save_event_target_as = human_fallen_empires_egypt_ruler
-		}
 		every_country = {
 			establish_communications_no_message = event_target:human_fallen_empires_egypt_country
 			if = {
@@ -1635,7 +1650,7 @@ country_event = {
 	is_triggered_only = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_egypt_ruler
+		portrait = event_target:human_fallen_empires_egypt.ruler
 		room = human_fallen_empires_egypt_room
 	}
 
@@ -2533,7 +2548,12 @@ planet_event = {
 
 	immediate = {
 		every_owned_pop = {
-			human_fallen_empires_effect_add_random_trait = yes
+			limit = {
+				is_robot_pop = no
+			}
+			species = {
+				mutate_species = yes
+			}
 		}
 	}
 
@@ -5042,7 +5062,7 @@ ship_event = {
 			type = human_fallen_empires_thoth
 			flag = random
 			effect = {
-				set_name = human_fallen_empires_customization_notch_rename
+				set_name = human_fallen_empires_customization_notch_this_rename
 				save_global_event_target_as = human_fallen_empires_thoth
 				set_custom_capital_location = event_target:human_fallen_empires_thoth_location
 				set_graphical_culture = mammalian_01
@@ -7135,15 +7155,36 @@ country_event = {
 		}
 		or = {
 			has_global_flag = galactic_crisis_happened
+
 			and = {
 				or = {
-					years_passed > 90
+					years_passed > 150
 					any_country = {
 						is_country_type = default
-						fleet_power > 50000
+						fleet_power > 100000
 					}
 				}
-				is_difficulty = 2
+				is_difficulty = 0
+			}
+			and = {
+				or = {
+					years_passed > 140
+					any_country = {
+						is_country_type = default
+						fleet_power > 90000
+					}
+				}
+				is_difficulty > 0
+			}
+			and = {
+				or = {
+					years_passed > 130
+					any_country = {
+						is_country_type = default
+						fleet_power > 80000
+					}
+				}
+				is_difficulty > 1
 			}
 			and = {
 				or = {
@@ -7153,17 +7194,7 @@ country_event = {
 						fleet_power > 70000
 					}
 				}
-				is_difficulty = 1
-			}
-			and = {
-				or = {
-					years_passed > 150
-					any_country = {
-						is_country_type = default
-						fleet_power > 90000
-					}
-				}
-				is_difficulty = 0
+				is_difficulty > 2
 			}
 		}
 	}
@@ -7200,9 +7231,6 @@ country_event = {
 		set_country_type = default
 		#set_empire_name = "Kad Republic"
 		set_global_flag = human_fallen_empires_future_in_expansion
-		ruler = {
-			save_event_target_as = human_fallen_empires_future_ruler
-		}
 		every_country = {
 			establish_communications_no_message = event_target:human_fallen_empires_future_country
 			if = {
@@ -7232,7 +7260,7 @@ country_event = {
 	is_triggered_only = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_future_ruler
+		portrait = event_target:human_fallen_empires_future.ruler
 		room = human_fallen_empires_future_room
 	}
 
@@ -7241,10 +7269,21 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires_future_contacted
 		}
-		# добавить эвент приглашения
-		#	hidden_effect = {
-
-		#	}
+		hidden_effect = {
+			if = {
+				limit = {
+					can_be_subject = {
+						overlord = event_target:human_fallen_empires_future
+						subject_type = human_fallen_empires_future_vassal
+					}
+				}
+				country_event = {
+					id = human_fallen_empires.5012
+					days = 10
+					random = 15
+				}
+			}
+		}
 		custom_tooltip = human_fallen_empires.5011.0.tooltip
 	}
 	option = {
@@ -7255,6 +7294,32 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_future_contacted
 		}
+	}
+}
+
+# future expansion notification invite
+country_event = {
+	id = human_fallen_empires.5012
+	title = TRANSMISSION
+	desc = human_fallen_empires.5012.desc
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:human_fallen_empires_future
+		room = human_fallen_empires_future_room
+	}
+
+	option = {
+		name = human_fallen_empires.5012.0
+		set_subject_of = {
+			who = event_target:human_fallen_empires_future
+			subject_type = human_fallen_empires_future_vassal
+		}
+		play_sound = event_celebration
+	}
+	option = {
+		name = human_fallen_empires.5012.1
 	}
 }
 
@@ -7689,9 +7754,13 @@ country_event = {
 	id = human_fallen_empires.5056
 	title = human_fallen_empires.5056.name
 	desc = human_fallen_empires.5056.desc
-	show_sound = event_mystic_reveal
+	show_sound = olafur_arnalds_only_the_winds
 	is_triggered_only = yes
 	diplomatic = yes
+
+	immediate = {
+	#	play_sound = olafur_arnalds_only_the_winds
+	}
 
 	picture_event_data = {
 		room = human_fallen_empires_dead_worms_room
@@ -7720,7 +7789,7 @@ country_event = {
 	id = human_fallen_empires.5057
 	title = human_fallen_empires.5056.name
 	desc = human_fallen_empires.5056.2.response
-	show_sound = event_space_battle
+	#show_sound = event_space_battle
 	is_triggered_only = yes
 	diplomatic = yes
 
@@ -7905,15 +7974,19 @@ country_event = {
 		any_country = {
 			is_country_type = default
 			OR = {
+				fleet_power > 12000
 				and = {
-					is_difficulty = 2
-					fleet_power > 40000
+					is_difficulty > 0
+					fleet_power > 100000
 				}
 				and = {
-					is_difficulty = 1
-					fleet_power > 50000
+					is_difficulty > 1
+					fleet_power > 80000
 				}
-				fleet_power > 60000
+				and = {
+					is_difficulty > 2
+					fleet_power > 60000
+				}
 				any_owned_planet = {
 					has_planet_flag = fallen_empire_world
 				}
@@ -7923,24 +7996,19 @@ country_event = {
 
 	immediate = {
 		random_list = {
-			200 = { }
-			100 = {
+			20 = { }
+			10 = {
 				modifier = {
 					factor = 2
-					any_country = {
-						is_country_type = default
-						OR = {
-							AND = {
-								is_difficulty = 2
-								fleet_power > 60000
-							}
-							AND = {
-								is_difficulty = 1
-								fleet_power > 80000
-							}
-							fleet_power > 100000
-						}
-					}
+					is_difficulty > 2
+				}
+				modifier = {
+					factor = 2
+					is_difficulty > 1
+				}
+				modifier = {
+					factor = 2
+					is_difficulty > 0
 				}
 				modifier = {
 					factor = 0.5
@@ -9186,23 +9254,23 @@ country_event = {
 			factor = 100
 			modifier = {
 				factor = 0.5
-				fleet_power < 5000
+				fleet_power < 20000
 			}
 			modifier = {
 				factor = 0.5
-				fleet_power < 10000
+				fleet_power < 30000
 			}
 			modifier = {
-				factor = 1.5
-				fleet_power > 20000
+				factor = 0.5
+				fleet_power < 40000
 			}
 			modifier = {
-				factor = 2
-				fleet_power > 30000
+				factor = 0.5
+				fleet_power < 50000
 			}
 			modifier = {
-				factor = 10
-				fleet_power > 40000
+				factor = 0.5
+				fleet_power < 60000
 			}
 			modifier = {
 				factor = 5
@@ -9210,7 +9278,7 @@ country_event = {
 			}
 			modifier = {
 				factor = 2
-				any_country = {
+				any_relation = {
 					is_ai = no
 					is_in_federation_with = root
 				}

@@ -629,6 +629,7 @@ fleet_event = {
 	immediate = {
 		#log = "pirate fleet logic"
 		clear_fleet_actions = this
+		set_fleet_stance = aggressive
 		queue_actions = {
 			repeat = {
 				# try found prior target
@@ -861,7 +862,7 @@ fleet_event = {
 					max_iterations = 5
 					find_closest_planet = {
 						trigger = {
-							id = human_fallen_empires_pirate.50.trigger.2
+							id = human_fallen_empires_pirate.50.trigger.1.0
 							root = {
 								has_hp_percentage > 0.99
 							}
@@ -872,13 +873,19 @@ fleet_event = {
 						}
 						found_planet = {
 							orbit_planet = this
+							effect = {
+								id = human_fallen_empires_pirate.50.effect.1.0
+								root = {
+									set_fleet_stance = aggressive
+								}
+							}
 							wait = 31
 						}
 					}
 				}
 				find_random_system = {
 					trigger = {
-						id = human_fallen_empires_pirate.50.trigger.3
+						id = human_fallen_empires_pirate.50.trigger.2.0
 						any_planet = {
 							exists = owner
 							owner = {
@@ -892,7 +899,7 @@ fleet_event = {
 				}
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires_pirate.50.trigger.4
+						id = human_fallen_empires_pirate.50.trigger.3.0
 						exists = owner
 						owner = {
 							is_country = root.owner
@@ -951,6 +958,7 @@ country_event = {
 	}
 
 	immediate = {
+		#log = "pirate kill station"
 		from = {
 			set_timed_country_flag = {
 				flag = human_fallen_empires_attacked_by_pirate
@@ -962,7 +970,6 @@ country_event = {
 		add_physics_research = 5
 		add_society_research = 5
 		add_engineering_research = 5
-		#log = "pirate kill station"
 	}
 }
 
@@ -1041,7 +1048,7 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		always = no
+		#always = no
 		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate

@@ -613,7 +613,6 @@ country_event = {
 							or = {
 								is_ship_size = destroyer
 								is_ship_size = military_station_small
-								is_ship_size = small_ship_fallen_empire
 							}
 						}
 					}
@@ -638,6 +637,7 @@ country_event = {
 								fromfromfrom = {
 									or = {
 										is_ship_size = cruiser
+										is_ship_size = small_ship_fallen_empire
 										is_ship_size = military_station_medium
 										is_ship_size = military_station_small_fallen_empire
 									}
@@ -735,35 +735,33 @@ country_event = {
 				amount = 1
 			}
 		}
-		fromfrom = {
-			solar_system = {
+		if = {
+			limit = {
+				exists = fromfrom.solar_system.space_owner
+			}
+			fromfrom.solar_system.space_owner = {
+				# фром тут уничтожаемый корабль
 				if = {
 					limit = {
-						exists = space_owner
-						exists = from
-						space_owner = {
-							energy > @human_fallen_empires_discovery_kill_reward
-							nor = {
-								is_country = root
-								is_hostile = root
-								is_country = from
-							}
-							is_hostile = from
+						energy > @human_fallen_empires_discovery_kill_reward
+						is_hostile = from.owner
+						nor = {
+							is_country = from.owner
+							is_country = root
+							is_hostile = root
 						}
 					}
-					space_owner = {
-						add_opinion_modifier = {
-							who = root
-							modifier = human_fallen_empires_opinion_discovery_kill_reward
-						}
+					add_opinion_modifier = {
+						who = root
+						modifier = human_fallen_empires_opinion_discovery_kill_reward
+					}
+					add_energy = @human_fallen_empires_discovery_kill_reward_minus
+					root = {
 						add_energy = @human_fallen_empires_discovery_kill_reward
-						root = {
-							add_energy = @human_fallen_empires_discovery_kill_reward
-							add_event_chain_counter = {
-								event_chain = human_fallen_empires_discovery_kill_count
-								counter = human_fallen_empires_discovery_kill_count_reward
-								amount = 1
-							}
+						add_event_chain_counter = {
+							event_chain = human_fallen_empires_discovery_kill_count
+							counter = human_fallen_empires_discovery_kill_count_reward
+							amount = 1
 						}
 					}
 				}
@@ -794,10 +792,7 @@ country_event = {
 		end_event_chain = human_fallen_empires_discovery_contract_pirate_hunt
 		random_country = {
 			limit = {
-				has_relation_flag = {
-					who = root
-					flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer
-				}
+				has_country_flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer@root
 			}
 			add_energy = @human_fallen_empires_discovery_contract_pirate_hunt_reward_minus
 			log = "321"
@@ -815,29 +810,31 @@ country_event = {
 	trigger = {
 		is_country_type = human_fallen_empires_discovery
 		has_event_chain = human_fallen_empires_discovery_contract_clear_system
-		exists = fromfromfrom
-		fromfromfrom = {
-			solar_system = {
-				has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
-				not = {
-					any_ship_in_system = {
-						exists = owner
-						owner = {
-							is_hostile = root
-						}
-					}
-				}
-			}
+		exists = fromfromfrom.solar_system
+		fromfromfrom.solar_system = {
+			has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
+			# not = {
+			# 	any_ship_in_system = {
+			# 		exists = owner
+			# 		owner = {
+			# 			is_hostile = root
+			# 		}
+			# 	}
+			# }
 		}
 	}
 
 	immediate = {
-		end_event_chain = human_fallen_empires_discovery_contract_clear_system
-		fromfromfrom = {
-			solar_system = {
-				remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
+		fromfrom = {
+			ship_event = {
+				id = human_fallen_empires_discovery.103
+				days = 15
 			}
 		}
+		# end_event_chain = human_fallen_empires_discovery_contract_clear_system
+		# fromfromfrom.solar_system = {
+		# 	remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
+		# }
 	}
 }
 
@@ -853,9 +850,9 @@ ship_event = {
 			is_country_type = human_fallen_empires_discovery
 			has_event_chain = human_fallen_empires_discovery_contract_clear_system
 		}
-		exists = from
-		from = {
-			has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
+		exists = solar_system
+		solar_system = {
+			has_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root.owner
 			not = {
 				any_ship_in_system = {
 					exists = owner
@@ -871,8 +868,8 @@ ship_event = {
 		owner = {
 			end_event_chain = human_fallen_empires_discovery_contract_clear_system
 		}
-		from = {
-			remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root
+		solar_system = {
+			remove_star_flag = human_fallen_empires_discovery_contract_clear_system_target@root.owner
 		}
 	}
 }
@@ -1056,6 +1053,7 @@ country_event = {
 					name = random
 					random_existing_design = science
 				}
+				set_fleet_stance = evasive
 				set_location = event_target:human_fallen_empires_discovery_docking_ship
 			}
 		}
@@ -1299,10 +1297,7 @@ country_event = {
 			event_target:human_fallen_empires_discovery_docking_planet = {
 				owner = {
 					save_event_target_as = human_fallen_empires_discovery_pirate_hunt_hirer
-					set_relation_flag = {
-						who = root
-						flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer
-					}
+					set_country_flag = human_fallen_empires_discovery_contract_pirate_hunt_hirer@root
 				}
 				closest_system = {
 					limit = {
@@ -1344,8 +1339,7 @@ country_event = {
 		name = human_fallen_empires_discovery.151.contract_menu.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.contract_menu
-			any_country = {
-				has_communications = root
+			any_relation = {
 				is_country_type = default
 				or = {
 					is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
@@ -1380,14 +1374,10 @@ country_event = {
 		}
 		hidden_effect = {
 			event_target:human_fallen_empires_discovery_docking_planet_owner = {
-				set_relation_flag = {
-					who = root
-					flag = human_fallen_empires_discovery_contract_embassy_hirer
-				}
+				set_country_flag = human_fallen_empires_discovery_contract_embassy_hirer@root
 			}
-			random_country = {
+			random_relation = {
 				limit = {
-					has_communications = root
 					is_country_type = default
 					or = {
 						is_hostile_to = event_target:human_fallen_empires_discovery_docking_planet_owner
@@ -1453,10 +1443,7 @@ country_event = {
 		}
 		hidden_effect = {
 			event_target:human_fallen_empires_discovery_docking_planet_owner = {
-				set_relation_flag = {
-					who = root
-					flag = human_fallen_empires_discovery_contract_clear_system_hirer
-				}
+				#set_country_flag = human_fallen_empires_discovery_contract_clear_system_hirer@root
 				random_system_within_border = {
 					limit = {
 						any_ship_in_system = {
@@ -1515,12 +1502,17 @@ country_event = {
 	}
 
 
-	# human_fallen_empires_discovery_damage lvl 0
+		# human_fallen_empires_discovery_damage lvl 0
 	option = {
 		name = human_fallen_empires_discovery.151.1.0.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_damage_0
@@ -1541,8 +1533,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.0
+		response_text = human_fallen_empires_discovery.151.1.0.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1569,8 +1562,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.1.0.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1592,8 +1588,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.1
+		response_text = human_fallen_empires_discovery.151.1.0.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1620,8 +1617,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.1.0.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1643,8 +1643,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.2
+		response_text = human_fallen_empires_discovery.151.1.0.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1671,8 +1672,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.1.0.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1694,8 +1698,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.3
+		response_text = human_fallen_empires_discovery.151.1.0.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1722,8 +1727,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.1.0.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1745,8 +1753,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.4
+		response_text = human_fallen_empires_discovery.151.1.0.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1773,8 +1782,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.1.0.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1796,8 +1808,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.5
+		response_text = human_fallen_empires_discovery.151.1.0.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1821,10 +1834,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.0
+		name = human_fallen_empires_discovery.151.1.1.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_fire_rate_0
@@ -1845,8 +1863,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.0
+		response_text = human_fallen_empires_discovery.151.1.1.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1870,11 +1889,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.1
+		name = human_fallen_empires_discovery.151.1.1.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1896,8 +1918,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.1
+		response_text = human_fallen_empires_discovery.151.1.1.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1921,11 +1944,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.2
+		name = human_fallen_empires_discovery.151.1.1.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1947,8 +1973,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.2
+		response_text = human_fallen_empires_discovery.151.1.1.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -1972,11 +1999,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.3
+		name = human_fallen_empires_discovery.151.1.1.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -1998,8 +2028,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.3
+		response_text = human_fallen_empires_discovery.151.1.1.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2023,11 +2054,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.4
+		name = human_fallen_empires_discovery.151.1.1.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2049,8 +2083,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.4
+		response_text = human_fallen_empires_discovery.151.1.1.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2074,11 +2109,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_fire_rate lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.5
+		name = human_fallen_empires_discovery.151.1.1.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2100,8 +2138,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.5
+		response_text = human_fallen_empires_discovery.151.1.1.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2125,10 +2164,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.0
+		name = human_fallen_empires_discovery.151.1.2.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_accuracy_0
@@ -2149,8 +2193,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.0
+		response_text = human_fallen_empires_discovery.151.1.2.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2174,11 +2219,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.1
+		name = human_fallen_empires_discovery.151.1.2.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2200,8 +2248,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.1
+		response_text = human_fallen_empires_discovery.151.1.2.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2225,11 +2274,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.2
+		name = human_fallen_empires_discovery.151.1.2.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2251,8 +2303,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.2
+		response_text = human_fallen_empires_discovery.151.1.2.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2276,11 +2329,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.3
+		name = human_fallen_empires_discovery.151.1.2.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2302,8 +2358,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.3
+		response_text = human_fallen_empires_discovery.151.1.2.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2327,11 +2384,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.4
+		name = human_fallen_empires_discovery.151.1.2.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2353,8 +2413,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.4
+		response_text = human_fallen_empires_discovery.151.1.2.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2378,11 +2439,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_accuracy lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.5
+		name = human_fallen_empires_discovery.151.1.2.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2404,8 +2468,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.5
+		response_text = human_fallen_empires_discovery.151.1.2.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2429,10 +2494,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.0
+		name = human_fallen_empires_discovery.151.1.3.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_range_0
@@ -2453,8 +2523,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.0
+		response_text = human_fallen_empires_discovery.151.1.3.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2478,11 +2549,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.1
+		name = human_fallen_empires_discovery.151.1.3.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2504,8 +2578,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.1
+		response_text = human_fallen_empires_discovery.151.1.3.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2529,11 +2604,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.2
+		name = human_fallen_empires_discovery.151.1.3.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2555,8 +2633,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.2
+		response_text = human_fallen_empires_discovery.151.1.3.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2580,11 +2659,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.3
+		name = human_fallen_empires_discovery.151.1.3.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2606,8 +2688,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.3
+		response_text = human_fallen_empires_discovery.151.1.3.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2631,11 +2714,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.4
+		name = human_fallen_empires_discovery.151.1.3.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2657,8 +2743,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.4
+		response_text = human_fallen_empires_discovery.151.1.3.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2682,11 +2769,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_range lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.1.0.5
+		name = human_fallen_empires_discovery.151.1.3.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.1
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2708,8 +2798,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.1.0.5
+		response_text = human_fallen_empires_discovery.151.1.3.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2736,7 +2827,12 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_hp_0
@@ -2757,8 +2853,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.0
+		response_text = human_fallen_empires_discovery.151.2.0.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2785,8 +2882,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2808,8 +2908,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.1
+		response_text = human_fallen_empires_discovery.151.2.0.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2836,8 +2937,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2859,8 +2963,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.2
+		response_text = human_fallen_empires_discovery.151.2.0.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2887,8 +2992,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2910,8 +3018,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.3
+		response_text = human_fallen_empires_discovery.151.2.0.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2938,8 +3047,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -2961,8 +3073,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.4
+		response_text = human_fallen_empires_discovery.151.2.0.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -2989,8 +3102,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.2.0.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3012,8 +3128,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.5
+		response_text = human_fallen_empires_discovery.151.2.0.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3037,10 +3154,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.0
+		name = human_fallen_empires_discovery.151.2.1.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_armor_0
@@ -3061,8 +3183,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.0
+		response_text = human_fallen_empires_discovery.151.2.1.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3086,11 +3209,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.1
+		name = human_fallen_empires_discovery.151.2.1.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3112,8 +3238,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.1
+		response_text = human_fallen_empires_discovery.151.2.1.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3137,11 +3264,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.2
+		name = human_fallen_empires_discovery.151.2.1.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3163,8 +3293,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.2
+		response_text = human_fallen_empires_discovery.151.2.1.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3188,11 +3319,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.3
+		name = human_fallen_empires_discovery.151.2.1.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3214,8 +3348,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.3
+		response_text = human_fallen_empires_discovery.151.2.1.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3239,11 +3374,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.4
+		name = human_fallen_empires_discovery.151.2.1.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3265,8 +3403,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.4
+		response_text = human_fallen_empires_discovery.151.2.1.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3290,11 +3429,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_armor lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.5
+		name = human_fallen_empires_discovery.151.2.1.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3316,8 +3458,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.5
+		response_text = human_fallen_empires_discovery.151.2.1.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3341,10 +3484,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.0
+		name = human_fallen_empires_discovery.151.2.2.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_shield_0
@@ -3365,8 +3513,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.0
+		response_text = human_fallen_empires_discovery.151.2.2.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3390,11 +3539,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.1
+		name = human_fallen_empires_discovery.151.2.2.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3416,8 +3568,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.1
+		response_text = human_fallen_empires_discovery.151.2.2.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3441,11 +3594,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.2
+		name = human_fallen_empires_discovery.151.2.2.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3467,8 +3623,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.2
+		response_text = human_fallen_empires_discovery.151.2.2.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3492,11 +3649,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.3
+		name = human_fallen_empires_discovery.151.2.2.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3518,8 +3678,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.3
+		response_text = human_fallen_empires_discovery.151.2.2.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3543,11 +3704,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.4
+		name = human_fallen_empires_discovery.151.2.2.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3569,8 +3733,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.4
+		response_text = human_fallen_empires_discovery.151.2.2.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3594,11 +3759,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_shield lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.2.0.5
+		name = human_fallen_empires_discovery.151.2.2.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.2
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3620,8 +3788,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.2.0.5
+		response_text = human_fallen_empires_discovery.151.2.2.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3648,7 +3817,12 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_speed_0
@@ -3669,8 +3843,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.0
+		response_text = human_fallen_empires_discovery.151.3.0.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3697,8 +3872,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3720,8 +3898,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.1
+		response_text = human_fallen_empires_discovery.151.3.0.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3748,8 +3927,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3771,8 +3953,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.2
+		response_text = human_fallen_empires_discovery.151.3.0.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3799,8 +3982,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3822,8 +4008,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.3
+		response_text = human_fallen_empires_discovery.151.3.0.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3850,8 +4037,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3873,8 +4063,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.4
+		response_text = human_fallen_empires_discovery.151.3.0.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3901,8 +4092,11 @@ country_event = {
 		name = human_fallen_empires_discovery.151.3.0.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -3924,8 +4118,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.5
+		response_text = human_fallen_empires_discovery.151.3.0.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3949,10 +4144,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.0
+		name = human_fallen_empires_discovery.151.3.1.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_warp_range_0
@@ -3973,8 +4173,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.0
+		response_text = human_fallen_empires_discovery.151.3.1.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -3998,11 +4199,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.1
+		name = human_fallen_empires_discovery.151.3.1.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4024,8 +4228,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.1
+		response_text = human_fallen_empires_discovery.151.3.1.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4049,11 +4254,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.2
+		name = human_fallen_empires_discovery.151.3.1.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4075,8 +4283,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.2
+		response_text = human_fallen_empires_discovery.151.3.1.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4100,11 +4309,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.3
+		name = human_fallen_empires_discovery.151.3.1.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4126,8 +4338,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.3
+		response_text = human_fallen_empires_discovery.151.3.1.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4151,11 +4364,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.4
+		name = human_fallen_empires_discovery.151.3.1.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4177,8 +4393,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.4
+		response_text = human_fallen_empires_discovery.151.3.1.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4202,11 +4419,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_warp_range lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.5
+		name = human_fallen_empires_discovery.151.3.1.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4228,8 +4448,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.5
+		response_text = human_fallen_empires_discovery.151.3.1.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4253,10 +4474,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.0
+		name = human_fallen_empires_discovery.151.3.2.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_interstellar_speed_0
@@ -4277,8 +4503,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.0
+		response_text = human_fallen_empires_discovery.151.3.2.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4302,11 +4529,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.1
+		name = human_fallen_empires_discovery.151.3.2.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4328,8 +4558,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.1
+		response_text = human_fallen_empires_discovery.151.3.2.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4353,11 +4584,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.2
+		name = human_fallen_empires_discovery.151.3.2.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4379,8 +4613,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.2
+		response_text = human_fallen_empires_discovery.151.3.2.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4404,11 +4639,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.3
+		name = human_fallen_empires_discovery.151.3.2.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4430,8 +4668,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.3
+		response_text = human_fallen_empires_discovery.151.3.2.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4455,11 +4694,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.4
+		name = human_fallen_empires_discovery.151.3.2.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4481,8 +4723,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.4
+		response_text = human_fallen_empires_discovery.151.3.2.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4506,11 +4749,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_interstellar_speed lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.5
+		name = human_fallen_empires_discovery.151.3.2.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4532,8 +4778,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.5
+		response_text = human_fallen_empires_discovery.151.3.2.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4557,10 +4804,15 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 0
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.0
+		name = human_fallen_empires_discovery.151.3.3.0
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 0
+				}
+			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
 					has_modifier = human_fallen_empires_discovery_winddown_0
@@ -4581,8 +4833,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.0
+		response_text = human_fallen_empires_discovery.151.3.3.0.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t0
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t0
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4606,11 +4859,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 1
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.1
+		name = human_fallen_empires_discovery.151.3.3.1
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 1
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 1
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4632,8 +4888,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.1
+		response_text = human_fallen_empires_discovery.151.3.3.1.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t1
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t1
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4657,11 +4914,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 2
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.2
+		name = human_fallen_empires_discovery.151.3.3.2
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 2
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 2
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4683,8 +4943,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.2
+		response_text = human_fallen_empires_discovery.151.3.3.2.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t2
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t2
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4708,11 +4969,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 3
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.3
+		name = human_fallen_empires_discovery.151.3.3.3
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 3
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 3
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4734,8 +4998,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.3
+		response_text = human_fallen_empires_discovery.151.3.3.3.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t3
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t3
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4759,11 +5024,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 4
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.4
+		name = human_fallen_empires_discovery.151.3.3.4
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 4
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 4
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4785,8 +5053,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.4
+		response_text = human_fallen_empires_discovery.151.3.3.4.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t4
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t4
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4810,11 +5079,14 @@ country_event = {
 	}
 	# human_fallen_empires_discovery_winddown lvl 5
 	option = {
-		name = human_fallen_empires_discovery.151.3.0.5
+		name = human_fallen_empires_discovery.151.3.3.5
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.3
-			event_target:human_fallen_empires_discovery_docking_planet = {
-				num_spaceport_modules > 5
+			event_target:human_fallen_empires_discovery_owner = {
+				check_variable = {
+					which = human_fallen_empires_discovery_docking_planet_lvl
+					value > 5
+				}
 			}
 			event_target:human_fallen_empires_discovery_docking_ship = {
 				not = {
@@ -4836,8 +5108,9 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.3.0.5
+		response_text = human_fallen_empires_discovery.151.3.3.5.response
 
+		play_sound = event_ai_started
 		add_minerals = @human_fallen_empires_discovery_docking_update_minerals_cost_minus_t5
 		add_energy = @human_fallen_empires_discovery_docking_update_energy_cost_minus_t5
 		event_target:human_fallen_empires_discovery_docking_ship = {
@@ -4859,6 +5132,7 @@ country_event = {
 			amount = 5
 		}
 	}
+
 
 	# return
 	option = {

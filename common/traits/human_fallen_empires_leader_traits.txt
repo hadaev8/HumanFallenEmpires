@@ -50,6 +50,9 @@ ruler_trait_transcendent = {
 	icon = gfx/interface/icons/leader_traits/ruler_trait_transcendent.dds
 	leader_potential_add = {
 		NOT = { from = { has_ethic = ethic_gestalt_consciousness } }
+		species = {
+			human_fallen_empires_trigger_is_psionic = yes
+		}
 	}
 	modifier = {
 		pop_government_ethic_attraction = 0.1
@@ -58,7 +61,7 @@ ruler_trait_transcendent = {
 	leader_trait = yes
 	leader_class = { ruler }
 	# проверить как это работает
-	requires_traits = { trait_psionic }
+	#requires_traits = { trait_psionic }
 }
 
 ruler_trait_wealth_seeker = {
@@ -277,8 +280,8 @@ admiral_trait_slayer = {
 	modification = no
 	icon = gfx/interface/icons/leader_traits/admiral_trait_slayer.dds
 	modifier = {
-		ship_fire_rate_mult = 0.05
-		ship_weapon_damage = 0.05
+		ship_tracking_add = 5
+		ship_accuracy_add = 5
 		ship_weapon_range_mult = 0.05
 	}
 	leader_trait = yes
@@ -379,8 +382,15 @@ human_fallen_empires_ruler_trait_genomod = {
 	leader_potential_add = {
 		NOT = { from = { has_ethic = ethic_gestalt_consciousness } }
 		species = {
-			is_subspecies = from.species
+			is_same_species = from.species
+			not = {
+				is_exact_same_species = from.species
+			}
 		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.1
+		leader_age = 10
 	}
 	modifier = {
 		modify_species_cost_mult = -0.1

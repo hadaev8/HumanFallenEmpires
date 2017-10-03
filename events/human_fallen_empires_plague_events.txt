@@ -13,45 +13,28 @@ country_event = {
 			has_global_flag = human_fallen_empires_plague_srarted
 		}
 		or = {
+			years_passed > 120
 			and = {
-				years_passed > 80
-				is_difficulty = 2
+				years_passed > 110
+				is_difficulty > 0
+			}
+			and = {
+				years_passed > 100
+				is_difficulty > 1
 			}
 			and = {
 				years_passed > 90
-				is_difficulty = 1
+				is_difficulty > 2
 			}
-			years_passed > 100
 		}
 	}
 
 	immediate = {
 		random_list = {
-			30 = {
+			20 = {
 				break = yes
 			}
 			10 = {
-				modifier = {
-					factor = 2
-					years_passed > 120
-				}
-				modifier = {
-					factor = 2
-					years_passed > 110
-				}
-				modifier = {
-					factor = 2
-					years_passed > 100
-					or = {
-						is_difficulty = 1
-						is_difficulty = 2
-					}
-				}
-				modifier = {
-					factor = 2
-					years_passed > 90
-					is_difficulty = 2
-				}
 			}
 		}
 		set_global_flag = human_fallen_empires_plague_srarted
@@ -77,25 +60,55 @@ country_event = {
 				}
 			}
 		}
-		# сделать зависимость от уровня сложности
 		while = {
-			count = 10
+			count = 4
 			random_planet = {
 				limit = {
-					exists = owner
-					owner = {
-						is_country_type = default
-					}
-					num_pops > 0
-					not = {
-						has_planet_flag = human_fallen_empires_plague_planet
-					}
-					is_under_colonization = no
-					any_owned_pop = {
-						human_fallen_empires_trigger_plague_is_immune = no
-					}
+					human_fallen_empires_trigger_plague_can_start_at_planet = yes
 				}
 				planet_event = { id = human_fallen_empires_plague.1 days = 1 random = 365}
+			}
+		}
+		if = {
+			limit = {
+				is_difficulty > 0
+			}
+			while = {
+				count = 2
+				random_planet = {
+					limit = {
+						human_fallen_empires_trigger_plague_can_start_at_planet = yes
+					}
+					planet_event = { id = human_fallen_empires_plague.1 days = 1 random = 365}
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_difficulty > 1
+			}
+			while = {
+				count = 2
+				random_planet = {
+					limit = {
+						human_fallen_empires_trigger_plague_can_start_at_planet = yes
+					}
+					planet_event = { id = human_fallen_empires_plague.1 days = 1 random = 365}
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_difficulty > 2
+			}
+			while = {
+				count = 2
+				random_planet = {
+					limit = {
+						human_fallen_empires_trigger_plague_can_start_at_planet = yes
+					}
+					planet_event = { id = human_fallen_empires_plague.1 days = 1 random = 365}
+				}
 			}
 		}
 		every_country = {
@@ -283,6 +296,14 @@ planet_event = {
 			random_list = {
 				# die
 				90 = {
+					modifier = {
+						factor = 0.75
+						has_building = building_clinic
+					}
+					modifier = {
+						factor = 0.5
+						has_building = building_hospital
+					}
 					owner = {
 						country_event = { id = human_fallen_empires_plague.56 days = 1 }
 						if = {
@@ -305,22 +326,12 @@ planet_event = {
 							counter = human_fallen_empires_plague_kill_pop_count_total
 							amount = 1
 						}
-						if = {
-							limit = {
-								has_global_flag = human_fallen_empires_plague_lvl_3
-							}
-							add_event_chain_counter = {
-								event_chain = human_fallen_empires_plague_count
-								counter = human_fallen_empires_plague_zombie_count_total
-								amount = 1
-							}
-						}
 					}
 					if = {
 						limit = {
 							has_global_flag = human_fallen_empires_plague_lvl_3
 							count_planet_army = {
-								count < 20
+								count < 25
 							}
 						}
 						human_fallen_empires_plague_get_zombie = yes
@@ -328,6 +339,16 @@ planet_event = {
 					 		name = Zombies
 					 		owner = event_target:human_fallen_empires_plague_zombie_country
 					 		type = human_fallen_empires_plague_zombie_army
+						}
+						every_playable_country = {
+							limit = {
+								has_event_chain = human_fallen_empires_plague_count
+							}
+							add_event_chain_counter = {
+								event_chain = human_fallen_empires_plague_count
+								counter = human_fallen_empires_plague_zombie_count_total
+								amount = 1
+							}
 						}
 					}
 					random_owned_pop = {
@@ -347,10 +368,10 @@ planet_event = {
 					}
 					modifier = {
 						factor = 2
-						is_difficulty = 1
+						is_difficulty < 2
 					}
 					modifier = {
-						factor = 4
+						factor = 2
 						is_difficulty = 0
 					}
 					owner = {
@@ -368,14 +389,6 @@ planet_event = {
 				}
 				# nothing
 				9 = {
-					modifier = {
-						factor = 1.2
-						has_building = building_clinic
-					}
-					modifier = {
-						factor = 1.4
-						has_building = building_hospital
-					}
 				}
 			}
 		}
@@ -562,24 +575,7 @@ planet_event = {
 			}
 			random_planet = {
 				limit = {
-					exists = owner
-					owner = {
-						or = {
-							is_country_type = default
-							is_country_type = awakened_fallen_empire
-						}
-					}
-					is_under_colonization = no
-					num_pops > 0
-					nor = {
-						has_planet_flag = human_fallen_empires_plague_planet
-						controller = {
-							is_country_type = human_fallen_empires_plague_zombie
-						}
-					}
-					any_owned_pop = {
-						human_fallen_empires_trigger_plague_is_immune = no
-					}
+					human_fallen_empires_trigger_plague_can_start_at_planet = yes
 				}
 				random_list = {
 					# nothing
@@ -594,10 +590,7 @@ planet_event = {
 						}
 						modifier = {
 							factor = 1.2
-							or = {
-								is_planet_class = pc_habitat
-								is_planet_class = pc_ringworld_habitable
-							}
+							habitable_structure = yes
 						}
 						modifier = {
 							factor = 2
@@ -698,10 +691,7 @@ country_event = {
 			success_text = {
 				text = human_fallen_empires_plague.9.desc.1
 				any_owned_planet = {
-					or = {
-						is_planet_class = pc_habitat
-						is_planet_class = pc_ringworld_habitable
-					}
+					habitable_structure = yes
 				}
 			}
 			text = human_fallen_empires_plague.9.desc.2
@@ -1175,7 +1165,7 @@ country_event = {
 	option = {
 		name = human_fallen_empires_plague.50.2
 		trigger = {
-			has_trait = human_fallen_empires_trait_brainworm
+			human_fallen_empires_trigger_is_brainworm_country = yes
 		}
 	}
 }

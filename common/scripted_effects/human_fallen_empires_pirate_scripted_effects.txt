@@ -57,16 +57,7 @@ human_fallen_empires_effect_create_pirate = {
 			}
 			if = {
 				limit = {
-					is_difficulty = 3
-				}
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_country_insane
-					days = -1
-				}
-			}
-			if = {
-				limit = {
-					is_difficulty = 2
+					is_difficulty > 1
 				}
 				add_modifier = {
 					modifier = human_fallen_empires_pirate_country_insane
@@ -104,6 +95,8 @@ human_fallen_empires_effect_create_pirate = {
 			}
 			add_energy = 200
 			add_influence = 200
+			add_research_option = tech_human_fallen_empires_pirate_local_harvest
+			add_research_option = tech_human_fallen_empires_pirate_black_market
 			set_policy = {
 				policy = orbital_bombardment
 				option = orbital_bombardment_full
@@ -133,6 +126,19 @@ human_fallen_empires_effect_create_pirate = {
 					is_country_type = primitive
 				}
 				establish_communications_no_message = event_target:pirate_band
+				event_target:pirate_band = {
+					if = {
+						limit = {
+							human_fallen_empires_trigger_is_xenophile = yes
+						}
+					}
+					set_faction_hostility = {
+						target = prev
+						set_hostile = no
+						set_neutral = no
+						set_friendly = yes
+					}
+				}
 			}
 			random_planet = {
 				limit = {
@@ -154,7 +160,7 @@ human_fallen_empires_effect_create_pirate_base = {
 	change_pc = pc_human_fallen_empires_pirate_base
 	create_colony = {
 		owner = event_target:pirate_band
-		species = event_target:pirate_band.species
+		species = owner
 		ethos = owner
 	}
 	every_owned_pop = {

@@ -188,7 +188,7 @@ human_fallen_empires_make_collition_member = {
 		parameter:country = {
 			can_be_subject = {
 				overlord = fromfromfrom
-				subject_type = "human_fallen_empires_future_vassal"
+				subject_type = human_fallen_empires_future_vassal
 			}
 		}
 	}
@@ -201,7 +201,7 @@ human_fallen_empires_make_collition_member = {
 		parameter:country = {
 			set_subject_of = {
 				who = fromfromfrom
-				subject_type = "human_fallen_empires_future_vassal"
+				subject_type = human_fallen_empires_future_vassal
 			}
 		}
 	}
@@ -377,7 +377,6 @@ human_fallen_empires_challenge_coallition_leadership = {
 		set_subject_of = {
 			who = none
 		}
-		set_country_flag = human_fallen_empires_coalition_leader
 	#	country_event = { }
 		every_country = {
 			limit = {
@@ -397,6 +396,7 @@ human_fallen_empires_challenge_coallition_leadership = {
 			}
 			remove_country_flag = human_fallen_empires_coalition_leader
 		}
+		set_country_flag = human_fallen_empires_coalition_leader
 		clear_global_event_target = human_fallen_empires_coalition_leader
 		save_global_event_target_as = human_fallen_empires_coalition_leader
 	}
@@ -432,6 +432,7 @@ human_fallen_empires_slave_raid = {
 	}
 
 	potential = {
+		allows_slavery = yes
 		OR = {
 			is_subject = no
 			NOT = {
@@ -440,7 +441,6 @@ human_fallen_empires_slave_raid = {
 				}
 			}
 		}
-		allows_slavery = yes
 		parameter:country = {
 			is_country_type = default
 		}
@@ -505,8 +505,12 @@ human_fallen_empires_slave_raid = {
 	}
 
 	possible = {
+		allows_slavery = yes
 		fromfromfrom = {
 			allows_slavery = yes
+			any_owned_planet = {
+				free_pop_tiles > 0
+			}
 		}
 		hidden:parameter:country = {
 			custom_tooltip_fail = {
@@ -688,6 +692,7 @@ human_fallen_empires_loot_raid = {
 	}
 
 	potential = {
+		human_fallen_empires_trigger_is_regular_fallen = no
 		OR = {
 			is_subject = no
 			NOT = {
