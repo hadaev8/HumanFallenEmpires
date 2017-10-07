@@ -272,6 +272,10 @@ country_event = {
 		country_event = { id = human_fallen_empires_pirate.3 }
 		# send fleet logic for unstuck fleets
 		every_owned_fleet = {
+			limit = {
+				num_ships > 4
+			}
+			set_fleet_stance = aggressive
 			fleet_event = { id = human_fallen_empires_pirate.50 }
 		}
 		# kick buildings
@@ -726,12 +730,6 @@ fleet_event = {
 											controller = {
 												is_country_type = default
 												is_hostile = root.owner
-												not = {
-													has_opinion_modifier = {
-														who = root.owner
-														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-													}
-												}
 											}
 										}
 										and = {
@@ -739,14 +737,6 @@ fleet_event = {
 											root.owner = {
 												any_owned_planet = {
 													free_pop_tiles > 0
-												}
-											}
-											owner = {
-												not = {
-													has_opinion_modifier = {
-														who = root.owner
-														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-													}
 												}
 											}
 										}
@@ -797,14 +787,6 @@ fleet_event = {
 										}
 										any_planet = {
 											human_fallen_empires_pirate_valid_target_planet = yes
-											owner = {
-												not = {
-													has_opinion_modifier = {
-														who = root.owner
-														modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-													}
-												}
-											}
 										}
 										not = {
 											any_ship_in_system = {
@@ -1048,7 +1030,7 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		#always = no
+		always = no
 		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
@@ -1148,7 +1130,7 @@ country_event = {
 
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_pirate_country
-		room = human_fallen_empires_pirate_room
+		room = event_target:human_fallen_empires_pirate_country.ruler
 	}
 
 	after = {
@@ -1165,12 +1147,7 @@ country_event = {
 			# выполняется если тру
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.0.tooltip_fail
-				not = {
-					has_opinion_modifier = {
-						who = event_target:human_fallen_empires_pirate_country
-						modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-					}
-				}
+				is_hostile = event_target:human_fallen_empires_pirate_country
 			}
 			energy > 500
 			minerals > 500
@@ -1186,11 +1163,18 @@ country_event = {
 			add_minerals = 500
 		}
 		hidden_effect = {
-			add_opinion_modifier = {
-				who = event_target:human_fallen_empires_pirate_country
-				modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+			# event to return hostile
+			country_event = {
+				id = human_fallen_empires_pirate.200
+				days = 1825
 			}
 			event_target:human_fallen_empires_pirate_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
 				add_opinion_modifier = {
 					who = root
 					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
@@ -1213,15 +1197,15 @@ country_event = {
 			every_relation = {
 				limit = {
 					is_country_type = default
-					is_at_war_with = root
+					or = {
+						is_at_war_with = root
+						is_hostile = root
+					}
+					is_hostile = event_target:human_fallen_empires_pirate_country
 					not = {
 						has_opinion_modifier = {
 							who = event_target:human_fallen_empires_pirate_country
 							modifier = human_fallen_empires_opinion_pirate_prior_target
-						}
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 						}
 					}
 				}
@@ -1235,14 +1219,11 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_rival = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
 								modifier = human_fallen_empires_opinion_pirate_prior_target
-							}
-							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 							}
 						}
 					}
@@ -1257,6 +1238,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_domineering_to = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
@@ -1275,6 +1257,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_hostile_to = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
@@ -1293,6 +1276,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_dismissive_to = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
@@ -1311,6 +1295,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_unfriendly_to = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							is_country = root
 							has_opinion_modifier = {
@@ -1330,6 +1315,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_threatened_to = root
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
@@ -1347,6 +1333,7 @@ country_event = {
 				every_relation = {
 					limit = {
 						is_country_type = default
+						is_hostile = event_target:human_fallen_empires_pirate_country
 						not = {
 							has_opinion_modifier = {
 								who = event_target:human_fallen_empires_pirate_country
@@ -1372,17 +1359,6 @@ country_event = {
 		allow = {
 			energy > 500
 			minerals > 500
-			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_0 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
@@ -1434,17 +1410,6 @@ country_event = {
 			energy > 500
 			minerals > 500
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_1 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
-			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_1 = {
@@ -1494,17 +1459,6 @@ country_event = {
 		allow = {
 			energy > 500
 			minerals > 500
-			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_2 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
@@ -1556,17 +1510,6 @@ country_event = {
 			energy > 500
 			minerals > 500
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_3 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
-			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_3 = {
@@ -1617,17 +1560,6 @@ country_event = {
 			energy > 500
 			minerals > 500
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_4 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
-			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_4 = {
@@ -1677,17 +1609,6 @@ country_event = {
 		allow = {
 			energy > 500
 			minerals > 500
-			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_pay_for_protect
-				not = {
-					event_target:human_fallen_empires_event_target_5 = {
-						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_pay_for_protect
-						}
-					}
-				}
-			}
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
@@ -2541,4 +2462,56 @@ country_event = {
 }
 
 # other pirate related event
+
+# extend pay for protect
+country_event = {
+	id = human_fallen_empires_pirate.200
+	title = TRANSMISSION
+	desc = human_fallen_empires_pirate.200.desc
+	diplomatic = yes
+	is_triggered_only = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:human_fallen_empires_pirate_country
+		room = event_target:human_fallen_empires_pirate_country.ruler
+	}
+
+	trigger = {
+		exists = event_target:human_fallen_empires_pirate_country
+	}
+
+	option = {
+		name = human_fallen_empires_pirate.200.0
+		allow = {
+			energy > 500
+			minerals > 500
+		}
+		add_minerals = -500
+		add_energy = -500
+		hidden_effect = {
+			country_event = {
+				id = human_fallen_empires_pirate.200
+				days = 1825
+			}
+			event_target:human_fallen_empires_pirate_country = {
+				add_opinion_modifier = {
+					who = root
+					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires_pirate.200.1
+		default_hide_option = yes
+		set_faction_hostility = {
+			target = event_target:human_fallen_empires_pirate_country
+			set_hostile = yes
+			set_neutral = no
+			set_friendly = no
+		}
+	}
+}
+
 # notify then save pops from bases

@@ -133,6 +133,7 @@ country_event = {
 			destroy_colony = {
 				keep_buildings = no
 			}
+			reroll_planet = yes
 		}
 		#set_custom_capital_location = event_target:human_fallen_empires_discovery_start_location
 		create_leader = {
@@ -336,41 +337,71 @@ country_event = {
 	}
 
 	immediate = {
-		every_country = {
-			limit = {
-				has_country_flag = human_fallen_empires_discovery_war_target@root
-				not = {
-					is_at_war_with = root
-				}
-			}
-			remove_country_flag = human_fallen_empires_discovery_war_target@root
+		country_event = {
+			id = human_fallen_empires_discovery.54
+			days = 1
 		}
 	}
 }
 
-# make default country if have planets, kill decovery ship
 country_event = {
 	id = human_fallen_empires_discovery.54
 	hide_window = yes
     is_triggered_only = yes
 
-	trigger = {
-		#	has_country_flag = human_fallen_empires_discovery
-		is_country_type = human_fallen_empires_discovery
-		num_owned_planets > 0
-		num_pops > 0
-	}
-
 	immediate = {
-		set_country_type = default
-		# random_owned_ship = {
+		every_country = {
+			limit = {
+				has_country_flag = human_fallen_empires_discovery_war_target@root
+				nor = {
+					is_country = root
+					is_at_war_with = root
+				}
+			}
+			remove_country_flag = human_fallen_empires_discovery_war_target@root
+		}
+		# every_playable_country = {
 		# 	limit = {
-		# 		has_ship_flag = human_fallen_empires_discovery_ship
+		# 		is_hostile = root
+		# 		not = {
+		# 			is_country = root
+		# 			is_at_war_with = root
+		# 		}
 		# 	}
-
+		# 	#log = "[This.GetName]"
+		# 	set_faction_hostility = {
+		# 		target = root
+		# 		set_hostile = no
+		# 		set_neutral = yes
+		# 		set_friendly = no
+		# 	}
 		# }
 	}
 }
+
+# make default country if have planets, kill decovery ship
+# country_event = {
+# 	id = human_fallen_empires_discovery.54
+# 	hide_window = yes
+#     is_triggered_only = yes
+
+# 	trigger = {
+# 		#	has_country_flag = human_fallen_empires_discovery
+# 		is_country_type = human_fallen_empires_discovery
+# 		num_owned_planets > 0
+# 		num_pops > 0
+# 	}
+
+# 	immediate = {
+# 		set_country_type = default
+# 		# random_owned_ship = {
+# 		# 	limit = {
+# 		# 		has_ship_flag = human_fallen_empires_discovery_ship
+# 		# 	}
+
+# 		# }
+# 	}
+# }
 
 # instruction to dock event
 country_event = {
@@ -838,7 +869,7 @@ country_event = {
 	}
 }
 
-# check enemys in target system for on_entering_system
+# check enemies in target system for on_entering_system
 ship_event = {
 	id = human_fallen_empires_discovery.103
 	hide_window = yes
@@ -892,10 +923,10 @@ fleet_event = {
 			exists = owner
 			has_spaceport = yes
 			owner = {
-				is_country_type = default
 				not = {
 					is_hostile = root.owner
 				}
+				human_fallen_empires_trigger_is_awake = yes
 			}
 		}
 	}
