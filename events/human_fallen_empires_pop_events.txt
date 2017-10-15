@@ -1,0 +1,437 @@
+namespace = human_fallen_empires_migration
+
+# set modifiler on planet by pop by on actions
+pop_event = {
+	id = human_fallen_empires_migration.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+		exists = planet
+	}
+
+	immediate = {
+		planet = {
+			planet_event = { id = human_fallen_empires_migration.1 }
+		}
+	}
+}
+
+# set modifiler on planet by on actions
+planet_event = {
+	id = human_fallen_empires_migration.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_disable_migration
+		}
+	}
+
+	immediate = {
+		planet_event = { id = human_fallen_empires_migration.2 }
+		planet_event = { id = human_fallen_empires_migration.3 }
+		planet_event = { id = human_fallen_empires_migration.4 }
+		planet_event = { id = human_fallen_empires_migration.5 }
+	}
+}
+
+# set overpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles < 2
+		not = {
+			has_modifier = human_fallen_empires_migration_overpopulated_planet
+		}
+		exists = owner
+		owner = {
+			is_country_type = default
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_migration_overpopulated_planet
+			days = -1
+		}
+	}
+}
+
+# remove overpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 1
+		has_modifier = human_fallen_empires_migration_overpopulated_planet
+		pop_percentage = {
+			percentage > 0.5
+			limit = {
+				is_robot_pop = no
+			}
+		}
+	}
+
+	immediate = {
+		remove_modifier = human_fallen_empires_migration_overpopulated_planet
+	}
+}
+
+# set unpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 4
+		not = {
+			has_modifier = human_fallen_empires_migration_unpopulated_planet
+		}
+		exists = owner
+		owner = {
+			is_country_type = default
+			human_fallen_empires_trigger_is_hive = no
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_migration_unpopulated_planet
+			days = -1
+		}
+	}
+}
+
+# remove unpopulated modifiler on planet
+planet_event = {
+	id = human_fallen_empires_migration.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles < 5
+		has_modifier = human_fallen_empires_migration_unpopulated_planet
+	}
+
+	immediate = {
+		remove_modifier = human_fallen_empires_migration_unpopulated_planet
+	}
+}
+
+# change main species 50 - 100
+country_event = {
+	id = human_fallen_empires_migration.50
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		num_pops > 0
+		not = {
+			any_owned_pop_species = {
+				is_exact_same_species = root
+			}
+		}
+	}
+
+	immediate = {
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+				root = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+				root = {
+					pop_percentage = {
+						percentage > 0.4
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+				root = {
+					pop_percentage = {
+						percentage > 0.3
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+				root = {
+					pop_percentage = {
+						percentage > 0.2
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+				root = {
+					pop_percentage = {
+						percentage > 0.1
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				is_same_species = root
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				root = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				root = {
+					pop_percentage = {
+						percentage > 0.4
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				root = {
+					pop_percentage = {
+						percentage > 0.3
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				root = {
+					pop_percentage = {
+						percentage > 0.2
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			limit = {
+				root = {
+					pop_percentage = {
+						percentage > 0.1
+						limit = {
+							is_exact_same_species = prev
+						}
+					}
+				}
+			}
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+		random_owned_pop = {
+			root = {
+				change_dominant_species = { species = prev }
+				set_timed_country_flag = {
+					flag = human_fallen_empires_migration.50.stop
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_migration.50.stop
+			}
+			break = yes
+		}
+	}
+}
