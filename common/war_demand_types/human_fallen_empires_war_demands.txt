@@ -13,7 +13,6 @@
 
 # coalition cb
 # invite to coalition
-# разобраться что с вассализацией в 1.6
 human_fallen_empires_make_collition_member = {
 	execution_order = 1
 
@@ -418,7 +417,10 @@ human_fallen_empires_slave_raid = {
 
 	warscore_cost = {
 		base = 50
-
+		modifier = {
+			factor = 0.9
+			has_valid_civic = civic_slaver_guilds
+		}
 		scaled_modifier = {
 			scope = parameter:country
 			add = 0.01
@@ -581,6 +583,23 @@ human_fallen_empires_loot_raid = {
 
 	warscore_cost = {
 		base = 10
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
 		modifier = {
 			add = 5
 			parameter:country = {
@@ -825,5 +844,187 @@ human_fallen_empires_loot_raid = {
 				}
 			}
 		}
+	}
+}
+
+# disband federation
+human_fallen_empires_disband_federation = {
+	execution_order = 1
+
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+
+	warscore_cost = {
+		base = 50
+		modifier = {
+			add = 10
+			parameter:country = {
+				count_relation = {
+					count > 5
+					trigger = {
+						# exists = this
+						is_in_federation_with = parameter:country
+					}
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			parameter:country = {
+				count_relation = {
+					count > 6
+					trigger = {
+						# exists = this
+						is_in_federation_with = parameter:country
+					}
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			parameter:country = {
+				count_relation = {
+					count > 7
+					trigger = {
+						# exists = this
+						is_in_federation_with = parameter:country
+					}
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			parameter:country = {
+				count_relation = {
+					count > 8
+					trigger = {
+						# exists = this
+						is_in_federation_with = parameter:country
+					}
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			parameter:country = {
+				count_relation = {
+					count > 9
+					trigger = {
+						# exists = this
+						is_in_federation_with = parameter:country
+					}
+				}
+			}
+		}
+	}
+
+	potential = {
+		parameter:country = {
+			is_federation_leader = yes
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_not_opponent"
+			parameter:country = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+
+				}
+			}
+		}
+		custom_tooltip_fail = {
+			text = "war_demand_vassalize_country_overlord_in_war"
+			OR = {
+				NOT = {
+					exists = parameter:country.overlord
+				}
+				AND = {
+					exists = fromfrom
+					fromfrom = {
+						NOT = {
+							is_war_participant = {
+								who = parameter:country.overlord
+								side = root
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = fromfrom }
+					parameter:country.overlord = {
+						NOT = {
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = root
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		hidden:parameter:country = {
+			has_federation = yes
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_liberated"
+				war_demand_counter = {
+					type = liberated_or_vassalized
+					value < 1
+				}
+			}
+			custom_tooltip_fail = {
+				text = "war_demand_vassalize_country_no_planets"
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+			}
+		}
+	}
+
+	proposable = {
+		parameter:country = {
+			has_federation = yes
+		}
+	}
+
+	effect = {
+		parameter:country = {
+			every_relation = {
+				limit = {
+					# exists = this
+					is_in_federation_with = parameter:country
+				}
+				leave_alliance = yes
+			}
+			leave_alliance = yes
+		}
+	}
+
+	ai_weight = {
+		base = 9
 	}
 }
