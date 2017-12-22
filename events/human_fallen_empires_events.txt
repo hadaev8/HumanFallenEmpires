@@ -412,7 +412,9 @@ event = {
 		# leaders module
 		every_country = {
 			country_event = {
-				id = human_fallen_empires_leaders.0 days = 1 random = 355
+				id = human_fallen_empires_leaders.0
+				days = 1
+				random = 355
 			}
 		}
 		# pirate module
@@ -1758,6 +1760,7 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.49.0
+		default_hide_option = yes
 	}
 }
 
@@ -2265,6 +2268,7 @@ country_event = {
 	option = {
 		name = human_fallen_empires.104.2
 		response_text = human_fallen_empires.104.2.response
+		default_hide_option = yes
 		human_fallen_empires_effect_add_physics_research.2 = yes
 	}
 }
@@ -2401,9 +2405,6 @@ planet_event = {
 	trigger = {
 		is_planet_class = pc_human_fallen_empires_memorial
 		exists = owner
-		# owner = {
-		# is_ai = no
-		# }
 		has_ground_combat = no
 		num_pops > 0
 	}
@@ -2499,6 +2500,7 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires.152.0
 		}
+		default_hide_option = yes
 		hidden_effect = {
 			create_leader = {
 				type = governor
@@ -2509,7 +2511,6 @@ country_event = {
 			last_created_leader = {
 				set_skill = 3
 			}
-
 		}
 	}
 	option = {
@@ -2607,7 +2608,7 @@ ship_event = {
 			}
 			create_species = {
 				name = "Gnosis"
-				class = random
+				class = random_non_machine
 				portrait = random
 				traits = random
 			}
@@ -2658,7 +2659,8 @@ ship_event = {
 		}
 		event_target:human_fallen_empires_memorial_planet = {
 			planet_event = {
-				id = human_fallen_empires.155 days = 15
+				id = human_fallen_empires.155
+				days = 15
 			}
 		}
 	}
@@ -2759,7 +2761,6 @@ ship_event = {
 		}
 	}
 }
-
 
 # military warehouse events 200 - 250
 # start
@@ -2985,7 +2986,7 @@ country_event = {
 					fleet = {
 						set_leader = human_fallen_empires_scientist_wounded
 						leader = {
-							save_event_target_as = human_fallen_empires.205.scientist
+							save_event_target_as = human_fallen_empires_205_scientist
 						}
 					}
 				}
@@ -3001,8 +3002,8 @@ country_event = {
 							set_location = root.capital_scope
 							set_leader = human_fallen_empires_scientist_wounded
 							leader = {
+								save_event_target_as = human_fallen_empires_205_scientist
 								unassign_leader = this
-								save_event_target_as = human_fallen_empires.205.scientist
 							}
 							delete_fleet = this
 						}
@@ -3017,7 +3018,8 @@ country_event = {
 			event_target:human_fallen_empires_ship = {
 				fleet = {
 					kill_leader = {
-						type = scientist show_notification = no
+						type = scientist
+						show_notification = no
 					}
 				}
 			}
@@ -3042,7 +3044,9 @@ country_event = {
 			remove_country_flag = human_fallen_empires.205.1
 			set_country_flag = human_fallen_empires.205.2
 			country_event = {
-				id = human_fallen_empires.205 days = 60 random = 120
+				id = human_fallen_empires.205
+				days = 60
+				random = 120
 			}
 		}
 	}
@@ -3125,7 +3129,6 @@ ship_event = {
 		}
 	}
 }
-
 
 # found cruiser 250 - 300
 # start
@@ -4620,7 +4623,7 @@ ship_event = {
 		name = human_fallen_empires.412.0
 		hidden_effect = {
 			leader = {
-				exile_leader_as = human_fallen_empires.412.scientist
+				exile_leader_as = human_fallen_empires_412_scientist
 			}
 			owner = {
 				country_event = {
@@ -4660,7 +4663,7 @@ country_event = {
 	}
 	picture = GFX_evt_human_fallen_empires_black_hole
 	show_sound = event_scanner
-	location = root
+	location = event_target:human_fallen_empires_target_ahet_home
 	is_triggered_only = yes
 
 	option = {
@@ -4675,16 +4678,18 @@ country_event = {
 						random_existing_design = science
 					}
 					set_location = root.capital_scope
-					set_leader = human_fallen_empires.412.scientist
+					set_leader = human_fallen_empires_412_scientist
 					leader = {
-						save_event_target_as = human_fallen_empires.413.scientist
+						save_event_target_as = human_fallen_empires_413_scientist
 						unassign_leader = this
 					}
 					delete_fleet = this
 				}
 			}
 			event_target:human_fallen_empires_target_ahet_home = {
-				change_pc = pc_shielded
+				set_planet_entity = {
+					entity = shielded_planet_01_entity
+				}
 			}
 		}
 		if = {
@@ -4697,16 +4702,7 @@ country_event = {
 			}
 			human_fallen_empires_effect_xenophobe_attraction_middle = yes
 			else = {
-				if = {
-					limit = {
-						nor = {
-							human_fallen_empires_trigger_is_xenophobe = yes
-							human_fallen_empires_trigger_is_militarist = yes
-							human_fallen_empires_trigger_is_authoritarian = yes
-						}
-					}
-					human_fallen_empires_effect_xenophile_attraction_middle = yes
-				}
+				human_fallen_empires_effect_xenophile_attraction_middle = yes
 			}
 		}
 		if = {
@@ -4925,9 +4921,254 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.501.13
+		default_hide_option = yes
 		custom_tooltip = human_fallen_empires.501.13.tooltip
 	}
 }
+
+# terminator event part of memorial events 550 - 600
+# человек. есть пустынная планета. столица одного из классов. есть дружественная империя
+# start event nothing, complitly nothing
+ship_event = {
+	id = human_fallen_empires.550
+	title = human_fallen_empires.550.name
+	desc = human_fallen_empires.550.desc
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	location = root #event_target:human_fallen_empires_memorial_planet
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		exists = leader
+	}
+
+	immediate = {
+		leader = {
+			save_event_target_as = human_fallen_empires_550_scientist
+		}
+		owner = {
+			country_event = {
+				id = human_fallen_empires.551
+				#days = 50
+				#random = 150
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.550.0
+	}
+}
+
+# check scientist position
+country_event = {
+	id = human_fallen_empires.551
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			is_same_value = event_target:human_fallen_empires_550_scientist
+		}
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_same_value = event_target:human_fallen_empires_550_scientist
+			}
+			if = {
+				limit = {
+					exists = fleet
+				}
+				# branch 1
+				fleet = {
+					random_list = {
+						# kill ship
+						10 = {
+							fleet_event = {
+								id = human_fallen_empires.552
+							}
+						}
+						# disappeared, move to branch 2
+						10 = {
+							fleet_event = {
+								id = human_fallen_empires.553
+							}
+						}
+					}
+				}
+				else = {
+					root = {
+						# branch 2
+						random_list = {
+							# attempt failed
+							10 = {
+								country_event = {
+									id = human_fallen_empires.554
+								}
+							}
+							# main event
+							10 = {
+								country_event = {
+									id = human_fallen_empires.555
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# branch 1 ship
+# kill ship
+fleet_event = {
+	id = human_fallen_empires.552
+	title = human_fallen_empires.552.name
+	desc = human_fallen_empires.552.desc
+	show_sound = event_ship_explosion
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	location = root
+	is_triggered_only = yes
+
+	immediate = {
+		kill_leader = {
+			type = scientist
+			show_notification = no
+		}
+		destroy_fleet = this
+	}
+
+	option = {
+		name = human_fallen_empires.552.0
+	}
+}
+
+# branch 2 planet
+# disappeared, move to branch 2
+fleet_event = {
+	id = human_fallen_empires.553
+	title = human_fallen_empires.553.name
+	desc = human_fallen_empires.553.desc
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		exists = leader
+	}
+
+	immediate = {
+		leader = {
+			exile_leader_as = human_fallen_empires_553_scientist
+		}
+		owner = {
+			random_list = {
+				# attempt failed
+				10 = {
+					country_event = {
+						id = human_fallen_empires.554
+						days = 80
+						random = 100
+					}
+				}
+				# main event
+				10 = {
+					country_event = {
+						id = human_fallen_empires.555
+						days = 180
+						random = 100
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.553.0
+	}
+}
+
+# attempt failed
+country_event = {
+	id = human_fallen_empires.554
+	title = human_fallen_empires.554.name
+	desc = human_fallen_empires.554.desc
+	show_sound = event_structural_collapse
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	location = capital_scope
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.554.0
+	}
+}
+
+# main event planet desc
+planet_event = {
+	id = human_fallen_empires.555
+	title = human_fallen_empires.555.name
+	desc = human_fallen_empires.555.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = event_target:human_fallen_empires_555_room.ruler
+	}
+
+	immediate = {
+		save_global_event_target_as = human_fallen_empires_555_planet
+		create_country = {
+			name = random
+			type = human_fallen_empires_placeholder
+			flag = random
+			effect = {
+				set_country_flag = human_fallen_empires_555_room
+				save_event_target_as = human_fallen_empires_555_room
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_next
+		default_hide_option = yes
+		hidden_effect = {
+			clear_global_event_target = human_fallen_empires_555_planet
+			random_country = {
+				limit = {
+					has_country_flag = human_fallen_empires_555_room
+				}
+				destroy_country = yes
+			}
+		}
+	}
+}
+
+# main event ruler desc
+
+# terminator appeared: 3 branches
+
+# branch 1 awake pekar and run
+
+# succses
+
+# fail
+
+# branch 2 run
+
+# succses
+
+# fail
+
+# branch 3 fight event 1
+
+# succses
+
+# fail
+
 
 # drone country section 600
 # cheat for survey
@@ -5994,6 +6235,7 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.705.0
+		default_hide_option = yes
 	}
 }
 
@@ -6450,6 +6692,7 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.712.1
+		default_hide_option = yes
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.711.module_ordered
 			remove_country_flag = human_fallen_empires.711.0.module_ordered
@@ -6514,6 +6757,7 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.721.0
+		default_hide_option = yes
 	}
 }
 
@@ -6533,6 +6777,7 @@ country_event = {
 	option = {
 		name = human_fallen_empires.725.0
 		response_text = human_fallen_empires.725.0.response
+		default_hide_option = yes
 	}
 }
 
@@ -7730,6 +7975,7 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.5012.1
+		default_hide_option = yes
 	}
 }
 

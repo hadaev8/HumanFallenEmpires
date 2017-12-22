@@ -253,7 +253,7 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 						limit = { num_pops < 8 }
 						random_tile = {
 							limit = {
-								has_grown_pop = no
+								has_pop = no
 							}
 							create_pop = {
 								species = owner
@@ -410,21 +410,19 @@ human_fallen_empires_effect_create_primitive = {
 		limit = {
 			has_building = yes
 		}
-		remove_building = yes
+		random_list = {
+			95 = {
+				remove_building = yes
+			}
+			5 = { }
+		}
 	}
-	owner.species = { save_event_target_as = human_fallen_empires_species }
+	owner.species = {
+		save_event_target_as = human_fallen_empires_species
+	}
 	random_list = {
 		# Industrial Civilization
 		50 = {
-			create_species = {
-				name = random
-				class = random
-				portrait = random
-				homeworld = THIS
-				traits = {
-					trait = random_traits
-				}
-			}
 			create_country = {
 				name = random
 				authority = random
@@ -432,7 +430,7 @@ human_fallen_empires_effect_create_primitive = {
 					civic = civic_increasing_urbanization
 					civic = civic_atmospheric_pollution
 				}
-				species = last_created
+				species = event_target:human_fallen_empires_species
 				ethos = random
 				flag = {
 					icon = {
@@ -451,25 +449,25 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				type = primitive
-			}
-			last_created_country = {
-				set_graphical_culture = industrial_01
-				random_list = {
-					25 = {
-						set_country_flag = industrial_age
-						set_primitive_age = industrial_age
-					}
-					25 = {
-						set_country_flag = machine_age
-						set_primitive_age = machine_age
-					}
-					25 = {
-						set_country_flag = atomic_age
-						set_primitive_age = atomic_age
-					}
-					25 = {
-						set_country_flag = early_space_age
-						set_primitive_age = early_space_age
+				effect = {
+					set_graphical_culture = industrial_01
+					random_list = {
+						25 = {
+							set_country_flag = industrial_age
+							set_primitive_age = industrial_age
+						}
+						25 = {
+							set_country_flag = machine_age
+							set_primitive_age = machine_age
+						}
+						25 = {
+							set_country_flag = atomic_age
+							set_primitive_age = atomic_age
+						}
+						25 = {
+							set_country_flag = early_space_age
+							set_primitive_age = early_space_age
+						}
 					}
 				}
 			}
@@ -481,7 +479,7 @@ human_fallen_empires_effect_create_primitive = {
 					limit = {
 						has_blocker = no
 						has_building = no
-						has_grown_pop = no
+						has_pop = no
 					}
 					set_blocker = tb_decrepit_dwellings
 				}
@@ -489,43 +487,9 @@ human_fallen_empires_effect_create_primitive = {
 					limit = {
 						has_blocker = no
 						has_building = no
-						has_grown_pop = no
+						has_pop = no
 					}
 					set_blocker = tb_failing_infrastructure
-				}
-			}
-			while = {
-				count = 5
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = last_created
-					}
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						OR = {
-							has_country_flag = machine_age
-							has_country_flag = atomic_age
-							has_country_flag = early_space_age
-						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = last_created
-					}
 				}
 			}
 			if = {
@@ -545,23 +509,6 @@ human_fallen_empires_effect_create_primitive = {
 						has_pop = yes
 					}
 					set_building = "building_primitive_factory"
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						has_country_flag = early_space_age
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = last_created
-					}
 				}
 			}
 			if = {
@@ -609,8 +556,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 4
 							create_army = {
 								name = "Industrial Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "industrial_army"
 							}
 						}
@@ -623,8 +570,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 5
 							create_army = {
 								name = "Industrial Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "industrial_army"
 							}
 						}
@@ -637,8 +584,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 4
 							create_army = {
 								name = "Post-Atomic Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "postatomic_army"
 							}
 						}
@@ -651,8 +598,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 5
 							create_army = {
 								name = "Post-Atomic Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "postatomic_army"
 							}
 						}
@@ -673,15 +620,6 @@ human_fallen_empires_effect_create_primitive = {
 		}
 		# Medieval Civilization
 		50 = {
-			create_species = {
-				name = random
-				class = random
-				portrait = random
-				homeworld = THIS
-				traits = {
-					trait = random_traits
-				}
-			}
 			create_country = {
 				name = random
 				authority = random
@@ -689,7 +627,7 @@ human_fallen_empires_effect_create_primitive = {
 					civic = civic_landed_nobility
 					civic = civic_flat_world_theory
 				}
-				species = last_created
+				species = event_target:human_fallen_empires_species
 				ethos = random
 				flag = {
 					icon = {
@@ -708,86 +646,52 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				type = primitive
-			}
-			last_created_country = {
-				set_graphical_culture = preindustrial_01
-				random_list = {
-					20 = {
-						set_country_flag = stone_age
-						set_primitive_age = stone_age
-						change_government = {
-							authority = random
-							civics = {
-								civic = civic_secret_of_fire
-								civic = civic_the_wheel
+				effect = {
+					set_graphical_culture = preindustrial_01
+					random_list = {
+						20 = {
+							set_country_flag = stone_age
+							set_primitive_age = stone_age
+							change_government = {
+								authority = random
+								civics = {
+									civic = civic_secret_of_fire
+									civic = civic_the_wheel
+								}
 							}
 						}
-					}
-					20 = {
-						set_country_flag = bronze_age
-						set_primitive_age = bronze_age
-						change_government = {
-							authority = random
-							civics = {
-								civic = civic_secret_of_fire
-								civic = civic_the_wheel
+						20 = {
+							set_country_flag = bronze_age
+							set_primitive_age = bronze_age
+							change_government = {
+								authority = random
+								civics = {
+									civic = civic_secret_of_fire
+									civic = civic_the_wheel
+								}
 							}
 						}
-					}
-					20 = {
-						set_country_flag = iron_age
-						set_primitive_age = iron_age
-					}
-					20 = {
-						set_country_flag = late_medieval_age
-						set_primitive_age = late_medieval_age
-					}
-					20 = {
-						set_country_flag = renaissance_age
-						set_primitive_age = renaissance_age
-					}
-					20 = {
-						set_country_flag = steam_age
-						set_primitive_age = steam_age
+						20 = {
+							set_country_flag = iron_age
+							set_primitive_age = iron_age
+						}
+						20 = {
+							set_country_flag = late_medieval_age
+							set_primitive_age = late_medieval_age
+						}
+						20 = {
+							set_country_flag = renaissance_age
+							set_primitive_age = renaissance_age
+						}
+						20 = {
+							set_country_flag = steam_age
+							set_primitive_age = steam_age
+						}
 					}
 				}
 			}
 			set_owner = last_created_country
 			set_controller = last_created_country
-			random_tile = {
-				limit = {
-					has_blocker = no
-					has_grown_pop = no
-					has_growing_pop = no
-				}
-				create_pop = {
-					species = last_created
-				}
-			}
-			if = {
-				limit = {
-					last_created_country = {
-						OR = {
-							has_country_flag = steam_age
-							has_country_flag = renaissance_age
-						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = last_created
-					}
-				}
-			}
-			random_tile = {
-				limit = { has_building = "building_colony_shelter" }
-				remove_building = yes
-			}
 			while = {
 				count = 2
 				random_tile = {
@@ -821,16 +725,6 @@ human_fallen_empires_effect_create_primitive = {
 							has_country_flag = renaissance_age
 							has_country_flag = steam_age
 						}
-					}
-				}
-				random_tile = {
-					limit = {
-						has_blocker = no
-						has_grown_pop = no
-						has_growing_pop = no
-					}
-					create_pop = {
-						species = last_created
 					}
 				}
 				random_tile = {
@@ -881,8 +775,8 @@ human_fallen_empires_effect_create_primitive = {
 					PREV = {
 						create_army = {
 							name = "Primitive Army"
-							owner = last_created
-							species = last_created
+							owner = last_created_country
+							species = event_target:human_fallen_empires_species
 							type = "primitive_army"
 						}
 					}
@@ -892,8 +786,8 @@ human_fallen_empires_effect_create_primitive = {
 					PREV = {
 						create_army = {
 							name = "Primitive Army"
-							owner = last_created
-							species = last_created
+							owner = last_created_country
+							species = event_target:human_fallen_empires_species
 							type = "primitive_army"
 						}
 					}
@@ -905,8 +799,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 2
 							create_army = {
 								name = "Primitive Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "primitive_army"
 							}
 						}
@@ -919,8 +813,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 3
 							create_army = {
 								name = "Primitive Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "primitive_army"
 							}
 						}
@@ -933,8 +827,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 4
 							create_army = {
 								name = "Primitive Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "primitive_army"
 							}
 						}
@@ -947,8 +841,8 @@ human_fallen_empires_effect_create_primitive = {
 							count = 3
 							create_army = {
 								name = "Industrial Army"
-								owner = last_created
-								species = last_created
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
 								type = "industrial_army"
 							}
 						}
@@ -960,7 +854,7 @@ human_fallen_empires_effect_create_primitive = {
 	every_tile = {
 		limit = {
 			has_building = no
-			exists = pop
+			has_pop = yes
 		}
 		kill_pop = yes
 	}
@@ -996,7 +890,7 @@ human_fallen_empires_effect_create_vassal = {
 			random_country = {
 				limit = {
 					has_country_flag = human_fallen_empires_liberated_country
-					num_owned_planets < 64
+					num_owned_planets < 4
 				}
 				event_target:human_fallen_empires_planet = {
 					set_owner = prev

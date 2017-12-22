@@ -18,7 +18,7 @@ planet_event = {
 	immediate = {
 		create_species = {
 			name = random
-			class = random
+			class = random_non_machine
 			portrait = random
 			traits = random
 			homeworld = root
@@ -51,7 +51,7 @@ planet_event = {
 	}
 }
 
-# exodus feature
+# exodus feature, settle at planet
 planet_event = {
 	id = human_fallen_empires_features.3
 	hide_window = yes
@@ -163,6 +163,32 @@ planet_event = {
 			give_technology = {
 				message = no
 				tech = tech_human_fallen_empires_features_exodus
+			}
+		}
+	}
+}
+
+# disband federation
+country_event = {
+	id = human_fallen_empires_features.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_federation = yes
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			country_event = {
+				id = human_fallen_empires_features.6
+				days = 365
+			}
+			else = {
+				leave_alliance = yes
 			}
 		}
 	}
