@@ -68,35 +68,40 @@ country_event = {
 	picture = GFX_evt_human_fallen_empires_pirate
 	show_sound = event_space_battle
 
-	desc = { # Spiritual
+	desc = {
+		# Spiritual
 		text = pirate.1.desc_01
 		trigger = {
 			has_spiritualist_government = yes
 		}
 	}
 
-	desc = { # Militarist
+	desc = {
+		# Militarist
 		text = pirate.1.desc_02
 		trigger = {
 			has_militarist_government = yes
 		}
 	}
 
-	desc = { # Materialist
+	desc = {
+		# Materialist
 		text = pirate.1.desc_03
 		trigger = {
 			has_materialist_government = yes
 		}
 	}
 
-	desc = { # Pacifist
+	desc = {
+		# Pacifist
 		text = pirate.1.desc_04
 		trigger = {
 			has_pacifist_government = yes
 		}
 	}
 
-	desc = { # Generic Autocracy
+	desc = {
+		# Generic Autocracy
 		text = pirate.1.desc_05
 		trigger = {
 			OR = {
@@ -109,7 +114,8 @@ country_event = {
 		}
 	}
 
-	desc = { # Generic Oligarchy
+	desc = {
+		# Generic Oligarchy
 		text = pirate.1.desc_06
 		trigger = {
 			OR = {
@@ -119,7 +125,8 @@ country_event = {
 		}
 	}
 
-	desc = { # Generic Democracy
+	desc = {
+		# Generic Democracy
 		text = pirate.1.desc_07
 		trigger = {
 			has_government = gov_representative_democracy
@@ -269,14 +276,18 @@ country_event = {
 
 	immediate = {
 		# build new bases
-		country_event = { id = human_fallen_empires_pirate.3 }
+		country_event = {
+			id = human_fallen_empires_pirate.3
+		}
 		# send fleet logic for unstuck fleets
 		every_owned_fleet = {
 			limit = {
 				num_ships > 4
 			}
 			set_fleet_stance = aggressive
-			fleet_event = { id = human_fallen_empires_pirate.50 }
+			fleet_event = {
+				id = human_fallen_empires_pirate.50
+			}
 		}
 		# kick buildings
 		every_owned_planet = {
@@ -308,7 +319,9 @@ country_event = {
 						has_technology = tech_warp_drive_2
 					}
 				}
-				give_technology = { tech = tech_warp_drive_2 }
+				give_technology = {
+					tech = tech_warp_drive_2
+				}
 			}
 			if = {
 				limit = {
@@ -317,7 +330,9 @@ country_event = {
 						has_technology = tech_wormhole_generation_2
 					}
 				}
-				give_technology = { tech = tech_wormhole_generation_2 }
+				give_technology = {
+					tech = tech_wormhole_generation_2
+				}
 			}
 			if = {
 				limit = {
@@ -326,7 +341,9 @@ country_event = {
 						has_technology = tech_wormhole_generation_3
 					}
 				}
-				give_technology = { tech = tech_hyper_drive_2 }
+				give_technology = {
+					tech = tech_hyper_drive_2
+				}
 			}
 		}
 		if = {
@@ -340,7 +357,9 @@ country_event = {
 						has_technology = tech_warp_drive_3
 					}
 				}
-				give_technology = { tech = tech_warp_drive_3 }
+				give_technology = {
+					tech = tech_warp_drive_3
+				}
 			}
 			if = {
 				limit = {
@@ -349,7 +368,9 @@ country_event = {
 						has_technology = tech_wormhole_generation_3
 					}
 				}
-				give_technology = { tech = tech_wormhole_generation_3 }
+				give_technology = {
+					tech = tech_wormhole_generation_3
+				}
 			}
 			if = {
 				limit = {
@@ -358,7 +379,9 @@ country_event = {
 						has_technology = tech_hyper_drive_3
 					}
 				}
-				give_technology = { tech = tech_hyper_drive_3 }
+				give_technology = {
+					tech = tech_hyper_drive_3
+				}
 			}
 		}
 	}
@@ -438,7 +461,9 @@ ship_event = {
 
 	immediate = {
 		fleet = {
-			fleet_event = { id = human_fallen_empires_pirate.50 }
+			fleet_event = {
+				id = human_fallen_empires_pirate.50
+			}
 		}
 	}
 }
@@ -475,15 +500,19 @@ country_event = {
 						is_country_type = human_fallen_empires_pirate
 					}
 					# попробовать через from и prevprev назначить владельца
-					save_event_target_as = human_fallen_empires_pirate_new_owner
+					#save_event_target_as = human_fallen_empires_pirate_new_owner
+					prev = {
+						every_owned_fleet = {
+							set_owner = prevprev
+						}
+					}
 				}
-				every_owned_fleet = {
-					set_owner = event_target:human_fallen_empires_pirate_new_owner
-				}
+				# destroy contry later for fix errors in log
+				#country_event = {
+				#	id = human_fallen_empires.9
+				#	days = 2
+				#}
 			}
-			# destroy contry later for fix errors in log
-			country_event = { id = human_fallen_empires.9 days = 2 }
-			#	destroy_country = yes
 		}
 		fromfromfrom.orbit.planet = {
 			if = {
@@ -493,7 +522,10 @@ country_event = {
 				every_owned_pop = {
 					limit = {
 						not = {
-							has_citizenship_type = { type = citizenship_purge country = root }
+							has_citizenship_type = {
+								type = citizenship_purge
+								country = root
+							}
 						}
 					}
 					save_event_target_as = human_fallen_empires_settle_pop_target
@@ -502,9 +534,39 @@ country_event = {
 						human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 					}
 				}
+				every_owned_pop = {
+					save_event_target_as = human_fallen_empires_settle_pop_target
+					random_country = {
+						limit = {
+							or = {
+								has_policy_flag = refugees_allowed
+								and = {
+									has_policy_flag = refugees_only_citizens
+									prev = {
+										has_citizenship_type = {
+											type = citizenship_full
+											country = prev
+										}
+									}
+								}
+							}
+							prev = {
+								not = {
+									has_citizenship_type = {
+										type = citizenship_purge
+										country = prev
+									}
+								}
+							}
+						}
+						human_fallen_empires_effect_settle_pop = yes
+						human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+					}
+				}
 			}
-			# добавить перемещение к любой другой империи
-			destroy_colony = { keep_buildings = no }
+			destroy_colony = {
+				keep_buildings = no
+			}
 			change_pc = pc_asteroid
 		}
 	}
@@ -525,7 +587,9 @@ country_event = {
 
 	immediate = {
 		log = "pirate spawned again"
-		set_timed_country_flag = { flag = human_fallen_empires_pirate_spawned days = 1500 }
+		set_timed_country_flag = {
+			flag = human_fallen_empires_pirate_spawned days = 1500
+		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		random_system = {
 			limit = {
@@ -830,7 +894,9 @@ fleet_event = {
 											id = human_fallen_empires_pirate.50.effect.0.3
 											root = {
 												clear_fleet_actions = this
-												fleet_event = { id = human_fallen_empires_pirate.50 } # days = 200 }
+												fleet_event = {
+													id = human_fallen_empires_pirate.50
+												} # days = 200 }
 												log = "pirate fleet stop operation due no targets"
 											}
 										}
@@ -914,7 +980,7 @@ fleet_event = {
 	}
 
 	immediate = {
-		#	log = "pirate fleet emercy ftl"
+		# log = "pirate fleet emercy ftl"
 		clear_fleet_actions = this
 	}
 }
@@ -1074,7 +1140,9 @@ country_event = {
 		from = {
 			save_event_target_as = human_fallen_empires_pirate_country
 		}
-		country_event = { id = human_fallen_empires_pirate.101 }
+		country_event = {
+			id = human_fallen_empires_pirate.101
+		}
 		# set_country_flag = human_fallen_empires_pirate.101.block remove due game's bug
 	}
 }
@@ -1181,7 +1249,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1346,7 +1416,9 @@ country_event = {
 			}
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
 			set_country_flag = human_fallen_empires_pirate.101.raid_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# select target menu
@@ -1395,7 +1467,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1445,7 +1519,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1495,7 +1571,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1545,7 +1623,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1595,7 +1675,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1645,7 +1727,9 @@ country_event = {
 				}
 				every_owned_fleet = {
 					clear_fleet_actions = this
-					fleet_event = { id = human_fallen_empires_pirate.50 }
+					fleet_event = {
+						id = human_fallen_empires_pirate.50
+					}
 				}
 			}
 		}
@@ -1659,7 +1743,9 @@ country_event = {
 		hidden_effect = {
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
 			set_country_flag = human_fallen_empires_pirate.101.traid_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# energy for minerals
@@ -1700,7 +1786,9 @@ country_event = {
 			event_target:human_fallen_empires_pirate_country = {
 				human_fallen_empires_effect_save_slave_target = yes
 			}
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2011,11 +2099,13 @@ country_event = {
 			event_target:human_fallen_empires_pirate_country = {
 				save_event_target_as = human_fallen_empires_blackjack_target_1
 			}
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# select bet
-		option = {
+	option = {
 		name = human_fallen_empires_pirate.101.casino_menu.bet.0
 		trigger = {
 			has_country_flag = human_fallen_empires_pirate.101.casino_menu
@@ -2170,7 +2260,9 @@ country_event = {
 				}
 				human_fallen_empires_effect_save_event_target = yes
 			}
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# select target menu
@@ -2186,7 +2278,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2201,7 +2295,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2216,7 +2312,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2231,7 +2329,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2246,7 +2346,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	option = {
@@ -2261,7 +2363,9 @@ country_event = {
 			}
 			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
 			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# return
@@ -2272,7 +2376,9 @@ country_event = {
 		}
 		hidden_effect = {
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			country_event = { id = human_fallen_empires_pirate.101 }
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 	# exit

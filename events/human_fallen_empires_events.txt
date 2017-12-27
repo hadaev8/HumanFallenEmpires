@@ -4967,6 +4967,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = capital_scope
 		any_owned_leader = {
 			is_same_value = event_target:human_fallen_empires_550_scientist
 		}
@@ -5010,8 +5011,10 @@ country_event = {
 							}
 							# main event
 							10 = {
-								country_event = {
-									id = human_fallen_empires.555
+								capital_scope = {
+									planet_event = {
+										id = human_fallen_empires.555
+									}
 								}
 							}
 						}
@@ -5058,6 +5061,7 @@ fleet_event = {
 
 	trigger = {
 		exists = owner
+		exists = owner.capital_scope
 		exists = leader
 	}
 
@@ -5077,10 +5081,12 @@ fleet_event = {
 				}
 				# main event
 				10 = {
-					country_event = {
-						id = human_fallen_empires.555
-						days = 180
-						random = 100
+					capital_scope = {
+						planet_event = {
+							id = human_fallen_empires.555
+							days = 180
+							random = 100
+						}
 					}
 				}
 			}
@@ -5111,7 +5117,96 @@ country_event = {
 planet_event = {
 	id = human_fallen_empires.555
 	title = human_fallen_empires.555.name
-	desc = human_fallen_empires.555.desc
+	desc = {
+		trigger = {
+			fail_text = {
+				text = human_fallen_empires.555.desc.0.0
+				or = {
+					habitable_structure = yes
+					solar_system = {
+						any_planet = {
+							is_star = yes
+							is_planet_class = pc_black_hole
+						}
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.0.1
+				or = {
+					habitable_structure = yes
+					solar_system = {
+						any_planet = {
+							is_star = yes
+							is_planet_class = pc_black_hole
+						}
+					}
+				}
+			}
+			text = newline
+			success_text = {
+				text = human_fallen_empires.555.desc.1.0
+				or = {
+					is_planet_class = pc_tropical
+					is_planet_class = pc_continental
+					is_planet_class = pc_ocean
+					is_planet_class = pc_gaia
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.1.1
+				or = {
+					is_planet_class = pc_desert
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.1.2
+				or = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.1.3
+				habitable_structure = yes
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.1.4
+				is_planet_class = pc_nuked
+			}
+			text = newline
+			success_text = {
+				text = human_fallen_empires.555.desc.2.0
+				is_moon = no
+				has_moon = yes
+				not = {
+					is_planet_class = pc_nuked
+				}
+				habitable_structure = no
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.2.1
+				is_moon = no
+				num_moons < 1
+				# has_moon = no seems broken
+				not = {
+					is_planet_class = pc_nuked
+				}
+				habitable_structure = no
+			}
+			success_text = {
+				text = human_fallen_empires.555.desc.2.2
+				is_moon = yes
+				not = {
+					is_planet_class = pc_nuked
+				}
+				habitable_structure = no
+			}
+		}
+	}
 	is_triggered_only = yes
 	diplomatic = yes
 
@@ -5128,6 +5223,16 @@ planet_event = {
 			effect = {
 				set_country_flag = human_fallen_empires_555_room
 				save_event_target_as = human_fallen_empires_555_room
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					any_moon = {
+						is_planet = root
+					}
+				}
+				save_event_target_as = human_fallen_empires_555_orbiting_planet
 			}
 		}
 	}
