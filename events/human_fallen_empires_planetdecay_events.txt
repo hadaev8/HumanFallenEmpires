@@ -8,16 +8,24 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		colony_age > 3600
+		exists = owner
 		not = {
 			has_global_flag = human_fallen_empires_disable_planet_decay
 		}
-		colony_age > 3600
-		exists = owner
 	}
 
 	immediate = {
-		planet_event = { id = human_fallen_empires_planetdecay.1 days = 1 }
-		planet_event = { id = human_fallen_empires_planetdecay.3 days = 2 }
+		planet_event = {
+			id = human_fallen_empires_planetdecay.1
+			days = 1
+			random = 150
+		}
+		planet_event = {
+			id = human_fallen_empires_planetdecay.3
+			days = 20
+			random = 250
+		}
 	}
 }
 
@@ -29,7 +37,7 @@ planet_event = {
 
 	trigger = {
 		any_tile = {
-			has_any_resource = yes
+			has_resource = yes
 		}
 	}
 
@@ -40,7 +48,11 @@ planet_event = {
 			}
 			clear_resources = yes
 		}
-		planet_event = { id = human_fallen_empires_planetdecay.2 days = 1 random = 15 }
+		planet_event = {
+			id = human_fallen_empires_planetdecay.2
+			days = 1
+			random = 15
+		}
 	}
 }
 
@@ -86,6 +98,7 @@ planet_event = {
 			is_planet_class = pc_habitat
 		}
 		any_owned_pop = {
+			exists = owner
 			is_being_purged = no
 			not = {
 				pop_has_trait = trait_mechanical
@@ -102,6 +115,7 @@ planet_event = {
 	immediate = {
 		random_owned_pop =  {
 			limit = {
+				exists = owner
 				is_being_purged = no
 				not = {
 					pop_has_trait = trait_mechanical
@@ -112,14 +126,17 @@ planet_event = {
 						status = no
 					}
 				}
-				exists = owner
 			}
 			modify_species = {
 				species = this
 				ideal_planet_class = root
 			}
 		}
-		planet_event = { id = human_fallen_empires_planetdecay.2 days = 1 random = 16 }
+		planet_event = {
+			id = human_fallen_empires_planetdecay.2
+			days = 1
+			random = 30
+		}
 	}
 }
 
@@ -139,15 +156,182 @@ planet_event = {
 			is_ai = no
 		}
 		not = {
-			has_planet_flag = human_fallen_empires_planet_degradate_start
+			has_planet_flag = human_fallen_empires_planetdecay.4_block
 		}
 	}
 
 	immediate = {
-		set_planet_flag = human_fallen_empires_planet_degradate_start
+		set_planet_flag = human_fallen_empires_planetdecay.4_block
 	}
 
 	option = {
 		name = WORRYING
+	}
+}
+
+# mine is depleted
+planet_event = {
+	id = human_fallen_empires_planetdecay.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = no
+		exists = controller
+		orbital_deposit_tile = {
+			has_resource = yes
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				nor = {
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_0
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_1
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_2
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_3
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_4
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_5
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_6
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_7
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_8
+					has_planet_flag = human_fallen_empires_planetdecay.6_stage_9
+				}
+			}
+			set_planet_flag = human_fallen_empires_planetdecay.6_stage_0
+			else = {
+				if = {
+					limit = {
+						has_planet_flag = human_fallen_empires_planetdecay.6_stage_0
+					}
+					human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+					set_planet_flag = human_fallen_empires_planetdecay.6_stage_1
+					else = {
+						if = {
+							limit = {
+								has_planet_flag = human_fallen_empires_planetdecay.6_stage_1
+							}
+							human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+							set_planet_flag = human_fallen_empires_planetdecay.6_stage_2
+							else = {
+								if = {
+									limit = {
+										has_planet_flag = human_fallen_empires_planetdecay.6_stage_2
+									}
+									human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+									set_planet_flag = human_fallen_empires_planetdecay.6_stage_3
+									else = {
+										if = {
+											limit = {
+												has_planet_flag = human_fallen_empires_planetdecay.6_stage_3
+											}
+											human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+											set_planet_flag = human_fallen_empires_planetdecay.6_stage_4
+											else = {
+												if = {
+													limit = {
+														has_planet_flag = human_fallen_empires_planetdecay.6_stage_4
+													}
+													human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+													set_planet_flag = human_fallen_empires_planetdecay.6_stage_5
+													else = {
+														if = {
+															limit = {
+																has_planet_flag = human_fallen_empires_planetdecay.6_stage_5
+															}
+															human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+															set_planet_flag = human_fallen_empires_planetdecay.6_stage_6
+															else = {
+																if = {
+																	limit = {
+																		has_planet_flag = human_fallen_empires_planetdecay.6_stage_6
+																	}
+																	human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+																	set_planet_flag = human_fallen_empires_planetdecay.6_stage_7
+																	else = {
+																		if = {
+																			limit = {
+																				has_planet_flag = human_fallen_empires_planetdecay.6_stage_7
+																			}
+																			human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+																			set_planet_flag = human_fallen_empires_planetdecay.6_stage_8
+																			else = {
+																				if = {
+																					limit = {
+																						has_planet_flag = human_fallen_empires_planetdecay.6_stage_8
+																					}
+																					human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+																					set_planet_flag = human_fallen_empires_planetdecay.6_stage_9
+																					else = {
+																						if = {
+																							limit = {
+																								has_planet_flag = human_fallen_empires_planetdecay.6_stage_9
+																							}
+																							human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+																							set_planet_flag = human_fallen_empires_planetdecay.6_stage_10
+																							else = {
+																								human_fallen_empires_effect_planetdecay_clear_mine_flag = yes
+																								controller = {
+																									country_event = {
+																										id = human_fallen_empires_planetdecay.6
+																										days = 1
+																										random = 15
+																									}
+																								}
+																								orbital_deposit_tile = {
+																									clear_resources = yes
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# inform
+country_event = {
+	id = human_fallen_empires_planetdecay.6
+	title = human_fallen_empires_planetdecay.6.name
+	desc = human_fallen_empires_planetdecay.6.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_construction
+	location = from
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_country_flag = human_fallen_empires_planetdecay.6_block
+		}
+	}
+
+	option = {
+		name = WORRYING
+	}
+
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_planetdecay.6_block
+		}
 	}
 }

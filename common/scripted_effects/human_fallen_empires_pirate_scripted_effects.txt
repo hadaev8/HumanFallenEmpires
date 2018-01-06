@@ -40,117 +40,154 @@ human_fallen_empires_effect_pirate_diplomacy_remove_flags = {
 # create pirate
 # return event target pirate_band, need event target human_fallen_empires_pirate_target
 human_fallen_empires_effect_create_pirate = {
-	create_country = {
-		name = random
-		type = human_fallen_empires_pirate
-		species = event_target:human_fallen_empires_pirate_target.species
-		name_list = human_fallen_empires_pirate_namelist
-		authority = random
-		civics = random
-		released_from_country = event_target:human_fallen_empires_pirate_target
-		ethos = random
-		flag = random
-		effect = {
-			add_modifier = {
-				modifier = human_fallen_empires_pirate_country_unkeep
-				days = -1
-			}
-			if = {
-				limit = {
-					is_difficulty > 1
+	random_system = {
+		limit = {
+			or = {
+				any_planet = {
+					is_neighbor_of = event_target:human_fallen_empires_pirate_target
 				}
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_country_insane
-					days = -1
+				distance = {
+					source = event_target:human_fallen_empires_pirate_target.capital_scope
+					min_distance = 5
+					max_distance = 50
 				}
 			}
-			if = {
-				limit = {
-					is_difficulty = 1
+			nor = {
+				any_planet = {
+					exists = owner
 				}
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_country_hard
-					days = -1
+				has_star_flag = hostile_system
+			}
+			any_planet = {
+				is_asteroid = yes
+				nor = {
+					exists = controller
+					exists = owner
 				}
 			}
-			set_graphical_culture = pirate_01
-			add_minerals = 500
-			if = {
-				limit = {
-					years_passed > 20
+		}
+		random_system_planet = {
+			limit = {
+				is_asteroid = yes
+				nor = {
+					exists = controller
+					exists = owner
 				}
-				add_minerals = 500
 			}
-			if = {
-				limit = {
-					years_passed > 40
-				}
-				add_minerals = 500
-			}
-			if = {
-				limit = {
-					years_passed > 60
-				}
-				add_minerals = 500
-			}
-			add_energy = 200
-			add_influence = 200
-			add_research_option = tech_human_fallen_empires_pirate_local_harvest
-			add_research_option = tech_human_fallen_empires_pirate_black_market
-			set_policy = {
-				policy = orbital_bombardment
-				option = orbital_bombardment_full
-				cooldown = yes
-			}
-			set_relation_flag = {
-				who = event_target:human_fallen_empires_pirate_target
-				flag = pirate_relation
-			}
-			if = {
-				limit = {
-					has_ethic = ethic_pacifist
-				}
-				country_remove_ethic = ethic_pacifist
-				country_add_ethic = ethic_militarist
-			}
-			if = {
-				limit = {
-					has_ethic = ethic_fanatic_pacifist
-				}
-				country_remove_ethic = ethic_fanatic_pacifist
-				country_add_ethic = ethic_fanatic_militarist
-			}
-			save_event_target_as = pirate_band
-			every_country = {
-				limit = {
-					is_country_type = primitive
-				}
-				establish_communications_no_message = event_target:pirate_band
-				event_target:pirate_band = {
+			create_country = {
+				name = random
+				type = human_fallen_empires_pirate
+				species = event_target:human_fallen_empires_pirate_target.species
+				name_list = human_fallen_empires_pirate_namelist
+				authority = random
+				civics = random
+				released_from_country = event_target:human_fallen_empires_pirate_target
+				ethos = random
+				flag = random
+				effect = {
+					add_modifier = {
+						modifier = human_fallen_empires_pirate_country_unkeep
+						days = -1
+					}
 					if = {
 						limit = {
-							human_fallen_empires_trigger_is_xenophile = yes
+							is_difficulty > 1
+						}
+						add_modifier = {
+							modifier = human_fallen_empires_pirate_country_insane
+							days = -1
 						}
 					}
-					set_faction_hostility = {
-						target = prev
-						set_hostile = no
-						set_neutral = no
-						set_friendly = yes
-					}
-				}
-			}
-			random_planet = {
-				limit = {
-					solar_system = {
-						not = {
-							is_same_value = event_target:pirate_band.capital_scope.solar_system
+					if = {
+						limit = {
+							is_difficulty = 1
+						}
+						add_modifier = {
+							modifier = human_fallen_empires_pirate_country_hard
+							days = -1
 						}
 					}
+					set_graphical_culture = pirate_01
+					add_minerals = 500
+					if = {
+						limit = {
+							years_passed > 20
+						}
+						add_minerals = 500
+					}
+					if = {
+						limit = {
+							years_passed > 40
+						}
+						add_minerals = 500
+					}
+					if = {
+						limit = {
+							years_passed > 60
+						}
+						add_minerals = 500
+					}
+					add_energy = 200
+					add_influence = 200
+					add_research_option = tech_human_fallen_empires_pirate_local_harvest
+					add_research_option = tech_human_fallen_empires_pirate_black_market
+					set_policy = {
+						policy = orbital_bombardment
+						option = orbital_bombardment_full
+						cooldown = yes
+					}
+					set_relation_flag = {
+						who = event_target:human_fallen_empires_pirate_target
+						flag = pirate_relation
+					}
+					if = {
+						limit = {
+							has_ethic = ethic_pacifist
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_militarist
+					}
+					if = {
+						limit = {
+							has_ethic = ethic_fanatic_pacifist
+						}
+						country_remove_ethic = ethic_fanatic_pacifist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+					save_event_target_as = pirate_band
+					every_country = {
+						limit = {
+							is_country_type = primitive
+						}
+						establish_communications_no_message = event_target:pirate_band
+						event_target:pirate_band = {
+							if = {
+								limit = {
+									human_fallen_empires_trigger_is_xenophile = yes
+								}
+							}
+							set_faction_hostility = {
+								target = prev
+								set_hostile = no
+								set_neutral = no
+								set_friendly = yes
+							}
+						}
+					}
+					random_planet = {
+						limit = {
+							solar_system = {
+								not = {
+									is_same_value = event_target:pirate_band.capital_scope.solar_system
+								}
+							}
+						}
+						save_event_target_as = human_fallen_empires_hide_capital
+					}
+					set_custom_capital_location = event_target:human_fallen_empires_hide_capital
 				}
-				save_event_target_as = human_fallen_empires_hide_capital
 			}
-			set_custom_capital_location = event_target:human_fallen_empires_hide_capital
+			human_fallen_empires_effect_create_pirate_base = yes
 		}
 	}
 }
@@ -161,7 +198,6 @@ human_fallen_empires_effect_create_pirate_base = {
 	create_colony = {
 		owner = event_target:pirate_band
 		species = owner
-		ethos = owner
 	}
 	every_owned_pop = {
 		kill_pop = yes
@@ -172,10 +208,7 @@ human_fallen_empires_effect_create_pirate_base = {
 		}
 		remove_building = yes
 	}
-	create_spaceport = {
-		owner = event_target:pirate_band
-		initial_module = laser_weapon
-	}
+	human_fallen_empires_effect_init_set_spaceport = yes
 	log = "pirate created new base on [This.GetStarName]"
 	set_planet_flag = human_fallen_empires_pirate_base
 }
