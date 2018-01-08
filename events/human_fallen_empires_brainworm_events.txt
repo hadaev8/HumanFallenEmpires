@@ -13,12 +13,10 @@ planet_event = {
 	}
 
 	immediate = {
-		every_owned_pop = {
-			modify_species = {
-				species = this
-				add_trait = human_fallen_empires_trait_brainworm
-				add_traits_at_start_of_list = yes
-			}
+		modify_species = {
+			species = owner
+			add_trait = human_fallen_empires_trait_brainworm
+			#add_traits_at_start_of_list = yes
 		}
 		owner = {
 			change_dominant_species = {
@@ -45,6 +43,49 @@ planet_event = {
 				modify_species = {
 					species = this
 					remove_trait = human_fallen_empires_trait_brainworm
+				}
+			}
+		}
+	}
+}
+
+# secondary species: assign trait_machine_unit, turn into robotics, then create pops
+# this: capital planet
+# from: secondary species
+planet_event = {
+	id = human_fallen_empires_brainworm.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_civic = human_fallen_empires_civic_brainworm_syncretic
+		}
+	}
+
+
+	immediate = {
+		from = {
+			save_event_target_as = secondary_species
+		}
+		event_target:secondary_species = {
+			set_citizenship_type = {
+				country = root.owner
+				type = citizenship_slavery
+			}
+		}
+		while = {
+			count = 4
+			random_tile = {
+				limit = {
+					OR = {
+						has_building = building_mining_network_1
+						has_building = building_hydroponics_farm_1
+					}
+					has_pop = no
+				}
+				create_pop = {
+					species = event_target:secondary_species
 				}
 			}
 		}
