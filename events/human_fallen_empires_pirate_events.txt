@@ -153,7 +153,7 @@ country_event = {
 		set_country_flag = human_fallen_empires_birth_of_piracy
 		set_country_flag = pirate_encountered
 		save_event_target_as = human_fallen_empires_pirate_target
-		human_fallen_empires_effect_create_pirate = yes		
+		human_fallen_empires_effect_pirate_init = yes
 		every_country = {
 			limit = {
 				is_country_type = default
@@ -398,7 +398,7 @@ country_event = {
 							exists = owner
 						}
 					}
-					human_fallen_empires_effect_create_pirate_base = yes
+					human_fallen_empires_effect_pirate_init_base = yes
 					root = {
 						add_energy = @human_fallen_empires_pirate_base_cost_minus
 					}
@@ -577,8 +577,8 @@ country_event = {
 						exists = owner
 					}
 				}
-				human_fallen_empires_effect_create_pirate = yes
-				human_fallen_empires_effect_create_pirate_base = yes
+				human_fallen_empires_effect_pirate_init = yes
+				human_fallen_empires_effect_pirate_init_base = yes
 			}
 		}
 		every_country = {
@@ -611,49 +611,16 @@ fleet_event = {
 		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
+			is_ai = yes
 		}
 		num_ships > 4
 		has_hp_percentage > 0.99
 		is_fleet_idle = yes
 		any_system = {
 			any_planet = {
-				or = {
-					and = {
-						has_orbital_station = yes
-						exists = controller
-						controller = {
-							is_country_type = default
-							is_hostile = root.owner
-						}
-					}
-					and = {
-						exists = owner
-						owner = {
-							or = {
-								is_country_type = default
-								is_country_type = primitive
-							}
-							is_hostile = root.owner
-						}
-					}
-				}
+				human_fallen_empires_pirate_valid_target_planet = yes
 			}
-			not = {
-				any_ship_in_system = {
-					or = {
-						is_ship_size = orbital_station
-						is_ship_class = shipclass_military
-						is_ship_class = shipclass_military_station
-					}
-					exists = owner
-					owner = {
-						is_hostile = root.owner
-					}
-					root = {
-						fleet_power < @human_fallen_empires_pirate_fleet_power_minimum
-					}
-				}
-			}
+			human_fallen_empires_pirate_valid_target_system = yes
 		}
 	}
 
@@ -667,60 +634,15 @@ fleet_event = {
 				find_closest_system = {
 					trigger = {
 						id = human_fallen_empires_pirate.50.trigger.0.0
-						root = {
-							has_hp_percentage > 0.99
-						}
 						any_country = {
 							has_opinion_modifier = {
 								who = root.owner
 								modifier = human_fallen_empires_opinion_pirate_prior_target
 							}
 						}
+						human_fallen_empires_pirate_valid_target_system = yes
 						any_planet = {
-							or = {
-								and = {
-									has_orbital_station = yes
-									exists = controller
-									controller = {
-										is_country_type = default
-										is_hostile = root.owner
-										has_opinion_modifier = {
-											who = root.owner
-											modifier = human_fallen_empires_opinion_pirate_prior_target
-										}
-									}
-								}
-								and = {
-									human_fallen_empires_pirate_valid_target_planet = yes
-									root.owner = {
-										any_owned_planet = {
-											free_pop_tiles > 0
-										}
-									}
-									owner = {
-										has_opinion_modifier = {
-											who = root.owner
-											modifier = human_fallen_empires_opinion_pirate_prior_target
-										}
-									}
-								}
-							}
-						}
-						not = {
-							any_ship_in_system = {
-								or = {
-									is_ship_size = orbital_station
-									is_ship_class = shipclass_military
-									is_ship_class = shipclass_military_station
-								}
-								exists = owner
-								owner = {
-									is_hostile = root.owner
-								}
-								root = {
-									fleet_power < @human_fallen_empires_pirate_fleet_power_minimum
-								}
-							}
+							human_fallen_empires_pirate_valid_target_planet_prior = yes
 						}
 					}
 					found_system = {
@@ -746,44 +668,9 @@ fleet_event = {
 						find_closest_system = {
 							trigger = {
 								id = human_fallen_empires_pirate.50.trigger.0.1
-								root = {
-									has_hp_percentage > 0.99
-								}
+								human_fallen_empires_pirate_valid_target_system = yes
 								any_planet = {
-									or = {
-										and = {
-											has_orbital_station = yes
-											exists = controller
-											controller = {
-												is_country_type = default
-												is_hostile = root.owner
-											}
-										}
-										and = {
-											human_fallen_empires_pirate_valid_target_planet = yes
-											root.owner = {
-												any_owned_planet = {
-													free_pop_tiles > 0
-												}
-											}
-										}
-									}
-								}
-								not = {
-									any_ship_in_system = {
-										or = {
-											is_ship_size = orbital_station
-											is_ship_class = shipclass_military
-											is_ship_class = shipclass_military_station
-										}
-										exists = owner
-										owner = {
-											is_hostile = root.owner
-										}
-										root = {
-											fleet_power < @human_fallen_empires_pirate_fleet_power_minimum
-										}
-									}
+									human_fallen_empires_pirate_valid_target_planet = yes
 								}
 							}
 							found_system = {
@@ -804,65 +691,17 @@ fleet_event = {
 								}
 								move_to = this
 							}
+							# then wait
 							failed = {
-								# then try found planet if havent other targets
-								find_closest_system = {
-									trigger = {
-										id = human_fallen_empires_pirate.50.trigger.0.2
-										root = {
-											has_hp_percentage > 0.99
+								wait = 200
+								effect = {
+									id = human_fallen_empires_pirate.50.effect.0.3
+									root = {
+										clear_fleet_actions = this
+										fleet_event = {
+											id = human_fallen_empires_pirate.50
 										}
-										any_planet = {
-											human_fallen_empires_pirate_valid_target_planet = yes
-										}
-										not = {
-											any_ship_in_system = {
-												or = {
-													is_ship_size = orbital_station
-													is_ship_class = shipclass_military
-													is_ship_class = shipclass_military_station
-												}
-												exists = owner
-												owner = {
-													is_hostile = root.owner
-												}
-												root = {
-													fleet_power < @human_fallen_empires_pirate_fleet_power_minimum
-												}
-											}
-										}
-									}
-									found_system = {
-										effect = {
-											id = human_fallen_empires_pirate.50.effect.0.2
-											root = {
-												if = {
-													limit = {
-														or = {
-															num_ships < 5
-															has_hp_percentage < 0.99
-														}
-													}
-													clear_fleet_actions = this
-													log = "pirate fleet stop operation due low hp"
-												}
-											}
-										}
-										move_to = this
-									}
-									# then wait
-									failed = {
-										wait = 200
-										effect = {
-											id = human_fallen_empires_pirate.50.effect.0.3
-											root = {
-												clear_fleet_actions = this
-												fleet_event = {
-													id = human_fallen_empires_pirate.50
-												} # days = 200 }
-												log = "pirate fleet stop operation due no targets"
-											}
-										}
+										log = "pirate fleet stop operation due no targets"
 									}
 								}
 							}
@@ -877,10 +716,7 @@ fleet_event = {
 							root = {
 								has_hp_percentage > 0.99
 							}
-							or = {
-								has_orbital_station = yes
-								human_fallen_empires_pirate_valid_target_planet = yes
-							}
+							human_fallen_empires_pirate_valid_target_planet = yes
 						}
 						found_planet = {
 							orbit_planet = this
@@ -943,7 +779,7 @@ fleet_event = {
 	}
 
 	immediate = {
-		# log = "pirate fleet emercy ftl"
+		log = "pirate fleet emercy ftl at [solar_system.GetName]"
 		clear_fleet_actions = this
 	}
 }
@@ -994,60 +830,46 @@ planet_event = {
 		num_pops > 0
 		exists = owner
 		exists = from
+		exists = orbit
 		from = {
-			is_country_type = human_fallen_empires_pirate
+			any_owned_fleet = {
+				num_ships > 4
+				exists = leader
+				leader = {
+					has_trait = human_fallen_empires_admiral_trait_pirate
+				}
+				exists = orbit
+				orbit = {
+					is_same_value = root.orbit
+				}
+			}
 		}
 	}
 
 	immediate = {
 		log = "pirate bombarding on [Root.GetStarName]"
-		owner = {
-			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_attacked
-				days = 365
-			}
-		}
-		from = {
-			add_minerals = 50
-			add_energy = 10
-			add_physics_research = 5
-			add_society_research = 5
-			add_engineering_research = 5
-			if = {
-				limit = {
-					any_owned_planet = {
-						free_pop_tiles > 0
-					}
-				}
-				random_owned_planet = {
-					limit = {
-						free_pop_tiles > 0
-					}
-					save_event_target_as = human_fallen_empires_pirate_planet
-				}
-				root = {
-					random_owned_pop = {
-						limit = {
-							is_growing = no
-							is_sapient = yes
-						}
-						resettle_pop = {
-							pop = this
-							planet = event_target:human_fallen_empires_pirate_planet
-						}
-					}
-				}
-			}
-		}
-		add_modifier = {
-			modifier = human_fallen_empires_pirate_ravaged_planet
-			days = @human_fallen_empires_pirate_ravaged_planet_time
-		}
-		random_tile = {
+		if = {
 			limit = {
-				has_building = yes
+				from = {
+					is_country_type = human_fallen_empires_pirate
+				}
 			}
-			set_ruined = yes
+			owner = {
+				set_timed_country_flag = {
+					flag = human_fallen_empires_pirate_attacked
+					days = 365
+				}
+			}
+			human_fallen_empires_effect_pirate_ravage_planet = yes
+			else = {
+				random_list = {
+					10 = {
+					}
+					5 = {
+						human_fallen_empires_effect_pirate_ravage_planet = yes
+					}
+				}
+			}
 		}
 	}
 }
@@ -1081,6 +903,27 @@ ship_event = {
 	}
 }
 
+# add pirate trait to admiral
+country_event = {
+	id = human_fallen_empires_pirate.55
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = human_fallen_empires_pirate
+		exists = from
+		from = {
+			leader_class = admiral
+		}
+	}
+
+	immediate = {
+		from = {
+			add_trait = human_fallen_empires_admiral_trait_pirate
+		}
+	}
+}
+
 # pirate diplomacy 100-150
 
 # start event diplomacy
@@ -1095,7 +938,7 @@ country_event = {
 			is_country_type = human_fallen_empires_pirate
 		}
 		not = {
-			has_country_flag = human_fallen_empires_pirate.101.block
+			has_country_flag = human_fallen_empires_pirate.101_block
 		}
 	}
 
@@ -1106,7 +949,7 @@ country_event = {
 		country_event = {
 			id = human_fallen_empires_pirate.101
 		}
-		# set_country_flag = human_fallen_empires_pirate.101.block remove due game's bug
+		set_country_flag = human_fallen_empires_pirate.101_block
 	}
 }
 
@@ -1162,10 +1005,6 @@ country_event = {
 	picture_event_data = {
 		portrait = event_target:human_fallen_empires_pirate_country
 		room = event_target:human_fallen_empires_pirate_country.ruler
-	}
-
-	after = {
-		remove_country_flag = human_fallen_empires_pirate.101.block
 	}
 
 	# pay for protect
@@ -2349,6 +2188,7 @@ country_event = {
 		name = human_fallen_empires_end_transmission
 		default_hide_option = yes
 		hidden_effect = {
+			remove_country_flag = human_fallen_empires_pirate.101_block
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
 		}
 	}

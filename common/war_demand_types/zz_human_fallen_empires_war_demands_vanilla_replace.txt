@@ -41,7 +41,9 @@ cede_planet = {
 						is_same_value = from
 						AND = {
 							is_subject = yes
-							overlord = { is_same_value = from }
+							overlord = {
+								is_same_value = from
+							}
 						}
 					}
 				}
@@ -93,7 +95,9 @@ cede_planet = {
 			custom_tooltip = {
 				text = "war_demand_trait_warlike"
 				exists = ruler
-				ruler = { has_trait = trait_ruler_warlike }
+				ruler = {
+					has_trait = trait_ruler_warlike
+				}
 			}
 		}
 
@@ -103,7 +107,9 @@ cede_planet = {
 			custom_tooltip = {
 				text = "war_demand_trait_expansionist"
 				exists = ruler
-				ruler = { has_trait = trait_ruler_expansionist }
+				ruler = {
+					has_trait = trait_ruler_expansionist
+				}
 			}
 		}
 
@@ -138,7 +144,9 @@ cede_planet = {
 			custom_tooltip = {
 				text = "tr_purity_age_machines"
 				has_swapped_tradition = tr_purity_age_machines
-				parameter:planet.owner = { is_synthetic_empire = no }
+				parameter:planet.owner = {
+					is_synthetic_empire = no
+				}
 			}
 		}
 
@@ -190,9 +198,13 @@ cede_planet = {
 		custom_tooltip = {
 			fail_text = "war_demand_cede_planet_liberation_war"
 			OR = {
-				NOT = { exists = overlord }
+				NOT = {
+					exists = overlord
+				}
 				overlord = {
-					NOT = { is_same_value = from }
+					NOT = {
+						is_same_value = from
+					}
 				}
 			}
 		}
@@ -213,7 +225,9 @@ cede_planet = {
 							}
 						}
 						AND = {
-							NOT = { exists = fromfrom }
+							NOT = {
+								exists = fromfrom
+							}
 							would_join_war = {
 								attacker = root
 								defender = from
@@ -312,7 +326,9 @@ cede_planet = {
 		parameter:planet = {
 			if = {
 				limit = {
-					NOT = { is_original_owner = fromfromfrom }
+					NOT = {
+						is_original_owner = fromfromfrom
+					}
 				}
 
 				add_threat = {
@@ -384,7 +400,9 @@ cede_planet = {
 
 		modifier = {
 			factor = 0
-			root = { is_fallen_machine_empire = yes }
+			root = {
+				is_fallen_machine_empire = yes
+			}
 		}
 
 		modifier = {
@@ -477,14 +495,6 @@ total_defeat = {
 	effect = {
 		# Subjects of losing FE are freed
 		parameter:country = {
-			every_subject = {
-				set_subject_of = {
-					who = none
-				}
-				remove_modifier = human_fallen_empires_fallen_resurces_drain
-			}
-		}
-		parameter:country = {
 			save_event_target_as = WarInHeavenLoserFE
 			set_country_flag = silence_destroy_event
 		}
@@ -496,8 +506,8 @@ total_defeat = {
 			}
 
 			# переделать ванильные механики. какие-то они громоздкие
-	#		remove_global_flag = war_in_heaven_ongoing
-	#		set_global_flag = war_in_heaven_ended
+			#		remove_global_flag = war_in_heaven_ongoing
+			#		set_global_flag = war_in_heaven_ended
 
 			# Flag winners & losers
 			save_event_target_as = WarInHeavenWinnerFE
@@ -510,14 +520,24 @@ total_defeat = {
 						is_same_value = parameter:country
 					}
 				}
-				set_timed_country_flag = { flag = war_in_heaven_loser days = 1 }
+				remove_modifier = human_fallen_empires_fallen_resurces_drain
+				set_timed_country_flag = {
+					flag = war_in_heaven_loser
+					days = 1
+				}
 			}
 			every_country = {
 				limit = {
 					is_subject = yes
-					overlord = { is_same_value = root }
+					overlord = {
+						is_same_value = root
+					}
 				}
-				set_timed_country_flag = { flag = war_in_heaven_winner days = 1 }
+				remove_modifier = human_fallen_empires_fallen_resurces_drain
+				set_timed_country_flag = {
+					flag = war_in_heaven_winner
+					days = 1
+				}
 			}
 
 
@@ -538,7 +558,9 @@ total_defeat = {
 					limit = {
 						has_country_flag = war_in_heaven_winner
 						has_country_flag = war_in_heaven_picked_side
-						event_target:planet_to_cede = { is_neighbor_of = prev }
+						event_target:planet_to_cede = {
+							is_neighbor_of = prev
+						}
 					}
 
 					save_event_target_as = conqueror
@@ -557,8 +579,12 @@ total_defeat = {
 					random_country = {
 						limit = {
 							has_country_flag = war_in_heaven_winner
-							NOT = { has_country_flag = war_in_heaven_picked_side }
-							event_target:planet_to_cede = { is_neighbor_of = prev }
+							NOT = {
+								has_country_flag = war_in_heaven_picked_side
+							}
+							event_target:planet_to_cede = {
+								is_neighbor_of = prev
+							}
 						}
 
 						save_event_target_as = conqueror
@@ -609,7 +635,9 @@ total_defeat = {
 												}
 												human_fallen_empires_effect_create_primitive = yes
 												else = {
-													destroy_colony = { keep_buildings = no }
+													destroy_colony = {
+														keep_buildings = no
+													}
 												}
 											}
 										}
@@ -641,8 +669,14 @@ total_defeat = {
 				limit = {
 					has_country_flag = war_in_heaven_loser
 				}
-				remove_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy }
-				root = { remove_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_enemy } }
+				remove_opinion_modifier = {
+					who = root modifier = opinion_war_in_heaven_enemy
+				}
+				root = {
+					remove_opinion_modifier = {
+						who = prev modifier = opinion_war_in_heaven_enemy
+					}
+				}
 			}
 			if = {
 				limit = {
@@ -655,11 +689,21 @@ total_defeat = {
 					limit = {
 						is_ai = no
 					}
-					country_event = { id = war_in_heaven.5 }
-					country_event = { id = war_in_heaven.6 }
-					country_event = { id = war_in_heaven.7 }
-					country_event = { id = war_in_heaven.8 }
-					country_event = { id = war_in_heaven.9 }
+					country_event = {
+						id = war_in_heaven.5
+					}
+					country_event = {
+						id = war_in_heaven.6
+					}
+					country_event = {
+						id = war_in_heaven.7
+					}
+					country_event = {
+						id = war_in_heaven.8
+					}
+					country_event = {
+						id = war_in_heaven.9
+					}
 				}
 			}
 
@@ -678,7 +722,9 @@ total_defeat = {
 			}
 
 			else = {
-				country_event = { id = human_fallen_empires.10150 }
+				country_event = {
+					id = human_fallen_empires.10150
+				}
 			}
 		}
 	}

@@ -522,55 +522,260 @@ human_fallen_empires_leaders_calc_general_capacity = {
 	# log = "[This.human_fallen_empires_leaders_general_capacity]"
 }
 
+human_fallen_empires_leaders_calc_leaders_capacity = {
+	human_fallen_empires_leaders_calc_governor_capacity = yes
+	human_fallen_empires_leaders_calc_scientist_capacity = yes
+	human_fallen_empires_leaders_calc_admiral_capacity = yes
+	human_fallen_empires_leaders_calc_general_capacity = yes
+}
+
 human_fallen_empires_leaders_add_random_trait = {
 	if = {
 		limit = {
-			leader_class = ruler
-		}
-		while = {
-			limit = {
-				NOT = { has_leader_flag = has_gained_trait }
+			not = {
+				has_leader_flag = has_gained_trait
 			}
-			random_list = {
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = ruler_trait_mark_of_infinity
-					}
-					add_trait = ruler_trait_mark_of_infinity
-					set_timed_leader_flag = { flag = gained_ruler_trait_mark_of_infinity days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
+		}
+		if = {
+			limit = {
+				leader_class = ruler
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
 				}
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = ruler_trait_resource_extraordinaire
+			}
+			while = {
+				limit = {
+					NOT = {
+						has_leader_flag = has_gained_trait
 					}
-					add_trait = ruler_trait_resource_extraordinaire
-					set_timed_leader_flag = { flag = gained_ruler_trait_resource_extraordinaire days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = ruler_trait_transcendent
+				random_list = {
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = ruler_trait_mark_of_infinity
+								}
+								owner = {
+									human_fallen_empires_trigger_is_hive = no
+									human_fallen_empires_trigger_is_spiritualist = no
+								}
+							}
+							add_trait = ruler_trait_mark_of_infinity
+							set_timed_leader_flag = {
+								flag = gained_ruler_trait_mark_of_infinity
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
 					}
-					add_trait = ruler_trait_transcendent
-					set_timed_leader_flag = { flag = gained_ruler_trait_transcendent days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
-				}
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = ruler_trait_wealth_seeker
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = ruler_trait_resource_extraordinaire
+								}
+								owner = {
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = ruler_trait_resource_extraordinaire
+							set_timed_leader_flag = {
+								flag = gained_ruler_trait_resource_extraordinaire
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
 					}
-					add_trait = ruler_trait_wealth_seeker
-					set_timed_leader_flag = { flag = gained_ruler_trait_wealth_seeker days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = ruler_trait_transcendent
+								}
+								owner = {
+									human_fallen_empires_trigger_is_hive = no
+								}
+								species = {
+									human_fallen_empires_trigger_is_psionic = yes
+								}
+							}
+							add_trait = ruler_trait_transcendent
+							set_timed_leader_flag = {
+								flag = gained_ruler_trait_transcendent
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = ruler_trait_wealth_seeker
+								}
+								owner = {
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = ruler_trait_wealth_seeker
+							set_timed_leader_flag = {
+								flag = gained_ruler_trait_wealth_seeker
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_genomod
+								}
+								owner = {
+									human_fallen_empires_trigger_is_hive = no
+								}
+								species = {
+									is_same_species = owner.species
+									not = {
+										is_exact_same_species = owner.species
+									}
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_genomod
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_genomod
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_imperialist
+								}
+								owner = {
+									human_fallen_empires_trigger_is_pacifist = no
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_imperialist
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_imperialist
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_warriror_honor
+								}
+								owner = {
+									has_militarist_government = yes
+									num_communications > 3
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_warriror_honor
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_warriror_honor
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_manipulative
+								}
+								owner = {
+									has_civic = civic_cutthroat_politics
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_manipulative
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_manipulative
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_puppet
+								}
+								owner = {
+									has_civic = civic_shadow_council
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_puppet
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_puppet
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = human_fallen_empires_ruler_trait_corrupted
+								}
+								owner = {
+									has_civic = civic_shadow_council
+									human_fallen_empires_trigger_is_hive = no
+								}
+							}
+							add_trait = human_fallen_empires_ruler_trait_corrupted
+							set_timed_leader_flag = {
+								flag = gained_human_fallen_empires_ruler_trait_corrupted
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 				}
 			}
 		}
@@ -581,75 +786,186 @@ human_fallen_empires_leaders_add_random_trait = {
 		}
 		while = {
 			limit = {
-				NOT = { has_leader_flag = has_gained_trait }
+				NOT = {
+					has_leader_flag = has_gained_trait
+				}
 			}
 			random_list = {
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = governor_trait_art_of_war
-					}
-					add_trait = governor_trait_art_of_war
-					set_timed_leader_flag = { flag = gained_governor_trait_art_of_war days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
-				}
-				5 = {
-					modifier = {
-						factor = 0
-						or = {
-							has_trait = governor_trait_corrupted_state
-							allows_slavery = no
+					if = {
+						limit = {
+							not = {
+								has_trait = governor_trait_art_of_war
+							}
+						}
+						add_trait = governor_trait_art_of_war
+						set_timed_leader_flag = {
+							flag = gained_governor_trait_art_of_war
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
 						}
 					}
-					add_trait = governor_trait_corrupted_state
-					set_timed_leader_flag = { flag = gained_governor_trait_corrupted_state days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = governor_trait_mistrust
-					}
-					add_trait = governor_trait_mistrust
-					set_timed_leader_flag = { flag = gained_governor_trait_mistrust days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
-				}
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = governor_trait_stable_welfare
-					}
-					add_trait = governor_trait_stable_welfare
-					set_timed_leader_flag = { flag = gained_governor_trait_stable_welfare days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
-				}
-				5 = {
-					modifier = {
-						factor = 0
-						has_trait = governor_trait_dedicated_explorer
-					}
-					add_trait = governor_trait_dedicated_explorer
-					set_timed_leader_flag = { flag = gained_governor_trait_dedicated_explorer days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
-				}
-				5 = {
-					modifier = {
-						factor = 0
-						or = {
-							has_trait = human_fallen_empires_governor_trait_sympathizes_slaves
-							allows_slavery = no
+					if = {
+						limit = {
+							not = {
+								has_trait = governor_trait_mistrust
+							}
+						}
+						add_trait = governor_trait_mistrust
+						set_timed_leader_flag = {
+							flag = gained_governor_trait_mistrust
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
 						}
 					}
-					add_trait = human_fallen_empires_governor_trait_sympathizes_slaves
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_governor_trait_sympathizes_slaves days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = governor_trait_stable_welfare
+							}
+						}
+						add_trait = governor_trait_stable_welfare
+						set_timed_leader_flag = {
+							flag = gained_governor_trait_stable_welfare
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = governor_trait_dedicated_explorer
+							}
+						}
+						add_trait = governor_trait_dedicated_explorer
+						set_timed_leader_flag = {
+							flag = gained_governor_trait_dedicated_explorer
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_governor_trait_sympathizes_slaves
+							}
+							owner = {
+								allows_slavery = yes
+							}
+						}
+						add_trait = human_fallen_empires_governor_trait_sympathizes_slaves
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_governor_trait_sympathizes_slaves
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_governor_trait_pious
+							}
+							owner = {
+								human_fallen_empires_trigger_is_spiritualist = yes
+							}
+						}
+						add_trait = human_fallen_empires_governor_trait_pious
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_governor_trait_pious
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_governor_trait_manager
+							}
+						}
+						add_trait = human_fallen_empires_governor_trait_manager
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_governor_trait_manager
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_governor_trait_telepath
+							}
+							species = {
+								human_fallen_empires_trigger_is_psionic = yes
+							}
+						}
+						add_trait = human_fallen_empires_governor_trait_telepath
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_governor_trait_telepath
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_governor_trait_xenolover
+							}
+							owner = {
+								human_fallen_empires_trigger_is_xenophile = yes
+							}
+						}
+						add_trait = human_fallen_empires_governor_trait_xenolover
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_governor_trait_xenolover
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+
 			}
 		}
 	}
@@ -659,48 +975,82 @@ human_fallen_empires_leaders_add_random_trait = {
 		}
 		while = {
 			limit = {
-				NOT = { has_leader_flag = has_gained_trait }
+				NOT = {
+					has_leader_flag = has_gained_trait
+				}
 			}
 			random_list = {
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = scientist_trait_overthinker
+					if = {
+						limit = {
+							not = {
+								has_trait = scientist_trait_overthinker
+							}
+						}
+						add_trait = scientist_trait_overthinker
+						set_timed_leader_flag = {
+							flag = gained_scientist_trait_overthinker
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = scientist_trait_overthinker
-					set_timed_leader_flag = { flag = gained_scientist_trait_overthinker days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = scientist_trait_hypochondriac
+					if = {
+						limit = {
+							not = {
+								has_trait = scientist_trait_hypochondriac
+							}
+						}
+						add_trait = scientist_trait_hypochondriac
+						set_timed_leader_flag = {
+							flag = gained_scientist_trait_hypochondriac
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = scientist_trait_hypochondriac
-					set_timed_leader_flag = { flag = gained_scientist_trait_hypochondriac days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = scientist_trait_rash_decisions
+					if = {
+						limit = {
+							not = {
+								has_trait = scientist_trait_rash_decisions
+							}
+						}
+						add_trait = scientist_trait_rash_decisions
+						set_timed_leader_flag = {
+							flag = gained_scientist_trait_rash_decisions
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = scientist_trait_rash_decisions
-					set_timed_leader_flag = { flag = gained_scientist_trait_rash_decisions days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = scientist_trait_shining_star
+					if = {
+						limit = {
+							not = {
+								has_trait = scientist_trait_shining_star
+							}
+						}
+						add_trait = scientist_trait_shining_star
+						set_timed_leader_flag = {
+							flag = gained_scientist_trait_shining_star
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = scientist_trait_shining_star
-					set_timed_leader_flag = { flag = gained_scientist_trait_shining_star days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 			}
 		}
@@ -709,44 +1059,90 @@ human_fallen_empires_leaders_add_random_trait = {
 		limit = {
 			leader_class = general
 		}
-		# while = {
-		# 	limit = {
-		# 		NOT = { has_leader_flag = has_gained_trait }
-		# 	}
+		while = {
+			limit = {
+				NOT = {
+					has_leader_flag = has_gained_trait
+				}
+			}
 			random_list = {
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = general_trait_guerrilla_warfare
+					if = {
+						limit = {
+							not = {
+								has_trait = general_trait_guerrilla_warfare
+							}
+						}
+						add_trait = general_trait_guerrilla_warfare
+						set_timed_leader_flag = {
+							flag = gained_general_trait_guerrilla_warfare
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = general_trait_guerrilla_warfare
-					set_timed_leader_flag = { flag = gained_general_trait_guerrilla_warfare days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = general_trait_lost_voice
+					if = {
+						limit = {
+							not = {
+								has_trait = general_trait_lost_voice
+							}
+						}
+						add_trait = general_trait_lost_voice
+						set_timed_leader_flag = {
+							flag = gained_general_trait_lost_voice
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = general_trait_lost_voice
-					set_timed_leader_flag = { flag = gained_general_trait_lost_voice days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_general_trait_engineer
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_general_trait_engineer
+							}
+						}
+						add_trait = human_fallen_empires_general_trait_engineer
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_general_trait_engineer
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_general_trait_engineer
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_general_trait_engineer days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
-
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_general_trait_gravity_control
+							}
+							species = {
+								human_fallen_empires_trigger_is_psionic = yes
+							}
+						}
+						add_trait = human_fallen_empires_general_trait_gravity_control
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_general_trait_gravity_control
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
 			}
-		#}
+		}
 	}
 	if = {
 		limit = {
@@ -754,98 +1150,232 @@ human_fallen_empires_leaders_add_random_trait = {
 		}
 		while = {
 			limit = {
-				NOT = { has_leader_flag = has_gained_trait }
+				NOT = {
+					has_leader_flag = has_gained_trait
+				}
 			}
 			random_list = {
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = admiral_trait_intergalactic_scurvy
+					if = {
+						limit = {
+							not = {
+								has_trait = admiral_trait_intergalactic_scurvy
+							}
+						}
+						add_trait = admiral_trait_intergalactic_scurvy
+						set_timed_leader_flag = {
+							flag = gained_admiral_trait_intergalactic_scurvy
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = admiral_trait_intergalactic_scurvy
-					set_timed_leader_flag = { flag = gained_admiral_trait_intergalactic_scurvy days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = admiral_trait_swift_shot
+					if = {
+						limit = {
+							not = {
+								has_trait = admiral_trait_swift_shot
+							}
+						}
+						add_trait = admiral_trait_swift_shot
+						set_timed_leader_flag = {
+							flag = gained_admiral_trait_swift_shot
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = admiral_trait_swift_shot
-					set_timed_leader_flag = { flag = gained_admiral_trait_swift_shot days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = admiral_trait_goliath
+					if = {
+						limit = {
+							not = {
+								has_trait = admiral_trait_goliath
+							}
+						}
+						add_trait = admiral_trait_goliath
+						set_timed_leader_flag = {
+							flag = gained_admiral_trait_goliath
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = admiral_trait_goliath
-					set_timed_leader_flag = { flag = gained_admiral_trait_goliath days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = admiral_trait_slayer
+					if = {
+						limit = {
+							not = {
+								has_trait = admiral_trait_slayer
+							}
+						}
+						add_trait = admiral_trait_slayer
+						set_timed_leader_flag = {
+							flag = gained_admiral_trait_slayer
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = admiral_trait_slayer
-					set_timed_leader_flag = { flag = gained_admiral_trait_slayer days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_admiral_trait_envious_to_fallen
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_envious_to_fallen
+							}
+							owner = {
+								any_relation = {
+									human_fallen_empires_trigger_is_regular_fallen = yes
+								}
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_envious_to_fallen
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_envious_to_fallen
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_admiral_trait_envious_to_fallen
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_admiral_trait_envious_to_fallen days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_admiral_trait_laser_lover
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_laser_lover
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_laser_lover
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_laser_lover
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_admiral_trait_laser_lover
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_admiral_trait_laser_lover days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_admiral_trait_pirate_hunter
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_pirate_hunter
+							}
+							owner = {
+								not = {
+									is_country_type = human_fallen_empires_pirate
+								}
+								any_relation = {
+									is_country_type = human_fallen_empires_pirate
+								}
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_pirate_hunter
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_pirate_hunter
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_admiral_trait_pirate_hunter
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_admiral_trait_pirate_hunter days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_admiral_trait_robot_hunter
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_robot_hunter
+							}
+							owner = {
+								any_relation = {
+									is_country_type = ai_empire
+								}
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_robot_hunter
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_robot_hunter
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_admiral_trait_robot_hunter
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_admiral_trait_robot_hunter days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
 				}
 				5 = {
-					modifier = {
-						factor = 0
-						has_trait = human_fallen_empires_admiral_trait_afraid_demons
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_afraid_demons
+							}
+							owner = {
+								has_global_flag = extradimensional_invasion_happened
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_afraid_demons
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_afraid_demons
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
 					}
-					add_trait = human_fallen_empires_admiral_trait_afraid_demons
-					set_timed_leader_flag = { flag = gained_human_fallen_empires_admiral_trait_afraid_demons days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait days = 7 }
-					set_timed_leader_flag = { flag = has_gained_trait_good days = 7 }
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_former_fighter
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_former_fighter
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_former_fighter
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							not = {
+								has_trait = human_fallen_empires_admiral_trait_extramundane
+							}
+							species = {
+								human_fallen_empires_trigger_is_psionic = yes
+							}
+						}
+						add_trait = human_fallen_empires_admiral_trait_extramundane
+						set_timed_leader_flag = {
+							flag = gained_human_fallen_empires_admiral_trait_extramundane
+							days = 7
+						}
+						set_timed_leader_flag = {
+							flag = has_gained_trait
+							days = 7
+						}
+					}
 				}
 			}
 		}

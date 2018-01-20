@@ -39,13 +39,11 @@ human_fallen_empires_effect_pirate_diplomacy_remove_flags = {
 
 # create pirate
 # return event target pirate_band, need event target human_fallen_empires_pirate_target
-human_fallen_empires_effect_create_pirate = {
+human_fallen_empires_effect_pirate_init = {
 	random_system = {
 		limit = {
 			or = {
-				any_planet = {
-					is_neighbor_of = event_target:human_fallen_empires_pirate_target
-				}
+				is_neighbor_of = event_target:human_fallen_empires_pirate_target
 				distance = {
 					source = event_target:human_fallen_empires_pirate_target.capital_scope
 					min_distance = 5
@@ -159,18 +157,18 @@ human_fallen_empires_effect_create_pirate = {
 						limit = {
 							is_country_type = primitive
 						}
-						establish_communications_no_message = event_target:pirate_band
-						event_target:pirate_band = {
+						establish_communications_no_message = prev
+						prev = {
 							if = {
 								limit = {
-									human_fallen_empires_trigger_is_xenophile = yes
+									human_fallen_empires_trigger_is_xenophobe = no
 								}
 							}
 							set_faction_hostility = {
 								target = prev
 								set_hostile = no
-								set_neutral = no
-								set_friendly = yes
+								set_neutral = yes
+								set_friendly = no
 							}
 						}
 					}
@@ -187,13 +185,13 @@ human_fallen_empires_effect_create_pirate = {
 					set_custom_capital_location = event_target:human_fallen_empires_hide_capital
 				}
 			}
-			human_fallen_empires_effect_create_pirate_base = yes
+			human_fallen_empires_effect_pirate_init_base = yes
 		}
 	}
 }
 
 # for planet, asteroid ideally, need event target pirate_band
-human_fallen_empires_effect_create_pirate_base = {
+human_fallen_empires_effect_pirate_init_base = {
 	change_pc = pc_human_fallen_empires_pirate_base
 	create_colony = {
 		owner = event_target:pirate_band
@@ -289,5 +287,44 @@ human_fallen_empires_effect_save_slave_target = {
 				}
 			}
 		}
+	}
+}
+
+# this planet, from bombarder
+human_fallen_empires_effect_pirate_ravage_planet = {
+	random_tile = {
+		limit = {
+			has_building = yes
+			is_ruined = no
+		}
+		set_ruined = yes
+		prev.from = {
+			add_minerals = 50
+			add_energy = 10
+			add_physics_research = 5
+			add_society_research = 5
+			add_engineering_research = 5
+		}
+	}
+	if = {
+		limit = {
+			from = {
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+		}
+		random_owned_pop = {
+			limit = {
+				is_growing = no
+				is_sapient = yes
+			}
+			save_event_target_as = human_fallen_empires_settle_pop_target
+		}
+		human_fallen_empires_effect_settle_pop = yes
+	}
+	add_modifier = {
+		modifier = human_fallen_empires_pirate_ravaged_planet
+		days = @human_fallen_empires_pirate_ravaged_planet_time
 	}
 }

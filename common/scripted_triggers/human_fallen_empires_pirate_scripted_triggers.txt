@@ -1,19 +1,6 @@
-#	Example:
 #
-#	example_trigger = {
-#		is_country_type = default
-#		free_leader_slots > 0
-#	}
-#
-#
-#	In a script file:
-#
-#	trigger = {
-#		example_trigger = yes
-#	}
-#
+@human_fallen_empires_pirate_fleet_power_minimum = 4000
 
-# pirate
 # for country
 human_fallen_empires_trigger_pirate_diplomacy_any_menu = {
 	or = {
@@ -38,17 +25,81 @@ human_fallen_empires_trigger_exists_any_slave_target = {
 }
 
 # valid pirate target planet for fleet logic, root.owner is pirate, owner planet's owner
+# for planet
 human_fallen_empires_pirate_valid_target_planet = {
-	human_fallen_empires_trigger_primitive_planet = no
-	not = {
-		has_modifier = human_fallen_empires_pirate_ravaged_planet
-	}
-	exists = owner
-	owner = {
-		or = {
-			is_country_type = default
-			is_country_type = primitive
+	or = {
+		and = {
+			has_owner = no
+			has_orbital_station = yes
+			exists = controller
+			controller = {
+				human_fallen_empires_pirate_valid_target_country = yes
+			}
 		}
-		is_hostile = root.owner
+		and = {
+			human_fallen_empires_trigger_primitive_planet = no
+			not = {
+				has_modifier = human_fallen_empires_pirate_ravaged_planet
+			}
+			exists = owner
+			owner = {
+				human_fallen_empires_pirate_valid_target_country = yes
+			}
+		}
 	}
+}
+
+# for country
+human_fallen_empires_pirate_valid_target_country = {
+	is_hostile = root.owner
+	nor = {
+		is_country_type = human_fallen_empires_pirate
+		is_country_type = human_fallen_empires_drone
+	}
+}
+
+# for system
+human_fallen_empires_pirate_valid_target_system = {
+	not = {
+		has_star_flag = human_fallen_empires_pirate_block
+		any_ship_in_system = {
+			or = {
+				is_ship_size = orbital_station
+				is_ship_class = shipclass_military
+				is_ship_class = shipclass_military_station
+			}
+			exists = owner
+			owner = {
+				is_hostile = root.owner
+			}
+			root = {
+				fleet_power < @human_fallen_empires_pirate_fleet_power_minimum
+			}
+		}
+	}
+}
+
+# for planet
+human_fallen_empires_pirate_valid_target_planet_prior = {
+	or = {
+		and = {
+			exists = controller
+			controller = {
+				has_opinion_modifier = {
+					who = root.owner
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+		and = {
+			exists = owner
+			owner = {
+				has_opinion_modifier = {
+					who = root.owner
+					modifier = human_fallen_empires_opinion_pirate_prior_target
+				}
+			}
+		}
+	}
+	human_fallen_empires_pirate_valid_target_planet = yes
 }
