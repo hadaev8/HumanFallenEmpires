@@ -141,12 +141,25 @@ country_event = {
 	}
 }
 
-country_event = {
+ship_event = {
 	id = human_fallen_empires_test.8
 	hide_window = yes
 	is_triggered_only = yes
 
+	trigger = {
+		is_ship_class = shipclass_colonizer
+		exists = orbit.planet
+	}
+
 	immediate = {
-		leave_alliance = yes
+		orbit.planet = {
+			log = "[this.GetName] [root.species.GetName]"
+			random_owned_pop = {
+				limit = {
+					is_exact_same_species = root.species
+				}
+				kill_pop = yes
+			}
+		}
 	}
 }
