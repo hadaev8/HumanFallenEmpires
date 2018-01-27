@@ -49,49 +49,6 @@ planet_event = {
 	}
 }
 
-# secondary species: assign trait_machine_unit, turn into robotics, then create pops
-# this: capital planet
-# from: secondary species
-planet_event = {
-	id = human_fallen_empires_brainworm.1
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		owner = {
-			has_civic = human_fallen_empires_civic_brainworm_syncretic
-		}
-	}
-
-
-	immediate = {
-		from = {
-			save_event_target_as = secondary_species
-		}
-		event_target:secondary_species = {
-			set_citizenship_type = {
-				country = root.owner
-				type = citizenship_slavery
-			}
-		}
-		while = {
-			count = 4
-			random_tile = {
-				limit = {
-					OR = {
-						has_building = building_mining_network_1
-						has_building = building_hydroponics_farm_1
-					}
-					has_pop = no
-				}
-				create_pop = {
-					species = event_target:secondary_species
-				}
-			}
-		}
-	}
-}
-
 # functional events 1 - 50
 
 # kick events by pop by on_pop_migration_end
@@ -246,9 +203,9 @@ planet_event = {
 					human_fallen_empires_trigger_is_brainworm_country = no
 				}
 				random_list = {
-					95 = {
+					90 = {
 					}
-					5 = {
+					10 = {
 						set_country_flag = human_fallen_empires_brainworm_discovered
 						# notification for owner
 						country_event = {
@@ -267,58 +224,41 @@ planet_event = {
 				}
 			}
 		}
-		if = {
+		random_owned_pop = {
 			limit = {
-				owner = {
-					has_trait = trait_hive_mind
-					human_fallen_empires_trigger_is_brainworm_country = yes
+				human_fallen_empires_trigger_is_brainworm_target = yes
+				exists = tile
+				tile = {
+					nor = {
+						has_building = human_fallen_empires_brainworm_reservation_0
+						has_building = human_fallen_empires_brainworm_reservation_1
+					}
 				}
 			}
-			random_owned_pop = {
+			modify_species = {
+				species = this
+				add_trait = human_fallen_empires_trait_brainworm
+			}
+			if = {
 				limit = {
-					human_fallen_empires_trigger_is_brainworm_target = yes
-					exists = tile
-					tile = {
-						nor = {
-							has_building = human_fallen_empires_brainworm_reservation_0
-							has_building = human_fallen_empires_brainworm_reservation_1
-						}
-					}
+					has_trait = trait_hive_mind
 				}
 				modify_species = {
 					species = this
-					add_trait = trait_hive_mind
-					add_trait = human_fallen_empires_trait_brainworm
-					add_traits_at_start_of_list = yes
-				}
-			}
-			else = {
-				random_owned_pop = {
-					limit = {
-						human_fallen_empires_trigger_is_brainworm_target = yes
-						exists = tile
-						tile = {
-							nor = {
-								has_building = human_fallen_empires_brainworm_reservation_0
-								has_building = human_fallen_empires_brainworm_reservation_1
-							}
-						}
-					}
-					modify_species = {
-						species = this
-						add_trait = human_fallen_empires_trait_brainworm
-						add_traits_at_start_of_list = yes
-					}
+					remove_trait = trait_hive_mind
 				}
 			}
 		}
 		# assimilate again
 		planet_event = {
-			id = human_fallen_empires_brainworm.4 days = 90 random = 60
+			id = human_fallen_empires_brainworm.4
+			days = 90
+			random = 60
 		}
 		# change owner again
 		planet_event = {
 			id = human_fallen_empires_brainworm.5
+			days = 1
 		}
 	}
 }
@@ -490,6 +430,49 @@ planet_event = {
 		name = human_fallen_empires_brainworm.54.0
 		owner = {
 			human_fallen_empires_effect_add_unity.1 = yes
+		}
+	}
+}
+
+# secondary species: assign trait_machine_unit, turn into robotics, then create pops
+# this: capital planet
+# from: secondary species
+planet_event = {
+	id = human_fallen_empires_brainworm.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_civic = human_fallen_empires_civic_brainworm_syncretic
+		}
+	}
+
+
+	immediate = {
+		from = {
+			save_event_target_as = secondary_species
+		}
+		event_target:secondary_species = {
+			set_citizenship_type = {
+				country = root.owner
+				type = citizenship_slavery
+			}
+		}
+		while = {
+			count = 4
+			random_tile = {
+				limit = {
+					OR = {
+						has_building = building_mining_network_1
+						has_building = building_hydroponics_farm_1
+					}
+					has_pop = no
+				}
+				create_pop = {
+					species = event_target:secondary_species
+				}
+			}
 		}
 	}
 }

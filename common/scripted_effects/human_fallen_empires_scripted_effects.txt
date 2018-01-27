@@ -71,57 +71,47 @@ human_fallen_empires_effect_down_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
-
 			stone_age = { }
-
 			bronze_age = {
 				remove_country_flag = bronze_age
 				set_country_flag = stone_age
 				set_primitive_age = stone_age
 			}
-
 			iron_age = {
 				remove_country_flag = iron_age
 				set_country_flag = bronze_age
 				set_primitive_age = bronze_age
 			}
-
 			late_medieval_age = {
 				remove_country_flag = late_medieval_age
 				set_country_flag = iron_age
 				set_primitive_age = iron_age
 			}
-
 			renaissance_age = {
 				remove_country_flag = renaissance_age
 				set_country_flag = late_medieval_age
 				set_primitive_age = late_medieval_age
 			}
-
 			steam_age = {
 				remove_country_flag = steam_age
 				set_country_flag = renaissance_age
 				set_primitive_age = renaissance_age
 			}
-
 			industrial_age = {
 				remove_country_flag = industrial_age
 				set_country_flag = steam_age
 				set_primitive_age = steam_age
 			}
-
 			machine_age = {
 				remove_country_flag = machine_age
 				set_country_flag = industrial_age
 				set_primitive_age = industrial_age
 			}
-
 			atomic_age = {
 				remove_country_flag = atomic_age
 				set_country_flag = machine_age
 				set_primitive_age = machine_age
 			}
-
 			early_space_age = {
 				remove_country_flag = early_space_age
 				set_country_flag = atomic_age
@@ -135,63 +125,54 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
-
 			stone_age = {
 				remove_country_flag = stone_age
 				set_country_flag = bronze_age
 				set_primitive_age = bronze_age
 			}
-
 			bronze_age = {
 				remove_country_flag = bronze_age
 				set_country_flag = iron_age
 				set_primitive_age = iron_age
 			}
-
 			iron_age = {
 				remove_country_flag = iron_age
 				set_country_flag = late_medieval_age
 				set_primitive_age = late_medieval_age
 			}
-
 			late_medieval_age = {
 				remove_country_flag = late_medieval_age
 				set_country_flag = renaissance_age
 				set_primitive_age = renaissance_age
 			}
-
 			renaissance_age = {
 				remove_country_flag = renaissance_age
 				set_country_flag = steam_age
 				set_primitive_age = steam_age
 			}
-
 			steam_age = {
 				remove_country_flag = steam_age
 				set_country_flag = industrial_age
 				set_primitive_age = industrial_age
 			}
-
 			industrial_age = {
 				remove_country_flag = industrial_age
 				set_country_flag = machine_age
 				set_primitive_age = machine_age
 			}
-
 			machine_age = {
 				remove_country_flag = machine_age
 				set_country_flag =  atomic_age
 				set_primitive_age =  atomic_age
 			}
-
 			atomic_age = {
 				remove_country_flag = atomic_age
 				set_country_flag = early_space_age
 				set_primitive_age = early_space_age
 			}
-
 			early_space_age = {
 				remove_country_flag = early_space_age
+				set_country_flag = primitives_can_into_space
 				set_country_type = default
 				change_country_flag = random
 				if = {
@@ -217,6 +198,10 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 				if = {
 					limit = { is_species_class = FUN }
 					set_graphical_culture = fungoid_01
+				}
+				if = {
+					limit = { is_species_class = PLANT }
+					set_graphical_culture = plantoid_01
 				}
 				change_government = {
 					authority = random
@@ -250,10 +235,17 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 						remove_blocker = yes
 					}
 					while = {
-						limit = { num_pops < 8 }
+						limit = {
+							num_pops < 8
+							any_tile = {
+								has_pop = no
+								has_blocker = no
+							}
+						}
 						random_tile = {
 							limit = {
 								has_pop = no
+								has_blocker = no
 							}
 							create_pop = {
 								species = owner
@@ -269,100 +261,53 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 								has_building = no
 							}
 						}
-						clear_deposits = yes
-						add_deposit = d_mineral_food_deposit
+						set_deposit = d_energy_deposit
 						set_building = building_capital_2
 					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
+					while = {
+						count = 2
+						random_tile = {
+							limit = {
+								has_pop = yes
+								OR = {
+									has_building = building_primitive_farm
+									has_building = building_primitive_factory
+									has_building = no
+								}
 							}
+							set_deposit = d_mineral_deposit
+							set_building = building_mining_network_1
 						}
-						clear_deposits = yes
-						add_deposit = d_mineral_deposit
-						set_building = building_mining_network_1
 					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
+					while = {
+						count = 2
+						random_tile = {
+							limit = {
+								has_pop = yes
+								OR = {
+									has_building = building_primitive_farm
+									has_building = building_primitive_factory
+									has_building = no
+								}
 							}
+							set_deposit = d_farmland_deposit
+							set_building = building_hydroponics_farm_1
 						}
-						clear_deposits = yes
-						add_deposit = d_mineral_deposit
-						set_building = building_mining_network_1
 					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
+					while = {
+						count = 3
+						random_tile = {
+							limit = {
+								has_pop = yes
+								OR = {
+									has_building = building_primitive_farm
+									has_building = building_primitive_factory
+									has_building = no
+								}
 							}
+							set_deposit = d_energy_deposit
+							set_building = building_power_plant_1
 						}
-						clear_deposits = yes
-						add_deposit = d_farmland_deposit
-						set_building = building_hydroponics_farm_1
-					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
-							}
-						}
-						clear_deposits = yes
-						add_deposit = d_farmland_deposit
-						set_building = building_hydroponics_farm_1
-					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
-							}
-						}
-						clear_deposits = yes
-						add_deposit = d_energy_deposit
-						set_building = building_power_plant_1
-					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
-							}
-						}
-						clear_deposits = yes
-						add_deposit = d_energy_deposit
-						set_building = building_power_plant_1
-					}
-					random_tile = {
-						limit = {
-							has_pop = yes
-							OR = {
-								has_building = building_primitive_farm
-								has_building = building_primitive_factory
-								has_building = no
-							}
-						}
-						clear_deposits = yes
-						add_deposit = d_energy_deposit
-						set_building = building_power_plant_1
 					}
 					remove_all_armies = yes
 					create_army = {
@@ -1113,6 +1058,7 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 				}
 			}
 			failed = {
+				wait = 100
 				effect = {
 					id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.3
 					event_target:human_fallen_empires_varelse_fleet = {
@@ -1132,11 +1078,11 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 		find_closest_system = {
 			trigger = {
 				id = human_fallen_empires_find_new_home_trigger.0
-				has_owner = no
 				any_planet = {
-					or = {
-						is_planet_class = pc_gaia
-						is_planet_class = pc_desert
+					has_owner = no
+					habitability = {
+						who = event_target:human_fallen_empires_varelse_species
+						value > 0.7
 					}
 				}
 			}
@@ -1149,9 +1095,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 						id = human_fallen_empires_find_new_home_trigger.1
 						any_planet = {
 							has_owner = no
-							or = {
-								is_planet_class = pc_arid
-								is_planet_class = pc_savannah
+							habitability = {
+								who = event_target:human_fallen_empires_varelse_species
+								value > 0.4
 							}
 						}
 					}
@@ -1164,13 +1110,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 								id = human_fallen_empires_find_new_home_trigger.2
 								any_planet = {
 									has_owner = no
-									or = {
-										is_planet_class = pc_tropical
-										is_planet_class = pc_ocean
-										is_planet_class = pc_tundra
-										is_planet_class = pc_arctic
-										is_planet_class = pc_continental
-										is_planet_class = pc_alpine
+									habitability = {
+										who = event_target:human_fallen_empires_varelse_species
+										value > 0.1
 									}
 								}
 							}
@@ -1178,6 +1120,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 								move_to = this
 							}
 							failed = {
+								wait = 100
 								effect = {
 									id = human_fallen_empires_find_new_home_effect.0
 									human_fallen_empires_effect_varelse_fleet_attack_home_of_light = yes
@@ -1192,36 +1135,16 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 			trigger = {
 				id = human_fallen_empires_find_new_home_trigger.3
 				has_owner = no
-				or = {
-					is_planet_class = pc_gaia
-					is_planet_class = pc_desert
+				habitability = {
+					who = event_target:human_fallen_empires_varelse_species
+					value > 0.7
 				}
 			}
 			found_planet = {
 				move_to = this
 				effect = {
 					id = human_fallen_empires_find_new_home_effect.1
-					create_country = {
-						name = "Varelse Hegemony"
-						type = default
-						authority = random
-						civics = random
-						species = event_target:human_fallen_empires_varelse_species
-						ethos = {
-							ethic = ethic_xenophobe
-							ethic = ethic_militarist
-							ethic = ethic_materialist
-						}
-						flag = random
-					}
-					create_colony = {
-						owner = last_created_country
-						species = owner
-						ethos = owner
-					}
-					event_target:human_fallen_empires_varelse_fleet = {
-						set_owner = last_created_country
-					}
+					human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
 				}
 			}
 			failed = {
@@ -1229,36 +1152,16 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 					trigger = {
 						id = human_fallen_empires_find_new_home_trigger.4
 						has_owner = no
-						or = {
-							is_planet_class = pc_arid
-							is_planet_class = pc_savannah
+						habitability = {
+							who = event_target:human_fallen_empires_varelse_species
+							value > 0.4
 						}
 					}
 					found_planet = {
 						move_to = this
 						effect = {
 							id = human_fallen_empires_find_new_home_effect.2
-							create_country = {
-								name = "Varelse Hegemony"
-								type = default
-								authority = random
-								civics = random
-								species = event_target:human_fallen_empires_varelse_species
-								ethos = {
-									ethic = ethic_xenophobe
-									ethic = ethic_militarist
-									ethic = ethic_materialist
-								}
-								flag = random
-							}
-							create_colony = {
-								owner = last_created_country
-								species = owner
-								ethos = owner
-							}
-							event_target:human_fallen_empires_varelse_fleet = {
-								set_owner = last_created_country
-							}
+							human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
 						}
 					}
 					failed = {
@@ -1266,40 +1169,16 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							trigger = {
 								id = human_fallen_empires_find_new_home_trigger.5
 								has_owner = no
-								or = {
-									is_planet_class = pc_tropical
-									is_planet_class = pc_ocean
-									is_planet_class = pc_tundra
-									is_planet_class = pc_arctic
-									is_planet_class = pc_continental
-									is_planet_class = pc_alpine
+								habitability = {
+									who = event_target:human_fallen_empires_varelse_species
+									value > 0.1
 								}
 							}
 							found_planet = {
 								move_to = this
 								effect = {
 									id = human_fallen_empires_find_new_home_effect.3
-									create_country = {
-										name = "Varelse Hegemony"
-										type = default
-										authority = random
-										civics = random
-										species = event_target:human_fallen_empires_varelse_species
-										ethos = {
-											ethic = ethic_xenophobe
-											ethic = ethic_militarist
-											ethic = ethic_materialist
-										}
-										flag = random
-									}
-									create_colony = {
-										owner = last_created_country
-										species = owner
-										ethos = owner
-									}
-									event_target:human_fallen_empires_varelse_fleet = {
-										set_owner = last_created_country
-									}
+									human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
 								}
 							}
 						}
@@ -1307,6 +1186,29 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 				}
 			}
 		}
+	}
+}
+
+human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
+	create_country = {
+		name = "Varelse Hegemony"
+		type = default
+		authority = random
+		civics = random
+		species = event_target:human_fallen_empires_varelse_species
+		ethos = {
+			ethic = ethic_xenophobe
+			ethic = ethic_militarist
+			ethic = ethic_materialist
+		}
+		flag = random
+	}
+	create_colony = {
+		owner = last_created_country
+		species = owner.species
+	}
+	event_target:human_fallen_empires_varelse_fleet = {
+		set_owner = last_created_country
 	}
 }
 
@@ -1519,7 +1421,6 @@ human_fallen_empires_effect_declare_total_war = {
 			declare_war = {
 				who = event_target:human_fallen_empires_war_defender
 				major_war = yes
-				name = "Total War"
 			}
 			add_war_demand = {
 				type = total_defeat
@@ -2764,29 +2665,27 @@ human_fallen_empires_effect_add_psionic_trait = {
 				has_trait = leader_trait_ruler_chosen
 			}
 		}
-		if = {
-			limit = { leader_class = admiral }
-			add_trait = leader_trait_admiral_psionic
-			add_ruler_trait = leader_trait_ruler_psionic
-		}
-		if = {
-			limit = { leader_class = general }
-			add_trait = leader_trait_general_psionic
-			add_ruler_trait = leader_trait_ruler_psionic
-		}
-		if = {
-			limit = { leader_class = governor }
-			add_trait = leader_trait_governor_psionic
-			add_ruler_trait = leader_trait_ruler_psionic
-		}
-		if = {
-			limit = { leader_class = scientist }
-			add_trait = leader_trait_scientist_psionic
-			add_ruler_trait = leader_trait_ruler_psionic
-		}
-		if = {
-			limit = { leader_class = ruler }
-			add_trait = leader_trait_ruler_psionic
+		switch = {
+			trigger = leader_class
+			admiral = {
+				add_trait = leader_trait_admiral_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+			general = {
+				add_trait = leader_trait_general_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+			governor = {
+				add_trait = leader_trait_governor_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+			scientist = {
+				add_trait = leader_trait_scientist_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+			ruler = {
+				add_trait = leader_trait_ruler_psionic
+			}
 		}
 	}
 }

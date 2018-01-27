@@ -34,11 +34,16 @@ planet_event = {
 				add_trait = trait_hive_mind
 			}
 			last_created_species = {
-				set_citizenship_type = { country = root.owner type = citizenship_full cooldown = no }
+				set_citizenship_type = {
+					country = root.owner
+					type = citizenship_full
+					cooldown = no
+				}
 			}
 		}
 		random_list = {
-			90 = { }
+			90 = {
+			}
 			10 = {
 				last_created_species = {
 					human_fallen_empires_effect_add_random_trait = yes
@@ -254,6 +259,165 @@ country_event = {
 			value = 2
 			min = 100
 			max = 10000
+		}
+	}
+}
+
+# early colonisation civic
+country_event = {
+	id = human_fallen_empires_features.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_valid_civic = human_fallen_empires_civic_features_early_colonisation
+		exists = capital_scope
+	}
+
+	immediate = {
+		capital_scope.solar_system = {
+			random_system_planet = {
+				limit = {
+					is_asteroid = no
+					is_star = no
+					habitable_planet = no
+					has_owner = no
+				}
+				change_pc = pc_gaia
+				root = {
+					switch = {
+						trigger = ideal_planet_class
+						pc_desert = {
+							prev = {
+								change_pc = pc_desert
+							}
+						}
+						pc_tropical = {
+							prev = {
+								change_pc = pc_tropical
+							}
+						}
+						pc_arid = {
+							prev = {
+								change_pc = pc_arid
+							}
+						}
+						pc_continental = {
+							prev = {
+								change_pc = pc_continental
+							}
+						}
+						pc_ocean = {
+							prev = {
+								change_pc = pc_ocean
+							}
+						}
+						pc_tundra = {
+							prev = {
+								change_pc = pc_tundra
+							}
+						}
+						pc_arctic = {
+							prev = {
+								change_pc = pc_arctic
+							}
+						}
+						pc_alpine = {
+							prev = {
+								change_pc = pc_alpine
+							}
+						}
+						pc_savannah = {
+							prev = {
+								change_pc = pc_savannah
+							}
+						}
+						pc_gaia = {
+							prev = {
+								change_pc = pc_gaia
+							}
+						}
+					}
+				}
+				while = {
+					limit = {
+						planet_size > 25
+					}
+					change_planet_size = -1
+				}
+				while = {
+					limit = {
+						planet_size < 10
+					}
+					change_planet_size = 1
+				}
+				create_colony = {
+					owner = root
+					species = root.species
+				}
+				create_pop = {
+					species = root.species
+				}
+				create_pop = {
+					species = root.species
+				}
+			}
+		}
+	}
+}
+
+# early contact civic
+country_event = {
+	id = human_fallen_empires_features.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_valid_civic = human_fallen_empires_civic_features_early_contact
+		exists = capital_scope
+	}
+
+	immediate = {
+		set_country_flag = has_encountered_other_empire
+		set_country_flag = Story7
+		add_influence = 150
+		create_species = {
+			name = random
+			class = random_non_machine
+			portrait = random
+			traits = random
+			extra_trait_points = 1
+		}
+		create_country = {
+			name = random
+			type = default
+			species = last_created_species
+			ignore_initial_colony_error = yes
+			authority = random
+			civics = random
+			ethos = random
+			flag = random
+		}
+		create_fleet = {
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = random
+					random_existing_design = colonizer
+					graphical_culture = last_created_country
+				}
+				set_location = {
+					target = root.capital_scope
+					angle = 120
+				}
+				last_created_ship = {
+					change_species = last_created_species
+				}
+				add_modifier = {
+				 	modifier = human_fallen_empires_unkeep_80
+				 	days = -1
+				}
+			}
 		}
 	}
 }

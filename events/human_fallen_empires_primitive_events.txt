@@ -1,0 +1,75 @@
+#
+namespace = human_fallen_empires_primitive
+
+# ahet 0 - 50
+
+# varelse 50 - 100
+
+# primitive can make colony in same system
+country_event = {
+	id = human_fallen_empires_primitive.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = early_space_age
+		capital_scope.solar_system = {
+			any_planet = {
+				habitability = {
+					who = root.species
+					value > 0.2
+				}
+				# can_colonize = {
+				# 	who = root
+				# 	status = yes
+				# }
+				has_owner = no
+			}
+		}
+	}
+
+	immediate = {
+		create_fleet = {
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = random
+					random_existing_design = colonizer
+				}
+				set_location = root.capital_scope
+				save_event_target_as = human_fallen_empires_primitive_100_fleet
+				queue_actions = {
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_primitive.100_fleet_trigger.0
+
+							habitability = {
+								who = root.species
+								value > 0.2
+							}
+							has_owner = no
+						}
+						found_planet = {
+							move_to = this
+							effect = {
+								id = human_fallen_empires_primitive.100_fleet_effect.0
+								start_colony = {
+									owner = root
+									species = root.species
+								}
+								delete_fleet = event_target:human_fallen_empires_primitive_100_fleet
+							}
+						}
+						failed = {
+							effect = {
+								id = human_fallen_empires_primitive.100_fleet_effect.1
+								delete_fleet = event_target:human_fallen_empires_primitive_100_fleet
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
