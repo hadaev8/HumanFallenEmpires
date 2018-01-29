@@ -71,7 +71,6 @@ human_fallen_empires_effect_down_primitive_teh_lvl = {
 	owner = {
 		switch = {
 			trigger = has_country_flag
-			stone_age = { }
 			bronze_age = {
 				remove_country_flag = bronze_age
 				set_country_flag = stone_age
@@ -176,31 +175,45 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 				set_country_type = default
 				change_country_flag = random
 				if = {
-					limit = { is_species_class = MAM }
+					limit = {
+						is_species_class = MAM
+					}
 					set_graphical_culture = mammalian_01
 				}
 				if = {
-					limit = { is_species_class = REP }
+					limit = {
+						is_species_class = REP
+					}
 					set_graphical_culture = reptilian_01
 				}
 				if = {
-					limit = { is_species_class = AVI }
+					limit = {
+						is_species_class = AVI
+					}
 					set_graphical_culture = avian_01
 				}
 				if = {
-					limit = { is_species_class = ART }
+					limit = {
+						is_species_class = ART
+					}
 					set_graphical_culture = arthropoid_01
 				}
 				if = {
-					limit = { is_species_class = MOL }
+					limit = {
+						is_species_class = MOL
+					}
 					set_graphical_culture = molluscoid_01
 				}
 				if = {
-					limit = { is_species_class = FUN }
+					limit = {
+						is_species_class = FUN
+					}
 					set_graphical_culture = fungoid_01
 				}
 				if = {
-					limit = { is_species_class = PLANT }
+					limit = {
+						is_species_class = PLANT
+					}
 					set_graphical_culture = plantoid_01
 				}
 				change_government = {
@@ -210,13 +223,15 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 				set_name = random
 				if = {
 					limit = {
-						home_planet = {
+						capital_scope = {
 							has_observation_outpost = yes
 						}
 					}
-					home_planet = {
+					capital_scope = {
 						observation_outpost_owner = {
-							country_event = { id = primitive.17 }
+							country_event = {
+								id = primitive.17
+							}
 						}
 					}
 				}
@@ -336,15 +351,53 @@ human_fallen_empires_effect_up_primitive_teh_lvl = {
 					}
 				}
 				random_owned_ship = {
-					limit = { is_ship_size = primitive_space_station }
-					fleet = { destroy_fleet = THIS }
+					limit = {
+						is_ship_size = primitive_space_station
+					}
+					fleet = {
+						destroy_fleet = THIS
+					}
 				}
 			}
 		}
 	}
 }
 
-# for war in heavens
+# total war cb, need 2 event targets
+human_fallen_empires_effect_declare_total_war = {
+	if = {
+		limit = {
+			not = {
+				event_target:human_fallen_empires_war_attaker = {
+					is_at_war_with = event_target:human_fallen_empires_war_defender
+				}
+			}
+		}
+		event_target:human_fallen_empires_war_attaker = {
+			declare_war = {
+				who = event_target:human_fallen_empires_war_defender
+				major_war = yes
+			}
+			add_war_demand = {
+				type = total_defeat
+				parameter:country = event_target:human_fallen_empires_war_defender
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_defender
+			}
+		}
+		event_target:human_fallen_empires_war_defender = {
+			add_war_demand = {
+				type = total_defeat
+				parameter:country = event_target:human_fallen_empires_war_attaker
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_attaker
+			}
+		}
+	}
+}
+
 # for planet
 human_fallen_empires_effect_create_primitive = {
 	add_threat = {
@@ -359,7 +412,8 @@ human_fallen_empires_effect_create_primitive = {
 			95 = {
 				remove_building = yes
 			}
-			5 = { }
+			5 = {
+			}
 		}
 	}
 	owner.species = {
@@ -495,7 +549,9 @@ human_fallen_empires_effect_create_primitive = {
 			}
 			last_created_country = {
 				if = {
-					limit = { has_country_flag = industrial_age }
+					limit = {
+						has_country_flag = industrial_age
+					}
 					PREV = {
 						while = {
 							count = 4
@@ -509,7 +565,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = machine_age }
+					limit = {
+						has_country_flag = machine_age
+					}
 					PREV = {
 						while = {
 							count = 5
@@ -523,7 +581,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = atomic_age }
+					limit = {
+						has_country_flag = atomic_age
+					}
 					PREV = {
 						while = {
 							count = 4
@@ -537,7 +597,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = early_space_age }
+					limit = {
+						has_country_flag = early_space_age
+					}
 					PREV = {
 						while = {
 							count = 5
@@ -716,7 +778,9 @@ human_fallen_empires_effect_create_primitive = {
 			}
 			last_created_country = {
 				if = {
-					limit = { has_country_flag = stone_age }
+					limit = {
+						has_country_flag = stone_age
+					}
 					PREV = {
 						create_army = {
 							name = "Primitive Army"
@@ -727,7 +791,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = bronze_age }
+					limit = {
+						has_country_flag = bronze_age
+					}
 					PREV = {
 						create_army = {
 							name = "Primitive Army"
@@ -738,7 +804,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = iron_age }
+					limit = {
+						has_country_flag = iron_age
+					}
 					PREV = {
 						while = {
 							count = 2
@@ -752,7 +820,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = late_medieval_age }
+					limit = {
+						has_country_flag = late_medieval_age
+					}
 					PREV = {
 						while = {
 							count = 3
@@ -766,7 +836,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = renaissance_age }
+					limit = {
+						has_country_flag = renaissance_age
+					}
 					PREV = {
 						while = {
 							count = 4
@@ -780,7 +852,9 @@ human_fallen_empires_effect_create_primitive = {
 					}
 				}
 				if = {
-					limit = { has_country_flag = steam_age }
+					limit = {
+						has_country_flag = steam_age
+					}
 					PREV = {
 						while = {
 							count = 3
@@ -855,11 +929,15 @@ human_fallen_empires_effect_create_vassal = {
 					type = default
 					day_zero_contact = no
 					effect = {
-						set_timed_country_flag = { flag = human_fallen_empires_liberated_country days = 1 }
+						set_timed_country_flag = {
+							flag = human_fallen_empires_liberated_country days = 1
+						}
 						establish_communications_no_message = root
 						#establish_communications_no_message = fromfromfrom
 						#establish_communications_no_message = parameter:planet.owner
-						establish_contact = { who = root location = event_target:human_fallen_empires_planet }
+						establish_contact = {
+							who = root location = event_target:human_fallen_empires_planet
+						}
 						#establish_contact = { who = fromfromfrom location = parameter:planet }
 						#establish_contact = { who = parameter:planet.owner location = parameter:planet }
 						event_target:human_fallen_empires_planet = {
@@ -926,6 +1004,178 @@ human_fallen_empires_effect_create_vassal = {
 				}
 			}
 		}
+	}
+}
+
+# for country
+human_fallen_empires_effect_split_planets = {
+	every_country = {
+		limit = {
+			or = {
+				is_in_federation_with = event_target:WarInHeavenLoserFE
+				and = {
+					exists = overlord
+					overlord = {
+						is_country = event_target:WarInHeavenLoserFE
+					}
+				}
+			}
+		}
+		remove_modifier = human_fallen_empires_fallen_resurces_drain
+		set_timed_country_flag = {
+			flag = war_in_heaven_loser
+			days = 1
+		}
+	}
+	every_country = {
+		limit = {
+			or = {
+				is_in_federation_with = event_target:WarInHeavenWinnerFE
+				and = {
+					exists = overlord
+					overlord = {
+						is_country = event_target:WarInHeavenWinnerFE
+					}
+				}
+			}
+		}
+		remove_modifier = human_fallen_empires_fallen_resurces_drain
+		set_timed_country_flag = {
+			flag = war_in_heaven_loser
+			days = 1
+		}
+	}
+	# Losers are punished, planets are given to nearby winners
+	if = {
+		limit = {
+			any_relation = {
+				has_country_flag = war_in_heaven_winner
+			}
+			any_relation = {
+				has_country_flag = war_in_heaven_loser
+			}
+		}
+		every_planet = {
+			limit = {
+				exists = owner
+				owner = {
+					has_country_flag = war_in_heaven_loser
+				}
+				is_capital = no
+			}
+			save_event_target_as = planet_to_cede
+			# First dibs to countries who originally sided with them
+			random_country = {
+				limit = {
+					has_country_flag = war_in_heaven_winner
+					event_target:planet_to_cede = {
+						is_neighbor_of = prev
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = war_in_heaven_picked_side
+					}
+					save_event_target_as = conqueror
+					event_target:planet_to_cede = {
+						owner = {
+							set_country_flag = war_in_heaven_planet_was_taken
+						}
+						conquer = event_target:conqueror
+						set_owner = event_target:conqueror
+					}
+					set_country_flag = war_in_heaven_planet_was_given
+					# May decide to be nice to a late joiner
+					else = {
+						random = {
+							chance = 30
+							save_event_target_as = conqueror
+							event_target:planet_to_cede = {
+								owner = {
+									set_country_flag = war_in_heaven_planet_was_taken
+								}
+								conquer = event_target:conqueror
+								set_owner = event_target:conqueror
+							}
+							set_country_flag = war_in_heaven_planet_was_given
+						}
+					}
+				}
+			}
+		}
+	}
+	# Add opinions towards winner
+	every_country = {
+		limit = {
+			has_country_flag = war_in_heaven_winner
+		}
+		add_opinion_modifier = {
+			who = event_target:WarInHeavenWinnerFE
+			modifier = opinion_war_in_heaven_winner
+		}
+		event_target:WarInHeavenWinnerFE = {
+			add_opinion_modifier = {
+				who = prev
+				modifier = opinion_war_in_heaven_winner
+			}
+		}
+	}
+	every_country = {
+		limit = {
+			has_country_flag = war_in_heaven_loser
+		}
+		remove_opinion_modifier = {
+			who = event_target:WarInHeavenWinnerFE
+			modifier = opinion_war_in_heaven_enemy
+		}
+		event_target:WarInHeavenWinnerFE = {
+			remove_opinion_modifier = {
+				who = prev
+				modifier = opinion_war_in_heaven_enemy
+			}
+		}
+	}
+	# War in Heaven victory event
+	if = {
+		limit = {
+			event_target:WarInHeavenWinnerFE = {
+				is_at_war = no
+				human_fallen_empires_trigger_is_regular_fallen = yes
+			}
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = {
+				id = war_in_heaven.5
+			}
+			country_event = {
+				id = war_in_heaven.6
+			}
+			country_event = {
+				id = war_in_heaven.7
+			}
+			country_event = {
+				id = war_in_heaven.8
+			}
+			country_event = {
+				id = war_in_heaven.9
+			}
+		}
+	}
+	# Cleanup
+	every_country = {
+		limit = {
+			OR = {
+				has_country_flag = war_in_heaven_loser
+				has_country_flag = war_in_heaven_winner
+			}
+		}
+		remove_country_flag = war_in_heaven_winner
+		remove_country_flag = war_in_heaven_loser
+		remove_country_flag = war_in_heaven_planet_was_given
+		remove_country_flag = war_in_heaven_planet_was_taken
 	}
 }
 
@@ -1205,7 +1455,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 	}
 	create_colony = {
 		owner = last_created_country
-		species = owner.species
+		species = owner
 	}
 	event_target:human_fallen_empires_varelse_fleet = {
 		set_owner = last_created_country
@@ -1407,42 +1657,7 @@ human_fallen_empires_effect_drone_calc_outpost = {
 	}
 }
 
-# total war cb, need 2 event targets
-human_fallen_empires_effect_declare_total_war = {
-	if = {
-		limit = {
-			not = {
-				event_target:human_fallen_empires_war_attaker = {
-					is_at_war_with = event_target:human_fallen_empires_war_defender
-				}
-			}
-		}
-		event_target:human_fallen_empires_war_attaker = {
-			declare_war = {
-				who = event_target:human_fallen_empires_war_defender
-				major_war = yes
-			}
-			add_war_demand = {
-				type = total_defeat
-				parameter:country = event_target:human_fallen_empires_war_defender
-				warscore_cost = 100
-				target = this
-				enemy = event_target:human_fallen_empires_war_defender
-			}
-		}
-		event_target:human_fallen_empires_war_defender = {
-			add_war_demand = {
-				type = total_defeat
-				parameter:country = event_target:human_fallen_empires_war_attaker
-				warscore_cost = 100
-				target = this
-				enemy = event_target:human_fallen_empires_war_attaker
-			}
-		}
-	}
-}
-
-# rewards for dialogues and events, for country
+# rewards for dialogs and events, for country
 human_fallen_empires_effect_add_unity.1 = {
 	add_monthly_resource_mult = {
 		resource = unity
@@ -1823,8 +2038,12 @@ human_fallen_empires_effect_settle_pop_from_slavery_buff = {
 		if = {
 			limit = {
 				or = {
-					has_citizenship_type = { country = root type = citizenship_full }
-					has_citizenship_type = { country = root type = citizenship_limited }
+					has_citizenship_type = {
+						country = root type = citizenship_full
+					}
+					has_citizenship_type = {
+						country = root type = citizenship_limited
+					}
 					is_same_species = root
 				}
 			}
