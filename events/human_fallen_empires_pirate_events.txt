@@ -246,7 +246,6 @@ country_event = {
 			limit = {
 				num_ships > 4
 			}
-			set_fleet_stance = aggressive
 			fleet_event = {
 				id = human_fallen_empires_pirate.50
 			}
@@ -265,9 +264,6 @@ country_event = {
 				}
 				add_building_construction = human_fallen_empires_pirate_slave_pit
 			}
-			# every_owned_pop = {
-			# 	set_slavery_type = { country = root type = slavery_normal cooldown = yes }
-			# }
 		}
 		# also cheat for better drives
 		if = {
@@ -1623,7 +1619,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1670,7 +1666,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1717,7 +1713,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1764,7 +1760,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1811,7 +1807,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1858,7 +1854,7 @@ country_event = {
 			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					free_pop_tiles > 0
+					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
@@ -1892,6 +1888,87 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+	}
+	# hire pirate admiral
+	option = {
+		name = human_fallen_empires_pirate.101.traid_menu.2
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+		}
+		allow = {
+			energy > 1000
+			custom_tooltip = {
+				text = human_fallen_empires_pirate.101.traid_menu.2.fail
+				or = {
+					and = {
+						not = {
+							has_global_flag = human_fallen_empires_disable_leaders
+						}
+						free_leader_slots > 0
+					}
+					check_variable = {
+						which = human_fallen_empires_leaders_admiral_capacity
+						value > 0
+					}
+				}
+				event_target:human_fallen_empires_pirate_country = {
+					any_pool_leader = {
+						leader_class = admiral
+					}
+				}
+			}
+		}
+
+		#is_dialog_only = yes
+		#response_text = human_fallen_empires_pirate.101.traid_menu.2.response
+		# багует. не хочет изгонять второго лидера без обновления эвента. вместо этого изгоняет первого опять
+
+		add_energy = -1000
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 1000
+			custom_tooltip = human_fallen_empires_pirate.101.traid_menu.2.effect
+			hidden_effect = {
+				random_pool_leader = {
+					limit = {
+						leader_class = admiral
+					}
+					exile_leader_as = human_fallen_empires_pirate_admiral
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root
+						create_ship = {
+							name = random
+							random_existing_design = science
+						}
+						set_location = root.capital_scope
+						set_leader = human_fallen_empires_pirate_admiral
+						leader = {
+							unassign_leader = this
+						}
+						delete_fleet = this
+					}
+				}
+				if = {
+					limit = {
+						not = {
+							has_global_flag = human_fallen_empires_disable_leaders
+						}
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_leaders_admiral_capacity
+							value = -1
+						}
+					}
+				}
+				root = {
+					country_event = {
+						id = human_fallen_empires_pirate.101
+					}
+				}
+			}
+		}
 	}
 	# casino menu
 	option = {

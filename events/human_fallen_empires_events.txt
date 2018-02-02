@@ -8726,7 +8726,6 @@ country_event = {
 	}
 }
 
-
 # inform events with text 10050
 country_event = {
 	id = human_fallen_empires.10050
@@ -9744,6 +9743,7 @@ country_event = {
 	# make primitive
 	option = {
 		name = human_fallen_empires.10150.0
+		custom_tooltip = human_fallen_empires.10150.0.tooltip
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -9760,6 +9760,7 @@ country_event = {
 				}
 			}
 			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
 				every_owned_planet = {
 					human_fallen_empires_effect_create_primitive = yes
 				}
@@ -9769,6 +9770,7 @@ country_event = {
 	# annex
 	option = {
 		name = human_fallen_empires.10150.1
+		custom_tooltip = human_fallen_empires.10150.1.tooltip
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -9779,6 +9781,7 @@ country_event = {
 				factor = 0
 				human_fallen_empires_trigger_is_authoritarian = no
 				human_fallen_empires_trigger_is_egalitarian = no
+				human_fallen_empires_trigger_is_assimilator = no
 			}
 		}
 		hidden_effect = {
@@ -9789,13 +9792,14 @@ country_event = {
 				}
 			}
 			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
 				every_owned_planet = {
 					add_threat = {
 						who = root
 						amount = 1 # scales to pops
 					}
+					conquer = root
 					set_owner = root
-					set_controller = root
 				}
 			}
 		}
@@ -9803,6 +9807,7 @@ country_event = {
 	# make vassal
 	option = {
 		name = human_fallen_empires.10150.2
+		custom_tooltip = human_fallen_empires.10150.2.tooltip
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -9822,6 +9827,7 @@ country_event = {
 				}
 			}
 			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
 				every_owned_planet = {
 					human_fallen_empires_effect_create_vassal = yes
 				}
@@ -9831,6 +9837,7 @@ country_event = {
 	# kill them all
 	option = {
 		name = human_fallen_empires.10150.3
+		custom_tooltip = human_fallen_empires.10150.3.tooltip
 		trigger = {
 			allows_purge = yes
 		}
@@ -9839,6 +9846,7 @@ country_event = {
 			modifier = {
 				factor = 0
 				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_undiplomatic = no
 			}
 		}
 		human_fallen_empires_effect_xenophobe_attraction_high = yes
@@ -9850,6 +9858,7 @@ country_event = {
 				}
 			}
 			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
 				every_owned_planet = {
 					add_threat = {
 						who = root
@@ -9857,6 +9866,62 @@ country_event = {
 					}
 					destroy_colony = {
 						keep_buildings = no
+					}
+				}
+			}
+		}
+	}
+	# make infertile
+	option = {
+		name = human_fallen_empires.10150.4
+		custom_tooltip = human_fallen_empires.10150.4.tooltip
+		trigger = {
+			allows_purge = yes
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_xenophile = no
+				human_fallen_empires_trigger_is_materialist = no
+				human_fallen_empires_trigger_is_pacifist = no
+			}
+		}
+		human_fallen_empires_effect_pacifist_attraction_high = yes
+		human_fallen_empires_effect_xenophobe_attraction_low = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10155
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				every_owned_pop_species = {
+					limit = {
+						pop_can_reproduce = yes
+					}
+					prev = {
+						modify_species = {
+							species = prev
+							add_trait = human_fallen_empires_species_trait_infertil
+						}
+					}
+				}
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					every_owned_pop = {
+						random_list = {
+							50 = {
+							}
+							50 = {
+								kill_pop = yes
+							}
+						}
 					}
 				}
 			}
@@ -9890,7 +9955,6 @@ country_event = {
 			is_country = from
 		}
 	}
-
 	option = {
 		name = human_fallen_empires.10151.1
 		trigger = {
@@ -9930,7 +9994,6 @@ country_event = {
 			is_country = from
 		}
 	}
-
 	option = {
 		name = human_fallen_empires.10152.1
 		trigger = {
@@ -9970,7 +10033,6 @@ country_event = {
 			is_country = from
 		}
 	}
-
 	option = {
 		name = human_fallen_empires.10153.1
 		trigger = {
@@ -10010,9 +10072,47 @@ country_event = {
 			is_country = from
 		}
 	}
-
 	option = {
 		name = human_fallen_empires.10154.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.10155
+	title = human_fallen_empires.10155.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10155.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10155.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires.10155.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10155.1
 		trigger = {
 			not = {
 				is_country = from
