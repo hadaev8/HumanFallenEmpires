@@ -1,0 +1,1814 @@
+# The War in Heavens by Human Fallen Empires
+namespace = human_fallen_empires
+
+# awake event
+country_event = {
+	id = human_fallen_empires.10000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		years_passed > 100
+		any_country = {
+			NOT = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+			is_country_type = fallen_empire
+			is_at_war = no
+		}
+		any_country = {
+			is_country_type = default
+			OR = {
+				fleet_power > 12000
+				and = {
+					is_difficulty > 0
+					fleet_power > 100000
+				}
+				and = {
+					is_difficulty > 1
+					fleet_power > 80000
+				}
+				and = {
+					is_difficulty > 2
+					fleet_power > 60000
+				}
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					is_difficulty > 2
+				}
+				modifier = {
+					factor = 2
+					is_difficulty > 1
+				}
+				modifier = {
+					factor = 2
+					is_difficulty > 0
+				}
+				modifier = {
+					factor = 0.5
+					num_fallen_empires > 1
+					num_fallen_empires < 3
+				}
+				modifier = {
+					factor = 0.5
+					num_fallen_empires > 2
+					num_fallen_empires < 4
+				}
+				modifier = {
+					factor = 0.25
+					num_fallen_empires > 3
+				}
+				modifier = {
+					factor = 10
+					any_country = {
+						is_country_type = default
+						any_owned_planet = {
+							has_planet_flag = fallen_empire_world
+						}
+					}
+				}
+				modifier = {
+					factor = 100
+					has_global_flag = high_awaken_chance
+				}
+				modifier = {
+					factor = 4
+					has_global_flag = galactic_crisis_happened
+				}
+				# awake random fallen
+				random_country = {
+					limit = {
+						NOT = {
+							has_ethic = ethic_gestalt_consciousness
+						}
+						is_country_type = fallen_empire
+					}
+					set_global_flag = sleepers_awake_happened
+					set_global_flag = human_fallen_empires_sleepers_awake_happened
+					country_event = {
+						id = fallen_empires_awakening.3
+					}
+					country_event = {
+						id = human_fallen_empires.10001
+					}
+				}
+			}
+		}
+	}
+}
+
+# for inform
+country_event = {
+	id = human_fallen_empires.10001
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# inform player
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			establish_communications_no_message = from
+			country_event = {
+				id = fallen_empires_awakening.2
+			}
+		}
+	}
+}
+
+# start war 100010
+country_event = {
+	id = human_fallen_empires.10010
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Leviathans Story Pack"
+		not = {
+			has_global_flag = human_fallen_empires_war_in_heaven_started
+		}
+		any_country = {
+			count > 2 # лол почему-то больше считается как больше или равно
+			is_country_type = awakened_fallen_empire
+			or = {
+				is_at_war = no
+				has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
+			}
+			fleet_power > 40000
+		}
+	}
+
+	immediate = {
+		log = "war in heavens started"
+		random_list = {
+			1 = {
+			}
+			3 = {
+				if = {
+					limit = {
+						not = {
+							has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
+						}
+					}
+					break = yes
+				}
+			}
+		}
+		set_global_flag = human_fallen_empires_war_in_heaven_started
+		every_country = {
+			limit = {
+				is_country_type = awakened_fallen_empire
+			}
+			remove_country_flag = ai_no_wars
+			country_event = {
+				id = fallen_empires.13
+			}
+			if = {
+				limit = {
+					any_country = {
+						is_country_type = default
+						fleet_power > 50000
+					}
+				}
+				country_event = {
+					id = fallen_empires.13
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = awakened_fallen_empire
+				or = {
+					is_at_war = no
+					has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
+				}
+			}
+			human_fallen_empires_effect_save_event_target = yes
+		}
+		# can be up to 6 targets from 0 to 5 index
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_event_target_5
+			}
+			# 5 vs all other
+			# 5 vs 4
+			event_target:human_fallen_empires_event_target_5 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_4 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 5 vs 3
+			event_target:human_fallen_empires_event_target_5 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_3 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 5 vs 2
+			event_target:human_fallen_empires_event_target_5 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_2 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 5 vs 1
+			event_target:human_fallen_empires_event_target_5 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_1 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 5 vs 0
+			event_target:human_fallen_empires_event_target_5 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_event_target_4
+			}
+			# 4 vs all other
+			# 4 vs 3
+			event_target:human_fallen_empires_event_target_4 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_3 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 4 vs 2
+			event_target:human_fallen_empires_event_target_4 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_2 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 4 vs 1
+			event_target:human_fallen_empires_event_target_4 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_1 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 4 vs 0
+			event_target:human_fallen_empires_event_target_4 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_event_target_3
+			}
+			# 3 vs all other
+			# 3 vs 2
+			event_target:human_fallen_empires_event_target_3 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_2 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 3 vs 1
+			event_target:human_fallen_empires_event_target_3 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_1 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 3 vs 0
+			event_target:human_fallen_empires_event_target_3 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_event_target_2
+			}
+			# 2 vs all other
+			# 2 vs 1
+			event_target:human_fallen_empires_event_target_2 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_1 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+			# 2 vs 0
+			event_target:human_fallen_empires_event_target_2 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_event_target_1
+			}
+			# 1 vs all other
+			# 1 vs 0
+			event_target:human_fallen_empires_event_target_1 = {
+				save_event_target_as = human_fallen_empires_war_attaker
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				save_event_target_as = human_fallen_empires_war_defender
+			}
+			human_fallen_empires_effect_declare_total_war = yes
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = human_fallen_empires.10050
+			}
+		}
+		set_global_flag = human_fallen_empires_war_in_heaven_started
+	}
+}
+
+# fire event by on_war_beginning
+country_event = {
+	id = human_fallen_empires.10011
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Leviathans Story Pack"
+		not = {
+			has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
+		}
+		is_country_type = awakened_fallen_empire
+		any_country = {
+			is_country_type = awakened_fallen_empire
+			is_at_war_with = root
+		}
+	}
+
+	immediate = {
+		set_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
+		random_country = {
+			country_event = {
+				id = human_fallen_empires.10010
+			}
+		}
+		log = "war in heavens start by ai"
+	}
+}
+
+# inform events with text 10050
+country_event = {
+	id = human_fallen_empires.10050
+	title = human_fallen_empires.10050.name
+	desc = {
+		trigger = {
+			fail_text = {
+				text = human_fallen_empires.10050.desc.0.0
+				exists = event_target:human_fallen_empires_event_target_2
+			}
+			success_text = {
+				text = human_fallen_empires.10050.desc.0.1
+				exists = event_target:human_fallen_empires_event_target_2
+				not = {
+					exists = event_target:human_fallen_empires_event_target_3
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.10050.desc.0.2
+				exists = event_target:human_fallen_empires_event_target_3
+			}
+			success_text = {
+				text = human_fallen_empires.10050.desc.1.0
+				exists = event_target:human_fallen_empires_coalition_leader
+			}
+			success_text = {
+				text = human_fallen_empires.10050.desc.1.1
+				exists = event_target:human_fallen_empires_egypt_country
+				event_target:human_fallen_empires_egypt_country = {
+					not = {
+						is_country = event_target:human_fallen_empires_coalition_leader
+					}
+				}
+			}
+			text = human_fallen_empires.10050.desc.2.0
+		}
+	}
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	# step 0 for vanilla fallen empires
+	option = {
+		name = human_fallen_empires.10050.0.0
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_0
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_0 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_0
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_0
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_0
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_0 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_0
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_0
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_0 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_0
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.0.1
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_1
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_1 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_1
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_1
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_1
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_1 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_1
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_1
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_1 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_1
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.0.2
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_2
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_2 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_2
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_2
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_2
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_2 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_2
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_2
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_2 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_2
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.0.3
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_3
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_3 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_3
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_3
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_3
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_3 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_3
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_3
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_3 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_3
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.0.4
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_4
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_4 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_4
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_4
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_4
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_4 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_4
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_4
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_4 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_4
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.0.5
+		trigger = {
+			is_subject = no
+			is_country_type = default
+			exists = event_target:human_fallen_empires_event_target_5
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_future
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_militarist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_xenophile = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_spiritualist = no
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_materialist = no
+					}
+					human_fallen_empires_trigger_is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						human_fallen_empires_trigger_is_xenophile = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_xenophile
+						}
+						human_fallen_empires_trigger_is_militarist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_materialist
+						}
+						human_fallen_empires_trigger_is_spiritualist = yes
+					}
+					and = {
+						event_target:human_fallen_empires_event_target_5 = {
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						human_fallen_empires_trigger_is_materialist = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_5
+					subject_type = thrall
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_5
+					subject_type = signatory
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_5
+					subject_type = dominion
+				}
+			}
+			if = {
+				limit = {
+					event_target:human_fallen_empires_event_target_5 = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_subject_of = {
+					who = event_target:human_fallen_empires_event_target_5
+					subject_type = satellite
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_event_target_5
+				modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_event_target_5 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_war_in_heaven_ally
+				}
+			}
+			join_war = event_target:human_fallen_empires_event_target_5
+		}
+	}
+	# step 1 for human fallen empires
+	option = {
+		name = human_fallen_empires.10050.1.0
+		trigger = {
+			is_subject = no
+			#is_at_war = no		#подумать над этим
+			is_country_type = default
+			exists = event_target:human_fallen_empires_coalition_leader
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					has_ai_personality = fanatic_purifiers
+					has_ai_personality = metalhead
+					has_country_flag = human_fallen_empires_egypt
+				}
+			}
+			modifier = {
+				factor = 0.5
+				human_fallen_empires_trigger_is_egalitarian = no
+				human_fallen_empires_trigger_is_xenophile = no
+				human_fallen_empires_trigger_is_militarist = no
+			}
+			modifier = {
+				factor = 0.1
+				or = {
+					human_fallen_empires_trigger_is_authoritarian = yes
+					human_fallen_empires_trigger_is_xenophobe = yes
+					human_fallen_empires_trigger_is_pacifist = yes
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = war_in_heaven_picked_side
+			event_target:human_fallen_empires_coalition_leader = {
+				guarantee_country = {
+					target = root
+					free_guarantee_days = 3600
+				}
+			}
+			set_subject_of = {
+				who = event_target:human_fallen_empires_coalition_leader
+				subject_type = human_fallen_empires_future_vassal
+			}
+			add_opinion_modifier = {
+				who = event_target:human_fallen_empires_future_country modifier = opinion_war_in_heaven_ally
+			}
+			event_target:human_fallen_empires_coalition_leader = {
+				add_opinion_modifier = {
+					who = root modifier = opinion_war_in_heaven_ally
+				}
+			}
+			# стоит ли добавить модификатор врага? from = { add_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy } }
+			join_war = event_target:human_fallen_empires_coalition_leader
+		}
+	}
+	# step 2 for other options
+	option = {
+		name = human_fallen_empires.10050.2.0
+		trigger = {
+			is_subject = no
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.5
+				fleet_power < 20000
+			}
+			modifier = {
+				factor = 0.5
+				fleet_power < 30000
+			}
+			modifier = {
+				factor = 0.5
+				fleet_power < 40000
+			}
+			modifier = {
+				factor = 0.5
+				fleet_power < 50000
+			}
+			modifier = {
+				factor = 0.5
+				fleet_power < 60000
+			}
+			modifier = {
+				factor = 5
+				has_federation = yes
+			}
+			modifier = {
+				factor = 2
+				any_relation = {
+					is_ai = no
+					is_in_federation_with = root
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.10050.2.1
+		trigger = {
+			is_subject = yes
+		}
+		if = {
+			limit = {
+				overlord = {
+					is_country = event_target:human_fallen_empires_1_awakened
+				}
+			}
+			join_war = event_target:human_fallen_empires_1_awakened
+		}
+		if = {
+			limit = {
+				overlord = {
+					is_country = event_target:human_fallen_empires_2_awakened
+				}
+			}
+			join_war = event_target:human_fallen_empires_2_awakened
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_3_awakened
+				overlord = {
+					is_country = event_target:human_fallen_empires_3_awakened
+				}
+			}
+			join_war = event_target:human_fallen_empires_3_awakened
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_4_awakened
+				overlord = {
+					is_country = event_target:human_fallen_empires_4_awakened
+				}
+			}
+			join_war = event_target:human_fallen_empires_4_awakened
+		}
+	}
+}
+
+# event for empire after total war win 10150
+country_event = {
+	id = human_fallen_empires.10150
+	title = human_fallen_empires.10150.name
+	desc = human_fallen_empires.10150.desc.0
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	# make primitive
+	option = {
+		name = human_fallen_empires.10150.0
+		custom_tooltip = human_fallen_empires.10150.0.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_materialist = no
+			}
+		}
+		human_fallen_empires_effect_materialist_attraction_high = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10151
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					human_fallen_empires_effect_create_primitive = yes
+				}
+			}
+		}
+	}
+	# annex
+	option = {
+		name = human_fallen_empires.10150.1
+		custom_tooltip = human_fallen_empires.10150.1.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 100
+				has_country_flag = human_fallen_empires_egypt
+			}
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_authoritarian = no
+				human_fallen_empires_trigger_is_egalitarian = no
+				human_fallen_empires_trigger_is_assimilator = no
+			}
+		}
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10152
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					conquer = root
+					set_owner = root
+				}
+			}
+		}
+	}
+	# make vassal
+	option = {
+		name = human_fallen_empires.10150.2
+		custom_tooltip = human_fallen_empires.10150.2.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_spiritualist = no
+				human_fallen_empires_trigger_is_xenophile = no
+				not = {
+					has_country_flag = human_fallen_empires_coalition_leader
+				}
+			}
+		}
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10152
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					human_fallen_empires_effect_create_vassal = yes
+				}
+			}
+		}
+	}
+	# kill them all
+	option = {
+		name = human_fallen_empires.10150.3
+		custom_tooltip = human_fallen_empires.10150.3.tooltip
+		trigger = {
+			allows_purge = yes
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_undiplomatic = no
+			}
+		}
+		human_fallen_empires_effect_xenophobe_attraction_high = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10154
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 3 # scales to pops
+					}
+					destroy_colony = {
+						keep_buildings = no
+					}
+				}
+			}
+		}
+	}
+	# make infertile
+	option = {
+		name = human_fallen_empires.10150.4
+		custom_tooltip = human_fallen_empires.10150.4.tooltip
+		trigger = {
+			allows_purge = yes
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_xenophile = no
+				human_fallen_empires_trigger_is_materialist = no
+				human_fallen_empires_trigger_is_pacifist = no
+			}
+		}
+		human_fallen_empires_effect_pacifist_attraction_high = yes
+		human_fallen_empires_effect_xenophobe_attraction_low = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires.10155
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				every_owned_pop_species = {
+					limit = {
+						pop_can_reproduce = yes
+					}
+					prev = {
+						modify_species = {
+							species = prev
+							add_trait = human_fallen_empires_species_trait_infertil
+						}
+					}
+				}
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					every_owned_pop = {
+						random_list = {
+							50 = {
+							}
+							50 = {
+								kill_pop = yes
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# inform after total war
+country_event = {
+	id = human_fallen_empires.10151
+	title = human_fallen_empires.10151.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10151.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10151.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_tech_fail
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.10151.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10151.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.10152
+	title = human_fallen_empires.10152.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10152.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10152.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ships_on_orbit
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires.10152.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10152.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.10153
+	title = human_fallen_empires.10153.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10153.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10153.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_city_center
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires.10153.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10153.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.10154
+	title = human_fallen_empires.10154.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10154.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10154.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires.10154.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10154.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires.10155
+	title = human_fallen_empires.10155.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.10155.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires.10155.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires.10155.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires.10155.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+# fallen drain resurces if losing war 10200
+country_event = {
+	id = human_fallen_empires.10200
+	title = human_fallen_empires.10200.name
+	desc = human_fallen_empires.100200.desc.0
+	picture = GFX_evt_human_fallen_empires_fallen_3
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	trigger = {
+		exists = overlord
+	}
+
+	option = {
+		name = human_fallen_empires.10050.0
+		add_modifier = {
+			modifier = human_fallen_empires_fallen_resurces_drain
+			days = 1825
+		}
+		overlord = {
+			add_modifier = {
+				modifier = human_fallen_empires_fallen_ship_build_buff
+				days = 1825
+			}
+		}
+	}
+}

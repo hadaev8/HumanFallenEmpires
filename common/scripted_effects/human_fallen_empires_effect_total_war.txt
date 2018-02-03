@@ -1,0 +1,817 @@
+#
+
+# total war cb, need 2 event targets
+human_fallen_empires_effect_declare_total_war = {
+	if = {
+		limit = {
+			not = {
+				event_target:human_fallen_empires_war_attaker = {
+					is_at_war_with = event_target:human_fallen_empires_war_defender
+				}
+			}
+		}
+		event_target:human_fallen_empires_war_attaker = {
+			declare_war = {
+				who = event_target:human_fallen_empires_war_defender
+				major_war = yes
+			}
+			add_war_demand = {
+				type = human_fallen_empires_total_war
+				parameter:country = event_target:human_fallen_empires_war_defender
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_defender
+			}
+		}
+		event_target:human_fallen_empires_war_defender = {
+			add_war_demand = {
+				type = human_fallen_empires_total_war
+				parameter:country = event_target:human_fallen_empires_war_attaker
+				warscore_cost = 100
+				target = this
+				enemy = event_target:human_fallen_empires_war_attaker
+			}
+		}
+	}
+}
+
+# for planet
+human_fallen_empires_effect_create_primitive = {
+	add_threat = {
+		who = root
+		amount = 1 # scales to pops
+	}
+	every_tile = {
+		limit = {
+			has_building = yes
+		}
+		random_list = {
+			95 = {
+				remove_building = yes
+			}
+			5 = {
+			}
+		}
+	}
+	owner.species = {
+		save_event_target_as = human_fallen_empires_species
+	}
+	random_list = {
+		# Industrial Civilization
+		50 = {
+			create_country = {
+				name = random
+				authority = random
+				civics = {
+					civic = civic_increasing_urbanization
+					civic = civic_atmospheric_pollution
+				}
+				species = event_target:human_fallen_empires_species
+				ethos = random
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_22.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+					colors={
+						"turquoise"
+						"green"
+						"null"
+						"null"
+					}
+				}
+				type = primitive
+				effect = {
+					set_graphical_culture = industrial_01
+					random_list = {
+						25 = {
+							set_country_flag = industrial_age
+							set_primitive_age = industrial_age
+						}
+						25 = {
+							set_country_flag = machine_age
+							set_primitive_age = machine_age
+						}
+						25 = {
+							set_country_flag = atomic_age
+							set_primitive_age = atomic_age
+						}
+						25 = {
+							set_country_flag = early_space_age
+							set_primitive_age = early_space_age
+						}
+					}
+				}
+			}
+			set_owner = last_created_country
+			set_controller = last_created_country
+			while = {
+				count = 3
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = no
+					}
+					set_blocker = tb_decrepit_dwellings
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = no
+					}
+					set_blocker = tb_failing_infrastructure
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						OR = {
+							has_country_flag = machine_age
+							has_country_flag = atomic_age
+							has_country_flag = early_space_age
+						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_factory"
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						has_country_flag = early_space_age
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_factory"
+				}
+			}
+			while = {
+				count = 2
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_factory"
+				}
+			}
+			while = {
+				count = 4
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_farm"
+				}
+			}
+			last_created_country = {
+				if = {
+					limit = {
+						has_country_flag = industrial_age
+					}
+					PREV = {
+						while = {
+							count = 4
+							create_army = {
+								name = "Industrial Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "industrial_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = machine_age
+					}
+					PREV = {
+						while = {
+							count = 5
+							create_army = {
+								name = "Industrial Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "industrial_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = atomic_age
+					}
+					PREV = {
+						while = {
+							count = 4
+							create_army = {
+								name = "Post-Atomic Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "postatomic_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = early_space_age
+					}
+					PREV = {
+						while = {
+							count = 5
+							create_army = {
+								name = "Post-Atomic Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "postatomic_army"
+							}
+						}
+						create_fleet = {
+							name = "NAME_Space_Station"
+							effect = {
+								set_owner = last_created_country
+								create_ship = {
+									name = "NAME_Space_Station"
+									design = "Space Station"
+								}
+								set_location = PREV
+							}
+						}
+					}
+				}
+			}
+		}
+		# Medieval Civilization
+		50 = {
+			create_country = {
+				name = random
+				authority = random
+				civics = {
+					civic = civic_landed_nobility
+					civic = civic_flat_world_theory
+				}
+				species = event_target:human_fallen_empires_species
+				ethos = random
+				flag = {
+					icon = {
+						category = "special"
+						file = "primitive.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+					colors={
+						"turquoise"
+						"green"
+						"null"
+						"null"
+					}
+				}
+				type = primitive
+				effect = {
+					set_graphical_culture = preindustrial_01
+					random_list = {
+						20 = {
+							set_country_flag = stone_age
+							set_primitive_age = stone_age
+							change_government = {
+								authority = random
+								civics = {
+									civic = civic_secret_of_fire
+									civic = civic_the_wheel
+								}
+							}
+						}
+						20 = {
+							set_country_flag = bronze_age
+							set_primitive_age = bronze_age
+							change_government = {
+								authority = random
+								civics = {
+									civic = civic_secret_of_fire
+									civic = civic_the_wheel
+								}
+							}
+						}
+						20 = {
+							set_country_flag = iron_age
+							set_primitive_age = iron_age
+						}
+						20 = {
+							set_country_flag = late_medieval_age
+							set_primitive_age = late_medieval_age
+						}
+						20 = {
+							set_country_flag = renaissance_age
+							set_primitive_age = renaissance_age
+						}
+						20 = {
+							set_country_flag = steam_age
+							set_primitive_age = steam_age
+						}
+					}
+				}
+			}
+			set_owner = last_created_country
+			set_controller = last_created_country
+			while = {
+				count = 2
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_farm"
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						has_country_flag = stone_age
+					}
+				}
+				every_tile = {
+					limit = {
+						has_building = "building_primitive_farm"
+					}
+					remove_building = yes
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						OR = {
+							has_country_flag = iron_age
+							has_country_flag = late_medieval_age
+							has_country_flag = renaissance_age
+							has_country_flag = steam_age
+						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_farm"
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						OR = {
+							has_country_flag = steam_age
+							has_country_flag = renaissance_age
+						}
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_farm"
+				}
+			}
+			if = {
+				limit = {
+					last_created_country = {
+						has_country_flag = steam_age
+					}
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_pop = yes
+					}
+					set_building = "building_primitive_factory"
+				}
+			}
+			last_created_country = {
+				if = {
+					limit = {
+						has_country_flag = stone_age
+					}
+					PREV = {
+						create_army = {
+							name = "Primitive Army"
+							owner = last_created_country
+							species = event_target:human_fallen_empires_species
+							type = "primitive_army"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = bronze_age
+					}
+					PREV = {
+						create_army = {
+							name = "Primitive Army"
+							owner = last_created_country
+							species = event_target:human_fallen_empires_species
+							type = "primitive_army"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = iron_age
+					}
+					PREV = {
+						while = {
+							count = 2
+							create_army = {
+								name = "Primitive Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "primitive_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = late_medieval_age
+					}
+					PREV = {
+						while = {
+							count = 3
+							create_army = {
+								name = "Primitive Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "primitive_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = renaissance_age
+					}
+					PREV = {
+						while = {
+							count = 4
+							create_army = {
+								name = "Primitive Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "primitive_army"
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = steam_age
+					}
+					PREV = {
+						while = {
+							count = 3
+							create_army = {
+								name = "Industrial Army"
+								owner = last_created_country
+								species = event_target:human_fallen_empires_species
+								type = "industrial_army"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	every_tile = {
+		limit = {
+			has_building = no
+			has_pop = yes
+		}
+		kill_pop = yes
+	}
+	last_created_country = {
+		every_owned_fleet = {
+			destroy_fleet = this
+		}
+	}
+	every_country = {
+		establish_communications_no_message = last_created_country
+	}
+}
+
+human_fallen_empires_effect_create_vassal = {
+	add_threat = {
+		who = root
+		amount = 1 # scales to pops
+	}
+	if = {
+		limit = {
+			owner = {
+				is_country = event_target:WarInHeavenLoserFE
+			}
+		}
+		save_event_target_as = human_fallen_empires_planet
+		if = {
+			limit = {
+				any_country = {
+					has_country_flag = human_fallen_empires_liberated_country
+					num_owned_planets < 4
+				}
+			}
+			random_country = {
+				limit = {
+					has_country_flag = human_fallen_empires_liberated_country
+					num_owned_planets < 4
+				}
+				event_target:human_fallen_empires_planet = {
+					set_owner = prev
+					set_controller = prev
+				}
+			}
+			else = {
+				create_country = {
+					name = random
+					authority = random
+					civics = random
+					released_by_country = root
+					released_from_country = event_target:WarInHeavenLoserFE
+					species = event_target:WarInHeavenLoserFE.species
+					ethos = root
+					flag = random
+					type = default
+					day_zero_contact = no
+					effect = {
+						set_timed_country_flag = {
+							flag = human_fallen_empires_liberated_country days = 1
+						}
+						establish_communications_no_message = root
+						#establish_communications_no_message = fromfromfrom
+						#establish_communications_no_message = parameter:planet.owner
+						establish_contact = {
+							who = root location = event_target:human_fallen_empires_planet
+						}
+						#establish_contact = { who = fromfromfrom location = parameter:planet }
+						#establish_contact = { who = parameter:planet.owner location = parameter:planet }
+						event_target:human_fallen_empires_planet = {
+							set_owner = prev
+							set_controller = prev
+							solar_system = {
+								every_system_planet = {
+									limit = {
+										exists = owner
+										owner = {
+											is_country = event_target:WarInHeavenLoserFE
+										}
+									}
+									set_owner = prevprevprev
+									set_controller = prevprevprev
+								}
+							}
+						}
+						if = {
+							limit = {
+								is_country_type = awakened_fallen_empire
+							}
+							if = {
+								limit = {
+									has_ethic = ethic_fanatic_spiritualist
+								}
+								set_subject_of = {
+									who = root
+									subject_type = dominion
+								}
+								else = {
+									if = {
+										limit = {
+											has_ethic = ethic_fanatic_xenophile
+										}
+										set_subject_of = {
+											who = root
+											subject_type = signatory
+										}
+									}
+								}
+							}
+							else = {
+								if = {
+									limit = {
+										has_country_flag = human_fallen_empires_coalition_leader
+									}
+									set_subject_of = {
+										who = root
+										subject_type = human_fallen_empires_future_vassal
+									}
+									#country_remove_ethic = ethic_fanatic_militarist
+									#country_add_ethic = ethic_militarist
+									else = {
+										set_subject_of = {
+											who = root
+											subject_type = vassal
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# for country
+human_fallen_empires_effect_split_planets = {
+	every_country = {
+		limit = {
+			or = {
+				is_in_federation_with = event_target:WarInHeavenLoserFE
+				and = {
+					exists = overlord
+					overlord = {
+						is_country = event_target:WarInHeavenLoserFE
+					}
+				}
+			}
+		}
+		remove_modifier = human_fallen_empires_fallen_resurces_drain
+		set_timed_country_flag = {
+			flag = war_in_heaven_loser
+			days = 1
+		}
+	}
+	every_country = {
+		limit = {
+			or = {
+				is_in_federation_with = event_target:WarInHeavenWinnerFE
+				and = {
+					exists = overlord
+					overlord = {
+						is_country = event_target:WarInHeavenWinnerFE
+					}
+				}
+			}
+		}
+		remove_modifier = human_fallen_empires_fallen_resurces_drain
+		set_timed_country_flag = {
+			flag = war_in_heaven_loser
+			days = 1
+		}
+	}
+	# Losers are punished, planets are given to nearby winners
+	if = {
+		limit = {
+			any_relation = {
+				has_country_flag = war_in_heaven_winner
+			}
+			any_relation = {
+				has_country_flag = war_in_heaven_loser
+			}
+		}
+		every_planet = {
+			limit = {
+				exists = owner
+				owner = {
+					has_country_flag = war_in_heaven_loser
+				}
+				is_capital = no
+			}
+			save_event_target_as = planet_to_cede
+			# First dibs to countries who originally sided with them
+			random_country = {
+				limit = {
+					has_country_flag = war_in_heaven_winner
+					event_target:planet_to_cede = {
+						is_neighbor_of = prev
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = war_in_heaven_picked_side
+					}
+					save_event_target_as = conqueror
+					event_target:planet_to_cede = {
+						owner = {
+							set_country_flag = war_in_heaven_planet_was_taken
+						}
+						conquer = event_target:conqueror
+						set_owner = event_target:conqueror
+					}
+					set_country_flag = war_in_heaven_planet_was_given
+					# May decide to be nice to a late joiner
+					else = {
+						random = {
+							chance = 30
+							save_event_target_as = conqueror
+							event_target:planet_to_cede = {
+								owner = {
+									set_country_flag = war_in_heaven_planet_was_taken
+								}
+								conquer = event_target:conqueror
+								set_owner = event_target:conqueror
+							}
+							set_country_flag = war_in_heaven_planet_was_given
+						}
+					}
+				}
+			}
+		}
+	}
+	# Add opinions towards winner
+	every_country = {
+		limit = {
+			has_country_flag = war_in_heaven_winner
+		}
+		add_opinion_modifier = {
+			who = event_target:WarInHeavenWinnerFE
+			modifier = opinion_war_in_heaven_winner
+		}
+		event_target:WarInHeavenWinnerFE = {
+			add_opinion_modifier = {
+				who = prev
+				modifier = opinion_war_in_heaven_winner
+			}
+		}
+	}
+	every_country = {
+		limit = {
+			has_country_flag = war_in_heaven_loser
+		}
+		remove_opinion_modifier = {
+			who = event_target:WarInHeavenWinnerFE
+			modifier = opinion_war_in_heaven_enemy
+		}
+		event_target:WarInHeavenWinnerFE = {
+			remove_opinion_modifier = {
+				who = prev
+				modifier = opinion_war_in_heaven_enemy
+			}
+		}
+	}
+	# War in Heaven victory event
+	if = {
+		limit = {
+			event_target:WarInHeavenWinnerFE = {
+				is_at_war = no
+				human_fallen_empires_trigger_is_regular_fallen = yes
+			}
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = {
+				id = war_in_heaven.5
+			}
+			country_event = {
+				id = war_in_heaven.6
+			}
+			country_event = {
+				id = war_in_heaven.7
+			}
+			country_event = {
+				id = war_in_heaven.8
+			}
+			country_event = {
+				id = war_in_heaven.9
+			}
+		}
+	}
+	# Cleanup
+	every_country = {
+		limit = {
+			OR = {
+				has_country_flag = war_in_heaven_loser
+				has_country_flag = war_in_heaven_winner
+			}
+		}
+		remove_country_flag = war_in_heaven_winner
+		remove_country_flag = war_in_heaven_loser
+		remove_country_flag = war_in_heaven_planet_was_given
+		remove_country_flag = war_in_heaven_planet_was_taken
+	}
+}
