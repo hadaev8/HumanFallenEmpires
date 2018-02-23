@@ -1,65 +1,6 @@
 #
 namespace = human_fallen_empires_pirate
 
-
-@tier1materialreward = 6
-@tier1materialmin = 100
-@tier1materialmax = 500
-@tier2materialreward = 12
-@tier2materialmin = 150
-@tier2materialmax = 1000
-@tier3materialreward = 18
-@tier3materialmin = 250
-@tier3materialmax = 1500
-@tier4materialreward = 24
-@tier4materialmin = 350
-@tier4materialmax = 2000
-
-@tier1influencereward = 6
-@tier1influencemin = 40
-@tier1influencemax = 100
-@tier2influencereward = 12
-@tier2influencemin = 80
-@tier2influencemax = 175
-@tier3influencereward = 18
-@tier3influencemin = 125
-@tier3influencemax = 250
-@tier4influencereward = 24
-@tier4influencemin = 150
-@tier4influencemax = 300
-
-@tier1researchreward = 6
-@tier1researchmin = 60
-@tier1researchmax = 150
-@tier2researchreward = 12
-@tier2researchmin = 90
-@tier2researchmax = 250
-@tier3researchreward = 18
-@tier3researchmin = 120
-@tier3researchmax = 350
-@tier4researchreward = 24
-@tier4researchmin = 150
-@tier4researchmax = 500
-
-# pirate
-@human_fallen_empires_pirate_base_cost = 4000
-@human_fallen_empires_pirate_base_cost_minus = -4000
-@human_fallen_empires_pirate_slave_cost = 300
-@human_fallen_empires_pirate_slave_cost_minus = -300
-@human_fallen_empires_pirate_fleet_power_minimum = 4000
-
-@human_fallen_empires_blackjack_bet_0 = 100
-@human_fallen_empires_blackjack_bet_1 = 250
-@human_fallen_empires_blackjack_bet_2 = 500
-@human_fallen_empires_blackjack_bet_3 = 1000
-@human_fallen_empires_blackjack_bet_4 = 5000
-
-@human_fallen_empires_blackjack_bet_0_minus = -100
-@human_fallen_empires_blackjack_bet_1_minus = -250
-@human_fallen_empires_blackjack_bet_2_minus = -500
-@human_fallen_empires_blackjack_bet_3_minus = -1000
-@human_fallen_empires_blackjack_bet_4_minus = -5000
-
 # spawn pirate birth of piracy
 country_event = {
 	id = human_fallen_empires_pirate.1
@@ -137,17 +78,12 @@ country_event = {
 		not = {
 			has_country_flag = human_fallen_empires_birth_of_piracy
 		}
+		years_passed > 10
 	}
 
 	is_triggered_only = yes
 
 	immediate = {
-		# random_list = {
-		# 	1 = { }
-		# 	2 = {
-		# 		break = yes
-		# 	}
-		# }
 		log = "pirate spawned"
 		set_country_flag = human_fallen_empires_birth_of_piracy
 		set_country_flag = pirate_encountered
@@ -265,83 +201,6 @@ country_event = {
 				add_building_construction = human_fallen_empires_pirate_slave_pit
 			}
 		}
-		# also cheat for better drives
-		if = {
-			limit = {
-				years_passed > 20
-			}
-			if = {
-				limit = {
-					has_technology = tech_warp_drive_1
-					not = {
-						has_technology = tech_warp_drive_2
-					}
-				}
-				give_technology = {
-					tech = tech_warp_drive_2
-				}
-			}
-			if = {
-				limit = {
-					has_technology = tech_wormhole_generation_1
-					not = {
-						has_technology = tech_wormhole_generation_2
-					}
-				}
-				give_technology = {
-					tech = tech_wormhole_generation_2
-				}
-			}
-			if = {
-				limit = {
-					has_technology = tech_hyper_drive_1
-					not = {
-						has_technology = tech_wormhole_generation_3
-					}
-				}
-				give_technology = {
-					tech = tech_hyper_drive_2
-				}
-			}
-		}
-		if = {
-			limit = {
-				years_passed > 40
-			}
-			if = {
-				limit = {
-					has_technology = tech_warp_drive_2
-					not = {
-						has_technology = tech_warp_drive_3
-					}
-				}
-				give_technology = {
-					tech = tech_warp_drive_3
-				}
-			}
-			if = {
-				limit = {
-					has_technology = tech_wormhole_generation_2
-					not = {
-						has_technology = tech_wormhole_generation_3
-					}
-				}
-				give_technology = {
-					tech = tech_wormhole_generation_3
-				}
-			}
-			if = {
-				limit = {
-					has_technology = tech_hyper_drive_2
-					not = {
-						has_technology = tech_hyper_drive_3
-					}
-				}
-				give_technology = {
-					tech = tech_hyper_drive_3
-				}
-			}
-		}
 	}
 }
 
@@ -357,41 +216,38 @@ country_event = {
 
 	immediate = {
 		save_event_target_as = pirate_band
-		every_owned_planet = {
-			random_system = {
+		capital_scope = {
+			closest_system = {
 				limit = {
-					distance = {
-						source = prev
-						min_distance = 5
-						max_distance = 50
-					}
-					nor = {
-						any_planet = {
+					or = {
+						has_owner = no
+						and = {
 							exists = owner
+							owner = {
+								is_country = root
+							}
+							not = {
+								root = {
+									any_owned_planet = {
+										free_pop_tiles > 0
+									}
+								}
+							}
 						}
+					}
+					not = {
 						any_ship_in_system = {
-							is_ship_class = shipclass_military_station
-						}
-						has_star_flag = hostile_system
-					}
-					any_planet = {
-						is_asteroid = yes
-						nor = {
-							exists = controller
 							exists = owner
+							owner = {
+								is_hostile = event_target:human_fallen_empires_init_target
+							}
 						}
-					}
-					root = {
-						energy > @human_fallen_empires_pirate_base_cost
 					}
 				}
 				random_system_planet = {
 					limit = {
 						is_asteroid = yes
-						nor = {
-							exists = controller
-							exists = owner
-						}
+						has_owner = no
 					}
 					human_fallen_empires_effect_pirate_init_base = yes
 					root = {
@@ -439,9 +295,8 @@ country_event = {
 		}
 		exists = fromfromfrom
 		fromfromfrom = {
-			is_ship_size = orbital_station
+			is_ship_class = shipclass_starbase
 		}
-		exists = fromfromfrom.orbit.planet
 	}
 
 	immediate = {
@@ -457,75 +312,47 @@ country_event = {
 					limit = {
 						is_country_type = human_fallen_empires_pirate
 					}
-					# попробовать через from и prevprev назначить владельца
-					#save_event_target_as = human_fallen_empires_pirate_new_owner
 					prev = {
 						every_owned_fleet = {
 							set_owner = prevprev
 						}
 					}
 				}
-				# destroy contry later for fix errors in log
-				#country_event = {
-				#	id = human_fallen_empires.9
-				#	days = 2
-				#}
 			}
-		}
-		fromfromfrom.orbit.planet = {
-			if = {
+			every_owned_planet = {
 				limit = {
-					num_pops > 0
+					solar_system = {
+						is_same_value = fromfromfrom.solar_system
+					}
 				}
-				every_owned_pop = {
+				if = {
 					limit = {
-						not = {
-							has_citizenship_type = {
-								type = citizenship_purge
-								country = root
-							}
-						}
+						num_pops > 0
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
-					root = {
-						human_fallen_empires_effect_settle_pop = yes
-						human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
-					}
-				}
-				every_owned_pop = {
-					save_event_target_as = human_fallen_empires_settle_pop_target
-					random_country = {
-						limit = {
-							or = {
-								has_policy_flag = refugees_allowed
-								and = {
-									has_policy_flag = refugees_only_citizens
-									prev = {
-										has_citizenship_type = {
-											type = citizenship_full
-											country = prev
-										}
-									}
-								}
-							}
-							prev = {
+					every_owned_pop = {
+						if = {
+							limit = {
 								not = {
 									has_citizenship_type = {
 										type = citizenship_purge
-										country = prev
+										country = root
 									}
 								}
 							}
+							save_event_target_as = human_fallen_empires_settle_pop_target
+							root = {
+								human_fallen_empires_effect_settle_pop = yes
+								human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+							}
+							else = {
+								human_fallen_empires_effect_refugee_or_die = yes
+							}
 						}
-						human_fallen_empires_effect_settle_pop = yes
-						human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
 					}
 				}
+				destroy_colony = yes
+				change_pc = pc_asteroid
 			}
-			destroy_colony = {
-				keep_buildings = no
-			}
-			change_pc = pc_asteroid
 		}
 	}
 }
@@ -541,12 +368,14 @@ country_event = {
 		not = {
 			has_country_flag = human_fallen_empires_pirate_spawned
 		}
+		has_country_flag = human_fallen_empires_birth_of_piracy
 	}
 
 	immediate = {
 		log = "pirate spawned again"
 		set_timed_country_flag = {
-			flag = human_fallen_empires_pirate_spawned days = 1500
+			flag = human_fallen_empires_pirate_spawned
+			days = 1500
 		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		random_system = {
@@ -760,7 +589,7 @@ fleet_event = {
 	}
 }
 
-# cleet fleet actions after emercy ftl
+# clean fleet actions after emercy ftl
 fleet_event = {
 	id = human_fallen_empires_pirate.51
 	hide_window = yes
@@ -786,7 +615,7 @@ fleet_event = {
 	}
 }
 
-# pirate gain resurces after kill station
+# pirate gain resources after kill station
 country_event = {
 	id = human_fallen_empires_pirate.52
 	hide_window = yes
@@ -797,11 +626,10 @@ country_event = {
 		exists = fromfromfrom
 		fromfromfrom = {
 			or = {
-				is_ship_size = wormhole_station
 				is_ship_size = research_station
 				is_ship_size = mining_station
 				is_ship_size = observation_station
-				is_ship_size = outpost_station
+				is_ship_class = shipclass_starbase
 			}
 		}
 	}
@@ -876,7 +704,7 @@ planet_event = {
 	}
 }
 
-# clear action on comand for ai for on_ship_ordered
+# clear action on command for ai for on_ship_ordered
 ship_event = {
 	id = human_fallen_empires_pirate.54
 	hide_window = yes
@@ -897,7 +725,7 @@ ship_event = {
 	}
 
 	immediate = {
-		log = "clear ship order by ai comand owner [Owner.GetName] location [This.GetStarName]"
+		log = "clear ship order by ai command owner [Owner.GetName] location [This.GetStarName]"
 		fleet = {
 			#set_timed_fleet_flag = { flag = human_fallen_empires_clear_action_on_order days = 365 }
 			clear_fleet_actions = this
@@ -941,6 +769,10 @@ country_event = {
 		}
 		not = {
 			has_country_flag = human_fallen_empires_pirate.101_block
+		}
+		or = {
+			human_fallen_empires_trigger_is_undiplomatic = no
+			is_same_species = from
 		}
 	}
 
@@ -1067,7 +899,7 @@ country_event = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			#	human_fallen_empires_effect_clear_event_target = yes
+			# human_fallen_empires_effect_clear_event_target = yes
 			every_relation = {
 				limit = {
 					is_country_type = default
@@ -1901,9 +1733,7 @@ country_event = {
 				text = human_fallen_empires_pirate.101.traid_menu.2.fail
 				or = {
 					and = {
-						not = {
-							has_global_flag = human_fallen_empires_disable_leaders
-						}
+						has_global_flag = human_fallen_empires_disable_leaders
 						free_leader_slots > 0
 					}
 					check_variable = {

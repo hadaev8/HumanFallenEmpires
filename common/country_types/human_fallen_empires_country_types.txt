@@ -4,27 +4,40 @@
 #name_of_country_type = {
 #	can_own_empty_planets					#no by default, decides if empty planets belonging to country are automatically removed from the country.
 #	playable = yes							#if this type is available for players. used when listing countries for hot-joining players
-#	has_fortifications = yes				#does this type use planetary fortifications?
-#	shuffle_pop_ethos = yes					#if pops belonging to this country type should mutate their ethos every now and then
+# 	randomize_ethos = no					#does this empire have a randomly generated ethos?
+#	shuffle_pop_ethos = no					#if pops belonging to this country type should mutate their ethos every now and then
 #	sub_title = "EXAMPLE_COUNTRY"			#sub title that will be shown for this empire. Like "Example Federation - Fallen Empire"
 #	sub_title_desc = "EXAMPLE_COUNTRY_DESC" #description for the sub title. used in tooltips
-#	needs_survey = yes						#default yes, if yes then planets must be surveyed before they can be colonized
+#	needs_survey = no						#default no, if yes then planets must be surveyed before they can be colonized, also if yes a science ship is needed for exploration.
+# 	has_complete_sensor = no				#default no, if yes then empire has complete sensor of the galaxy
 #	has_capital = yes						#default is yes, capital always exists but toggling this no hides any mention of the capital planet being a capital.
 #	enforces_borders = yes					#default is yes, if the country doesn't enforce it's borders people are always free to enter.
 #	can_planets_be_attacked = yes			#default yes, if no then planets owned by this country type can not be attacked
 #	colonizing_title = "COLONIZING_PLANET_DEFAULT"		#localization key for colonization view title
 #	colonizing_desc = "PLANET_VIEW_UNDER_COLONIZATION_DEFAULT_DESC"	#localization key for colonization view desc
-#	orbital_bomardment = yes				#default yes, does orbital bombardment
+#	orbital_bombardment = yes				#default yes, does orbital bombardment
 #	diplomatic_wars = no					#default no, decides if the country needs to declare war to be hostile, only works against countries who also have diplomatic wars toggled on
+#	attack_unarmed_orbital_stations = no	#default no, decides if the country should attack unarmed orbital (mining, research & observation stations) without explicit orders to do so
+#	ship_disengagement = no					#default no, decides if the country's ships can flee from battle instead of fighting to the death
+#	army_disengagement = no					#default no, decides if the country's armies can flee from battle instead of fighting to the death
+#	min_navy_for_wars = 0					#default 0, decides how large a navy this country wants (out of desired size) before declaring any wars
+# 	min_assault_armies_for_wars = 1			#default 1, deciades how many assault armies the country wants before declaring any wars
 # 	share_communications = no				#default yes, decides if they share communciations with anyone you have contact with
 #	relations = no							#default no, this controls whether the country makes us of opinion
 #	fallen_empire = no						#default no, this controls whether the empire uses the special Fallen Empire AI
-#	default_closed_borders = no				#default no, controls if the country has closed borders as default
-#	closed_borders_message_key = x			#default "NO_ACCESS_TO_COUNTRY_SYSTEMS", the message when hovering a system you don't have access to.
+#	awakened_fallen_empire = no				#default no, this controls whether the empire uses the special Awakened Fallen Empire AI
+# 	uses_special_buildables = no			#default no, this controls whether this empire builds global ship designs that are defined as special buildables instead of normal designable ships
+#	show_in_contacts_list = yes				#default yes, whether to show an entry in the contacts list
+#	minimalist_contacts_list_profile = no	#default no, whether to show only empire name and flag in diplomacy panel in the contacts list
+#	government = no							#default yes, if yes then the country has a government
+# 	custom_starbase = x						#if this is set, country will defined ship size for constructed starbases instead of building outposts
+#	destroys_starbases = no					#if this is set to yes, country will destroy starbases instead of disabling them
+#	can_have_their_comms_shared				#if this is set to yes, other countries in contact with this one will be able to share that contact (for countries that use custom_diplomacy)
 #
 #	faction = {							#these values are copied to the country and can be changed during the game
 #		neutral = no						#if yes, fleets will never attack anything and will never be attacked
 #		hostile = no						#if yes, fleets will attack everything on sight ( except neutral fleets )
+#		follow = no							#if yes, fleets will follow the fleets of allies
 #		auto_delete = yes					#if yes, country will be automatically be deleted when considered dead ( usually when out of colonies and colony ships ). Should be yes in most cases but can be useful to turn off for some countries that are created by events.
 #		needs_border_access = yes			#decides if a country needs to have explicit border access from another country to enter its borders.
 #		generate_borders = yes				#decides if a country generates borders or not
@@ -40,6 +53,7 @@
 #		declare_war = yes					#should AI declare wars? default yes
 #		colonizer = yes						#should AI colonize? default yes
 #		internal_policies = yes				#should AI update internal policies? such as edicts, changing government types etc.  default yes
+#		modification = yes					#should AI genemod & terraform? default yes
 #		construction = yes					#should AI build ships and buildings? default yes
 #		tech = yes							#should AI advance its technology? default yes
 #		ship_data							#highest fleet slot size first for military ship sizes
@@ -60,6 +74,7 @@
 #		standard_diplomacy_module = {}
 #		standard_technology_module = {}
 #		standard_pop_factions_module = {}
+#		standard_expansion_module = {}
 #	}
 #}
 
@@ -70,11 +85,10 @@ human_fallen_empire = {
 	sub_title_desc = "COUNTRY_FALLEN_EMPIRE_DESC"
 
 	relations = yes
-	has_fortifications = yes
-	can_have_orbital_stations = yes
+	ship_disengagement = yes
+	army_disengagement = yes
 	fallen_empire = yes
 	diplomatic_wars = yes
-	distant_ftl_cost_mult = 1.0
 
 	ai = {
 		enabled = yes
@@ -136,9 +150,9 @@ human_fallen_empire = {
 
 human_fallen_empires_drone = {
 	playable = no
-	can_have_orbital_stations = yes
+	destroys_starbases = yes
 	can_own_empty_planets = yes
-	has_leaders = no
+	is_space_critter = yes
 	government = no
 	has_capital = no
 	enforces_borders = no
@@ -146,7 +160,7 @@ human_fallen_empires_drone = {
 	counts_for_victory = yes
 	relations = yes
 	share_communications = no
-	debris = no
+	can_have_their_comms_shared = no
 
 	# targets = {
 	# 	human_fallen_empires_drone
@@ -159,7 +173,7 @@ human_fallen_empires_drone = {
 		colonizer = yes
 		internal_policies = yes # нужно для постройки станций
 		construction = yes
-		tech = no
+		tech = yes
 		government = no
 		traditions = no
 		modules = {
@@ -172,29 +186,22 @@ human_fallen_empires_drone = {
 
 		ship_data = {
 			# need any designable ship size
-			# human_fallen_empires_drone_constructor = {
-			# 	min = 5
-			# 	max = 10
-			# }
 			constructor = {
 				min = 5
 				max = 10
 			}
 
 			human_fallen_empires_ancient_mining_drone = {
-				#min = 500
 				fraction = {
 					base = 50
 				}
 			}
 			human_fallen_empires_ancient_corvette = {
-				#min = 500
 				fraction = {
 					base = 30
 				}
 			}
 			human_fallen_empires_ancient_destroyer = {
-				#min = 500
 				fraction = {
 					base = 20
 				}
@@ -218,12 +225,11 @@ human_fallen_empires_drone = {
 }
 
 human_fallen_empires_thoth = {
-	#show_in_contacts_list = yes
-	has_leaders = no
+	is_space_critter = yes
 	minimalist_contacts_list_profile = yes
 	share_communications = no
-	#default_ships = no
 	government = no
+	can_have_their_comms_shared = no
 	ai = {
 		enabled = no
 	}
@@ -234,7 +240,6 @@ human_fallen_empires_thoth = {
 		needs_colony = no
 	}
 	custom_diplomacy = yes
-	#custom_opinion = yes
 	modules = {
 		basic_technology_module = {}
 		standard_event_module = {}

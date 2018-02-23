@@ -1,16 +1,3 @@
-#	Example:
-#
-#	example_trigger = {
-#		is_country_type = default
-#		free_leader_slots > 0
-#	}
-#
-#
-#	In a script file:
-#
-#	trigger = {
-#		example_trigger = yes
-#	}
 #
 
 # for country
@@ -114,13 +101,19 @@ human_fallen_empires_trigger_is_awake = {
 	nor = {
 		is_country_type = human_fallen_empire
 		is_country_type = fallen_empire
+		is_country_type = primitive
 	}
 }
 
 human_fallen_empires_trigger_is_fallen = {
 	or = {
-		is_country_type = fallen_empire
-		is_country_type = awakened_fallen_empire
+		human_fallen_empires_trigger_is_regular_fallen = yes
+		human_fallen_empires_trigger_is_human_fallen = yes
+	}
+}
+
+human_fallen_empires_trigger_is_human_fallen = {
+	or = {
 		has_country_flag = human_fallen_empires_egypt
 		has_country_flag = human_fallen_empires_future
 	}
@@ -133,12 +126,11 @@ human_fallen_empires_trigger_is_regular_fallen = {
 	}
 }
 
-
 # for planet, mod's primitives
 human_fallen_empires_trigger_primitive_planet = {
 	or = {
-		has_planet_flag = human_fallen_empires_ahet_colony
-		has_planet_flag = human_fallen_empires_ahet_colony_2
+		has_planet_flag = human_fallen_empires_ahet_colony_0
+		has_planet_flag = human_fallen_empires_ahet_colony_1
 		has_planet_flag = human_fallen_empires_varelse_colony
 		has_planet_flag = human_fallen_empires_too_ideal_planet
 	}
@@ -147,7 +139,7 @@ human_fallen_empires_trigger_primitive_planet = {
 human_fallen_empires_trigger_planet_valid_for_settle = {
 	is_under_colonization = no
 	is_controlled_by = owner
-	under_bombardment = no
+	has_orbital_bombardment = no
 	free_pop_tiles > 0
 }
 
@@ -157,7 +149,6 @@ human_fallen_empires_trigger_is_psionic = {
 		has_trait = trait_psionic
 	}
 }
-
 
 # for any
 human_fallen_empires_trigger_exists_all_event_targets = {
@@ -178,5 +169,37 @@ human_fallen_empires_trigger_exists_any_event_target = {
 		exists = event_target:human_fallen_empires_event_target_3
 		exists = event_target:human_fallen_empires_event_target_4
 		exists = event_target:human_fallen_empires_event_target_5
+	}
+}
+
+human_fallen_empires_trigger_has_starbase_outpost = {
+	exists = starbase
+}
+
+human_fallen_empires_trigger_has_starbase_starport = {
+	exists = starbase
+	starbase = {
+		has_starbase_size >= starbase_starport
+	}
+}
+
+human_fallen_empires_trigger_has_starbase_starhold = {
+	exists = starbase
+	starbase = {
+		has_starbase_size >= starbase_starhold
+	}
+}
+
+human_fallen_empires_trigger_has_starbase_starfortress = {
+	exists = starbase
+	starbase = {
+		has_starbase_size >= starbase_starfortress
+	}
+}
+
+human_fallen_empires_trigger_has_starbase_citadel = {
+	exists = starbase
+	starbase = {
+		has_starbase_size >= starbase_citadel
 	}
 }

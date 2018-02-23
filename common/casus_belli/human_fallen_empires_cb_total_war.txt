@@ -1,0 +1,43 @@
+#my_casus_belli = {
+#	potential = { ... }		# trigger to make some CBs invalid for certain types of countries; this = attacker (CB owner); default: { always = yes }
+#	is_valid = { ... }		# trigger, evaluated daily to check if CB should be created or destroyed automatically, does not affect CBs granted via script;
+#								# this = attacker (CB owner), from = defender (target country); default: { always = yes }
+#	destroy_if = { ... }	# trigger, evaluated daily to destroy CBs that have been granted via script ahead of expiration date;
+#								# this = attacker (CB owner), from = defender (target country); default: { always = no }
+#	show_notification = no/yes	# optional (default = yes), flag to control whether this CB will generate a notification (to avoid duplicate 
+# 								# notification when a claim CB is generated)
+#}
+
+human_fallen_empires_cb_total_war = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+		num_owned_planets > 0
+		num_pops > 0
+		or = {
+			human_fallen_empires_trigger_is_awake = yes
+			is_ai = no
+		}
+	}
+	is_valid = {
+		from = {
+			num_owned_planets > 0
+			num_pops > 0
+			or = {
+				not = {
+					is_country_type = default
+				}
+				and = {
+					prev = {
+						has_technology = tech_human_fallen_empires_total_war
+					}
+					relative_power = {
+						who = prev
+						category = fleet
+						value > equivalent
+					}
+				}
+			}
+		}
+	}
+}

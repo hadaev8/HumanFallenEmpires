@@ -1,32 +1,5 @@
-#reloadable with 'reload stats'
+# reloadable with 'reload stats'
 # This file is where you start when you want to configure something new, then go to sections
-
-@civilian_ships_combat_speed = 0.5
-@corvette_combat_speed = 1.75 	# assault ships
-@corvette_combat_rotation = 0.08
-@corvette_collision_radius = 2.0
-@corvette_formation_priority = 3
-
-@destroyer_combat_speed = 1.25	 # picket ships
-@destroyer_combat_rotation = 0.05
-@destroyer_collision_radius = 2.5
-@destroyer_formation_priority = 2
-
-@cruiser_combat_speed = 1.25	 # picket/assault ships
-@cruiser_combat_rotation = 0.035
-@cruiser_collision_radius = 3
-@cruiser_formation_priority = 1
-
-@battleship_combat_speed = 0.75
-@battleship_combat_rotation = 0.025
-@battleship_collision_radius = 3
-@battleship_formation_priority = 4
-
-@build_block_radius_none = 0
-@build_block_radius_tiny = 10
-@build_block_radius_small = 70
-@build_block_radius_medium = 90
-@build_block_radius_large = 110
 
 # discovery
 human_fallen_empires_deepvoid = {
@@ -34,61 +7,50 @@ human_fallen_empires_deepvoid = {
 	#entity = mammalian_01_battleship_entity
 	entity = eventship_04_blue_entity
 	#entity = eventship_03
-	max_speed = 3
+	max_speed = 100
 	acceleration = 0.2
 	rotation_speed = 0.15
-	combat_max_speed = 0.35
-	combat_rotation_speed = 0.02
 	collision_radius = 5
 	modifier = {
 		ship_armor_add = 60
 		ship_evasion_add = 5
-		#	science_ship_survey_speed  = 0.1
-		#	ship_anomaly_research_speed_mult = 0.1
-		#	ship_anomaly_generation_chance_mult = 0.1
-		#	ship_anomaly_fail_risk = -0.30
-		ship_upkeep_mult = -1
-		ship_auto_repair_add = 0.01
+		ship_upkeep_mult = -0.9
+		ship_hull_regen_add_perc = 0.01
 	}
 	max_hitpoints = 2400
 	size_multiplier = 8
-	fleet_slot_size = 4
+	fleet_slot_size = 0
 	#section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
 	section_slots = { "mid" = { locator = "root" } }
 	num_target_locators = 4
 	is_space_station = no
 	icon_frame = 5
 	base_buildtime = 480
-	required_spaceport_level = 60
 	can_have_federation_design = no
 	enable_default_design = no	#if yes, countries will have an auto-generated design at start
-
-	#	prerequisites = { "tech_spaceport_6" }
+	#	prerequisites = { "tech_starbase_6" }
 	#is_civilian = yes
 	is_designable = no
+	has_mineral_upkeep = yes
 	class = shipclass_military
+	construction_type = starbase_shipyard
 	required_component_set = ftl_components
-#	required_component_set = science_labs
 	required_component_set = combat_computers
 	required_component_set = thruster_components
-	required_component_set = ship_sensor_components
-#	required_component_set = border_extruders
+	required_component_set = sensor_components
 }
 
 # drones
 human_fallen_empires_ancient_mining_drone = {
 	entity = ancient_mining_drone_entity
-	#ftl = warp
-	max_speed = 8
+	max_speed = 100
 	rotation_speed = 0.5
-	combat_max_speed = 1.5
-	combat_rotation_speed = 0.08
 	acceleration = 0.5
 	modifier = {
 		ship_armor_add = 6
 		ship_evasion_add = 60
 		#ship_upkeep_mult = -1
-		ship_auto_repair_add = 0.01
+		ship_hull_regen_add_perc = 0.01
 	}
 	max_hitpoints = 200
 	size_multiplier = 1
@@ -97,29 +59,32 @@ human_fallen_empires_ancient_mining_drone = {
 	num_target_locators = 0
 	icon_frame = 10
 	base_buildtime = 40
-
+	#is_designable = yes
+	enable_default_design = yes
+	prerequisites = {
+		tech_human_fallen_empires_drone_ships	
+	}
+	has_mineral_upkeep = yes
 	class = shipclass_military
-	is_designable = yes
+	construction_type = starbase_shipyard
 	graphical_culture = no
+	required_component_set = power_core
 	required_component_set = ftl_components
 	required_component_set = combat_computers
 	required_component_set = thruster_components
-	required_component_set = ship_sensor_components
+	required_component_set = sensor_components
 }
 
 human_fallen_empires_ancient_corvette = {
 	entity = ancient_corvette_entity
-	#ftl = warp
-	max_speed = 6
+	max_speed = 100
 	rotation_speed = 0.15
-	combat_max_speed = 1.5
-	combat_rotation_speed = 0.08
 	acceleration = 0.35
 	modifier = {
 		ship_armor_add = 2
 		ship_evasion_add = 60
 		#ship_upkeep_mult = -1
-		ship_auto_repair_add = 0.01
+		ship_hull_regen_add_perc = 0.01
 	}
 	max_hitpoints = 450
 	size_multiplier = 1
@@ -128,29 +93,31 @@ human_fallen_empires_ancient_corvette = {
 	num_target_locators = 0
 	icon_frame = 10
 	base_buildtime = 60
-
+	#is_designable = yes
+	enable_default_design = yes
+	prerequisites = {
+		tech_human_fallen_empires_drone_ships	
+	}
+	has_mineral_upkeep = yes
 	class = shipclass_military
-	is_designable = yes
+	construction_type = starbase_shipyard
 	graphical_culture = no
+	required_component_set = power_core
 	required_component_set = ftl_components
 	required_component_set = combat_computers
 	required_component_set = thruster_components
-	required_component_set = ship_sensor_components
+	required_component_set = sensor_components
 }
 
 human_fallen_empires_ancient_destroyer = {
 	entity = ancient_destroyer_entity
-	#ftl = warp
-	max_speed = 6
+	max_speed = 100
 	rotation_speed = 0.3
-	combat_max_speed = 1.5
-	combat_rotation_speed = 0.08
 	acceleration = 1.0
 	modifier = {
 		ship_armor_add = 10
 		ship_evasion_add = 30
-		#ship_upkeep_mult = -1
-		ship_auto_repair_add = 0.01
+		ship_hull_regen_add_perc = 0.01
 	}
 	max_hitpoints = 900
 	size_multiplier = 2
@@ -159,41 +126,18 @@ human_fallen_empires_ancient_destroyer = {
 	num_target_locators = 3
 	icon_frame = 10
 	base_buildtime = 80
-
-	class = shipclass_military
-	is_designable = yes
-	graphical_culture = no
-	required_component_set = ftl_components
-	required_component_set = combat_computers
-	required_component_set = thruster_components
-	required_component_set = ship_sensor_components
-}
-
-human_fallen_empires_drone_constructor = {
-	entity = constructor_entity
-	max_speed = 3.75
-	acceleration = 0.3
-	rotation_speed = 0.2
-	combat_max_speed = @civilian_ships_combat_speed
-	combat_rotation_speed = 0.2
-	modifier = {
-		ship_armor_add = 3
-		ship_evasion_add = 5
+	#is_designable = yes
+	enable_default_design = yes
+	prerequisites = {
+		tech_human_fallen_empires_drone_ships
 	}
-	max_hitpoints = 300
-	size_multiplier = 1
-	fleet_slot_size = 3
-	section_slots = { "mid" = { locator = "part1" } }
-	num_target_locators = 0
-	is_space_station = no
-	icon_frame = 7
-	base_buildtime = 60
-
-	is_civilian = yes
-	is_designable = no
-	class = shipclass_constructor
+	has_mineral_upkeep = yes
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	graphical_culture = no
+	required_component_set = power_core
 	required_component_set = ftl_components
 	required_component_set = combat_computers
 	required_component_set = thruster_components
-	required_component_set = ship_sensor_components
+	required_component_set = sensor_components
 }

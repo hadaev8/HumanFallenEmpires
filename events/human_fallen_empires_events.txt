@@ -1,50 +1,6 @@
 #
 namespace = human_fallen_empires
 
-
-@tier1materialreward = 6
-@tier1materialmin = 100
-@tier1materialmax = 500
-@tier2materialreward = 12
-@tier2materialmin = 150
-@tier2materialmax = 1000
-@tier3materialreward = 18
-@tier3materialmin = 250
-@tier3materialmax = 1500
-@tier4materialreward = 24
-@tier4materialmin = 350
-@tier4materialmax = 2000
-
-@tier1influencereward = 6
-@tier1influencemin = 40
-@tier1influencemax = 100
-@tier2influencereward = 12
-@tier2influencemin = 80
-@tier2influencemax = 175
-@tier3influencereward = 18
-@tier3influencemin = 125
-@tier3influencemax = 250
-@tier4influencereward = 24
-@tier4influencemin = 150
-@tier4influencemax = 300
-
-@tier1researchreward = 6
-@tier1researchmin = 60
-@tier1researchmax = 150
-@tier2researchreward = 12
-@tier2researchmin = 90
-@tier2researchmax = 250
-@tier3researchreward = 18
-@tier3researchmin = 120
-@tier3researchmax = 350
-@tier4researchreward = 24
-@tier4researchmin = 150
-@tier4researchmax = 500
-
-# thoth
-@human_fallen_empires_thoth_module_cost = 1000
-@human_fallen_empires_thoth_module_cost_minus = -1000
-
 # functional section 0 - 50
 
 # functional events and features
@@ -159,30 +115,13 @@ event = {
 										any_defender = {
 											is_country = prev
 										}
-										defender_war_score < -20
+										defender_war_exhaustion > 20
 									}
 									any_war = {
 										any_defender = {
 											is_country = prev
 										}
-										attacker_war_score < -20
-									}
-								}
-							}
-							modifier = {
-								factor = 2
-								or = {
-									any_war = {
-										any_defender = {
-											is_country = prev
-										}
-										defender_war_score < -40
-									}
-									any_war = {
-										any_defender = {
-											is_country = prev
-										}
-										attacker_war_score < -40
+										attacker_war_exhaustion > 20
 									}
 								}
 							}
@@ -193,13 +132,13 @@ event = {
 										any_defender = {
 											is_country = prev
 										}
-										defender_war_score < -60
+										defender_war_exhaustion > 40
 									}
 									any_war = {
 										any_defender = {
 											is_country = prev
 										}
-										attacker_war_score < -60
+										attacker_war_exhaustion > 40
 									}
 								}
 							}
@@ -210,18 +149,37 @@ event = {
 										any_defender = {
 											is_country = prev
 										}
-										defender_war_score < -80
+										defender_war_exhaustion > 60
 									}
 									any_war = {
 										any_defender = {
 											is_country = prev
 										}
-										attacker_war_score < -80
+										attacker_war_exhaustion > 60
+									}
+								}
+							}
+							modifier = {
+								factor = 2
+								or = {
+									any_war = {
+										any_defender = {
+											is_country = prev
+										}
+										defender_war_exhaustion > 80
+									}
+									any_war = {
+										any_defender = {
+											is_country = prev
+										}
+										attacker_war_exhaustion > 80
 									}
 								}
 							}
 							country_event = {
-								id = human_fallen_empires_pirate.6 days = 1 random = 355
+								id = human_fallen_empires_pirate.6
+								days = 1 
+								random = 355
 							}
 						}
 					}
@@ -338,19 +296,18 @@ event = {
 					is_country_type = awakened_fallen_empire
 					is_at_war = yes
 					is_war_leader = yes
-					is_proposing_war_demands = yes
 					or = {
 						any_war = {
 							any_defender = {
 								is_country = prev
 							}
-							defender_war_score < -20
+							defender_war_exhaustion > 20
 						}
 						any_war = {
 							any_defender = {
 								is_country = prev
 							}
-							attacker_war_score < -20
+							attacker_war_exhaustion > 20
 						}
 					}
 				}
@@ -360,19 +317,18 @@ event = {
 					is_country_type = awakened_fallen_empire
 					is_at_war = yes
 					is_war_leader = yes
-					is_proposing_war_demands = yes
 					or = {
 						any_war = {
 							any_defender = {
 								is_country = prevprev
 							}
-							defender_war_score < -20
+							defender_war_exhaustion > 20
 						}
 						any_war = {
 							any_defender = {
 								is_country = prevprev
 							}
-							attacker_war_score < -20
+							attacker_war_exhaustion > 20
 						}
 					}
 				}
@@ -383,7 +339,7 @@ event = {
 						}
 					}
 					country_event = {
-						id = human_fallen_empires.10200
+						id = human_fallen_empires_total_war.50
 					}
 				}
 			}
@@ -398,14 +354,6 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
-		every_country = {
-			# primitive can make colony in same system
-			country_event = {
-				id = human_fallen_empires_primitive.200
-				days = 1
-				random = 3600
-			}
-		}
 		# planet decay feature
 		if = {
 			limit = {
@@ -420,7 +368,7 @@ event = {
 				}
 				every_owned_planet = {
 					planet_event = {
-						id = human_fallen_empires_planetdecay.0
+						id = human_fallen_empires_decay.0
 						days = 1
 						random = 3600
 					}
@@ -428,13 +376,13 @@ event = {
 			}
 			every_planet = {
 				planet_event = {
-					id = human_fallen_empires_planetdecay.5
+					id = human_fallen_empires_decay.5
 					days = 1
 					random = 3600
 				}
 			}
 		}
-		# kad republic buy robots dialoge
+		# kad republic buy robots dialog
 		if = {
 			limit = {
 				not = {
@@ -517,13 +465,13 @@ event = {
 			}
 			# awake fallen
 			country_event = {
-				id = human_fallen_empires.10000
+				id = human_fallen_empires_total_war.1000
 				days = 1
 				random = 3600
 			}
 			# war in heavens trigger
 			country_event = {
-				id = human_fallen_empires.10010
+				id = human_fallen_empires_total_war.1010
 				days = 1
 				random = 3600
 			}
@@ -579,7 +527,7 @@ country_event = {
 	}
 }
 
-# meeting dialoge egypt
+# meeting dialog egypt
 country_event = {
 	id = human_fallen_empires.47
 	title = TRANSMISSION
@@ -1272,7 +1220,7 @@ country_event = {
 	#сделать бонусную ветку
 }
 
-# make egypt default country 48
+# awake make egypt default country 48
 country_event = {
 	id = human_fallen_empires.48
 	hide_window = yes
@@ -1284,6 +1232,7 @@ country_event = {
 		}
 		or = {
 			has_global_flag = galactic_crisis_happened
+			recently_lost_war = yes
 			and = {
 				or = {
 					years_passed > 140
@@ -1483,7 +1432,7 @@ ship_event = {
 	}
 }
 
-# project complite
+# project complete
 ship_event = {
 	id = human_fallen_empires.52
 	title = human_fallen_empires.52.name
@@ -1570,7 +1519,7 @@ ship_event = {
 	}
 }
 
-# dialogue with fleet
+# dialog with fleet
 country_event = {
 	id = human_fallen_empires.53
 	title = TRANSMISSION
@@ -1923,7 +1872,7 @@ country_event = {
 			}
 			event_target:human_fallen_empires_varelse_colony = {
 				owner = {
-					human_fallen_empires_effect_down_primitive_teh_lvl = yes
+					human_fallen_empires_effect_primitive_down = yes
 				}
 				every_tile = {
 					limit = {
@@ -1972,7 +1921,7 @@ country_event = {
 	immediate = {
 		event_target:human_fallen_empires_varelse_colony = {
 			owner = {
-				human_fallen_empires_effect_up_primitive_teh_lvl = yes
+				human_fallen_empires_effect_primitive_up = yes
 				country_remove_ethic = ethic_spiritualist
 				country_add_ethic = ethic_materialist
 			}
@@ -2128,10 +2077,9 @@ country_event = {
 				type = governor
 				species = event_target:human_fallen_empires_egypt_species
 				name = random
-				skill = 0
-			}
-			last_created_leader = {
-				set_skill = 3
+				leader_age_min = 50
+				leader_age_max = 650
+				skill = 5
 			}
 		}
 	}
@@ -2145,12 +2093,10 @@ country_event = {
 				type = scientist
 				species = event_target:human_fallen_empires_egypt_species
 				name = random
-				skill = 0
+				leader_age_min = 50
+				leader_age_max = 650
+				skill = 5
 			}
-			last_created_leader = {
-				set_skill = 3
-			}
-
 		}
 	}
 	option = {
@@ -2163,10 +2109,9 @@ country_event = {
 				type = admiral
 				species = event_target:human_fallen_empires_egypt_species
 				name = random
-				skill = 0
-			}
-			last_created_leader = {
-				set_skill = 3
+				leader_age_min = 50
+				leader_age_max = 650
+				skill = 5
 			}
 		}
 	}
@@ -2180,10 +2125,9 @@ country_event = {
 				type = general
 				species = event_target:human_fallen_empires_egypt_species
 				name = random
-				skill = 0
-			}
-			last_created_leader = {
-				set_skill = 3
+				leader_age_min = 50
+				leader_age_max = 650
+				skill = 5
 			}
 		}
 	}
@@ -3759,7 +3703,7 @@ country_event = {
 	}
 }
 
-# project complite
+# project complete
 country_event = {
 	id = human_fallen_empires.360
 	title = human_fallen_empires.360.name
@@ -3996,7 +3940,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_planet_flag = human_fallen_empires_too_ideal_planet.0
+		has_planet_flag = human_fallen_empires_too_ideal_planet
 		not = {
 			has_planet_flag = human_fallen_empires_has_event.362
 		}
@@ -4044,7 +3988,7 @@ ship_event = {
 
 	trigger = {
 		from = {
-			has_planet_flag = human_fallen_empires_ahet_colony
+			has_planet_flag = human_fallen_empires_ahet_colony_0
 		}
 		from.owner = {
 			is_country_type = primitive
@@ -4106,7 +4050,7 @@ ship_event = {
 
 	trigger = {
 		from = {
-			has_planet_flag = human_fallen_empires_ahet_colony_2
+			has_planet_flag = human_fallen_empires_ahet_colony_1
 		}
 		from.owner = {
 			is_country_type = primitive
@@ -4229,7 +4173,7 @@ ship_event = {
 	}
 }
 
-# project complite remove scientist
+# project complete remove scientist
 ship_event = {
 	id = human_fallen_empires.412
 	title = human_fallen_empires.412.name
@@ -4968,7 +4912,7 @@ country_event = {
 		is_country_type = human_fallen_empires_drone
 		exists = fromfrom
 		fromfrom = {
-			is_ship_size = outpost_station
+			is_ship_class = shipclass_starbase
 		}
 	}
 
@@ -4992,20 +4936,18 @@ country_event = {
 		is_country_type = human_fallen_empires_drone
 		exists = fromfrom
 		fromfrom = {
-			is_ship_size = orbital_station
+			is_ship_class = shipclass_starbase
 		}
 	}
 
 	immediate = {
-		random_owned_planet = {
+		every_owned_planet = {
 			limit = {
 				solar_system = {
 					is_same_value = fromfrom.solar_system
 				}
 			}
-			destroy_colony = {
-				keep_buildings = no
-			}
+			destroy_colony = yes
 			change_pc = pc_molten
 			log = "drone base killed on [Root.GetStarName]"
 		}
@@ -5172,21 +5114,12 @@ planet_event = {
 		from = {
 			is_country_type = human_fallen_empires_drone
 		}
+		num_pops > 0
 	}
 
 	immediate = {
-		if = {
-			limit = {
-				num_pops > 0
-			}
-			random_owned_pop = {
-				kill_pop = yes
-			}
-			else = {
-				destroy_colony = {
-					keep_buildings = no
-				}
-			}
+		random_owned_pop = {
+			kill_pop = yes
 		}
 	}
 }
@@ -5291,7 +5224,7 @@ ship_event = {
 	}
 }
 
-# project complite
+# project complete
 ship_event = {
 	id = human_fallen_empires.701
 	title = human_fallen_empires.701.name
@@ -5315,7 +5248,7 @@ ship_event = {
 	}
 }
 
-# dialogue with station
+# dialog with station
 country_event = {
 	id = human_fallen_empires.702
 	title = TRANSMISSION
@@ -5637,7 +5570,7 @@ country_event = {
 			remove_country_flag = human_fallen_empires.703.goodend
 		}
 	}
-	# if havent ju ahet
+	# if haven't ju ahet
 	option = {
 		name = human_fallen_empires.702.5.1
 		trigger = {
@@ -5713,7 +5646,7 @@ country_event = {
 	}
 }
 
-# dialogue with fleet
+# dialog with fleet
 country_event = {
 	id = human_fallen_empires.703
 	title = TRANSMISSION
@@ -6004,7 +5937,7 @@ country_event = {
 	}
 }
 
-# trade dialogue
+# trade dialog
 country_event = {
 	id = human_fallen_empires.711
 	title = TRANSMISSION
@@ -6043,7 +5976,7 @@ country_event = {
 					has_country_flag = human_fallen_empires.711.4.5
 				}
 			}
-			# dialogue 0
+			# dialog 0
 			success_text = {
 				text = human_fallen_empires.711.desc.4.1
 				has_country_flag = human_fallen_empires.711.4.1
@@ -6102,7 +6035,8 @@ country_event = {
 			set_country_flag = human_fallen_empires.711.module_ordered
 			set_country_flag = human_fallen_empires.711.0.module_ordered
 			country_event = {
-				id = human_fallen_empires.712 days = 365
+				id = human_fallen_empires.712
+				days = 365
 			}
 		}
 	}
@@ -6127,7 +6061,8 @@ country_event = {
 			set_country_flag = human_fallen_empires.711.module_ordered
 			set_country_flag = human_fallen_empires.711.1.module_ordered
 			country_event = {
-				id = human_fallen_empires.712 days = 365
+				id = human_fallen_empires.712
+				days = 365
 			}
 		}
 	}
@@ -6181,7 +6116,7 @@ country_event = {
 			}
 		}
 	}
-	# dialogue 0
+	# dialog 0
 	option = {
 		name = human_fallen_empires.711.4.0
 		trigger = {
@@ -6281,17 +6216,15 @@ country_event = {
 		}
 		response_text = human_fallen_empires.711.4.5.response
 		is_dialog_only = yes
-
 		allow = {
 			hidden_trigger = {
 				not = {
-					has_country_flag = human_fallen_empires.711.dialogue.0.complite
+					has_country_flag = human_fallen_empires.711.dialog.0.complete
 				}
 			}
 		}
-
 		enable_special_project = {
-			name = human_fallen_empires_project_thoth_memori
+			name = human_fallen_empires_project_thoth_memory
 			location = event_target:human_fallen_empires_thoth_location
 			owner = root
 		}
@@ -6309,13 +6242,13 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires.711.4.5
-			set_country_flag = human_fallen_empires.711.dialogue.0.complite
+			set_country_flag = human_fallen_empires.711.dialog.0.complete
 		}
 	}
 	option = {
 		name = human_fallen_empires.711.5
 		trigger = {
-			has_country_flag = human_fallen_empires.711.dialogue.0.complite
+			has_country_flag = human_fallen_empires.711.dialog.0.complete
 		}
 		response_text = human_fallen_empires.711.5.response
 		is_dialog_only = yes
@@ -6329,7 +6262,7 @@ country_event = {
 	}
 }
 
-# complite module
+# complete module
 country_event = {
 	id = human_fallen_empires.712
 	title = TRANSMISSION
@@ -6362,40 +6295,31 @@ country_event = {
 	}
 
 	immediate = {
-		if = {
-			limit = {
-				has_country_flag = human_fallen_empires.711.0.module_ordered
+		switch = {
+			trigger = has_country_flag
+			human_fallen_empires.711.0.module_ordered = {
+				change_variable = {
+					which = human_fallen_empires_building_thoth_module_energy
+					value = 1
+				}
 			}
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_energy
-				value = 1
+			human_fallen_empires.711.1.module_ordered = {
+				change_variable = {
+					which = human_fallen_empires_building_thoth_module_mineral
+					value = 1
+				}
 			}
-		}
-		if = {
-			limit = {
-				has_country_flag = human_fallen_empires.711.1.module_ordered
+			human_fallen_empires.711.2.module_ordered = {
+				change_variable = {
+					which = human_fallen_empires_building_thoth_module_food
+					value = 1
+				}
 			}
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_mineral
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				has_country_flag = human_fallen_empires.711.2.module_ordered
-			}
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_food
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				has_country_flag = human_fallen_empires.711.3.module_ordered
-			}
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_science
-				value = 1
+			human_fallen_empires.711.3.module_ordered = {
+				change_variable = {
+					which = human_fallen_empires_building_thoth_module_science
+					value = 1
+				}
 			}
 		}
 	}
@@ -6426,7 +6350,7 @@ country_event = {
 	}
 }
 
-# memori installed
+# memory installed
 ship_event = {
 	id = human_fallen_empires.720
 	title = human_fallen_empires.720.name
@@ -6438,7 +6362,7 @@ ship_event = {
 
 	immediate = {
 		owner = {
-			set_country_flag = human_fallen_empires_thoth_memori_installed
+			set_country_flag = human_fallen_empires_thoth_memory_installed
 		}
 	}
 
@@ -6451,13 +6375,14 @@ ship_event = {
 			random_list = {
 				1 = {
 					owner = {
-						set_country_flag = human_fallen_empires_thoth_memori_installed_spy
+						set_country_flag = human_fallen_empires_thoth_memory_installed_spy
 					}
 				}
 				1 = {
 					owner = {
 						country_event = {
-							id = human_fallen_empires.721 days = 10
+							id = human_fallen_empires.721 
+							days = 10
 						}
 					}
 				}
@@ -6556,7 +6481,7 @@ country_event = {
 					}
 				}
 			}
-			establish_communications = event_target:human_fallen_empires_4999_target
+			establish_communications_no_message = event_target:human_fallen_empires_4999_target
 		}
 	}
 
@@ -7489,7 +7414,7 @@ country_event = {
 	}
 }
 
-# make future default country, start expansion era 5010 - 5012
+# awake make future default country, start expansion era 5010 - 5012
 country_event = {
 	id = human_fallen_empires.5010
 	hide_window = yes
@@ -7501,7 +7426,7 @@ country_event = {
 		}
 		or = {
 			has_global_flag = galactic_crisis_happened
-
+			recently_lost_war = yes
 			and = {
 				or = {
 					years_passed > 150
@@ -8079,13 +8004,8 @@ country_event = {
 			}
 			root = {
 				declare_war = {
-					who = last_created_country
-				}
-				add_war_demand = {
-					type = cede_planet
-					parameter:planet = prev
-					target = prev.owner
-					warscore_cost = 50
+					target = last_created_country
+					attacker_war_goal = wg_subjugation
 				}
 			}
 		}

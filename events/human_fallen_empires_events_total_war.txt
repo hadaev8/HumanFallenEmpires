@@ -1,9 +1,443 @@
 # The War in Heavens by Human Fallen Empires
-namespace = human_fallen_empires
+# Total War
+namespace = human_fallen_empires_total_war
 
-# awake event
+
+# events during total war 50 - 100
+# fallen drain resurces if losing war 10200
 country_event = {
-	id = human_fallen_empires.10000
+	id = human_fallen_empires_total_war.50
+	title = human_fallen_empires_total_war.50.name
+	desc = human_fallen_empires_total_war.50.desc.0
+	picture = GFX_evt_human_fallen_empires_fallen_3
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	immediate = {
+		log = "work event id = human_fallen_empires_total_war.50 for [this.GetName] overlord: [this.overlord.GetName]"
+	}
+
+	trigger = {
+		exists = overlord
+	}
+
+	option = {
+		name = human_fallen_empires_total_war.50.0
+		add_modifier = {
+			modifier = human_fallen_empires_fallen_resurces_drain
+			days = 1825
+		}
+		overlord = {
+			add_modifier = {
+				modifier = human_fallen_empires_fallen_ship_build_buff
+				days = 1825
+			}
+		}
+	}
+}
+
+
+# events after war end 100
+
+# event for empire after total war win 100
+country_event = {
+	id = human_fallen_empires_total_war.100
+	title = human_fallen_empires_total_war.100.name
+	desc = human_fallen_empires_total_war.100.desc.0
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	# make primitive
+	option = {
+		name = human_fallen_empires_total_war.100.0
+		custom_tooltip = human_fallen_empires_total_war.100.0.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_materialist = no
+			}
+		}
+		human_fallen_empires_effect_materialist_attraction_high = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.150
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					human_fallen_empires_effect_primitive_set_primitive = yes
+				}
+			}
+		}
+	}
+	# annex
+	option = {
+		name = human_fallen_empires_total_war.100.1
+		custom_tooltip = human_fallen_empires_total_war.100.1.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 100
+				has_country_flag = human_fallen_empires_egypt
+			}
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_authoritarian = no
+				human_fallen_empires_trigger_is_egalitarian = no
+				human_fallen_empires_trigger_is_assimilator = no
+			}
+		}
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.151
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_starbase = {
+					set_owner = root
+				}
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					conquer = root
+					set_owner = root
+				}
+			}
+		}
+	}
+	# make vassal
+	option = {
+		name = human_fallen_empires_total_war.100.2
+		custom_tooltip = human_fallen_empires_total_war.100.2.tooltip
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_spiritualist = no
+				human_fallen_empires_trigger_is_xenophile = no
+				not = {
+					has_country_flag = human_fallen_empires_coalition_leader
+				}
+			}
+		}
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.152
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					human_fallen_empires_effect_create_vassal = yes
+				}
+			}
+		}
+	}
+	# kill them all
+	option = {
+		name = human_fallen_empires_total_war.100.3
+		custom_tooltip = human_fallen_empires_total_war.100.3.tooltip
+		trigger = {
+			allows_purge = yes
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_xenophobe = no
+				human_fallen_empires_trigger_is_undiplomatic = no
+			}
+		}
+		human_fallen_empires_effect_xenophobe_attraction_high = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.153
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 3 # scales to pops
+					}
+					destroy_colony = yes
+				}
+			}
+		}
+	}
+	# make infertile
+	option = {
+		name = human_fallen_empires_total_war.100.4
+		custom_tooltip = human_fallen_empires_total_war.100.4.tooltip
+		trigger = {
+			allows_purge = yes
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_xenophile = no
+				human_fallen_empires_trigger_is_materialist = no
+				human_fallen_empires_trigger_is_pacifist = no
+			}
+		}
+		human_fallen_empires_effect_pacifist_attraction_high = yes
+		human_fallen_empires_effect_xenophobe_attraction_low = yes
+		hidden_effect = {
+			# inform
+			every_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.154
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				every_owned_pop_species = {
+					limit = {
+						pop_can_reproduce = yes
+					}
+					prev = {
+						modify_species = {
+							species = prev
+							add_trait = human_fallen_empires_species_trait_infertil
+						}
+					}
+				}
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					every_owned_pop = {
+						random_list = {
+							50 = {
+							}
+							50 = {
+								kill_pop = yes
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# inform after total war
+country_event = {
+	id = human_fallen_empires_total_war.150
+	title = human_fallen_empires_total_war.150.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires_total_war.150.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires_total_war.150.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_tech_fail
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires_total_war.150.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_total_war.150.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_total_war.151
+	title = human_fallen_empires_total_war.151.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires_total_war.151.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires_total_war.151.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ships_on_orbit
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_total_war.151.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_total_war.151.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_total_war.152
+	title = human_fallen_empires_total_war.152.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires_total_war.152.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires_total_war.152.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_city_center
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_total_war.152.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_total_war.152.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_total_war.153
+	title = human_fallen_empires_total_war.153.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires_total_war.153.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires_total_war.153.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_total_war.153.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_total_war.153.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_total_war.154
+	title = human_fallen_empires_total_war.154.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires_total_war.154.desc.0
+				is_country = from
+			}
+			fail_text = {
+				text = human_fallen_empires_total_war.154.desc.1
+				is_country = from
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = human_fallen_empires_total_war.154.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_total_war.154.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+}
+
+# war in heaven 1000+
+# awake fallen event
+country_event = {
+	id = human_fallen_empires_total_war.1000
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -101,7 +535,7 @@ country_event = {
 						id = fallen_empires_awakening.3
 					}
 					country_event = {
-						id = human_fallen_empires.10001
+						id = human_fallen_empires_total_war.1001
 					}
 				}
 			}
@@ -111,7 +545,7 @@ country_event = {
 
 # for inform
 country_event = {
-	id = human_fallen_empires.10001
+	id = human_fallen_empires_total_war.1001
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -129,9 +563,9 @@ country_event = {
 	}
 }
 
-# start war 100010
+# start war 1010
 country_event = {
-	id = human_fallen_empires.10010
+	id = human_fallen_empires_total_war.1010
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -206,44 +640,44 @@ country_event = {
 			# 5 vs all other
 			# 5 vs 4
 			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 5 vs 3
 			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 5 vs 2
 			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 5 vs 1
 			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 5 vs 0
 			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 		}
 		if = {
 			limit = {
@@ -252,36 +686,36 @@ country_event = {
 			# 4 vs all other
 			# 4 vs 3
 			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 4 vs 2
 			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 4 vs 1
 			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 4 vs 0
 			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 		}
 		if = {
 			limit = {
@@ -290,28 +724,28 @@ country_event = {
 			# 3 vs all other
 			# 3 vs 2
 			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 3 vs 1
 			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 3 vs 0
 			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 		}
 		if = {
 			limit = {
@@ -320,20 +754,20 @@ country_event = {
 			# 2 vs all other
 			# 2 vs 1
 			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 			# 2 vs 0
 			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 		}
 		if = {
 			limit = {
@@ -342,19 +776,19 @@ country_event = {
 			# 1 vs all other
 			# 1 vs 0
 			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_war_attaker
+				save_event_target_as = human_fallen_empires_total_war_attaker
 			}
 			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_war_defender
+				save_event_target_as = human_fallen_empires_total_war_defender
 			}
-			human_fallen_empires_effect_declare_total_war = yes
+			human_fallen_empires_effect_total_war_declare = yes
 		}
 		every_country = {
 			limit = {
 				is_country_type = default
 			}
 			country_event = {
-				id = human_fallen_empires.10050
+				id = human_fallen_empires_total_war.1050
 			}
 		}
 		set_global_flag = human_fallen_empires_war_in_heaven_started
@@ -363,7 +797,7 @@ country_event = {
 
 # fire event by on_war_beginning
 country_event = {
-	id = human_fallen_empires.10011
+	id = human_fallen_empires_total_war.1011
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -383,7 +817,7 @@ country_event = {
 		set_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
 		random_country = {
 			country_event = {
-				id = human_fallen_empires.10010
+				id = human_fallen_empires_total_war.1010
 			}
 		}
 		log = "war in heavens start by ai"
@@ -392,31 +826,31 @@ country_event = {
 
 # inform events with text 10050
 country_event = {
-	id = human_fallen_empires.10050
-	title = human_fallen_empires.10050.name
+	id = human_fallen_empires_total_war.1050
+	title = human_fallen_empires_total_war.1050.name
 	desc = {
 		trigger = {
 			fail_text = {
-				text = human_fallen_empires.10050.desc.0.0
+				text = human_fallen_empires_total_war.1050.desc.0.0
 				exists = event_target:human_fallen_empires_event_target_2
 			}
 			success_text = {
-				text = human_fallen_empires.10050.desc.0.1
+				text = human_fallen_empires_total_war.1050.desc.0.1
 				exists = event_target:human_fallen_empires_event_target_2
 				not = {
 					exists = event_target:human_fallen_empires_event_target_3
 				}
 			}
 			success_text = {
-				text = human_fallen_empires.10050.desc.0.2
+				text = human_fallen_empires_total_war.1050.desc.0.2
 				exists = event_target:human_fallen_empires_event_target_3
 			}
 			success_text = {
-				text = human_fallen_empires.10050.desc.1.0
+				text = human_fallen_empires_total_war.1050.desc.1.0
 				exists = event_target:human_fallen_empires_coalition_leader
 			}
 			success_text = {
-				text = human_fallen_empires.10050.desc.1.1
+				text = human_fallen_empires_total_war.1050.desc.1.1
 				exists = event_target:human_fallen_empires_egypt_country
 				event_target:human_fallen_empires_egypt_country = {
 					not = {
@@ -424,7 +858,7 @@ country_event = {
 					}
 				}
 			}
-			text = human_fallen_empires.10050.desc.2.0
+			text = human_fallen_empires_total_war.1050.desc.2.0
 		}
 	}
 	picture = GFX_evt_fallen_empire_awakes
@@ -433,7 +867,7 @@ country_event = {
 
 	# step 0 for vanilla fallen empires
 	option = {
-		name = human_fallen_empires.10050.0.0
+		name = human_fallen_empires_total_war.1050.0.0
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -444,10 +878,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -566,11 +998,10 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_0
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.0.1
+		name = human_fallen_empires_total_war.1050.0.1
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -581,10 +1012,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -703,11 +1132,10 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_1
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.0.2
+		name = human_fallen_empires_total_war.1050.0.2
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -718,10 +1146,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -840,11 +1266,10 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_2
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.0.3
+		name = human_fallen_empires_total_war.1050.0.3
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -855,10 +1280,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -977,11 +1400,10 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_3
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.0.4
+		name = human_fallen_empires_total_war.1050.0.4
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -992,10 +1414,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -1114,11 +1534,10 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_4
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.0.5
+		name = human_fallen_empires_total_war.1050.0.5
 		trigger = {
 			is_subject = no
 			is_country_type = default
@@ -1129,10 +1548,8 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
-					has_country_flag = human_fallen_empires_future
-					has_country_flag = human_fallen_empires_egypt
+					human_fallen_empires_trigger_is_undiplomatic = yes
+					human_fallen_empires_trigger_is_human_fallen = yes
 				}
 			}
 			modifier = {
@@ -1251,12 +1668,11 @@ country_event = {
 					modifier = opinion_war_in_heaven_ally
 				}
 			}
-			join_war = event_target:human_fallen_empires_event_target_5
 		}
 	}
 	# step 1 for human fallen empires
 	option = {
-		name = human_fallen_empires.10050.1.0
+		name = human_fallen_empires_total_war.1050.1.0
 		trigger = {
 			is_subject = no
 			#is_at_war = no		#подумать над этим
@@ -1268,8 +1684,7 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					has_ai_personality = fanatic_purifiers
-					has_ai_personality = metalhead
+					human_fallen_empires_trigger_is_undiplomatic = yes
 					has_country_flag = human_fallen_empires_egypt
 				}
 			}
@@ -1309,12 +1724,11 @@ country_event = {
 				}
 			}
 			# стоит ли добавить модификатор врага? from = { add_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy } }
-			join_war = event_target:human_fallen_empires_coalition_leader
 		}
 	}
 	# step 2 for other options
 	option = {
-		name = human_fallen_empires.10050.2.0
+		name = human_fallen_empires_total_war.1050.2.0
 		trigger = {
 			is_subject = no
 		}
@@ -1354,461 +1768,18 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires.10050.2.1
+		name = human_fallen_empires_total_war.1050.2.1
 		trigger = {
 			is_subject = yes
 		}
+	}
+	after = {
 		if = {
 			limit = {
-				overlord = {
-					is_country = event_target:human_fallen_empires_1_awakened
-				}
+				exists = overlord
+				# добавить условие на кб
 			}
-			join_war = event_target:human_fallen_empires_1_awakened
-		}
-		if = {
-			limit = {
-				overlord = {
-					is_country = event_target:human_fallen_empires_2_awakened
-				}
-			}
-			join_war = event_target:human_fallen_empires_2_awakened
-		}
-		if = {
-			limit = {
-				exists = event_target:human_fallen_empires_3_awakened
-				overlord = {
-					is_country = event_target:human_fallen_empires_3_awakened
-				}
-			}
-			join_war = event_target:human_fallen_empires_3_awakened
-		}
-		if = {
-			limit = {
-				exists = event_target:human_fallen_empires_4_awakened
-				overlord = {
-					is_country = event_target:human_fallen_empires_4_awakened
-				}
-			}
-			join_war = event_target:human_fallen_empires_4_awakened
-		}
-	}
-}
-
-# event for empire after total war win 10150
-country_event = {
-	id = human_fallen_empires.10150
-	title = human_fallen_empires.10150.name
-	desc = human_fallen_empires.10150.desc.0
-	picture = GFX_evt_fallen_empire_awakes
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	# make primitive
-	option = {
-		name = human_fallen_empires.10150.0
-		custom_tooltip = human_fallen_empires.10150.0.tooltip
-		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 0
-				human_fallen_empires_trigger_is_materialist = no
-			}
-		}
-		human_fallen_empires_effect_materialist_attraction_high = yes
-		hidden_effect = {
-			# inform
-			every_country = {
-				country_event = {
-					id = human_fallen_empires.10151
-				}
-			}
-			event_target:WarInHeavenLoserFE = {
-				human_fallen_empires_effect_refugee_10 = yes
-				every_owned_planet = {
-					human_fallen_empires_effect_create_primitive = yes
-				}
-			}
-		}
-	}
-	# annex
-	option = {
-		name = human_fallen_empires.10150.1
-		custom_tooltip = human_fallen_empires.10150.1.tooltip
-		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 100
-				has_country_flag = human_fallen_empires_egypt
-			}
-			modifier = {
-				factor = 0
-				human_fallen_empires_trigger_is_authoritarian = no
-				human_fallen_empires_trigger_is_egalitarian = no
-				human_fallen_empires_trigger_is_assimilator = no
-			}
-		}
-		hidden_effect = {
-			# inform
-			every_country = {
-				country_event = {
-					id = human_fallen_empires.10152
-				}
-			}
-			event_target:WarInHeavenLoserFE = {
-				human_fallen_empires_effect_refugee_10 = yes
-				every_owned_planet = {
-					add_threat = {
-						who = root
-						amount = 1 # scales to pops
-					}
-					conquer = root
-					set_owner = root
-				}
-			}
-		}
-	}
-	# make vassal
-	option = {
-		name = human_fallen_empires.10150.2
-		custom_tooltip = human_fallen_empires.10150.2.tooltip
-		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 0
-				human_fallen_empires_trigger_is_spiritualist = no
-				human_fallen_empires_trigger_is_xenophile = no
-				not = {
-					has_country_flag = human_fallen_empires_coalition_leader
-				}
-			}
-		}
-		hidden_effect = {
-			# inform
-			every_country = {
-				country_event = {
-					id = human_fallen_empires.10152
-				}
-			}
-			event_target:WarInHeavenLoserFE = {
-				human_fallen_empires_effect_refugee_10 = yes
-				every_owned_planet = {
-					human_fallen_empires_effect_create_vassal = yes
-				}
-			}
-		}
-	}
-	# kill them all
-	option = {
-		name = human_fallen_empires.10150.3
-		custom_tooltip = human_fallen_empires.10150.3.tooltip
-		trigger = {
-			allows_purge = yes
-		}
-		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 0
-				human_fallen_empires_trigger_is_xenophobe = no
-				human_fallen_empires_trigger_is_undiplomatic = no
-			}
-		}
-		human_fallen_empires_effect_xenophobe_attraction_high = yes
-		hidden_effect = {
-			# inform
-			every_country = {
-				country_event = {
-					id = human_fallen_empires.10154
-				}
-			}
-			event_target:WarInHeavenLoserFE = {
-				human_fallen_empires_effect_refugee_10 = yes
-				every_owned_planet = {
-					add_threat = {
-						who = root
-						amount = 3 # scales to pops
-					}
-					destroy_colony = {
-						keep_buildings = no
-					}
-				}
-			}
-		}
-	}
-	# make infertile
-	option = {
-		name = human_fallen_empires.10150.4
-		custom_tooltip = human_fallen_empires.10150.4.tooltip
-		trigger = {
-			allows_purge = yes
-		}
-		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 0
-				human_fallen_empires_trigger_is_xenophile = no
-				human_fallen_empires_trigger_is_materialist = no
-				human_fallen_empires_trigger_is_pacifist = no
-			}
-		}
-		human_fallen_empires_effect_pacifist_attraction_high = yes
-		human_fallen_empires_effect_xenophobe_attraction_low = yes
-		hidden_effect = {
-			# inform
-			every_country = {
-				country_event = {
-					id = human_fallen_empires.10155
-				}
-			}
-			event_target:WarInHeavenLoserFE = {
-				every_owned_pop_species = {
-					limit = {
-						pop_can_reproduce = yes
-					}
-					prev = {
-						modify_species = {
-							species = prev
-							add_trait = human_fallen_empires_species_trait_infertil
-						}
-					}
-				}
-				human_fallen_empires_effect_refugee_10 = yes
-				every_owned_planet = {
-					add_threat = {
-						who = root
-						amount = 1 # scales to pops
-					}
-					every_owned_pop = {
-						random_list = {
-							50 = {
-							}
-							50 = {
-								kill_pop = yes
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-# inform after total war
-country_event = {
-	id = human_fallen_empires.10151
-	title = human_fallen_empires.10151.name
-	desc = {
-		trigger = {
-			success_text = {
-				text = human_fallen_empires.10151.desc.0
-				is_country = from
-			}
-			fail_text = {
-				text = human_fallen_empires.10151.desc.1
-				is_country = from
-			}
-		}
-	}
-	picture = GFX_evt_human_fallen_empires_tech_fail
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	option = {
-		name = human_fallen_empires.10151.0
-		trigger = {
-			is_country = from
-		}
-	}
-	option = {
-		name = human_fallen_empires.10151.1
-		trigger = {
-			not = {
-				is_country = from
-			}
-		}
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10152
-	title = human_fallen_empires.10152.name
-	desc = {
-		trigger = {
-			success_text = {
-				text = human_fallen_empires.10152.desc.0
-				is_country = from
-			}
-			fail_text = {
-				text = human_fallen_empires.10152.desc.1
-				is_country = from
-			}
-		}
-	}
-	picture = GFX_evt_human_fallen_empires_ships_on_orbit
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10152.0
-		trigger = {
-			is_country = from
-		}
-	}
-	option = {
-		name = human_fallen_empires.10152.1
-		trigger = {
-			not = {
-				is_country = from
-			}
-		}
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10153
-	title = human_fallen_empires.10153.name
-	desc = {
-		trigger = {
-			success_text = {
-				text = human_fallen_empires.10153.desc.0
-				is_country = from
-			}
-			fail_text = {
-				text = human_fallen_empires.10153.desc.1
-				is_country = from
-			}
-		}
-	}
-	picture = GFX_evt_human_fallen_empires_city_center
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10153.0
-		trigger = {
-			is_country = from
-		}
-	}
-	option = {
-		name = human_fallen_empires.10153.1
-		trigger = {
-			not = {
-				is_country = from
-			}
-		}
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10154
-	title = human_fallen_empires.10154.name
-	desc = {
-		trigger = {
-			success_text = {
-				text = human_fallen_empires.10154.desc.0
-				is_country = from
-			}
-			fail_text = {
-				text = human_fallen_empires.10154.desc.1
-				is_country = from
-			}
-		}
-	}
-	picture = GFX_evt_human_fallen_empires_ruins
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10154.0
-		trigger = {
-			is_country = from
-		}
-	}
-	option = {
-		name = human_fallen_empires.10154.1
-		trigger = {
-			not = {
-				is_country = from
-			}
-		}
-	}
-}
-
-country_event = {
-	id = human_fallen_empires.10155
-	title = human_fallen_empires.10155.name
-	desc = {
-		trigger = {
-			success_text = {
-				text = human_fallen_empires.10155.desc.0
-				is_country = from
-			}
-			fail_text = {
-				text = human_fallen_empires.10155.desc.1
-				is_country = from
-			}
-		}
-	}
-	picture = GFX_evt_human_fallen_empires_ruins
-	show_sound = event_space_battle
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	option = {
-		name = human_fallen_empires.10155.0
-		trigger = {
-			is_country = from
-		}
-	}
-	option = {
-		name = human_fallen_empires.10155.1
-		trigger = {
-			not = {
-				is_country = from
-			}
-		}
-	}
-}
-
-# fallen drain resurces if losing war 10200
-country_event = {
-	id = human_fallen_empires.10200
-	title = human_fallen_empires.10200.name
-	desc = human_fallen_empires.100200.desc.0
-	picture = GFX_evt_human_fallen_empires_fallen_3
-	show_sound = event_alien_signal
-	is_triggered_only = yes
-
-	trigger = {
-		exists = overlord
-	}
-
-	option = {
-		name = human_fallen_empires.10050.0
-		add_modifier = {
-			modifier = human_fallen_empires_fallen_resurces_drain
-			days = 1825
-		}
-		overlord = {
-			add_modifier = {
-				modifier = human_fallen_empires_fallen_ship_build_buff
-				days = 1825
-			}
+			join_war = overlord # протестировать это
 		}
 	}
 }

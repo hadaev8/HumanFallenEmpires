@@ -1,5 +1,4 @@
 #
-@human_fallen_empires_pirate_fleet_power_minimum = 4000
 
 # for country
 human_fallen_empires_trigger_pirate_diplomacy_any_menu = {
@@ -60,17 +59,16 @@ human_fallen_empires_pirate_valid_target_country = {
 
 # for system
 human_fallen_empires_pirate_valid_target_system = {
-	not = {
+	nor = {
 		has_star_flag = human_fallen_empires_pirate_block
 		any_ship_in_system = {
-			or = {
-				is_ship_size = orbital_station
-				is_ship_class = shipclass_military
-				is_ship_class = shipclass_military_station
-			}
 			exists = owner
 			owner = {
 				is_hostile = root.owner
+			}
+			exists = fleet
+			fleet = {
+				fleet_power > @human_fallen_empires_pirate_fleet_power_minimum
 			}
 			root = {
 				fleet_power < @human_fallen_empires_pirate_fleet_power_minimum

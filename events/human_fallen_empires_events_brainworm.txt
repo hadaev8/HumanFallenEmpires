@@ -13,11 +13,6 @@ planet_event = {
 	}
 
 	immediate = {
-		modify_species = {
-			species = owner
-			add_trait = human_fallen_empires_species_trait_brainworm
-			#add_traits_at_start_of_list = yes
-		}
 		owner = {
 			change_dominant_species = {
 				species = last_created_species
@@ -166,7 +161,9 @@ planet_event = {
 	immediate = {
 		# assimilate all
 		planet_event = {
-			id = human_fallen_empires_brainworm.4 days = 90 random = 30
+			id = human_fallen_empires_brainworm.4 
+			days = 90 
+			random = 30
 		}
 		# change owner if needed
 		planet_event = {
@@ -295,11 +292,11 @@ planet_event = {
 		log = "worm gain planet [This.GetName]"
 		if = {
 			limit = {
-				any_country = {
+				any_playable_country = {
 					human_fallen_empires_trigger_is_brainworm_country = yes
 				}
 			}
-			random_country = {
+			random_playable_country = {
 				limit = {
 					human_fallen_empires_trigger_is_brainworm_country = yes
 				}
@@ -332,6 +329,27 @@ planet_event = {
 		# notification for new owner
 		planet_event = {
 			id = human_fallen_empires_brainworm.54
+		}
+	}
+}
+
+# change leader species
+country_event = {
+	id = human_fallen_empires_brainworm.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		human_fallen_empires_trigger_is_brainworm_country = yes
+		exists = from.species
+		from.species = {
+			human_fallen_empires_trigger_is_brainworm_country = no
+		}
+	}
+
+	immediate = {
+		from = {
+			change_species = root.species
 		}
 	}
 }

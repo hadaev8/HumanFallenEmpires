@@ -1107,13 +1107,38 @@ country_event = {
 	option = {
 		name = human_fallen_empires_plague.50.0
 	}
+	# robots
 	option = {
-		name = human_fallen_empires_plague.50.1
+		name = human_fallen_empires_plague.50.1.0
 		trigger = {
 			has_trait = trait_mechanical
-			human_fallen_empires_trigger_is_xenophobe = yes
+			or = {
+				human_fallen_empires_trigger_is_xenophobe = yes
+				human_fallen_empires_trigger_is_undiplomatic = yes
+			}
 		}
 		human_fallen_empires_effect_xenophobe_attraction_low = yes
+	}
+	option = {
+		name = human_fallen_empires_plague.50.1.1
+		trigger = {
+			has_trait = trait_mechanical
+			or = {
+				human_fallen_empires_trigger_is_xenophile = yes
+				human_fallen_empires_trigger_is_assimilator = yes
+			}
+		}
+		human_fallen_empires_effect_xenophile_attraction_low = yes
+	}
+	option = {
+		name = human_fallen_empires_plague.50.1.2
+		trigger = {
+			has_trait = trait_mechanical
+			human_fallen_empires_trigger_is_xenophobe = no
+			human_fallen_empires_trigger_is_undiplomatic = no
+			human_fallen_empires_trigger_is_xenophile = no
+			human_fallen_empires_trigger_is_assimilator = no
+		}
 	}
 	option = {
 		name = human_fallen_empires_plague.50.2
@@ -1520,9 +1545,7 @@ ship_event = {
 				}
 			}
 			human_fallen_empires_effect_plague_planet_clean = yes
-			destroy_colony = {
-				keep_buildings = no
-			}
+			destroy_colony = yes
 			add_modifier = {
 				modifier = human_fallen_empires_plague_bombardment_planet
 				days = 36500

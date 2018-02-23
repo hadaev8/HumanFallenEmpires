@@ -1,7 +1,5 @@
 # pirate
 
-@human_fallen_empires_pirate_ravaged_planet_time = 365
-
 # for country
 human_fallen_empires_effect_pirate_diplomacy_remove_flags = {
 	remove_country_flag = human_fallen_empires_pirate.101.raid_menu
@@ -16,14 +14,7 @@ human_fallen_empires_effect_pirate_diplomacy_remove_flags = {
 human_fallen_empires_effect_pirate_init = {
 	random_system = {
 		limit = {
-			or = {
-				is_neighbor_of = event_target:human_fallen_empires_pirate_target
-				distance = {
-					source = event_target:human_fallen_empires_pirate_target.capital_scope
-					min_distance = 5
-					max_distance = 50
-				}
-			}
+			is_neighbor_of = event_target:human_fallen_empires_pirate_target
 			nor = {
 				any_planet = {
 					exists = owner
@@ -57,6 +48,7 @@ human_fallen_empires_effect_pirate_init = {
 				ethos = random
 				flag = random
 				effect = {
+					randomize_flag_symbol = pirate
 					add_modifier = {
 						modifier = human_fallen_empires_pirate_country_unkeep
 						days = -1
@@ -101,13 +93,6 @@ human_fallen_empires_effect_pirate_init = {
 					}
 					add_energy = 200
 					add_influence = 200
-					add_research_option = tech_human_fallen_empires_pirate_local_harvest
-					add_research_option = tech_human_fallen_empires_pirate_black_market
-					set_policy = {
-						policy = orbital_bombardment
-						option = orbital_bombardment_full
-						cooldown = yes
-					}
 					set_relation_flag = {
 						who = event_target:human_fallen_empires_pirate_target
 						flag = pirate_relation
@@ -180,7 +165,15 @@ human_fallen_empires_effect_pirate_init_base = {
 		}
 		remove_building = yes
 	}
-	human_fallen_empires_effect_init_set_spaceport = yes
+	human_fallen_empires_effect_init_set_starbase = yes
+	starbase = {
+		if = {
+			limit = {
+				has_starbase_size = starbase_outpost
+			}
+			set_starbase_size = starbase_starport
+		}
+	}
 	log = "pirate created new base on [This.GetStarName]"
 	set_planet_flag = human_fallen_empires_pirate_base
 }
@@ -272,6 +265,7 @@ human_fallen_empires_effect_pirate_ravage_planet = {
 			is_ruined = no
 		}
 		set_ruined = yes
+		# протестить можно ли просто фром
 		prev.from = {
 			add_minerals = 50
 			add_energy = 10
