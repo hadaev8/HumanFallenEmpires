@@ -1,99 +1,8 @@
 #
 
 # for country
-human_fallen_empires_leaders_calc_leaders_num = {
-	#log = "calc all leaders"
-	set_variable = {
-		which = human_fallen_empires_leaders_governor_num
-		value = 0
-	}
-	set_variable = {
-		which = human_fallen_empires_leaders_scientist_num
-		value = 0
-	}
-	set_variable = {
-		which = human_fallen_empires_leaders_admiral_num
-		value = 0
-	}
-	set_variable = {
-		which = human_fallen_empires_leaders_general_num
-		value = 0
-	}
-	every_owned_leader = {
-		if = {
-			limit = {
-				leader_class = governor
-			}
-			root = {
-				change_variable = {
-					which = human_fallen_empires_leaders_governor_num
-					value = 1
-				}
-			}
-			else = {
-				if = {
-					limit = {
-						leader_class = scientist
-					}
-					root = {
-						change_variable = {
-							which = human_fallen_empires_leaders_scientist_num
-							value = 1
-						}
-					}
-					else = {
-						if = {
-							limit = {
-								leader_class = admiral
-							}
-							root = {
-								change_variable = {
-									which = human_fallen_empires_leaders_admiral_num
-									value = 1
-								}
-							}
-							else = {
-								if = {
-									limit = {
-										leader_class = general
-									}
-									root = {
-										change_variable = {
-											which = human_fallen_empires_leaders_general_num
-											value = 1
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-human_fallen_empires_leaders_calc_governor_num = {
-	#log = "calc governor num"
-	set_variable = {
-		which = human_fallen_empires_leaders_governor_num
-		value = 0
-	}
-	every_owned_leader = {
-		limit = {
-			leader_class = governor
-		}
-		root = {
-			change_variable = {
-				which = human_fallen_empires_leaders_governor_num
-				value = 1
-			}
-		}
-	}
-}
-
 human_fallen_empires_leaders_calc_governor_capacity = {
-	#log = "calc governor capacity"
+	# log = "calc governor capacity"
 	if = {
 		limit = {
 			num_owned_planets = 0
@@ -170,30 +79,18 @@ human_fallen_empires_leaders_calc_governor_capacity = {
 				}
 			}
 			# log = "[This.human_fallen_empires_leaders_governor_capacity]"
-			subtract_variable = {
-				which = human_fallen_empires_leaders_governor_capacity
-				value = human_fallen_empires_leaders_governor_num
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				root = {
+					change_variable = {
+						which = human_fallen_empires_leaders_governor_capacity
+						value = -1
+					}
+				}
 			}
 			# log = "[This.human_fallen_empires_leaders_governor_capacity]"
-		}
-	}
-}
-
-human_fallen_empires_leaders_calc_scientist_num = {
-	# log = "calc scientist num"
-	set_variable = {
-		which = human_fallen_empires_leaders_scientist_num
-		value = 0
-	}
-	every_owned_leader = {
-		limit = {
-			leader_class = scientist
-		}
-		root = {
-			change_variable = {
-				which = human_fallen_empires_leaders_scientist_num
-				value = 1
-			}
 		}
 	}
 }
@@ -258,26 +155,14 @@ human_fallen_empires_leaders_calc_scientist_capacity = {
 			value = 0.5
 		}
 	}
-	subtract_variable = {
-		which = human_fallen_empires_leaders_scientist_capacity
-		value = human_fallen_empires_leaders_scientist_num
-	}
-}
-
-human_fallen_empires_leaders_calc_admiral_num = {
-	# log = "calc admiral num"
-	set_variable = {
-		which = human_fallen_empires_leaders_admiral_num
-		value = 0
-	}
 	every_owned_leader = {
 		limit = {
-			leader_class = admiral
+			leader_class = scientist
 		}
 		root = {
 			change_variable = {
-				which = human_fallen_empires_leaders_admiral_num
-				value = 1
+				which = human_fallen_empires_leaders_scientist_capacity
+				value = -1
 			}
 		}
 	}
@@ -294,7 +179,7 @@ human_fallen_empires_leaders_calc_admiral_capacity = {
 			fleet_power > 1000
 		}
 		change_variable = {
-			which = human_fallen_empires_leaders_num_fleets
+			which = human_fallen_empires_leaders_admiral_capacity
 			value = 1
 		}
 	}
@@ -349,7 +234,7 @@ human_fallen_empires_leaders_calc_admiral_capacity = {
 			is_country_type = human_fallen_empires_discovery
 		}
 		change_variable = {
-			which = human_fallen_empires_leaders_num_fleets
+			which = human_fallen_empires_leaders_admiral_capacity
 			value = 1
 		}
 	}
@@ -386,7 +271,7 @@ human_fallen_empires_leaders_calc_admiral_capacity = {
 		}
 		change_variable = {
 			which = human_fallen_empires_leaders_admiral_capacity
-			value = 0.5
+			value = 1
 		}
 	}
 	if = {
@@ -398,25 +283,13 @@ human_fallen_empires_leaders_calc_admiral_capacity = {
 			value = 1
 		}
 	}
-	subtract_variable = {
-		which = human_fallen_empires_leaders_admiral_capacity
-		value = human_fallen_empires_leaders_admiral_num
-	}
-}
-
-human_fallen_empires_leaders_calc_general_num = {
-	# log = "calc general num"
-	set_variable = {
-		which = human_fallen_empires_leaders_general_num
-		value = 0
-	}
 	every_owned_leader = {
 		limit = {
-			leader_class = general
+			leader_class = admiral
 		}
 		root = {
 			change_variable = {
-				which = human_fallen_empires_leaders_general_num
+				which = human_fallen_empires_leaders_admiral_capacity
 				value = 1
 			}
 		}
@@ -476,7 +349,7 @@ human_fallen_empires_leaders_calc_general_capacity = {
 		}
 		change_variable = {
 			which = human_fallen_empires_leaders_general_capacity
-			value = 0.5
+			value = 1
 		}
 	}
 	if = {
@@ -489,9 +362,16 @@ human_fallen_empires_leaders_calc_general_capacity = {
 		}
 	}
 	# log = "[This.human_fallen_empires_leaders_general_capacity]"
-	subtract_variable = {
-		which = human_fallen_empires_leaders_general_capacity
-		value = human_fallen_empires_leaders_general_num
+	every_owned_leader = {
+		limit = {
+			leader_class = general
+		}
+		root = {
+			change_variable = {
+				which = human_fallen_empires_leaders_general_capacity
+				value = -1
+			}
+		}
 	}
 	# log = "[This.human_fallen_empires_leaders_general_capacity]"
 }
@@ -501,6 +381,13 @@ human_fallen_empires_leaders_calc_leaders_capacity = {
 	human_fallen_empires_leaders_calc_scientist_capacity = yes
 	human_fallen_empires_leaders_calc_admiral_capacity = yes
 	human_fallen_empires_leaders_calc_general_capacity = yes
+}
+
+human_fallen_empires_leaders_print_stats = {
+	log = "[This.human_fallen_empires_leaders_governor_capacity] governor capacity"
+	log = "[This.human_fallen_empires_leaders_scientist_capacity] scientist capacity"
+	log = "[This.human_fallen_empires_leaders_admiral_capacity] admiral capacity"
+	log = "[This.human_fallen_empires_leaders_general_capacity] general capacity"
 }
 
 human_fallen_empires_leaders_add_random_trait = {
@@ -532,7 +419,7 @@ human_fallen_empires_leaders_add_random_trait = {
 								}
 								owner = {
 									human_fallen_empires_trigger_is_hive = no
-									human_fallen_empires_trigger_is_spiritualist = no
+									is_spiritualist = no
 								}
 							}
 							add_trait = ruler_trait_mark_of_infinity
@@ -646,7 +533,7 @@ human_fallen_empires_leaders_add_random_trait = {
 									has_trait = human_fallen_empires_ruler_trait_imperialist
 								}
 								owner = {
-									human_fallen_empires_trigger_is_pacifist = no
+									is_pacifist = no
 									human_fallen_empires_trigger_is_hive = no
 								}
 							}
@@ -865,7 +752,7 @@ human_fallen_empires_leaders_add_random_trait = {
 								has_trait = human_fallen_empires_governor_trait_pious
 							}
 							owner = {
-								human_fallen_empires_trigger_is_spiritualist = yes
+								is_spiritualist = yes
 							}
 						}
 						add_trait = human_fallen_empires_governor_trait_pious
@@ -925,7 +812,7 @@ human_fallen_empires_leaders_add_random_trait = {
 								has_trait = human_fallen_empires_governor_trait_xenolover
 							}
 							owner = {
-								human_fallen_empires_trigger_is_xenophile = yes
+								is_xenophile = yes
 							}
 						}
 						add_trait = human_fallen_empires_governor_trait_xenolover

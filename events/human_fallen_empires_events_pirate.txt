@@ -89,21 +89,6 @@ country_event = {
 		set_country_flag = pirate_encountered
 		save_event_target_as = human_fallen_empires_pirate_target
 		human_fallen_empires_effect_pirate_init = yes
-		every_country = {
-			limit = {
-				is_country_type = default
-				has_country_flag = pirate_encountered
-			}
-			every_country = {
-				limit = {
-					or = {
-						is_country_type = pirate
-						is_country_type = human_fallen_empires_pirate
-					}
-				}
-				establish_communications_no_message = prev
-			}
-		}
 	}
 
 	option = {
@@ -282,81 +267,6 @@ ship_event = {
 	}
 }
 
-# kill pirate base
-country_event = {
-	id = human_fallen_empires_pirate.5
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		exists = from
-		from = {
-			is_country_type = human_fallen_empires_pirate
-		}
-		exists = fromfromfrom
-		fromfromfrom = {
-			is_ship_class = shipclass_starbase
-		}
-	}
-
-	immediate = {
-		from = {
-			if = {
-				limit = {
-					num_owned_planets = 1
-					any_country = {
-						is_country_type = human_fallen_empires_pirate
-					}
-				}
-				random_country = {
-					limit = {
-						is_country_type = human_fallen_empires_pirate
-					}
-					prev = {
-						every_owned_fleet = {
-							set_owner = prevprev
-						}
-					}
-				}
-			}
-			every_owned_planet = {
-				limit = {
-					solar_system = {
-						is_same_value = fromfromfrom.solar_system
-					}
-				}
-				if = {
-					limit = {
-						num_pops > 0
-					}
-					every_owned_pop = {
-						if = {
-							limit = {
-								not = {
-									has_citizenship_type = {
-										type = citizenship_purge
-										country = root
-									}
-								}
-							}
-							save_event_target_as = human_fallen_empires_settle_pop_target
-							root = {
-								human_fallen_empires_effect_settle_pop = yes
-								human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
-							}
-							else = {
-								human_fallen_empires_effect_refugee_or_die = yes
-							}
-						}
-					}
-				}
-				destroy_colony = yes
-				change_pc = pc_asteroid
-			}
-		}
-	}
-}
-
 # spawn pirate during game
 country_event = {
 	id = human_fallen_empires_pirate.6
@@ -451,7 +361,7 @@ fleet_event = {
 	immediate = {
 		#log = "pirate fleet logic"
 		clear_fleet_actions = this
-		set_fleet_stance = aggressive
+		#set_fleet_stance = aggressive
 		queue_actions = {
 			repeat = {
 				# try found prior target
@@ -544,12 +454,12 @@ fleet_event = {
 						}
 						found_planet = {
 							orbit_planet = this
-							effect = {
-								id = human_fallen_empires_pirate.50.effect.1.0
-								root = {
-									set_fleet_stance = aggressive
-								}
-							}
+							# effect = {
+								# id = human_fallen_empires_pirate.50.effect.1.0
+								# root = {
+									# set_fleet_stance = aggressive
+								# }
+							# }
 							wait = 31
 						}
 					}
@@ -661,19 +571,7 @@ planet_event = {
 		exists = owner
 		exists = from
 		exists = orbit
-		from = {
-			any_owned_fleet = {
-				num_ships > 4
-				exists = leader
-				leader = {
-					has_trait = human_fallen_empires_admiral_trait_pirate
-				}
-				exists = orbit
-				orbit = {
-					is_same_value = root.orbit
-				}
-			}
-		}
+		has_orbital_bombardment_stance = human_fallen_empires_stance_pirate_raid
 	}
 
 	immediate = {
@@ -1432,7 +1330,7 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires_pirate.101.slave_menu
 			event_target:human_fallen_empires_pirate_country = {
-				human_fallen_empires_trigger_is_egalitarian = yes
+				is_egalitarian = yes
 			}
 		}
 		is_dialog_only = yes

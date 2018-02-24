@@ -1,0 +1,125 @@
+#
+namespace = human_fallen_empires_maintenance
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = human_fallen_empires_maintenance.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		or = {
+			is_country_type = human_fallen_empires_drone
+			is_country_type = human_fallen_empires_pirate
+		}
+		exists = fromfrom
+		fromfrom = {
+			count_fleet_ships = {
+				limit = {
+					is_ship_class = shipclass_starbase
+				}
+				count > 0
+			}
+		}
+	}
+
+	immediate = {
+		fromfrom = {
+			fleet_event = {
+				id = human_fallen_empires_maintenance.1
+				days = 1
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = human_fallen_empires_maintenance.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				count_fleet_ships = {
+					limit = {
+						is_ship_class = shipclass_starbase
+						has_hp < 10
+					}
+					count = 0
+				}
+			}
+			if = {
+				limit = {
+					is_in_combat = yes
+				}
+				fleet_event = {
+					id = human_fallen_empires_maintenance.1
+					days = 29
+				}
+			}
+			else = {
+				owner = {
+					if = {
+						limit = {
+							is_country_type = human_fallen_empires_pirate
+							num_starbases = 1
+							any_country = {
+								is_country_type = human_fallen_empires_pirate
+							}
+						}
+						random_country = {
+							limit = {
+								is_country_type = human_fallen_empires_pirate
+							}
+							prev = {
+								every_owned_fleet = {
+									set_owner = prevprev
+								}
+							}
+						}
+					}
+					every_owned_planet = {
+						limit = {
+							solar_system = {
+								is_same_value = root.solar_system
+							}
+						}
+						if = {
+							limit = {
+								num_pops > 0
+							}
+							every_owned_pop = {
+								human_fallen_empires_effect_refugee_or_die = yes
+								# мб стоит таки сделать преоритет для того, кто уничтожает базу
+								# if = {
+									# limit = {
+										# not = {
+											# has_citizenship_type = {
+												# type = citizenship_purge
+												# country = root
+											# }
+										# }
+									# }
+									# save_event_target_as = human_fallen_empires_settle_pop_target
+									# root = {
+										# human_fallen_empires_effect_settle_pop = yes
+										# human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+									# }
+									# else = {
+									# }
+								# }
+							}
+						}
+						destroy_colony = yes
+						change_pc = pc_asteroid
+					}
+				}
+				destroy_fleet = this
+			}
+		}
+	}
+}
