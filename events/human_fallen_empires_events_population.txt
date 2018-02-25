@@ -8,7 +8,7 @@ pop_event = {
 
 	trigger = {
 		not = {
-			has_global_flag = human_fallen_empires_disable_migration
+			has_global_flag = human_fallen_empires_population_disable
 		}
 		exists = planet
 	}
@@ -30,7 +30,7 @@ planet_event = {
 
 	trigger = {
 		not = {
-			has_global_flag = human_fallen_empires_disable_migration
+			has_global_flag = human_fallen_empires_population_disable
 		}
 	}
 
@@ -147,7 +147,7 @@ ship_event = {
 
 	trigger = {
 		not = {
-			has_global_flag = human_fallen_empires_disable_migration
+			has_global_flag = human_fallen_empires_population_disable
 		}
 		is_ship_class = shipclass_colonizer
 		exists = orbit.planet
@@ -158,10 +158,38 @@ ship_event = {
 			random_owned_pop = {
 				limit = {
 					is_exact_same_species = root.species
+					is_growing = no
 				}
 				kill_pop = yes
 			}
 		}
+	}
+}
+
+# remove pop_was_enslaved modifier
+pop_event = {
+	id = human_fallen_empires_population.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = human_fallen_empires_population_disable
+		}
+		or = {
+			has_ethic = ethic_authoritarian
+			and = {
+				has_ethic = ethic_spiritualist
+				exists = owner
+				owner = {
+					has_spiritualist_government = yes
+				}
+			}
+		}
+	}
+
+	immediate = {
+		remove_modifier = pop_was_enslaved
 	}
 }
 
