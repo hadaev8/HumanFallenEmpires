@@ -2,6 +2,34 @@
 # Total War
 namespace = human_fallen_empires_total_war
 
+# star war events 0 - 50
+# invite every subjects to war on_war_beginning
+# A war is beginning, executed for every country in the war.
+# Root = Country
+# From = War
+country_event = {
+	id = human_fallen_empires_total_war.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			using_war_goal = {
+				type = human_fallen_empires_wg_total_war
+				owner = root
+			}
+		}
+		any_subject = {
+			always = yes
+		}
+	}
+
+	immediate = {
+		every_subject = {
+			join_war = root
+		}
+	}
+}
 
 # events during total war 50 - 100
 # fallen drain resurces if losing war 10200
@@ -36,10 +64,7 @@ country_event = {
 	}
 }
 
-
-# events after war end 100
-
-# event for empire after total war win 100
+# events after war end 100 - 150
 country_event = {
 	id = human_fallen_empires_total_war.100
 	title = human_fallen_empires_total_war.100.name
@@ -242,7 +267,7 @@ country_event = {
 	}
 }
 
-# inform after total war
+# inform after total war 150 - 200
 country_event = {
 	id = human_fallen_empires_total_war.150
 	title = human_fallen_empires_total_war.150.name
@@ -442,7 +467,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		years_passed > 100
+		end_game_years_passed >= 0
 		any_country = {
 			NOT = {
 				has_ethic = ethic_gestalt_consciousness
@@ -453,7 +478,9 @@ country_event = {
 		any_country = {
 			is_country_type = default
 			OR = {
-				fleet_power > 12000
+				# Fragged a holy world
+				has_country_flag = holy_world_killed
+				fleet_power > 120000
 				and = {
 					is_difficulty > 0
 					fleet_power > 100000
@@ -792,6 +819,7 @@ country_event = {
 			}
 		}
 		set_global_flag = human_fallen_empires_war_in_heaven_started
+		set_global_flag = war_in_heaven_ongoing
 	}
 }
 
@@ -807,7 +835,7 @@ country_event = {
 			has_global_flag = human_fallen_empires_war_in_heaven_started_by_ai
 		}
 		is_country_type = awakened_fallen_empire
-		any_country = {
+		any_relation = {
 			is_country_type = awakened_fallen_empire
 			is_at_war_with = root
 		}

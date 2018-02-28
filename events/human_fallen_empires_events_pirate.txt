@@ -74,22 +74,25 @@ country_event = {
 	}
 
 	trigger = {
-		is_country_type = default
 		not = {
 			has_country_flag = human_fallen_empires_birth_of_piracy
 		}
+		is_country_type = default
 		years_passed > 10
+		num_owned_planets > 2
+		human_fallen_empires_trigger_is_human_fallen = no
+		human_fallen_empires_trigger_is_hive = no
 	}
 
 	is_triggered_only = yes
 
 	immediate = {
-		log = "pirate spawned"
+		# log = "pirate spawned"
 		set_country_flag = human_fallen_empires_birth_of_piracy
 		set_country_flag = pirate_encountered
 		set_timed_country_flag = {
 			flag = human_fallen_empires_pirate_spawned
-			days = 1500
+			days = @human_fallen_empires_pirate_spawn_cooldown
 		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		human_fallen_empires_effect_pirate_init = yes
@@ -204,9 +207,10 @@ country_event = {
 	}
 
 	immediate = {
-		save_event_target_as = pirate_band
+		save_event_target_as = human_fallen_empires_pirate_clan
 		capital_scope = {
 			closest_system = {
+				max_steps = 20
 				limit = {
 					has_owner = no
 					not = {
@@ -281,34 +285,7 @@ country_event = {
 			days = @human_fallen_empires_pirate_spawn_cooldown
 		}
 		save_event_target_as = human_fallen_empires_pirate_target
-		random_system = {
-			limit = {
-				nor = {
-					has_star_flag = hostile_system
-					any_planet = {
-						exists = owner
-					}
-				}
-				any_planet = {
-					is_asteroid = yes
-					not = {
-						exists = controller
-					}
-				}
-				human_fallen_empires_trigger_has_starbase_starport = no
-			}
-			random_system_planet = {
-				limit = {
-					is_asteroid = yes
-					nor = {
-						exists = controller
-						exists = owner
-					}
-				}
-				human_fallen_empires_effect_pirate_init = yes
-				human_fallen_empires_effect_pirate_init_base = yes
-			}
-		}
+		human_fallen_empires_effect_pirate_init = yes
 	}
 }
 
@@ -2017,13 +1994,22 @@ country_event = {
 				}
 			}
 			text = human_fallen_empires_blackjack_show_my_stats
+			text = human_fallen_empires_blackjack_show_my_stats_cards
 			text = human_fallen_empires_newline_3
 			fail_text = {
 				text = human_fallen_empires_blackjack_show_enemy_stats_hide
 				has_country_flag = human_fallen_empires_blackjack_end
 			}
+			fail_text = {
+				text = human_fallen_empires_blackjack_show_enemy_stats_hide_cards
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
 			success_text = {
 				text = human_fallen_empires_blackjack_show_enemy_stats
+				has_country_flag = human_fallen_empires_blackjack_end
+			}
+			success_text = {
+				text = human_fallen_empires_blackjack_show_enemy_stats_cards
 				has_country_flag = human_fallen_empires_blackjack_end
 			}
 		}

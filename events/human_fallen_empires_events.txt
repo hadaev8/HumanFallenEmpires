@@ -45,6 +45,9 @@ event = {
 					}
 					random_country = {
 						limit = {
+							not = {
+								has_country_flag = human_fallen_empires_birth_of_piracy
+							}
 							is_country_type = default
 							num_owned_planets > 2
 							human_fallen_empires_trigger_is_human_fallen = no
@@ -72,10 +75,10 @@ event = {
 				every_country = {
 					limit = {
 						is_country_type = default
-						has_country_flag = human_fallen_empires_birth_of_piracy
 						not = {
 							has_country_flag = human_fallen_empires_pirate_spawned
 						}
+						has_country_flag = human_fallen_empires_birth_of_piracy
 					}
 					random_list = {
 						98 = {
@@ -100,14 +103,18 @@ event = {
 							modifier = {
 								factor = 2
 								any_owned_planet = {
-									is_occupied_flag = yes
+									not = {
+										is_controlled_by = owner
+									}
 								}
 							}
 							modifier = {
 								factor = 2
 								any_owned_planet = {
 									is_capital = yes
-									is_occupied_flag = yes
+									not = {
+										is_controlled_by = owner
+									}
 								}
 							}
 							# modifier = {
@@ -1233,7 +1240,12 @@ country_event = {
 			has_global_flag = human_fallen_empires_egypt_in_expansion
 		}
 		or = {
+			mid_game_years_passed > 50
+			end_game_years_passed > 0
+		}
+		or = {
 			has_global_flag = galactic_crisis_happened
+			has_global_flag = human_fallen_empires_war_in_heaven_started
 			recently_lost_war = yes
 			and = {
 				or = {
@@ -3011,12 +3023,10 @@ ship_event = {
 		create_fleet = {
 			name = "Marvin"
 			effect = {
-				set_owner = root.owner
+				set_owner = event_target:human_fallen_empires_egypt
 				create_ship = {
 					name = "Marvin"
-					design = Set
-					graphical_culture = "mammalian_01"
-					prefix = no
+					random_existing_design = battleship
 				}
 				last_created_ship = {
 					add_modifier = {
@@ -3024,6 +3034,7 @@ ship_event = {
 						days = -1
 					}
 				}
+				set_owner = root.owner
 				set_location = root
 				set_fleet_stance = aggressive
 			}
@@ -4020,7 +4031,9 @@ ship_event = {
 				is_materialist = yes
 			}
 		}
-		human_fallen_empires_effect_materialist_attraction_low = yes
+		owner = {
+			human_fallen_empires_effect_materialist_attraction_low = yes
+		}
 	}
 	after = {
 		owner = {
@@ -7313,7 +7326,12 @@ country_event = {
 			has_global_flag = human_fallen_empires_future_in_expansion
 		}
 		or = {
+			mid_game_years_passed > 50
+			end_game_years_passed > 0
+		}
+		or = {
 			has_global_flag = galactic_crisis_happened
+			has_global_flag = human_fallen_empires_war_in_heaven_started
 			recently_lost_war = yes
 			and = {
 				or = {

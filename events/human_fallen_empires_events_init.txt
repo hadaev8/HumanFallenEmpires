@@ -196,37 +196,19 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = {
-					nor = {
-						has_global_flag = human_fallen_empires_init_fleet_5
-						has_global_flag = human_fallen_empires_init_fleet_4
-						has_global_flag = human_fallen_empires_init_fleet_3
-						has_global_flag = human_fallen_empires_init_fleet_2
-						has_global_flag = human_fallen_empires_init_fleet_1
+					check_variable = {
+						which = human_fallen_empires_init_fast_start_fleet_num
+						value > 5
 					}
 				}
-				set_global_flag = human_fallen_empires_init_fleet_1
+				set_variable = {
+					which = human_fallen_empires_init_fast_start_fleet_num
+					value = 0
+				}
 				else = {
-					switch = {
-						trigger = has_global_flag
-						human_fallen_empires_init_fleet_5 = {
-							remove_global_flag = human_fallen_empires_init_fleet_5
-						}
-						human_fallen_empires_init_fleet_4 = {
-							remove_global_flag = human_fallen_empires_init_fleet_4
-							set_global_flag = human_fallen_empires_init_fleet_5
-						}
-						human_fallen_empires_init_fleet_3 = {
-							remove_global_flag = human_fallen_empires_init_fleet_3
-							set_global_flag = human_fallen_empires_init_fleet_4
-						}
-						human_fallen_empires_init_fleet_2 = {
-							remove_global_flag = human_fallen_empires_init_fleet_2
-							set_global_flag = human_fallen_empires_init_fleet_3
-						}
-						human_fallen_empires_init_fleet_1 = {
-							remove_global_flag = human_fallen_empires_init_fleet_1
-							set_global_flag = human_fallen_empires_init_fleet_2
-						}
+					change_variable = {
+						which = human_fallen_empires_init_fast_start_fleet_num
+						value = 1
 					}
 				}
 			}
@@ -245,37 +227,19 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = {
-					nor = {
-						has_global_flag = human_fallen_empires_init_pirate_25
-						has_global_flag = human_fallen_empires_init_pirate_20
-						has_global_flag = human_fallen_empires_init_pirate_15
-						has_global_flag = human_fallen_empires_init_pirate_10
-						has_global_flag = human_fallen_empires_init_pirate_5
+					check_variable = {
+						which = human_fallen_empires_init_fast_start_pirate_num
+						value > 5
 					}
 				}
-				set_global_flag = human_fallen_empires_init_pirate_5
+				set_variable = {
+					which = human_fallen_empires_init_fast_start_pirate_num
+					value = 0
+				}
 				else = {
-					switch = {
-						trigger = has_global_flag
-						human_fallen_empires_init_pirate_25 = {
-							remove_global_flag = human_fallen_empires_init_pirate_25
-						}
-						human_fallen_empires_init_pirate_20 = {
-							remove_global_flag = human_fallen_empires_init_pirate_20
-							set_global_flag = human_fallen_empires_init_pirate_25
-						}
-						human_fallen_empires_init_pirate_15 = {
-							remove_global_flag = human_fallen_empires_init_pirate_15
-							set_global_flag = human_fallen_empires_init_pirate_20
-						}
-						human_fallen_empires_init_pirate_10 = {
-							remove_global_flag = human_fallen_empires_init_pirate_10
-							set_global_flag = human_fallen_empires_init_pirate_15
-						}
-						human_fallen_empires_init_pirate_5 = {
-							remove_global_flag = human_fallen_empires_init_pirate_5
-							set_global_flag = human_fallen_empires_init_pirate_10
-						}
+					change_variable = {
+						which = human_fallen_empires_init_fast_start_pirate_num
+						value = 1
 					}
 				}
 			}
@@ -756,35 +720,9 @@ country_event = {
 					human_fallen_empires_effect_init_expand_borders = yes
 					human_fallen_empires_effect_init_set_minings_stations = yes
 					# more fleets
-					switch = {
-						trigger = has_global_flag
-						human_fallen_empires_init_fleet_5 = {
-							while = {
-								count = 5
-								human_fallen_empires_effect_init_make_fleet = yes
-							}
-						}
-						human_fallen_empires_init_fleet_4 = {
-							while = {
-								count = 4
-								human_fallen_empires_effect_init_make_fleet = yes
-							}
-						}
-						human_fallen_empires_init_fleet_3 = {
-							while = {
-								count = 3
-								human_fallen_empires_effect_init_make_fleet = yes
-							}
-						}
-						human_fallen_empires_init_fleet_2 = {
-							while = {
-								count = 2
-								human_fallen_empires_effect_init_make_fleet = yes
-							}
-						}
-						human_fallen_empires_init_fleet_1 = {
-							human_fallen_empires_effect_init_make_fleet = yes
-						}
+					while = {
+						count = human_fallen_empires_init_fast_start_fleet_num
+						human_fallen_empires_effect_init_make_fleet = yes
 					}
 					# some res
 					add_food = 200
@@ -834,67 +772,14 @@ country_event = {
 					run_ai_strategic_data = yes
 				}
 				# more pirate
-				switch = {
-					trigger = has_global_flag
-					human_fallen_empires_init_pirate_25 = {
-						while = {
-							count = 25
-							random_country = {
-								limit = {
-									is_country_type = default
-								}
-								save_event_target_as = human_fallen_empires_pirate_target
-								human_fallen_empires_effect_pirate_init = yes
-							}
+				while = {
+					count = human_fallen_empires_init_fast_start_pirate_num
+					random_country = {
+						limit = {
+							is_country_type = default
 						}
-					}
-					human_fallen_empires_init_pirate_20 = {
-						while = {
-							count = 20
-							random_country = {
-								limit = {
-									is_country_type = default
-								}
-								save_event_target_as = human_fallen_empires_pirate_target
-								human_fallen_empires_effect_pirate_init = yes
-							}
-						}
-					}
-					human_fallen_empires_init_pirate_15 = {
-						while = {
-							count = 15
-							random_country = {
-								limit = {
-									is_country_type = default
-								}
-								save_event_target_as = human_fallen_empires_pirate_target
-								human_fallen_empires_effect_pirate_init = yes
-							}
-						}
-					}
-					human_fallen_empires_init_pirate_10 = {
-						while = {
-							count = 10
-							random_country = {
-								limit = {
-									is_country_type = default
-								}
-								save_event_target_as = human_fallen_empires_pirate_target
-								human_fallen_empires_effect_pirate_init = yes
-							}
-						}
-					}
-					human_fallen_empires_init_pirate_5 = {
-						while = {
-							count = 5
-							random_country = {
-								limit = {
-									is_country_type = default
-								}
-								save_event_target_as = human_fallen_empires_pirate_target
-								human_fallen_empires_effect_pirate_init = yes
-							}
-						}
+						save_event_target_as = human_fallen_empires_pirate_target
+						human_fallen_empires_effect_pirate_init = yes
 					}
 				}
 			}
