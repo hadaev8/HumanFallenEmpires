@@ -60,71 +60,62 @@ country_event = {
 				}
 			}
 		}
-		while = {
-			count = 4
-			random_planet = {
-				limit = {
-					human_fallen_empires_trigger_plague_can_start_at_planet = yes
-				}
-				planet_event = {
-					id = human_fallen_empires_plague.1 days = 1 random = 365
-				}
-			}
+		set_variable = {
+			which = human_fallen_empires_plague_power
+			value = 4
 		}
 		if = {
 			limit = {
 				is_difficulty > 0
 			}
-			while = {
-				count = 2
-				random_planet = {
-					limit = {
-						human_fallen_empires_trigger_plague_can_start_at_planet = yes
-					}
-					planet_event = {
-						id = human_fallen_empires_plague.1 days = 1 random = 365
-					}
-				}
+			change_variable = {
+				which = human_fallen_empires_plague_power
+				value = 2
 			}
 		}
 		if = {
 			limit = {
 				is_difficulty > 1
 			}
-			while = {
-				count = 2
-				random_planet = {
-					limit = {
-						human_fallen_empires_trigger_plague_can_start_at_planet = yes
-					}
-					planet_event = {
-						id = human_fallen_empires_plague.1 days = 1 random = 365
-					}
-				}
+			change_variable = {
+				which = human_fallen_empires_plague_power
+				value = 2
 			}
 		}
 		if = {
 			limit = {
 				is_difficulty > 2
 			}
-			while = {
-				count = 2
-				random_planet = {
-					limit = {
-						human_fallen_empires_trigger_plague_can_start_at_planet = yes
-					}
-					planet_event = {
-						id = human_fallen_empires_plague.1 days = 1 random = 365
-					}
+			change_variable = {
+				which = human_fallen_empires_plague_power
+				value = 2
+			}
+		}
+		while = {
+			count = human_fallen_empires_plague_power
+			random_planet = {
+				limit = {
+					human_fallen_empires_trigger_plague_valid_planet = yes
+				}
+				planet_event = {
+					id = human_fallen_empires_plague.1
+					days = 1
+					random = 365
 				}
 			}
+		}
+		set_variable = {
+			which = human_fallen_empires_plague_power
+			value = 0
 		}
 		every_country = {
 			limit = {
 				is_ai = no
 			}
 			country_event = {
-				id = human_fallen_empires_plague.50 days = 1 random = 15
+				id = human_fallen_empires_plague.50 
+				days = 1
+				random = 15
 			}
 		}
 		create_species = {
@@ -134,11 +125,11 @@ country_event = {
 		 	traits = random
 		}
 		create_country = {
-			name = "Zombies"
+			name = Zombies
 			species = last_created_species
 			type = human_fallen_empires_plague_zombie
 			effect = {
-				save_event_target_as = human_fallen_empires_plague_zombie_country
+				save_global_event_target_as = human_fallen_empires_plague_zombie_country
 			}
 		}
 	}
@@ -162,14 +153,16 @@ planet_event = {
 
 	immediate = {
 		set_timed_planet_flag = {
-			flag = human_fallen_empires_plague_planet days = 3650
+			flag = human_fallen_empires_plague_planet
+			days = 3650
 		}
 		every_owned_pop = {
 			limit = {
 				human_fallen_empires_trigger_plague_is_immune = no
 			}
 			set_timed_pop_flag = {
-				flag = human_fallen_empires_plague_pop days = 3650
+				flag = human_fallen_empires_plague_pop 
+				days = 3650
 			}
 		}
 		every_playable_country = {
@@ -194,7 +187,9 @@ planet_event = {
 			}
 			owner = {
 				country_event = {
-					id = human_fallen_empires_plague.55 days = 1 random = 15
+					id = human_fallen_empires_plague.55
+					days = 1 
+					random = 15
 				}
 			}
 			else = {
@@ -208,7 +203,9 @@ planet_event = {
 					}
 					owner = {
 						country_event = {
-							id = human_fallen_empires_plague.54 days = 1 random = 15
+							id = human_fallen_empires_plague.54
+							days = 1 
+							random = 15
 						}
 					}
 					else = {
@@ -218,7 +215,9 @@ planet_event = {
 						}
 						owner = {
 							country_event = {
-								id = human_fallen_empires_plague.53 days = 1 random = 15
+								id = human_fallen_empires_plague.53 
+								days = 1 
+								random = 15
 							}
 						}
 					}
@@ -248,7 +247,8 @@ planet_event = {
 			every_playable_country = {
 				add_research_option = tech_human_fallen_empires_plague_study
 				country_event = {
-					id = human_fallen_empires_plague.51 days = 1
+					id = human_fallen_empires_plague.51 
+					days = 1
 				}
 			}
 		}
@@ -267,7 +267,8 @@ planet_event = {
 			set_global_flag = human_fallen_empires_plague_lvl_3
 			every_playable_country = {
 				country_event = {
-					id = human_fallen_empires_plague.52 days = 1
+					id = human_fallen_empires_plague.52 
+					days = 1
 				}
 			}
 		}
@@ -293,7 +294,8 @@ planet_event = {
 		}
 		# check planet after 10 years
 		planet_event = {
-			id = human_fallen_empires_plague.4 days = 3651
+			id = human_fallen_empires_plague.4 
+			days = 3651
 		}
 	}
 }
@@ -317,7 +319,9 @@ planet_event = {
 
 	immediate = {
 		planet_event = {
-			id = human_fallen_empires_plague.2 days = 180 random = 180
+			id = human_fallen_empires_plague.2
+			days = 180 
+			random = 180
 		}
 		# log = "Plague pulse on planet [Root.GetName] owner: [Root.Owner.GetName]"
 		# kill someone
@@ -473,12 +477,12 @@ planet_event = {
 			max_steps = 10
 			limit = {
 				any_planet = {
-					human_fallen_empires_trigger_plague_can_start_at_planet = yes
+					human_fallen_empires_trigger_plague_valid_planet = yes
 				}
 			}
 			random_planet = {
 				limit = {
-					human_fallen_empires_trigger_plague_can_start_at_planet = yes
+					human_fallen_empires_trigger_plague_valid_planet = yes
 				}
 				random_list = {
 					# nothing
@@ -763,7 +767,8 @@ country_event = {
 		custom_tooltip = human_fallen_empires_plague.9.0.tooltip
 		hidden_effect = {
 			country_event = {
-				id = human_fallen_empires_plague.10 days = 2
+				id = human_fallen_empires_plague.10 
+				days = 2
 			}
 		}
 	}
@@ -1118,7 +1123,7 @@ country_event = {
 			has_trait = trait_mechanical
 			or = {
 				is_xenophile = yes
-				human_fallen_empires_trigger_is_assimilator = yes
+				has_valid_civic = civic_machine_servitor
 			}
 		}
 		human_fallen_empires_effect_xenophile_attraction_low = yes
@@ -1127,10 +1132,9 @@ country_event = {
 		name = human_fallen_empires_plague.50.1.2
 		exclusive_trigger = {
 			has_trait = trait_mechanical
-			is_xenophobe = no
-			human_fallen_empires_trigger_is_undiplomatic = no
-			is_xenophile = no
-			human_fallen_empires_trigger_is_assimilator = no
+			#is_xenophobe = no
+			#is_xenophile = no
+			#human_fallen_empires_trigger_is_undiplomatic = no
 		}
 	}
 	option = {
