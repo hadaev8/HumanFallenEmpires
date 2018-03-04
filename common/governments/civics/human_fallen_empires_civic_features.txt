@@ -1,5 +1,6 @@
 #
 
+# starting civics
 human_fallen_empires_civic_features_exodus = {
 	icon = gfx/interface/icons/civic/human_fallen_empires_civic_features_exodus.dds
 	modification = no
@@ -11,6 +12,7 @@ human_fallen_empires_civic_features_exodus = {
 				value = human_fallen_empires_civic_brainworm
 				value = human_fallen_empires_civic_features_early_colonisation
 				value = human_fallen_empires_civic_features_early_contact
+				value = human_fallen_empires_civic_features_fanatic_isolationist
 			}
 		}
 	}
@@ -19,32 +21,6 @@ human_fallen_empires_civic_features_exodus = {
 	}
 	modifier = {
 		country_starbase_influence_cost_mult = -0.2
-	}
-}
-
-human_fallen_empires_civic_features_aggressive_diplomacy = {
-	icon = gfx/interface/icons/civic/human_fallen_empires_civic_features_aggressive_diplomacy.dds
-	potential = {
-		ethics = {
-			not = {
-				value = ethic_gestalt_consciousness
-			}
-		}
-	}
-	possible = {
-		ethics = {
-			OR = {
-				text = civic_tooltip_militarist
-				value = ethic_militarist
-				value = ethic_fanatic_militarist
-			}
-		}
-	}
-	random_weight = {
-		base = 1
-	}
-	description = human_fallen_empires_civic_features_aggressive_diplomacy.tooltip
-	modifier = {
 	}
 }
 
@@ -57,8 +33,9 @@ human_fallen_empires_civic_features_early_colonisation = {
 		civics = {
 			nor = {
 				value = human_fallen_empires_civic_brainworm
-				value = human_fallen_empires_civic_features_early_contact
 				value = human_fallen_empires_civic_features_exodus
+				value = human_fallen_empires_civic_features_early_contact
+				value = human_fallen_empires_civic_features_fanatic_isolationist
 			}
 		}
 	}
@@ -89,8 +66,9 @@ human_fallen_empires_civic_features_early_contact = {
 		civics = {
 			nor = {
 				value = human_fallen_empires_civic_brainworm
-				value = human_fallen_empires_civic_features_early_colonisation
 				value = human_fallen_empires_civic_features_exodus
+				value = human_fallen_empires_civic_features_early_colonisation
+				value = human_fallen_empires_civic_features_fanatic_isolationist
 			}
 		}
 		ethics = {
@@ -110,6 +88,74 @@ human_fallen_empires_civic_features_early_contact = {
 		}
 	}
 	description = human_fallen_empires_civic_features_early_contact.tooltip
+	modifier = {
+	}
+}
+
+human_fallen_empires_civic_features_fanatic_isolationist = {
+	icon = gfx/interface/icons/civic/human_fallen_empires_civic_features_fanatic_isolationist.dds
+	modification = no
+	potential = {
+		ethics = {
+			not = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+	}
+	possible = {
+		civics = {
+			nor = {
+				value = human_fallen_empires_civic_brainworm
+				value = human_fallen_empires_civic_features_exodus
+				value = human_fallen_empires_civic_features_early_contact
+				value = human_fallen_empires_civic_features_early_colonisation
+			}
+		}
+		ethics = {
+			value = ethic_pacifist
+			value = ethic_fanatic_xenophobe
+		}
+	}
+	random_weight = {
+		base = 1
+		modifier = {
+			# civic has no effect after galaxy generation, disable for random generation
+			factor = 0
+			has_global_flag = game_started
+		}
+	}
+	modifier = {
+		starbase_defensive_war_ship_build_speed_mult = 1
+		ship_home_territory_fire_rate_mult = 1
+		country_starbase_influence_cost_mult = 0.8
+		country_claim_influence_cost_mult = 0.8
+	}
+	description = human_fallen_empires_civic_features_fanatic_isolationist.tooltip
+}
+
+# other
+human_fallen_empires_civic_features_aggressive_diplomacy = {
+	icon = gfx/interface/icons/civic/human_fallen_empires_civic_features_aggressive_diplomacy.dds
+	potential = {
+		ethics = {
+			not = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+	}
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_militarist
+				value = ethic_militarist
+				value = ethic_fanatic_militarist
+			}
+		}
+	}
+	random_weight = {
+		base = 1
+	}
+	description = human_fallen_empires_civic_features_aggressive_diplomacy.tooltip
 	modifier = {
 	}
 }

@@ -150,25 +150,68 @@ ship_event = {
 			has_global_flag = human_fallen_empires_population_disable
 		}
 		is_ship_class = shipclass_colonizer
-		exists = orbit.planet
 	}
 
 	immediate = {
-		orbit.planet = {
-			random_owned_pop = {
-				limit = {
-					is_exact_same_species = root.species
-					is_growing = no
+		if = {
+			limit = {
+				exists = orbit.planet
+			}
+			orbit.planet = {
+				random_owned_pop = {
+					limit = {
+						is_exact_same_species = root.species
+						is_growing = no
+					}
+					kill_pop = yes
 				}
-				kill_pop = yes
+			}
+			else = {
+				solar_system = {
+					random_system_planet = {
+						limit = {
+							exists = owner
+							any_owned_pop = {
+								is_exact_same_species = root.species
+								is_growing = no
+							}
+						}
+						random_owned_pop = {
+							limit = {
+								is_exact_same_species = root.species
+								is_growing = no
+							}
+							kill_pop = yes
+						}
+					}
+				}
 			}
 		}
 	}
 }
 
+# remove modifiers on_planet_ownerless
+planet_event = {
+	id = human_fallen_empires_population.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		or = {
+			has_modifier = human_fallen_empires_population_unpopulated_planet
+			has_modifier = human_fallen_empires_population_overpopulated_planet
+		}
+	}
+
+	immediate = {
+		remove_modifier = human_fallen_empires_population_unpopulated_planet
+		remove_modifier = human_fallen_empires_population_overpopulated_planet
+	}
+}
+
 # remove pop_was_enslaved modifier
 pop_event = {
-	id = human_fallen_empires_population.7
+	id = human_fallen_empires_population.11
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -192,6 +235,7 @@ pop_event = {
 		remove_modifier = pop_was_enslaved
 	}
 }
+
 
 # change main species 50 - 100
 country_event = {

@@ -62,6 +62,58 @@ country_event = {
 	}
 }
 
+# annex occuping systems
+# A planets controller becomes a country not the same as the owner.
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
+planet_event = {
+	id = human_fallen_empires_total_war.51
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = {
+			exists = overlord
+			exists = from
+			any_war = {
+				any_war_participant = {
+					is_country = prevprev.from
+				}
+				any_war_participant = {
+					prev = {
+						using_war_goal = {
+							type = human_fallen_empires_wg_total_war
+							owner = prev
+						}
+					}
+					or = {
+						is_in_federation_with = prevprev
+						is_country = prevprev
+						is_overlord_to = prevprev
+						any_subject = {
+							is_country = prevprevprev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		conquer = fromfrom
+		if = {
+			limit = {
+				exists = starbase
+			}
+			starbase = {
+				set_owner = fromfrom
+			}
+		}
+	}
+}
+
 # events after war end 100 - 150
 country_event = {
 	id = human_fallen_empires_total_war.100

@@ -15,6 +15,9 @@ event = {
 			country_event = {
 				id = human_fallen_empires_init.50
 			}
+			country_event = {
+				id = human_fallen_empires_init.102
+			}
 		}
 	}
 }
@@ -47,24 +50,24 @@ country_event = {
 	is_triggered_only = yes
 
 	# disable story
-	option = {
-		name = human_fallen_empires_init.50.0.defined_text
-		custom_tooltip = human_fallen_empires_init.50.0.tooltip.defined_text
-		hidden_effect = {
-			if = {
-				limit = {
-					has_global_flag = human_fallen_empires_disable_story
-				}
-				remove_global_flag = human_fallen_empires_disable_story
-				else = {
-					set_global_flag = human_fallen_empires_disable_story
-				}
-			}
-			country_event = {
-				id = human_fallen_empires_init.50
-			}
-		}
-	}
+	# option = {
+	# 	name = human_fallen_empires_init.50.0.defined_text
+	# 	custom_tooltip = human_fallen_empires_init.50.0.tooltip.defined_text
+	# 	hidden_effect = {
+	# 		if = {
+	# 			limit = {
+	# 				has_global_flag = human_fallen_empires_disable_story
+	# 			}
+	# 			remove_global_flag = human_fallen_empires_disable_story
+	# 			else = {
+	# 				set_global_flag = human_fallen_empires_disable_story
+	# 			}
+	# 		}
+	# 		country_event = {
+	# 			id = human_fallen_empires_init.50
+	# 		}
+	# 	}
+	# }
 	# fast start
 	option = {
 		name = human_fallen_empires_init.50.1.0.defined_text
@@ -345,362 +348,7 @@ country_event = {
 			# prevent vanilla awake
 			set_global_flag = sleepers_awake_happened
 			# story mod, enabled by default
-			if = {
-				limit = {
-					not = {
-						has_global_flag = human_fallen_empires_disable_story
-					}
-				}
-				# find humans
-				if = {
-					limit = {
-						any_country = {
-							or = {
-								has_country_flag = human_1
-								has_country_flag = human_2
-								species_portrait = human
-							}
-						}
-					}
-					every_country = {
-						limit = {
-							or = {
-								has_country_flag = human_1
-								has_country_flag = human_2
-								species_portrait = human
-							}
-						}
-						set_country_flag = human_fallen_empires_marked_as_human
-					}
-					if = {
-						limit = {
-							any_country = {
-								has_country_flag = human_fallen_empires_marked_as_human
-								is_ai = no
-							}
-						}
-						random_country = {
-							limit = {
-								has_country_flag = human_fallen_empires_marked_as_human
-								is_ai = no
-							}
-							species = {
-								save_event_target_as = human_fallen_empires_human_species
-							}
-						}
-						else = {
-							random_country = {
-								limit = {
-									has_country_flag = human_fallen_empires_marked_as_human
-								}
-								species = {
-									save_event_target_as = human_fallen_empires_human_species
-								}
-							}
-						}
-					}
-				}
-				# create need species
-				# egypt
-				create_species = {
-					name = "Ju Ahet"
-					plural = "Ju Ahet"
-					class = HUM
-					portrait = human_fallen_empires_egypt_portrait
-					traits = {
-						ideal_planet_class = pc_continental
-						trait = trait_extremely_adaptive
-						trait = trait_venerable
-						trait = trait_slow_breeders
-						trait = trait_psionic
-					}
-					immortal = yes
-				}
-				last_created_species = {
-					save_global_event_target_as = human_fallen_empires_egypt_species
-					if = {
-						limit = {
-							exists = event_target:human_fallen_empires_human_species
-						}
-						set_species_identity = event_target:human_fallen_empires_human_species
-					}
-				}
-				# ahet
-				create_species = {
-					name = Ahet
-					plural = Ahet
-					class = "REP"
-					portrait = random
-					traits = {
-						ideal_planet_class = pc_tropical
-						trait = trait_slow_breeders
-						trait = trait_strong
-						trait = random_traits
-					}
-				}
-				last_created_species = {
-					save_global_event_target_as = human_fallen_empires_ahet_species
-				}
-				# varelse
-				create_species = {
-					name = Varelse
-					plural = Varelse
-					class = "REP"
-					portrait = random
-					traits = {
-						ideal_planet_class = pc_desert
-						trait = trait_industrious
-						trait = trait_natural_engineers
-						trait = trait_strong
-						trait = trait_repugnant
-					}
-				}
-				last_created_species = {
-					save_global_event_target_as = human_fallen_empires_varelse_species
-				}
-				# future
-				create_species = {
-					name = Human
-					plural = Humans
-					class = HUM
-					portrait = human
-					traits = {
-						ideal_planet_class = pc_continental
-						trait = trait_intelligent
-						trait = trait_thrifty
-						trait = trait_strong
-						trait = trait_solitary
-					}
-				}
-				last_created_species = {
-					set_species_identity = event_target:human_fallen_empires_egypt_species
-					save_global_event_target_as = human_fallen_empires_future_species
-				}
-				# future
-				random_rim_system = {
-					limit = {
-						has_owner = no
-						is_fe_cluster = no
-						not = {
-							any_system = {
-								distance = {
-									source = prev
-									max_distance = 50
-									min_distance = 0
-								}
-								has_owner = yes
-							}
-						}
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_future
-					}
-					set_global_flag = human_fallen_empires_future_spawned
-				}
-				# egypt
-				random_system = {
-					limit = {
-						has_owner = no
-						is_fe_cluster = no
-						not = {
-							any_system = {
-								distance = {
-									source = prev
-									max_distance = 50
-									min_distance = 0
-								}
-								has_owner = yes
-							}
-						}
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_egypt
-					}
-					set_global_flag = human_fallen_empires_egypt_spawned
-				}
-				random_system = {
-					limit = {
-						has_star_flag = human_fallen_empires_egypt_0
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_hope
-					}
-				}
-				random_system = {
-					limit = {
-						has_star_flag = human_fallen_empires_egypt_1
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_gift
-					}
-				}
-				#some other systems
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_memorial_01
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_memorial_02
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_memorial_03
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_memorial_04
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_varelse
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_ahet
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_ahet_2
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_ahet_home
-					}
-				}
-				random_system = {
-					limit = {
-						has_owner = no
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_copernicus
-					}
-				}
-				# drone
-				random_system = {
-					limit = {
-						has_owner = no
-						is_fe_cluster = no
-						not = {
-							any_system = {
-								distance = {
-									source = prev
-									max_distance = 50
-									min_distance = 0
-								}
-								has_owner = yes
-							}
-						}
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_drone_sector_0
-					}
-				}
-				random_system = {
-					limit = {
-						has_star_flag = human_fallen_empires_drone_0
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_drone_sector_1
-					}
-				}
-				random_system = {
-					limit = {
-						has_star_flag = human_fallen_empires_drone_1
-					}
-					spawn_system = {
-						min_distance = 0
-						max_distance = 10
-						hyperlane = yes
-						initializer = human_fallen_empires_drone_sector_10
-					}
-				}
-				# expand borders and develop
-				country_event = {
-					id = human_fallen_empires_init.101
-					days = 3
-				}
-				country_event = {
-					id = human_fallen_empires_init.101
-					days = 5
-				}
-			}
+
 			# fast start
 			if = {
 				limit = {
@@ -851,6 +499,372 @@ country_event = {
 		event_target:human_fallen_empires_drone_country = {
 			human_fallen_empires_effect_init_expand_borders = yes
 			human_fallen_empires_effect_init_set_minings_stations = yes
+		}
+	}
+}
+
+# stry mod event
+country_event = {
+	id = human_fallen_empires_init.102
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				not = {
+					has_global_flag = human_fallen_empires_disable_story
+				}
+			}
+			# find humans
+			if = {
+				limit = {
+					any_country = {
+						or = {
+							has_country_flag = human_1
+							has_country_flag = human_2
+							species_portrait = human
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						or = {
+							has_country_flag = human_1
+							has_country_flag = human_2
+							species_portrait = human
+						}
+					}
+					set_country_flag = human_fallen_empires_marked_as_human
+				}
+				if = {
+					limit = {
+						any_country = {
+							has_country_flag = human_fallen_empires_marked_as_human
+							is_ai = no
+						}
+					}
+					random_country = {
+						limit = {
+							has_country_flag = human_fallen_empires_marked_as_human
+							is_ai = no
+						}
+						species = {
+							save_event_target_as = human_fallen_empires_human_species
+						}
+					}
+					else = {
+						random_country = {
+							limit = {
+								has_country_flag = human_fallen_empires_marked_as_human
+							}
+							species = {
+								save_event_target_as = human_fallen_empires_human_species
+							}
+						}
+					}
+				}
+			}
+			# create need species
+			# egypt
+			create_species = {
+				name = "Ju Ahet"
+				plural = "Ju Ahet"
+				class = HUM
+				portrait = human_fallen_empires_egypt_portrait
+				traits = {
+					ideal_planet_class = pc_continental
+					trait = trait_extremely_adaptive
+					trait = trait_venerable
+					trait = trait_slow_breeders
+					trait = trait_psionic
+				}
+				immortal = yes
+			}
+			last_created_species = {
+				save_global_event_target_as = human_fallen_empires_egypt_species
+				if = {
+					limit = {
+						exists = event_target:human_fallen_empires_human_species
+					}
+					set_species_identity = event_target:human_fallen_empires_human_species
+				}
+			}
+			# ahet
+			create_species = {
+				name = Ahet
+				plural = Ahet
+				class = "REP"
+				portrait = random
+				traits = {
+					ideal_planet_class = pc_tropical
+					trait = trait_slow_breeders
+					trait = trait_strong
+					trait = random_traits
+				}
+			}
+			last_created_species = {
+				save_global_event_target_as = human_fallen_empires_ahet_species
+			}
+			# varelse
+			create_species = {
+				name = Varelse
+				plural = Varelse
+				class = "REP"
+				portrait = random
+				traits = {
+					ideal_planet_class = pc_desert
+					trait = trait_industrious
+					trait = trait_natural_engineers
+					trait = trait_strong
+					trait = trait_repugnant
+				}
+			}
+			last_created_species = {
+				save_global_event_target_as = human_fallen_empires_varelse_species
+			}
+			# future
+			create_species = {
+				name = Human
+				plural = Humans
+				class = HUM
+				portrait = human
+				traits = {
+					ideal_planet_class = pc_continental
+					trait = trait_intelligent
+					trait = trait_thrifty
+					trait = trait_strong
+					trait = trait_solitary
+				}
+			}
+			last_created_species = {
+				set_species_identity = event_target:human_fallen_empires_egypt_species
+				save_global_event_target_as = human_fallen_empires_future_species
+			}
+			# future
+			random_rim_system = {
+				limit = {
+					has_owner = no
+					is_fe_cluster = no
+					not = {
+						any_system = {
+							distance = {
+								source = prev
+								max_distance = 50
+								min_distance = 0
+							}
+							has_owner = yes
+						}
+					}
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_future
+				}
+				set_global_flag = human_fallen_empires_future_spawned
+			}
+			# egypt
+			random_system = {
+				limit = {
+					has_owner = no
+					is_fe_cluster = no
+					not = {
+						any_system = {
+							distance = {
+								source = prev
+								max_distance = 50
+								min_distance = 0
+							}
+							has_owner = yes
+						}
+					}
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_egypt
+				}
+				set_global_flag = human_fallen_empires_egypt_spawned
+			}
+			random_system = {
+				limit = {
+					has_star_flag = human_fallen_empires_egypt_0
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_hope
+				}
+			}
+			random_system = {
+				limit = {
+					has_star_flag = human_fallen_empires_egypt_1
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_gift
+				}
+			}
+			#some other systems
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_memorial_01
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_memorial_02
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_memorial_03
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_memorial_04
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_varelse
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_ahet
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_ahet_2
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_ahet_home
+				}
+			}
+			random_system = {
+				limit = {
+					has_owner = no
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_copernicus
+				}
+			}
+			# drone
+			random_system = {
+				limit = {
+					has_owner = no
+					is_fe_cluster = no
+					not = {
+						any_system = {
+							distance = {
+								source = prev
+								max_distance = 50
+								min_distance = 0
+							}
+							has_owner = yes
+						}
+					}
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_drone_sector_0
+				}
+			}
+			random_system = {
+				limit = {
+					has_star_flag = human_fallen_empires_drone_0
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_drone_sector_1
+				}
+			}
+			random_system = {
+				limit = {
+					has_star_flag = human_fallen_empires_drone_1
+				}
+				spawn_system = {
+					min_distance = 0
+					max_distance = 10
+					hyperlane = yes
+					initializer = human_fallen_empires_drone_sector_10
+				}
+			}
+			# expand borders and develop
+			country_event = {
+				id = human_fallen_empires_init.101
+				days = 3
+			}
+			country_event = {
+				id = human_fallen_empires_init.101
+				days = 5
+			}
 		}
 	}
 }
