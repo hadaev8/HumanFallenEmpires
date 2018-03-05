@@ -12,6 +12,73 @@ human_fallen_empires_effect_pirate_diplomacy_remove_flags = {
 # create pirate
 # return event target pirate_band, need event target human_fallen_empires_pirate_target
 human_fallen_empires_effect_pirate_init = {
+	if = {
+		limit = {
+			any_system = {
+				is_neighbor_of = event_target:human_fallen_empires_pirate_target
+				human_fallen_empires_pirate_valid_base_system = yes
+			}
+		}
+		random_system = {
+			limit = {
+				is_neighbor_of = event_target:human_fallen_empires_pirate_target
+				human_fallen_empires_pirate_valid_base_system = yes
+			}
+			random_system_planet = {
+				limit = {
+					human_fallen_empires_pirate_valid_base_planet = yes
+				}
+				human_fallen_empires_effect_pirate_init_country = yes
+				human_fallen_empires_effect_pirate_init_base = yes
+			}
+		}
+		else = {
+			closest_system = {
+				max_steps = 50
+				limit = {
+					human_fallen_empires_pirate_valid_base_system = yes
+				}
+				random_system_planet = {
+					limit = {
+						human_fallen_empires_pirate_valid_base_planet = yes
+					}
+					human_fallen_empires_effect_pirate_init_country = yes
+					human_fallen_empires_effect_pirate_init_base = yes
+				}
+			}
+		}
+	}
+}
+
+# for planet, asteroid ideally, need event target pirate_band
+human_fallen_empires_effect_pirate_init_base = {
+	change_pc = pc_human_fallen_empires_pirate_base
+	create_colony = {
+		owner = event_target:human_fallen_empires_pirate_clan
+		species = owner
+	}
+	# log = "pirate created new base [this.GetName] owner: [owner.GetName] on [This.GetStarName]"
+	every_owned_pop = {
+		kill_pop = yes
+	}
+	random_tile = {
+		limit = {
+			has_building = building_colony_shelter
+		}
+		remove_building = yes
+	}
+	set_planet_flag = human_fallen_empires_pirate_base
+	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
+	starbase = {
+		set_starbase_size = starbase_starport
+		set_starbase_module = {
+			slot = 1
+			module = shipyard
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_init_country = {
 	create_country = {
 		name = random
 		type = human_fallen_empires_pirate
@@ -112,79 +179,6 @@ human_fallen_empires_effect_pirate_init = {
 					}
 				}
 			}
-			# random_planet = {
-			# 	limit = {
-			# 		solar_system = {
-			# 			not = {
-			# 				is_same_value = event_target:pirate_band.capital_scope.solar_system
-			# 			}
-			# 		}
-			# 	}
-			# 	save_event_target_as = human_fallen_empires_hide_capital
-			# }
-			# set_custom_capital_location = event_target:human_fallen_empires_hide_capital
-		}
-	}
-	if = {
-		limit = {
-			any_system = {
-				is_neighbor_of = event_target:human_fallen_empires_pirate_target
-				human_fallen_empires_pirate_valid_base_system = yes
-			}
-		}
-		random_system = {
-			limit = {
-				is_neighbor_of = event_target:human_fallen_empires_pirate_target
-				human_fallen_empires_pirate_valid_base_system = yes
-			}
-			random_system_planet = {
-				limit = {
-					human_fallen_empires_pirate_valid_base_planet = yes
-				}
-				human_fallen_empires_effect_pirate_init_base = yes
-			}
-		}
-		else = {
-			closest_system = {
-				max_steps = 50
-				limit = {
-					human_fallen_empires_pirate_valid_base_system = yes
-				}
-				random_system_planet = {
-					limit = {
-						human_fallen_empires_pirate_valid_base_planet = yes
-					}
-					human_fallen_empires_effect_pirate_init_base = yes
-				}
-			}
-		}
-	}
-}
-
-# for planet, asteroid ideally, need event target pirate_band
-human_fallen_empires_effect_pirate_init_base = {
-	change_pc = pc_human_fallen_empires_pirate_base
-	create_colony = {
-		owner = event_target:human_fallen_empires_pirate_clan
-		species = owner
-	}
-	# log = "pirate created new base [this.GetName] owner: [owner.GetName] on [This.GetStarName]"
-	every_owned_pop = {
-		kill_pop = yes
-	}
-	random_tile = {
-		limit = {
-			has_building = building_colony_shelter
-		}
-		remove_building = yes
-	}
-	set_planet_flag = human_fallen_empires_pirate_base
-	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
-	starbase = {
-		set_starbase_size = starbase_starport
-		set_starbase_module = {
-			slot = 1
-			module = shipyard
 		}
 	}
 }

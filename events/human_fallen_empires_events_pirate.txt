@@ -603,8 +603,7 @@ ship_event = {
 	}
 }
 
-
-# fix pirate planet class ownerless 56 on_planet_ownerless
+# fix pirate planet class ownerless 56 on_planet_ownerless on_planet_transfer
 planet_event = {
 	id = human_fallen_empires_pirate.57
 	hide_window = yes
@@ -618,6 +617,47 @@ planet_event = {
 		change_pc = pc_asteroid
 	}
 }
+
+# send default or pirate country fleets before get destroyed on_country_destroyed
+country_event = {
+	id = human_fallen_empires_pirate.58
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		or = {
+			is_country_type = human_fallen_empires_pirate
+			is_country_type = default
+		}
+		any_country = {
+			is_country_type = human_fallen_empires_pirate
+			not = {
+				is_country = root
+			}
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_country_type = human_fallen_empires_pirate
+				not = {
+					is_country = root
+				}
+			}
+			prev = {
+				every_owned_fleet = {
+					limit = {
+						is_ship_class = shipclass_military
+					}
+					set_owner = prevprev
+				}
+			}
+		}
+	}
+}
+
+
 
 # pirate diplomacy 100-150
 # start event diplomacy
@@ -1613,8 +1653,8 @@ country_event = {
 			}
 		}
 
-		#is_dialog_only = yes
-		#response_text = human_fallen_empires_pirate.101.traid_menu.2.response
+		is_dialog_only = yes
+		response_text = human_fallen_empires_pirate.101.traid_menu.2.response
 		# багует. не хочет изгонять второго лидера без обновления эвента. вместо этого изгоняет первого опять
 
 		add_energy = -1000
@@ -1625,40 +1665,32 @@ country_event = {
 				random_pool_leader = {
 					limit = {
 						leader_class = admiral
-					}
-					exile_leader_as = human_fallen_empires_pirate_admiral
-				}
-				create_fleet = {
-					effect = {
-						set_owner = root
-						create_ship = {
-							name = random
-							random_existing_design = science
-						}
-						set_location = root.capital_scope
-						set_leader = human_fallen_empires_pirate_admiral
-						leader = {
-							unassign_leader = this
-						}
-						delete_fleet = this
-					}
-				}
-				if = {
-					limit = {
 						not = {
-							has_global_flag = human_fallen_empires_disable_leaders
+							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
 						}
 					}
 					root = {
-						change_variable = {
-							which = human_fallen_empires_leaders_admiral_capacity
-							value = -1
+						clone_leader = {
+							target = prev
+							effect = {
+								save_event_target_as = human_fallen_empires_pirate_admiral_hired
+							}
+						}
+						if = {
+							limit = {
+								not = {
+									has_global_flag = human_fallen_empires_disable_leaders
+								}
+							}
+							change_variable = {
+								which = human_fallen_empires_leaders_admiral_capacity
+								value = -1
+							}
 						}
 					}
-				}
-				root = {
-					country_event = {
-						id = human_fallen_empires_pirate.101
+					set_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+					kill_leader = {
+						show_notification = no
 					}
 				}
 			}
