@@ -73,14 +73,30 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		exists = from
-		from = {
-			exists = overlord
-			exists = from
+		exists = owner
+		exists = controller
+		exists = solar_system
+		nor = {
+			solar_system = {
+				any_planet = {
+					exists = owner
+					is_controlled_by = owner
+				}
+			}
+			controller = {
+				is_country = root.owner
+			}
+		}
+		owner = {
 			any_war = {
 				any_war_participant = {
-					is_country = prevprev.from
+					is_country = root.owner
+					is_war_leader = no
 				}
+				any_war_participant = {
+					is_country = root.controller
+				}
+				# war leader
 				any_war_participant = {
 					prev = {
 						using_war_goal = {
@@ -89,11 +105,10 @@ planet_event = {
 						}
 					}
 					or = {
-						is_in_federation_with = prevprev
-						is_country = prevprev
-						is_overlord_to = prevprev
+						is_in_federation_with = root.controller
+						is_country = root.controller
 						any_subject = {
-							is_country = prevprevprev
+							is_country = root.controller
 						}
 					}
 				}
@@ -102,13 +117,13 @@ planet_event = {
 	}
 
 	immediate = {
-		conquer = fromfrom
+		conquer = controller
 		if = {
 			limit = {
 				exists = starbase
 			}
 			starbase = {
-				set_owner = fromfrom
+				set_owner = controller
 			}
 		}
 	}
@@ -189,7 +204,7 @@ country_event = {
 						amount = 1 # scales to pops
 					}
 					conquer = root
-					set_owner = root
+					#set_owner = root
 				}
 			}
 		}
@@ -207,6 +222,10 @@ country_event = {
 				not = {
 					has_country_flag = human_fallen_empires_coalition_leader
 				}
+			}
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_awake = yes
 			}
 		}
 		hidden_effect = {
