@@ -62,7 +62,7 @@ country_event = {
 	}
 }
 
-# annex occuping systems
+# annex occuping systems planet
 # A planets controller becomes a country not the same as the owner.
 # Root = Planet
 # From = Planet Owner
@@ -80,6 +80,11 @@ planet_event = {
 			solar_system = {
 				any_planet = {
 					exists = owner
+					owner = {
+						not = {
+							is_country_type = primitive
+						}
+					}
 					is_controlled_by = owner
 				}
 			}
@@ -125,6 +130,69 @@ planet_event = {
 			starbase = {
 				set_owner = controller
 			}
+		}
+	}
+}
+
+# annex occuping systems starbase
+# This = Ship
+# From = Disabler Ship
+# kill starbases of pirate and drone on_ship_disabled
+ship_event = {
+	id = human_fallen_empires_total_war.52
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = this
+		exists = owner
+		exists = from
+		exists = fleet
+		not = {
+			solar_system = {
+				any_planet = {
+					exists = owner
+					owner = {
+						not = {
+							is_country_type = primitive
+						}
+					}
+					is_controlled_by = owner
+				}
+			}
+		}
+		owner = {
+			any_war = {
+				any_war_participant = {
+					is_country = root.owner
+					is_war_leader = no
+				}
+				any_war_participant = {
+					is_country = root.from
+				}
+				# war leader
+				any_war_participant = {
+					prev = {
+						using_war_goal = {
+							type = human_fallen_empires_wg_total_war
+							owner = prev
+						}
+					}
+					or = {
+						is_in_federation_with = root.from
+						is_country = root.from
+						any_subject = {
+							is_country = root.from
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		fleet = {
+			set_owner = from
 		}
 	}
 }

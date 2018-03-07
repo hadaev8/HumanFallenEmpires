@@ -193,6 +193,15 @@ country_event = {
 				add_building_construction = human_fallen_empires_pirate_slave_pit
 			}
 		}
+		#
+		# if = {
+		# 	limit = {
+		# 		any_relation = {
+		# 			has_country_flag = trader_enclave_country
+		# 		}
+		# 		energy > 4000
+		# 		minerals < 4000
+		# 	}
 	}
 }
 
@@ -303,7 +312,6 @@ fleet_event = {
 	immediate = {
 		#log = "pirate fleet logic"
 		clear_fleet_actions = this
-		#set_fleet_stance = aggressive
 		queue_actions = {
 			repeat = {
 				# try found prior target
@@ -329,7 +337,7 @@ fleet_event = {
 									limit = {
 										or = {
 											num_ships < 5
-											has_hp_percentage < 0.99
+											has_hp_percentage < 0.9
 										}
 									}
 									clear_fleet_actions = this
@@ -357,7 +365,7 @@ fleet_event = {
 											limit = {
 												or = {
 													num_ships < 5
-													has_hp_percentage < 0.99
+													has_hp_percentage < 0.9
 												}
 											}
 											clear_fleet_actions = this
@@ -390,14 +398,28 @@ fleet_event = {
 						trigger = {
 							id = human_fallen_empires_pirate.50.trigger.1.0
 							root = {
-								has_hp_percentage > 0.99
+								has_hp_percentage > 0.9
 							}
 							human_fallen_empires_pirate_valid_target_planet = yes
+							has_owner = no
 						}
 						found_planet = {
 							orbit_planet = this
-							wait = 31
 						}
+					}
+				}
+				find_closest_planet = {
+					trigger = {
+						id = human_fallen_empires_pirate.50.trigger.1.1
+						root = {
+							has_hp_percentage > 0.9
+						}
+						human_fallen_empires_pirate_valid_target_planet = yes
+						has_owner = yes
+					}
+					found_planet = {
+						orbit_planet = this
+						wait = 180
 					}
 				}
 				effect = {
@@ -467,6 +489,29 @@ country_event = {
 				flag = human_fallen_empires_attacked_by_pirate
 				days = 365
 			}
+			change_variable = {
+				which = human_fallen_empires_pirate_attack_count
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = human_fallen_empires_pirate_attack_count
+						value > 10
+					}
+				}
+				set_variable = {
+					which = human_fallen_empires_pirate_attack_count
+					value = 0
+				}
+				root = {
+					save_event_target_as = human_fallen_empires_pirate_country
+				}
+				country_event = {
+					id = human_fallen_empires_pirate.200
+					days = 1
+				}
+			}
 		}
 		add_minerals = 90
 		add_energy = 10
@@ -477,13 +522,15 @@ country_event = {
 }
 
 # pirate bombard colony
+# Planet has reached 0 health from orbital bombardment
+# This = Planet
+# From = Bombarder
 planet_event = {
 	id = human_fallen_empires_pirate.53
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		log = "human_fallen_empires_pirate.53"
 		num_pops > 0
 		exists = owner
 		exists = from
@@ -757,18 +804,18 @@ country_event = {
 				text = human_fallen_empires_pirate.101.0.tooltip_fail
 				is_hostile = event_target:human_fallen_empires_pirate_country
 			}
-			energy > 500
-			minerals > 500
+			energy > @human_fallen_empires_pirate_protect_cost
+			minerals > @human_fallen_empires_pirate_protect_cost
 		}
 
 		is_dialog_only = yes
 		response_text = human_fallen_empires_pirate.101.0.response
 
-		add_energy = -500
-		add_minerals = -500
+		add_energy = @human_fallen_empires_pirate_protect_cost_minus
+		add_minerals = @human_fallen_empires_pirate_protect_cost_minus
 		event_target:human_fallen_empires_pirate_country = {
-			add_energy = 500
-			add_minerals = 500
+			add_energy = @human_fallen_empires_pirate_protect_cost
+			add_minerals = @human_fallen_empires_pirate_protect_cost
 		}
 		hidden_effect = {
 			# event to return hostile
@@ -2190,13 +2237,23 @@ country_event = {
 	}
 }
 
-# other pirate related event
-
-# extend pay for protect
+# other pirate related diplo events
+# offer protection and extend protection later
 country_event = {
 	id = human_fallen_empires_pirate.200
 	title = TRANSMISSION
-	desc = human_fallen_empires_pirate.200.desc
+	desc = {
+		trigger = {
+			succses_text = {
+				text = human_fallen_empires_pirate.200.desc.0
+				is_hostile_to = event_target:human_fallen_empires_pirate_country
+			}
+			fail_text = {
+				text = human_fallen_empires_pirate.200.desc.1
+				is_hostile_to = event_target:human_fallen_empires_pirate_country
+			}
+		}
+	}
 	diplomatic = yes
 	is_triggered_only = yes
 	force_open = yes
@@ -2211,15 +2268,35 @@ country_event = {
 		exists = event_target:human_fallen_empires_pirate_country
 	}
 
+	immediate = {
+		log = "pirates offer protection for [root.GetName]"
+	}
+
 	option = {
 		name = human_fallen_empires_pirate.200.0
 		allow = {
-			energy > 500
-			minerals > 500
+			energy >= @human_fallen_empires_pirate_protect_cost
+			minerals >= @human_fallen_empires_pirate_protect_cost
 		}
-		add_minerals = -500
-		add_energy = -500
+		add_minerals = @human_fallen_empires_pirate_protect_cost_minus
+		add_energy = @human_fallen_empires_pirate_protect_cost_minus
+		event_target:human_fallen_empires_pirate_country = {
+			add_minerals = @human_fallen_empires_pirate_protect_cost
+			add_energy = @human_fallen_empires_pirate_protect_cost
+		}
 		hidden_effect = {
+			log = "agree for protection pay"
+			if = {
+				limit = {
+					is_hostile_to = event_target:human_fallen_empires_pirate_country
+				}
+				set_faction_hostility = {
+					target = event_target:human_fallen_empires_pirate_country
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
+			}
 			country_event = {
 				id = human_fallen_empires_pirate.200
 				days = 1825
@@ -2231,17 +2308,100 @@ country_event = {
 				}
 			}
 		}
+		ai_chance = {
+			factor = 100
+			# ethics
+			modifier = {
+				factor = 0.5
+				or = {
+					is_militarist = yes
+					is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				is_pacifist = yes
+			}
+			# fleet power
+			modifier = {
+				factor = 0.5
+				relative_power = {
+					who = event_target:human_fallen_empires_pirate_country
+					category = fleet
+					value >= overwhelming
+				}
+			}
+			modifier = {
+				factor = 0.5
+				relative_power = {
+					who = event_target:human_fallen_empires_pirate_country
+					category = fleet
+					value >= superior
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:human_fallen_empires_pirate_country
+					category = fleet
+					value <= equivalent
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:human_fallen_empires_pirate_country
+					category = fleet
+					value <= inferior
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:human_fallen_empires_pirate_country
+					category = fleet
+					value <= pathetic
+				}
+			}
+			# money
+			modifier = {
+				factor = 0.5
+				energy < 5000
+				minerals < 5000
+			}
+			modifier = {
+				factor = 0.5
+				energy < 2500
+				minerals < 2500
+			}
+			modifier = {
+				factor = 0.5
+				energy < 1000
+				minerals < 1000
+			}
+			modifier = {
+				factor = 0
+				energy < 500
+				minerals < 500
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.200.1
 		default_hide_option = yes
-		set_faction_hostility = {
-			target = event_target:human_fallen_empires_pirate_country
-			set_hostile = yes
-			set_neutral = no
-			set_friendly = no
+		log = "not agree for protection pay"
+		if = {
+			limit = {
+				not = {
+					is_hostile_to = event_target:human_fallen_empires_pirate_country
+				}
+			}
+			set_faction_hostility = {
+				target = event_target:human_fallen_empires_pirate_country
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
 		}
 	}
 }
-
-# notify then save pops from bases
