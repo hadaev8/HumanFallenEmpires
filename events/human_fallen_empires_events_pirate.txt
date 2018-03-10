@@ -7,6 +7,7 @@ country_event = {
 	title = pirate.1.name
 	picture = GFX_evt_human_fallen_empires_pirate
 	show_sound = event_space_battle
+	location = event_target:human_fallen_empires_pirate_clan
 
 	desc = {
 		# Spiritual
@@ -193,15 +194,73 @@ country_event = {
 				add_building_construction = human_fallen_empires_pirate_slave_pit
 			}
 		}
-		#
-		# if = {
-		# 	limit = {
-		# 		any_relation = {
-		# 			has_country_flag = trader_enclave_country
-		# 		}
-		# 		energy > 4000
-		# 		minerals < 4000
-		# 	}
+		# sell slaves
+		if = {
+			limit = {
+				num_pops > 0
+				any_owned_planet = {
+					free_pop_tiles < 3
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						not = {
+							is_hostile = root
+						}
+						energy > 500
+						minerals > 500
+						is_country_type = default
+						any_owned_planet = {
+							free_pop_tiles > 0
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						not = {
+							is_hostile = root
+						}
+						energy > 500
+						minerals > 500
+						is_country_type = default
+						any_owned_planet = {
+							free_pop_tiles > 0
+						}
+					}
+					root = {
+						save_event_target_as = human_fallen_empires_pirate_country
+						human_fallen_empires_effect_save_slave_target = yes
+					}
+					set_country_flag = human_fallen_empires_pirate.101.deal_offer
+					set_country_flag = human_fallen_empires_pirate.101.slave_menu
+					country_event = {
+						id = human_fallen_empires_pirate.101
+					}
+				}
+				else = {
+					random_country = {
+						limit = {
+							energy > 500
+							minerals > 500
+							is_country_type = default
+							any_owned_planet = {
+								free_pop_tiles > 0
+							}
+						}
+						root = {
+							save_event_target_as = human_fallen_empires_pirate_country
+							human_fallen_empires_effect_save_slave_target = yes
+						}
+						set_country_flag = human_fallen_empires_pirate.101.deal_offer
+						set_country_flag = human_fallen_empires_pirate.101.slave_menu
+						country_event = {
+							id = human_fallen_empires_pirate.101
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -260,7 +319,7 @@ ship_event = {
 	}
 }
 
-# spawn pirate during game
+# spawn pirate again
 country_event = {
 	id = human_fallen_empires_pirate.6
 	hide_window = yes
@@ -275,13 +334,43 @@ country_event = {
 	}
 
 	immediate = {
-		#log = "pirate spawned again"
+		# log = "pirate spawned again"
 		set_timed_country_flag = {
 			flag = human_fallen_empires_pirate_spawned
 			days = @human_fallen_empires_pirate_spawn_cooldown
 		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		human_fallen_empires_effect_pirate_init = yes
+	}
+}
+
+# inform event
+country_event = {
+	id = human_fallen_empires_pirate.7
+	title = pirate.50.name
+	picture = GFX_evt_pirate_armada
+	desc = pirate.50.a.desc
+	desc = pirate.50.b.desc
+	desc = pirate.50.c.desc
+	show_sound = event_ship_bridge
+	location = event_target:human_fallen_empires_pirate_clan
+
+	trigger = {
+		not = {
+			has_country_flag = human_fallen_empires_pirate.7_block
+		}
+	}
+
+	option = {
+		name = pirate.50.a
+	}
+
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_pirate.7_block
+		}
 	}
 }
 
@@ -672,10 +761,10 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		or = {
-			is_country_type = human_fallen_empires_pirate
-			is_country_type = default
-		}
+		# or = {
+		# 	is_country_type = human_fallen_empires_pirate
+		# 	is_country_type = default
+		# }
 		any_country = {
 			is_country_type = human_fallen_empires_pirate
 			not = {
@@ -685,6 +774,7 @@ country_event = {
 	}
 
 	immediate = {
+		log = "work event human_fallen_empires_pirate.58"
 		random_country = {
 			limit = {
 				is_country_type = human_fallen_empires_pirate
@@ -694,10 +784,14 @@ country_event = {
 			}
 			prev = {
 				every_owned_fleet = {
+					log = "[this.GetName]"
+				}
+				every_owned_fleet = {
 					limit = {
 						is_ship_class = shipclass_military
 					}
 					set_owner = prevprev
+					log = "[this.GetName] flee to [owner.GetName]"
 				}
 			}
 		}
@@ -771,8 +865,15 @@ country_event = {
 				has_country_flag = human_fallen_empires_pirate.101.slave_menu
 				human_fallen_empires_trigger_exists_any_slave_target = no
 			}
+			# if pirates contacted with country
 			success_text = {
-				text = human_fallen_empires_pirate.101.slave_menu.desc.1
+				text = human_fallen_empires_pirate.101.slave_menu.desc.1.0
+				has_country_flag = human_fallen_empires_pirate.101.deal_offer
+				has_country_flag = human_fallen_empires_pirate.101.slave_menu
+				human_fallen_empires_trigger_exists_any_slave_target = yes
+			}
+			success_text = {
+				text = human_fallen_empires_pirate.101.slave_menu.desc.1.1
 				has_country_flag = human_fallen_empires_pirate.101.slave_menu
 				human_fallen_empires_trigger_exists_any_slave_target = yes
 			}
@@ -1436,6 +1537,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_0 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_0 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_0 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.2
@@ -1483,6 +1622,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_1 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_1 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_1 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.3
@@ -1530,6 +1707,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_2 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_2 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_2 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.4
@@ -1577,6 +1792,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_3 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_3 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_3 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.5
@@ -1624,6 +1877,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_4 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_4 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_4 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.6
@@ -1671,6 +1962,44 @@ country_event = {
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			# pop
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_5 = {
+					num_trait_points > 2
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_5 = {
+					num_trait_points > 3
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:human_fallen_empires_slave_target_5 = {
+					num_trait_points > 4
+				}
+			}
+		}
 	}
 	# hire pirate admiral
 	option = {
@@ -2049,6 +2378,9 @@ country_event = {
 			remove_country_flag = human_fallen_empires_pirate.101_block
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
 		}
+		ai_chance = {
+			factor = 100
+		}
 	}
 }
 
@@ -2246,11 +2578,11 @@ country_event = {
 		trigger = {
 			success_text = {
 				text = human_fallen_empires_pirate.200.desc.0
-				is_hostile_to = event_target:human_fallen_empires_pirate_country
+				is_hostile = event_target:human_fallen_empires_pirate_country
 			}
 			fail_text = {
 				text = human_fallen_empires_pirate.200.desc.1
-				is_hostile_to = event_target:human_fallen_empires_pirate_country
+				is_hostile = event_target:human_fallen_empires_pirate_country
 			}
 		}
 	}
@@ -2288,7 +2620,7 @@ country_event = {
 			log = "agree for protection pay"
 			if = {
 				limit = {
-					is_hostile_to = event_target:human_fallen_empires_pirate_country
+					is_hostile = event_target:human_fallen_empires_pirate_country
 				}
 				set_faction_hostility = {
 					target = event_target:human_fallen_empires_pirate_country
@@ -2393,7 +2725,7 @@ country_event = {
 		if = {
 			limit = {
 				not = {
-					is_hostile_to = event_target:human_fallen_empires_pirate_country
+					is_hostile = event_target:human_fallen_empires_pirate_country
 				}
 			}
 			set_faction_hostility = {
