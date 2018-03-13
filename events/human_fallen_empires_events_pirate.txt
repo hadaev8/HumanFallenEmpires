@@ -180,20 +180,20 @@ country_event = {
 			}
 		}
 		# kick buildings
-		every_owned_planet = {
-			limit = {
-				free_building_tiles > 0
-			}
-			every_tile = {
-				limit = {
-					exists = pop
-					not = {
-						has_building = human_fallen_empires_pirate_slave_pit
-					}
-				}
-				add_building_construction = human_fallen_empires_pirate_slave_pit
-			}
-		}
+		# every_owned_planet = {
+		# 	limit = {
+		# 		free_building_tiles > 0
+		# 	}
+		# 	every_tile = {
+		# 		limit = {
+		# 			exists = pop
+		# 			not = {
+		# 				has_building = human_fallen_empires_pirate_slave_pit
+		# 			}
+		# 		}
+		# 		add_building_construction = human_fallen_empires_pirate_slave_pit
+		# 	}
+		# }
 		# sell slaves
 		if = {
 			limit = {
@@ -234,6 +234,7 @@ country_event = {
 					}
 					set_country_flag = human_fallen_empires_pirate.101.deal_offer
 					set_country_flag = human_fallen_empires_pirate.101.slave_menu
+					log = "try to sell slaves to [this.GetName]"
 					country_event = {
 						id = human_fallen_empires_pirate.101
 					}
@@ -254,10 +255,36 @@ country_event = {
 						}
 						set_country_flag = human_fallen_empires_pirate.101.deal_offer
 						set_country_flag = human_fallen_empires_pirate.101.slave_menu
+						log = "try to sell slaves to [this.GetName]"
 						country_event = {
 							id = human_fallen_empires_pirate.101
 						}
 					}
+				}
+			}
+		}
+		# sell energy
+		if = {
+			limit = {
+				energy > 1000
+			}
+			random_country = {
+				limit = {
+					not = {
+						is_hostile = root
+					}
+					minerals > 1000
+					energy < 10000
+					is_country_type = default
+				}
+				root = {
+					save_event_target_as = human_fallen_empires_pirate_country
+				}
+				set_country_flag = human_fallen_empires_pirate.101.deal_offer
+				set_country_flag = human_fallen_empires_pirate.101.traid_menu
+				log = "try to sell energy to [this.GetName]"
+				country_event = {
+					id = human_fallen_empires_pirate.101
 				}
 			}
 		}
@@ -757,16 +784,17 @@ planet_event = {
 }
 
 # send default or pirate country fleets before get destroyed on_country_destroyed
+# looks like not worked
 country_event = {
 	id = human_fallen_empires_pirate.58
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		# or = {
-		# 	is_country_type = human_fallen_empires_pirate
-		# 	is_country_type = default
-		# }
+		or = {
+			is_country_type = human_fallen_empires_pirate
+		 	is_country_type = default
+		}
 		any_country = {
 			is_country_type = human_fallen_empires_pirate
 			not = {
@@ -776,31 +804,9 @@ country_event = {
 	}
 
 	immediate = {
-		log = "work event human_fallen_empires_pirate.58"
-		random_country = {
-			limit = {
-				is_country_type = human_fallen_empires_pirate
-				not = {
-					is_country = root
-				}
-			}
-			prev = {
-				every_owned_fleet = {
-					log = "[this.GetName]"
-				}
-				every_owned_fleet = {
-					limit = {
-						is_ship_class = shipclass_military
-					}
-					set_owner = prevprev
-					log = "[this.GetName] flee to [owner.GetName]"
-				}
-			}
-		}
+		human_fallen_empires_effect_pirate_flee_fleets = yes
 	}
 }
-
-
 
 # pirate diplomacy 100-150
 # start event diplomacy
@@ -860,6 +866,15 @@ country_event = {
 			success_text = {
 				text = human_fallen_empires_pirate.101.traid_menu.desc.0
 				has_country_flag = human_fallen_empires_pirate.101.traid_menu
+				not = {
+					has_country_flag = human_fallen_empires_pirate.101.deal_offer
+				}
+			}
+			# if pirates contacted with country
+			success_text = {
+				text = human_fallen_empires_pirate.101.traid_menu.desc.1
+				has_country_flag = human_fallen_empires_pirate.101.traid_menu
+				has_country_flag = human_fallen_empires_pirate.101.deal_offer
 			}
 			# slave
 			success_text = {
@@ -1438,7 +1453,7 @@ country_event = {
 			}
 		}
 	}
-	# energy for minerals
+	# sell minerals
 	option = {
 		name = human_fallen_empires_pirate.101.traid_menu.0
 		trigger = {
@@ -1463,6 +1478,19 @@ country_event = {
 			add_energy = -100
 			add_minerals = 150
 		}
+		hidden_effect = {
+			log = "sell minarals"
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy > 10000
+				}
+			}
+		}
 	}
 	# buy slave
 	option = {
@@ -1480,6 +1508,39 @@ country_event = {
 				id = human_fallen_empires_pirate.101
 			}
 		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				or = {
+					minerals < 1000
+					energy < 1000
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_authoritarian = yes
+			}
+			modifier = {
+				factor = 2
+				allows_slavery = yes
+			}
+			modifier = {
+				factor = 0
+				not = {
+					any_owned_planet = {
+						free_pop_tiles > 0
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				event_target:human_fallen_empires_pirate_country = {
+					num_pops = 0
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires_pirate.101.slave_menu.0
@@ -1491,6 +1552,9 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = human_fallen_empires_pirate.101.slave_menu.0.response
+		ai_chance = {
+			factor = 0
+		}
 	}
 	# select slave menu
 	option = {
@@ -1536,6 +1600,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
+			log = "[this.GetName] buy slaves 0"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -1621,6 +1686,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
+			log = "[this.GetName] buy slaves 1"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -2073,6 +2139,19 @@ country_event = {
 						show_notification = no
 					}
 				}
+				log = "pirate admiral hired"
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				energy < 1000
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_militarist = yes
 			}
 		}
 	}
@@ -2093,6 +2172,9 @@ country_event = {
 			country_event = {
 				id = human_fallen_empires_pirate.101
 			}
+		}
+		ai_chance = {
+			factor = 0
 		}
 	}
 	# select bet
@@ -2571,7 +2653,7 @@ country_event = {
 	}
 }
 
-# other pirate related diplo events
+# other pirate related diplo events 200 - 250
 # offer protection and extend protection later
 country_event = {
 	id = human_fallen_empires_pirate.200

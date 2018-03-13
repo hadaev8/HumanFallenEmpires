@@ -67,17 +67,11 @@ human_fallen_empires_effect_pirate_init_base = {
 			has_owner = no
 		}
 		set_owner = event_target:human_fallen_empires_pirate_clan
-		log = "pirate base not created, try to set owner"
+		log = "pirate base not created, try to set owner [this.GetName]"
 	}
 	# log = "pirate created new base [this.GetName] owner: [owner.GetName] on [This.GetStarName]"
 	every_owned_pop = {
-		kill_pop = yes
-	}
-	random_tile = {
-		limit = {
-			has_building = building_colony_shelter
-		}
-		remove_building = yes
+	 	kill_pop = yes
 	}
 	set_planet_flag = human_fallen_empires_pirate_base
 	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
@@ -90,7 +84,6 @@ human_fallen_empires_effect_pirate_init_base = {
 	}
 }
 
-
 human_fallen_empires_effect_pirate_init_country = {
 	create_country = {
 		name = random
@@ -101,36 +94,25 @@ human_fallen_empires_effect_pirate_init_country = {
 		civics = random
 		released_from_country = event_target:human_fallen_empires_pirate_target
 		ethos = random
-		flag = {
-			icon = {
-				category = zoological
-				file = flag_zoological_1.dds
-			}
-			background= {
-				category = backgrounds
-				file = 00_solid.dds
-			}
-			colors = {
-				dark_grey
-				dark_grey
-				null
-				null
-			}
-		}
+		flag = random
 		#ignore_initial_colony_error = yes
 		effect = {
-			# flag = {
-			# 	background = {
-			# 		category = backgrounds
-			# 		file = 00_solid.dds
-			# 	}
-			# 	colors = {
-			# 		dark_grey
-			# 		dark_grey
-			# 		null
-			# 		null
-			# 	}
-			# }
+			change_country_flag = {
+				icon = {
+					category = zoological
+					file = flag_zoological_1.dds
+				}
+				background= {
+					category = backgrounds
+					file = 00_solid.dds
+				}
+				colors = {
+					dark_grey
+					dark_grey
+					null
+					null
+				}
+			}
 			randomize_flag_symbol = pirate
 			add_modifier = {
 				modifier = human_fallen_empires_pirate_country_unkeep
@@ -342,5 +324,26 @@ human_fallen_empires_effect_pirate_ravage_planet = {
 	add_modifier = {
 		modifier = human_fallen_empires_pirate_ravaged_planet
 		days = @human_fallen_empires_pirate_ravaged_planet_time
+	}
+}
+
+# for country
+human_fallen_empires_effect_pirate_flee_fleets = {
+	random_country = {
+		limit = {
+			is_country_type = human_fallen_empires_pirate
+			not = {
+				is_country = prev
+			}
+		}
+		prev = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				set_owner = prevprev
+				log = "[this.GetName] flee to [owner.GetName]"
+			}
+		}
 	}
 }
