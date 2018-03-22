@@ -67,7 +67,7 @@ human_fallen_empires_effect_pirate_init_base = {
 			has_owner = no
 		}
 		set_owner = event_target:human_fallen_empires_pirate_clan
-		log = "pirate base not created, try to set owner [this.GetName]"
+		log = "pirate base not created, try to set owner [this.GetName] system: [this.solar_system.GetName]"
 	}
 	# log = "pirate created new base [this.GetName] owner: [owner.GetName] on [This.GetStarName]"
 	every_owned_pop = {
@@ -80,6 +80,14 @@ human_fallen_empires_effect_pirate_init_base = {
 		set_starbase_module = {
 			slot = 1
 			module = shipyard
+		}
+	}
+	solar_system = {
+		every_system_planet = {
+			surveyed = {
+				set_surveyed = yes
+				surveyor = event_target:human_fallen_empires_pirate_clan
+			}
 		}
 	}
 }
@@ -118,29 +126,29 @@ human_fallen_empires_effect_pirate_init_country = {
 				modifier = human_fallen_empires_pirate_country_unkeep
 				days = -1
 			}
-			if = {
-				limit = {
-					is_difficulty > 1
-				}
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_country_insane
-					days = -1
-				}
-			}
-			if = {
-				limit = {
-					is_difficulty = 1
-				}
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_country_hard
-					days = -1
-				}
-			}
+			# if = {
+			# 	limit = {
+			# 		is_difficulty > 1
+			# 	}
+			# 	add_modifier = {
+			# 		modifier = human_fallen_empires_pirate_country_insane
+			# 		days = -1
+			# 	}
+			# }
+			# if = {
+			# 	limit = {
+			# 		is_difficulty = 1
+			# 	}
+			# 	add_modifier = {
+			# 		modifier = human_fallen_empires_pirate_country_hard
+			# 		days = -1
+			# 	}
+			# }
 			add_modifier = {
 				modifier = human_fallen_empires_pirate_country_boost
 				days = 3650
 			}
-			set_graphical_culture = human_fallen_empires_graphical_culture_pirate
+			#set_graphical_culture = human_fallen_empires_graphical_culture_pirate
 			add_minerals = 500
 			if = {
 				limit = {
@@ -200,6 +208,17 @@ human_fallen_empires_effect_pirate_init_country = {
 						set_neutral = yes
 						set_friendly = no
 					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = enclave
+				}
+				set_faction_hostility = {
+					target = prev
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
 				}
 			}
 		}
