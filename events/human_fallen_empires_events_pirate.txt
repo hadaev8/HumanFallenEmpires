@@ -440,6 +440,7 @@ fleet_event = {
 			is_ai = yes
 		}
 		is_ship_class = shipclass_military
+		fleet_power > 500
 		num_ships > 4
 		has_hp_percentage > 0.99
 		is_fleet_idle = yes
@@ -757,42 +758,96 @@ country_event = {
 	}
 }
 
-# pirate gain resources after disabling starbase on_ship_disabled
 # This = Ship
 # From = Disabler Ship
+# take starbases of pirate on_ship_disabled
 ship_event = {
 	id = human_fallen_empires_pirate.56
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		exists = owner
+		exists = this
 		exists = from.owner
-		from.owner = {
+		exists = owner
+		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
 		is_ship_class = shipclass_starbase
 	}
 
 	immediate = {
-		#log = "pirate kill station"
+		# flee fleets
 		owner = {
-			set_timed_country_flag = {
-				flag = human_fallen_empires_attacked_by_pirate
-				days = 365
+			if = {
+				limit = {
+					num_starbases = 1
+				}
+				human_fallen_empires_effect_pirate_flee_fleets = yes
+			}
+			if = {
+				limit = {
+					from.owner = {
+						is_country_type = human_fallen_empires_pirate
+					}
+				}
+				# may be change this
+				every_owned_planet = {
+					limit = {
+						solar_system = {
+							is_same_value = root.solar_system
+						}
+					}
+					set_owner = from.owner
+				}
+				else = {
+					every_owned_planet = {
+						limit = {
+							solar_system = {
+								is_same_value = root.solar_system
+							}
+						}
+						every_owned_pop = {
+							human_fallen_empires_effect_refugee_or_die = yes
+							# мб стоит таки сделать преоритет для того, кто уничтожает базу
+						}
+						human_fallen_empires_effect_convert_to_asteroid = yes
+					}
+				}
 			}
 		}
-		from.owner = {
-			add_minerals = 90
-			add_energy = 10
-			add_physics_research = 5
-			add_society_research = 5
-			add_engineering_research = 5
+		#log = "get pirate starbase on [root.solar_system.GetName]"
+		if = {
+			limit = {
+				from.owner = {
+					num_owned_planets > 0
+				}
+			}
+			fleet = {
+				set_owner = from.owner
+			}
+			if = {
+				limit = {
+					from.owner = {
+						not = {
+							is_country_type = human_fallen_empires_pirate
+						}
+					}
+				}
+				starbase = {
+					set_starbase_size = starbase_outpost
+				}
+			}
+			else = {
+				fleet = {
+					destroy_fleet = this
+				}
+			}
 		}
 	}
 }
 
-# fix pirate planet class ownerless 56 on_planet_ownerless on_planet_transfer
+# fix pirate planet class ownerless on_planet_ownerless on_planet_transfer
 planet_event = {
 	id = human_fallen_empires_pirate.57
 	hide_window = yes
@@ -802,7 +857,7 @@ planet_event = {
 		is_planet_class = pc_human_fallen_empires_pirate_base
 	}
 
-	immediate = {		
+	immediate = {
 		human_fallen_empires_effect_convert_to_asteroid = yes
 	}
 }
@@ -829,6 +884,61 @@ country_event = {
 
 	immediate = {
 		human_fallen_empires_effect_pirate_flee_fleets = yes
+	}
+}
+
+# pirate gain resources after disabling starbase on_ship_disabled
+# This = Ship
+# From = Disabler Ship
+ship_event = {
+	id = human_fallen_empires_pirate.59
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		exists = from.owner
+		exists = fleet
+		from.owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+		is_ship_class = shipclass_starbase
+	}
+
+	immediate = {
+		owner = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_attacked_by_pirate
+				days = 365
+			}
+		}
+		from.owner = {
+			add_minerals = 90
+			add_energy = 10
+			add_physics_research = 5
+			add_society_research = 5
+			add_engineering_research = 5
+		}
+		fleet = {
+			change_variable = {
+				which = human_fallen_empires_pirate_outpost_attack_count
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = human_fallen_empires_pirate_outpost_attack_count
+						value > 5
+					}
+				}
+				set_variable = {
+					which = human_fallen_empires_pirate_outpost_attack_count
+					value = 0
+				}
+				log = "pirate get starbase from [owner.GetName] at [solar_system.GetName]"
+				set_owner = from.owner
+			}
+		}
 	}
 }
 

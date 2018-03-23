@@ -3,7 +3,7 @@ namespace = human_fallen_empires_maintenance
 
 # This = Ship
 # From = Disabler Ship
-# kill starbases of pirate and drone on_ship_disabled
+# kill starbases of drone on_ship_disabled
 ship_event = {
 	id = human_fallen_empires_maintenance.0
 	hide_window = yes
@@ -11,92 +11,27 @@ ship_event = {
 
 	trigger = {
 		exists = this
-		exists = from.owner
 		exists = owner
 		owner = {
-			or = {
-				is_country_type = human_fallen_empires_drone
-				is_country_type = human_fallen_empires_pirate
-			}
+			is_country_type = human_fallen_empires_drone
 		}
 		is_ship_class = shipclass_starbase
 	}
 
 	immediate = {
-		if = {
-			limit = {
-				owner = {
-					is_country_type = human_fallen_empires_pirate
-				}
-				from.owner = {
-					is_country_type = human_fallen_empires_pirate
-				}
-			}
-			# order is matter
-			owner = {
-				# may be change this
-				every_owned_planet = {
-					limit = {
-						solar_system = {
-							is_same_value = root.solar_system
-						}
-					}
-					set_owner = from.owner
-				}
-			}
-			log = "pirate get starbase from pirate on [root.solar_system.GetName]"
-			fleet = {
-				set_owner = from.owner
-			}
-			else = {
-				owner = {
-					if = {
-						limit = {
-							is_country_type = human_fallen_empires_pirate
-						}
-						human_fallen_empires_effect_pirate_flee_fleets = yes
-					}
-					every_owned_planet = {
-						limit = {
-							solar_system = {
-								is_same_value = root.solar_system
-							}
-						}
-						if = {
-							limit = {
-								num_pops > 0
-							}
-							every_owned_pop = {
-								human_fallen_empires_effect_refugee_or_die = yes
-								# мб стоит таки сделать преоритет для того, кто уничтожает базу
-								# if = {
-								# limit = {
-								# not = {
-								# has_citizenship_type = {
-								# type = citizenship_purge
-								# country = root
-								# }
-								# }
-								# }
-								# save_event_target_as = human_fallen_empires_settle_pop_target
-								# root = {
-								# human_fallen_empires_effect_settle_pop = yes
-								# human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
-								# }
-								# else = {
-								# }
-								# }
-							}
-						}
-						human_fallen_empires_effect_convert_to_asteroid = yes
-						#set_name = random
+		owner = {
+			every_owned_planet = {
+				limit = {
+					solar_system = {
+						is_same_value = root.solar_system
 					}
 				}
-				log = "loss starbase on [root.solar_system.GetName] owner: [root.owner.GetName] killer [root.from.owner.GetName]"
-				fleet = {
-					destroy_fleet = this
-				}
+				human_fallen_empires_effect_convert_to_asteroid = yes
 			}
+		}
+		log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
+		fleet = {
+			destroy_fleet = this
 		}
 	}
 }
@@ -131,10 +66,7 @@ planet_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			or = {
-				is_country_type = human_fallen_empires_drone
-				is_country_type = human_fallen_empires_pirate
-			}
+			is_country_type = human_fallen_empires_drone
 		}
 	}
 
