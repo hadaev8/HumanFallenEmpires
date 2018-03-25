@@ -300,33 +300,23 @@ country_event = {
 	}
 	# disable leaders
 	option = {
-		name = human_fallen_empires_menu.7.on
-		trigger = {
-			has_global_flag = human_fallen_empires_disable_leaders
-		}
-		custom_tooltip = human_fallen_empires_menu.7.on.tooltip
+		name = human_fallen_empires_menu.7.defined_text
+		custom_tooltip = human_fallen_empires_menu.7.tooltip.defined_text
 		hidden_effect = {
-			remove_global_flag = human_fallen_empires_disable_leaders
-			country_event = {
-				id = human_fallen_empires_menu.1
-			}
-		}
-	}
-	option = {
-		name = human_fallen_empires_menu.7.off
-		trigger = {
-			not = {
-				has_global_flag = human_fallen_empires_disable_leaders
-			}
-		}
-		custom_tooltip = human_fallen_empires_menu.7.off.tooltip
-		hidden_effect = {
-			set_global_flag = human_fallen_empires_disable_leaders
-			every_country = {
+			if = {
 				limit = {
-					has_modifier = human_fallen_empires_leaders_started
+					human_fallen_empires_trigger_leaders_recrutment_enabled = yes
+				}				
+				every_country = {
+					limit = {
+						has_modifier = human_fallen_empires_leaders_started
+					}
+					remove_modifier = human_fallen_empires_leaders_started
 				}
-				remove_modifier = human_fallen_empires_leaders_started
+				remove_global_flag = human_fallen_empires_leaders_recrutment
+				else = {
+					set_global_flag = human_fallen_empires_leaders_recrutment
+				}
 			}
 			country_event = {
 				id = human_fallen_empires_menu.1
