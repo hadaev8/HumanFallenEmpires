@@ -1,43 +1,79 @@
-
-#Scope type varies depending on what is selected
+# Scope type varies depending on what is selected
 # This = selected object or player country
 # From = player country
 
-# example_button_effect = {
-	# potential = {
-		# always = yes
-	# }
-	# allow = {
-		# always = yes
-	# }
+human_fallen_empires_button_effect_leaders_recrutment_block = {
+	potential = {
+		exists = from
+		from = {
+			or = {
+				human_fallen_empires_trigger_leaders_recrutment_enabled = yes
+				has_country_flag = human_fallen_empires_leaders_hire_block
+			}
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			text = human_fallen_empires_leaders_button_disable
+			always = no
+		}
+	}
+	effect = {
+	}
+}
 
-	# effect = {
-		# add_monthly_resource_mult = {
-			# resource = minerals
-			# value = 5
-			# min = 5
-			# max = 500
-		# }
-	# }
-# }
-
-human_fallen_empires_leaders_button_effect = {
+human_fallen_empires_button_effect_leaders_dismiss_block = {
 	potential = {
 		exists = from
 		from = {
 			human_fallen_empires_trigger_leaders_recrutment_enabled = yes
-			#is_country_type = default
 		}
-		#log = "[This.GetName]"
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = human_fallen_empires_leaders_button_disable
+			text = human_fallen_empires_leaders_button_disable
 			always = no
 		}
 	}
-
 	effect = {
-		log = "123"
+	}
+}
+
+human_fallen_empires_button_effect_leaders_reroll = {
+	potential = {
+		exists = from
+		from = {
+			human_fallen_empires_trigger_leaders_recrutment_enabled = no
+		}
+	}
+	allow = {
+		energy >= 1000
+		hidden_trigger = {
+			not = {
+				has_country_flag = human_fallen_empires_leaders_hire_block
+			}
+		}
+		# custom_tooltip = {
+			# text = human_fallen_empires_leaders_button_disable
+			# not = {
+				# has_country_flag = human_fallen_empires_leaders_hire_block
+			# }
+		# }
+	}
+	effect = {
+		add_energy = -1000
+		hidden_effect = {
+			from = {
+				set_timed_country_flag = {
+					flag = human_fallen_empires_leaders_hire_block
+					days = 1
+				}
+				every_pool_leader = {
+					kill_leader = {
+						show_notification = no
+					}
+				}
+			}
+		}
 	}
 }
