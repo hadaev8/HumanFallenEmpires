@@ -1,6 +1,7 @@
 # Human Fallen Empires
 Best mod for Stellaris in your life.
 
+[Full description](http://steamcommunity.com/sharedfiles/filedetails/?id=901039859&tscn=1492536073)
 
 # Внимание
 
@@ -12,7 +13,3 @@ Best mod for Stellaris in your life.
 # Установка
 1. Скачать архив, распаковать в Paradox Interactive\Stellaris\mod\
 2. Файл humanfallenempires.mod из папки переместить в Paradox Interactive\Stellaris\mod\
-
-Новая игра не требуется, если на карте есть место для новых падших империй.
-
-Полное описание http://steamcommunity.com/sharedfiles/filedetails/?id=901039859&tscn=1492536073
