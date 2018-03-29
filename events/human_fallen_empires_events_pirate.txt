@@ -7,7 +7,7 @@ country_event = {
 	title = pirate.1.name
 	picture = GFX_evt_human_fallen_empires_pirate
 	show_sound = event_space_battle
-	location = event_target:human_fallen_empires_pirate_clan
+	location = event_target:human_fallen_empires_pirate_clan.capital_star
 
 	desc = {
 		# Spiritual
@@ -97,6 +97,10 @@ country_event = {
 		}
 		save_event_target_as = human_fallen_empires_pirate_target
 		human_fallen_empires_effect_pirate_init = yes
+		begin_event_chain = {
+			event_chain = human_fallen_empires_chain_pirate_count
+			target = root
+		}
 	}
 
 	option = {
@@ -655,6 +659,16 @@ country_event = {
 					days = 1
 				}
 			}
+			if = {
+				limit = {
+					has_event_chain = human_fallen_empires_chain_pirate_count
+				}
+				add_event_chain_counter = {
+					event_chain = human_fallen_empires_chain_pirate_count
+					counter = human_fallen_empires_chain_pirate_count_lost_station
+					amount = 1
+				}
+			}
 		}
 		add_minerals = 90
 		add_energy = 10
@@ -823,6 +837,18 @@ ship_event = {
 					num_owned_planets > 0
 				}
 			}
+			from.owner = {
+				if = {
+					limit = {
+						has_event_chain = human_fallen_empires_chain_pirate_count
+					}
+					add_event_chain_counter = {
+						event_chain = human_fallen_empires_chain_pirate_count
+						counter = human_fallen_empires_chain_pirate_count_outpost_balance
+						amount = 1
+					}
+				}
+			}
 			fleet = {
 				set_owner = from.owner
 			}
@@ -936,7 +962,73 @@ ship_event = {
 					value = 0
 				}
 				log = "pirate get starbase from [owner.GetName] at [solar_system.GetName]"
+				owner = {
+					if = {
+						limit = {
+							has_event_chain = human_fallen_empires_chain_pirate_count
+						}
+						add_event_chain_counter = {
+							event_chain = human_fallen_empires_chain_pirate_count
+							counter = human_fallen_empires_chain_pirate_count_outpost_balance
+							amount = -1
+						}
+					}
+				}
 				set_owner = from.owner
+
+			}
+		}
+	}
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+# for human_fallen_empires_chain_pirate_count counters on_ship_destroyed_perp
+country_event = {
+	id = human_fallen_empires_pirate.60
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = fromfromfrom
+		fromfromfrom = {
+			is_ship_class = shipclass_military
+		}
+		or = {
+			is_country_type = human_fallen_empires_pirate
+			from = {
+				is_country_type = human_fallen_empires_pirate
+			}
+		}
+		or = {
+			has_event_chain = human_fallen_empires_chain_pirate_count
+			from = {
+				has_event_chain = human_fallen_empires_chain_pirate_count
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_country_type = human_fallen_empires_pirate
+			}
+			from = {
+				add_event_chain_counter = {
+					event_chain = human_fallen_empires_chain_pirate_count
+					counter = human_fallen_empires_chain_pirate_count_lost_ship
+					amount = 1
+				}
+			}
+			else = {
+				add_event_chain_counter = {
+					event_chain = human_fallen_empires_chain_pirate_count
+					counter = human_fallen_empires_chain_pirate_count_killed_ship
+					amount = 1
+				}
 			}
 		}
 	}
