@@ -7,27 +7,66 @@ human_fallen_empires_trigger_is_brainworm_target = {
 }
 
 human_fallen_empires_trigger_is_brainworm_target_growing = {
-	human_fallen_empires_trigger_is_robot = no
-	nor = {
-		has_trait = human_fallen_empires_species_trait_brainworm
-		has_trait = trait_nerve_stapled
+	human_fallen_empires_trigger_can_be_brainworm = yes
+	exists = tile
+	tile = {
+		nor = {
+			has_building = human_fallen_empires_brainworm_reservation_0
+			has_building = human_fallen_empires_brainworm_reservation_1
+			has_building_construction = human_fallen_empires_brainworm_reservation_0
+			has_building_construction = human_fallen_empires_brainworm_reservation_1
+		}
 	}
-	is_being_purged = no
 }
 
 human_fallen_empires_trigger_is_brainworm = {
-	has_trait = human_fallen_empires_species_trait_brainworm
+	human_fallen_empires_trigger_is_brainworm_species = yes
+	is_being_purged = no
+}
+
+human_fallen_empires_trigger_non_brainworm_in_brainworm_country = {
+	human_fallen_empires_trigger_can_be_brainworm = yes
+	owner = {
+		human_fallen_empires_trigger_is_brainworm_country = yes
+	}
+}
+
+human_fallen_empires_trigger_can_be_brainworm = {
+	exists = owner
+	human_fallen_empires_trigger_non_brainworm_species = yes
 	is_being_purged = no
 }
 
 human_fallen_empires_trigger_is_brainworm_country = {
 	or = {
-		has_trait = human_fallen_empires_species_trait_brainworm
+		human_fallen_empires_trigger_is_brainworm_species = yes
 		and = {
 			exists = ruler.species
 			ruler.species = {
-				has_trait = human_fallen_empires_species_trait_brainworm
+				human_fallen_empires_trigger_is_brainworm_species = yes
 			}
 		}
+	}
+}
+
+human_fallen_empires_trigger_non_brainworm_species = {
+	human_fallen_empires_trigger_is_robot = no
+	human_fallen_empires_trigger_is_brainworm_species = no
+	not = {
+		has_trait = trait_nerve_stapled
+	}
+}
+
+human_fallen_empires_trigger_is_brainworm_species = {
+	has_trait = human_fallen_empires_species_trait_brainworm
+}
+
+# for planet
+human_fallen_empires_trigger_brainworm_planet_for_assimilation = {
+	any_owned_pop = {
+		human_fallen_empires_trigger_is_brainworm = yes
+	}
+	any_owned_pop = {
+		human_fallen_empires_trigger_is_brainworm_target = yes
 	}
 }

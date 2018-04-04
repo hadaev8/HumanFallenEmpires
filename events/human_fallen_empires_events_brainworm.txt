@@ -8,7 +8,7 @@ planet_event = {
 
 	trigger = {
 		owner = {
-			has_civic = human_fallen_empires_civic_brainworm
+			has_valid_civic = human_fallen_empires_civic_brainworm
 		}
 	}
 
@@ -16,24 +16,56 @@ planet_event = {
 		owner = {
 			set_country_flag = custom_start_screen
 		}
-		random_tile = {
+		if = {
 			limit = {
-				has_pop = no
-			}
-			if = {
-				limit = {
-					has_blocker = yes
+				any_tile = {
+					has_pop = no
+					has_deposit = no
 				}
-				remove_blocker = yes
 			}
-			set_building = human_fallen_empires_brainworm_reservation_0
-			create_pop = {
-				species = owner
+			random_tile = {
+				limit = {
+					has_pop = no
+					has_deposit = no
+				}
+				if = {
+					limit = {
+						has_blocker = yes
+					}
+					remove_blocker = yes
+				}
+				set_building = human_fallen_empires_brainworm_reservation_0
+				create_pop = {
+					species = owner
+				}
+				pop = {
+					modify_species = {
+						species = this
+						remove_trait = human_fallen_empires_species_trait_brainworm
+					}
+				}
 			}
-			pop = {
-				modify_species = {
-					species = this
-					remove_trait = human_fallen_empires_species_trait_brainworm
+			else = {
+				random_tile = {
+					limit = {
+						has_pop = no
+					}
+					if = {
+						limit = {
+							has_blocker = yes
+						}
+						remove_blocker = yes
+					}
+					set_building = human_fallen_empires_brainworm_reservation_0
+					create_pop = {
+						species = owner
+					}
+					pop = {
+						modify_species = {
+							species = this
+							remove_trait = human_fallen_empires_species_trait_brainworm
+						}
+					}
 				}
 			}
 		}
@@ -54,17 +86,8 @@ pop_event = {
 
 	trigger = {
 		exists = planet
-		or = {
-			human_fallen_empires_trigger_is_brainworm = yes
-			human_fallen_empires_trigger_is_brainworm_target = yes
-			planet = {
-				any_owned_pop = {
-					or = {
-						human_fallen_empires_trigger_is_brainworm = yes
-						human_fallen_empires_trigger_is_brainworm_target = yes
-					}
-				}
-			}
+		planet = {
+			human_fallen_empires_trigger_brainworm_planet_for_assimilation = yes
 		}
 	}
 
@@ -75,13 +98,14 @@ pop_event = {
 				exists = from.owner
 				exists = fromfrom.owner
 				fromfrom.owner = {
-					human_fallen_empires_trigger_is_brainworm_country = no
+					human_fallen_empires_trigger_is_brainworm_country = yes
 				}
 				not = {
 					fromfrom.owner = {
 						is_country = from.owner
 					}
 				}
+				human_fallen_empires_trigger_is_brainworm = yes
 			}
 			fromfrom.owner = {
 				# notification for worm owner
@@ -93,7 +117,9 @@ pop_event = {
 		planet = {
 			# assimilate all
 			planet_event = {
-				id = human_fallen_empires_brainworm.4 days = 90 random = 30
+				id = human_fallen_empires_brainworm.4
+				days = 90
+				random = 30
 			}
 			# change owner if needed
 			planet_event = {
@@ -111,17 +137,8 @@ pop_event = {
 
 	trigger = {
 		exists = planet
-		or = {
-			human_fallen_empires_trigger_is_brainworm = yes
-			human_fallen_empires_trigger_is_brainworm_target = yes
-			planet = {
-				any_owned_pop = {
-					or = {
-						human_fallen_empires_trigger_is_brainworm = yes
-						human_fallen_empires_trigger_is_brainworm_target = yes
-					}
-				}
-			}
+		planet = {
+			human_fallen_empires_trigger_brainworm_planet_for_assimilation = yes
 		}
 	}
 
@@ -129,7 +146,9 @@ pop_event = {
 		planet = {
 			# assimilate all
 			planet_event = {
-				id = human_fallen_empires_brainworm.4 days = 90 random = 30
+				id = human_fallen_empires_brainworm.4
+				days = 90
+				random = 30
 			}
 			# change owner if needed
 			planet_event = {
@@ -146,12 +165,8 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		any_owned_pop = {
-			or = {
-				human_fallen_empires_trigger_is_brainworm = yes
-				human_fallen_empires_trigger_is_brainworm_target = yes
-			}
-		}
+		exists = owner
+		human_fallen_empires_trigger_brainworm_planet_for_assimilation = yes
 	}
 
 	immediate = {
@@ -175,12 +190,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		any_owned_pop = {
-			human_fallen_empires_trigger_is_brainworm_target = yes
-		}
-		any_owned_pop = {
-			human_fallen_empires_trigger_is_brainworm = yes
-		}
+		human_fallen_empires_trigger_brainworm_planet_for_assimilation = yes
 		exists = owner
 		owner = {
 			not = {
@@ -220,13 +230,6 @@ planet_event = {
 		random_owned_pop = {
 			limit = {
 				human_fallen_empires_trigger_is_brainworm_target = yes
-				exists = tile
-				tile = {
-					nor = {
-						has_building = human_fallen_empires_brainworm_reservation_0
-						has_building = human_fallen_empires_brainworm_reservation_1
-					}
-				}
 			}
 			modify_species = {
 				species = this
@@ -302,7 +305,7 @@ planet_event = {
 			else = {
 				random_owned_pop = {
 					limit = {
-						has_trait = human_fallen_empires_species_trait_brainworm
+						human_fallen_empires_trigger_is_brainworm_species = yes
 					}
 					create_country = {
 						name = random
@@ -340,7 +343,7 @@ country_event = {
 		human_fallen_empires_trigger_is_brainworm_country = yes
 		exists = from.species
 		from.species = {
-			human_fallen_empires_trigger_is_brainworm_country = no
+			human_fallen_empires_trigger_non_brainworm_species = yes
 		}
 	}
 
@@ -472,10 +475,9 @@ planet_event = {
 
 	trigger = {
 		owner = {
-			has_civic = human_fallen_empires_civic_brainworm_syncretic
+			has_valid_civic = human_fallen_empires_civic_brainworm_syncretic
 		}
 	}
-
 
 	immediate = {
 		from = {
@@ -501,6 +503,24 @@ planet_event = {
 					species = event_target:secondary_species
 				}
 			}
+		}
+	}
+}
+
+# brainworm_reservation civic on_game_start_country
+country_event = {
+	id = human_fallen_empires_brainworm.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_valid_civic = human_fallen_empires_civic_brainworm_reservation
+	}
+
+	immediate = {
+		give_technology = {
+			message = no
+			tech = tech_human_fallen_empires_brainworm_reservation_0
 		}
 	}
 }

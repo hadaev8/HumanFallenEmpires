@@ -418,10 +418,7 @@ country_event = {
 				}
 				# init options
 				# more tech and res
-				every_country = {
-					limit = {
-						is_country_type = default
-					}
+				every_playable_country = {
 					switch = {
 						trigger = has_country_flag
 						human_fallen_empires_init_tech_t4 = {
@@ -441,19 +438,16 @@ country_event = {
 				# more colony
 				while = {
 					count = human_fallen_empires_init_fast_start_colony_num
-					every_country = {
+					every_playable_country = {
 						limit = {
-							is_country_type = default
+							num_pops > 0
 						}
 						save_event_target_as = human_fallen_empires_init_target
 						human_fallen_empires_effect_init_make_colony = yes
 					}
 				}
 				# develop some
-				every_country = {
-					limit = {
-						is_country_type = default
-					}
+				every_playable_country = {
 					save_event_target_as = human_fallen_empires_init_target
 					capital_scope = {
 						human_fallen_empires_effect_init_develop_capital = yes
@@ -466,7 +460,7 @@ country_event = {
 					# some res
 					add_food = 200
 					switch = {
-						trigger = has_global_flag
+						trigger = has_country_flag
 						human_fallen_empires_init_tech_t4 = {
 							add_energy = 10000
 							add_minerals = 10000
@@ -526,10 +520,7 @@ country_event = {
 					limit = {
 						has_country_flag = human_fallen_empires_init_mining
 					}
-					every_country = {
-						limit = {
-							is_country_type = default
-						}
+					every_playable_country = {
 						country_event = {
 							id = human_fallen_empires_init.103
 							days = 2
@@ -541,14 +532,10 @@ country_event = {
 					limit = {
 						has_country_flag = human_fallen_empires_init_comms
 					}
-					every_country = {
-						limit = {
-							is_country_type = default
-						}
+					every_playable_country = {
 						set_country_flag = first_contact_event
-						every_country = {
+						every_playable_country = {
 							limit = {
-								is_country_type = default
 								not = {
 									has_communications = prev
 								}
@@ -562,7 +549,7 @@ country_event = {
 					limit = {
 						has_country_flag = human_fallen_empires_init_survey
 					}
-					every_country = {
+					every_playable_country = {
 						limit = {
 							not = {
 								has_technology = tech_automated_exploration
@@ -678,7 +665,7 @@ country_event = {
 						has_planet_flag = planet_earth
 						has_planet_flag = nuked_earth
 						and = {
-							has_owner = yes
+							exists = owner
 							is_capital = yes
 						}
 					}
