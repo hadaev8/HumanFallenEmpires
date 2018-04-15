@@ -9,7 +9,11 @@ is_valid_rival = {
 			OR = {
 				prev = { NOT = { is_country_type = default } }
 				AND = {
-					is_neighbor_of = prev
+					or = {
+						is_neighbor_of = prev
+						has_technology = tech_human_fallen_empires_total_war
+						num_owned_planets = 0
+					}
 					relative_power = { who = prev value >= inferior }
 					#relative_power = { who = prev value <= superior }
 				}
@@ -83,9 +87,6 @@ can_auto_migrate_pop = {
 	exists = root
 	exists = planet
 	exists = tile
-	root = {
-		is_country_type = default
-	}
 	# brainworm
 	tile = {
 		nor = {
@@ -108,7 +109,6 @@ can_auto_migrate_pop = {
 			has_modifier = human_fallen_empires_population_ban_auto_migrate
 		}
 	}
-	is_sapient = yes
 	# проверить
 	or = {
 		is_enslaved = no
@@ -122,10 +122,18 @@ can_auto_migrate_pop = {
 			}
 		}
 	}
+	# vanilla
+	root = {
+		is_country_type = default
+	}
+	is_sapient = yes
 	is_being_purged = no
 	has_migration_control = no
 	is_robot_pop = no
-	NOT = { has_trait = trait_self_modified }
+	OR = {
+		NOT = { has_trait = trait_self_modified }
+		is_same_species = root
+	}
 	NOT = { has_modifier = recently_migrated }
 	NOT = { has_modifier = recent_refugee }
 }
@@ -133,15 +141,9 @@ can_auto_migrate_pop = {
 #Root = planet
 #This = pop
 pop_can_live_on_planet = {
-	# or = {
-	# 	exists = owner
-	# 	is_sapient = no
-	# }
-	nand = {
-		has_citizenship_type = { type = citizenship_purge }
-		has_purge_type = { type = purge_displacement }
-	}
-	or = {
+	# vanilla thing
+	custom_tooltip = {
+		fail_text = POP_HABITABILITY_TOO_LOW
 		root = {
 			not = {
 				habitability = {
@@ -150,92 +152,103 @@ pop_can_live_on_planet = {
 				}
 			}
 		}
-		is_robot_pop = yes
-		and = {
-			exists = owner
-			owner = {
-				not = {
-					is_country_type = default
-				}
-			}
-		}
 	}
-	or = {
-		# everyone may live in sectors
-		root = {
-			sector_controlled = yes
-		}
-		# citizens may always live in core worlds
-		or = {
+	# vanilla thing re factored
+	custom_tooltip = {
+		fail_text = POP_MAY_NOT_LIVE_ON_PLANET
+		OR = {
+			is_robot_pop = yes
+			#is_sapient = no # проверить нормально ли все с предразумными
+			# everyone may live in sectors
+			root = { sector_controlled = yes }
+			# citizens may always live in core worlds
 			has_citizenship_type = { type = citizenship_full }
 			has_citizenship_type = { type = citizenship_caste_system }
 			has_citizenship_type = { type = citizenship_full_machine }
 			has_citizenship_type = { type = citizenship_organic_trophy }
-		}
-		# core_worlds_all / hive minds let everyone live in core worlds
-		and = {
-			exists = owner
-			or = {
-				owner = { has_policy_flag = core_worlds_all }
-				owner = { has_ethic = ethic_gestalt_consciousness }
-				owner = {
-					not = {
-						is_country_type = default
+			AND = {
+				exists = owner
+				OR = {
+					# core_worlds_all / hive minds let everyone live in core worlds
+					owner = { has_policy_flag = core_worlds_all }
+					owner = { has_ethic = ethic_gestalt_consciousness }
+					owner = { NOT = { is_country_type = default } }
+					# core_worlds_citizens_and_slaves lets slaves live in core worlds
+					and = {
+						has_citizenship_type = { type = citizenship_slavery }
+						owner = { has_policy_flag = core_worlds_citizens_and_slaves }
 					}
 				}
+				# stop non-citizens from moving to planets with recent land appropriation
+				# будут мигрировать на планету с присвоением земли, если она в секторе, так и должно быть или пофиксить?
+				NAND = {
+					root = { sector_controlled = yes }
+					root = { has_modifier = land_appropriation }
+					planet = { NOT = { is_same_value = root } }
+				}
 			}
+			# everyone can live here
+			root = {
+				has_modifier = human_fallen_empires_population_allow_all
+			}
+			# everyone can live here in reservation
+			# and = {
+				# exists = tile
+				# tile = {
+					# or = {
+						# has_building = human_fallen_empires_brainworm_reservation_0
+						# has_building = human_fallen_empires_brainworm_reservation_1
+					# }
+				# }
+			# }
 		}
-		# core_worlds_citizens_and_slaves lets slaves live in core worlds
-		and = {
-			has_citizenship_type = { type = citizenship_slavery }
-			exists = owner
-			owner = { has_policy_flag = core_worlds_citizens_and_slaves }
+		nand = {
+			has_citizenship_type = { type = citizenship_purge }
+			has_purge_type = { type = purge_displacement }
 		}
-		# stop non-citizens from moving to planets with recent land appropriation
-		NAND = {
-			root = { has_modifier = land_appropriation }
-			planet = { NOT = { is_same_value = root } }
- 		}
 	}
-	# migration
-	nor = {
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_yellow_ring
+	# population rings
+	custom_tooltip = {
+		fail_text = POP_MAY_NOT_LIVE_ON_PLANET
+		nor = {
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_yellow_ring
+				}
+				human_fallen_empires_trigger_is_thrifty = no
 			}
-			human_fallen_empires_trigger_is_thrifty = no
-		}
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_red_ring
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_red_ring
+				}
+				human_fallen_empires_trigger_is_industrious = no
 			}
-			human_fallen_empires_trigger_is_industrious = no
-		}
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_green_ring
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_green_ring
+				}
+				human_fallen_empires_trigger_is_agrarian = no
 			}
-			human_fallen_empires_trigger_is_agrarian = no
-		}
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_blue_ring
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_blue_ring
+				}
+				human_fallen_empires_trigger_is_clever = no
 			}
-			human_fallen_empires_trigger_is_clever = no
-		}
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_grey_ring
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_grey_ring
+				}
+				human_fallen_empires_trigger_is_robot = no
 			}
-			human_fallen_empires_trigger_is_synthetic = no
-		}
-		and = {
-			root = {
-				has_modifier = human_fallen_empires_population_ban_auto_migrate
-			}
-			planet = {
-				not = {
-					is_planet = root
+			and = {
+				root = {
+					has_modifier = human_fallen_empires_population_ban_auto_migrate
+				}
+				planet = {
+					not = {
+						is_planet = root
+					}
 				}
 			}
 		}
@@ -246,7 +259,10 @@ pop_can_live_on_planet = {
 #This = pop
 can_colonize_with_pop = {
 	has_colonization_control = no
-	NOT = { has_trait = trait_self_modified }
+	OR = {
+		NOT = { has_trait = trait_self_modified }
+		is_same_species = root
+	}
 	if = {
 		limit = {
 			OR = {
@@ -254,7 +270,6 @@ can_colonize_with_pop = {
 				is_sapient = no
 				# mod
 				has_pop_flag = human_fallen_empires_plague_pop
-				#human_fallen_empires_trigger_is_brainworm = yes
 			}
 		}
 		custom_tooltip = {
@@ -265,18 +280,6 @@ can_colonize_with_pop = {
 		}
 	}
 }
-
-# Determines if notification messages should be sent after a ground combat
-# this: planet
-# from: winner
-# root: loser
-# show_notification_for_ground_combat = {
-# 	NOT = {
-# 		has_planet_flag = slave_revolt
-# 		has_planet_flag = revolt_in_progress
-# 		has_planet_flag = human_fallen_empires_plague_planet
-# 	}
-# }
 
 # Checks if a pop can procreate
 # This = Pop
@@ -291,7 +294,7 @@ can_pop_procreate = {
 		has_citizenship_rights = yes
 	}
 	# mod
-	human_fallen_empires_trigger_is_brainworm = no
+	human_fallen_empires_trigger_is_brainworm_species = no
 	not = {
 		has_trait = human_fallen_empires_species_trait_infertil
 	}
@@ -324,3 +327,52 @@ can_spawn_debris = {
 		}
 	}
 }
+
+# Determines if notification messages should be sent after a ground combat
+# this: planet
+# from: winner
+# root: loser
+# show_notification_for_ground_combat = {
+# 	NOT = {
+# 		has_planet_flag = slave_revolt
+# 		has_planet_flag = revolt_in_progress
+# 		has_planet_flag = human_fallen_empires_plague_planet
+# 	}
+# }
+
+# Root = Pop
+# From = Country
+# This = Pop
+# pop_has_no_happiness = {
+	# FROM = {
+		# is_country_type = default
+	# }
+	# OR = {
+		# AND = {
+			# from = { has_authority = auth_machine_intelligence }
+			# has_trait = trait_machine_unit # Native machine
+		# }
+		# AND = {
+			# from = {
+				# OR = {
+					# has_authority = auth_machine_intelligence
+					# has_policy_flag = ai_outlawed
+				# }
+			# }
+			# has_trait = trait_mechanical # Robot
+		# }
+		# AND = {
+			# from = {
+				# has_authority = auth_machine_intelligence
+				# has_civic = civic_machine_assimilator # Assimilator empire
+			# }
+			# has_trait = trait_cybernetic # Cyborg pop
+		# }
+		# and = {
+			# exists = tile
+			# tile = {
+				# has_building = human_fallen_empires_building_crio
+			# }
+		# }
+	# }
+# }

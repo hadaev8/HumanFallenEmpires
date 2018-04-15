@@ -477,6 +477,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 			ethic = ethic_materialist
 		}
 		flag = random
+		effect = {
+			human_fallen_empires_effect_init_give_tech_t3 = yes
+		}
 	}
 	create_colony = {
 		owner = last_created_country
@@ -485,6 +488,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 	event_target:human_fallen_empires_varelse_fleet = {
 		set_owner = last_created_country
 	}
+	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
 }
 
 # for country return 6 event targets
@@ -656,6 +660,57 @@ human_fallen_empires_effect_create_future_fleet = {
 	}
 }
 
+human_fallen_empires_effect_set_science_deposit = {
+	random_list = {
+		10 = {
+			set_deposit = d_physics_deposit
+		}
+		10 = {
+			set_deposit = d_society_deposit
+		}
+		10 = {
+			set_deposit = d_engineering_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_memorial_tile = {
+	random_list = {
+		30 = {
+		}
+		10 = {
+			set_blocker = tb_radioactive_wasteland
+		}
+		10 = {
+			set_blocker = tb_city_ruins
+		}
+		10 = {
+			set_blocker = tb_bomb_crater
+		}
+		1 = {
+			set_building = building_dark_matter_power_plant
+		}
+		1 = {
+			set_building = building_agri_processing_complex
+		}
+		1 = {
+			set_building = building_ancient_factory
+		}
+		1 = {
+			set_building = building_ancient_archives
+		}
+		1 = {
+			set_deposit = d_mineral_deposit
+		}
+		1 = {
+			set_deposit = d_energy_deposit
+		}
+		3 = {
+			human_fallen_empires_effect_set_science_deposit = yes
+		}
+	}
+}
+
 # for leader
 human_fallen_empires_effect_add_psionic_trait = {
 	if = {
@@ -778,6 +833,34 @@ human_fallen_empires_effect_create_starbase_citadel_from_planet = {
 		human_fallen_empires_effect_create_starbase = yes
 		starbase = {
 			set_starbase_size = starbase_citadel
+		}
+	}
+}
+
+human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = {
+	owner = {
+		save_event_target_as = human_fallen_empires_starbase_owner
+	}
+	solar_system = {
+		#human_fallen_empires_effect_create_starbase = yes
+		create_starbase = {
+			size = "starbase_citadel"
+			owner = event_target:human_fallen_empires_starbase_owner
+
+			module = "shipyard"
+			module = "shipyard"
+			module = "shipyard"
+			module = "hangar_bay"
+			module = "gun_battery"
+			module = "gun_battery"
+
+			building = "target_uplink_computer"
+			building = "defense_grid"
+			building = "colossus_yards"
+			building = "titan_yards"
+
+			effect = {
+			}
 		}
 	}
 }

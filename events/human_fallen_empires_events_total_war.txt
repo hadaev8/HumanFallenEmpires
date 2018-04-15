@@ -77,6 +77,7 @@ planet_event = {
 		exists = controller
 		exists = solar_system
 		nor = {
+			is_controlled_by = owner
 			solar_system = {
 				any_planet = {
 					exists = owner
@@ -87,9 +88,6 @@ planet_event = {
 					}
 					is_controlled_by = owner
 				}
-			}
-			controller = {
-				is_country = root.owner
 			}
 		}
 		owner = {
@@ -128,7 +126,7 @@ planet_event = {
 				exists = starbase
 			}
 			starbase = {
-				set_owner = controller
+				set_owner = root.controller
 			}
 		}
 	}
@@ -138,6 +136,7 @@ planet_event = {
 # This = Ship
 # From = Disabler Ship
 # kill starbases of pirate and drone on_ship_disabled
+# проверить переключение на фром без рута
 ship_event = {
 	id = human_fallen_empires_total_war.52
 	hide_window = yes
@@ -220,7 +219,7 @@ country_event = {
 		human_fallen_empires_effect_materialist_attraction_high = yes
 		hidden_effect = {
 			# inform
-			every_country = {
+			every_playable_country = {
 				country_event = {
 					id = human_fallen_empires_total_war.150
 				}
@@ -239,24 +238,23 @@ country_event = {
 	}
 	# annex
 	option = {
-		name = human_fallen_empires_total_war.100.1
-		custom_tooltip = human_fallen_empires_total_war.100.1.tooltip
+		name = human_fallen_empires_total_war.100.1.0
+		custom_tooltip = human_fallen_empires_total_war.100.1.0.tooltip
+		trigger = {
+			is_authoritarian = no
+		}
 		ai_chance = {
 			factor = 100
 			modifier = {
-				factor = 100
-				has_country_flag = human_fallen_empires_egypt
-			}
-			modifier = {
 				factor = 0
-				human_fallen_empires_trigger_is_authoritarian = no
 				is_egalitarian = no
 				human_fallen_empires_trigger_is_assimilator = no
 			}
 		}
+		human_fallen_empires_effect_authoritarian_attraction_low = yes
 		hidden_effect = {
 			# inform
-			every_country = {
+			every_playable_country = {
 				country_event = {
 					id = human_fallen_empires_total_war.151
 				}
@@ -272,7 +270,71 @@ country_event = {
 						amount = 1 # scales to pops
 					}
 					conquer = root
-					#set_owner = root
+				}
+			}
+		}
+	}
+	# annex and enslave
+	option = {
+		name = human_fallen_empires_total_war.100.1.1
+		custom_tooltip = human_fallen_empires_total_war.100.1.1.tooltip
+		trigger = {
+			is_egalitarian = no
+			human_fallen_empires_trigger_is_hive = no
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 100
+				has_country_flag = human_fallen_empires_egypt
+			}
+			modifier = {
+				factor = 0
+				human_fallen_empires_trigger_is_authoritarian = no
+			}
+		}
+		human_fallen_empires_effect_authoritarian_attraction_low = yes
+		hidden_effect = {
+			# inform
+			every_playable_country = {
+				country_event = {
+					id = human_fallen_empires_total_war.151
+				}
+			}
+			event_target:WarInHeavenLoserFE = {
+				human_fallen_empires_effect_refugee_10 = yes
+				every_owned_pop_species = {
+					limit = {
+						not = {
+							is_same_species = root
+						}
+						or = {
+							has_citizenship_type = {
+								country = prev
+								type = citizenship_full
+							}
+							has_citizenship_type = {
+								country = prev
+								type = citizenship_caste_system
+							}
+						}
+					}
+					set_species_flag = human_fallen_empires_forever_slave@root
+					set_citizenship_type = {
+						country = root
+						type = citizenship_slavery
+						cooldown = no
+					}
+				}
+				every_owned_starbase = {
+					set_owner = root
+				}
+				every_owned_planet = {
+					add_threat = {
+						who = root
+						amount = 1 # scales to pops
+					}
+					conquer = root
 				}
 			}
 		}
@@ -297,7 +359,7 @@ country_event = {
 		}
 		hidden_effect = {
 			# inform
-			every_country = {
+			every_playable_country = {
 				country_event = {
 					id = human_fallen_empires_total_war.152
 				}
@@ -328,7 +390,7 @@ country_event = {
 		human_fallen_empires_effect_xenophobe_attraction_high = yes
 		hidden_effect = {
 			# inform
-			every_country = {
+			every_playable_country = {
 				country_event = {
 					id = human_fallen_empires_total_war.153
 				}
@@ -365,7 +427,7 @@ country_event = {
 		human_fallen_empires_effect_xenophobe_attraction_low = yes
 		hidden_effect = {
 			# inform
-			every_country = {
+			every_playable_country = {
 				country_event = {
 					id = human_fallen_empires_total_war.154
 				}
@@ -616,19 +678,7 @@ country_event = {
 			OR = {
 				# Fragged a holy world
 				has_country_flag = holy_world_killed
-				fleet_power > 120000
-				and = {
-					is_difficulty > 0
-					fleet_power > 100000
-				}
-				and = {
-					is_difficulty > 1
-					fleet_power > 80000
-				}
-				and = {
-					is_difficulty > 2
-					fleet_power > 60000
-				}
+				fleet_power > 50000
 				any_owned_planet = {
 					has_planet_flag = fallen_empire_world
 				}
@@ -638,9 +688,17 @@ country_event = {
 
 	immediate = {
 		random_list = {
-			20 = {
+			40 = {
 			}
 			10 = {
+				modifier = {
+					factor = 2
+					is_difficulty > 4
+				}
+				modifier = {
+					factor = 2
+					is_difficulty > 3
+				}
 				modifier = {
 					factor = 2
 					is_difficulty > 2
@@ -656,11 +714,6 @@ country_event = {
 				modifier = {
 					factor = 0.5
 					num_fallen_empires > 1
-					num_fallen_empires < 3
-				}
-				modifier = {
-					factor = 0.5
-					num_fallen_empires > 2
 					num_fallen_empires < 4
 				}
 				modifier = {
@@ -674,6 +727,13 @@ country_event = {
 						any_owned_planet = {
 							has_planet_flag = fallen_empire_world
 						}
+					}
+				}
+				modifier = {
+					factor = 2
+					any_country = {
+						is_country_type = default
+						fleet_power > 75000
 					}
 				}
 				modifier = {
@@ -692,7 +752,6 @@ country_event = {
 						}
 						is_country_type = fallen_empire
 					}
-					set_global_flag = sleepers_awake_happened
 					set_global_flag = human_fallen_empires_sleepers_awake_happened
 					country_event = {
 						id = fallen_empires_awakening.3

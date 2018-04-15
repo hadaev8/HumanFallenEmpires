@@ -16,15 +16,19 @@ country_event = {
 			mid_game_years_passed > 30
 			and = {
 				mid_game_years_passed > 20
-				is_difficulty > 0
-			}
-			and = {
-				mid_game_years_passed > 10
 				is_difficulty > 1
 			}
 			and = {
-				mid_game_years_passed > 0
+				mid_game_years_passed > 10
 				is_difficulty > 2
+			}
+			and = {
+				mid_game_years_passed > 0
+				is_difficulty > 3
+			}
+			and = {
+				mid_game_years_passed > -10
+				is_difficulty > 4
 			}
 		}
 	}
@@ -70,7 +74,7 @@ country_event = {
 			}
 			change_variable = {
 				which = human_fallen_empires_plague_power
-				value = 2
+				value = 1
 			}
 		}
 		if = {
@@ -79,7 +83,7 @@ country_event = {
 			}
 			change_variable = {
 				which = human_fallen_empires_plague_power
-				value = 2
+				value = 1
 			}
 		}
 		if = {
@@ -88,7 +92,25 @@ country_event = {
 			}
 			change_variable = {
 				which = human_fallen_empires_plague_power
-				value = 2
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				is_difficulty > 3
+			}
+			change_variable = {
+				which = human_fallen_empires_plague_power
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				is_difficulty > 4
+			}
+			change_variable = {
+				which = human_fallen_empires_plague_power
+				value = 1
 			}
 		}
 		while = {
@@ -141,20 +163,14 @@ planet_event = {
 	hide_window = yes
 	is_triggered_only = yes
 
-	trigger = {
-		nor = {
-			has_global_flag = human_fallen_empires_disable_plague
-			has_planet_flag = human_fallen_empires_plague_planet
-		}
-		any_owned_pop = {
-			human_fallen_empires_trigger_plague_is_immune = no
-		}
-	}
+	#trigger = {
+	#	human_fallen_empires_trigger_plague_valid_planet = yes
+	#}
 
 	immediate = {
 		set_timed_planet_flag = {
 			flag = human_fallen_empires_plague_planet
-			days = 3650
+			days = 3655
 		}
 		every_owned_pop = {
 			limit = {
@@ -163,6 +179,18 @@ planet_event = {
 			set_timed_pop_flag = {
 				flag = human_fallen_empires_plague_pop
 				days = 3650
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					has_event_chain = human_fallen_empires_chain_plague_count
+				}
+				add_event_chain_counter = {
+					event_chain = human_fallen_empires_chain_plague_count
+					counter = human_fallen_empires_chain_plague_infested_planet
+					amount = 1
+				}
 			}
 		}
 		every_playable_country = {
@@ -177,6 +205,9 @@ planet_event = {
 		}
 		log = "Plague start on planet [Root.GetName] owner: [Root.Owner.GetName]"
 		# set modifier and inform
+		#switch = {
+		#	trigger = has_global_flag
+		#	human_fallen_empires_plague_lvl_3 = {
 		if = {
 			limit = {
 				has_global_flag = human_fallen_empires_plague_lvl_3
@@ -283,18 +314,9 @@ planet_event = {
 			days = 180
 			random = 180
 		}
-		owner = {
-			save_event_target_as = human_fallen_empires_plague_planet_owner
-			if = {
-				limit = {
-					has_event_chain = human_fallen_empires_chain_plague_count
-				}
-				add_event_chain_counter = {
-					event_chain = human_fallen_empires_chain_plague_count
-					counter = human_fallen_empires_chain_plague_infested_planet
-					amount = 1
-				}
-			}
+		set_timed_planet_flag = {
+			flag = human_fallen_empires_plague_planet_owner@owner
+			days = 3655
 		}
 		# check planet after 10 years
 		planet_event = {
@@ -427,7 +449,7 @@ planet_event = {
 					}
 					modifier = {
 						factor = 2
-						is_difficulty = 0
+						is_difficulty < 1
 					}
 					owner = {
 						country_event = {
@@ -541,7 +563,7 @@ planet_event = {
 							num_pops > 20
 						}
 						modifier = {
-							factor = 0.01
+							factor = 0.1
 							owner = {
 								not = {
 									is_country = root.owner
@@ -571,6 +593,9 @@ pop_event = {
 	trigger = {
 		has_pop_flag = human_fallen_empires_plague_pop
 		exists = planet
+		planet = {
+			human_fallen_empires_trigger_plague_valid_planet = yes
+		}
 	}
 
 	immediate = {
@@ -588,6 +613,10 @@ planet_event = {
 	id = human_fallen_empires_plague.4
 	hide_window = yes
 	is_triggered_only = yes
+	
+	trigger = {
+		has_planet_flag = human_fallen_empires_plague_planet
+	}
 
 	immediate = {
 		every_playable_country = {
@@ -632,7 +661,12 @@ planet_event = {
 						amount = 1
 					}
 				}
-				event_target:human_fallen_empires_plague_planet_owner = {
+				random_country = {
+					limit = {
+						root = {
+							has_planet_flag = human_fallen_empires_plague_planet_owner@prev
+						}
+					}
 					country_event = {
 						id = human_fallen_empires_plague.61
 					}

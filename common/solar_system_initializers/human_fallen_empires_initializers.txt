@@ -113,7 +113,7 @@ human_fallen_empires_egypt = {
 						leader_age_max = 650
 						traits = {
 							trait = leader_trait_ruler_chosen
-							#trait = ruler_trait_transcendent
+							trait = human_fallen_empires_ruler_trait_transcendent_0
 						}
 					}
 					assign_leader = last_created_leader
@@ -136,31 +136,24 @@ human_fallen_empires_egypt = {
 							leader_age_max = 650
 							traits = {
 								trait = leader_trait_ruler_chosen
-								#trait = ruler_trait_transcendent
+								trait = human_fallen_empires_ruler_trait_transcendent_0
 							}
 						}
 						assign_leader = last_created_leader
-					}
-					every_owned_leader = {
-						human_fallen_empires_effect_add_psionic_trait = yes
 					}
 					save_global_event_target_as = human_fallen_empires_egypt_country
 				}
 			}
 			set_owner = last_created_country
 			set_planet_flag = human_fallen_empires_home_of_light
-			prevent_anomaly = yes
 			set_capital = yes
+			human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = yes
 			random_tile = {
 				limit = {
-					has_blocker = no
 					has_blocker = no
 				}
 				clear_deposits = yes
 				set_building = human_fallen_empires_building_thoth_temple
-				create_pop = {
-					species = owner
-				}
 			}
 			random_tile = {
 				limit = {
@@ -169,9 +162,6 @@ human_fallen_empires_egypt = {
 					num_adjacent_tiles > 3
 				}
 				set_building = building_capital_3
-				create_pop = {
-					species = owner
-				}
 				set_deposit = d_energy_deposit
 			}
 			while = {
@@ -183,10 +173,54 @@ human_fallen_empires_egypt = {
 					}
 					set_building = building_dark_matter_power_plant
 					set_deposit = d_energy_deposit
-					create_pop = {
-						species = owner
-					}
 				}
+			}
+			while = {
+				count = 2
+				random_tile = {
+					limit = {
+						has_building = no
+						has_blocker = no
+					}
+					set_building = building_fortress
+					clear_deposits = yes
+				}
+			}
+			random_tile = {
+				limit = {
+					has_building = no
+					has_blocker = no
+				}
+				set_building = building_planetary_shield_generator
+				clear_deposits = yes
+			}
+			while = {
+				count = 2
+				random_tile = {
+					limit = {
+						has_building = no
+						has_blocker = no
+					}
+					set_building = building_ancient_archives
+					human_fallen_empires_effect_set_science_deposit = yes
+				}
+			}
+			every_tile = {
+				limit = {
+					has_pop = no
+					has_building = yes
+				}
+				create_pop = {
+					species = owner
+				}
+			}
+			random_tile = {
+				limit = {
+					has_building = no
+					has_blocker = no
+				}
+				set_building = building_agri_processing_complex
+				set_deposit = d_farmland_deposit
 			}
 			while = {
 				count = 4
@@ -198,14 +232,6 @@ human_fallen_empires_egypt = {
 					set_building = building_ancient_factory
 					set_deposit = d_mineral_deposit
 				}
-			}
-			random_tile = {
-				limit = {
-					has_building = no
-					has_blocker = no
-				}
-				set_building = building_agri_processing_complex
-				set_deposit = d_farmland_deposit
 			}
 			every_tile = {
 				limit = {
@@ -231,29 +257,41 @@ human_fallen_empires_egypt = {
 					type = gene_warrior_army
 				}
 			}
-			human_fallen_empires_effect_init_set_starbase = yes
 			human_fallen_empires_effect_create_egypt_fleet = yes
 			human_fallen_empires_effect_create_egypt_fleet = yes
 			human_fallen_empires_effect_create_egypt_fleet = yes
-			if = {
-				limit = {
-					is_difficulty > 0
-				}
-				human_fallen_empires_effect_create_egypt_fleet = yes
-			}
 			if = {
 				limit = {
 					is_difficulty > 1
 				}
 				human_fallen_empires_effect_create_egypt_fleet = yes
 			}
+			# if = {
+			# 	limit = {
+			# 		is_difficulty > 2
+			# 	}
+			# 	human_fallen_empires_effect_create_egypt_fleet = yes
+			# }
 			if = {
 				limit = {
-					is_difficulty > 2
+					is_difficulty > 3
 				}
 				human_fallen_empires_effect_create_egypt_fleet = yes
 			}
+			# if = {
+			# 	limit = {
+			# 		is_difficulty > 4
+			# 	}
+			# 	human_fallen_empires_effect_create_egypt_fleet = yes
+			# }
 			last_created_country = {
+				every_owned_leader = {
+					human_fallen_empires_effect_add_psionic_trait = yes
+				}
+				add_modifier = {
+					modifier = human_fallen_empires_navy_size
+					days = -1
+				}
 				every_owned_ship = {
 					repair_ship = yes
 					add_modifier = {
@@ -263,20 +301,17 @@ human_fallen_empires_egypt = {
 				}
 			}
 		}
-
 		change_orbit = @base_moon_distance
-
 		moon = {
-			name = "Thoth"
-			class = "pc_barren"
-			entity = "barren_planet_01_destroyed_entity"
+			name = Thoth
+			class = pc_barren
+			entity = barren_planet_01_destroyed_entity
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
 			orbit_distance = 5
 			modifiers = none
-
 			init_effect = {
 				prevent_anomaly = yes
 			}
@@ -463,7 +498,7 @@ human_fallen_empires_hope = {
 					type = defense_army
 				}
 			}
-			human_fallen_empires_effect_init_set_starbase = yes
+			human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = yes
 		}
 
 		change_orbit = @base_moon_distance
@@ -711,7 +746,7 @@ human_fallen_empires_gift = {
 					type = defense_army
 				}
 			}
-			human_fallen_empires_effect_init_set_starbase = yes
+			human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = yes
 		}
 
 		change_orbit = @base_moon_distance
@@ -1406,10 +1441,12 @@ human_fallen_empires_varelse = {
 
 		moon = {
 			count = {
-				min = 0 max = 1
+				min = 0
+				max = 1
 			}
 			orbit_angle = {
-				min = 90 max = 270
+				min = 90
+				max = 270
 			}
 			orbit_distance = 5
 		}
@@ -1425,10 +1462,12 @@ human_fallen_empires_varelse = {
 
 		moon = {
 			count = {
-				min = 0 max = 1
+				min = 0
+				max = 1
 			}
 			orbit_angle = {
-				min = 90 max = 270
+				min = 90
+				max = 270
 			}
 			orbit_distance = 5
 		}
@@ -1437,7 +1476,8 @@ human_fallen_empires_varelse = {
 	planet = {
 		orbit_distance = 20
 		count = {
-			min = 0 max = 2
+			min = 0
+			max = 2
 		}
 	}
 
@@ -1449,93 +1489,57 @@ human_fallen_empires_memorial_01 = {
 	flags = {
 		human_fallen_empires_memorial_system
 	}
-
 	planet = {
 		count = 1
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20 max = 30
+			min = 20
+			max = 30
 		}
 		has_ring = no
 	}
-
 	change_orbit = 45
-
 	planet = {
 		name = "Arrakis"
 		count = 1
 		orbit_distance = 30
 		class = pc_human_fallen_empires_memorial
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 		size = {
-			min = 20 max = 25
+			min = 20
+			max = 25
 		}
 		tile_blockers = none
-
 		init_effect = {
 			every_tile = {
-				random_list = {
-					40 = {
-					}
-					8 = {
-						set_blocker = tb_radioactive_wasteland
-					}
-					8 = {
-						set_blocker = tb_city_ruins
-					}
-					8 = {
-						set_blocker = tb_bomb_crater
-					}
-					1 = {
-						set_building = building_dark_matter_power_plant
-					}
-					1 = {
-						set_building = building_agri_processing_complex
-					}
-					1 = {
-						set_building = building_ancient_factory
-					}
-					1 = {
-						set_deposit = d_mineral_deposit
-					}
-					1 = {
-						set_deposit = d_energy_deposit
-					}
-					1 = {
-						set_deposit = d_physics_deposit
-					}
-					1 = {
-						set_deposit = d_society_deposit
-					}
-					1 = {
-						set_deposit = d_engineering_deposit
-					}
-				}
+				human_fallen_empires_effect_set_memorial_tile = yes
 			}
 		}
 	}
-
 	planet = {
 		count = {
-			min = 2 max = 10
+			min = 2
+			max = 10
 		}
 		orbit_distance = 20
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
-
 		change_orbit = @base_moon_distance
-
 		moon = {
 			count = {
-				min = 0 max = 1
+				min = 0
+				max = 1
 			}
 			orbit_angle = {
-				min = 90 max = 270
+				min = 90
+				max = 270
 			}
 			orbit_distance = 5
 		}
@@ -1548,113 +1552,78 @@ human_fallen_empires_memorial_02 = {
 	flags = {
 		human_fallen_empires_memorial_system
 	}
-
 	planet = {
 		count = 1
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20 max = 30
+			min = 20
+			max = 30
 		}
 		has_ring = no
 	}
-
 	change_orbit = 30
-
 	planet = {
 		count = 2
 		orbit_distance = 20
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 	}
-
 	change_orbit = 25
-
 	planet = {
 		count = {
-			min = 1 max = 4
+			min = 1
+			max = 4
 		}
 		class = random_asteroid
 		orbit_distance = 0
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 	}
-
 	planet = {
 		name = "Caladan"
 		count = 1
 		orbit_distance = 25
 		class = pc_human_fallen_empires_memorial
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 		size = {
-			min = 20 max = 25
+			min = 20
+			max = 25
 		}
 		tile_blockers = none
 		init_effect = {
 			every_tile = {
-				random_list = {
-					40 = {
-					}
-					8 = {
-						set_blocker = tb_radioactive_wasteland
-					}
-					8 = {
-						set_blocker = tb_city_ruins
-					}
-					8 = {
-						set_blocker = tb_bomb_crater
-					}
-					1 = {
-						set_building = building_dark_matter_power_plant
-					}
-					1 = {
-						set_building = building_agri_processing_complex
-					}
-					1 = {
-						set_building = building_ancient_factory
-					}
-					1 = {
-						set_deposit = d_mineral_deposit
-					}
-					1 = {
-						set_deposit = d_energy_deposit
-					}
-					1 = {
-						set_deposit = d_physics_deposit
-					}
-					1 = {
-						set_deposit = d_society_deposit
-					}
-					1 = {
-						set_deposit = d_engineering_deposit
-					}
-				}
+				human_fallen_empires_effect_set_memorial_tile = yes
 			}
 		}
 	}
-
 	planet = {
 		count = {
-			min = 2 max = 5
+			min = 2
+			max = 5
 		}
 		orbit_distance = 30
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
-
 		change_orbit = @base_moon_distance
-
 		moon = {
 			count = {
-				min = 0 max = 1
+				min = 0
+				max = 1
 			}
 			orbit_angle = {
-				min = 90 max = 270
+				min = 90
+				max = 270
 			}
 			orbit_distance = 5
 		}
@@ -1666,112 +1635,77 @@ human_fallen_empires_memorial_03 = {
 	flags = {
 		human_fallen_empires_memorial_system
 	}
-
 	planet = {
 		count = 1
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20 max = 30
+			min = 20
+			max = 30
 		}
 		has_ring = no
 	}
-
 	change_orbit = 45
-
 	planet = {
 		name = "Giedi Prime"
 		count = 1
 		orbit_distance = 10
 		class = pc_human_fallen_empires_memorial
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 		size = {
-			min = 20 max = 25
+			min = 20
+			max = 25
 		}
 		tile_blockers = none
-
 		init_effect = {
 			every_tile = {
-				random_list = {
-					40 = {
-					}
-					8 = {
-						set_blocker = tb_radioactive_wasteland
-					}
-					8 = {
-						set_blocker = tb_city_ruins
-					}
-					8 = {
-						set_blocker = tb_bomb_crater
-					}
-					1 = {
-						set_building = building_dark_matter_power_plant
-					}
-					1 = {
-						set_building = building_agri_processing_complex
-					}
-					1 = {
-						set_building = building_ancient_factory
-					}
-					1 = {
-						set_deposit = d_mineral_deposit
-					}
-					1 = {
-						set_deposit = d_energy_deposit
-					}
-					1 = {
-						set_deposit = d_physics_deposit
-					}
-					1 = {
-						set_deposit = d_society_deposit
-					}
-					1 = {
-						set_deposit = d_engineering_deposit
-					}
-				}
+				human_fallen_empires_effect_set_memorial_tile = yes
 			}
 		}
 	}
-
 	planet = {
 		count = {
-			min = 1 max = 2
+			min = 1
+			max = 2
 		}
 		orbit_distance = 60
 		class = pc_gas_giant
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 		size = 25
-
 		change_orbit = @base_moon_distance
-
 		moon = {
 			count = {
-				min = 1 max = 4
+				min = 1
+				max = 4
 			}
 			size = {
-				min = 8 max = 20
+				min = 8
+				max = 20
 			}
 			orbit_angle = {
-				min = 90 max = 270
+				min = 90
+				max = 270
 			}
 			orbit_distance = 6
 		}
 	}
-
 	change_orbit = 20
-
 	planet = {
 		count = {
-			min = 0 max = 2
+			min = 0
+			max = 2
 		}
 		orbit_distance = 20
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 	}
 }
@@ -1782,96 +1716,60 @@ human_fallen_empires_memorial_04 = {
 	flags = {
 		human_fallen_empires_memorial_system
 	}
-
 	planet = {
 		count = 1
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20 max = 30
+			min = 20
+			max = 30
 		}
 		has_ring = no
 	}
-
 	change_orbit = 120
-
 	planet = {
 		name = "Kaitain"
 		count = 1
 		orbit_distance = 10
 		class = pc_human_fallen_empires_memorial
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 		size = {
-			min = 20 max = 25
+			min = 20
+			max = 25
 		}
 		tile_blockers = none
 		init_effect = {
 			every_tile = {
-				random_list = {
-					40 = {
-					}
-					8 = {
-						set_blocker = tb_radioactive_wasteland
-					}
-					8 = {
-						set_blocker = tb_city_ruins
-					}
-					8 = {
-						set_blocker = tb_bomb_crater
-					}
-					1 = {
-						set_building = building_dark_matter_power_plant
-					}
-					1 = {
-						set_building = building_agri_processing_complex
-					}
-					1 = {
-						set_building = building_ancient_factory
-					}
-					1 = {
-						set_deposit = d_mineral_deposit
-					}
-					1 = {
-						set_deposit = d_energy_deposit
-					}
-					1 = {
-						set_deposit = d_physics_deposit
-					}
-					1 = {
-						set_deposit = d_society_deposit
-					}
-					1 = {
-						set_deposit = d_engineering_deposit
-					}
-				}
+				human_fallen_empires_effect_set_memorial_tile = yes
 			}
 		}
 	}
-
 	change_orbit = -80
-
 	planet = {
 		count = {
-			min = 0 max = 2
+			min = 0
+			max = 2
 		}
 		orbit_distance = 20
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 	}
-
 	change_orbit = 80
-
 	planet = {
 		count = {
-			min = 0 max = 2
+			min = 0
+			max = 2
 		}
 		orbit_distance = 40
 		orbit_angle = {
-			min = 90 max = 270
+			min = 90
+			max = 270
 		}
 	}
 }
@@ -1990,10 +1888,8 @@ human_fallen_empires_copernicus = {
 				name = random
 				class = random_non_machine
 				portrait = random
-				homeworld = THIS
-				traits = {
-					trait = random_traits
-				}
+				homeworld = this
+				traits = random
 			}
 			create_country = {
 				name = random
@@ -2031,7 +1927,6 @@ human_fallen_empires_copernicus = {
 			}
 		}
 	}
-
 	planet = {
 		count = 1
 		init_effect = {
@@ -2274,22 +2169,6 @@ human_fallen_empires_drone_sector_0 = {
 				add_deposit = d_immense_mineral_deposit
 			}
 		}
-		# every_system_planet = {
-			# surveyed = {
-				# set_surveyed = yes
-				# surveyor = event_target:human_fallen_empires_drone_country
-			# }
-		# }
-		# every_neighbor_system = {
-			# every_neighbor_system = {
-				# every_system_planet = {
-					# surveyed = {
-						# set_surveyed = yes
-						# surveyor = event_target:human_fallen_empires_drone_country
-					# }
-				# }
-			# }
-		# }
 	}
 }
 
@@ -2381,12 +2260,6 @@ human_fallen_empires_drone_sector_1 = {
 				add_deposit = d_immense_mineral_deposit
 			}
 		}
-		# every_system_planet = {
-			# surveyed = {
-				# set_surveyed = yes
-				# surveyor = event_target:human_fallen_empires_drone_country
-			# }
-		# }
 	}
 }
 
@@ -2478,12 +2351,6 @@ human_fallen_empires_drone_sector_10 = {
 				add_deposit = d_immense_mineral_deposit
 			}
 		}
-		# every_system_planet = {
-			# surveyed = {
-				# set_surveyed = yes
-				# surveyor = event_target:human_fallen_empires_drone_country
-			# }
-		# }
 	}
 }
 
@@ -2613,16 +2480,46 @@ human_fallen_empires_future = {
 						has_blocker = no
 					}
 					random_list = {
-						30 = {
+						20 = {
 							set_building = building_ancient_factory
 							set_deposit = d_mineral_deposit
 						}
-						30 = {
+						20 = {
 							set_building = building_dark_matter_power_plant
 							set_deposit = d_energy_deposit
 						}
 						40 = {
 						}
+					}
+				}
+				while = {
+					count = 2
+					random_tile = {
+						limit = {
+							has_building = no
+							has_blocker = no
+						}
+						set_building = building_fortress
+						clear_deposits = yes
+					}
+				}
+				random_tile = {
+					limit = {
+						has_building = no
+						has_blocker = no
+					}
+					set_building = building_planetary_shield_generator
+					clear_deposits = yes
+				}
+				while = {
+					count = 2
+					random_tile = {
+						limit = {
+							has_building = no
+							has_blocker = no
+						}
+						set_building = building_ancient_archives
+						human_fallen_empires_effect_set_science_deposit = yes
 					}
 				}
 				every_tile = {
@@ -2643,29 +2540,39 @@ human_fallen_empires_future = {
 						type = gene_warrior_army
 					}
 				}
-				human_fallen_empires_effect_init_set_starbase = yes
+				human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = yes
 				human_fallen_empires_effect_create_future_fleet = yes
 				human_fallen_empires_effect_create_future_fleet = yes
 				human_fallen_empires_effect_create_future_fleet = yes
-				if = {
-					limit = {
-						is_difficulty > 0
-					}
-					human_fallen_empires_effect_create_future_fleet = yes
-				}
 				if = {
 					limit = {
 						is_difficulty > 1
 					}
 					human_fallen_empires_effect_create_future_fleet = yes
 				}
+				# if = {
+				# 	limit = {
+				# 		is_difficulty > 2
+				# 	}
+				# 	human_fallen_empires_effect_create_future_fleet = yes
+				# }
 				if = {
 					limit = {
-						is_difficulty > 2
+						is_difficulty > 3
 					}
 					human_fallen_empires_effect_create_future_fleet = yes
 				}
+				# if = {
+				# 	limit = {
+				# 		is_difficulty > 4
+				# 	}
+				# 	human_fallen_empires_effect_create_future_fleet = yes
+				# }
 				last_created_country = {
+					add_modifier = {
+						modifier = human_fallen_empires_navy_size
+						days = -1
+					}
 					every_owned_ship = {
 						repair_ship = yes
 						add_modifier = {
@@ -2715,16 +2622,46 @@ human_fallen_empires_future = {
 						has_blocker = no
 					}
 					random_list = {
-						30 = {
+						20 = {
 							set_building = building_ancient_factory
 							set_deposit = d_mineral_deposit
 						}
-						30 = {
+						20 = {
 							set_building = building_dark_matter_power_plant
 							set_deposit = d_energy_deposit
 						}
 						40 = {
 						}
+					}
+				}
+				while = {
+					count = 2
+					random_tile = {
+						limit = {
+							has_building = no
+							has_blocker = no
+						}
+						set_building = building_fortress
+						clear_deposits = yes
+					}
+				}
+				random_tile = {
+					limit = {
+						has_building = no
+						has_blocker = no
+					}
+					set_building = building_planetary_shield_generator
+					clear_deposits = yes
+				}
+				while = {
+					count = 2
+					random_tile = {
+						limit = {
+							has_building = no
+							has_blocker = no
+						}
+						set_building = building_ancient_archives
+						human_fallen_empires_effect_set_science_deposit = yes
 					}
 				}
 				every_tile = {
@@ -2745,7 +2682,6 @@ human_fallen_empires_future = {
 						type = defense_army
 					}
 				}
-				human_fallen_empires_effect_init_set_starbase = yes
 			}
 		}
 	}
