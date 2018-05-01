@@ -38,11 +38,11 @@ event = {
 				1 = {
 					modifier = {
 						factor = 2
-						is_difficulty > 4
+						is_difficulty > 0
 					}
 					modifier = {
 						factor = 2
-						is_difficulty > 3
+						is_difficulty > 1
 					}
 					modifier = {
 						factor = 2
@@ -50,7 +50,11 @@ event = {
 					}
 					modifier = {
 						factor = 2
-						is_difficulty > 1
+						is_difficulty > 3
+					}
+					modifier = {
+						factor = 2
+						is_difficulty > 4
 					}
 					random_country = {
 						limit = {
@@ -95,15 +99,7 @@ event = {
 						1 = {
 							modifier = {
 								factor = 2
-								is_difficulty > 4
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 3
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 2
+								is_difficulty > 0
 							}
 							modifier = {
 								factor = 2
@@ -111,7 +107,15 @@ event = {
 							}
 							modifier = {
 								factor = 2
-								is_difficulty > 0
+								is_difficulty > 2
+							}
+							modifier = {
+								factor = 2
+								is_difficulty > 3
+							}
+							modifier = {
+								factor = 2
+								is_difficulty > 4
 							}
 							modifier = {
 								factor = 2
@@ -827,7 +831,7 @@ country_event = {
 		name = human_fallen_empires.47.2.1
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step2
-			has_country_flag = human_2
+			has_country_flag = human_fallen_empires_marked_as_human
 			nand = {
 				exists = event_target:human_fallen_empires_earth
 				event_target:human_fallen_empires_earth = {
@@ -846,11 +850,12 @@ country_event = {
 			}
 		}
 	}
+	# Земля уже не та скажет не только ксенофоб
 	option = {
 		name = human_fallen_empires.47.2.2
 		trigger = {
 			has_country_flag = human_fallen_empires.47.step2
-			has_country_flag = human_2
+			has_country_flag = human_fallen_empires_marked_as_human
 			exists = event_target:human_fallen_empires_earth
 			event_target:human_fallen_empires_earth = {
 				is_surveyed = {
@@ -1022,10 +1027,8 @@ country_event = {
 				event_chain = human_fallen_empires_chain_find_sol
 				target = root
 			}
-			random_system = {
-				limit = {
-					has_star_flag = sol
-				}
+			# проверить
+			event_target:human_fallen_empires_earth.solar_system = {
 				save_event_target_as = human_fallen_empires_sol
 				set_star_flag = human_fallen_empires_sol_target@root
 			}
@@ -2085,6 +2088,7 @@ country_event = {
 				leader_age_min = 50
 				leader_age_max = 650
 				skill = 5
+				event_leader = yes
 			}
 		}
 	}
@@ -2101,6 +2105,7 @@ country_event = {
 				leader_age_min = 50
 				leader_age_max = 650
 				skill = 5
+				event_leader = yes
 			}
 		}
 	}
@@ -2117,6 +2122,7 @@ country_event = {
 				leader_age_min = 50
 				leader_age_max = 650
 				skill = 5
+				event_leader = yes
 			}
 		}
 	}
@@ -2133,6 +2139,7 @@ country_event = {
 				leader_age_min = 50
 				leader_age_max = 650
 				skill = 5
+				event_leader = yes
 			}
 		}
 	}
@@ -2171,36 +2178,36 @@ ship_event = {
 		}
 		event_target:human_fallen_empires_memorial_planet = {
 			create_country = {
-				name = "Gnosis"
+				name = Gnosis
 				type = faction
 				effect = {
 					establish_communications_no_message = root.owner
 				}
 			}
 			create_species = {
-				name = "Gnosis"
+				name = Gnosis
 				class = random_non_machine
 				portrait = random
 				traits = random
 			}
 			# запилить новый тип армии
 			create_army = {
-				name = "Gnosis"
+				name = Gnosis
 				owner = last_created
 				species = last_created
-				type = "titanic_guardian_army"
+				type = titanic_guardian_army
 			}
 			create_army = {
-				name = "Gnosis"
+				name = Gnosis
 				owner = last_created
 				species = last_created
-				type = "titanic_assault_army"
+				type = titanic_assault_army
 			}
 			create_army = {
-				name = "Gnosis"
+				name = Gnosis
 				owner = last_created
 				species = last_created
-				type = "titanic_assault_army"
+				type = titanic_assault_army
 			}
 		}
 	}
@@ -3254,22 +3261,26 @@ ship_event = {
 			}
 			success_text = {
 				text = human_fallen_empires.350.desc.1.0
-				from = {
-					nor = {
-						has_star_flag = nuked_sol
-						any_planet = {
+				exists = event_target:human_fallen_empires_earth
+				event_target:human_fallen_empires_earth = {
+					not = {
+						is_planet_class = pc_nuked
+					}
+					or = {
+						not = {
 							exists = owner
-							owner = {
-								is_country_type = default
-							}
+						}
+						owner = {
+							is_country_type = primitive
 						}
 					}
 				}
 			}
 			success_text = {
 				text = human_fallen_empires.350.desc.1.1
-				from = {
-					has_star_flag = nuked_sol
+				exists = event_target:human_fallen_empires_earth
+				event_target:human_fallen_empires_earth = {
+					is_planet_class = pc_nuked
 				}
 			}
 		}
@@ -3351,7 +3362,7 @@ ship_event = {
 		trigger = {
 			owner = {
 				is_xenophile = yes
-				human_fallen_empires_trigger_is_authoritarian = yes
+				is_authoritarian = yes
 				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
@@ -3370,7 +3381,7 @@ ship_event = {
 	}
 }
 
-# abort chain if contacted with sol owner 351, not enabled for now
+# abort chain if contacted with sol owner 351
 country_event = {
 	id = human_fallen_empires.351
 	hide_window = yes
@@ -3380,7 +3391,12 @@ country_event = {
 		has_event_chain = human_fallen_empires_chain_find_sol
 		exists = from
 		from = {
-
+			or = {
+				has_country_flag = human_1
+				event_target:human_fallen_empires_earth = {
+					is_owned_by = prev
+				}
+			}
 		}
 	}
 
@@ -7500,10 +7516,8 @@ country_event = {
 }
 
 
-## anomalies and after survey on actions 5050 - 5100
-
+# anomalies and after survey on actions 5050 - 5100
 # criopods anomaly 5050 - 5055
-
 # switch to country
 ship_event = {
 	id = human_fallen_empires.5050
@@ -7735,7 +7749,6 @@ country_event = {
 			hidden:root = {
 				switch = {
 					trigger = has_country_flag
-
 					human_fallen_empires_criopods_var_1 = {
 						text = human_fallen_empires.5052.desc.1
 					}
@@ -7866,7 +7879,6 @@ country_event = {
 }
 
 # dead worms anomaly 5055 - 5057
-
 # start
 ship_event = {
 	id = human_fallen_empires.5055
@@ -7973,60 +7985,137 @@ country_event = {
 	}
 }
 
-# necrotic autoevolution 5060 - 6061
+# necrotic autoevolution 5060
+# after anomaly or if survey planet there someone get anomaly
 ship_event = {
 	id = human_fallen_empires.5060
 	title = human_fallen_empires.5060.name
-	desc = human_fallen_empires.5060.desc
-	picture = GFX_evt_human_fallen_empires_space_debris
+	desc = {
+		trigger = {
+			text = human_fallen_empires.5060.desc.0
+			text = newline
+			success_text = {
+				text = human_fallen_empires.5060.desc.1.0
+				has_country_flag = human_fallen_empires_future_contacted
+			}
+			fail_text = {
+				text = human_fallen_empires.5060.desc.1.1
+				has_country_flag = human_fallen_empires_future_contacted
+			}
+			text = newline
+			text = human_fallen_empires.5060.desc.2
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins_robots
 	show_sound = event_mystic_reveal
 	location = root
 	is_triggered_only = yes
 
-	trigger = {
-		or = {
-			and = {
-				exists = from
-				from = {
-					has_modifier = human_fallen_empires_necrotic_autoevolution
-				}
-			}
-			not = {
-				has_global_flag = human_fallen_empires_has_event.5060
+	immediate = {
+		from = {
+			add_modifier = {
+				modifier =  human_fallen_empires_necrotic_autoevolution
+				days = -1
 			}
 		}
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				not = {
-					has_global_flag = human_fallen_empires_has_event.5060
-				}
-			}
-			set_global_flag = human_fallen_empires_has_event.5060
-			from = {
-				add_modifier = {
-					modifier =  human_fallen_empires_necrotic_autoevolution
-					days = -1
-				}
+		owner = {
+			country_event = {
+				id = human_fallen_empires.5070
 			}
 		}
 	}
 
 	option = {
 		name = human_fallen_empires.5060.0
+		trigger = {
+			is_militarist = yes
+		}
+		human_fallen_empires_effect_militarist_attraction_low = yes
+	}
+	option = {
+		name = human_fallen_empires.5060.1
+		trigger = {
+			is_pacifist = yes
+		}
+		human_fallen_empires_effect_pacifist_attraction_low = yes
+	}
+	option = {
+		name = human_fallen_empires.5060.2
+		trigger = {
+			is_xenophobe = yes
+		}
+		human_fallen_empires_effect_xenophobe_attraction_low = yes
+	}
+	option = {
+		name = human_fallen_empires.5060.3
+		trigger = {
+			is_militarist = no
+			is_pacifist = no
+			is_xenophobe = no
+		}
 	}
 }
 
-# after anomaly or if survey planet there someone get anomaly
-
 # then mining station build
 
-# find kad republick chain
+# find kad republick chain 5070
+country_event = {
+	id = human_fallen_empires.5070
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:human_fallen_empires_future_country
+		nor = {
+			has_event_chain = human_fallen_empires_chain_find_future_star
+			event_target:human_fallen_empires_future_country = {
+				has_communications = root
+			}
+		}
+		is_ai = no
+	}
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = human_fallen_empires_chain_find_future_star
+			target = root
+		}
+		event_target:human_fallen_empires_future_country.capital_scope.solar_system = {
+			set_star_flag = human_fallen_empires_chain_find_future_star@root
+			root = {
+				create_point_of_interest = {
+					id = human_fallen_empires_chain_find_future_star.1
+					name = human_fallen_empires_chain_find_future_star_name.1
+					desc = human_fallen_empires_chain_find_future_star_desc.1
+					event_chain = human_fallen_empires_chain_find_future_star
+					location = prev
+				}
+			}
+		}
+	}
+}
+
+# end chain then contacted
+country_event = {
+	id = human_fallen_empires.5071
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = human_fallen_empires_chain_find_future_star
+		exists = from
+		exists = event_target:human_fallen_empires_future
+		from = {
+			is_country = event_target:human_fallen_empires_future
+		}
+	}
+
+	immediate = {
+		end_event_chain = human_fallen_empires_chain_find_future_star
+	}
+}
 
 # other dialogs 5100 - 5200
-
 # buy robots 5100
 country_event = {
 	id = human_fallen_empires.5100

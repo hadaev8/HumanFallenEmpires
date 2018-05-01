@@ -129,9 +129,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_owned_planet = {
-			random_tile = {
-				set_building = human_fallen_empires_building_thoth_module_food
+		capital_scope = {
+			set_planet_entity = {
+				entity = hfe_shielded_planet
 			}
 		}
 	}
@@ -143,27 +143,11 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		every_owned_ship = {
-			limit = {
-				exists = orbit
-			}
-			orbit.planet.spaceport = {
-				log = "[Prev.GetName] [This.GetName] [Planet.GetName]"
+		capital_scope = {
+			set_planet_entity = {
+				entity = shielded_planet_01_entity
 			}
 		}
-
-		# every_owned_planet = {
-		# 	limit = {
-		# 	#	exists = orbit.spaceport
-		# 	}
-		# 	orbit.spaceport = {
-		# 		log = "[Prev.GetName] [This.GetName] [Planet.GetName]"
-		# 	}
-		# 	spaceport = {
-		# 		log = "[Prev.GetName] [This.GetName] [Planet.GetName]"
-		# 	}
-		# 	log = "true"
-		# }
 	}
 }
 
@@ -179,26 +163,19 @@ country_event = {
 	}
 }
 
-ship_event = {
+country_event = {
 	id = human_fallen_empires_test.8
 	hide_window = yes
 	is_triggered_only = yes
 
-	trigger = {
-		is_ship_class = shipclass_colonizer
-		exists = orbit.planet
-	}
-
 	immediate = {
-		orbit.planet = {
-			log = "[this.GetName] [root.species.GetName]"
-			random_owned_pop = {
-				limit = {
-					is_exact_same_species = root.species
-				}
-				kill_pop = yes
+		capital_scope = {
+			every_tile = {
+				break = yes
 			}
 		}
+		add_minerals = 10
+		log = "1"
 	}
 }
 
@@ -233,20 +210,19 @@ country_event = {
 	}
 }
 
-country_event = {
-	id = human_fallen_empires_test.10
-	hide_window = yes
-	is_triggered_only = yes
+# country_event = {
+# 	id = human_fallen_empires_test.10
+# 	hide_window = yes
+# 	is_triggered_only = yes
 
-	immediate = {
-		every_owned_ship = {
-			limit = {
-				is_ship_class = shipclass_starbase
-			}
-			add_modifier = {
-				modifier = human_fallen_empires_test
-				days = 100
-			}
-		}
-	}
-}
+# 	immediate = {
+# 		if = {
+# 			limit = {
+# 				ruler = {
+# 					has_mandate = human_fallen_empires_agenda_discovery_hawks_faction
+# 				}
+# 			}
+# 			add_minerals = 10
+# 		}
+# 	}
+# }
