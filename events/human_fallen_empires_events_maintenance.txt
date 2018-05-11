@@ -43,6 +43,7 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		always = no
 		exists = owner
 		owner = {
 			or = {
@@ -53,7 +54,7 @@ ship_event = {
 	}
 
 	immediate = {
-		#log = "outpost build in [root.solar_system.GetName] by [root.owner.GetName]"
+		log = "outpost build in [root.solar_system.GetName] by [root.owner.GetName]"
 	}
 }
 
@@ -72,5 +73,76 @@ planet_event = {
 
 	immediate = {
 		human_fallen_empires_effect_convert_to_asteroid = yes
+	}
+}
+
+# building_assimilator feature
+# on_purge_complete
+planet_event = {
+	id = human_fallen_empires_maintenance.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_pop = {
+			has_pop_flag = human_fallen_empires_building_assimilator
+			is_being_force_purged = yes
+			human_fallen_empires_trigger_building_assimilator_with_tile = yes
+		}
+	}
+
+	immediate = {
+		owner = {
+			human_fallen_empires_effect_add_unity.1 = yes
+			human_fallen_empires_effect_add_society_research.2 = yes
+		}
+	}
+}
+
+# on_pop_migration_end on_pop_moved on_pop_resettled
+pop_event = {
+	id = human_fallen_empires_maintenance.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		human_fallen_empires_trigger_building_assimilator_with_tile = yes
+	}
+
+	immediate = {
+		set_pop_flag = human_fallen_empires_building_assimilator
+		purge = yes
+	}
+}
+
+# on_pop_migration_end on_pop_moved on_pop_resettled
+pop_event = {
+	id = human_fallen_empires_maintenance.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_pop_flag = human_fallen_empires_building_assimilator
+		is_being_force_purged = yes
+		human_fallen_empires_trigger_building_assimilator_with_tile = no
+	}
+
+	immediate = {
+		remove_pop_flag = human_fallen_empires_building_assimilator
+		purge = no
+	}
+}
+
+planet_event = {
+	id = human_fallen_empires_maintenance.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_pop = {
+			pop_event = {
+				id = human_fallen_empires_maintenance.12
+			}
+		}
 	}
 }

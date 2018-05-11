@@ -217,9 +217,9 @@ event = {
 			}
 			random_planet = {
 				limit = {
+					exists = owner
 					has_planet_flag = human_fallen_empires_varelse_colony
 					has_observation_outpost = yes
-					exists = owner
 					owner = {
 						is_country_type = primitive
 					}
@@ -862,6 +862,9 @@ country_event = {
 					who = root
 					status = yes
 				}
+				not = {
+					is_owned_by = root
+				}
 			}
 		}
 		hidden_effect = {
@@ -1413,9 +1416,15 @@ ship_event = {
 		create_ambient_object = {
 			type = ancient_battlefield_object
 			location = solar_system
+			#use_3d_location = yes
+			# entity_offset_height = {
+			# 	min = -0
+			# 	max = -25
+			# }
 		}
 		last_created_ambient_object = {
 			save_event_target_as = human_fallen_empires_varelse_fleet_location
+			human_fallen_empires_effect_create_signal_object = yes
 		}
 		enable_special_project = {
 			name = human_fallen_empires_project_varelse_fleet
@@ -1461,6 +1470,7 @@ ship_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		human_fallen_empires_effect_remove_all_signal_object = yes
 		create_country = {
 			name = "Varelse Hegemony"
 			type = faction
@@ -1506,7 +1516,7 @@ ship_event = {
 						}
 					}
 				}
-				set_location = root
+				set_location = event_targe:human_fallen_empires_varelse_fleet_location
 				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
@@ -5056,6 +5066,14 @@ ship_event = {
 			is_ai = no
 			is_country_type = default
 		}
+		exists = solar_system
+		solar_system = {
+			any_planet = {
+				not = {
+					exists = owner
+				}
+			}
+		}
 	}
 
 	immediate = {
@@ -5065,6 +5083,11 @@ ship_event = {
 		set_global_flag = human_fallen_empires_has_event.700
 		solar_system = {
 			random_system_planet = {
+				limit = {
+					not = {
+						exists = owner
+					}
+				}
 				save_global_event_target_as = human_fallen_empires_thoth_location
 			}
 		}
@@ -5088,21 +5111,25 @@ ship_event = {
 						create_ship = {
 							name = random
 							design = "NAME_Artist_Enclave_Station"
-							graphical_culture = prev
+							#graphical_culture = prev
+							effect = {
+								set_ship_flag = human_fallen_empires_thoth_station
+							}
 						}
 						set_location = {
 							target = event_target:human_fallen_empires_thoth_location
 							distance = 10
 						}
 						set_fleet_flag = human_fallen_empires_thoth_station
+						human_fallen_empires_effect_create_signal_object = yes
+						enable_special_project = {
+							name = human_fallen_empires_project_thoth_contact
+							location = this
+							owner = root.owner
+						}
 					}
 				}
 			}
-		}
-		enable_special_project = {
-			name = human_fallen_empires_project_thoth_contact
-			location = event_target:human_fallen_empires_thoth_location
-			owner = root.owner
 		}
 	}
 
@@ -5149,6 +5176,7 @@ ship_event = {
 	option = {
 		name = human_fallen_empires_at_the_sreen
 		hidden_effect = {
+			human_fallen_empires_effect_remove_all_signal_object = yes
 			owner = {
 				establish_communications = event_target:human_fallen_empires_thoth
 				set_country_flag = human_fallen_empires.702.0
@@ -6337,6 +6365,28 @@ country_event = {
 		name = human_fallen_empires.725.0
 		response_text = human_fallen_empires.725.0.response
 		default_hide_option = yes
+	}
+}
+
+# kill country then station killed
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = human_fallen_empires.726
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = human_fallen_empires_thoth
+		fromfrom = {
+			has_ship_flag = human_fallen_empires_thoth_station
+		}
+	}
+
+	immediate = {
+		destroy_country = yes
 	}
 }
 
@@ -7872,9 +7922,9 @@ country_event = {
 		}
 	}
 	after = {
-		remove_country_flag = human_fallen_empire_criopods_var_1
-		remove_country_flag = human_fallen_empire_criopods_var_2
-		remove_country_flag = human_fallen_empire_criopods_var_3
+		remove_country_flag = human_fallen_empires_criopods_var_1
+		remove_country_flag = human_fallen_empires_criopods_var_2
+		remove_country_flag = human_fallen_empires_criopods_var_3
 	}
 }
 
@@ -8058,7 +8108,7 @@ ship_event = {
 
 # then mining station build
 
-# find kad republick chain 5070
+# find kad republic chain 5070
 country_event = {
 	id = human_fallen_empires.5070
 	hide_window = yes

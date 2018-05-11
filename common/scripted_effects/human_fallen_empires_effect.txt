@@ -893,3 +893,72 @@ human_fallen_empires_effect_create_starbase_upgrade = {
 		}
 	}
 }
+
+# for solar system
+human_fallen_empires_effect_add_hyperlanes = {
+	while = {
+		count = 3
+		random_system = {
+			limit = {
+				nor = {
+					has_hyperlane_to = prev
+					is_same_value = prev
+				}
+				distance = {
+					source = prev
+					type = euclidean
+					min_distance = 0
+					max_distance = 20
+					use_bypasses = no
+				}
+			}
+			add_hyperlane = {
+				from = prev
+				to = this
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_create_signal_object_for_planet = {
+	create_ambient_object = {
+		type = human_fallen_empires_object_signal
+		entity_offset_height = {
+			min = -15
+			max = -15
+		}
+	}
+	last_created_ambient_object = {
+		set_ambient_object_flag = human_fallen_empires_signal_object
+		set_location = {
+			target = prev
+			distance = 0
+			angle = 0
+		}
+	}
+}
+
+human_fallen_empires_effect_create_signal_object = {
+	create_ambient_object = {
+		type = human_fallen_empires_object_signal
+	}
+	last_created_ambient_object = {
+		set_ambient_object_flag = human_fallen_empires_signal_object
+		set_location = {
+			target = prev
+			distance = 0
+			angle = 0
+		}
+	}
+}
+
+human_fallen_empires_effect_remove_all_signal_object = {
+	solar_system = {
+		every_system_ambient_object = {
+			limit = {
+				has_ambient_object_flag = human_fallen_empires_signal_object
+			}
+			destroy_ambient_object = this
+		}
+	}
+}

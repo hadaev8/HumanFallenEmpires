@@ -47,7 +47,9 @@ human_fallen_empires_effect_init_make_colony = {
 						who = event_target:human_fallen_empires_init_target.species
 						value > 0.2
 					}
-					has_owner = no
+					not = {
+						exists = owner
+					}
 				}
 				not = {
 					any_ship_in_system = {
@@ -92,7 +94,6 @@ human_fallen_empires_effect_init_develop_colony = {
 					autobuild_trigger_tile_has_energy_more_than_others = yes
 					has_any_resource = no
 				}
-				has_blocker = no
 				num_adjacent_tiles > 3
 			}
 		}
@@ -100,11 +101,12 @@ human_fallen_empires_effect_init_develop_colony = {
 			limit = {
 				or = {
 					autobuild_trigger_tile_has_energy_more_than_others = yes
-					has_resource = no
+					has_deposit = no
 				}
 				has_blocker = no
 				num_adjacent_tiles > 3
 			}
+			remove_blocker = yes
 			human_fallen_empires_effect_init_set_capital = yes
 		}
 		else = {
@@ -112,11 +114,11 @@ human_fallen_empires_effect_init_develop_colony = {
 				limit = {
 					or = {
 						autobuild_trigger_tile_has_energy_more_than_others = yes
-						has_resource = no
+						has_deposit = no
 					}
-					has_blocker = no
 					num_adjacent_tiles > 2
 				}
+				remove_blocker = yes
 				human_fallen_empires_effect_init_set_capital = yes
 			}
 		}
@@ -181,8 +183,9 @@ human_fallen_empires_effect_init_set_pops = {
 			has_building = yes
 			has_pop = no
 		}
+		remove_blocker = yes
 		create_pop = {
-			species = event_target:human_fallen_empires_init_target.species
+			species = owner
 		}
 	}
 }
