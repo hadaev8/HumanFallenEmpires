@@ -438,6 +438,27 @@ country_event = {
 						}
 					}
 				}
+				every_country = {
+					limit = {
+						is_country_type = human_fallen_empires_discovery
+					}
+					switch = {
+						trigger = has_country_flag
+						human_fallen_empires_init_tech_t4 = {
+							human_fallen_empires_effect_init_give_tech_t4 = yes
+						}
+						human_fallen_empires_init_tech_t3 = {
+							human_fallen_empires_effect_init_give_tech_t3 = yes
+						}
+						human_fallen_empires_init_tech_t2 = {
+							human_fallen_empires_effect_init_give_tech_t2 = yes
+						}
+						human_fallen_empires_init_tech_t1 = {
+							human_fallen_empires_effect_init_give_tech_t1 = yes
+						}
+					}
+					set_country_type = human_fallen_empires_discovery
+				}
 				# more colony
 				while = {
 					count = human_fallen_empires_init_fast_start_colony_num
@@ -451,9 +472,14 @@ country_event = {
 				}
 				# develop some
 				every_playable_country = {
+					limit = {
+						exists = capital_scope
+					}
 					save_event_target_as = human_fallen_empires_init_target
 					capital_scope = {
-						human_fallen_empires_effect_init_develop_capital = yes
+						planet_event = {
+							id = human_fallen_empires_init.106
+						}
 					}
 					# more fleets
 					while = {
@@ -755,7 +781,7 @@ country_event = {
 			# future
 			random_rim_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
@@ -784,7 +810,7 @@ country_event = {
 			# egypt
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
@@ -835,7 +861,7 @@ country_event = {
 			# some other systems
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -846,7 +872,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -857,7 +883,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -868,7 +894,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -879,7 +905,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -890,7 +916,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -901,7 +927,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -912,7 +938,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -923,7 +949,7 @@ country_event = {
 			}
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 				}
 				spawn_system = {
 					min_distance = 10
@@ -935,7 +961,7 @@ country_event = {
 			# drone
 			random_system = {
 				limit = {
-					has_owner = no
+					not = { exists = owner }
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
@@ -1038,5 +1064,50 @@ country_event = {
 
 	immediate = {
 		human_fallen_empires_effect_init_set_minings_stations = yes
+	}
+}
+
+# need planet scope as root for autobuild triggers
+planet_event = {
+	id = human_fallen_empires_init.105
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		create_colony = {
+			owner = event_target:human_fallen_empires_init_target
+			species = owner
+		}
+		if = {
+			limit = {
+				not = {
+					exists = owner
+				}
+			}
+			log = "owner not exists on [this.GetName]"
+		}
+		random_tile = {
+			limit = {
+				has_building = building_colony_shelter
+			}
+			remove_building = yes
+		}
+		planet_event = {
+			id = human_fallen_empires_init.106
+		}
+	}
+}
+
+planet_event = {
+	id = human_fallen_empires_init.106
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		human_fallen_empires_effect_init_develop_planet = yes
 	}
 }

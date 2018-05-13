@@ -354,7 +354,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 			trigger = {
 				id = human_fallen_empires_find_new_home_trigger.0
 				any_planet = {
-					has_owner = no
+					not = { exists = owner }
 					habitability = {
 						who = event_target:human_fallen_empires_varelse_species
 						value > 0.7
@@ -369,7 +369,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 					trigger = {
 						id = human_fallen_empires_find_new_home_trigger.1
 						any_planet = {
-							has_owner = no
+							not = { exists = owner }
 							habitability = {
 								who = event_target:human_fallen_empires_varelse_species
 								value > 0.4
@@ -384,7 +384,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							trigger = {
 								id = human_fallen_empires_find_new_home_trigger.2
 								any_planet = {
-									has_owner = no
+									not = { exists = owner }
 									habitability = {
 										who = event_target:human_fallen_empires_varelse_species
 										value > 0.1
@@ -409,7 +409,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 		find_closest_planet = {
 			trigger = {
 				id = human_fallen_empires_find_new_home_trigger.3
-				has_owner = no
+				not = { exists = owner }
 				habitability = {
 					who = event_target:human_fallen_empires_varelse_species
 					value > 0.7
@@ -426,7 +426,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 				find_closest_planet = {
 					trigger = {
 						id = human_fallen_empires_find_new_home_trigger.4
-						has_owner = no
+						not = { exists = owner }
 						habitability = {
 							who = event_target:human_fallen_empires_varelse_species
 							value > 0.4
@@ -443,7 +443,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 						find_closest_planet = {
 							trigger = {
 								id = human_fallen_empires_find_new_home_trigger.5
-								has_owner = no
+								not = { exists = owner }
 								habitability = {
 									who = event_target:human_fallen_empires_varelse_species
 									value > 0.1
@@ -930,6 +930,7 @@ human_fallen_empires_effect_create_signal_object_for_planet = {
 	}
 	last_created_ambient_object = {
 		set_ambient_object_flag = human_fallen_empires_signal_object
+		set_ambient_object_flag = human_fallen_empires_signal_object@prev
 		set_location = {
 			target = prev
 			distance = 0
@@ -944,10 +945,22 @@ human_fallen_empires_effect_create_signal_object = {
 	}
 	last_created_ambient_object = {
 		set_ambient_object_flag = human_fallen_empires_signal_object
+		set_ambient_object_flag = human_fallen_empires_signal_object@prev
 		set_location = {
 			target = prev
 			distance = 0
 			angle = 0
+		}
+	}
+}
+
+human_fallen_empires_effect_remove_signal_object_from_this = {
+	solar_system = {
+		every_system_ambient_object = {
+			limit = {
+				has_ambient_object_flag = human_fallen_empires_signal_object@prevprev
+			}
+			destroy_ambient_object = this
 		}
 	}
 }

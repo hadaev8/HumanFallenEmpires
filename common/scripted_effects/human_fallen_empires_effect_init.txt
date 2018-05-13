@@ -66,25 +66,20 @@ human_fallen_empires_effect_init_make_colony = {
 						who = event_target:human_fallen_empires_init_target.species
 						value > 0.2
 					}
-					has_owner = no
-				}
-				create_colony = {
-					owner = event_target:human_fallen_empires_init_target
-					species = owner
-				}
-				random_tile = {
-					limit = {
-						has_building = building_colony_shelter
+					not = {
+						exists = owner
 					}
-					remove_building = yes
 				}
-				human_fallen_empires_effect_init_develop_colony = yes
+				# need planet scope as root for autobuild triggers
+				planet_event = {
+					id = human_fallen_empires_init.105
+				}
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_init_develop_colony = {
+human_fallen_empires_effect_init_develop_planet = {
 	human_fallen_empires_effect_init_clear_blockers = yes
 	# set buildings
 	if = {
@@ -170,7 +165,7 @@ human_fallen_empires_effect_init_develop_colony = {
 human_fallen_empires_effect_init_clear_blockers = {
 	every_tile = {
 		limit = {
-			has_any_resource = yes
+			has_deposit = yes
 			has_blocker = yes
 		}
 		remove_blocker = yes
@@ -188,18 +183,30 @@ human_fallen_empires_effect_init_set_pops = {
 			species = owner
 		}
 	}
+	human_fallen_empires_effect_brainworm_set_free_pop_with_reservation = yes
 }
 
 human_fallen_empires_effect_init_set_capital = {
 	if = {
 		limit = {
 			owner = {
-				has_technology = tech_colonial_centralization
+				has_technology = tech_galactic_administration
+			}
+			root = {
+				is_capital = yes
 			}
 		}
-		set_building = building_capital_2
-		else = {
-			set_building = building_capital_1
+		set_building = building_capital_3
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_colonial_centralization
+				}
+			}
+			set_building = building_capital_2
+			else = {
+				set_building = building_capital_1
+			}
 		}
 	}
 }
@@ -214,14 +221,17 @@ human_fallen_empires_effect_init_set_lab = {
 				trigger = has_technology
 				tech_physics_lab_3 = {
 					prev = {
-						# if = {
-						# 	limit = {
-						# 		planet = {
-						# 			has_building = building_capital_3
-						# 		}
-						# 	}
-						# }
-						set_building = building_physics_lab_3
+						if = {
+						 	limit = {
+						 		root = {
+						 			is_capital = yes
+						 		}
+						 	}
+							set_building = building_physics_lab_4
+							else = {
+								set_building = building_physics_lab_3
+							}
+						}
 					}
 				}
 				tech_physics_lab_2 = {
@@ -246,7 +256,17 @@ human_fallen_empires_effect_init_set_lab = {
 						trigger = has_technology
 						tech_biolab_3 = {
 							prev = {
-								set_building = building_biolab_3
+								if = {
+						 			limit = {
+						 				root = {
+						 					is_capital = yes
+						 				}
+						 			}
+									set_building = building_biolab_4
+									else = {
+										set_building = building_biolab_3
+									}
+								}
 							}
 						}
 						tech_biolab_2 = {
@@ -271,7 +291,17 @@ human_fallen_empires_effect_init_set_lab = {
 								trigger = has_technology
 								tech_engineering_lab_3 = {
 									prev = {
-										set_building = building_engineering_facility_3
+										if = {
+						 					limit = {
+						 						root = {
+						 							is_capital = yes
+						 						}
+						 					}
+											set_building = building_engineering_facility_4
+											else = {
+												set_building = building_engineering_facility_3
+											}
+										}
 									}
 								}
 								tech_engineering_lab_2 = {
@@ -299,7 +329,17 @@ human_fallen_empires_effect_init_set_power_plant = {
 			trigger = has_technology
 			tech_power_plant_4 = {
 				prev = {
-					set_building = building_power_plant_4
+					if = {
+						limit = {
+						 	root = {
+						 		is_capital = yes
+						 	}
+						}
+						set_building = building_power_plant_5
+						else = {
+							set_building = building_power_plant_4
+						}
+					}
 				}
 			}
 			tech_power_plant_3 = {
@@ -327,7 +367,17 @@ human_fallen_empires_effect_init_set_mine = {
 			trigger = has_technology
 			tech_mining_network_4 = {
 				prev = {
-					set_building = building_mining_network_4
+					if = {
+						limit = {
+						 	root = {
+						 		is_capital = yes
+						 	}
+						}
+						set_building = building_mining_network_5
+						else = {
+							set_building = building_mining_network_4
+						}
+					}
 				}
 			}
 			tech_mining_network_3 = {
@@ -355,231 +405,17 @@ human_fallen_empires_effect_init_set_farm = {
 			trigger = has_technology
 			tech_nano_vitality_crops = {
 				prev = {
-					set_building = building_hydroponics_farm_4
-				}
-			}
-			tech_gene_crops = {
-				prev = {
-					set_building = building_hydroponics_farm_3
-				}
-			}
-			tech_hydroponics = {
-				prev = {
-					set_building = building_hydroponics_farm_2
-				}
-			}
-			tech_eco_simulation = {
-				prev = {
-					set_building = building_hydroponics_farm_1
-				}
-			}
-		}
-	}
-}
-
-human_fallen_empires_effect_init_develop_capital = {
-	human_fallen_empires_effect_init_clear_blockers = yes
-	# set buildings
-	random_tile = {
-		limit = {
-			autobuild_trigger_has_planet_capital = yes
-		}
-		human_fallen_empires_effect_init_set_capital_cap = yes
-	}
-	every_tile = {
-		limit = {
-			has_any_resource = yes
-			autobuild_trigger_has_planet_capital = no
-		}
-		if = {
-			limit = {
-				autobuild_trigger_tile_has_science_more_than_others = yes
-			}
-			human_fallen_empires_effect_init_set_lab_cap = yes
-		}
-		if = {
-			limit = {
-				autobuild_trigger_tile_has_energy_more_than_others = yes
-			}
-			human_fallen_empires_effect_init_set_power_plant_cap = yes
-		}
-		if = {
-			limit = {
-				autobuild_trigger_tile_has_minerals_more_than_others = yes
-			}
-			human_fallen_empires_effect_init_set_mine_cap = yes
-		}
-		if = {
-			limit = {
-				autobuild_trigger_tile_has_food_more_than_others = yes
-				# is robot trigger = no
-			}
-			human_fallen_empires_effect_init_set_farm_cap = yes
-		}
-	}
-	human_fallen_empires_effect_init_set_pops = yes
-	human_fallen_empires_effect_init_set_starbase = yes
-}
-
-human_fallen_empires_effect_init_set_capital_cap = {
-	if = {
-		limit = {
-			owner = {
-				has_technology = tech_galactic_administration
-			}
-		}
-		set_building = building_capital_3
-		else = {
-			human_fallen_empires_effect_init_set_capital = yes
-		}
-	}
-}
-
-human_fallen_empires_effect_init_set_lab_cap = {
-	if = {
-		limit = {
-			has_resource = physics_research
-		}
-		owner = {
-			switch = {
-				trigger = has_technology
-				tech_physics_lab_3 = {
-					prev = {
-						set_building = building_physics_lab_4
-					}
-				}
-				tech_physics_lab_2 = {
-					prev = {
-						set_building = building_physics_lab_2
-					}
-				}
-				tech_physics_lab_1 = {
-					prev = {
-						set_building = building_physics_lab_1
-					}
-				}
-			}
-		}
-		else = {
-			if = {
-				limit = {
-					has_resource = society_research
-				}
-				owner = {
-					switch = {
-						trigger = has_technology
-						tech_biolab_3 = {
-							prev = {
-								set_building = building_biolab_4
-							}
-						}
-						tech_biolab_2 = {
-							prev = {
-								set_building = building_biolab_2
-							}
-						}
-						tech_biolab_1 = {
-							prev = {
-								set_building = building_biolab_1
-							}
-						}
-					}
-				}
-				else = {
-					if ={
+					if = {
 						limit = {
-							has_resource = engineering_research
+						 	root = {
+						 		is_capital = yes
+						 	}
 						}
-						owner = {
-							switch = {
-								trigger = has_technology
-								tech_engineering_lab_3 = {
-									prev = {
-										set_building = building_engineering_facility_4
-									}
-								}
-								tech_engineering_lab_2 = {
-									prev = {
-										set_building = building_engineering_facility_2
-									}
-								}
-								tech_engineering_lab_1 = {
-									prev = {
-										set_building = building_engineering_facility_1
-									}
-								}
-							}
+						set_building = building_hydroponics_farm_5
+						else = {
+							set_building = building_hydroponics_farm_4
 						}
 					}
-				}
-			}
-		}
-	}
-}
-
-human_fallen_empires_effect_init_set_power_plant_cap = {
-	owner = {
-		switch = {
-			trigger = has_technology
-			tech_power_plant_4 = {
-				prev = {
-					set_building = building_power_plant_5
-				}
-			}
-			tech_power_plant_3 = {
-				prev = {
-					set_building = building_power_plant_3
-				}
-			}
-			tech_power_plant_2 = {
-				prev = {
-					set_building = building_power_plant_2
-				}
-			}
-			tech_power_plant_1 = {
-				prev = {
-					set_building = building_power_plant_1
-				}
-			}
-		}
-	}
-}
-
-human_fallen_empires_effect_init_set_mine_cap = {
-	owner = {
-		switch = {
-			trigger = has_technology
-			tech_mining_network_4 = {
-				prev = {
-					set_building = building_mining_network_5
-				}
-			}
-			tech_mining_network_3 = {
-				prev = {
-					set_building = building_mining_network_3
-				}
-			}
-			tech_mining_network_2 = {
-				prev = {
-					set_building = building_mining_network_2
-				}
-			}
-			tech_basic_industry = {
-				prev = {
-					set_building = building_mining_network_1
-				}
-			}
-		}
-	}
-}
-
-human_fallen_empires_effect_init_set_farm_cap = {
-	owner = {
-		switch = {
-			trigger = has_technology
-			tech_nano_vitality_crops = {
-				prev = {
-					set_building = building_hydroponics_farm_5
 				}
 			}
 			tech_gene_crops = {
@@ -613,7 +449,7 @@ human_fallen_empires_effect_init_set_minings_stations = {
 	every_system_within_border = {
 		every_system_planet = {
 			limit = {
-				has_owner = no
+				not = { exists = owner }
 				has_orbital_station = no
 				or = {
 					has_deposit_for = shipclass_mining_station
@@ -642,7 +478,7 @@ human_fallen_empires_effect_init_expand_borders = {
 	every_system_within_border = {
 		every_neighbor_system = {
 			limit = {
-				has_owner = no
+				not = { exists = owner }
 			}
 			ignore_hyperlanes = no
 			human_fallen_empires_effect_create_starbase = yes
