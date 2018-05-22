@@ -4,182 +4,6 @@
 
 # если у фром что-то есть. то мы относимся к фром так-то
 
-# general
-# same class
-human_fallen_empires_opinion_same_species_class = {
-	trigger = {
-		is_same_species_class = from
-		human_fallen_empires_trigger_is_undiplomatic = no
-		not = {
-			is_same_species = from
-		}
-	}
-
-	opinion = {
-		base = 10
-	}
-}
-
-# same species
-human_fallen_empires_opinion_same_species = {
-	trigger = {
-		is_same_species = from
-	}
-
-	opinion = {
-		base = 20
-		modifier = {
-			factor = 2
-			is_xenophobe = yes
-			from = {
-				is_xenophile = no
-			}
-		}
-	}
-}
-
-# in war with same enemy
-human_fallen_empires_opinion_same_enemy = {
-	trigger = {
-		human_fallen_empires_trigger_is_undiplomatic = no
-		any_relation = {
-			is_at_war_with = prev
-			is_at_war_with = from
-		}
-	}
-
-	opinion = {
-		base = 10
-		modifier = {
-			add = 10
-			is_militarist = yes
-			from = {
-				is_pacifist = no
-			}
-		}
-	}
-}
-
-# save from slavery
-human_fallen_empires_opinion_save_from_slavery = {
-	trigger = {
-		is_egalitarian = yes
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			allows_slavery = no
-			any_owned_pop = {
-				has_modifier = pop_saved_from_slavery
-			}
-		}
-	}
-
-	opinion = {
-		base = 20
-	}
-}
-
-# hate our species
-human_fallen_empires_opinion_hate_our_species = {
-	trigger = {
-		is_country_type = default
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			human_fallen_empires_trigger_is_hive = no
-		}
-		human_fallen_empires_trigger_is_hive = no
-		not = {
-			is_same_species = from
-		}
-		species = {
-			has_citizenship_type = {
-				country = from
-				type = citizenship_purge
-			}
-		}
-	}
-
-	opinion = {
-		base = -50
-	}
-}
-
-# traits
-human_fallen_empires_opinion_warriror_honor = {
-	trigger = {
-		has_militarist_government = yes
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			exists = ruler
-			ruler = {
-				has_trait = human_fallen_empires_ruler_trait_warriror_honor
-			}
-		}
-	}
-
-	opinion = {
-		base = 20
-	}
-}
-
-human_fallen_empires_opinion_manipulative = {
-	trigger = {
-		is_country_type = default
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			exists = ruler
-			ruler = {
-				has_trait = human_fallen_empires_ruler_trait_manipulative
-			}
-			not = {
-				is_rival = prev
-			}
-			human_fallen_empires_trigger_is_undiplomatic = no
-		}
-	}
-
-	opinion = {
-		base = 10
-	}
-}
-
-human_fallen_empires_opinion_manipulative_rival = {
-	trigger = {
-		is_country_type = default
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			any_relation = {
-				exists = ruler
-				ruler = {
-					has_trait = human_fallen_empires_ruler_trait_manipulative
-				}
-				is_rival = prev
-				human_fallen_empires_trigger_is_undiplomatic = no
-			}
-		}
-	}
-
-	opinion = {
-		base = -10
-	}
-}
-
-human_fallen_empires_opinion_puppet = {
-	trigger = {
-		is_country_type = default
-		human_fallen_empires_trigger_is_undiplomatic = no
-		from = {
-			exists = ruler
-			ruler = {
-				has_trait = human_fallen_empires_ruler_trait_puppet
-			}
-		}
-	}
-
-	opinion = {
-		base = -10
-	}
-}
-
 # egypt
 # dont like varelse
 human_fallen_empires_opinion_egypt_vs_varelse = {
@@ -199,7 +23,6 @@ human_fallen_empires_opinion_egypt_vs_varelse = {
 			}
 		}
 	}
-
 	opinion = {
 		base = -100
 	}
@@ -211,11 +34,10 @@ human_fallen_empires_opinion_egypt_vs_memorial_owner = {
 		has_country_flag = human_fallen_empires_egypt
 		from = {
 			any_owned_planet = {
-				is_planet_class = pc_human_fallen_empires_memorial
+				is_planet_class = human_fallen_empires_pc_memorial
 			}
 		}
 	}
-
 	opinion = {
 		base = -50
 	}
@@ -229,7 +51,6 @@ human_fallen_empires_opinion_egypt_vs_has_event.156 = {
 			has_country_flag = human_fallen_empires_has_event.156
 		}
 	}
-
 	opinion = {
 		base = -30
 	}
@@ -242,7 +63,6 @@ human_fallen_empires_opinion_egypt_vs_neighbor = {
 		human_fallen_empires_trigger_is_awake = yes
 		is_neighbor_of = from
 	}
-
 	opinion = {
 		base = -100
 	}
@@ -259,9 +79,40 @@ human_fallen_empires_opinion_egypt_vs_good_pop = {
 			}
 		}
 	}
-
 	opinion = {
 		base = -50
+	}
+}
+
+human_fallen_empires_opinion_egypt_vs_varelse = {
+	trigger = {
+		or = {
+			and = {
+				has_country_flag = human_fallen_empires_egypt
+				from = {
+					is_same_species = event_target:human_fallen_empires_varelse_species
+				}
+			}
+			and = {
+				 from = {
+					 has_country_flag = human_fallen_empires_egypt
+				 }
+				 is_same_species = event_target:human_fallen_empires_varelse_species
+			}
+		}
+	}
+	opinion = {
+		base = -100
+	}
+}
+
+human_fallen_empires_opinion_egypt_first_contact_bad = {
+	opinion = {
+		base = -100
+	}
+	accumulative = yes
+	decay = {
+		base = 1
 	}
 }
 
@@ -279,7 +130,6 @@ human_fallen_empires_opinion_future_vs_neighbor = {
 			}
 		}
 	}
-
 	opinion = {
 		base = -100
 	}
@@ -296,7 +146,6 @@ human_fallen_empires_opinion_future_vs_bad = {
 			}
 		}
 	}
-
 	opinion = {
 		base = -30
 		modifier = {

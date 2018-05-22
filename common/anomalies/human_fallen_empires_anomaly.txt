@@ -1,0 +1,151 @@
+############################
+### DISCOVERY CATEGORIES ###
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+# wormhole
+human_fallen_empires_wormhole_category = {
+	desc = human_fallen_empires_wormhole_category.desc
+	picture = GFX_evt_human_fallen_empires_wormhole
+	level = 1
+	max_once_global = yes
+	spawn_chance = {
+		modifier = {
+			add = 1
+			exists = from.owner
+			from.owner = {
+				# может потом переделать. чтобы был проход в туннель. если система есть. а джухеты мертвы
+				any_country = {
+					has_country_flag = human_fallen_empires_egypt
+				}
+				not = {
+					any_relation = {
+						has_country_flag = human_fallen_empires_egypt
+					}
+				}
+			}
+		}
+	}
+	on_spawn = {
+		log = "wormhole [this.GetName]"
+		human_fallen_empires_effect_create_signal_object_for_planet = yes
+	}
+	on_success = human_fallen_empires.50
+}
+
+# criopods
+human_fallen_empires_criopods_category = {
+	desc = human_fallen_empires_criopods_category.desc
+	picture = GFX_evt_human_fallen_empires_criopods
+	level = 3
+	max_once_global = yes
+	spawn_chance = {
+		modifier = {
+			add = 10
+			or = {
+				is_planet_class = pc_continental
+				is_planet_class = pc_tropical
+				is_planet_class = pc_ocean
+			}
+			exists = from.owner
+			from.owner = {
+				num_pops > 0
+				or = {
+					has_country_flag = human_fallen_empires_marked_as_human
+					is_xenophobe = yes
+					is_xenophile = yes
+					is_authoritarian = yes
+					is_egalitarian = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			years_passed > 30
+		}
+		modifier = {
+			factor = 2
+			years_passed > 60
+		}
+		modifier = {
+			factor = 2
+			years_passed > 90
+		}
+	}
+	on_spawn = {
+		log = "criopods"
+		human_fallen_empires_effect_create_signal_object_for_planet = yes
+	}
+	on_success = human_fallen_empires.5050
+}
+
+# dead worms
+human_fallen_empires_dead_worms_category = {
+	desc = human_fallen_empires_dead_worms_category.desc
+	picture = GFX_evt_human_fallen_empires_dead_worms
+	level = 2
+	max_once_global = yes
+	spawn_chance = {
+		modifier = {
+			add = 4
+			is_planet_class = pc_molten
+		}
+		modifier = {
+			factor = 2
+			years_passed > 30
+		}
+		modifier = {
+			factor = 2
+			years_passed > 60
+		}
+		modifier = {
+			factor = 2
+			years_passed > 90
+		}
+	}
+	on_spawn = {
+		log = "dead worms"
+		human_fallen_empires_effect_create_signal_object_for_planet = yes
+	}
+	on_success = human_fallen_empires.5055
+}
+
+# necrotic autoevolution
+human_fallen_empires_necrotic_autoevolution_category = {
+	desc = human_fallen_empires_necrotic_autoevolution_category.desc
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	level = 3
+	max_once_global = yes
+	spawn_chance = {
+		modifier = {
+			add = 4
+			is_planet_class = pc_barren
+		}
+		modifier = {
+			factor = 2
+			years_passed > 30
+		}
+		modifier = {
+			factor = 2
+			years_passed > 60
+		}
+		modifier = {
+			factor = 2
+			years_passed > 90
+		}
+	}
+	on_spawn = {
+		human_fallen_empires_effect_create_signal_object_for_planet = yes
+	}
+	on_success = human_fallen_empires.5060
+}

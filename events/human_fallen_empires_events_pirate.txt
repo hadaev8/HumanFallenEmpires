@@ -247,9 +247,9 @@ country_event = {
 					random_country = {
 						limit = {
 							energy >= 500
-							minerals >= 500
-							is_country_type = default
-							any_owned_planet = {
+								   minerals >= 500
+								   is_country_type = default
+								   any_owned_planet = {
 								free_pop_tiles > 0
 							}
 						}
@@ -789,6 +789,7 @@ ship_event = {
 			is_country_type = human_fallen_empires_pirate
 		}
 		is_ship_class = shipclass_starbase
+		exists = solar_system
 	}
 
 	immediate = {
@@ -800,28 +801,25 @@ ship_event = {
 				}
 				human_fallen_empires_effect_pirate_flee_fleets = yes
 			}
-			if = {
+		}
+		solar_system = {
+			every_system_planet = {
 				limit = {
-					from.owner = {
-						is_country_type = human_fallen_empires_pirate
-					}
+					exists = owner
 				}
-				# may be change this
-				every_owned_planet = {
+				if = {
 					limit = {
-						solar_system = {
-							is_same_value = root.solar_system
+						or = {
+							from.owner = {
+								is_country_type = human_fallen_empires_pirate
+							}
+							not = {
+								is_planet_class = human_fallen_empires_pc_pirate_base
+							}
 						}
 					}
 					set_owner = from.owner
-				}
-				else = {
-					every_owned_planet = {
-						limit = {
-							solar_system = {
-								is_same_value = root.solar_system
-							}
-						}
+					else = {
 						every_owned_pop = {
 							human_fallen_empires_effect_refugee_or_die = yes
 							# мб стоит таки сделать преоритет для того, кто уничтожает базу
@@ -881,7 +879,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_human_fallen_empires_pirate_base
+		is_planet_class = human_fallen_empires_pc_pirate_base
 	}
 
 	immediate = {
@@ -955,7 +953,7 @@ ship_event = {
 				limit = {
 					check_variable = {
 						which = human_fallen_empires_pirate_outpost_attack_count
-						value > 5
+						value > 2
 					}
 				}
 				set_variable = {
@@ -976,7 +974,6 @@ ship_event = {
 					}
 				}
 				set_owner = from.owner
-
 			}
 		}
 	}
@@ -1362,8 +1359,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_0 = {
@@ -1414,8 +1411,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_1 = {
@@ -1466,8 +1463,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_2 = {
@@ -1518,8 +1515,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_3 = {
@@ -1570,8 +1567,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_4 = {
@@ -1622,8 +1619,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-			minerals >= 500
-			custom_tooltip = {
+				   minerals >= 500
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_5 = {
@@ -1688,7 +1685,7 @@ country_event = {
 		}
 		allow = {
 			minerals >= 150
-			custom_tooltip = {
+					 custom_tooltip = {
 				text = human_fallen_empires_pirate.101.traid_menu.fail
 				event_target:human_fallen_empires_pirate_country = {
 					energy >= 100
@@ -1792,14 +1789,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -1878,14 +1875,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -1964,14 +1961,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -2049,14 +2046,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -2134,14 +2131,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -2219,14 +2216,14 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_pirate_slave_cost
-			minerals >= @human_fallen_empires_pirate_slave_cost
-			custom_tooltip = {
+				   minerals >= @human_fallen_empires_pirate_slave_cost
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
 					human_fallen_empires_trigger_planet_valid_for_settle = yes
 				}
 			}
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
 				event_target:human_fallen_empires_pirate_country = {
 					any_owned_pop = {
@@ -2304,7 +2301,7 @@ country_event = {
 		}
 		allow = {
 			energy >= 1000
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_pirate.101.traid_menu.2.fail
 				or = {
 					and = {
@@ -2412,7 +2409,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_0
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_0
@@ -2439,7 +2436,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_1
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_1
@@ -2466,7 +2463,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_2
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_2
@@ -2493,7 +2490,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_3
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_3
@@ -2520,7 +2517,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_4
-			custom_tooltip = {
+				   custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_4
@@ -2919,7 +2916,7 @@ country_event = {
 		name = human_fallen_empires_pirate.200.0
 		allow = {
 			energy >= @human_fallen_empires_pirate_protect_cost
-			minerals >= @human_fallen_empires_pirate_protect_cost
+				   minerals >= @human_fallen_empires_pirate_protect_cost
 		}
 		add_minerals = @human_fallen_empires_pirate_protect_cost_minus
 		add_energy = @human_fallen_empires_pirate_protect_cost_minus

@@ -208,26 +208,30 @@ event = {
 				id = human_fallen_empires.5020
 			}
 		}
-		# varelse mahanicus event
+		# varelse mehanicus event
 		if = {
 			limit = {
 				not = {
 					has_global_flag = human_fallen_empires_varelse_mehanicus
 				}
 			}
-			random_planet = {
+			random_country = {
 				limit = {
-					exists = owner
-					has_planet_flag = human_fallen_empires_varelse_colony
-					has_observation_outpost = yes
-					owner = {
-						is_country_type = primitive
+					is_country_type = primitive
+					any_owned_planet = {
+						has_planet_flag = human_fallen_empires_varelse_colony
 					}
 				}
-				planet_event = {
-					id = human_fallen_empires.101
-					days = 1
-					random = 355
+				random_owned_planet = {
+					limit = {
+						has_planet_flag = human_fallen_empires_varelse_colony
+						has_observation_outpost = yes
+					}
+					planet_event = {
+						id = human_fallen_empires.101
+						days = 1
+						random = 355
+					}
 				}
 			}
 		}
@@ -238,26 +242,30 @@ event = {
 					has_global_flag = human_fallen_empires_has_event.362
 				}
 			}
-			random_planet = {
+			random_country = {
 				limit = {
-					has_planet_flag = human_fallen_empires_copernicus.0
-					has_observation_outpost = yes
-					exists = owner
-					owner = {
-						is_country_type = primitive
-					}
-					not = {
-						has_planet_flag = human_fallen_empires_has_event.362
+					is_country_type = primitive
+					any_owned_planet = {
+						has_planet_flag = human_fallen_empires_copernicus.0
 					}
 				}
-				planet_event = {
-					id = human_fallen_empires.361
-					days = 1
-					random = 355
+				random_owned_planet = {
+					limit = {
+						has_planet_flag = human_fallen_empires_copernicus.0
+						has_observation_outpost = yes
+						not = {
+							has_planet_flag = human_fallen_empires_has_event.362
+						}
+					}
+					planet_event = {
+						id = human_fallen_empires.361
+						days = 1
+						random = 355
+					}
 				}
 			}
 		}
-		# fallen emp drain resurces from vassals
+		# fallen empire drain recurses from vassals
 		# need to test
 		if = {
 			limit = {
@@ -327,15 +335,12 @@ event = {
 		# planet decay feature
 		if = {
 			limit = {
-				years_passed > 200
+				mid_game_years_passed > 0
 				not = {
 					has_global_flag = human_fallen_empires_disable_planet_decay
 				}
 			}
-			every_country = {
-				limit = {
-					is_country_type = default
-				}
+			every_playable_country = {
 				every_owned_planet = {
 					planet_event = {
 						id = human_fallen_empires_decay.0
@@ -343,12 +348,12 @@ event = {
 						random = 3600
 					}
 				}
-			}
-			every_planet = {
-				planet_event = {
-					id = human_fallen_empires_decay.5
-					days = 1
-					random = 3600
+				every_controlled_planet = {
+					planet_event = {
+						id = human_fallen_empires_decay.5
+						days = 1
+						random = 3600
+					}
 				}
 			}
 		}
@@ -449,26 +454,6 @@ event = {
 	}
 }
 
-# fix psi traits
-country_event = {
-	id = human_fallen_empires.10
-	hide_window = yes
-	is_triggered_only = yes
-
-	immediate = {
-		every_owned_pop = {
-			limit = {
-				has_trait = trait_latent_psionic
-				has_trait = trait_psionic
-			}
-			modify_species = {
-				species = this
-				remove_trait = trait_latent_psionic
-			}
-		}
-	}
-}
-
 # contact with egypt 46 - 47
 country_event = {
 	id = human_fallen_empires.46
@@ -490,6 +475,7 @@ country_event = {
 			limit = {
 				is_ai = no
 			}
+			set_country_flag = human_fallen_empires.47.step0
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -503,29 +489,48 @@ country_event = {
 	title = TRANSMISSION
 	desc = {
 		trigger = {
-			switch = {
-				trigger = has_country_flag
-				human_fallen_empires_egypt_wormhole = {
-					text = human_fallen_empires.47.desc.0
+			success_text = {
+				text = human_fallen_empires.47.desc.0.0
+				has_country_flag = human_fallen_empires.47.step0
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.0.1
+				has_country_flag = human_fallen_empires.47.step0
+				has_country_flag = human_fallen_empires_egypt_wormhole
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.1
+				has_country_flag = human_fallen_empires.47.step1
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.2
+				has_country_flag = human_fallen_empires.47.step2
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.3.0
+				has_country_flag = human_fallen_empires.47.step3
+				has_country_flag = human_fallen_empires.47.step3_bad_news.0
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.3.0
+				has_country_flag = human_fallen_empires.47.step3
+				has_country_flag = human_fallen_empires.47.step3_bad_news.1
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.3.0
+				has_country_flag = human_fallen_empires.47.step3
+				or = {
+					has_country_flag = human_fallen_empires.47.step3_bad_news.0
+					has_country_flag = human_fallen_empires.47.step3_bad_news.1
 				}
-				default = {
-					text = human_fallen_empires.47.desc.1
-				}
-				human_fallen_empires.47.step1 = {
-					text = human_fallen_empires.47.desc.2
-				}
-				human_fallen_empires.47.step2 = {
-					text = human_fallen_empires.47.desc.3
-				}
-				human_fallen_empires.47.step3 = {
-					text = human_fallen_empires.47.desc.4
-				}
-				human_fallen_empires.47.step4 = {
-					text = human_fallen_empires.47.desc.5
-				}
-				human_fallen_empires.47.stepbadend = {
-					text = human_fallen_empires.47.desc.6
-				}
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.3.1
+				has_country_flag = human_fallen_empires.47.step3
+			}
+			success_text = {
+				text = human_fallen_empires.47.desc.4
+				has_country_flag = human_fallen_empires.47.step4
 			}
 		}
 	}
@@ -540,21 +545,23 @@ country_event = {
 	# step 0
 	option = {
 		name = human_fallen_empires.47.0.0
-		response_text = human_fallen_empires.47.desc.6
+		response_text = human_fallen_empires.47.desc.badend
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
+			has_country_flag = human_fallen_empires.47.step0
+			not = {
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
-			has_ethic = ethic_fanatic_xenophobe
+			is_xenophobe = yes
 		}
 		human_fallen_empires_effect_xenophobe_attraction_high = yes
 		hidden_effect = {
-			set_country_flag = human_fallen_empires.47.stepbadend
-			remove_country_flag = human_fallen_empires_egypt_wormhole
+			human_fallen_empires_effect_clear_flags_event.47 = yes
+		}
+		event_target:human_fallen_empires_egypt_country = {
+			add_opinion_modifier = {
+				who = root
+				modifier = human_fallen_empires_opinion_egypt_first_contact_bad
+			}
 		}
 	}
 	option = {
@@ -563,16 +570,11 @@ country_event = {
 			any_relation = {
 				has_country_flag = human_fallen_empires_future
 			}
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
-			}
+			has_country_flag = human_fallen_empires.47.step0
 		}
 		hidden_effect = {
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step1
-			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -581,18 +583,12 @@ country_event = {
 	option = {
 		name = human_fallen_empires.47.0.2
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
-			}
-			# is_xenophobe = no
+			has_country_flag = human_fallen_empires.47.step0
 			has_country_flag = human_fallen_empires_marked_as_human
 		}
 		hidden_effect = {
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step1
-			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -601,17 +597,14 @@ country_event = {
 	option = {
 		name = human_fallen_empires.47.0.3
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
+			has_country_flag = human_fallen_empires.47.step0
+			not = {
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 		}
 		hidden_effect = {
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step1
-			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -620,18 +613,13 @@ country_event = {
 	option = {
 		name = human_fallen_empires.47.0.4
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
-			}
-			has_ethic = ethic_fanatic_spiritualist
+			has_country_flag = human_fallen_empires.47.step0
+			is_spiritualist = yes
 		}
 		human_fallen_empires_effect_spiritualist_attraction_high = yes
 		hidden_effect = {
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step1
-			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -640,31 +628,29 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.47.0.5
-		response_text = human_fallen_empires.47.desc.6
+		response_text = human_fallen_empires.47.desc.badend
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
-			}
-			has_ethic = ethic_fanatic_militarist
+			has_country_flag = human_fallen_empires.47.step0
+			is_militarist = yes
 			fleet_power > 40000
 		}
 		human_fallen_empires_effect_militarist_attraction_high = yes
 		hidden_effect = {
-			set_country_flag = human_fallen_empires.47.stepbadend
-			remove_country_flag = human_fallen_empires_egypt_wormhole
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 		}
+		event_target:human_fallen_empires_egypt_country = {
+			add_opinion_modifier = {
+				who = root
+				modifier = human_fallen_empires_opinion_egypt_first_contact_bad
+			}
+		}
+		# добавить объявление войны
 	}
 	option = {
 		name = human_fallen_empires.47.0.6
 		trigger = {
-			nor = {
-				has_country_flag = human_fallen_empires.47.step1
-				has_country_flag = human_fallen_empires.47.step2
-				has_country_flag = human_fallen_empires.47.step3
-				has_country_flag = human_fallen_empires.47.step4
+			has_country_flag = human_fallen_empires.47.step0
+			not = {
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 			any_relation = {
@@ -675,8 +661,8 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step1
-			remove_country_flag = human_fallen_empires_egypt_wormhole
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -691,7 +677,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_militarist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -706,7 +692,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophobe_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -721,7 +707,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_materialist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -736,7 +722,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_egalitarian_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -751,7 +737,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_pacifist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -766,7 +752,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophile_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -781,7 +767,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_spiritualist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -796,7 +782,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_authoritarian_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step1
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step2
 			country_event = {
 				id = human_fallen_empires.47
@@ -820,7 +806,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -843,7 +829,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -868,7 +854,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -895,7 +881,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -919,7 +905,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -944,7 +930,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -968,9 +954,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
-			set_country_flag = human_fallen_empires.47.step3_bad_news
+			set_country_flag = human_fallen_empires.47.step3_bad_news.0
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -996,7 +982,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -1021,7 +1007,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophile_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
 			country_event = {
 				id = human_fallen_empires.47
@@ -1064,9 +1050,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
-			set_country_flag = human_fallen_empires.47.step3_bad_news
+			set_country_flag = human_fallen_empires.47.step3_bad_news.1
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -1082,9 +1068,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
-			set_country_flag = human_fallen_empires.47.step3_bad_news
+			set_country_flag = human_fallen_empires.47.step3_bad_news.0
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -1106,9 +1092,8 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step2
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step3
-			set_country_flag = human_fallen_empires.47.step3_bad_news
 			country_event = {
 				id = human_fallen_empires.47
 			}
@@ -1123,8 +1108,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_militarist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1139,8 +1123,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophobe_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1155,8 +1138,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_materialist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1171,8 +1153,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_egalitarian_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1187,8 +1168,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_pacifist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1203,8 +1183,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophile_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1219,8 +1198,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_spiritualist_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1235,8 +1213,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_authoritarian_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step3
-			remove_country_flag = human_fallen_empires.47.step3_bad_news
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 			set_country_flag = human_fallen_empires.47.step4
 			country_event = {
 				id = human_fallen_empires.47
@@ -1252,7 +1229,7 @@ country_event = {
 		}
 		human_fallen_empires_effect_xenophile_attraction_low = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step4
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 		}
 		#добавить бонус к счастью
 	}
@@ -1263,7 +1240,7 @@ country_event = {
 			has_country_flag = human_fallen_empires_marked_as_human
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step4
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 		}
 	}
 	option = {
@@ -1272,7 +1249,7 @@ country_event = {
 			has_country_flag = human_fallen_empires.47.step4
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires.47.step4
+			human_fallen_empires_effect_clear_flags_event.47 = yes
 		}
 	}
 	#сделать бонусную ветку
@@ -1359,14 +1336,14 @@ ship_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
+		}
 		random_country = {
 			limit = {
 				has_country_flag = human_fallen_empires_egypt
 			}
-			random_owned_planet = {
-				limit = {
-					is_capital = yes
-				}
+			capital_scope = {
 				save_event_target_as = human_fallen_empires_ra_home
 			}
 		}
@@ -1475,8 +1452,10 @@ ship_event = {
 		}
 		create_country = {
 			name = "Varelse Hegemony"
-			type = faction
+			type = human_fallen_empires_placeholder_t3_tech
+			ignore_initial_colony_error = yes
 			effect = {
+				set_country_type = faction
 				establish_communications_no_message = root.owner
 				set_faction_hostility = {
 					set_hostile = no
@@ -1487,42 +1466,34 @@ ship_event = {
 					name = random
 					skill = 500
 				}
+				set_graphical_culture = reptilian_01
 			}
 		}
 		create_fleet = {
 			name = "11th Strike Force"
+			settings = {
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
 			effect = {
 				set_owner = last_created_country
 				while = {
 					count = 10
 					create_ship = {
-						name = random
-						design = Sunset
-						graphical_culture = "reptilian_01"
+						random_existing_design = cruiser
 					}
 				}
 				assign_leader = last_created_leader
 				while = {
-					count = 30
+					count = 40
 					create_ship = {
-						name = random
-						design = Farstar
-						graphical_culture = "reptilian_01"
+						random_existing_design = corvette
 					}
 				}
-				owner = {
-					every_owned_ship = {
-						add_modifier = {
-							modifier = human_fallen_empires_unkeep
-							days = -1
-						}
-					}
-				}
-				set_location = event_targe:human_fallen_empires_varelse_fleet_location
+				set_location = event_target:human_fallen_empires_varelse_fleet_location
 				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
-		#	destroy_ambient_object = event_targe:human_fallen_empires_varelse_fleet_location
 	}
 
 	option = {
@@ -1699,7 +1670,7 @@ country_event = {
 }
 
 # varelse section 100 - 150
-# varlse colony after curvey 100
+# varelse colony after survey 100
 ship_event = {
 	id = human_fallen_empires.100
 	title = human_fallen_empires.100.name
@@ -1941,9 +1912,9 @@ country_event = {
 	immediate = {
 		event_target:human_fallen_empires_varelse_colony = {
 			owner = {
-				human_fallen_empires_effect_primitive_up = yes
 				country_remove_ethic = ethic_spiritualist
 				country_add_ethic = ethic_materialist
+				human_fallen_empires_effect_primitive_up = yes
 			}
 		}
 	}
@@ -1954,7 +1925,7 @@ country_event = {
 			is_materialist = yes
 		}
 		human_fallen_empires_effect_materialist_attraction_high = yes
-		human_fallen_empires_effect_add_society_research.1 = yes
+		human_fallen_empires_effect_add_society_research.3 = yes
 	}
 }
 
@@ -1971,7 +1942,7 @@ country_event = {
 	immediate = {
 		event_target:human_fallen_empires_varelse_colony = {
 			observation_outpost = {
-				add_mission_progress = 0.3
+				add_mission_progress = 0.5
 			}
 		}
 	}
@@ -1994,7 +1965,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_human_fallen_empires_memorial
+		is_planet_class = human_fallen_empires_pc_memorial
 		exists = owner
 		has_ground_combat = no
 		num_pops > 0
@@ -2364,7 +2335,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_human_fallen_empires_memorial
+		is_planet_class = human_fallen_empires_pc_memorial
 		exists = owner
 		has_ground_combat = no
 		num_pops > 0
@@ -2729,7 +2700,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_human_fallen_empires_memorial
+		is_planet_class = human_fallen_empires_pc_memorial
 		exists = owner
 		has_ground_combat = no
 		num_pops > 0
@@ -3069,7 +3040,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_human_fallen_empires_memorial
+		is_planet_class = human_fallen_empires_pc_memorial
 		exists = owner
 		owner = {
 			nand = {
@@ -7581,6 +7552,7 @@ ship_event = {
 
 	immediate = {
 		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
 			save_event_target_as = human_fallen_empires_criopods_planet
 		}
 		owner = {
@@ -7943,6 +7915,12 @@ ship_event = {
 	show_sound = event_mystic_reveal
 	location = root
 	is_triggered_only = yes
+	
+	immediate = {
+		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
+		}
+	}
 
 	option = {
 		name = human_fallen_empires_at_the_sreen
@@ -8068,9 +8046,13 @@ ship_event = {
 
 	immediate = {
 		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
 			add_modifier = {
 				modifier =  human_fallen_empires_necrotic_autoevolution
 				days = -1
+			}
+			orbital_deposit_tile = {
+				set_deposit = human_fallen_empires_deposit_necrotic_autoevolution_0
 			}
 		}
 		owner = {
@@ -8112,6 +8094,39 @@ ship_event = {
 }
 
 # then mining station build
+ship_event = {
+	id = human_fallen_empires.5061
+	title = human_fallen_empires.5061.name
+	desc = human_fallen_empires.5061.desc
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	show_sound = event_mystic_reveal
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_modifier = human_fallen_empires_necrotic_autoevolution
+			not = {
+				orbital_deposit_tile = {
+					has_deposit = human_fallen_empires_deposit_necrotic_autoevolution_1
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			orbital_deposit_tile = {
+				set_deposit = human_fallen_empires_deposit_necrotic_autoevolution_1
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.5061.0
+		human_fallen_empires_effect_materialist_attraction_low = yes
+	}
+}
 
 # find kad republic chain 5070
 country_event = {
@@ -8237,7 +8252,7 @@ country_event = {
 		trigger = {
 			or = {
 				is_xenophobe = yes
-				human_fallen_empires_trigger_is_authoritarian = yes
+				is_authoritarian = yes
 			}
 			has_policy_flag = ai_full_rights
 		}
@@ -8263,7 +8278,7 @@ country_event = {
 		name = human_fallen_empires.5100.2
 		trigger = {
 			is_xenophobe = no
-			human_fallen_empires_trigger_is_authoritarian = no
+			is_authoritarian = no
 			has_policy_flag = ai_full_rights
 		}
 		response_text = human_fallen_empires.5100.no.response

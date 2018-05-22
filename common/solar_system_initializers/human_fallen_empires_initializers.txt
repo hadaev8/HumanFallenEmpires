@@ -1,5 +1,4 @@
 #
-@base_moon_distance = 11
 
 human_fallen_empires_egypt = {
 	flags = {
@@ -7,7 +6,10 @@ human_fallen_empires_egypt = {
 	}
 	name = "Home of Light"
 	class = rl_standard_stars
-	asteroids_distance = 50
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 50
+	}
 	planet = {
 		count = 1
 		class = pc_g_star
@@ -219,7 +221,7 @@ human_fallen_empires_egypt = {
 			}
 			every_tile = {
 				limit = {
-					has_pop = no
+					not = { exists = pop }
 					has_building = yes
 				}
 				create_pop = {
@@ -278,10 +280,6 @@ human_fallen_empires_egypt = {
 			owner = {
 				every_owned_leader = {
 					human_fallen_empires_effect_add_psionic_trait = yes
-				}
-				add_modifier = {
-					modifier = human_fallen_empires_navy_size
-					days = -1
 				}
 				every_owned_ship = {
 					repair_ship = yes
@@ -364,7 +362,10 @@ human_fallen_empires_hope = {
 		human_fallen_empires_egypt_1
 	}
 	class = rl_standard_stars
-	asteroids_distance = 115
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 115
+	}
 	planet = {
 		count = 1
 		class = star
@@ -649,7 +650,10 @@ human_fallen_empires_gift = {
 		human_fallen_empires_egypt_2
 	}
 	class = rl_standard_stars
-	asteroids_distance = 115
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 115
+	}
 	planet = {
 		count = 1
 		class = star
@@ -1157,7 +1161,7 @@ human_fallen_empires_ahet_2 = {
 				limit = {
 					has_building = yes
 					has_blocker = no
-					has_pop = no
+					not = { exists = pop }
 				}
 				random_list = {
 					50 = {
@@ -1468,7 +1472,7 @@ human_fallen_empires_memorial_01 = {
 		name = Arrakis
 		count = 1
 		orbit_distance = 30
-		class = pc_human_fallen_empires_memorial
+		class = human_fallen_empires_pc_memorial
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -1514,7 +1518,10 @@ human_fallen_empires_memorial_01 = {
 
 human_fallen_empires_memorial_02 = {
 	class = rl_standard_stars
-	asteroids_distance = 95
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 95
+	}
 	flags = {
 		human_fallen_empires_memorial_system
 	}
@@ -1555,7 +1562,7 @@ human_fallen_empires_memorial_02 = {
 		name = Caladan
 		count = 1
 		orbit_distance = 25
-		class = pc_human_fallen_empires_memorial
+		class = human_fallen_empires_pc_memorial
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -1598,6 +1605,7 @@ human_fallen_empires_memorial_02 = {
 		human_fallen_empires_effect_add_hyperlanes = yes
 	}
 }
+
 human_fallen_empires_memorial_03 = {
 	class = rl_standard_stars
 	flags = {
@@ -1619,7 +1627,7 @@ human_fallen_empires_memorial_03 = {
 		name = "Giedi Prime"
 		count = 1
 		orbit_distance = 10
-		class = pc_human_fallen_empires_memorial
+		class = human_fallen_empires_pc_memorial
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -1680,9 +1688,9 @@ human_fallen_empires_memorial_03 = {
 		human_fallen_empires_effect_add_hyperlanes = yes
 	}
 }
+
 human_fallen_empires_memorial_04 = {
 	class = rl_standard_stars
-	asteroids_distance = 120
 	flags = {
 		human_fallen_empires_memorial_system
 	}
@@ -1697,12 +1705,15 @@ human_fallen_empires_memorial_04 = {
 		}
 		has_ring = no
 	}
-	change_orbit = 120
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 120
+	}
 	planet = {
 		name = Kaitain
 		count = 1
 		orbit_distance = 10
-		class = pc_human_fallen_empires_memorial
+		class = human_fallen_empires_pc_memorial
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -1746,6 +1757,7 @@ human_fallen_empires_memorial_04 = {
 		human_fallen_empires_effect_add_hyperlanes = yes
 	}
 }
+
 # ahet home
 human_fallen_empires_ahet_home = {
 	class = rl_standard_stars
@@ -1829,9 +1841,10 @@ human_fallen_empires_ahet_home = {
 		human_fallen_empires_effect_add_hyperlanes = yes
 	}
 }
+
 # too ideal planet
 human_fallen_empires_copernicus = {
-	#	class = "rl_standard_stars"
+	class = rl_standard_stars
 	flags = {
 		human_fallen_empires_copernicus
 	}
@@ -1903,69 +1916,6 @@ human_fallen_empires_copernicus = {
 		human_fallen_empires_effect_add_hyperlanes = yes
 	}
 }
-# discovery
-human_fallen_empires_discovery_system = {
-	class = rl_standard_stars
-	asteroids_distance = 90
-	usage = custom_empire
-	planet = {
-		count = 1
-		class = star
-		orbit_distance = 0
-		orbit_angle = 1
-		size = {
-			min = 10
-			max = 30
-		}
-		#has_ring = yes
-	}
-	change_orbit = 90
-	planet = {
-		count = {
-			min = 1
-			max = 4
-		}
-		class = random_asteroid
-		orbit_distance = 0
-		orbit_angle = random
-	}
-	change_orbit = 20
-	planet = {
-		count = 1
-		orbit_distance = 10
-		class = pc_nuked
-		orbit_angle = random
-		size = {
-			min = 15
-			max = 20
-		}
-		starting_planet = yes
-		init_effect = {
-			set_planet_flag = human_fallen_empires_discovery_planet
-		}
-	}
-	planet = {
-		orbit_distance = 20
-		count = {
-			min = 1
-			max = 2
-		}
-		class = pc_gas_giant
-		change_orbit = @base_moon_distance
-		moon = {
-			count = {
-				min = 1
-				max = 4
-			}
-			class = random_non_colonizable
-			orbit_angle = {
-				min = 90
-				max = 270
-			}
-			orbit_distance = 5
-		}
-	}
-}
 
 # drone
 human_fallen_empires_drone_sector_0 = {
@@ -1974,7 +1924,10 @@ human_fallen_empires_drone_sector_0 = {
 	}
 	class = "rl_standard_stars"
 	name = "Drone Sector 0"
-	asteroids_distance = 100
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 100
+	}
 	planet = {
 		count = 1
 		class = star
@@ -2120,7 +2073,10 @@ human_fallen_empires_drone_sector_1 = {
 	}
 	class = rl_standard_stars
 	name = "Drone Sector 1"
-	asteroids_distance = 60
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 60
+	}
 	planet = {
 		count = 1
 		class = star
@@ -2204,7 +2160,10 @@ human_fallen_empires_drone_sector_10 = {
 	}
 	class = "rl_standard_stars"
 	name = "Drone Sector 10"
-	asteroids_distance = 40
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 40
+	}
 	planet = {
 		count = 1
 		class = star
@@ -2286,7 +2245,10 @@ human_fallen_empires_drone_sector_10 = {
 human_fallen_empires_future = {
 	name = Tartarus
 	class = "rl_standard_stars"
-	asteroids_distance = 70
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 70
+	}
 	planet = {
 		name = Tartarus
 		count = 1
@@ -2485,10 +2447,6 @@ human_fallen_empires_future = {
 					human_fallen_empires_effect_create_future_fleet = yes
 				}
 				owner = {
-					add_modifier = {
-						modifier = human_fallen_empires_navy_size
-						days = -1
-					}
 					every_owned_ship = {
 						repair_ship = yes
 						add_modifier = {
@@ -2532,9 +2490,6 @@ human_fallen_empires_future = {
 					}
 					set_building = building_ancient_factory
 					set_deposit = d_mineral_deposit
-					create_pop = {
-						species = event_target:human_fallen_empires_ahet_species
-					}
 				}
 				random_tile = {
 					limit = {

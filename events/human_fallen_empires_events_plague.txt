@@ -217,56 +217,95 @@ planet_event = {
 		}
 		log = "Plague start on planet [Root.GetName] owner: [Root.Owner.GetName]"
 		# set modifier and inform
-		#switch = {
-		#	trigger = has_global_flag
-		#	human_fallen_empires_plague_lvl_3 = {
-		if = {
-			limit = {
-				has_global_flag = human_fallen_empires_plague_lvl_3
-			}
-			add_modifier = {
-				modifier = human_fallen_empires_plague_lvl_3
-				days = 3650
-			}
-			owner = {
-				country_event = {
-					id = human_fallen_empires_plague.55
-					days = 1
-					random = 15
+		switch = {
+			trigger = has_global_flag
+			human_fallen_empires_plague_lvl_3 = {
+				add_modifier = {
+					modifier = human_fallen_empires_plague_lvl_3
+					days = 3650
+				}
+				owner = {
+					country_event = {
+						id = human_fallen_empires_plague.55
+						days = 1
+						random = 15
+					}
 				}
 			}
-			else = {
-				if = {
-					limit = {
-						has_global_flag = human_fallen_empires_plague_lvl_2
+			human_fallen_empires_plague_lvl_2 = {
+				add_modifier = {
+					modifier = human_fallen_empires_plague_lvl_2
+					days = 3650
+				}
+				owner = {
+					country_event = {
+						id = human_fallen_empires_plague.54
+						days = 1
+						random = 15
 					}
-					add_modifier = {
-						modifier = human_fallen_empires_plague_lvl_2
-						days = 3650
-					}
-					owner = {
-						country_event = {
-							id = human_fallen_empires_plague.54
-							days = 1
-							random = 15
-						}
-					}
-					else = {
-						add_modifier = {
-							modifier = human_fallen_empires_plague_lvl_1
-							days = 3650
-						}
-						owner = {
-							country_event = {
-								id = human_fallen_empires_plague.53
-								days = 1
-								random = 15
-							}
-						}
+				}
+			}
+			human_fallen_empires_plague_srarted = {
+				add_modifier = {
+					modifier = human_fallen_empires_plague_lvl_1
+					days = 3650
+				}
+				owner = {
+					country_event = {
+						id = human_fallen_empires_plague.53
+						days = 1
+						random = 15
 					}
 				}
 			}
 		}
+		# if = {
+		# 	limit = {
+		# 		has_global_flag = human_fallen_empires_plague_lvl_3
+		# 	}
+		# 	add_modifier = {
+		# 		modifier = human_fallen_empires_plague_lvl_3
+		# 		days = 3650
+		# 	}
+		# 	owner = {
+		# 		country_event = {
+		# 			id = human_fallen_empires_plague.55
+		# 			days = 1
+		# 			random = 15
+		# 		}
+		# 	}
+		# 	else = {
+		# 		if = {
+		# 			limit = {
+		# 				has_global_flag = human_fallen_empires_plague_lvl_2
+		# 			}
+		# 			add_modifier = {
+		# 				modifier = human_fallen_empires_plague_lvl_2
+		# 				days = 3650
+		# 			}
+		# 			owner = {
+		# 				country_event = {
+		# 					id = human_fallen_empires_plague.54
+		# 					days = 1
+		# 					random = 15
+		# 				}
+		# 			}
+		# 			else = {
+		# 				add_modifier = {
+		# 					modifier = human_fallen_empires_plague_lvl_1
+		# 					days = 3650
+		# 				}
+		# 				owner = {
+		# 					country_event = {
+		# 						id = human_fallen_empires_plague.53
+		# 						days = 1
+		# 						random = 15
+		# 					}
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
 		# lvl up plague
 		event_target:human_fallen_empires_chain_plague_count = {
 			change_variable = {
@@ -288,7 +327,7 @@ planet_event = {
 			}
 			set_global_flag = human_fallen_empires_plague_lvl_2
 			every_playable_country = {
-				add_research_option = tech_human_fallen_empires_plague_study
+				add_research_option = human_fallen_empires_tech_plague_study
 				country_event = {
 					id = human_fallen_empires_plague.51
 					days = 1
@@ -532,13 +571,13 @@ planet_event = {
 		}
 		# send plague
 		closest_system = {
-			max_steps = 10
+			max_steps = 15
 			limit = {
 				any_planet = {
 					human_fallen_empires_trigger_plague_valid_planet = yes
 				}
 			}
-			random_planet = {
+			random_system_planet = {
 				limit = {
 					human_fallen_empires_trigger_plague_valid_planet = yes
 				}
@@ -824,7 +863,7 @@ country_event = {
 	diplomatic = yes
 
 	trigger = {
-		last_increased_tech = tech_human_fallen_empires_plague_study
+		last_increased_tech = human_fallen_empires_tech_plague_study
 	}
 
 	immediate = {
@@ -1167,7 +1206,6 @@ country_event = {
 }
 
 # inform events 50 - 100
-
 # plague start inform
 country_event = {
 	id = human_fallen_empires_plague.50
@@ -1219,12 +1257,20 @@ country_event = {
 			human_fallen_empires_trigger_is_robot = yes
 		}
 	}
+	# brainworm
 	option = {
 		name = human_fallen_empires_plague.50.2
 		exclusive_trigger = {
-			human_fallen_empires_trigger_is_brainworm_country = yes
+			human_fallen_empires_trigger_brainworm_country = yes
 		}
 		human_fallen_empires_effect_add_unity.1 = yes
+	}
+	# discovery
+	option = {
+		name = human_fallen_empires_plague.50.3
+		exclusive_trigger = {
+			is_country_type = human_fallen_empires_discovery
+		}
 	}
 }
 
@@ -1244,7 +1290,25 @@ country_event = {
 	option = {
 		name = CURSES
 		tooltip = {
-			add_research_option = tech_human_fallen_empires_plague_study
+			add_research_option = human_fallen_empires_tech_plague_study
+		}
+	}
+	option = {
+		name = human_fallen_empires_plague.51.0
+		exclusive_trigger = {
+			is_spiritualist = yes
+		}
+		tooltip = {
+			add_research_option = human_fallen_empires_tech_plague_study
+		}
+	}
+	option = {
+		name = human_fallen_empires_plague.51.1
+		exclusive_trigger = {
+			is_materialist = yes
+		}
+		tooltip = {
+			add_research_option = human_fallen_empires_tech_plague_study
 		}
 	}
 }
@@ -1304,7 +1368,7 @@ country_event = {
 		trigger = {
 			text = human_fallen_empires_plague.54.desc
 			success_text = {
-				has_technology = tech_human_fallen_empires_plague_study
+				has_technology = human_fallen_empires_tech_plague_study
 				text = human_fallen_empires_plague_from_planet.desc
 			}
 		}
@@ -1341,7 +1405,7 @@ country_event = {
 		trigger = {
 			text = human_fallen_empires_plague.55.desc
 			success_text = {
-				has_technology = tech_human_fallen_empires_plague_study
+				has_technology = human_fallen_empires_tech_plague_study
 				text = human_fallen_empires_plague_from_planet.desc
 			}
 		}
@@ -1462,7 +1526,7 @@ country_event = {
 
 	trigger = {
 		not = {
-			has_technology = tech_human_fallen_empires_plague_immune
+			has_technology = human_fallen_empires_tech_plague_immune
 		}
 	}
 
@@ -1473,7 +1537,7 @@ country_event = {
 				has_country_flag = human_fallen_empires_plague_know_immune
 			}
 		}
-		add_research_option = tech_human_fallen_empires_plague_immune
+		add_research_option = human_fallen_empires_tech_plague_immune
 		set_country_flag = human_fallen_empires_plague_know_immune
 		log = "[Root.GetName] now know immune"
 	}
@@ -1483,7 +1547,7 @@ country_event = {
 			has_country_flag = human_fallen_empires_plague_know_immune
 		}
 		add_tech_progress = {
-			tech = tech_human_fallen_empires_plague_immune
+			tech = human_fallen_empires_tech_plague_immune
 			progress = 0.01
 		}
 	}
@@ -1554,37 +1618,37 @@ country_event = {
 }
 
 # events on first plague planet 100 - 150
-planet_event = {
-	id = human_fallen_empires_plague.100
-	title = human_fallen_empires_plague.100.name
-	desc = human_fallen_empires_plague.100.desc
-	picture = GFX_evt_human_fallen_empires_plague
-	show_sound = event_air_raid_siren
-	is_triggered_only = yes
-	location = root
+# planet_event = {
+	# id = human_fallen_empires_plague.100
+	# title = human_fallen_empires_plague.100.name
+	# desc = human_fallen_empires_plague.100.desc
+	# picture = GFX_evt_human_fallen_empires_plague
+	# show_sound = event_air_raid_siren
+	# is_triggered_only = yes
+	# location = root
 
-	trigger = {
-		exists = owner
-		owner = {
-			not = {
-				has_country_flag = human_fallen_empires_plague_fist_time
-			}
-		}
-	}
+	# trigger = {
+		# exists = owner
+		# owner = {
+			# not = {
+				# has_country_flag = human_fallen_empires_plague_fist_time
+			# }
+		# }
+	# }
 
-	immediate = {
-		set_timed_planet_flag = {
-			flag = human_fallen_empires_plague_fist_planet days = 3650
-		}
-		owner = {
-			set_country_flag = human_fallen_empires_plague_fist_time
-		}
-	}
+	# immediate = {
+		# set_timed_planet_flag = {
+			# flag = human_fallen_empires_plague_fist_planet days = 3650
+		# }
+		# owner = {
+			# set_country_flag = human_fallen_empires_plague_fist_time
+		# }
+	# }
 
-	option = {
-		name = human_fallen_empires_plague.100.0
-	}
-}
+	# option = {
+		# name = human_fallen_empires_plague.100.0
+	# }
+# }
 
 # bombardment event 150 - 200
 # bombarding infected planet after project finished

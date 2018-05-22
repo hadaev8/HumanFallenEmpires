@@ -418,10 +418,7 @@ country_event = {
 				}
 				# init options
 				# more tech and res
-				every_country = {
-					limit = {
-						is_country_type = default
-					}
+				every_playable_country = {
 					switch = {
 						trigger = has_country_flag
 						human_fallen_empires_init_tech_t4 = {
@@ -437,27 +434,6 @@ country_event = {
 							human_fallen_empires_effect_init_give_tech_t1 = yes
 						}
 					}
-				}
-				every_country = {
-					limit = {
-						is_country_type = human_fallen_empires_discovery
-					}
-					switch = {
-						trigger = has_country_flag
-						human_fallen_empires_init_tech_t4 = {
-							human_fallen_empires_effect_init_give_tech_t4 = yes
-						}
-						human_fallen_empires_init_tech_t3 = {
-							human_fallen_empires_effect_init_give_tech_t3 = yes
-						}
-						human_fallen_empires_init_tech_t2 = {
-							human_fallen_empires_effect_init_give_tech_t2 = yes
-						}
-						human_fallen_empires_init_tech_t1 = {
-							human_fallen_empires_effect_init_give_tech_t1 = yes
-						}
-					}
-					set_country_type = human_fallen_empires_discovery
 				}
 				# more colony
 				while = {
@@ -684,23 +660,24 @@ country_event = {
 					}
 				}
 			}
-			random_planet = {
+			random_system = {
 				limit = {
-					exists = solar_system
-					solar_system = {
-						has_star_flag = sol
-					}
-					or = {
-						has_planet_flag = planet_earth
-						has_planet_flag = nuked_earth
-						and = {
-							exists = owner
-							is_capital = yes
+					has_star_flag = sol
+				}
+				random_system_planet = {
+					limit = {
+						or = {
+							has_planet_flag = planet_earth
+							has_planet_flag = nuked_earth
+							and = {
+								exists = owner
+								is_capital = yes
+							}
 						}
 					}
+					log = "hfe find earth"
+					save_global_event_target_as = human_fallen_empires_earth
 				}
-				log = "hfe find earth"
-				save_global_event_target_as = human_fallen_empires_earth
 			}
 			# create need species
 			# egypt
@@ -718,6 +695,12 @@ country_event = {
 				}
 				immortal = yes
 				effect = {
+					if = {
+						limit = {
+							exists = event_target:human_fallen_empires_earth
+						}
+						set_species_homeworld = event_target:human_fallen_empires_earth
+					}
 					save_global_event_target_as = human_fallen_empires_egypt_species
 					if = {
 						limit = {
@@ -731,7 +714,7 @@ country_event = {
 			create_species = {
 				name = Ahet
 				plural = Ahet
-				class = "REP"
+				class = REP
 				portrait = random
 				traits = {
 					ideal_planet_class = pc_tropical
@@ -739,15 +722,15 @@ country_event = {
 					trait = trait_strong
 					trait = random_traits
 				}
-			}
-			last_created_species = {
-				save_global_event_target_as = human_fallen_empires_ahet_species
+				effect = {
+					save_global_event_target_as = human_fallen_empires_ahet_species
+				}
 			}
 			# varelse
 			create_species = {
 				name = Varelse
 				plural = Varelse
-				class = "REP"
+				class = REP
 				portrait = random
 				traits = {
 					ideal_planet_class = pc_desert
@@ -756,9 +739,9 @@ country_event = {
 					trait = trait_strong
 					trait = trait_repugnant
 				}
-			}
-			last_created_species = {
-				save_global_event_target_as = human_fallen_empires_varelse_species
+				effect = {
+					save_global_event_target_as = human_fallen_empires_varelse_species
+				}
 			}
 			# future
 			create_species = {
@@ -773,10 +756,16 @@ country_event = {
 					trait = trait_strong
 					trait = trait_solitary
 				}
-			}
-			last_created_species = {
-				set_species_identity = event_target:human_fallen_empires_egypt_species
-				save_global_event_target_as = human_fallen_empires_future_species
+				effect = {
+					if = {
+						limit = {
+							exists = event_target:human_fallen_empires_earth
+						}
+						set_species_homeworld = event_target:human_fallen_empires_earth
+					}
+					set_species_identity = event_target:human_fallen_empires_egypt_species
+					save_global_event_target_as = human_fallen_empires_future_species
+				}
 			}
 			# future
 			random_rim_system = {
@@ -785,7 +774,7 @@ country_event = {
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
-							has_owner = yes
+							exists = owner
 						}
 						# any_system = {
 						# 	distance = {
@@ -795,7 +784,7 @@ country_event = {
 						# 		type = hyperlane
 						# 		#uses_bypass = no
 						# 	}
-						# 	has_owner = yes
+						# 	exists = owner
 						# }
 					}
 				}
@@ -814,7 +803,7 @@ country_event = {
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
-							has_owner = yes
+							exists = owner
 						}
 						# any_system = {
 						# distance = {
@@ -824,7 +813,7 @@ country_event = {
 						# type = hyperlane
 						# #uses_bypass = no
 						# }
-						# has_owner = yes
+						# exists = owner
 						# }
 					}
 				}
@@ -965,7 +954,7 @@ country_event = {
 					is_fe_cluster = no
 					not = {
 						any_neighbor_system = {
-							has_owner = yes
+							exists = owner
 						}
 						# any_system = {
 						# 	distance = {
@@ -975,7 +964,7 @@ country_event = {
 						# 		type = hyperlane
 						# 		#uses_bypass = no
 						# 	}
-						# 	has_owner = yes
+						# 	exists = owner
 						# }
 					}
 				}
@@ -1014,10 +1003,10 @@ country_event = {
 					id = human_fallen_empires_init.103
 					days = 2
 				}
-				country_event = {
-					id = human_fallen_empires_init.103
-					days = 3
-				}
+				# country_event = {
+					# id = human_fallen_empires_init.103
+					# days = 3
+				# }
 			}
 			event_target:human_fallen_empires_future_country = {
 				country_event = {
@@ -1049,11 +1038,11 @@ country_event = {
 	hide_window = yes
 
 	immediate = {
+		human_fallen_empires_effect_init_expand_borders = yes
 		country_event = {
 			id = human_fallen_empires_init.104
 			days = 2
 		}
-		human_fallen_empires_effect_init_expand_borders = yes
 	}
 }
 

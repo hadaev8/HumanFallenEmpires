@@ -262,7 +262,17 @@ human_fallen_empires_effect_add_random_trait = {
 	}
 }
 
-# varelse fleen event
+human_fallen_empires_effect_clear_flags_event.47 = {
+	remove_country_flag = human_fallen_empires.47.step3_bad_news
+	remove_country_flag = human_fallen_empires_egypt_wormhole
+	remove_country_flag = human_fallen_empires.47.step0
+	remove_country_flag = human_fallen_empires.47.step1
+	remove_country_flag = human_fallen_empires.47.step2
+	remove_country_flag = human_fallen_empires.47.step3
+	remove_country_flag = human_fallen_empires.47.step4
+}
+
+# varelse fleet event
 # for fleet
 human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 	set_fleet_stance = aggressive
@@ -283,12 +293,10 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 						limit = {
 							any_planet = {
 								has_planet_flag = human_fallen_empires_home_of_light
-								not = {
-									and = {
-										exists = owner
-										owner = {
-											has_country_flag = human_fallen_empires_egypt
-										}
+								nand = {
+									exists = owner
+									owner = {
+										has_country_flag = human_fallen_empires_egypt
 									}
 								}
 							}
@@ -297,11 +305,9 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 							human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 						}
 						else = {
-							event_target:human_fallen_empires_varelse_fleet = {
-								owner = {
-									set_faction_hostility = {
-										set_hostile = yes
-									}
+							event_target:human_fallen_empires_varelse_fleet.owner = {
+								set_faction_hostility = {
+									set_hostile = yes
 								}
 							}
 						}
@@ -326,7 +332,6 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 						effect = {
 							id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.2
 							event_target:human_fallen_empires_varelse_fleet = {
-								clear_fleet_actions = this
 								human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 							}
 						}
@@ -338,7 +343,6 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 				effect = {
 					id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.3
 					event_target:human_fallen_empires_varelse_fleet = {
-						clear_fleet_actions = this
 						human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 					}
 				}
@@ -488,6 +492,15 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 	event_target:human_fallen_empires_varelse_fleet = {
 		set_owner = last_created_country
 	}
+	last_created_country = {
+		every_owned_ship = {
+			repair_ship = yes
+			add_modifier = {
+				modifier = human_fallen_empires_unkeep
+				days = -1
+			}
+		}
+	}
 	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
 }
 
@@ -593,6 +606,10 @@ human_fallen_empires_effect_create_egypt_fleet = {
 		}
 	}
 	create_fleet = {
+		settings = {
+			can_change_composition = no
+			uses_naval_capacity = no
+		}
 		effect = {
 			set_owner = event_target:human_fallen_empires_egypt_country
 			while = {
@@ -634,6 +651,10 @@ human_fallen_empires_effect_create_future_fleet = {
 		}
 	}
 	create_fleet = {
+		settings = {
+			can_change_composition = no
+			uses_naval_capacity = no
+		}
 		effect = {
 			set_owner = event_target:human_fallen_empires_future_country
 			while = {
@@ -660,6 +681,7 @@ human_fallen_empires_effect_create_future_fleet = {
 	}
 }
 
+# for tile
 human_fallen_empires_effect_set_science_deposit = {
 	random_list = {
 		10 = {
@@ -907,8 +929,8 @@ human_fallen_empires_effect_add_hyperlanes = {
 				distance = {
 					source = prev
 					type = euclidean
-					min_distance = 0
-					max_distance = 20
+					min_distance >= 0
+					max_distance <= 20
 					use_bypasses = no
 				}
 			}

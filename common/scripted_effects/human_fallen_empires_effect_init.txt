@@ -2,28 +2,118 @@
 
 # for default country, give tier tech
 human_fallen_empires_effect_init_give_tech_t1 = {
-	set_country_type = human_fallen_empires_placeholder_t1_tech
-	set_country_type = default
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_init_placeholder_t1_tech
+		}		
+		copy_techs_from = {
+			target = event_target:human_fallen_empires_init_placeholder_t1_tech
+			except = {
+			}
+		}
+		else = {
+			create_country = {
+				type = human_fallen_empires_placeholder_t1_tech
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = human_fallen_empires_init_placeholder_t1_tech
+				}
+			}
+			human_fallen_empires_effect_init_give_tech_t1 = yes
+		}
+	}
 }
 
 human_fallen_empires_effect_init_give_tech_t2 = {
-	set_country_type = human_fallen_empires_placeholder_t2_tech
-	set_country_type = default
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_init_placeholder_t2_tech
+		}		
+		copy_techs_from = {
+			target = event_target:human_fallen_empires_init_placeholder_t2_tech
+			except = {
+			}
+		}
+		else = {
+			create_country = {
+				type = human_fallen_empires_placeholder_t2_tech
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = human_fallen_empires_init_placeholder_t2_tech
+				}
+			}
+			human_fallen_empires_effect_init_give_tech_t2 = yes
+		}
+	}
 }
 
 human_fallen_empires_effect_init_give_tech_t3 = {
-	set_country_type = human_fallen_empires_placeholder_t3_tech
-	set_country_type = default
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_init_placeholder_t3_tech
+		}		
+		copy_techs_from = {
+			target = event_target:human_fallen_empires_init_placeholder_t3_tech
+			except = {
+			}
+		}
+		else = {
+			create_country = {
+				type = human_fallen_empires_placeholder_t3_tech
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = human_fallen_empires_init_placeholder_t3_tech
+				}
+			}
+			human_fallen_empires_effect_init_give_tech_t3 = yes
+		}
+	}
 }
 
 human_fallen_empires_effect_init_give_tech_t4 = {
-	set_country_type = human_fallen_empires_placeholder_t4_tech
-	set_country_type = default
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_init_placeholder_t4_tech
+		}		
+		copy_techs_from = {
+			target = event_target:human_fallen_empires_init_placeholder_t4_tech
+			except = {
+			}
+		}
+		else = {
+			create_country = {
+				type = human_fallen_empires_placeholder_t4_tech
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = human_fallen_empires_init_placeholder_t4_tech
+				}
+			}
+			human_fallen_empires_effect_init_give_tech_t4 = yes
+		}
+	}
 }
 
 human_fallen_empires_effect_init_give_tech_t5 = {
-	set_country_type = human_fallen_empires_placeholder_t5_tech
-	set_country_type = default
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_init_placeholder_t5_tech
+		}		
+		copy_techs_from = {
+			target = event_target:human_fallen_empires_init_placeholder_t5_tech
+			except = {
+			}
+		}
+		else = {
+			create_country = {
+				type = human_fallen_empires_placeholder_t5_tech
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = human_fallen_empires_init_placeholder_t5_tech
+				}
+			}
+			human_fallen_empires_effect_init_give_tech_t5 = yes
+		}
+	}
 }
 
 # for country make colony, need human_fallen_empires_init_target
@@ -81,13 +171,23 @@ human_fallen_empires_effect_init_make_colony = {
 
 human_fallen_empires_effect_init_develop_planet = {
 	human_fallen_empires_effect_init_clear_blockers = yes
+	# remove low tier buildings from capital
+	every_tile = {
+		limit = {
+			or = {
+				autobuild_trigger_has_any_regular_building = yes
+				autobuild_trigger_has_planet_capital = yes
+			}
+		}
+		remove_building = yes
+	}
 	# set buildings
 	if = {
 		limit = {
 			any_tile = {
 				or = {
 					autobuild_trigger_tile_has_energy_more_than_others = yes
-					has_any_resource = no
+					has_deposit = no
 				}
 				num_adjacent_tiles > 3
 			}
@@ -98,7 +198,6 @@ human_fallen_empires_effect_init_develop_planet = {
 					autobuild_trigger_tile_has_energy_more_than_others = yes
 					has_deposit = no
 				}
-				has_blocker = no
 				num_adjacent_tiles > 3
 			}
 			remove_blocker = yes
@@ -120,7 +219,7 @@ human_fallen_empires_effect_init_develop_planet = {
 	}
 	every_tile = {
 		limit = {
-			has_any_resource = yes
+			has_deposit = yes
 			has_building = no
 		}
 		if = {
@@ -176,7 +275,7 @@ human_fallen_empires_effect_init_set_pops = {
 	every_tile = {
 		limit = {
 			has_building = yes
-			has_pop = no
+			not = { exists = pop }
 		}
 		remove_blocker = yes
 		create_pop = {
@@ -197,15 +296,17 @@ human_fallen_empires_effect_init_set_capital = {
 			}
 		}
 		set_building = building_capital_3
-		if = {
-			limit = {
-				owner = {
-					has_technology = tech_colonial_centralization
+		else = {
+			if = {
+				limit = {
+					owner = {
+						has_technology = tech_colonial_centralization
+					}
 				}
-			}
-			set_building = building_capital_2
-			else = {
-				set_building = building_capital_1
+				set_building = building_capital_2
+				else = {
+					set_building = building_capital_1
+				}
 			}
 		}
 	}
@@ -449,7 +550,9 @@ human_fallen_empires_effect_init_set_minings_stations = {
 	every_system_within_border = {
 		every_system_planet = {
 			limit = {
-				not = { exists = owner }
+				not = {
+					exists = owner
+				}
 				has_orbital_station = no
 				or = {
 					has_deposit_for = shipclass_mining_station
