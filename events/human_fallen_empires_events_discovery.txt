@@ -1213,7 +1213,9 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires_discovery.151.contract_menu
 			event_target:human_fallen_empires_discovery_docking_planet.owner = {
-				has_country_flag = human_fallen_empires_attacked_by_pirate
+				any_relation = {
+					has_country_flag = human_fallen_empires_pirate_attack@prev
+				}
 			}
 		}
 		allow = {
@@ -1244,6 +1246,7 @@ country_event = {
 							exists = owner
 							owner = {
 								is_country_type = human_fallen_empires_pirate
+								has_country_flag = human_fallen_empires_pirate_attack@event_target:human_fallen_empires_discovery_docking_planet.owner
 							}
 						}
 					}
@@ -1252,14 +1255,6 @@ country_event = {
 							is_ship_class = shipclass_starbase
 						}
 						set_fleet_flag = human_fallen_empires_discovery_pirate_hunt_target@root
-					}
-					random_system_planet = {
-						limit = {
-							exists = owner
-							owner = {
-								is_country_type = human_fallen_empires_pirate
-							}
-						}
 						save_event_target_as = human_fallen_empires_discovery_pirate_hunt_target
 					}
 				}

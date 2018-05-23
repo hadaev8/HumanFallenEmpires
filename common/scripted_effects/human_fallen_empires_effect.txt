@@ -114,9 +114,9 @@ human_fallen_empires_effect_refugee_or_die = {
 				human_fallen_empires_effect_settle_pop = yes
 			}
 		}
-		else = {
-			kill_pop = yes
-		}
+	}
+	else = {
+		kill_pop = yes
 	}
 }
 
@@ -133,44 +133,42 @@ human_fallen_empires_effect_settle_pop = {
 		event_target:human_fallen_empires_settle_pop_target = {
 			human_fallen_empires_effect_refugee_or_die = yes
 		}
-		else = {
-			if = {
-				limit = {
-					any_owned_planet = {
-						habitability = {
-							who = event_target:human_fallen_empires_settle_pop_target
-							value > 0.4
-						}
-						human_fallen_empires_trigger_planet_valid_for_settle = yes
-					}
+	}
+	else_if = {
+		limit = {
+			any_owned_planet = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.4
 				}
-				random_owned_planet = {
-					limit = {
-						habitability = {
-							who = event_target:human_fallen_empires_settle_pop_target
-							value > 0.4
-						}
-						free_pop_tiles > 0
-					}
-					resettle_pop = {
-						pop = event_target:human_fallen_empires_settle_pop_target
-						planet = this
-					}
-					add_organic_sanctuaries = yes
-				}
-				else = {
-					random_owned_planet = {
-						limit = {
-							human_fallen_empires_trigger_planet_valid_for_settle = yes
-						}
-						resettle_pop = {
-							pop = event_target:human_fallen_empires_settle_pop_target
-							planet = this
-						}
-						add_organic_sanctuaries = yes
-					}
-				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
 			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.4
+				}
+				free_pop_tiles > 0
+			}
+			resettle_pop = {
+				pop = event_target:human_fallen_empires_settle_pop_target
+				planet = this
+			}
+			add_organic_sanctuaries = yes
+		}
+	}
+	else = {
+		random_owned_planet = {
+			limit = {
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			resettle_pop = {
+				pop = event_target:human_fallen_empires_settle_pop_target
+				planet = this
+			}
+			add_organic_sanctuaries = yes
 		}
 	}
 }
@@ -196,11 +194,11 @@ human_fallen_empires_effect_settle_pop_from_slavery_buff = {
 				modifier = pop_saved_from_slavery
 				days = 3650
 			}
-			else = {
-				add_modifier = {
-					modifier = human_fallen_empires_pirate_pop_purchased
-					days = 3650
-				}
+		}
+		else = {
+			add_modifier = {
+				modifier = human_fallen_empires_pirate_pop_purchased
+				days = 3650
 			}
 		}
 	}
@@ -304,11 +302,11 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 						event_target:human_fallen_empires_varelse_fleet = {
 							human_fallen_empires_effect_varelse_fleet_find_new_home = yes
 						}
-						else = {
-							event_target:human_fallen_empires_varelse_fleet.owner = {
-								set_faction_hostility = {
-									set_hostile = yes
-								}
+					}
+					else = {
+						event_target:human_fallen_empires_varelse_fleet.owner = {
+							set_faction_hostility = {
+								set_hostile = yes
 							}
 						}
 					}
@@ -508,76 +506,71 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 human_fallen_empires_effect_save_event_target = {
 	if = {
 		limit = {
+			exists = event_target:human_fallen_empires_event_target_5
+		}
+	}
+	else_if = {
+		limit = {
 			not = {
 				exists = event_target:human_fallen_empires_event_target_0
 			}
 		}
 		save_event_target_as = human_fallen_empires_event_target_0
-		else = {
-			if = {
-				limit = {
-					nor = {
-						is_same_value = event_target:human_fallen_empires_event_target_0
-						exists = event_target:human_fallen_empires_event_target_1
-					}
-				}
-				save_event_target_as = human_fallen_empires_event_target_1
-				else = {
-					if = {
-						limit = {
-							nor = {
-								is_same_value = event_target:human_fallen_empires_event_target_0
-								is_same_value = event_target:human_fallen_empires_event_target_1
-								exists = event_target:human_fallen_empires_event_target_2
-							}
-						}
-						save_event_target_as = human_fallen_empires_event_target_2
-						else = {
-							if = {
-								limit = {
-									nor = {
-										is_same_value = event_target:human_fallen_empires_event_target_0
-										is_same_value = event_target:human_fallen_empires_event_target_1
-										is_same_value = event_target:human_fallen_empires_event_target_2
-										exists = event_target:human_fallen_empires_event_target_3
-									}
-								}
-								save_event_target_as = human_fallen_empires_event_target_3
-								else = {
-									if = {
-										limit = {
-											nor = {
-												is_same_value = event_target:human_fallen_empires_event_target_0
-												is_same_value = event_target:human_fallen_empires_event_target_1
-												is_same_value = event_target:human_fallen_empires_event_target_2
-												is_same_value = event_target:human_fallen_empires_event_target_3
-												exists = event_target:human_fallen_empires_event_target_4
-											}
-										}
-										save_event_target_as = human_fallen_empires_event_target_4
-										else = {
-											if = {
-												limit = {
-													nor = {
-														is_same_value = event_target:human_fallen_empires_event_target_0
-														is_same_value = event_target:human_fallen_empires_event_target_1
-														is_same_value = event_target:human_fallen_empires_event_target_2
-														is_same_value = event_target:human_fallen_empires_event_target_3
-														is_same_value = event_target:human_fallen_empires_event_target_4
-														exists = event_target:human_fallen_empires_event_target_5
-													}
-												}
-												save_event_target_as = human_fallen_empires_event_target_5
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+	}
+	else_if = {
+		limit = {
+			nor = {
+				is_same_value = event_target:human_fallen_empires_event_target_0
+				exists = event_target:human_fallen_empires_event_target_1
 			}
 		}
+		save_event_target_as = human_fallen_empires_event_target_1
+	}
+	else_if = {
+		limit = {
+			nor = {
+				is_same_value = event_target:human_fallen_empires_event_target_0
+				is_same_value = event_target:human_fallen_empires_event_target_1
+				exists = event_target:human_fallen_empires_event_target_2
+			}
+		}
+		save_event_target_as = human_fallen_empires_event_target_2
+	}
+	else_if = {
+		limit = {
+			nor = {
+				is_same_value = event_target:human_fallen_empires_event_target_0
+				is_same_value = event_target:human_fallen_empires_event_target_1
+				is_same_value = event_target:human_fallen_empires_event_target_2
+				exists = event_target:human_fallen_empires_event_target_3
+			}
+		}
+		save_event_target_as = human_fallen_empires_event_target_3
+	}
+	else_if = {
+		limit = {
+			nor = {
+				is_same_value = event_target:human_fallen_empires_event_target_0
+				is_same_value = event_target:human_fallen_empires_event_target_1
+				is_same_value = event_target:human_fallen_empires_event_target_2
+				is_same_value = event_target:human_fallen_empires_event_target_3
+				exists = event_target:human_fallen_empires_event_target_4
+			}
+		}
+		save_event_target_as = human_fallen_empires_event_target_4
+	}
+	else_if = {
+		limit = {
+			nor = {
+				is_same_value = event_target:human_fallen_empires_event_target_0
+				is_same_value = event_target:human_fallen_empires_event_target_1
+				is_same_value = event_target:human_fallen_empires_event_target_2
+				is_same_value = event_target:human_fallen_empires_event_target_3
+				is_same_value = event_target:human_fallen_empires_event_target_4
+				exists = event_target:human_fallen_empires_event_target_5
+			}
+		}
+		save_event_target_as = human_fallen_empires_event_target_5
 	}
 }
 
@@ -791,12 +784,12 @@ human_fallen_empires_effect_create_starbase = {
 		starbase = {
 			set_owner = event_target:human_fallen_empires_starbase_owner
 		}
-		else = {
-			create_starbase = {
-				size = starbase_outpost
-				#module = shipyard
-				owner = event_target:human_fallen_empires_starbase_owner
-			}
+	}
+	else = {
+		create_starbase = {
+			size = starbase_outpost
+			#module = shipyard
+			owner = event_target:human_fallen_empires_starbase_owner
 		}
 	}
 }

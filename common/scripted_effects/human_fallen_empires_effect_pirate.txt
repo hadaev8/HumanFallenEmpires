@@ -35,21 +35,21 @@ human_fallen_empires_effect_pirate_init = {
 				human_fallen_empires_effect_pirate_init_base = yes
 			}
 		}
-		else = {
-			closest_system = {
-				max_steps = 30
+	}
+	else = {
+		closest_system = {
+			max_steps = 30
+			limit = {
+				human_fallen_empires_pirate_valid_base_system = yes
+			}
+			random_system_planet = {
 				limit = {
-					human_fallen_empires_pirate_valid_base_system = yes
+					human_fallen_empires_pirate_valid_base_planet = yes
 				}
-				random_system_planet = {
-					limit = {
-						human_fallen_empires_pirate_valid_base_planet = yes
-					}
-					# for vanilla localization
-					save_event_target_as = pirate_system
-					human_fallen_empires_effect_pirate_init_country = yes
-					human_fallen_empires_effect_pirate_init_base = yes
-				}
+				# for vanilla localization
+				save_event_target_as = pirate_system
+				human_fallen_empires_effect_pirate_init_country = yes
+				human_fallen_empires_effect_pirate_init_base = yes
 			}
 		}
 	}
@@ -85,6 +85,7 @@ human_fallen_empires_effect_pirate_init_base = {
 	}
 }
 
+
 human_fallen_empires_effect_pirate_init_country = {
 	create_country = {
 		name = random
@@ -119,32 +120,39 @@ human_fallen_empires_effect_pirate_init_country = {
 				modifier = human_fallen_empires_pirate_country_unkeep
 				days = -1
 			}
-			add_modifier = {
-				modifier = human_fallen_empires_pirate_country_boost
-				days = 3650
-			}
 			set_graphical_culture = human_fallen_empires_graphical_culture_pirate
 			add_minerals = 500
 			if = {
 				limit = {
-					years_passed > 20
+					years_passed > 60
 				}
-				add_minerals = 1000
+				add_minerals = 10000
+				add_modifier = {
+					modifier = human_fallen_empires_pirate_country_boost
+					days = 3650
+				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					years_passed > 40
 				}
-				add_minerals = 1000
+				add_minerals = 5000
+				add_modifier = {
+					modifier = human_fallen_empires_pirate_country_boost
+					days = 1825
+				}
 			}
-			if = {
+			else_if = {
 				limit = {
-					years_passed > 60
+					years_passed > 20
 				}
 				add_minerals = 1000
+				add_modifier = {
+					modifier = human_fallen_empires_pirate_country_boost
+					days = 365
+				}
 			}
 			add_energy = 600
-			#add_influence = 600
 			set_relation_flag = {
 				who = event_target:human_fallen_empires_pirate_target
 				flag = pirate_relation
@@ -156,16 +164,16 @@ human_fallen_empires_effect_pirate_init_country = {
 				country_remove_ethic = ethic_pacifist
 				country_add_ethic = ethic_militarist
 			}
-			if = {
+			else_if = {
 				limit = {
 					has_ethic = ethic_fanatic_pacifist
 				}
 				country_remove_ethic = ethic_fanatic_pacifist
 				country_add_ethic = ethic_fanatic_militarist
 			}
+			save_event_target_as = human_fallen_empires_pirate_clan
 			# for vanilla localization
 			save_event_target_as = pirate_band
-			save_event_target_as = human_fallen_empires_pirate_clan
 			every_country = {
 				limit = {
 					is_country_type = primitive
@@ -200,10 +208,11 @@ human_fallen_empires_effect_pirate_init_country = {
 				limit = {
 					leader_class = admiral
 				}
-				root = {
+				event_target:human_fallen_empires_pirate_clan = {
 					clone_leader = {
 						target = prev
 					}
+					log = "able to create admiral for pirate"
 				}
 				kill_leader = {
 					show_notification = no
@@ -230,76 +239,71 @@ human_fallen_empires_effect_save_slave_target = {
 	every_owned_pop = {
 		if = {
 			limit = {
+				exists = event_target:human_fallen_empires_slave_target_5
+			}
+		}
+		else_if = {
+			limit = {
 				not = {
 					exists = event_target:human_fallen_empires_slave_target_0
 				}
 			}
 			save_event_target_as = human_fallen_empires_slave_target_0
-			else = {
-				if = {
-					limit = {
-						nor = {
-							exists = event_target:human_fallen_empires_slave_target_1
-							is_exact_same_species = event_target:human_fallen_empires_slave_target_0
-						}
-					}
-					save_event_target_as = human_fallen_empires_slave_target_1
-					else = {
-						if = {
-							limit = {
-								nor = {
-									exists = event_target:human_fallen_empires_slave_target_2
-									is_exact_same_species = event_target:human_fallen_empires_slave_target_0
-									is_exact_same_species = event_target:human_fallen_empires_slave_target_1
-								}
-							}
-							save_event_target_as = human_fallen_empires_slave_target_2
-							else = {
-								if = {
-									limit = {
-										nor = {
-											exists = event_target:human_fallen_empires_slave_target_3
-											is_exact_same_species = event_target:human_fallen_empires_slave_target_0
-											is_exact_same_species = event_target:human_fallen_empires_slave_target_1
-											is_exact_same_species = event_target:human_fallen_empires_slave_target_2
-										}
-									}
-									save_event_target_as = human_fallen_empires_slave_target_3
-									else = {
-										if = {
-											limit = {
-												nor = {
-													exists = event_target:human_fallen_empires_slave_target_4
-													is_exact_same_species = event_target:human_fallen_empires_slave_target_0
-													is_exact_same_species = event_target:human_fallen_empires_slave_target_1
-													is_exact_same_species = event_target:human_fallen_empires_slave_target_2
-													is_exact_same_species = event_target:human_fallen_empires_slave_target_3
-												}
-											}
-											save_event_target_as = human_fallen_empires_slave_target_4
-											else = {
-												if = {
-													limit = {
-														nor = {
-															exists = event_target:human_fallen_empires_slave_target_5
-															is_exact_same_species = event_target:human_fallen_empires_slave_target_0
-															is_exact_same_species = event_target:human_fallen_empires_slave_target_1
-															is_exact_same_species = event_target:human_fallen_empires_slave_target_2
-															is_exact_same_species = event_target:human_fallen_empires_slave_target_3
-															is_exact_same_species = event_target:human_fallen_empires_slave_target_4
-														}
-													}
-													save_event_target_as = human_fallen_empires_slave_target_5
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+		}
+		else_if = {
+			limit = {
+				nor = {
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					exists = event_target:human_fallen_empires_slave_target_1
 				}
 			}
+			save_event_target_as = human_fallen_empires_slave_target_1
+		}
+		else_if = {
+			limit = {
+				nor = {
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					exists = event_target:human_fallen_empires_slave_target_2
+				}
+			}
+			save_event_target_as = human_fallen_empires_slave_target_2
+		}
+		else_if = {
+			limit = {
+				nor = {
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+					exists = event_target:human_fallen_empires_slave_target_3
+				}
+			}
+			save_event_target_as = human_fallen_empires_slave_target_3
+		}
+		else_if = {
+			limit = {
+				nor = {
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+					exists = event_target:human_fallen_empires_slave_target_4
+				}
+			}
+			save_event_target_as = human_fallen_empires_slave_target_4
+		}
+		else_if = {
+			limit = {
+				nor = {
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+					is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+					exists = event_target:human_fallen_empires_slave_target_5
+				}
+			}
+			save_event_target_as = human_fallen_empires_slave_target_5
 		}
 	}
 }
@@ -354,6 +358,40 @@ human_fallen_empires_effect_pirate_ravage_planet = {
 				counter = human_fallen_empires_chain_pirate_count_planet_ravaged
 				amount = 1
 			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_resource_reward = {
+	add_minerals = 90
+	add_energy = 10
+	add_physics_research = 5
+	add_society_research = 5
+	add_engineering_research = 5
+}
+
+human_fallen_empires_effect_pirate_attack_count_check = {
+	if = {
+		limit = {
+			check_variable = {
+				which = human_fallen_empires_pirate_attack_count
+				value > 10
+			}
+		}
+		set_variable = {
+			which = human_fallen_empires_pirate_attack_count
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_country_flag = human_fallen_empires_pirate_attack_count@prev
+			}
+			save_event_target_as = human_fallen_empires_pirate_country
+		}
+		country_event = {
+			id = human_fallen_empires_pirate.200
+			days = 1
+			random = 30
 		}
 	}
 }

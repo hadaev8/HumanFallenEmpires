@@ -48,90 +48,104 @@ human_fallen_empires_effect_create_vassal = {
 					set_controller = prev
 				}
 			}
-			else = {
-				create_country = {
-					name = random
-					authority = random
-					civics = random
-					released_by_country = root
-					released_from_country = event_target:WarInHeavenLoserFE
-					species = event_target:WarInHeavenLoserFE.species
-					ethos = root
-					flag = random
-					type = default
-					day_zero_contact = no
-					effect = {
-						set_timed_country_flag = {
-							flag = human_fallen_empires_liberated_country days = 1
-						}
-						establish_communications_no_message = root
-						#establish_communications_no_message = fromfromfrom
-						#establish_communications_no_message = parameter:planet.owner
-						establish_contact = {
-							who = root 
-							location = event_target:human_fallen_empires_planet
-						}
-						#establish_contact = { who = fromfromfrom location = parameter:planet }
-						#establish_contact = { who = parameter:planet.owner location = parameter:planet }
-						event_target:human_fallen_empires_planet = {
-							set_owner = prev
-							set_controller = prev
-							solar_system = {
-								every_system_planet = {
-									limit = {
-										exists = owner
-										owner = {
-											is_country = event_target:WarInHeavenLoserFE
-										}
+		}
+		else = {
+			create_country = {
+				name = random
+				authority = random
+				civics = random
+				released_by_country = root
+				released_from_country = event_target:WarInHeavenLoserFE
+				species = event_target:WarInHeavenLoserFE.species
+				ethos = root
+				flag = random
+				type = default
+				day_zero_contact = no
+				effect = {
+					set_timed_country_flag = {
+						flag = human_fallen_empires_liberated_country days = 1
+					}
+					establish_communications_no_message = root
+					#establish_communications_no_message = fromfromfrom
+					#establish_communications_no_message = parameter:planet.owner
+					establish_contact = {
+						who = root 
+						location = event_target:human_fallen_empires_planet
+					}
+					#establish_contact = { who = fromfromfrom location = parameter:planet }
+					#establish_contact = { who = parameter:planet.owner location = parameter:planet }
+					event_target:human_fallen_empires_planet = {
+						set_owner = prev
+						set_controller = prev
+						solar_system = {
+							every_system_planet = {
+								limit = {
+									exists = owner
+									owner = {
+										is_country = event_target:WarInHeavenLoserFE
 									}
-									set_owner = prevprevprev
-									set_controller = prevprevprev
 								}
+								set_owner = prevprevprev
+								set_controller = prevprevprev
 							}
+						}
+					}
+					if = {
+						limit = {
+							is_country_type = awakened_fallen_empire
 						}
 						if = {
 							limit = {
-								is_country_type = awakened_fallen_empire
+								is_xenophile = yes
 							}
-							if = {
-								limit = {
-									has_ethic = ethic_fanatic_spiritualist
-								}
-								set_subject_of = {
-									who = root
-									subject_type = dominion
-								}
-								else = {
-									if = {
-										limit = {
-											has_ethic = ethic_fanatic_xenophile
-										}
-										set_subject_of = {
-											who = root
-											subject_type = signatory
-										}
-									}
-								}
+							set_subject_of = {
+								who = root
+								subject_type = signatory
+							}	
+						}
+						else_if = {
+							limit = {
+								is_xenophobe = yes
 							}
-							else = {
-								if = {
-									limit = {
-										has_country_flag = human_fallen_empires_coalition_leader
-									}
-									set_subject_of = {
-										who = root
-										subject_type = human_fallen_empires_future_vassal
-									}
-									#country_remove_ethic = ethic_fanatic_militarist
-									#country_add_ethic = ethic_militarist
-									else = {
-										set_subject_of = {
-											who = root
-											subject_type = vassal
-										}
-									}
-								}
+							set_subject_of = {
+								who = root
+								subject_type = thrall
 							}
+						}
+						else_if = {
+							limit = {
+								is_spiritualist = yes
+							}
+							set_subject_of = {
+								who = root
+								subject_type = dominion
+							}
+						}
+						else_if = {
+							limit = { 
+								is_materialist = yes
+							}
+							set_subject_of = {
+								who = root
+								subject_type = satellite
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							has_country_flag = human_fallen_empires_coalition_leader
+						}
+						set_subject_of = {
+							who = root
+							subject_type = human_fallen_empires_future_vassal
+						}
+						#country_remove_ethic = ethic_fanatic_militarist
+						#country_add_ethic = ethic_militarist
+					}
+					else = {
+						set_subject_of = {
+							who = root
+							subject_type = vassal
 						}
 					}
 				}

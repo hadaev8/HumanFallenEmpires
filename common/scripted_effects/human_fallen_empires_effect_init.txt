@@ -11,16 +11,16 @@ human_fallen_empires_effect_init_give_tech_t1 = {
 			except = {
 			}
 		}
-		else = {
-			create_country = {
-				type = human_fallen_empires_placeholder_t1_tech
-				ignore_initial_colony_error = yes
-				effect = {
-					save_global_event_target_as = human_fallen_empires_init_placeholder_t1_tech
-				}
+	}
+	else = {
+		create_country = {
+			type = human_fallen_empires_placeholder_t1_tech
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = human_fallen_empires_init_placeholder_t1_tech
 			}
-			human_fallen_empires_effect_init_give_tech_t1 = yes
 		}
+		human_fallen_empires_effect_init_give_tech_t1 = yes
 	}
 }
 
@@ -34,16 +34,16 @@ human_fallen_empires_effect_init_give_tech_t2 = {
 			except = {
 			}
 		}
-		else = {
-			create_country = {
-				type = human_fallen_empires_placeholder_t2_tech
-				ignore_initial_colony_error = yes
-				effect = {
-					save_global_event_target_as = human_fallen_empires_init_placeholder_t2_tech
-				}
+	}
+	else = {
+		create_country = {
+			type = human_fallen_empires_placeholder_t2_tech
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = human_fallen_empires_init_placeholder_t2_tech
 			}
-			human_fallen_empires_effect_init_give_tech_t2 = yes
 		}
+		human_fallen_empires_effect_init_give_tech_t2 = yes
 	}
 }
 
@@ -57,16 +57,16 @@ human_fallen_empires_effect_init_give_tech_t3 = {
 			except = {
 			}
 		}
-		else = {
-			create_country = {
-				type = human_fallen_empires_placeholder_t3_tech
-				ignore_initial_colony_error = yes
-				effect = {
-					save_global_event_target_as = human_fallen_empires_init_placeholder_t3_tech
-				}
+	}
+	else = {
+		create_country = {
+			type = human_fallen_empires_placeholder_t3_tech
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = human_fallen_empires_init_placeholder_t3_tech
 			}
-			human_fallen_empires_effect_init_give_tech_t3 = yes
 		}
+		human_fallen_empires_effect_init_give_tech_t3 = yes
 	}
 }
 
@@ -80,16 +80,16 @@ human_fallen_empires_effect_init_give_tech_t4 = {
 			except = {
 			}
 		}
-		else = {
-			create_country = {
-				type = human_fallen_empires_placeholder_t4_tech
-				ignore_initial_colony_error = yes
-				effect = {
-					save_global_event_target_as = human_fallen_empires_init_placeholder_t4_tech
-				}
+	}
+	else = {
+		create_country = {
+			type = human_fallen_empires_placeholder_t4_tech
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = human_fallen_empires_init_placeholder_t4_tech
 			}
-			human_fallen_empires_effect_init_give_tech_t4 = yes
 		}
+		human_fallen_empires_effect_init_give_tech_t4 = yes
 	}
 }
 
@@ -103,16 +103,16 @@ human_fallen_empires_effect_init_give_tech_t5 = {
 			except = {
 			}
 		}
-		else = {
-			create_country = {
-				type = human_fallen_empires_placeholder_t5_tech
-				ignore_initial_colony_error = yes
-				effect = {
-					save_global_event_target_as = human_fallen_empires_init_placeholder_t5_tech
-				}
+	}
+	else = {
+		create_country = {
+			type = human_fallen_empires_placeholder_t5_tech
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = human_fallen_empires_init_placeholder_t5_tech
 			}
-			human_fallen_empires_effect_init_give_tech_t5 = yes
 		}
+		human_fallen_empires_effect_init_give_tech_t5 = yes
 	}
 }
 
@@ -128,9 +128,7 @@ human_fallen_empires_effect_init_make_colony = {
 							is_country = event_target:human_fallen_empires_init_target
 						}
 					}
-					not = {
-						exists = space_owner
-					}
+					has_presence = no
 				}
 				any_planet = {
 					habitability = {
@@ -139,14 +137,6 @@ human_fallen_empires_effect_init_make_colony = {
 					}
 					not = {
 						exists = owner
-					}
-				}
-				not = {
-					any_ship_in_system = {
-						exists = owner
-						owner = {
-							is_hostile = event_target:human_fallen_empires_init_target
-						}
 					}
 				}
 			}
@@ -160,9 +150,17 @@ human_fallen_empires_effect_init_make_colony = {
 						exists = owner
 					}
 				}
-				# need planet scope as root for autobuild triggers
-				planet_event = {
-					id = human_fallen_empires_init.105
+				create_colony = {
+					owner = event_target:human_fallen_empires_init_target
+					species = owner
+				}
+				if = {
+					limit = {
+						not = {
+							exists = owner
+						}
+					}
+					log = "owner not exists on [this.GetName]"
 				}
 			}
 		}
@@ -176,7 +174,7 @@ human_fallen_empires_effect_init_develop_planet = {
 		limit = {
 			or = {
 				autobuild_trigger_has_any_regular_building = yes
-				autobuild_trigger_has_planet_capital = yes
+				autobuild_trigger_has_planet_capital_or_shelter = yes
 			}
 		}
 		remove_building = yes
@@ -203,18 +201,18 @@ human_fallen_empires_effect_init_develop_planet = {
 			remove_blocker = yes
 			human_fallen_empires_effect_init_set_capital = yes
 		}
-		else = {
-			random_tile = {
-				limit = {
-					or = {
-						autobuild_trigger_tile_has_energy_more_than_others = yes
-						has_deposit = no
-					}
-					num_adjacent_tiles > 2
+	}
+	else = {
+		random_tile = {
+			limit = {
+				or = {
+					autobuild_trigger_tile_has_energy_more_than_others = yes
+					has_deposit = no
 				}
-				remove_blocker = yes
-				human_fallen_empires_effect_init_set_capital = yes
+				num_adjacent_tiles > 2
 			}
+			remove_blocker = yes
+			human_fallen_empires_effect_init_set_capital = yes
 		}
 	}
 	every_tile = {
@@ -228,19 +226,19 @@ human_fallen_empires_effect_init_develop_planet = {
 			}
 			human_fallen_empires_effect_init_set_lab = yes
 		}
-		if = {
+		else_if = {
 			limit = {
 				autobuild_trigger_tile_has_energy_more_than_others = yes
 			}
 			human_fallen_empires_effect_init_set_power_plant = yes
 		}
-		if = {
+		else_if = {
 			limit = {
 				autobuild_trigger_tile_has_minerals_more_than_others = yes
 			}
 			human_fallen_empires_effect_init_set_mine = yes
 		}
-		if = {
+		else_if = {
 			limit = {
 				autobuild_trigger_tile_has_food_more_than_others = yes
 			}
@@ -251,9 +249,9 @@ human_fallen_empires_effect_init_develop_planet = {
 					}
 				}
 				human_fallen_empires_effect_init_set_power_plant = yes
-				else = {
-					human_fallen_empires_effect_init_set_farm = yes
-				}
+			}
+			else = {
+				human_fallen_empires_effect_init_set_farm = yes
 			}
 		}
 	}
@@ -296,19 +294,17 @@ human_fallen_empires_effect_init_set_capital = {
 			}
 		}
 		set_building = building_capital_3
-		else = {
-			if = {
-				limit = {
-					owner = {
-						has_technology = tech_colonial_centralization
-					}
-				}
-				set_building = building_capital_2
-				else = {
-					set_building = building_capital_1
-				}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_technology = tech_colonial_centralization
 			}
 		}
+		set_building = building_capital_2
+	}
+	else = {
+		set_building = building_capital_1
 	}
 }
 
@@ -347,76 +343,72 @@ human_fallen_empires_effect_init_set_lab = {
 				}
 			}
 		}
-		else = {
-			if = {
-				limit = {
-					has_resource = society_research
-				}
-				owner = {
-					switch = {
-						trigger = has_technology
-						tech_biolab_3 = {
-							prev = {
-								if = {
-						 			limit = {
-						 				root = {
-						 					is_capital = yes
-						 				}
-						 			}
-									set_building = building_biolab_4
-									else = {
-										set_building = building_biolab_3
-									}
+	}
+	else_if = {
+		limit = {
+			has_resource = society_research
+		}
+		owner = {
+			switch = {
+				trigger = has_technology
+				tech_biolab_3 = {
+					prev = {
+						if = {
+							limit = {
+								root = {
+									is_capital = yes
 								}
 							}
-						}
-						tech_biolab_2 = {
-							prev = {
-								set_building = building_biolab_2
-							}
-						}
-						tech_biolab_1 = {
-							prev = {
-								set_building = building_biolab_1
+							set_building = building_biolab_4
+							else = {
+								set_building = building_biolab_3
 							}
 						}
 					}
 				}
-				else = {
-					if ={
-						limit = {
-							has_resource = engineering_research
-						}
-						owner = {
-							switch = {
-								trigger = has_technology
-								tech_engineering_lab_3 = {
-									prev = {
-										if = {
-						 					limit = {
-						 						root = {
-						 							is_capital = yes
-						 						}
-						 					}
-											set_building = building_engineering_facility_4
-											else = {
-												set_building = building_engineering_facility_3
-											}
-										}
-									}
-								}
-								tech_engineering_lab_2 = {
-									prev = {
-										set_building = building_engineering_facility_2
-									}
-								}
-								tech_engineering_lab_1 = {
-									prev = {
-										set_building = building_engineering_facility_1
-									}
+				tech_biolab_2 = {
+					prev = {
+						set_building = building_biolab_2
+					}
+				}
+				tech_biolab_1 = {
+					prev = {
+						set_building = building_biolab_1
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_resource = engineering_research
+		}
+		owner = {
+			switch = {
+				trigger = has_technology
+				tech_engineering_lab_3 = {
+					prev = {
+						if = {
+							limit = {
+								root = {
+									is_capital = yes
 								}
 							}
+							set_building = building_engineering_facility_4
+							else = {
+								set_building = building_engineering_facility_3
+							}
 						}
+					}
+				}
+				tech_engineering_lab_2 = {
+					prev = {
+						set_building = building_engineering_facility_2
+					}
+				}
+				tech_engineering_lab_1 = {
+					prev = {
+						set_building = building_engineering_facility_1
 					}
 				}
 			}
@@ -437,9 +429,9 @@ human_fallen_empires_effect_init_set_power_plant = {
 						 	}
 						}
 						set_building = building_power_plant_5
-						else = {
-							set_building = building_power_plant_4
-						}
+					}
+					else = {
+						set_building = building_power_plant_4
 					}
 				}
 			}
@@ -475,9 +467,9 @@ human_fallen_empires_effect_init_set_mine = {
 						 	}
 						}
 						set_building = building_mining_network_5
-						else = {
-							set_building = building_mining_network_4
-						}
+					}
+					else = {
+						set_building = building_mining_network_4
 					}
 				}
 			}
@@ -513,9 +505,9 @@ human_fallen_empires_effect_init_set_farm = {
 						 	}
 						}
 						set_building = building_hydroponics_farm_5
-						else = {
-							set_building = building_hydroponics_farm_4
-						}
+					}
+					else = {
+						set_building = building_hydroponics_farm_4
 					}
 				}
 			}
@@ -566,10 +558,10 @@ human_fallen_empires_effect_init_set_minings_stations = {
 				create_mining_station = {
 					owner = prevprevprev
 				}
-				else = {
-					create_research_station = {
-						owner = prevprevprev
-					}
+			}
+			else = {
+				create_research_station = {
+					owner = prevprevprev
 				}
 			}
 		}
@@ -582,6 +574,7 @@ human_fallen_empires_effect_init_expand_borders = {
 		every_neighbor_system = {
 			limit = {
 				not = { exists = owner }
+				has_presence = no
 			}
 			ignore_hyperlanes = no
 			human_fallen_empires_effect_create_starbase = yes

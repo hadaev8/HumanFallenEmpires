@@ -243,26 +243,26 @@ country_event = {
 						id = human_fallen_empires_pirate.101
 					}
 				}
-				else = {
-					random_country = {
-						limit = {
-							energy >= 500
-								   minerals >= 500
-								   is_country_type = default
-								   any_owned_planet = {
-								free_pop_tiles > 0
-							}
+			}
+			else = {
+				random_country = {
+					limit = {
+						energy >= 500
+							   minerals >= 500
+							   is_country_type = default
+							   any_owned_planet = {
+							free_pop_tiles > 0
 						}
-						root = {
-							save_event_target_as = human_fallen_empires_pirate_country
-							human_fallen_empires_effect_save_slave_target = yes
-						}
-						set_country_flag = human_fallen_empires_pirate.101.deal_offer
-						set_country_flag = human_fallen_empires_pirate.101.slave_menu
-						log = "try to sell slaves to [this.GetName]"
-						country_event = {
-							id = human_fallen_empires_pirate.101
-						}
+					}
+					root = {
+						save_event_target_as = human_fallen_empires_pirate_country
+						human_fallen_empires_effect_save_slave_target = yes
+					}
+					set_country_flag = human_fallen_empires_pirate.101.deal_offer
+					set_country_flag = human_fallen_empires_pirate.101.slave_menu
+					log = "try to sell slaves to [this.GetName]"
+					country_event = {
+						id = human_fallen_empires_pirate.101
 					}
 				}
 			}
@@ -580,6 +580,15 @@ fleet_event = {
 					duration = 200
 					random = 150
 				}
+				effect = {
+					id = human_fallen_empires_pirate.50.effect.2.1
+					root = {
+						clear_fleet_actions = this
+						fleet_event = {
+							id = human_fallen_empires_pirate.50
+						}
+					}
+				}
 			}
 		}
 	}
@@ -625,41 +634,23 @@ country_event = {
 				is_ship_size = research_station
 				is_ship_size = mining_station
 				is_ship_size = observation_station
-				is_ship_class = shipclass_starbase
+				#is_ship_class = shipclass_starbase
 			}
 		}
 	}
 
 	immediate = {
 		#log = "pirate kill station"
+		set_timed_country_flag = {
+			flag = human_fallen_empires_pirate_attack@from
+			days = 365
+		}
 		from = {
-			set_timed_country_flag = {
-				flag = human_fallen_empires_attacked_by_pirate
-				days = 365
-			}
 			change_variable = {
 				which = human_fallen_empires_pirate_attack_count
 				value = 1
 			}
-			if = {
-				limit = {
-					check_variable = {
-						which = human_fallen_empires_pirate_attack_count
-						value > 10
-					}
-				}
-				set_variable = {
-					which = human_fallen_empires_pirate_attack_count
-					value = 0
-				}
-				root = {
-					save_event_target_as = human_fallen_empires_pirate_country
-				}
-				country_event = {
-					id = human_fallen_empires_pirate.200
-					days = 1
-				}
-			}
+			human_fallen_empires_effect_pirate_attack_count_check = yes
 			if = {
 				limit = {
 					has_event_chain = human_fallen_empires_chain_pirate_count
@@ -671,11 +662,7 @@ country_event = {
 				}
 			}
 		}
-		add_minerals = 90
-		add_energy = 10
-		add_physics_research = 5
-		add_society_research = 5
-		add_engineering_research = 5
+		human_fallen_empires_effect_pirate_resource_reward = yes
 	}
 }
 
@@ -710,13 +697,13 @@ planet_event = {
 				}
 			}
 			human_fallen_empires_effect_pirate_ravage_planet = yes
-			else = {
-				random_list = {
-					10 = {
-					}
-					5 = {
-						human_fallen_empires_effect_pirate_ravage_planet = yes
-					}
+		}
+		else = {
+			random_list = {
+				10 = {
+				}
+				5 = {
+					human_fallen_empires_effect_pirate_ravage_planet = yes
 				}
 			}
 		}
@@ -819,13 +806,13 @@ ship_event = {
 						}
 					}
 					set_owner = from.owner
-					else = {
-						every_owned_pop = {
-							human_fallen_empires_effect_refugee_or_die = yes
-							# мб стоит таки сделать преоритет для того, кто уничтожает базу
-						}
-						human_fallen_empires_effect_convert_to_asteroid = yes
+				}
+				else = {
+					every_owned_pop = {
+						human_fallen_empires_effect_refugee_or_die = yes
+						# мб стоит таки сделать преоритет для того, кто уничтожает базу
 					}
+					human_fallen_empires_effect_convert_to_asteroid = yes
 				}
 			}
 		}
@@ -851,18 +838,18 @@ ship_event = {
 			fleet = {
 				set_owner = from.owner
 			}
-			if = {
-				limit = {
-					from.owner = {
-						not = {
-							is_country_type = human_fallen_empires_pirate
-						}
-					}
-				}
-				starbase = {
-					set_starbase_size = starbase_outpost
-				}
-			}
+			# if = {
+				# limit = {
+					# from.owner = {
+						# not = {
+							# is_country_type = human_fallen_empires_pirate
+						# }
+					# }
+				# }
+				# starbase = {
+					# set_starbase_size = starbase_outpost
+				# }
+			# }
 			else = {
 				fleet = {
 					destroy_fleet = this
@@ -921,6 +908,7 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = this
 		exists = owner
 		exists = from.owner
 		exists = fleet
@@ -931,29 +919,64 @@ ship_event = {
 	}
 
 	immediate = {
-		owner = {
+		from.owner = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_attacked_by_pirate
+				flag = human_fallen_empires_pirate_attack@root.owner
 				days = 365
 			}
 		}
 		from.owner = {
-			add_minerals = 90
-			add_energy = 10
-			add_physics_research = 5
-			add_society_research = 5
-			add_engineering_research = 5
+			human_fallen_empires_effect_pirate_resource_reward = yes
 		}
 		fleet = {
 			change_variable = {
 				which = human_fallen_empires_pirate_outpost_attack_count
 				value = 1
 			}
+			owner = {
+				change_variable = {
+					which = human_fallen_empires_pirate_attack_count
+					value = 1
+				}
+			}
 			if = {
 				limit = {
-					check_variable = {
-						which = human_fallen_empires_pirate_outpost_attack_count
-						value > 2
+					or = {
+						and = {
+							is_difficulty > 0
+							check_variable = {
+								which = human_fallen_empires_pirate_outpost_attack_count
+								value > 7
+							}
+						}
+						and = {
+							is_difficulty > 1
+							check_variable = {
+								which = human_fallen_empires_pirate_outpost_attack_count
+								value > 6
+							}
+						}
+						and = {
+							is_difficulty > 2
+							check_variable = {
+								which = human_fallen_empires_pirate_outpost_attack_count
+								value > 5
+							}
+						}
+						and = {
+							is_difficulty > 3
+							check_variable = {
+								which = human_fallen_empires_pirate_outpost_attack_count
+								value > 4
+							}
+						}
+						and = {
+							is_difficulty > 4
+							check_variable = {
+								which = human_fallen_empires_pirate_outpost_attack_count
+								value > 3
+							}
+						}
 					}
 				}
 				set_variable = {
@@ -962,6 +985,10 @@ ship_event = {
 				}
 				log = "pirate get starbase from [owner.GetName] at [solar_system.GetName]"
 				owner = {
+					change_variable = {
+						which = human_fallen_empires_pirate_attack_count
+						value = 2
+					}
 					if = {
 						limit = {
 							has_event_chain = human_fallen_empires_chain_pirate_count
@@ -1021,12 +1048,12 @@ country_event = {
 					amount = 1
 				}
 			}
-			else = {
-				add_event_chain_counter = {
-					event_chain = human_fallen_empires_chain_pirate_count
-					counter = human_fallen_empires_chain_pirate_count_killed_ship
-					amount = 1
-				}
+		}
+		else = {
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_chain_pirate_count
+				counter = human_fallen_empires_chain_pirate_count_killed_ship
+				amount = 1
 			}
 		}
 	}
@@ -1087,7 +1114,7 @@ country_event = {
 				has_country_flag = human_fallen_empires_pirate.101.raid_menu
 				human_fallen_empires_trigger_exists_any_event_target = no
 			}
-			# traid
+			# trade
 			success_text = {
 				text = human_fallen_empires_pirate.101.traid_menu.desc.0
 				has_country_flag = human_fallen_empires_pirate.101.traid_menu
@@ -1163,7 +1190,7 @@ country_event = {
 			# event to return hostile
 			country_event = {
 				id = human_fallen_empires_pirate.200
-				days = 1825
+				days = @human_fallen_empires_pirate_protect_days
 			}
 			event_target:human_fallen_empires_pirate_country = {
 				set_faction_hostility = {
@@ -1663,7 +1690,7 @@ country_event = {
 			}
 		}
 	}
-	# traid menu
+	# trade menu
 	option = {
 		name = human_fallen_empires_pirate.101.2
 		trigger = {
@@ -2916,7 +2943,7 @@ country_event = {
 		name = human_fallen_empires_pirate.200.0
 		allow = {
 			energy >= @human_fallen_empires_pirate_protect_cost
-				   minerals >= @human_fallen_empires_pirate_protect_cost
+			minerals >= @human_fallen_empires_pirate_protect_cost
 		}
 		add_minerals = @human_fallen_empires_pirate_protect_cost_minus
 		add_energy = @human_fallen_empires_pirate_protect_cost_minus
@@ -2939,7 +2966,7 @@ country_event = {
 			}
 			country_event = {
 				id = human_fallen_empires_pirate.200
-				days = 1825
+				days = @human_fallen_empires_pirate_protect_days
 			}
 			event_target:human_fallen_empires_pirate_country = {
 				add_opinion_modifier = {

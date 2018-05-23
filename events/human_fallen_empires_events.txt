@@ -1376,6 +1376,7 @@ ship_event = {
 	picture = GFX_evt_human_fallen_empires_station
 	show_sound = event_ship_thrusters
 	location = event_target:human_fallen_empires_varelse_fleet_location
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -1962,6 +1963,7 @@ planet_event = {
 	picture = GFX_evt_human_fallen_empires_building_thoth_temple_2
 	show_sound = event_mystic_reveal
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -2332,6 +2334,7 @@ planet_event = {
 	picture = GFX_evt_human_fallen_empires_weapon_storage
 	show_sound = event_mystic_reveal
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -2548,24 +2551,24 @@ country_event = {
 						}
 					}
 				}
-				else = {
-					create_fleet = {
-						name = "Science Ship"
-						effect = {
-							set_owner = root
-							create_ship = {
-								name = random
-								random_existing_design = science
-							}
-							set_location = root.capital_scope
-							set_leader = human_fallen_empires_scientist_wounded
-							leader = {
-								save_event_target_as = human_fallen_empires_205_scientist
-								unassign_leader = this
-							}
-							delete_fleet = this
-						}
+			}
+		}
+		else = {
+			create_fleet = {
+				name = "Science Ship"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = random
+						random_existing_design = science
 					}
+					set_location = root.capital_scope
+					set_leader = human_fallen_empires_scientist_wounded
+					leader = {
+						save_event_target_as = human_fallen_empires_205_scientist
+						unassign_leader = this
+					}
+					delete_fleet = this
 				}
 			}
 		}
@@ -2697,6 +2700,7 @@ planet_event = {
 	picture = GFX_evt_human_fallen_empires_ship_old
 	show_sound = event_mystic_reveal
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -3037,6 +3041,7 @@ planet_event = {
 	picture = GFX_evt_human_fallen_empires_satellite
 	show_sound = event_mystic_reveal
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -3447,26 +3452,26 @@ ship_event = {
 					root.owner = {
 						set_country_flag = human_fallen_empires_copernicus_has_owner
 					}
-					else = {
-						begin_event_chain = {
-							event_chain = human_fallen_empires_chain_copernicus
-							target = root.owner
-						}
-						if = {
-							limit = {
-								owner = {
-									is_country_type = primitive
-								}
-							}
+				}
+				else = {
+					begin_event_chain = {
+						event_chain = human_fallen_empires_chain_copernicus
+						target = root.owner
+					}
+					if = {
+						limit = {
 							owner = {
-								#establish_communications_no_message = root.owner
-								species = {
-									save_global_event_target_as = human_fallen_empires_copernicus_species
-								}
+								is_country_type = primitive
 							}
-							root.owner = {
-								set_country_flag = human_fallen_empires_copernicus_has_primitive
+						}
+						owner = {
+							#establish_communications_no_message = root.owner
+							species = {
+								save_global_event_target_as = human_fallen_empires_copernicus_species
 							}
+						}
+						root.owner = {
+							set_country_flag = human_fallen_empires_copernicus_has_primitive
 						}
 					}
 				}
@@ -3677,6 +3682,7 @@ country_event = {
 	desc = human_fallen_empires.359.desc
 	picture = GFX_evt_human_fallen_empires_copernicus
 	show_sound = event_scanner
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -4149,6 +4155,7 @@ ship_event = {
 	picture = GFX_evt_human_fallen_empires_black_hole
 	show_sound = event_scanner
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -4274,9 +4281,9 @@ country_event = {
 				}
 			}
 			human_fallen_empires_effect_xenophobe_attraction_middle = yes
-			else = {
-				human_fallen_empires_effect_xenophile_attraction_middle = yes
-			}
+		}
+		else = {
+			human_fallen_empires_effect_xenophile_attraction_middle = yes
 		}
 		if = {
 			limit = {
@@ -4293,93 +4300,87 @@ country_event = {
 					tech = tech_psionic_theory
 					progress = 0.5
 				}
-				else = {
-					add_research_option = tech_psionic_theory
+			}
+			else = {
+				add_research_option = tech_psionic_theory
+			}
+		}
+		else_if = {
+			limit = {
+				is_spiritualist = no
+				not = {
+					has_technology = tech_sapient_ai
 				}
 			}
 			if = {
 				limit = {
-					is_spiritualist = no
-					not = {
-						has_technology = tech_sapient_ai
-					}
+					has_tech_option = tech_sapient_ai
 				}
-				if = {
-					limit = {
-						has_tech_option = tech_sapient_ai
-					}
-					add_tech_progress = {
-						tech = tech_sapient_ai
-						progress = 0.5
-					}
-					else = {
-						add_research_option = tech_sapient_ai
-					}
+				add_tech_progress = {
+					tech = tech_sapient_ai
+					progress = 0.5
 				}
-				else = {
-					if = {
-						limit = {
-							is_spiritualist = no
-							not = {
-								has_technology = tech_synthetic_workers
-							}
-						}
-						if = {
-							limit = {
-								has_tech_option = tech_synthetic_workers
-							}
-							add_tech_progress = {
-								tech = tech_synthetic_workers
-								progress = 0.5
-							}
-							else = {
-								add_research_option = tech_synthetic_workers
-							}
-						}
-						else = {
-							if = {
-								limit = {
-									not = {
-										has_technology = tech_epigenetic_triggers
-									}
-								}
-								if = {
-									limit = {
-										has_tech_option = tech_epigenetic_triggers
-									}
-									add_tech_progress = {
-										tech = tech_epigenetic_triggers
-										progress = 0.5
-									}
-									else = {
-										add_research_option = tech_epigenetic_triggers
-									}
-								}
-								else = {
-									if = {
-										limit = {
-											not = {
-												has_technology = tech_gene_tailoring
-											}
-										}
-										if = {
-											limit = {
-												has_tech_option = tech_gene_tailoring
-											}
-											add_tech_progress = {
-												tech = tech_gene_tailoring
-												progress = 0.5
-											}
-											else = {
-												add_research_option = tech_gene_tailoring
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+			}
+			else = {
+				add_research_option = tech_sapient_ai
+			}
+		}
+		else_if = {
+			limit = {
+				is_spiritualist = no
+				not = {
+					has_technology = tech_synthetic_workers
 				}
+			}
+			if = {
+				limit = {
+					has_tech_option = tech_synthetic_workers
+				}
+				add_tech_progress = {
+					tech = tech_synthetic_workers
+					progress = 0.5
+				}
+			}
+			else = {
+				add_research_option = tech_synthetic_workers
+			}
+		}
+		else_if = {
+			limit = {
+				not = {
+					has_technology = tech_epigenetic_triggers
+				}
+			}
+			if = {
+				limit = {
+					has_tech_option = tech_epigenetic_triggers
+				}
+				add_tech_progress = {
+					tech = tech_epigenetic_triggers
+					progress = 0.5
+				}
+			}
+			else = {
+				add_research_option = tech_epigenetic_triggers
+			}
+		}
+		else_if = {
+			limit = {
+				not = {
+					has_technology = tech_gene_tailoring
+				}
+			}
+			if = {
+				limit = {
+					has_tech_option = tech_gene_tailoring
+				}
+				add_tech_progress = {
+					tech = tech_gene_tailoring
+					progress = 0.5
+				}
+			}
+			else = {
+				add_research_option = tech_gene_tailoring
 			}
 		}
 		end_event_chain = human_fallen_empires_chain_ahet_home
@@ -4572,22 +4573,22 @@ country_event = {
 						}
 					}
 				}
-				else = {
-					root = {
-						# branch 2
-						random_list = {
-							# attempt failed
-							10 = {
-								country_event = {
-									id = human_fallen_empires.554
-								}
+			}
+			else = {
+				root = {
+					# branch 2
+					random_list = {
+						# attempt failed
+						10 = {
+							country_event = {
+								id = human_fallen_empires.554
 							}
-							# main event
-							10 = {
-								capital_scope = {
-									planet_event = {
-										id = human_fallen_empires.555
-									}
+						}
+						# main event
+						10 = {
+							capital_scope = {
+								planet_event = {
+									id = human_fallen_empires.555
 								}
 							}
 						}
@@ -5028,6 +5029,7 @@ ship_event = {
 	picture = GFX_evt_human_fallen_empires_thoth
 	show_sound = event_ship_thrusters
 	location = root
+	trackable = yes
 	is_triggered_only = yes
 
 	trigger = {
@@ -6365,98 +6367,6 @@ country_event = {
 		destroy_country = yes
 	}
 }
-
-# joke event
-country_event = {
-	id = human_fallen_empires.4999
-	diplomatic = yes
-	is_triggered_only = yes
-	title = TRANSMISSION
-	desc = {
-		trigger = {
-			fail_text = {
-				text = human_fallen_empires.4999.desc.0
-				has_country_flag = human_fallen_empires.4999.step0
-			}
-			success_text = {
-				text = human_fallen_empires.4999.desc.1
-				has_country_flag = human_fallen_empires.4999.step0
-			}
-		}
-	}
-
-	picture_event_data = {
-		portrait = event_target:human_fallen_empires_4999_target
-		planet_background = event_target:human_fallen_empires_4999_target
-		graphical_culture = event_target:human_fallen_empires_4999_target
-		city_level = event_target:human_fallen_empires_4999_target
-		room = event_target:human_fallen_empires_4999_target
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				not = {
-					exists = event_target:human_fallen_empires_4999_target
-				}
-			}
-			if = {
-				limit = {
-					any_country = {
-						is_species_class = HUM
-					}
-				}
-				random_country = {
-					limit = {
-						is_species_class = HUM
-					}
-					save_event_target_as = human_fallen_empires_4999_target
-				}
-				else = {
-					random_country = {
-						save_event_target_as = human_fallen_empires_4999_target
-					}
-				}
-			}
-			establish_communications_no_message = event_target:human_fallen_empires_4999_target
-		}
-	}
-
-	option = {
-		name = human_fallen_empires.4999.0.0
-		trigger = {
-			not = {
-				has_country_flag = human_fallen_empires.4999.step0
-			}
-		}
-		hidden_effect = {
-			set_country_flag = human_fallen_empires.4999.step0
-			country_event = {
-				id = human_fallen_empires.4999
-			}
-		}
-	}
-	option = {
-		name = human_fallen_empires.4999.1.0
-		trigger = {
-			has_country_flag = human_fallen_empires.4999.step0
-		}
-	}
-	option = {
-		name = human_fallen_empires.4999.1.1
-		trigger = {
-			has_country_flag = human_fallen_empires.4999.step0
-		}
-	}
-	option = {
-		name = human_fallen_empires.4999.1.2
-		custom_tooltip = human_fallen_empires.4999.1.2.tooltip
-		trigger = {
-			has_country_flag = human_fallen_empires.4999.step0
-		}
-	}
-}
-
 
 ### Kad Republic section
 
