@@ -183,21 +183,6 @@ country_event = {
 				id = human_fallen_empires_pirate.50
 			}
 		}
-		# kick buildings
-		# every_owned_planet = {
-		# 	limit = {
-		# 		free_building_tiles > 0
-		# 	}
-		# 	every_tile = {
-		# 		limit = {
-		# 			exists = pop
-		# 			not = {
-		# 				has_building = human_fallen_empires_pirate_slave_pit
-		# 			}
-		# 		}
-		# 		add_building_construction = human_fallen_empires_pirate_slave_pit
-		# 	}
-		# }
 		# sell slaves
 		if = {
 			limit = {
@@ -211,6 +196,7 @@ country_event = {
 					any_country = {
 						not = {
 							is_hostile = root
+							has_country_flag = human_fallen_empires_pirate_offer_deal@root
 						}
 						energy >= 500
 						minerals >= 500
@@ -224,6 +210,7 @@ country_event = {
 					limit = {
 						not = {
 							is_hostile = root
+							has_country_flag = human_fallen_empires_pirate_offer_deal@root
 						}
 						energy >= 500
 						minerals >= 500
@@ -239,6 +226,10 @@ country_event = {
 					set_country_flag = human_fallen_empires_pirate.101.deal_offer
 					set_country_flag = human_fallen_empires_pirate.101.slave_menu
 					log = "try to sell slaves to [this.GetName]"
+					set_timed_country_flag = {
+						flag = human_fallen_empires_pirate_offer_deal@root
+						days = 1825
+					}
 					country_event = {
 						id = human_fallen_empires_pirate.101
 					}
@@ -247,10 +238,13 @@ country_event = {
 			else = {
 				random_country = {
 					limit = {
+						not = {
+							has_country_flag = human_fallen_empires_pirate_offer_deal@root
+						}
 						energy >= 500
-							   minerals >= 500
-							   is_country_type = default
-							   any_owned_planet = {
+						minerals >= 500
+						is_country_type = default
+						any_owned_planet = {
 							free_pop_tiles > 0
 						}
 					}
@@ -261,6 +255,10 @@ country_event = {
 					set_country_flag = human_fallen_empires_pirate.101.deal_offer
 					set_country_flag = human_fallen_empires_pirate.101.slave_menu
 					log = "try to sell slaves to [this.GetName]"
+					set_timed_country_flag = {
+						flag = human_fallen_empires_pirate_offer_deal@root
+						days = 1825
+					}
 					country_event = {
 						id = human_fallen_empires_pirate.101
 					}
@@ -274,8 +272,9 @@ country_event = {
 			}
 			random_country = {
 				limit = {
-					not = {
+					nor = {
 						is_hostile = root
+						has_country_flag = human_fallen_empires_pirate_offer_deal@root
 					}
 					minerals >= 1000
 					energy < 10000
@@ -287,6 +286,10 @@ country_event = {
 				set_country_flag = human_fallen_empires_pirate.101.deal_offer
 				set_country_flag = human_fallen_empires_pirate.101.traid_menu
 				log = "try to sell energy to [this.GetName]"
+				set_timed_country_flag = {
+					flag = human_fallen_empires_pirate_offer_deal@root
+					days = 1825
+				}
 				country_event = {
 					id = human_fallen_empires_pirate.101
 				}
@@ -301,7 +304,15 @@ country_event = {
 					category = fleet
 					value < equivalent
 				}
-				is_neighbor_of = root
+				or = {
+					is_neighbor_of = root
+					any_system_within_border = {
+						distance_to_empire = {
+							who = root
+							distance <= 20
+						}
+					}
+				}
 				# добавить условие на 5 прыжков между границами
 				not = {
 					has_opinion_modifier = {
@@ -473,8 +484,9 @@ fleet_event = {
 							}
 						}
 						human_fallen_empires_pirate_valid_target_system = yes
+						human_fallen_empires_pirate_valid_target_system_prior = yes
 						any_planet = {
-							human_fallen_empires_pirate_valid_target_planet_prior = yes
+							human_fallen_empires_pirate_valid_target_planet = yes
 						}
 					}
 					found_system = {
@@ -489,7 +501,6 @@ fleet_event = {
 										}
 									}
 									clear_fleet_actions = this
-									#log = "pirate fleet stop operation due low hp"
 								}
 							}
 						}
@@ -548,8 +559,8 @@ fleet_event = {
 							root = {
 								has_hp_percentage > 0.9
 							}
-							human_fallen_empires_pirate_valid_target_planet = yes
 							not = { exists = owner }
+							human_fallen_empires_pirate_valid_target_planet = yes							
 						}
 						found_planet = {
 							orbit_planet = this
@@ -562,8 +573,8 @@ fleet_event = {
 						root = {
 							has_hp_percentage > 0.9
 						}
-						human_fallen_empires_pirate_valid_target_planet = yes
 						exists = owner
+						human_fallen_empires_pirate_valid_target_planet = yes
 					}
 					found_planet = {
 						orbit_planet = this
@@ -583,7 +594,6 @@ fleet_event = {
 				effect = {
 					id = human_fallen_empires_pirate.50.effect.2.1
 					root = {
-						clear_fleet_actions = this
 						fleet_event = {
 							id = human_fallen_empires_pirate.50
 						}
@@ -792,7 +802,7 @@ ship_event = {
 		solar_system = {
 			every_system_planet = {
 				limit = {
-					exists = owner
+					is_owned_by = root.owner
 				}
 				if = {
 					limit = {
@@ -850,10 +860,10 @@ ship_event = {
 					# set_starbase_size = starbase_outpost
 				# }
 			# }
-			else = {
-				fleet = {
-					destroy_fleet = this
-				}
+		}
+		else = {
+			fleet = {
+				destroy_fleet = this
 			}
 		}
 	}
@@ -882,10 +892,10 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		or = {
-			is_country_type = human_fallen_empires_pirate
-		 	is_country_type = default
-		}
+		# or = {
+			# is_country_type = human_fallen_empires_pirate
+		 	# is_country_type = default
+		# }
 		any_country = {
 			is_country_type = human_fallen_empires_pirate
 			not = {
@@ -912,6 +922,7 @@ ship_event = {
 		exists = owner
 		exists = from.owner
 		exists = fleet
+		exists = solar_system
 		from.owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
@@ -938,10 +949,15 @@ ship_event = {
 					which = human_fallen_empires_pirate_attack_count
 					value = 1
 				}
+				human_fallen_empires_effect_pirate_attack_count_check = yes
 			}
 			if = {
 				limit = {
 					or = {
+						check_variable = {
+							which = human_fallen_empires_pirate_outpost_attack_count
+							value > 8
+						}
 						and = {
 							is_difficulty > 0
 							check_variable = {
@@ -989,6 +1005,7 @@ ship_event = {
 						which = human_fallen_empires_pirate_attack_count
 						value = 2
 					}
+					human_fallen_empires_effect_pirate_attack_count_check = yes
 					if = {
 						limit = {
 							has_event_chain = human_fallen_empires_chain_pirate_count
@@ -1000,7 +1017,16 @@ ship_event = {
 						}
 					}
 				}
-				set_owner = from.owner
+				solar_system = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = prevprev.owner
+						}
+						log = "pirate get planet from [owner.GetName]"
+						set_owner = from.owner
+					}
+				}
+				set_owner = from.owner						
 			}
 		}
 	}
