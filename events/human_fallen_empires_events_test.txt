@@ -178,55 +178,6 @@ country_event = {
 	}
 }
 
-# country_event = {
-	# id = human_fallen_empires_test.9
-	# title = human_fallen_emires_test_string_0
-	# desc = human_fallen_emires_test_string_1
-	# picture = GFX_evt_alien_city
-	# is_triggered_only = yes
-
-	# immediate = {
-		# set_name = human_fallen_emires_test_string_0
-		# capital_scope = {
-			# set_name = human_fallen_emires_test_string_1
-			# create_fleet = {
-				# name = human_fallen_emires_test_string_2
-				# effect = {
-					# set_owner = root
-					# create_ship = {
-						# name = "NAME_00110001"
-						# design = "NAME_Beta"
-						# graphical_culture = "fallen_empire_01"
-					# }
-					# set_location = prev
-				# }
-			# }
-		# }
-	# }
-
-	# option = {
-		# name = human_fallen_emires_test_string_2
-	# }
-# }
-
-# country_event = {
-# 	id = human_fallen_empires_test.10
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	immediate = {
-# 		if = {
-# 			limit = {
-# 				ruler = {
-# 					has_mandate = human_fallen_empires_agenda_discovery_hawks_faction
-# 				}
-# 			}
-# 			add_minerals = 10
-# 		}
-# 	}
-# }
-
-
 country_event = {
 	id = human_fallen_empires_test.11
 	hide_window = yes
@@ -258,24 +209,77 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		log = "0"
-		if = {
+		every_system = {
+			set_timed_star_flag = {
+				flag = human_fallen_empires_test_star_flag
+				days = 10
+			}
+		}
+		set_spawn_system_batch = begin
+		no_scope = {
+			# spawn_system = {
+				# min_distance >= 320
+				# max_distance <= 321
+				# min_orientation_angle = 330
+				# max_orientation_angle = 330.1
+				# initializer = human_fallen_empires_initializer_test_0
+			# }
+			human_fallen_empires_effect_test_1 = yes
+		}
+		every_system = {
 			limit = {
-				always = no
+				not = {
+					has_star_flag = human_fallen_empires_test_star_flag
+				}
 			}
-			if = {
+			human_fallen_empires_effect_add_hyperlanes = yes
+		}
+		# event_target:human_fallen_empires_initializer_test_0 = {
+			# human_fallen_empires_effect_test_0 = yes
+		# }
+		# every_system = {
+			# limit = {
+				# has_star_flag = human_fallen_empires_test_star_flag
+			# }
+			# every_system = {
+				# limit = {
+					# not = {
+						# has_star_flag = human_fallen_empires_test_star_flag
+					# }
+					# has_hyperlane_to = prev
+				# }
+				# remove_hyperlane = {
+					# from = this
+					# to = prev
+				# }
+			# }
+		# }
+		every_system = {
+			limit = {
+				not = {
+					has_star_flag = human_fallen_empires_test_star_flag
+				}
+			}
+			every_system = {
 				limit = {
-					always = yes
+					has_hyperlane_to = prev
+					not = {
+						has_star_flag = human_fallen_empires_test_star_flag
+					}
+					distance = {
+						source = prev
+						min_distance >= 100
+						type = euclidean
+						#uses_bypass = no
+					}
 				}
-				log = "1"
-				else = {
-					log = "2"
+				log = "removed [prev.GetName] [this.GetName]"
+				remove_hyperlane = {
+					from = this
+					to = prev
 				}
 			}
 		}
-		else = {
-			log = "3"
-		}
-		log = "4"
+		set_spawn_system_batch = end
 	}
 }
