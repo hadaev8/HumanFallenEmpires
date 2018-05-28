@@ -25,12 +25,13 @@ human_fallen_empires_effect_refugee_or_die = {
 			}
 			owner = {
 				any_relation = {
+					num_owned_planets > 0
 					#is_country_type = default
 					not = {
 						has_policy_flag = refugees_not_allowed
 					}
 					event_target:human_fallen_empires_refugee_pop_target = {
-						OR = {
+						or = {
 							has_citizenship_type = {
 								type = citizenship_full
 								country = prev
@@ -39,14 +40,20 @@ human_fallen_empires_effect_refugee_or_die = {
 								type = citizenship_caste_system
 								country = prev
 							}
-							AND = {
-								has_citizenship_type = {
-									type = citizenship_limited
-									country = prev
-								}
-								has_citizenship_type = {
-									type = citizenship_caste_system_limited
-									country = prev
+							has_citizenship_type = {
+								type = citizenship_organic_trophy
+								country = prev
+							}							
+							and = {
+								or = {
+									has_citizenship_type = {
+										type = citizenship_limited
+										country = prev
+									}
+									has_citizenship_type = {
+										type = citizenship_caste_system_limited
+										country = prev
+									}
 								}
 								prev = {
 									has_policy_flag = refugees_allowed
@@ -73,12 +80,13 @@ human_fallen_empires_effect_refugee_or_die = {
 		owner = {
 			random_relation = {
 				limit = {
+					num_owned_planets > 0
 					#is_country_type = default
 					not = {
 						has_policy_flag = refugees_not_allowed
 					}
 					event_target:human_fallen_empires_refugee_pop_target = {
-						OR = {
+						or = {
 							has_citizenship_type = {
 								type = citizenship_full
 								country = prev
@@ -87,14 +95,20 @@ human_fallen_empires_effect_refugee_or_die = {
 								type = citizenship_caste_system
 								country = prev
 							}
-							AND = {
-								has_citizenship_type = {
-									type = citizenship_limited
-									country = prev
-								}
-								has_citizenship_type = {
-									type = citizenship_caste_system_limited
-									country = prev
+							has_citizenship_type = {
+								type = citizenship_organic_trophy
+								country = prev
+							}							
+							and = {
+								or = {
+									has_citizenship_type = {
+										type = citizenship_limited
+										country = prev
+									}
+									has_citizenship_type = {
+										type = citizenship_caste_system_limited
+										country = prev
+									}
 								}
 								prev = {
 									has_policy_flag = refugees_allowed
@@ -150,7 +164,7 @@ human_fallen_empires_effect_settle_pop = {
 					who = event_target:human_fallen_empires_settle_pop_target
 					value > 0.4
 				}
-				free_pop_tiles > 0
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
 			}
 			resettle_pop = {
 				pop = event_target:human_fallen_empires_settle_pop_target
@@ -178,15 +192,18 @@ human_fallen_empires_effect_settle_pop_from_slavery_buff = {
 	event_target:human_fallen_empires_settle_pop_target = {
 		if = {
 			limit = {
-				or = {
-					is_same_species = owner
+				nor = {
 					has_citizenship_type = {
 						country = owner
-						type = citizenship_full
+						type = citizenship_slavery
 					}
 					has_citizenship_type = {
 						country = owner
-						type = citizenship_limited
+						type = citizenship_purge
+					}
+					has_citizenship_type = {
+						country = owner
+						type = citizenship_purge_machine
 					}
 				}
 			}
@@ -499,7 +516,7 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 			}
 		}
 	}
-	human_fallen_empires_effect_create_starbase_outpost_from_planet = yes
+	human_fallen_empires_effect_create_starbase_starport_from_planet = yes
 }
 
 # for country return 6 event targets
@@ -675,32 +692,154 @@ human_fallen_empires_effect_create_future_fleet = {
 }
 
 # for tile
+human_fallen_empires_effect_set_random_deposit = {
+	random_list = {
+		30 = {
+			human_fallen_empires_effect_set_science_deposit = yes
+		}
+		10 = {
+			human_fallen_empires_effect_set_energy_deposit = yes
+		}
+		10 = {
+			human_fallen_empires_effect_set_mineral_deposit = yes
+		}
+	}
+}
+
 human_fallen_empires_effect_set_science_deposit = {
+	random_list = {
+		10 = {
+			human_fallen_empires_effect_set_physics_deposit = yes
+		}
+		10 = {
+			human_fallen_empires_effect_set_society_deposit = yes
+		}
+		10 = {
+			human_fallen_empires_effect_set_engineering_deposit = yes
+		}
+	}
+}
+
+human_fallen_empires_effect_set_energy_deposit = {
+	random_list = {
+		10 = {
+			set_deposit = d_energy_deposit
+		}
+		10 = {
+			set_deposit = d_rich_energy_deposit
+		}
+		10 = {
+			set_deposit = d_vast_energy_deposit
+		}
+		10 = {
+			set_deposit = d_immense_energy_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_mineral_deposit = {
+	random_list = {
+		10 = {
+			set_deposit = d_mineral_deposit
+		}
+		10 = {
+			set_deposit = d_rich_mineral_deposit
+		}
+		10 = {
+			set_deposit = d_vast_mineral_deposit
+		}
+		10 = {
+			set_deposit = d_immense_mineral_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_food_deposit = {
+	random_list = {
+		10 = {
+			set_deposit = d_farmland_deposit
+		}
+		10 = {
+			set_deposit = d_rich_farmland_deposit
+		}
+		10 = {
+			set_deposit = d_vast_farmland_deposit
+		}
+		10 = {
+			set_deposit = d_immense_farmland_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_physics_deposit = {
 	random_list = {
 		10 = {
 			set_deposit = d_physics_deposit
 		}
 		10 = {
+			set_deposit = d_rich_physics_deposit
+		}
+		10 = {
+			set_deposit = d_vast_physics_deposit
+		}
+		10 = {
+			set_deposit = d_immense_physics_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_society_deposit = {
+	random_list = {
+		10 = {
 			set_deposit = d_society_deposit
 		}
 		10 = {
+			set_deposit = d_rich_society_deposit
+		}
+		10 = {
+			set_deposit = d_vast_society_deposit
+		}
+		10 = {
+			set_deposit = d_immense_society_deposit
+		}
+	}
+}
+
+human_fallen_empires_effect_set_engineering_deposit = {
+	random_list = {
+		10 = {
 			set_deposit = d_engineering_deposit
+		}
+		10 = {
+			set_deposit = d_rich_engineering_deposit
+		}
+		10 = {
+			set_deposit = d_vast_engineering_deposit
+		}
+		10 = {
+			set_deposit = d_immense_engineering_deposit
 		}
 	}
 }
 
 human_fallen_empires_effect_set_memorial_tile = {
 	random_list = {
-		30 = {
+		20 = {
 		}
-		10 = {
+		5 = {
 			set_blocker = tb_radioactive_wasteland
 		}
 		10 = {
 			set_blocker = tb_city_ruins
 		}
 		10 = {
-			set_blocker = tb_bomb_crater
+			set_blocker = tb_bombarded_land
+		}
+		10 = {
+			set_blocker = tb_battlefield_debris
+		}
+		2 = {
+			set_blocker = tb_ancient_ruins
 		}
 		1 = {
 			set_building = building_dark_matter_power_plant
@@ -714,14 +853,8 @@ human_fallen_empires_effect_set_memorial_tile = {
 		1 = {
 			set_building = building_ancient_archives
 		}
-		1 = {
-			set_deposit = d_mineral_deposit
-		}
-		1 = {
-			set_deposit = d_energy_deposit
-		}
-		3 = {
-			human_fallen_empires_effect_set_science_deposit = yes
+		20 = {
+			human_fallen_empires_effect_set_random_deposit = yes
 		}
 	}
 }
