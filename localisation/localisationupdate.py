@@ -19,6 +19,7 @@ for loc_index in loc_indexes:
     if os.path.exists(out_file):
         os.remove(out_file)
     with open(out_file, 'a', encoding='utf-8') as f:
+        f.write(u'\uFEFF')
         f.write(loc_rows[loc_index] + '\n')
         for i, j in enumerate(loc):
             if loc_keys[i] != '':
