@@ -5,7 +5,37 @@ namespace = human_fallen_empires_pirate
 country_event = {
 	id = human_fallen_empires_pirate.1
 	title = pirate.1.name
-	picture = GFX_evt_human_fallen_empires_pirate
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_0
+		}
+		picture = GFX_evt_human_fallen_empires_pirate
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_1
+		}
+		picture = GFX_evt_pirate_armada
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_2
+		}
+		picture = GFX_evt_smugglers_in_bar
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_3
+		}
+		picture = GFX_evt_unknown_ships
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_4
+		}
+		picture = GFX_evt_machine_space_battle
+	}
+
 	show_sound = event_space_battle
 	location = event_target:pirate_system
 
@@ -89,6 +119,7 @@ country_event = {
 
 	immediate = {
 		# log = "pirate spawned"
+		human_fallen_empires_effect_set_flags_for_random_pic_5_country = yes
 		save_event_target_as = human_fallen_empires_pirate_target
 		human_fallen_empires_effect_pirate_init = yes
 	}
@@ -173,118 +204,6 @@ country_event = {
 				id = human_fallen_empires_pirate.50
 			}
 		}
-		# sell slaves
-		if = {
-			limit = {
-				num_pops > 0
-				any_owned_planet = {
-					free_pop_tiles < 3
-				}
-			}
-			if = {
-				limit = {
-					any_country = {
-						not = {
-							is_hostile = root
-							has_country_flag = human_fallen_empires_pirate_offer_deal@root
-						}
-						energy >= 500
-						minerals >= 500
-						is_country_type = default
-						any_owned_planet = {
-							free_pop_tiles > 0
-						}
-					}
-				}
-				random_country = {
-					limit = {
-						not = {
-							is_hostile = root
-							has_country_flag = human_fallen_empires_pirate_offer_deal@root
-						}
-						energy >= 500
-						minerals >= 500
-						is_country_type = default
-						any_owned_planet = {
-							free_pop_tiles > 0
-						}
-					}
-					root = {
-						save_event_target_as = human_fallen_empires_pirate_country
-						human_fallen_empires_effect_save_slave_target = yes
-					}
-					set_country_flag = human_fallen_empires_pirate.101.deal_offer
-					set_country_flag = human_fallen_empires_pirate.101.slave_menu
-					log = "try to sell slaves to [this.GetName]"
-					set_timed_country_flag = {
-						flag = human_fallen_empires_pirate_offer_deal@root
-						days = 1825
-					}
-					country_event = {
-						id = human_fallen_empires_pirate.101
-					}
-				}
-			}
-			else = {
-				random_country = {
-					limit = {
-						not = {
-							has_country_flag = human_fallen_empires_pirate_offer_deal@root
-						}
-						energy >= 500
-						minerals >= 500
-						is_country_type = default
-						any_owned_planet = {
-							free_pop_tiles > 0
-						}
-					}
-					root = {
-						save_event_target_as = human_fallen_empires_pirate_country
-						human_fallen_empires_effect_save_slave_target = yes
-					}
-					set_country_flag = human_fallen_empires_pirate.101.deal_offer
-					set_country_flag = human_fallen_empires_pirate.101.slave_menu
-					log = "try to sell slaves to [this.GetName]"
-					set_timed_country_flag = {
-						flag = human_fallen_empires_pirate_offer_deal@root
-						days = 1825
-					}
-					country_event = {
-						id = human_fallen_empires_pirate.101
-					}
-				}
-			}
-		}
-		# sell energy
-		if = {
-			limit = {
-				energy >= 1000
-			}
-			random_country = {
-				limit = {
-					nor = {
-						is_hostile = root
-						has_country_flag = human_fallen_empires_pirate_offer_deal@root
-					}
-					minerals >= 1000
-					energy < 10000
-					is_country_type = default
-				}
-				root = {
-					save_event_target_as = human_fallen_empires_pirate_country
-				}
-				set_country_flag = human_fallen_empires_pirate.101.deal_offer
-				set_country_flag = human_fallen_empires_pirate.101.traid_menu
-				log = "try to sell energy to [this.GetName]"
-				set_timed_country_flag = {
-					flag = human_fallen_empires_pirate_offer_deal@root
-					days = 1825
-				}
-				country_event = {
-					id = human_fallen_empires_pirate.101
-				}
-			}
-		}
 		# try to hunt weaker near pirate
 		random_relation = {
 			limit = {
@@ -315,6 +234,16 @@ country_event = {
 				modifier = human_fallen_empires_opinion_pirate_prior_target
 			}
 			log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
+		}
+		country_event = {
+			id = human_fallen_empires_pirate.10
+			days = 1
+			random = 360
+		}
+		country_event = {
+			id = human_fallen_empires_pirate.11
+			days = 1
+			random = 360
 		}
 	}
 }
@@ -386,6 +315,12 @@ country_event = {
 			has_country_flag = human_fallen_empires_pirate_spawned
 		}
 		has_country_flag = human_fallen_empires_birth_of_piracy
+		count_country = {
+			count < 31
+			limit = {
+				is_country_type = human_fallen_empires_pirate
+			}
+		}
 	}
 
 	immediate = {
@@ -399,13 +334,46 @@ country_event = {
 country_event = {
 	id = human_fallen_empires_pirate.7
 	title = pirate.50.name
-	picture = GFX_evt_pirate_armada
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_0
+		}
+		picture = GFX_evt_human_fallen_empires_pirate
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_1
+		}
+		picture = GFX_evt_pirate_armada
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_2
+		}
+		picture = GFX_evt_smugglers_in_bar
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_3
+		}
+		picture = GFX_evt_unknown_ships
+	}
+	picture = {
+		trigger = {
+			has_country_flag = human_fallen_empires_pic_4
+		}
+		picture = GFX_evt_machine_space_battle
+	}
 	desc = pirate.50.a.desc
 	desc = pirate.50.b.desc
 	desc = pirate.50.c.desc
 	show_sound = event_ship_bridge
 	location = event_target:human_fallen_empires_pirate_clan
 	is_triggered_only = yes
+
+	immediate = {
+		human_fallen_empires_effect_set_flags_for_random_pic_5_country = yes
+	}
 
 	trigger = {
 		is_ai = no
@@ -423,6 +391,119 @@ country_event = {
 		custom_tooltip = human_fallen_empires_block.tooltip
 		hidden_effect = {
 			set_country_flag = human_fallen_empires_pirate.7_block
+		}
+	}
+}
+
+# pirate diplo simulation
+# sell slaves
+country_event = {
+	id = human_fallen_empires_pirate.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		num_pops > 0
+		any_owned_planet = {
+			free_pop_tiles < 3
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				not = {
+					is_hostile = root
+					has_country_flag = human_fallen_empires_pirate_offer_deal@root
+				}
+				energy >= 500
+				minerals >= 500
+				is_country_type = default
+				any_owned_planet = {
+					free_pop_tiles > 0
+				}
+			}
+			save_event_target_as = human_fallen_empires_pirate_diplo_target
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:human_fallen_empires_pirate_diplo_target
+				}
+			}
+			random_country = {
+				limit = {
+					not = {
+						has_country_flag = human_fallen_empires_pirate_offer_deal@root
+					}
+					energy >= 500
+					minerals >= 500
+					is_country_type = default
+					any_owned_planet = {
+						free_pop_tiles > 0
+					}
+				}
+				save_event_target_as = human_fallen_empires_pirate_diplo_target
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_pirate_diplo_target
+			}
+			event_target:human_fallen_empires_pirate_diplo_target = {
+				root = {
+					save_event_target_as = human_fallen_empires_pirate_country
+					human_fallen_empires_effect_save_slave_target = yes
+				}
+				set_country_flag = human_fallen_empires_pirate.101.deal_offer
+				set_country_flag = human_fallen_empires_pirate.101.slave_menu
+				log = "try to sell slaves to [this.GetName]"
+				set_timed_country_flag = {
+					flag = human_fallen_empires_pirate_offer_deal@root
+					days = 1825
+				}
+				country_event = {
+					id = human_fallen_empires_pirate.101
+				}
+			}
+		}
+	}
+}
+
+# sell energy
+country_event = {
+	id = human_fallen_empires_pirate.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		energy >= 1000
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				nor = {
+					is_hostile = root
+					has_country_flag = human_fallen_empires_pirate_offer_deal@root
+				}
+				minerals >= 1000
+				energy < 10000
+				is_country_type = default
+			}
+			root = {
+				save_event_target_as = human_fallen_empires_pirate_country
+			}
+			set_country_flag = human_fallen_empires_pirate.101.deal_offer
+			set_country_flag = human_fallen_empires_pirate.101.traid_menu
+			log = "try to sell energy to [this.GetName]"
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirate_offer_deal@root
+				days = 1825
+			}
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
 		}
 	}
 }
@@ -775,6 +856,7 @@ ship_event = {
 	}
 
 	immediate = {
+		#log = "get pirate starbase on [root.solar_system.GetName]"
 		# flee fleets
 		owner = {
 			if = {
@@ -784,38 +866,81 @@ ship_event = {
 				human_fallen_empires_effect_pirate_flee_fleets = yes
 			}
 		}
-		solar_system = {
-			every_system_planet = {
-				limit = {
-					is_owned_by = root.owner
-				}
-				if = {
-					limit = {
-						or = {
-							from.owner = {
-								is_country_type = human_fallen_empires_pirate
-							}
-							not = {
-								is_planet_class = human_fallen_empires_pc_pirate_base
-							}
-						}
-					}
-					set_owner = from.owner
-				}
-				else = {
-					every_owned_pop = {
-						human_fallen_empires_effect_refugee_or_die = yes
-						# мб стоит таки сделать преоритет для того, кто уничтожает базу
-					}
-					human_fallen_empires_effect_convert_to_asteroid = yes
-				}
-			}
-		}
-		#log = "get pirate starbase on [root.solar_system.GetName]"
 		if = {
 			limit = {
 				from.owner = {
 					num_owned_planets > 0
+				}
+				solar_system = {
+					any_neighbor_system = {
+						 ignore_hyperlanes = no
+						 owner = {
+							 is_country = from.owner
+						 }
+					}
+
+				}
+			}
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+					}
+					if = {
+						limit = {
+							or = {
+								from.owner = {
+									is_country_type = human_fallen_empires_pirate
+								}
+								and = {
+									num_pops > 0
+									not = {
+										is_planet_class = human_fallen_empires_pc_pirate_base
+									}
+								}
+
+							}
+						}
+						set_owner = from.owner
+					}
+					else_if = {
+						limit = {
+							is_planet_class = human_fallen_empires_pc_pirate_base
+						}
+						root.owner = {
+							set_timed_country_flag = {
+								flag = human_fallen_empires_refugee_country_prior@from.owner
+								days = 10
+							}
+						}
+						every_owned_pop = {
+							human_fallen_empires_effect_refugee_or_die = yes
+						}
+						human_fallen_empires_effect_convert_to_asteroid = yes
+						from = {
+							save_event_target_as = pirate_slayers
+							owner = {
+								random_list = {
+									80 = {
+										country_event = {
+											id = pirate.25
+										}
+									}
+									20 = {
+										modifier = {
+											factor = 0
+											not = {
+												has_event_chain = l_cluster_chain
+											}
+										}
+										country_event = {
+											id = pirate.26
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			from.owner = {
@@ -833,20 +958,28 @@ ship_event = {
 			fleet = {
 				set_owner = from.owner
 			}
-			# if = {
-				# limit = {
-					# from.owner = {
-						# not = {
-							# is_country_type = human_fallen_empires_pirate
-						# }
-					# }
-				# }
-				# starbase = {
-					# set_starbase_size = starbase_outpost
-				# }
-			# }
+			# убрать пиратские здания
 		}
 		else = {
+			# протестить потом
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+						not = {
+							is_planet_class = human_fallen_empires_pc_pirate_base
+						}
+						num_pops > 0
+					}
+					random_owned_pop = {
+						create_country = {
+							type = default
+							species = prev
+						}
+					}
+					set_owner = last_created_country
+				}
+			}
 			fleet = {
 				destroy_fleet = this
 			}
@@ -1066,6 +1199,31 @@ country_event = {
 				counter = human_fallen_empires_chain_pirate_count_killed_ship
 				amount = 1
 			}
+		}
+	}
+}
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+# fix pirate non hostile then attacked by player on_entering_battle
+country_event = {
+	id = human_fallen_empires_pirate.61
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		not = {
+			is_hostile = from
+		}
+	}
+
+	immediate = {
+		set_faction_hostility = {
+			target = from
+			set_hostile = yes
 		}
 	}
 }
@@ -2736,15 +2894,15 @@ country_event = {
 	desc = {
 		trigger = {
 			success_text = {
-				text = "We win!"
+				text = human_fallen_empires_blackjack_win.defined_text
 				has_country_flag = human_fallen_empires_blackjack_end_win
 			}
 			success_text = {
-				text = "We stay!"
+				text = human_fallen_empires_blackjack_stay.defined_text
 				has_country_flag = human_fallen_empires_blackjack_end_stay
 			}
 			success_text = {
-				text = "We lose!"
+				text = human_fallen_empires_blackjack_lose.defined_text
 				has_country_flag = human_fallen_empires_blackjack_end
 				nor = {
 					has_country_flag = human_fallen_empires_blackjack_end_win
@@ -2799,7 +2957,7 @@ country_event = {
 	}
 
 	option = {
-		name = "Hit"
+		name = human_fallen_empires_blackjack_hit.defined_text
 		trigger = {
 			not = {
 				has_country_flag = human_fallen_empires_blackjack_end
@@ -2832,7 +2990,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = "Stand"
+		name = human_fallen_empires_blackjack_stand.defined_text
 		trigger = {
 			not = {
 				has_country_flag = human_fallen_empires_blackjack_end
@@ -2887,7 +3045,7 @@ country_event = {
 	}
 
 	option = {
-		name = "Yes"
+		name = human_fallen_empires_blackjack_challenge_yes.defined_text
 		human_fallen_empires_effect_blackjack_remove_bet = yes
 		hidden_effect = {
 			human_fallen_empires_effect_blackjack_turn_0 = yes
@@ -2897,7 +3055,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = "No"
+		name = human_fallen_empires_blackjack_challenge_no.defined_text
 		default_hide_option = yes
 		hidden_effect = {
 			event_target:human_fallen_empires_blackjack_target_0 = {

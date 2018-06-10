@@ -15,7 +15,6 @@ human_fallen_empires_effect_refugee_10 = {
 
 # for pop
 human_fallen_empires_effect_refugee_or_die = {
-	save_event_target_as = human_fallen_empires_refugee_pop_target
 	if = {
 		limit = {
 			is_robot_pop = no
@@ -23,110 +22,231 @@ human_fallen_empires_effect_refugee_or_die = {
 				has_trait = trait_hive_mind
 				has_trait = trait_nerve_stapled
 			}
-			owner = {
-				any_relation = {
-					num_owned_planets > 0
-					#is_country_type = default
-					not = {
-						has_policy_flag = refugees_not_allowed
-					}
-					event_target:human_fallen_empires_refugee_pop_target = {
-						or = {
-							has_citizenship_type = {
-								type = citizenship_full
-								country = prev
-							}
-							has_citizenship_type = {
-								type = citizenship_caste_system
-								country = prev
-							}
-							has_citizenship_type = {
-								type = citizenship_organic_trophy
-								country = prev
-							}							
-							and = {
-								or = {
-									has_citizenship_type = {
-										type = citizenship_limited
-										country = prev
-									}
-									has_citizenship_type = {
-										type = citizenship_caste_system_limited
-										country = prev
-									}
-								}
-								prev = {
-									has_policy_flag = refugees_allowed
-								}
-							}
-						}
-					}
-					any_owned_planet = {
-						habitability = {
-							who = event_target:human_fallen_empires_refugee_pop_target
-							value > 0.2
-						}
-						human_fallen_empires_trigger_planet_valid_for_settle = yes
-					}
-				}
-			}
 		}
-		remove_modifier = pop_recently_conquered
-		add_modifier = {
-			modifier = recent_refugee
-			days = 3600
-		}
-		save_event_target_as = human_fallen_empires_settle_pop_target
+		save_event_target_as = human_fallen_empires_refugee_pop_target
 		owner = {
 			random_relation = {
 				limit = {
+					has_country_flag = human_fallen_empires_refugee_country_prior@prev
 					num_owned_planets > 0
-					#is_country_type = default
-					not = {
-						has_policy_flag = refugees_not_allowed
-					}
 					event_target:human_fallen_empires_refugee_pop_target = {
-						or = {
+						nor = {
 							has_citizenship_type = {
-								type = citizenship_full
+								type = citizenship_purge
 								country = prev
 							}
 							has_citizenship_type = {
-								type = citizenship_caste_system
+								type = citizenship_purge_machine
 								country = prev
-							}
-							has_citizenship_type = {
-								type = citizenship_organic_trophy
-								country = prev
-							}							
-							and = {
-								or = {
-									has_citizenship_type = {
-										type = citizenship_limited
-										country = prev
-									}
-									has_citizenship_type = {
-										type = citizenship_caste_system_limited
-										country = prev
-									}
-								}
-								prev = {
-									has_policy_flag = refugees_allowed
-								}
 							}
 						}
 					}
 					any_owned_planet = {
-						habitability = {
-							who = event_target:human_fallen_empires_refugee_pop_target
-							value > 0.2
-						}
 						human_fallen_empires_trigger_planet_valid_for_settle = yes
-
 					}
 				}
+				save_global_event_target_as = human_fallen_empires_refugee_country_target
+			}
+			if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						not = {
+							has_policy_flag = refugees_not_allowed
+						}
+						event_target:human_fallen_empires_refugee_pop_target = {
+							or = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_organic_trophy
+									country = prev
+								}
+							}
+						}
+						any_owned_planet = {
+							habitability = {
+								who = event_target:human_fallen_empires_refugee_pop_target
+								value > 0.3
+							}
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+			else_if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						not = {
+							has_policy_flag = refugees_not_allowed
+						}
+						event_target:human_fallen_empires_refugee_pop_target = {
+							or = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_organic_trophy
+									country = prev
+								}
+							}
+						}
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+			else_if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						has_policy_flag = refugees_allowed
+						event_target:human_fallen_empires_refugee_pop_target = {
+							or = {
+								has_citizenship_type = {
+									type = citizenship_limited
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_caste_system_limited
+									country = prev
+								}
+							}
+						}
+						any_owned_planet = {
+							habitability = {
+								who = event_target:human_fallen_empires_refugee_pop_target
+								value > 0.3
+							}
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+			else_if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						has_policy_flag = refugees_allowed
+						event_target:human_fallen_empires_refugee_pop_target = {
+							or = {
+								has_citizenship_type = {
+									type = citizenship_limited
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_caste_system_limited
+									country = prev
+								}
+							}
+						}
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+			else_if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						has_policy_flag = refugees_allowed
+						event_target:human_fallen_empires_refugee_pop_target = {
+							has_citizenship_type = {
+								type = citizenship_assimilation
+								country = prev
+							}
+						}
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+			else_if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_refugee_country_target
+					}
+				}
+				random_relation = {
+					limit = {
+						num_owned_planets > 0
+						has_policy_flag = refugees_allowed
+						event_target:human_fallen_empires_refugee_pop_target = {
+							has_citizenship_type = {
+								type = citizenship_slavery
+								country = prev
+							}
+						}
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+						}
+					}
+					save_global_event_target_as = human_fallen_empires_refugee_country_target
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_refugee_country_target
+			}
+			remove_modifier = pop_recently_conquered
+			add_modifier = {
+				modifier = recent_refugee
+				days = 3600
+			}
+			save_event_target_as = human_fallen_empires_settle_pop_target
+			event_target:human_fallen_empires_refugee_country_target = {
 				human_fallen_empires_effect_settle_pop = yes
 			}
+			clear_global_event_target = human_fallen_empires_refugee_country_target
+		}
+		else = {
+			kill_pop = yes
 		}
 	}
 	else = {
@@ -150,39 +270,139 @@ human_fallen_empires_effect_settle_pop = {
 	}
 	else_if = {
 		limit = {
-			any_owned_planet = {
-				habitability = {
-					who = event_target:human_fallen_empires_settle_pop_target
-					value > 0.4
-				}
-				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
 			}
 		}
 		random_owned_planet = {
 			limit = {
 				habitability = {
 					who = event_target:human_fallen_empires_settle_pop_target
-					value > 0.4
+					value > 0.8
 				}
 				human_fallen_empires_trigger_planet_valid_for_settle = yes
 			}
-			resettle_pop = {
-				pop = event_target:human_fallen_empires_settle_pop_target
-				planet = this
-			}
-			add_organic_sanctuaries = yes
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
 		}
 	}
-	else = {
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
+			}
+		}
 		random_owned_planet = {
 			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.7
+				}
 				human_fallen_empires_trigger_planet_valid_for_settle = yes
 			}
-			resettle_pop = {
-				pop = event_target:human_fallen_empires_settle_pop_target
-				planet = this
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
 			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.6
+				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.5
+				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.4
+				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.3
+				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
+				exists = event_target:human_fallen_empires_settle_planet_target
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				habitability = {
+					who = event_target:human_fallen_empires_settle_pop_target
+					value > 0.2
+				}
+				human_fallen_empires_trigger_planet_valid_for_settle = yes
+			}
+			save_global_event_target_as = human_fallen_empires_settle_planet_target
+		}
+	}
+	if = {
+		limit = {
+			exists = event_target:human_fallen_empires_settle_planet_target
+		}
+		resettle_pop = {
+			pop = event_target:human_fallen_empires_settle_pop_target
+			planet = event_target:human_fallen_empires_settle_planet_target
+		}
+		event_target:human_fallen_empires_settle_planet_target = {
 			add_organic_sanctuaries = yes
+		}
+		clear_global_event_target = human_fallen_empires_settle_planet_target
+	}
+	else = {
+		event_target:human_fallen_empires_settle_pop_target = {
+			human_fallen_empires_effect_refugee_or_die = yes
 		}
 	}
 }
@@ -903,8 +1123,7 @@ human_fallen_empires_effect_add_psionic_trait = {
 
 # for planet
 human_fallen_empires_effect_convert_to_asteroid = {
-	clear_buildings = yes
-	destroy_colony = yes
+	human_fallen_empires_effect_clear_buildings_and_destroy_colony = yes
 	change_pc = pc_asteroid
 }
 
@@ -992,7 +1211,7 @@ human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet =
 	solar_system = {
 		#human_fallen_empires_effect_create_starbase = yes
 		create_starbase = {
-			size = "starbase_citadel"
+			size = starbase_citadel
 			owner = event_target:human_fallen_empires_starbase_owner
 
 			module = "shipyard"
@@ -1122,4 +1341,111 @@ human_fallen_empires_effect_remove_all_signal_object = {
 			destroy_ambient_object = this
 		}
 	}
+}
+
+human_fallen_empires_effect_clear_buildings_and_destroy_colony = {
+	clear_buildings = yes
+	destroy_colony = yes
+}
+
+human_fallen_empires_effect_set_flags_for_random_pic_2_country = {
+	remove_country_flag = human_fallen_empires_pic_0
+	remove_country_flag = human_fallen_empires_pic_1
+	random_list = {
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_0
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_1
+				days = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_set_flags_for_random_pic_3_country = {
+	remove_country_flag = human_fallen_empires_pic_0
+	remove_country_flag = human_fallen_empires_pic_1
+	remove_country_flag = human_fallen_empires_pic_2
+	random_list = {
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_0
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_1
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_2
+				days = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_set_flags_for_random_pic_5_country = {
+	remove_country_flag = human_fallen_empires_pic_0
+	remove_country_flag = human_fallen_empires_pic_1
+	remove_country_flag = human_fallen_empires_pic_2
+	remove_country_flag = human_fallen_empires_pic_3
+	remove_country_flag = human_fallen_empires_pic_4
+	random_list = {
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_0
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_1
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_2
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_3
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pic_4
+				days = 1
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_remove_ethics = {
+	country_remove_ethic = ethic_fanatic_materialist
+	country_remove_ethic = ethic_materialist
+	country_remove_ethic = ethic_fanatic_egalitarian
+	country_remove_ethic = ethic_fanatic_pacifist
+	country_remove_ethic = ethic_pacifist
+	country_remove_ethic = ethic_fanatic_militarist
+	country_remove_ethic = ethic_fanatic_xenophile
+	country_remove_ethic = ethic_fanatic_xenophobe
+	country_remove_ethic = ethic_xenophobe
+	country_remove_ethic = ethic_fanatic_spiritualist
+	country_remove_ethic = ethic_spiritualist
+	country_remove_ethic = ethic_fanatic_authoritarian
+	country_remove_ethic = ethic_authoritarian
+	country_remove_ethic = ethic_gestalt_consciousness
 }
