@@ -184,28 +184,22 @@ event = {
 			}
 		}
 		# make discovery default country
-		if = {
+		random_country = {
 			limit = {
-				any_country = {
-					is_country_type = human_fallen_empires_discovery
-					num_owned_planets > 0
-				}
+				is_country_type = human_fallen_empires_discovery
+				num_owned_planets > 0
 			}
-			random_country = {
-				limit = {
-					is_country_type = human_fallen_empires_discovery
-					num_owned_planets > 0
-				}
-				set_country_type = default
-			}
+			set_country_type = default
 		}
 		# assimilation event for coalition
 		random_country = {
 			limit = {
-				has_country_flag = human_fallen_empires_coalition_leader
+				is_country = event_target:human_fallen_empires_coalition_leader
 			}
 			country_event = {
 				id = human_fallen_empires.5020
+				days = 1
+				random = 700
 			}
 		}
 		# varelse mehanicus event
@@ -230,7 +224,7 @@ event = {
 					planet_event = {
 						id = human_fallen_empires.101
 						days = 1
-						random = 355
+						random = 700
 					}
 				}
 			}
@@ -260,7 +254,26 @@ event = {
 					planet_event = {
 						id = human_fallen_empires.361
 						days = 1
-						random = 355
+						random = 700
+					}
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_country_type = default
+				not = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+			random_list = {
+				10 = {
+				}
+				10 = {
+					country_event = {
+						id = human_fallen_empires_plague.160
+						days = 1
+						random = 700
 					}
 				}
 			}
@@ -270,54 +283,35 @@ event = {
 		if = {
 			limit = {
 				has_global_flag = human_fallen_empires_war_in_heaven_started
-				any_country = {
-					is_country_type = awakened_fallen_empire
-					is_at_war = yes
-					is_war_leader = yes
-					or = {
-						any_war = {
-							any_defender = {
-								is_country = prev
-							}
-							defender_war_exhaustion > 20
-						}
-						any_war = {
-							any_defender = {
-								is_country = prev
-							}
-							attacker_war_exhaustion > 20
-						}
-					}
-				}
 			}
 			random_country = {
 				limit = {
 					is_country_type = awakened_fallen_empire
 					is_at_war = yes
 					is_war_leader = yes
-					or = {
-						any_war = {
-							any_defender = {
-								is_country = prevprev
+					is_overlord = yes
+					any_war = {
+						or = {
+							and = {
+								any_defender = {
+									is_country = prevprev
+								}
+								defender_war_exhaustion > 20
 							}
-							defender_war_exhaustion > 20
-						}
-						any_war = {
-							any_defender = {
-								is_country = prevprev
+							and = {
+								any_attacker = {
+									is_country = prevprev
+								}
+								attacker_war_exhaustion > 20
 							}
-							attacker_war_exhaustion > 20
 						}
 					}
 				}
 				every_subject = {
-					limit = {
-						not = {
-							has_modifier = human_fallen_empires_fallen_resurces_drain
-						}
-					}
 					country_event = {
 						id = human_fallen_empires_total_war.50
+						days = 1
+						random = 700
 					}
 				}
 			}
@@ -6454,7 +6448,7 @@ country_event = {
 					type = admiral
 					species = this
 					name = random
-					skill = 100
+					skill = 1
 				}
 			}
 			random_owned_leader = {
@@ -7884,7 +7878,7 @@ country_event = {
 			root = {
 				declare_war = {
 					target = last_created_country
-					attacker_war_goal = wg_subjugation
+					attacker_war_goal = human_fallen_empires_wg_annex
 				}
 			}
 		}

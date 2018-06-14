@@ -137,15 +137,22 @@ country_event = {
 	}
 }
 
-country_event = {
+fleet_event = {
 	id = human_fallen_empires_test.6
 	hide_window = yes
 	is_triggered_only = yes
 
 	immediate = {
-		capital_scope = {
-			set_planet_entity = {
-				entity = shielded_planet_01_entity
+		solar_system = {
+			random_neighbor_system = {
+				random_system_planet = {
+					root = {
+						auto_move_to_planet = {
+							target = prev
+							clear_auto_move_on_arrival = yes
+						}
+					}
+				}
 			}
 		}
 	}
@@ -208,14 +215,16 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		capital_scope = {
-			random_owned_pop = {
-				create_country = {
-					type = default
-					species = prev
+		every_country = {
+			limit ={
+				exists = capital_scope
+				not = {
+					exists = home_planet
 				}
 			}
-			set_owner = last_created_country
+			species = {
+				set_species_homeworld = prev.capital_scope
+			}
 		}
 	}
 }

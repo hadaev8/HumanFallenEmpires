@@ -27,5 +27,7 @@ for loc_index in loc_indexes:
                     f.write(' ' + loc_keys[i] + '\n')
                 elif loc[i] == '':
                     f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], eng_fallback[i]))
+                elif eng_fallback[i] == '':
+                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], ' '))
                 else:
                     f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], loc[i]))

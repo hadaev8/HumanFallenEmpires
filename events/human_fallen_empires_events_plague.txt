@@ -245,7 +245,7 @@ planet_event = {
 					}
 				}
 			}
-			human_fallen_empires_plague_srarted = {
+			default = {
 				add_modifier = {
 					modifier = human_fallen_empires_plague_lvl_1
 					days = 3650
@@ -1777,12 +1777,8 @@ country_event = {
 # bombarding infected planet after project finished
 ship_event = {
 	id = human_fallen_empires_plague.150
-	title = human_fallen_empires_plague.150.name
-	desc = human_fallen_empires_plague.150.desc
-	picture = GFX_evt_ground_combat
-	show_sound = event_ground_battle
+	hide_window = yes
 	is_triggered_only = yes
-	location = root
 
 	immediate = {
 		event_target:human_fallen_empires_project_plague_planet_bombardment_target = {
@@ -1835,23 +1831,15 @@ ship_event = {
 			}
 		}
 		# добавить эвенты адмирала
-	}
-
-	option = {
-		name = human_fallen_empires_plague.150.0
-	}
-	option = {
-		name = human_fallen_empires_block
-		custom_tooltip = human_fallen_empires_block.tooltip
-		hidden_effect = {
-			owner = {
-				set_country_flag = human_fallen_empires_plague.150_block
+		owner = {
+			country_event = {
+				id = human_fallen_empires_plague.152
 			}
 		}
 	}
 }
 
-# check if planet still has owner
+# check if planet still has owner 151
 ship_event = {
 	id = human_fallen_empires_plague.151
 	hide_window = yes
@@ -1859,7 +1847,9 @@ ship_event = {
 
 	trigger = {
 		event_target:human_fallen_empires_project_plague_planet_bombardment_target = {
-			not = { exists = owner }
+			not = {
+				 exists = owner
+			}
 		}
 	}
 
@@ -1873,4 +1863,101 @@ ship_event = {
 	}
 }
 
-# first plagued colony events 150 - 200
+# inform event
+
+country_event = {
+	id = human_fallen_empires_plague.152
+	title = human_fallen_empires_plague.152.name
+	desc = human_fallen_empires_plague.152.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_country_flag = human_fallen_empires_plague.153_block
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_plague.152.0
+	}
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_block.tooltip
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_plague.153_block
+		}
+	}
+}
+
+# get total war cb vs robots 160
+country_event = {
+	id = human_fallen_empires_plague.160
+	title = human_fallen_empires_plague.160.name
+	desc = human_fallen_empires_plague.160.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = human_fallen_empires_plague_lvl_2
+		not = {
+			has_authority = auth_machine_intelligence
+		}
+		is_at_war = no
+		any_relation = {
+			has_authority = auth_machine_intelligence
+			relative_power = {
+				who = root
+				category = fleet
+				value >= equivalent
+			}
+			root = {
+				not = {
+					has_casus_belli = {
+						target = prev
+						type = human_fallen_empires_cb_annex
+					}
+				}
+			}
+		}
+		any_owned_planet = {
+			has_planet_flag = human_fallen_empires_plague_planet
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_plague.160.0
+		hidden_effect = {
+			random_relation = {
+				limit = {
+					has_authority = auth_machine_intelligence
+					relative_power = {
+						who = root
+						category = fleet
+						value >= equivalent
+					}
+					root = {
+						not = {
+							has_casus_belli = {
+								target = prev
+								type = human_fallen_empires_cb_annex
+							}
+						}
+					}
+				}
+				root = {
+					add_casus_belli = {
+						type = human_fallen_empires_cb_annex
+						who = prev
+						days = 3650
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires_plague.160.1
+	}
+}
