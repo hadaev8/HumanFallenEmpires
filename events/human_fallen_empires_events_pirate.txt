@@ -958,7 +958,7 @@ ship_event = {
 			fleet = {
 				set_owner = from.owner
 			}
-			# убрать пиратские здания
+			# убрать пиратские здания со старбазы
 		}
 		else = {
 			# протестить потом
@@ -1315,6 +1315,32 @@ country_event = {
 				has_country_flag = human_fallen_empires_pirate.101.slave_menu
 				human_fallen_empires_trigger_exists_any_slave_target = yes
 			}
+			# psi test start
+			success_text = {
+				text = human_fallen_empires_pirate.101.psi_test_menu.desc.0
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+				check_variable = {
+					which = take_place_1
+					value = 0
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_pirate.101.psi_test_menu.desc.1
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+				check_variable = {
+					which = take_place_1
+					value = 1
+				}
+			}
+			# psi test end
+			success_text = {
+				text = human_fallen_empires_pirate.101.psi_test_menu.desc.2
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
+			}
+			success_text = {
+				text = human_fallen_empires_pirate.101.psi_test_menu.desc.3
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
+			}
 			# casino
 			success_text = {
 				text = human_fallen_empires_pirate.101.casino_menu.desc.0
@@ -1345,10 +1371,8 @@ country_event = {
 			energy >= @human_fallen_empires_pirate_protect_cost
 			minerals >= @human_fallen_empires_pirate_protect_cost
 		}
-
 		is_dialog_only = yes
 		response_text = human_fallen_empires_pirate.101.0.response
-
 		add_energy = @human_fallen_empires_pirate_protect_cost_minus
 		add_minerals = @human_fallen_empires_pirate_protect_cost_minus
 		event_target:human_fallen_empires_pirate_country = {
@@ -1383,7 +1407,7 @@ country_event = {
 	}
 	# raid menu
 	option = {
-		name = human_fallen_empires_pirate.101.1
+		name = human_fallen_empires_pirate.101.raid_menu
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
@@ -1659,8 +1683,8 @@ country_event = {
 		}
 		allow = {
 			energy >= 500
-				   minerals >= 500
-				   custom_tooltip = {
+			minerals >= 500
+			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
 				not = {
 					event_target:human_fallen_empires_event_target_2 = {
@@ -1861,7 +1885,7 @@ country_event = {
 	}
 	# trade menu
 	option = {
-		name = human_fallen_empires_pirate.101.2
+		name = human_fallen_empires_pirate.101.traid_menu
 		trigger = {
 			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
@@ -1881,17 +1905,15 @@ country_event = {
 		}
 		allow = {
 			minerals >= 150
-					 custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_pirate.101.traid_menu.fail
 				event_target:human_fallen_empires_pirate_country = {
 					energy >= 100
 				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = human_fallen_empires_pirate.101.traid_menu.0.response
-
 		add_energy = 100
 		add_minerals = -150
 		event_target:human_fallen_empires_pirate_country = {
@@ -1909,6 +1931,88 @@ country_event = {
 					minerals < 1000
 					energy >= 10000
 				}
+			}
+		}
+	}
+	# hire pirate admiral
+	option = {
+		name = human_fallen_empires_pirate.101.traid_menu.2
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+		}
+		allow = {
+			energy >= 1000
+			custom_tooltip = {
+				text = human_fallen_empires_pirate.101.traid_menu.2.fail
+				or = {
+					and = {
+						human_fallen_empires_trigger_leaders_recrutment_enabled = no
+						free_leader_slots > 0
+					}
+					check_variable = {
+						which = human_fallen_empires_leaders_admiral_capacity
+						value > 0
+					}
+				}
+				event_target:human_fallen_empires_pirate_country = {
+					any_pool_leader = {
+						leader_class = admiral
+						not = {
+							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+						}
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = human_fallen_empires_pirate.101.traid_menu.2.response
+		add_energy = -1000
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 1000
+			custom_tooltip = human_fallen_empires_pirate.101.traid_menu.2.effect
+			hidden_effect = {
+				random_pool_leader = {
+					limit = {
+						leader_class = admiral
+						not = {
+							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+						}
+					}
+					root = {
+						clone_leader = {
+							target = prev
+							effect = {
+								save_event_target_as = human_fallen_empires_pirate_admiral_hired
+							}
+						}
+						if = {
+							limit = {
+								human_fallen_empires_trigger_leaders_recrutment_enabled = yes
+							}
+							change_variable = {
+								which = human_fallen_empires_leaders_admiral_capacity
+								value = -1
+							}
+						}
+					}
+					set_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+					kill_leader = {
+						show_notification = no
+					}
+				}
+				log = "pirate admiral hired"
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				energy < 1000
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_militarist = yes
 			}
 		}
 	}
@@ -2489,95 +2593,164 @@ country_event = {
 			}
 		}
 	}
-	# hire pirate admiral
+	# service menu
 	option = {
-		name = human_fallen_empires_pirate.101.traid_menu.2
+		name = human_fallen_empires_pirate.101.service_menu
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 		}
-		allow = {
-			energy >= 1000
-			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.traid_menu.2.fail
-				or = {
-					and = {
-						human_fallen_empires_trigger_leaders_recrutment_enabled = no
-						free_leader_slots > 0
-					}
-					check_variable = {
-						which = human_fallen_empires_leaders_admiral_capacity
-						value > 0
-					}
-				}
-				event_target:human_fallen_empires_pirate_country = {
-					any_pool_leader = {
-						leader_class = admiral
-						not = {
-							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
-						}
-					}
-				}
-			}
-		}
-
-		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.traid_menu.2.response
-
-		add_energy = -1000
-		event_target:human_fallen_empires_pirate_country = {
-			add_energy = 1000
-			custom_tooltip = human_fallen_empires_pirate.101.traid_menu.2.effect
-			hidden_effect = {
-				random_pool_leader = {
-					limit = {
-						leader_class = admiral
-						not = {
-							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
-						}
-					}
-					root = {
-						clone_leader = {
-							target = prev
-							effect = {
-								save_event_target_as = human_fallen_empires_pirate_admiral_hired
-							}
-						}
-						if = {
-							limit = {
-								human_fallen_empires_trigger_leaders_recrutment_enabled = yes
-							}
-							change_variable = {
-								which = human_fallen_empires_leaders_admiral_capacity
-								value = -1
-							}
-						}
-					}
-					set_leader_flag = human_fallen_empires_pirate_admiral_to_kill
-					kill_leader = {
-						show_notification = no
-					}
-				}
-				log = "pirate admiral hired"
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires_pirate.101.service_menu
+			country_event = {
+				id = human_fallen_empires_pirate.101
 			}
 		}
 		ai_chance = {
-			factor = 100
-			modifier = {
-				factor = 0
-				energy < 1000
+			factor = 0
+		}
+	}
+	# psi test menu
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu
+		trigger = {
+			always = no
+			has_country_flag = human_fallen_empires_pirate.101.service_menu
+			exists = ruler
+			event_target:human_fallen_empires_pirate_country = {
+				is_spiritualist = no
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_militarist = yes
+		}
+		add_energy = -50
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = 50
+		}
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			save_event_target_as = human_fallen_empires_blackjack_target_0
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# clubs
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.0
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			not = {
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			}
+		}
+		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.0
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# diamonds
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.1
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			not = {
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			}
+		}
+		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.1
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# hearts
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.2
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			not = {
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			}
+		}
+		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.2
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# spades
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.3
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			not = {
+				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			}
+		}
+		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.3
+		hidden_effect = {
+			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# end lose
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.4
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			human_fallen_empires_effect_cards_clean_all = yes
+			set_variable = {
+				which = human_fallen_empires_pirate_psi_test_score
+				value = 0
+			}
+			country_event = {
+				id = human_fallen_empires_pirate.101
+			}
+		}
+	}
+	# end win
+	option = {
+		name = human_fallen_empires_pirate.101.psi_test_menu.5
+		trigger = {
+			has_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
+		}
+		add_energy = 10000
+		event_target:human_fallen_empires_pirate_country = {
+			add_energy = -10000
+		}
+		hidden_effect = {
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
+			remove_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			human_fallen_empires_effect_cards_clean_all = yes
+			set_variable = {
+				which = human_fallen_empires_pirate_psi_test_score
+				value = 0
+			}
+			country_event = {
+				id = human_fallen_empires_pirate.101
 			}
 		}
 	}
 	# casino menu
 	option = {
-		name = human_fallen_empires_pirate.101.3
+		name = human_fallen_empires_pirate.101.casino_menu
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			has_country_flag = human_fallen_empires_pirate.101.service_menu
 		}
 		hidden_effect = {
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
@@ -2591,9 +2764,6 @@ country_event = {
 				id = human_fallen_empires_pirate.101
 			}
 		}
-		ai_chance = {
-			factor = 0
-		}
 	}
 	# select bet
 	option = {
@@ -2603,7 +2773,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_0
-				   custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_0
@@ -2630,7 +2800,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_1
-				   custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_1
@@ -2657,7 +2827,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_2
-				   custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_2
@@ -2684,7 +2854,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_3
-				   custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_3
@@ -2711,7 +2881,7 @@ country_event = {
 		}
 		allow = {
 			energy >= @human_fallen_empires_blackjack_bet_4
-				   custom_tooltip = {
+			custom_tooltip = {
 				text = human_fallen_empires_not_enough_energy
 				event_target:human_fallen_empires_blackjack_target_1 = {
 					energy >= @human_fallen_empires_blackjack_bet_4
@@ -2748,6 +2918,7 @@ country_event = {
 				limit = {
 					is_ai = no
 					energy >= @human_fallen_empires_blackjack_bet_0
+					human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
 				}
 				human_fallen_empires_effect_save_event_target = yes
 			}
@@ -2983,9 +3154,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_blackjack_get_card = yes
+			human_fallen_empires_effect_cards_get_card = yes
 			human_fallen_empires_effect_blackjack_calc_cards = yes
-			human_fallen_empires_effect_blackjack_take_cards_in_place = yes
+			human_fallen_empires_effect_cards_take_cards_in_place = yes
 			human_fallen_empires_effect_blackjack_next_turn = yes
 		}
 	}
