@@ -278,67 +278,7 @@ country_event = {
 					habitable_planet = no
 					not = { exists = owner }
 				}
-				change_pc = pc_gaia
-				root = {
-					switch = {
-						trigger = ideal_planet_class
-						pc_desert = {
-							prev = {
-								change_pc = pc_desert
-							}
-						}
-						pc_tropical = {
-							prev = {
-								change_pc = pc_tropical
-							}
-						}
-						pc_arid = {
-							prev = {
-								change_pc = pc_arid
-							}
-						}
-						pc_continental = {
-							prev = {
-								change_pc = pc_continental
-							}
-						}
-						pc_ocean = {
-							prev = {
-								change_pc = pc_ocean
-							}
-						}
-						pc_tundra = {
-							prev = {
-								change_pc = pc_tundra
-							}
-						}
-						pc_arctic = {
-							prev = {
-								change_pc = pc_arctic
-							}
-						}
-						pc_alpine = {
-							prev = {
-								change_pc = pc_alpine
-							}
-						}
-						pc_savannah = {
-							prev = {
-								change_pc = pc_savannah
-							}
-						}
-						pc_gaia = {
-							prev = {
-								change_pc = pc_gaia
-							}
-						}
-						pc_nuked = {
-							prev = {
-								change_pc = pc_nuked
-							}
-						}
-					}
-				}
+				human_fallen_empires_effect_root_this_change_pc_to_ideal = yes
 				while = {
 					limit = {
 						planet_size > 25
@@ -355,9 +295,6 @@ country_event = {
 				create_colony = {
 					owner = root
 					species = owner
-				}
-				create_pop = {
-					species = root
 				}
 				create_pop = {
 					species = root
@@ -389,11 +326,9 @@ country_event = {
 			traits = random
 		}
 		create_country = {
-			name = random
 			type = default
 			species = last_created_species
 			ignore_initial_colony_error = yes
-			flag = random
 		}
 		create_fleet = {
 			effect = {
@@ -412,6 +347,102 @@ country_event = {
 				 	modifier = human_fallen_empires_unkeep_80
 				 	days = -1
 				}
+			}
+		}
+	}
+}
+
+
+# sanctuary civic
+country_event = {
+	id = human_fallen_empires_features.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_valid_civic = human_fallen_empires_civic_features_sanctuary
+		exists = capital_scope
+	}
+
+	immediate = {
+		add_seen_bypass_type = wormhole
+		solar_system = {
+			isolate_system = yes
+			random_system = {
+				limit = {
+					NOR = {
+						has_natural_wormhole = yes
+						starting_system = yes
+						has_star_flag = empire_cluster
+					}
+				}
+				spawn_natural_wormhole = {
+					bypass_type = wormhole
+					random_pos = yes
+					#orbit_angle = 360
+				}
+				prev = { # done this way to ensure we don't spawn "orphan" wormholes (wormholes that aren't linked to anything)
+					spawn_natural_wormhole = {
+						bypass_type = wormhole
+						random_pos = yes
+						#orbit_angle = 360
+					}
+				}
+				link_wormholes = prev
+			}
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_features.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = capital_scope.solar_system
+	}
+
+	immediate = {
+		set_spawn_system_batch = begin
+		no_scope = {
+			spawn_system = {
+				initializer = human_fallen_empires_initializer_init_features_sanctuary
+				min_distance >= 45
+				max_distance <= 46
+				min_orientation_angle = 90
+				max_orientation_angle = 95
+				hyperlane = no
+			}
+		}
+		set_spawn_system_batch = end
+		#country_event = {
+		#	id = human_fallen_empires_features.13
+		#	days = 365
+		#}
+		capital_scope.solar_system = {
+			# every_neighbor_system = {
+				# remove_hyperlane = {
+					# from = prev
+					# to = this
+				# }
+			# }
+		}
+	}
+}
+
+event = {
+	id = human_fallen_empires_features.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_valid_civic = human_fallen_empires_civic_features_sanctuary
+			}
+			country_event = {
+				id = human_fallen_empires_features.13
 			}
 		}
 	}

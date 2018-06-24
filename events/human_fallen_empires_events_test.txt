@@ -130,8 +130,15 @@ country_event = {
 
 	immediate = {
 		capital_scope = {
-			set_planet_entity = {
-				entity = rotating_test_entity
+			if = {
+				limit = {
+					count_pops = {
+						limit = { }
+						count > 10
+						count < 13
+					}
+				}
+				log = "0"
 			}
 		}
 	}
@@ -176,38 +183,58 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		clear_ethos = yes
-		create_country = {
-			type = default
-			species = root
-			ignore_initial_colony_error = yes
+		capital_scope = {
+			random_owned_pop = {
+				create_country = {
+					type = default
+					species = this.species
+					ignore_initial_colony_error = yes
+					effect = {
+						set_player = root
+					}
+				}
+			}
+			set_owner = last_created_country
 		}
-		copy_ethos_and_authority = last_created_country
-		# change_government = {
-			# civics = random
-		# }
 	}
 }
 
-country_event = {
+event = {
 	id = human_fallen_empires_test.10
 	hide_window = yes
 	is_triggered_only = yes
 
 	immediate = {
-		create_fleet = {
-			effect = {
-				set_owner = root
-				create_ship = {
-					name = test1
-					design = "NAME_Outrider"
+		random_system = {
+			limit = {
+				has_star_flag = human_fallen_empires_features_sanctuary_system
+			}
+			random_system = {
+				limit = {
+					NOR = {
+						has_natural_wormhole = yes
+						starting_system = yes
+						has_star_flag = empire_cluster
+					}
+					distance = {
+						source = prev
+						min_distance >= 500
+					}
 				}
-				set_location = {
-					target = root.capital_scope
-					distance = 10
-					angle = random
+				log = "1"
+				spawn_natural_wormhole = {
+					bypass_type = wormhole
+					random_pos = yes
+					orbit_angle = 360
 				}
-				set_name = test2
+				prev = { # done this way to ensure we don't spawn "orphan" wormholes (wormholes that aren't linked to anything)
+					spawn_natural_wormhole = {
+						bypass_type = wormhole
+						random_pos = yes
+						orbit_angle = 360
+					}
+				}
+				link_wormholes = prev
 			}
 		}
 	}
@@ -219,16 +246,8 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		every_country = {
-			limit ={
-				exists = capital_scope
-				not = {
-					exists = home_planet
-				}
-			}
-			species = {
-				set_species_homeworld = prev.capital_scope
-			}
+		change_government = {
+			authority = auth_machine_intelligence
 		}
 	}
 }

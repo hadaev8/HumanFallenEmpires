@@ -96,3 +96,158 @@ human_fallen_empires_initializer_features_starting_asteroid_init_01 = {
 		orbit_angle = { min = 90 max = 270 }
 	}
 }
+
+human_fallen_empires_initializer_init_features_sanctuary = {
+	class = "rl_trinary_stars"
+	#usage =
+	flags = { human_fallen_empires_features_sanctuary_system empire_home_system empire_cluster }
+	init_effect = {
+		generate_home_system_resources = yes
+	}
+	planet = {
+        class = star
+        orbit_distance = 0
+        orbit_angle = 0
+        size = { min = 30 max = 35 }
+        has_ring = no
+    }
+    planet = {
+        class = star
+        orbit_distance = 260
+      	orbit_angle = { min = 90 max = 270 }
+        size = { min = 20 max = 30 }
+        has_ring = no
+        satellite_naming_policy = upper_case_roman_numerals
+		change_orbit = 30
+		planet = {
+			orbit_angle = { min = 90 max = 270 }
+			class = rl_habitable_normal
+			orbit_distance = 25
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+			moon = {
+				count = { min = 0 max = 1 }
+				class = random_non_colonizable
+				orbit_angle = { min = 90 max = 270 }
+				orbit_distance = 5
+			}
+		}
+		planet = {
+			count = { min = 1 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			class = random_non_colonizable
+			orbit_distance = 25
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+			moon = {
+				count = { min = 0 max = 1 }
+				class = random_non_colonizable
+				orbit_angle = { min = 90 max = 270 }
+				orbit_distance = 5
+			}
+		}
+    }
+    planet = {
+        class = star
+        orbit_distance = 0
+        orbit_angle = { min = 90 max = 270 }
+        size = { min = 15 max = 30 }
+        has_ring = no
+        satellite_naming_policy = upper_case_roman_numerals
+		change_orbit = 30
+		planet = {
+			orbit_angle = { min = 90 max = 270 }
+			class = random_non_colonizable
+			orbit_distance = 25
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+		}
+		planet = {
+			orbit_angle = { min = 90 max = 270 }
+			class = rl_habitable_special
+			orbit_distance = 25
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+		}
+		planet = {
+			count = { min = 0 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			class = random_non_colonizable
+			orbit_distance = 25
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+		}
+    }
+    change_orbit = -210
+    planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 15
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		class = random
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 16 max = 20 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = {
+			set_owner = root
+			human_fallen_empires_effect_root_this_change_pc_to_ideal = yes
+			generate_start_buildings_and_blockers = yes
+			root = {
+				every_owned_pop = {
+					resettle_pop = {
+						pop = this
+						planet = prevprev
+					}
+				}
+				every_owned_fleet = {
+					if = {
+						limit = {
+							or = {
+								is_ship_class = shipclass_mining_station
+								is_ship_class = shipclass_research_station
+								is_ship_class = shipclass_starbase
+							}
+						}
+						destroy_fleet = this
+					}
+					else = {
+						set_location = prevprev.system_star
+					}
+				}
+			}
+			root.capital_scope = {
+				human_fallen_empires_effect_clear_buildings_and_destroy_colony = yes
+			}
+			set_capital = yes
+			human_fallen_empires_effect_create_starbase_starport_from_planet = yes
+			human_fallen_empires_effect_starbase_add_shipyard_0 = yes
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 1 max = 2 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	init_effect = {
+	}
+}

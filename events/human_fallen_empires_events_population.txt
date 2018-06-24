@@ -477,16 +477,15 @@ country_event = {
 			species = event_target:human_fallen_empires_population_species
 			#change_all = no
 		}
-		# switch from machine
+		# switch from hive
 		if = {
 			limit = {
 				human_fallen_empires_trigger_is_hive = yes
 				human_fallen_empires_trigger_non_sapient = no
 			}
-			clear_ethos = yes
 			create_country = {
 				type = default
-				species = root
+				species = this
 				ignore_initial_colony_error = yes
 			}
 			copy_ethos_and_authority = last_created_country
@@ -494,84 +493,7 @@ country_event = {
 				civics = random
 			}
 		}
-		# switch to machine
-		if = {
-			limit = {
-				host_has_dlc = "Synthetic Dawn Story Pack"
-				human_fallen_empires_trigger_is_hive = no
-				human_fallen_empires_trigger_non_sapient = yes
-			}
-			clear_ethos = yes
-			create_country = {
-				type = default
-				species = root
-				ignore_initial_colony_error = yes
-			}
-			copy_ethos_and_authority = last_created_country
-			if = {
-				limit = {
-					human_fallen_empires_trigger_is_robot = yes
-				}
-				random_list = {
-					10 = {
-						modifier = {
-							factor = 0.1
-							not = {
-								any_owned_pop_species = {
-									human_fallen_empires_trigger_is_robot = no
-								}
-							}
-						}
-						change_government = {
-							civics = {
-								civic = civic_machine_servitor
-								civic = random
-							}
-						}
-					}
-					10 = {
-						modifier = {
-							factor = 0.1
-							not = {
-								any_owned_pop_species = {
-									human_fallen_empires_trigger_is_robot = no
-								}
-							}
-						}
-						change_government = {
-							civics = {
-								civic = civic_machine_assimilator
-								civic = random
-							}
-						}
-					}
-					10 = {
-						modifier = {
-							factor = 0.1
-							any_owned_pop_species = {
-								human_fallen_empires_trigger_is_robot = no
-							}
-						}
-						change_government = {
-							civics = {
-								civic = civic_machine_terminator
-								civic = random
-							}
-						}
-					}
-					10 = {
-						change_government = {
-							civics = random
-						}
-					}
-				}
-			}
-			else = {
-				change_government = {
-					civics = random
-				}
-			}
-		}
+		human_fallen_empires_effect_fix_gov_hive = yes
 	}
 }
 
