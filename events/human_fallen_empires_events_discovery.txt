@@ -213,7 +213,7 @@ country_event = {
 	immediate = {
 		country_event = {
 			id = human_fallen_empires_discovery.54
-			days = 1
+			days = 2
 		}
 	}
 }
@@ -282,6 +282,51 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires_discovery.55.0
+	}
+}
+
+# add comms with enclaves on_entering_system
+ship_event = {
+	id = human_fallen_empires_discovery.56
+	hide_window = yes
+    is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_discovery
+		}
+		exists = solar_system
+		solar_system = {
+			any_ship_in_system = {
+				exists = owner
+				owner = {
+					is_country_type = enclave
+					not = {
+						has_communications = root.owner
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		solar_system = {
+			random_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = {
+						is_country_type = enclave
+						not = {
+							has_communications = root.owner
+						}
+					}
+				}
+				owner = {
+					establish_communications = root.owner
+				}
+			}
+		}
 	}
 }
 

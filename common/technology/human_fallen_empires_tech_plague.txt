@@ -4,6 +4,7 @@ human_fallen_empires_tech_plague_study = {
 	area = society
 	cost = @tier2cost2
 	tier = 2
+	#gateway = human_fallen_empires_plague
 	category = {
 		biology
 	}
@@ -11,13 +12,10 @@ human_fallen_empires_tech_plague_study = {
 	weight_modifier = {
 		modifier = {
 			factor = 0
-			not = {
-				has_global_flag = human_fallen_empires_plague_lvl_2
-			}
 		}
 	}
 	ai_weight = {
-		factor = 100
+		factor = 1000
 	}
 }
 
@@ -25,17 +23,20 @@ human_fallen_empires_tech_plague_immune = {
 	area = society
 	cost = @tier3cost3
 	tier = 3
+	#gateway = human_fallen_empires_plague
 	category = {
 		biology
 	}
-	weight = @tier3weight3
+	prerequisites = {
+		human_fallen_empires_tech_plague_study
+	}
 	prereqfor_desc = {
 		custom = {
-			title = human_fallen_empires_plague_unlock_tech_immune
-			desc = human_fallen_empires_plague_unlock_tech_immune_desc
+			title = human_fallen_empires_tech_unlock_plague_immune
+			desc = human_fallen_empires_tech_unlock_plague_immune_desc
 		}
 	}
-	# добавить чумную ветку технологий когда-нибудь
+	weight = @tier3weight3
 	weight_modifier = {
 		modifier = {
 			factor = 0
@@ -52,6 +53,49 @@ human_fallen_empires_tech_plague_immune = {
 					is_difficulty > 0
 				}
 			}
+		}
+		modifier = {
+			factor = 1.25
+			research_leader = {
+				area = society
+				has_trait = leader_trait_expertise_biology
+			}
+		}
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+human_fallen_empires_tech_plague_spread = {
+	area = society
+	cost = @tier2cost2
+	tier = 2
+	#gateway = human_fallen_empires_plague
+	category = {
+		biology
+	}
+	prerequisites = {
+		human_fallen_empires_tech_plague_study
+	}
+	prereqfor_desc = {
+		custom = {
+			title = human_fallen_empires_tech_unlock_plague_spread
+			desc = human_fallen_empires_tech_unlock_plague_spread_desc
+		}
+	}
+	weight = @tier2weight2
+	weight_modifier = {
+		modifier = {
+			factor = 1.25
+			research_leader = {
+				area = society
+				has_trait = leader_trait_expertise_biology
+			}
+		}
+		modifier = {
+			factor = 0
+			allows_purge = no
 		}
 	}
 	ai_weight = {
