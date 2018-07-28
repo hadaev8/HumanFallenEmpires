@@ -192,12 +192,25 @@ event = {
 			set_country_type = default
 		}
 		# assimilation event for coalition
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_coalition_leader
+			}
+			event_target:human_fallen_empires_coalition_leader = {
+				country_event = {
+					id = human_fallen_empires.5020
+					days = 1
+					random = 700
+				}
+			}
+		}
+		# egypt change vassal type
 		random_country = {
 			limit = {
-				is_country = event_target:human_fallen_empires_coalition_leader
+				has_country_flag = human_fallen_empires_egypt
 			}
 			country_event = {
-				id = human_fallen_empires.5020
+				id = human_fallen_empires_maintenance.51
 				days = 1
 				random = 700
 			}
@@ -445,6 +458,19 @@ event = {
 				random = 3600
 			}
 		}
+	}
+}
+
+# egypt features 10 - 46
+# assimilator policy notification
+country_event = {
+	id = human_fallen_empires.10
+	title = human_fallen_empires.10.name
+	desc = human_fallen_empires.10.desc
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.10.0
 	}
 }
 
@@ -7430,7 +7456,7 @@ country_event = {
 			if = {
 				limit = {
 					can_be_subject = {
-						overlord = event_target:human_fallen_empires_future
+						overlord = event_target:human_fallen_empires_future_country
 						subject_type = human_fallen_empires_future_vassal
 					}
 				}
@@ -7462,17 +7488,18 @@ country_event = {
 	title = TRANSMISSION
 	desc = human_fallen_empires.5012.desc
 	diplomatic = yes
+	show_sound = placeholder_sfx
 	is_triggered_only = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_future
+		portrait = event_target:human_fallen_empires_future_country
 		room = human_fallen_empires_future_room
 	}
 
 	option = {
 		name = human_fallen_empires.5012.0
 		set_subject_of = {
-			who = event_target:human_fallen_empires_future
+			who = event_target:human_fallen_empires_future_country
 			subject_type = human_fallen_empires_future_vassal
 		}
 		play_sound = event_celebration
@@ -7489,16 +7516,16 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 
-	trigger = {
-		any_subject = {
-			not = {
-				is_subject_type = human_fallen_empires_future_vassal
-			}
-		}
-	}
+	# trigger = {
+	# 	any_subject = {
+	# 		not = {
+	# 			is_subject_type = human_fallen_empires_future_vassal
+	# 		}
+	# 	}
+	# }
 
 	immediate = {
-		random_subject = {
+		every_subject = {
 			limit = {
 				not = {
 					is_subject_type = human_fallen_empires_future_vassal
@@ -7520,6 +7547,7 @@ country_event = {
 	id = human_fallen_empires.5021
 	title = human_fallen_empires.5021.name
 	desc = human_fallen_empires.5021.desc
+	show_sound = placeholder_sfx
 	picture = {
 		trigger = {
 			has_country_flag = human_fallen_empires_pic_0
@@ -8211,9 +8239,9 @@ country_event = {
 	trigger = {
 		has_event_chain = human_fallen_empires_chain_find_future_star
 		exists = from
-		exists = event_target:human_fallen_empires_future
+		exists = event_target:human_fallen_empires_future_country
 		from = {
-			is_country = event_target:human_fallen_empires_future
+			is_country = event_target:human_fallen_empires_future_country
 		}
 	}
 
