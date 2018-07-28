@@ -467,6 +467,7 @@ country_event = {
 	id = human_fallen_empires.10
 	title = human_fallen_empires.10.name
 	desc = human_fallen_empires.10.desc
+	picture = GFX_evt_human_fallen_empires_fallen_3
 	is_triggered_only = yes
 
 	option = {
@@ -3999,7 +4000,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_planet_flag = human_fallen_empires_too_ideal_planet
+		has_planet_flag = human_fallen_empires_copernicus.0
 		not = {
 			has_planet_flag = human_fallen_empires_has_event.362
 		}
@@ -6053,7 +6054,6 @@ country_event = {
 		}
 		response_text = human_fallen_empires.711.0.response
 		is_dialog_only = yes
-
 		add_energy = @human_fallen_empires_thoth_module_cost_minus
 		add_minerals = @human_fallen_empires_thoth_module_cost_minus
 		hidden_effect = {
@@ -6079,7 +6079,6 @@ country_event = {
 		}
 		response_text = human_fallen_empires.711.1.response
 		is_dialog_only = yes
-
 		add_energy = @human_fallen_empires_thoth_module_cost_minus
 		add_minerals = @human_fallen_empires_thoth_module_cost_minus
 		hidden_effect = {
@@ -6105,7 +6104,6 @@ country_event = {
 		}
 		response_text = human_fallen_empires.711.2.response
 		is_dialog_only = yes
-
 		add_energy = @human_fallen_empires_thoth_module_cost_minus
 		add_minerals = @human_fallen_empires_thoth_module_cost_minus
 		hidden_effect = {
@@ -6130,7 +6128,6 @@ country_event = {
 		}
 		response_text = human_fallen_empires.711.3.response
 		is_dialog_only = yes
-
 		add_energy = @human_fallen_empires_thoth_module_cost_minus
 		add_minerals = @human_fallen_empires_thoth_module_cost_minus
 		hidden_effect = {
@@ -6151,7 +6148,6 @@ country_event = {
 				has_country_flag = human_fallen_empires.711.4.3
 				has_country_flag = human_fallen_empires.711.4.4
 				has_country_flag = human_fallen_empires.711.4.5
-				has_country_flag = human_fallen_empires.711.4.6
 			}
 		}
 		hidden_effect = {
@@ -7741,7 +7737,7 @@ country_event = {
 				has_country_flag = human_fallen_empires_marked_as_human
 			}
 			is_xenophobe = yes
-			human_fallen_empires_trigger_is_undiplomatic = no
+			is_homicidal = no
 		}
 		event_target:human_fallen_empires_criopods_planet = {
 			create_pop = {
@@ -7853,15 +7849,46 @@ country_event = {
 	location = event_target:human_fallen_empires_criopods_planet
 	is_triggered_only = yes
 
+	immediate = {
+		if = {
+			limit = {
+				not = {
+					has_country_flag = human_fallen_empires_criopods_var_1
+				}
+			}
+			event_target:human_fallen_empires_criopods_planet = {
+				create_country = {
+					name = random
+					type = default
+					species = event_target:human_fallen_empires_future_species
+					ethos = {
+						ethic = ethic_fanatic_egalitarian
+						ethic = ethic_militarist
+					}
+					effect = {
+						human_fallen_empires_effect_fix_gov = yes
+						establish_communications_no_message = root
+					}
+				}
+				create_colony = {
+					owner = last_created_country
+					species = owner
+				}
+			}
+		}
+	}
+
 	option = {
 		name = human_fallen_empires.5052.1
 		trigger = {
 			has_country_flag = human_fallen_empires_criopods_var_1
 		}
 		event_target:human_fallen_empires_criopods_planet = {
-			create_colony = {
-				owner = root
-				species = event_target:human_fallen_empires_future_species
+			event_target:human_fallen_empires_criopods_planet = {
+				create_pop = {
+					species = event_target:human_fallen_empires_future_species
+				}
+				set_owner = root
 			}
 		}
 	}
@@ -7870,26 +7897,10 @@ country_event = {
 		trigger = {
 			has_country_flag = human_fallen_empires_criopods_var_2
 		}
-		event_target:human_fallen_empires_criopods_planet = {
-			create_country = {
-				name = random
-				type = default
-				species = event_target:human_fallen_empires_future_species
-				ethos = {
-					ethic = ethic_fanatic_egalitarian
-					ethic = ethic_militarist
-				}
-				effect = {
-					human_fallen_empires_effect_fix_gov = yes
-					set_subject_of = {
-						who = root
-						subject_type = protectorate
-					}
-				}
-			}
-			create_colony = {
-				owner = last_created_country
-				species = event_target:human_fallen_empires_future_species
+		event_target:human_fallen_empires_criopods_planet.owner = {
+			set_subject_of = {
+				who = root
+				subject_type = protectorate
 			}
 		}
 	}
@@ -7897,25 +7908,6 @@ country_event = {
 		name = human_fallen_empires.5052.3
 		trigger = {
 			has_country_flag = human_fallen_empires_criopods_var_3
-		}
-		event_target:human_fallen_empires_criopods_planet = {
-			create_country = {
-				name = random
-				type = default
-				species = event_target:human_fallen_empires_future_species
-				ethos = {
-					ethic = ethic_fanatic_egalitarian
-					ethic = ethic_militarist
-				}
-				effect = {
-					human_fallen_empires_effect_fix_gov = yes
-					establish_communications_no_message = root
-				}
-			}
-			create_colony = {
-				owner = last_created_country
-				species = event_target:human_fallen_empires_future_species
-			}
 		}
 	}
 	option = {
@@ -7925,30 +7917,9 @@ country_event = {
 			is_militarist = yes
 		}
 		human_fallen_empires_effect_militarist_attraction.1 = yes
-		event_target:human_fallen_empires_criopods_planet = {
-			create_country = {
-				name = random
-				type = default
-				species = event_target:human_fallen_empires_future_species
-				ethos = {
-					ethic = ethic_fanatic_egalitarian
-					ethic = ethic_militarist
-				}
-				effect = {
-					human_fallen_empires_effect_fix_gov = yes
-					establish_communications_no_message = root
-				}
-			}
-			create_colony = {
-				owner = last_created_country
-				species = event_target:human_fallen_empires_future_species
-			}
-			root = {
-				declare_war = {
-					target = last_created_country
-					attacker_war_goal = human_fallen_empires_wg_annex
-				}
-			}
+		declare_war = {
+			target = event_target:human_fallen_empires_criopods_planet.owner
+			attacker_war_goal = human_fallen_empires_wg_annex
 		}
 	}
 	after = {

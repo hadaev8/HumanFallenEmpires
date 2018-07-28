@@ -109,15 +109,15 @@ country_event = {
 				modifier = {
 					factor = 0
 					always = yes
-					log = "1"
 				}
+				log = "1"
 			}
 			1 = {
 				modifier = {
 					factor = 0
 					always = yes
-					log = "2"
 				}
+				log = "2"
 			}
 		}
 	}
@@ -130,8 +130,17 @@ country_event = {
 
 	immediate = {
 		capital_scope.solar_system = {
-			every_system_planet = {
-				remove_planet = yes
+			random_system_planet = {
+				limit = {
+					not = {
+						exists = owner
+					}
+				}
+				change_pc = pc_continental
+				create_colony = {
+					owner = root
+					species = event_target:human_fallen_empires_future_species
+				}
 			}
 		}
 	}
@@ -142,35 +151,9 @@ country_event = {
     is_triggered_only = yes
 
     immediate = {
-        # tags the first 5 non-outpost bases as key bases
-        if = {
-            limit = { check_variable = { which = jkai_keybasecount value < 5 } }
-            every_system_within_border = {
-                limit = { starbase = { has_starbase_size > starbase_outpost } }
-                starbase = { set_variable = { which = jkai_keybase value = 1 } }
-                root = { change_variable = { which = jkai_keybasecount value = 1 } }
-                log = "jkai_gamecontrol.5; setting key base for country [Root.GetName]; [This.GetName]"
-            }
-        }
-        # tags the first 5 colonies as key colonies (if they meet the selection criteria)
-        if = {
-            limit = { check_variable = { which = jkai_keycolonycount value < 5 } }
-            random_owned_pop = {
-                limit = { has_citizenship_type = { type = citizenship_full country = root } }
-                log = "jkai_gamecontrol.5; found pop [Root.GetName]; [This.GetName]"
-                save_event_target_as = saved_pop
-            }
-            every_owned_planet  = {
-                limit = {
-                    is_colony = yes
-                    planet_size > 12
-                    habitability = { who = event_target:saved_pop value > 0.70 }
-                }
-                set_variable = { which = jkai_keycolony value = 1 }
-                root = { change_variable = { which = jkai_keycolonycount value = 1 } }
-                log = "jkai_gamecontrol.5; setting key colony for country [Root.GetName]; [This.GetName]"
-            }
-        }
+		ruler = {
+			change_species = root
+		}
     }
 }
 

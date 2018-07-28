@@ -899,10 +899,11 @@ country_event = {
 				text = human_fallen_empires_discovery.151.4.desc
 				has_country_flag = human_fallen_empires_discovery.151.4
 			}
-			success_text = {
-				text = human_fallen_empires_discovery.151.crew_menu.desc.0
-				has_country_flag = human_fallen_empires_discovery.151.crew_menu
-			}
+			# потом пофиксить это
+			# success_text = {
+			# 	text = human_fallen_empires_discovery.151.crew_menu.desc.0
+			# 	has_country_flag = human_fallen_empires_discovery.151.crew_menu
+			# }
 			success_text = {
 				text = human_fallen_empires_discovery.151.contract_menu.desc.0
 				has_country_flag = human_fallen_empires_discovery.151.contract_menu
@@ -1023,117 +1024,46 @@ country_event = {
 	option = {
 		name = human_fallen_empires_discovery.151.crew_menu.0.0
 		trigger = {
-			has_country_flag = human_fallen_empires_discovery.151.crew_menu
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_1
-				has_modifier = human_fallen_empires_discovery_crew_2
-				has_modifier = human_fallen_empires_discovery_crew_3
-				has_modifier = human_fallen_empires_discovery_crew_4
-			}
+			has_country_flag = human_fallen_empires_discovery.151.4
 		}
 		allow = {
 			energy >= 200
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_1
-				has_modifier = human_fallen_empires_discovery_crew_2
-				has_modifier = human_fallen_empires_discovery_crew_3
+			not = {
 				has_modifier = human_fallen_empires_discovery_crew_4
 			}
 		}
 		is_dialog_only = yes
 		response_text = human_fallen_empires_discovery.151.crew_menu.0.0.response
 		add_energy = -200
-		human_fallen_empires_effect_discovery_clean_crew_modifier = yes
-		add_modifier = {
-			modifier = human_fallen_empires_discovery_crew_1
-			days = -1
-		}
-		event_target:human_fallen_empires_discovery_docking_planet.owner = {
-			add_energy = 100
-		}
-	}
-	# crew lvl 2
-	option = {
-		name = human_fallen_empires_discovery.151.crew_menu.0.1
-		trigger = {
-			has_country_flag = human_fallen_empires_discovery.151.crew_menu
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_2
-				has_modifier = human_fallen_empires_discovery_crew_3
-				has_modifier = human_fallen_empires_discovery_crew_4
+		switch = {
+			trigger = has_modifier
+			human_fallen_empires_discovery_crew_1 = {
+				remove_modifier = human_fallen_empires_discovery_crew_1
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_2
+					days = -1
+				}
 			}
-		}
-		allow = {
-			energy >= 200
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_2
-				has_modifier = human_fallen_empires_discovery_crew_3
-				has_modifier = human_fallen_empires_discovery_crew_4
+			human_fallen_empires_discovery_crew_2 = {
+				remove_modifier = human_fallen_empires_discovery_crew_2
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_3
+					days = -1
+				}
 			}
-		}
-		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.crew_menu.0.1.response
-		add_energy = -200
-		human_fallen_empires_effect_discovery_clean_crew_modifier = yes
-		add_modifier = {
-			modifier = human_fallen_empires_discovery_crew_2
-			days = -1
-		}
-		event_target:human_fallen_empires_discovery_docking_planet.owner = {
-			add_energy = 100
-		}
-	}
-	# crew lvl 3
-	option = {
-		name = human_fallen_empires_discovery.151.crew_menu.0.2
-		trigger = {
-			has_country_flag = human_fallen_empires_discovery.151.crew_menu
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_3
-				has_modifier = human_fallen_empires_discovery_crew_4
+			human_fallen_empires_discovery_crew_3 = {
+				remove_modifier = human_fallen_empires_discovery_crew_3
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_4
+					days = -1
+				}
 			}
-		}
-		allow = {
-			energy >= 200
-			nor = {
-				has_modifier = human_fallen_empires_discovery_crew_3
-				has_modifier = human_fallen_empires_discovery_crew_4
+			default = {
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_1
+					days = -1
+				}
 			}
-		}
-		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.crew_menu.0.2.response
-		add_energy = -200
-		human_fallen_empires_effect_discovery_clean_crew_modifier = yes
-		add_modifier = {
-			modifier = human_fallen_empires_discovery_crew_3
-			days = -1
-		}
-		event_target:human_fallen_empires_discovery_docking_planet.owner = {
-			add_energy = 100
-		}
-	}
-	# crew lvl 4
-	option = {
-		name = human_fallen_empires_discovery.151.crew_menu.0.3
-		trigger = {
-			has_country_flag = human_fallen_empires_discovery.151.crew_menu
-			not = {
-				has_modifier = human_fallen_empires_discovery_crew_4
-			}
-		}
-		allow = {
-			energy >= 200
-			not = {
-				has_modifier = human_fallen_empires_discovery_crew_4
-			}
-		}
-		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.crew_menu.0.3.response
-		add_energy = -200
-		human_fallen_empires_effect_discovery_clean_crew_modifier = yes
-		add_modifier = {
-			modifier = human_fallen_empires_discovery_crew_4
-			days = -1
 		}
 		event_target:human_fallen_empires_discovery_docking_planet.owner = {
 			add_energy = 100
@@ -1141,9 +1071,9 @@ country_event = {
 	}
 	# crew freeze
 	option = {
-		name = human_fallen_empires_discovery.151.crew_menu.0.4
+		name = human_fallen_empires_discovery.151.crew_menu.0.1
 		trigger = {
-			has_country_flag = human_fallen_empires_discovery.151.crew_menu
+			has_country_flag = human_fallen_empires_discovery.151.4
 		}
 		allow = {
 			energy >= 100
@@ -1155,42 +1085,33 @@ country_event = {
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_discovery.151.crew_menu.0.4.response
+		response_text = human_fallen_empires_discovery.151.crew_menu.0.1.response
 		add_energy = -200
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_discovery_crew_1
+		switch = {
+			trigger = has_modifier
+			human_fallen_empires_discovery_crew_1 = {
+				remove_modifier = human_fallen_empires_discovery_crew_1
 			}
-			remove_modifier = human_fallen_empires_discovery_crew_1
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_discovery_crew_2
+			human_fallen_empires_discovery_crew_2 = {
+				remove_modifier = human_fallen_empires_discovery_crew_2
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_1
+					days = -1
+				}
 			}
-			remove_modifier = human_fallen_empires_discovery_crew_2
-			add_modifier = {
-				modifier = human_fallen_empires_discovery_crew_1
-				days = -1
+			human_fallen_empires_discovery_crew_3 = {
+				remove_modifier = human_fallen_empires_discovery_crew_3
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_2
+					days = -1
+				}
 			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_discovery_crew_3
-			}
-			remove_modifier = human_fallen_empires_discovery_crew_3
-			add_modifier = {
-				modifier = human_fallen_empires_discovery_crew_2
-				days = -1
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = human_fallen_empires_discovery_crew_4
-			}
-			remove_modifier = human_fallen_empires_discovery_crew_4
-			add_modifier = {
-				modifier = human_fallen_empires_discovery_crew_3
-				days = -1
+			human_fallen_empires_discovery_crew_4 = {
+				remove_modifier = human_fallen_empires_discovery_crew_4
+				add_modifier = {
+					modifier = human_fallen_empires_discovery_crew_3
+					days = -1
+				}
 			}
 		}
 		event_target:human_fallen_empires_discovery_docking_planet.owner = {
@@ -1277,7 +1198,7 @@ country_event = {
 			event_target:human_fallen_empires_discovery_docking_planet.owner = {
 				any_relation = {
 					is_country_type = default
-					human_fallen_empires_trigger_is_undiplomatic = no
+					is_homicidal = no
 					their_opinion = {
 						who = prev
 						value <= -20
@@ -1314,7 +1235,7 @@ country_event = {
 				random_relation = {
 					limit = {
 						is_country_type = default
-						human_fallen_empires_trigger_is_undiplomatic = no
+						is_homicidal = no
 						their_opinion = {
 							who = prev
 							value <= -20
