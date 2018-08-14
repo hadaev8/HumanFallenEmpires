@@ -194,16 +194,35 @@ human_fallen_empires_trigger_population_enabled = {
 }
 
 # for pop
-human_fallen_empires_trigger_assimilator_pop = {
+human_fallen_empires_trigger_assimilator_pop_valid = {
+	#exists = owner
 	is_growing = no
 	human_fallen_empires_trigger_is_robot = no
 }
 
-human_fallen_empires_trigger_assimilator = {
-	human_fallen_empires_trigger_assimilator_pop = yes
+
+
+human_fallen_empires_trigger_assimilator_on_tile = {
+	exists = tile
+	tile = {
+		has_building = human_fallen_empires_building_assimilator
+		is_ruined = no
+	}
+}
+
+human_fallen_empires_trigger_assimilator_pop_to_move = {
+	human_fallen_empires_trigger_assimilator_on_tile = no
+	human_fallen_empires_trigger_assimilator_pop_valid = yes
+}
+
+human_fallen_empires_trigger_assimilator_pop_valid_with_ai_block = {
+	human_fallen_empires_trigger_assimilator_pop_valid = yes
 	or = {
-		owner = {
-			is_ai = no
+		and = {
+			exists = owner
+			owner = {
+				is_ai = no
+			}
 		}
 		nor = {
 			is_same_species = owner
@@ -211,15 +230,6 @@ human_fallen_empires_trigger_assimilator = {
 			is_same_species = event_target:human_fallen_empires_ahet_species
 		}
 	}
-}
-
-human_fallen_empires_trigger_assimilator_with_tile = {
-	exists = tile
-	tile = {
-		has_building = human_fallen_empires_building_assimilator
-		is_ruined = no
-	}
-	human_fallen_empires_trigger_assimilator = yes
 }
 
 human_fallen_empires_trigger_system_in_free_space = {

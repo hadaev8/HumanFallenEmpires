@@ -244,6 +244,9 @@ country_event = {
 	}
 
 	immediate = {
+		species = {
+			save_event_target_as = human_fallen_empires_population_old_species
+		}
 		random_owned_pop_species = {
 			limit = {
 				is_same_species = root
@@ -252,6 +255,7 @@ country_event = {
 						percentage > 0.5
 						limit = {
 							is_exact_same_species = prev
+							is_growing = no
 						}
 					}
 				}
@@ -272,6 +276,7 @@ country_event = {
 							percentage > 0.4
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -293,6 +298,7 @@ country_event = {
 							percentage > 0.3
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -314,6 +320,7 @@ country_event = {
 							percentage > 0.2
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -335,6 +342,7 @@ country_event = {
 							percentage > 0.1
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -368,6 +376,7 @@ country_event = {
 							percentage > 0.5
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -388,6 +397,7 @@ country_event = {
 							percentage > 0.4
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -408,6 +418,7 @@ country_event = {
 							percentage > 0.3
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -428,6 +439,7 @@ country_event = {
 							percentage > 0.2
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -448,6 +460,7 @@ country_event = {
 							percentage > 0.1
 							limit = {
 								is_exact_same_species = prev
+								is_growing = no
 							}
 						}
 					}
@@ -465,28 +478,158 @@ country_event = {
 				save_event_target_as = human_fallen_empires_population_species
 			}
 		}
+		# flags for texts
+		if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					is_same_species = root
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_subspecies
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				not = {
+					has_authority = auth_machine_intelligence
+				}
+				event_target:human_fallen_empires_population_species = {
+					human_fallen_empires_trigger_non_sapient_robot = yes
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_switch_to_robot_hive
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				not = {
+					has_authority = auth_hive_mind
+				}
+				event_target:human_fallen_empires_population_species = {
+					has_trait = trait_hive_mind
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_switch_to_bio_hive
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					or = {
+						has_citizenship_type = {
+							type = citizenship_full
+							country = prev
+						}
+						has_citizenship_type = {
+							type = citizenship_caste_system
+							country = prev
+						}
+					}
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_citizenship_full
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					has_citizenship_type = {
+						type = citizenship_assimilation
+						country = prev
+					}
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_citizenship_assimilation
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					or = {
+						has_citizenship_type = {
+							type = citizenship_limited
+							country = prev
+						}
+						has_citizenship_type = {
+							type = citizenship_caste_system_limited
+							country = prev
+						}
+					}
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_citizenship_limited
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					has_citizenship_type = {
+						type = citizenship_slavery
+						country = prev
+					}
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_citizenship_slavery
+				days = 10
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:human_fallen_empires_population_species = {
+					has_citizenship_type = {
+						type = citizenship_purge
+						country = prev
+					}
+				}
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_citizenship_purge
+				days = 10
+			}
+		}
+		# change species and other stuff if needed
 		change_dominant_species = {
 			species = event_target:human_fallen_empires_population_species
 			#change_all = no
 		}
-		# switch from hive
+		# random ethics civics if purifer
 		if = {
 			limit = {
-				human_fallen_empires_trigger_is_hive = yes
-				human_fallen_empires_trigger_non_sapient = no
+				has_valid_civic = civic_fanatic_purifiers
+				not = {
+					has_country_flag = human_fallen_empires_population.50_subspecies
+				}
 			}
-			create_country = {
-				type = default
-				species = this
-				ignore_initial_colony_error = yes
-			}
-			copy_ethos_and_authority = last_created_country
-			change_government = {
-				civics = random
+			human_fallen_empires_effect_gov_reset_non_hive = yes
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_was_purifiers
+				days = 10
 			}
 		}
-		human_fallen_empires_effect_fix_gov_hive = yes
+		human_fallen_empires_effect_gov_fix_from_hive = yes
+		human_fallen_empires_effect_gov_fix_to_hive = yes
 		log = "changing main species for [this.GetName]"
+		country_event = {
+			id = human_fallen_empires_population.52
+		}
+		every_relation = {
+			country_event = {
+				id = human_fallen_empires_population.52
+			}
+		}
 	}
 }
 
@@ -499,6 +642,550 @@ country_event = {
 	immediate = {
 		country_event = {
 			id = human_fallen_empires_population.50
+		}
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_population.52
+	title = human_fallen_empires_population.52.name
+	desc = {
+		trigger = {
+			# non hives
+			# subspecies
+			success_text = {
+				text = human_fallen_empires_population.52.desc.0.0
+				from = {
+					has_country_flag = human_fallen_empires_population.50_subspecies
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.0.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.0.2
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_subspecies
+				}
+			}
+			# new species is citizen
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_full
+				not = {
+					has_trait = trait_robotic_3
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.0.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_full
+				has_trait = trait_robotic_3
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.0.2
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_full
+				has_trait = trait_robotic_3
+				has_technology = tech_synthetic_workers
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.0.3
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_full
+				has_trait = trait_robotic_3
+				not = {
+					has_technology = tech_synthetic_workers
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_full
+					not = {
+						has_trait = trait_robotic_3
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.1.1.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_full
+					has_trait = trait_robotic_3
+				}
+			}
+			# new species assimilated
+			success_text = {
+				text = human_fallen_empires_population.52.desc.2.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_assimilation
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.2.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_assimilation
+				}
+			}
+			# new species is non citizen
+			success_text = {
+				text = human_fallen_empires_population.52.desc.3.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_limited
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.3.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_limited
+				}
+			}
+			# new species is slave
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+				not = {
+					has_trait = trait_robotic_3
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.0.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+				has_trait = trait_robotic_3
+				not = {
+					has_policy_flag = ai_outlawed
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.0.2
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+				has_trait = trait_robotic_3
+				has_policy_flag = ai_outlawed
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+					not = {
+						has_trait = trait_robotic_3
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.1.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+					has_trait = trait_robotic_3
+					not = {
+						has_policy_flag = ai_outlawed
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.4.1.2
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_slavery
+					has_trait = trait_robotic_3
+					has_policy_flag = ai_outlawed
+				}
+			}
+			# new species is purged
+			success_text = {
+				text = human_fallen_empires_population.52.desc.5.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_purge
+				not = {
+					has_trait = trait_robotic_3
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.5.0.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_citizenship_purge
+				has_trait = trait_robotic_3
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.5.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_purge
+					nor = {
+						has_country_flag = human_fallen_empires_population.50_was_purifiers
+						has_trait = trait_robotic_3
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.5.1.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_purge
+					has_country_flag = human_fallen_empires_population.50_was_purifiers
+					not = {
+						has_trait = trait_robotic_3
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.5.1.2
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_citizenship_purge
+					has_trait = trait_robotic_3
+				}
+			}
+			# became robo hive
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				nor = {
+					has_valid_civic = civic_machine_servitor
+					has_valid_civic = civic_machine_assimilator
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.1.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_servitor
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.1.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_servitor
+				exists = event_target:human_fallen_empires_event_target_5
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.2.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_assimilator
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.2.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_assimilator
+				exists = event_target:human_fallen_empires_event_target_5
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.3.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_terminator
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.0.3.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				has_valid_civic = civic_machine_terminator
+				exists = event_target:human_fallen_empires_event_target_5
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.1.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+					nor = {
+						has_valid_civic = civic_machine_servitor
+						has_valid_civic = civic_machine_assimilator
+						has_valid_civic = civic_machine_terminator
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.1.2
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+					has_valid_civic = civic_machine_servitor
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.1.3
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+					has_valid_civic = civic_machine_assimilator
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.6.1.4
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+			# became bio hive
+			success_text = {
+				text = human_fallen_empires_population.52.desc.7.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.7.0.1
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+				not = {
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.7.0.2
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.7.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+					not = {
+						has_valid_civic = civic_hive_devouring_swarm
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.7.1.1
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			# hives
+		}
+	}
+	# swith to hive
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+			}
+		}
+		picture = GFX_evt_glitchy_matrix
+	}
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_switch_to_bio_hive
+			}
+		}
+		picture = GFX_evt_hive_mind
+	}
+	# bio pics for upgrade-subspecies
+	picture = {
+		trigger = {
+			from = {
+				has_authority = auth_hive_mind
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			has_country_flag = human_fallen_empires_random_0
+		}
+		picture = GFX_evt_hive_mind
+	}
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			has_country_flag = human_fallen_empires_random_0
+		}
+		picture = GFX_evt_society_research
+	}
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			has_country_flag = human_fallen_empires_random_1
+		}
+		picture = GFX_evt_clones
+	}
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			has_country_flag = human_fallen_empires_random_2
+		}
+		picture = GFX_evt_genetic_modification
+	}
+	picture = {
+		trigger = {
+			from = {
+				has_country_flag = human_fallen_empires_population.50_subspecies
+			}
+			has_country_flag = human_fallen_empires_random_3
+		}
+		picture = GFX_evt_circuitry_modification
+	}
+	# robot pics
+	picture = {
+		trigger = {
+			from = {
+				or = {
+					has_authority = auth_machine_intelligence
+					has_trait = trait_robotic_3
+				}
+			}
+			or = {
+				has_country_flag = human_fallen_empires_random_0
+				has_country_flag = human_fallen_empires_random_1
+			}
+		}
+		picture = GFX_evt_robot_assembly_plant
+	}
+	picture = {
+		trigger = {
+			from = {
+				or = {
+					has_authority = auth_machine_intelligence
+					has_trait = trait_robotic_3
+				}
+			}
+			or = {
+				has_country_flag = human_fallen_empires_random_2
+				has_country_flag = human_fallen_empires_random_3
+			}
+		}
+		picture = GFX_evt_sapient_AI
+	}
+	picture = GFX_evt_alien_city
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	# hive_mind
+	# clones
+
+	# genetic_modification
+	# circuitry_modification
+	# society_research
+
+	# cybernetics
+
+	# glitchy_matrix
+	# sapient_AI
+	# robot_assembly_plant
+
+	trigger = {
+		is_ai = no
+		nand = {
+			not = {
+				is_country = from
+			}
+			has_country_flag = human_fallen_empires_population.52_block
+		}
+		exists = from
+	}
+
+	immediate = {
+		human_fallen_empires_effect_random_roll_flags_4_country = yes
+		if = {
+			limit = {
+				has_country_flag = human_fallen_empires_population.50_switch_to_robot_hive
+			}
+			every_owned_pop_species = {
+				limit = {
+					human_fallen_empires_trigger_is_robot = no
+				}
+				human_fallen_empires_effect_save_event_target = yes
+			}
+			every_relation = {
+				limit = {
+					human_fallen_empires_trigger_is_robot = no
+				}
+				species = {
+					human_fallen_empires_effect_save_event_target = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_population.52.0.0
+		trigger = {
+			is_country = from
+		}
+	}
+	option = {
+		name = human_fallen_empires_population.52.0.1
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires_block
+		custom_tooltip = human_fallen_empires_block.tooltip
+		trigger = {
+			not = {
+				is_country = from
+			}
+		}
+		hidden_effect = {
+			set_country_flag = human_fallen_empires_population.52_block
 		}
 	}
 }

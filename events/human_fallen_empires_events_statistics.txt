@@ -52,16 +52,16 @@ country_event = {
 	desc = {
 		trigger = {
 			success_text = {
-				text = human_fallen_empires_statistics.planet.0.desc
+				text = human_fallen_empires_statistics.system.0.desc
 				check_variable = {
-					which = human_fallen_empires_statistics_planet_num
+					which = human_fallen_empires_statistics_system_num
 					value > 0
 				}
 			}
 			fail_text = {
-				text = human_fallen_empires_statistics.planet.1.desc
+				text = human_fallen_empires_statistics.system.1.desc
 				check_variable = {
-					which = human_fallen_empires_statistics_planet_num
+					which = human_fallen_empires_statistics_system_num
 					value > 0
 				}
 			}
@@ -76,6 +76,20 @@ country_event = {
 				text = human_fallen_empires_statistics.star.1.desc
 				check_variable = {
 					which = human_fallen_empires_statistics_star_num
+					value > 0
+				}
+			}
+			success_text = {
+				text = human_fallen_empires_statistics.planet.0.desc
+				check_variable = {
+					which = human_fallen_empires_statistics_planet_num
+					value > 0
+				}
+			}
+			fail_text = {
+				text = human_fallen_empires_statistics.planet.1.desc
+				check_variable = {
+					which = human_fallen_empires_statistics_planet_num
 					value > 0
 				}
 			}
@@ -576,11 +590,15 @@ country_event = {
 
 	immediate = {
 		set_variable = {
-			which = human_fallen_empires_statistics_planet_num
+			which = human_fallen_empires_statistics_system_num
 			value = 0
 		}
 		set_variable = {
 			which = human_fallen_empires_statistics_star_num
+			value = 0
+		}
+		set_variable = {
+			which = human_fallen_empires_statistics_planet_num
 			value = 0
 		}
 		set_variable = {
@@ -723,411 +741,424 @@ country_event = {
 			which = human_fallen_empires_statistics_pc_pulsar_num
 			value = 0
 		}
-		every_planet = {
-			if = {
-				limit = {
-					is_star = no
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_planet_num
-						value = 1
-					}
+		every_system = {
+			root = {
+				change_variable = {
+					which = human_fallen_empires_statistics_system_num
+					value = 1
 				}
 			}
-			if = {
-				limit = {
-					is_star = yes
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_star_num
-						value = 1
+			every_system_planet = {
+				if = {
+					limit = {
+						is_star = no
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_planet_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_desert
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_desert_num
-						value = 1
+				else_if = {
+					limit = {
+						is_star = yes
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_arid
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_arid_num
-						value = 1
+				if = {
+					limit = {
+						is_planet_class = pc_desert
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_desert_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_savannah
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_savannah_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_arid
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_arid_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_tropical
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_tropical_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_savannah
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_savannah_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_continental
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_continental_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_tropical
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_tropical_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_ocean
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_ocean_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_continental
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_continental_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_tundra
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_tundra_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_ocean
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_ocean_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_arctic
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_arctic_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_tundra
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_tundra_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_alpine
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_alpine_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_arctic
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_arctic_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_gaia
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_gaia_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_alpine
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_alpine_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_habitat
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_habitat_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_gaia
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_gaia_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_ringworld_habitable
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_ringworld_habitable_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_habitat
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_habitat_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = human_fallen_empires_pc_pirate_base
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_human_fallen_empires_pc_pirate_base_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_ringworld_habitable
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_ringworld_habitable_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_asteroid
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_asteroid_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = human_fallen_empires_pc_pirate_base
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_human_fallen_empires_pc_pirate_base_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_gas_giant
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_gas_giant_num
-						value = 1
+				else_if = {
+					limit = {
+						or = {
+							is_planet_class = pc_asteroid
+							is_planet_class = pc_ice_asteroid
+							is_planet_class = pc_crystal_asteroid
+							is_planet_class = pc_crystal_asteroid_2
+						}
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_asteroid_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_molten
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_molten_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_gas_giant
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_gas_giant_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_barren
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_barren_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_molten
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_molten_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_barren_cold
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_barren_cold_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_barren
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_barren_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_toxic
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_toxic_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_barren_cold
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_barren_cold_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_frozen
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_frozen_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_toxic
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_toxic_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_nuked
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_nuked_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_frozen
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_frozen_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = human_fallen_empires_pc_memorial
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_human_fallen_empires_pc_memorial_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_nuked
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_nuked_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_ai
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_ai_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = human_fallen_empires_pc_memorial
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_human_fallen_empires_pc_memorial_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_infested
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_infested_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_ai
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_ai_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_shielded
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_shielded_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_infested
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_infested_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_shrouded
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_shrouded_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_shielded
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_shielded_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_b_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_b_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_shrouded
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_shrouded_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_a_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_a_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_b_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_b_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_f_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_f_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_a_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_a_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_g_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_g_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_f_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_f_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_k_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_k_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_g_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_g_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_m_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_m_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_k_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_k_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_black_hole
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_black_hole_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_m_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_m_star_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_neutron_star
-				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_neutron_star_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_black_hole
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_black_hole_num
+							value = 1
+						}
 					}
 				}
-			}
-			if = {
-				limit = {
-					is_planet_class = pc_pulsar
+				else_if = {
+					limit = {
+						is_planet_class = pc_neutron_star
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_neutron_star_num
+							value = 1
+						}
+					}
 				}
-				root = {
-					change_variable = {
-						which = human_fallen_empires_statistics_pc_pulsar_num
-						value = 1
+				else_if = {
+					limit = {
+						is_planet_class = pc_pulsar
+					}
+					root = {
+						change_variable = {
+							which = human_fallen_empires_statistics_pc_pulsar_num
+							value = 1
+						}
 					}
 				}
 			}
