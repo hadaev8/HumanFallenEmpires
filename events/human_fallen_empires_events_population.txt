@@ -520,6 +520,25 @@ country_event = {
 		}
 		else_if = {
 			limit = {
+				human_fallen_empires_trigger_is_hive = yes
+				human_fallen_empires_trigger_non_sapient = no
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_population.50_switch_from_hive
+				days = 10
+			}
+			if = {
+				limit = {
+					has_valid_civic = civic_machine_servitor
+				}
+				set_timed_country_flag = {
+					flag = human_fallen_empires_population.50_was_servitor
+					days = 10
+				}
+			}
+		}
+		else_if = {
+			limit = {
 				event_target:human_fallen_empires_population_species = {
 					or = {
 						has_citizenship_type = {
@@ -1014,6 +1033,23 @@ country_event = {
 				}
 			}
 			# hives
+			# from hive to regular
+			success_text = {
+				text = human_fallen_empires_population.52.desc.8.0.0
+				is_country = from
+				has_country_flag = human_fallen_empires_population.50_switch_from_hive
+				has_country_flag = human_fallen_empires_population.50_was_servitor
+			}
+			success_text = {
+				text = human_fallen_empires_population.52.desc.8.1.0
+				not = {
+					is_country = from
+				}
+				from = {
+					has_country_flag = human_fallen_empires_population.50_switch_from_hive
+					has_country_flag = human_fallen_empires_population.50_was_servitor
+				}
+			}
 		}
 	}
 	# swith to hive
