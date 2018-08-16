@@ -31,126 +31,81 @@ event = {
 					has_global_flag = human_fallen_empires_disable_pirate
 				}
 			}
-			# spawn pirate
-			random_list = {
-				4 = {
+			every_playable_country = {
+				limit = {
+					not = {
+						has_country_flag = human_fallen_empires_pirate_spawned
+					}
+					num_owned_planets > 2
+					human_fallen_empires_trigger_is_human_fallen = no
+					human_fallen_empires_trigger_is_hive = no
+					is_country_type = default
 				}
-				1 = {
-					modifier = {
-						factor = 2
-						is_difficulty > 0
+				# spawn pirate
+				random_list = {
+					9 = {
 					}
-					modifier = {
-						factor = 2
-						is_difficulty > 1
-					}
-					modifier = {
-						factor = 2
-						is_difficulty > 2
-					}
-					modifier = {
-						factor = 2
-						is_difficulty > 3
-					}
-					modifier = {
-						factor = 2
-						is_difficulty > 4
-					}
-					random_country = {
-						limit = {
-							not = {
-								has_country_flag = human_fallen_empires_birth_of_piracy
+					1 = {
+						modifier = {
+							factor = 2
+							or = {
+								is_difficulty > 0
+								is_difficulty > 1
 							}
-							is_country_type = default
-							num_owned_planets > 2
-							human_fallen_empires_trigger_is_human_fallen = no
-							human_fallen_empires_trigger_is_hive = no
 						}
+						modifier = {
+							factor = 2
+							or = {
+								is_difficulty > 2
+								is_difficulty > 3
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								is_at_war = yes
+								recently_lost_war = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								is_militarist = yes
+								is_egalitarian = yes
+							}
+						}
+						modifier = {
+							factor = 0.5
+							or = {
+								is_pacifist = yes
+								is_xenophobe = yes
+								is_authoritarian = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							any_owned_planet = {
+								is_occupied_flag = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							exists = capital_scope
+							capital_scope = {
+								is_occupied_flag = yes
+							}
+						}
+						# spawn pirate first time
 						country_event = {
 							id = human_fallen_empires_pirate.1
 							days = 1
 							random = 355
 						}
-					}
-				}
-			}
-			# spawn pirate again
-			if = {
-				limit = {
-					any_country = {
-						is_country_type = default
-						has_country_flag = human_fallen_empires_birth_of_piracy
-						not = {
-							has_country_flag = human_fallen_empires_pirate_spawned
-						}
-					}
-				}
-				every_country = {
-					limit = {
-						is_country_type = default
-						not = {
-							has_country_flag = human_fallen_empires_pirate_spawned
-						}
-						has_country_flag = human_fallen_empires_birth_of_piracy
-					}
-					random_list = {
-						99 = {
-						}
-						1 = {
-							modifier = {
-								factor = 2
-								is_difficulty > 0
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 1
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 2
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 3
-							}
-							modifier = {
-								factor = 2
-								is_difficulty > 4
-							}
-							modifier = {
-								factor = 2
-								is_at_war = yes
-							}
-							modifier = {
-								factor = 2
-								is_militarist = yes
-							}
-							modifier = {
-								factor = 0.5
-								is_pacifist = yes
-							}
-							modifier = {
-								factor = 2
-								any_owned_planet = {
-									not = {
-										is_controlled_by = owner
-									}
-								}
-							}
-							modifier = {
-								factor = 2
-								any_owned_planet = {
-									is_capital = yes
-									not = {
-										is_controlled_by = owner
-									}
-								}
-							}
-							country_event = {
-								id = human_fallen_empires_pirate.6
-								days = 1
-								random = 355
-							}
+						# spawn pirate again
+						country_event = {
+							id = human_fallen_empires_pirate.6
+							days = 1
+							random = 355
 						}
 					}
 				}
@@ -1348,7 +1303,7 @@ country_event = {
 	is_triggered_only = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_egypt.ruler
+		portrait = event_target:human_fallen_empires_egypt_country.ruler
 		room = human_fallen_empires_egypt_room
 	}
 
@@ -3183,6 +3138,7 @@ ship_event = {
 						planet_event = {
 							id = human_fallen_empires.150
 							days = 1
+							random = 10
 						}
 					}
 					33 = {
@@ -3193,6 +3149,7 @@ ship_event = {
 						planet_event = {
 							id = human_fallen_empires.200
 							days = 1
+							random = 10
 						}
 					}
 					33 = {
@@ -3203,6 +3160,7 @@ ship_event = {
 						planet_event = {
 							id = human_fallen_empires.250
 							days = 1
+							random = 10
 						}
 					}
 					1 = {
@@ -3210,6 +3168,7 @@ ship_event = {
 							ship_event = {
 								id = human_fallen_empires.303
 								days = 15
+								random = 10
 							}
 						}
 					}
@@ -7386,10 +7345,14 @@ country_event = {
 			}
 			pop_change_ethic = ethic_militarist
 		}
-		# kill_leader = {
-		# 	type = ruler
-		# 	show_notification = no
-		# }
+		kill_leader = {
+			type = ruler
+			show_notification = no
+		}
+		create_leader = {
+			type = ruler
+		}
+		assign_leader = last_created_leader
 		# добавить потом убийство лидера и добавление нового
 		set_country_type = default
 		set_global_flag = human_fallen_empires_future_in_expansion
@@ -7416,7 +7379,7 @@ country_event = {
 	is_triggered_only = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_future.ruler
+		portrait = event_target:human_fallen_empires_future_country.ruler
 		room = human_fallen_empires_future_room
 	}
 
