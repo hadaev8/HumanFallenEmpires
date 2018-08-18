@@ -95,15 +95,8 @@ event = {
 								is_occupied_flag = yes
 							}
 						}
-						# spawn pirate first time
 						country_event = {
-							id = human_fallen_empires_pirate.1
-							days = 1
-							random = 355
-						}
-						# spawn pirate again
-						country_event = {
-							id = human_fallen_empires_pirate.6
+							id = human_fallen_empires_pirate.0
 							days = 1
 							random = 355
 						}
@@ -409,6 +402,12 @@ event = {
 			# war in heavens trigger
 			country_event = {
 				id = human_fallen_empires_total_war.1010
+				days = 1
+				random = 3600
+			}
+			# drone awake
+			country_event = {
+				id = human_fallen_empires.606
 				days = 1
 				random = 3600
 			}
@@ -1956,7 +1955,7 @@ planet_event = {
 	id = human_fallen_empires.150
 	title = human_fallen_empires.150.name
 	desc = human_fallen_empires.150.desc
-	picture = GFX_evt_human_fallen_empires_building_thoth_temple_2
+	picture = GFX_evt_human_fallen_empires_temple_of_toth
 	show_sound = event_mystic_reveal
 	location = root
 	trackable = yes
@@ -3234,7 +3233,7 @@ ship_event = {
 }
 
 # find sol 350
-ship_event = {
+fleet_event = {
 	id = human_fallen_empires.350
 	title = human_fallen_empires.350.name
 	desc = {
@@ -5070,24 +5069,285 @@ country_event = {
 	}
 }
 
-# drone bombardment event for on_monthly_orbital_bombardment
-planet_event = {
+# drone awake
+country_event = {
 	id = human_fallen_empires.606
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		exists = owner
-		exists = from
-		from = {
-			is_country_type = human_fallen_empires_drone
+		human_fallen_empires_trigger_story_enabled = yes
+		exists = event_target:human_fallen_empires_drone_country
+		nor = {
+			has_global_flag = human_fallen_empires_drone_awake
+			has_global_flag = human_fallen_empires_has_event.606
 		}
-		num_pops > 0
+		years_passed > 10
 	}
 
 	immediate = {
-		random_owned_pop = {
-			kill_pop = yes
+		random_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			save_event_target_as = human_fallen_empires_606_target_country
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:human_fallen_empires_606_target_country
+				}
+			}
+			random_playable_country = {
+				save_event_target_as = human_fallen_empires_606_target_country
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_606_target_country
+			}
+			random_system = {
+				limit = {
+					has_presence = no
+					distance_to_empire = {
+						who = event_target:human_fallen_empires_606_target_country
+						distance <= 50
+					}
+					any_planet = {
+						is_planet_class = pc_gas_giant
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_gas_giant
+					}
+					save_event_target_as = human_fallen_empires_606_target
+				}
+			}
+			if = {
+				limit = {
+					not = {
+						exists = event_target:human_fallen_empires_606_target
+					}
+				}
+				event_target:human_fallen_empires_606_target_country = {
+					random_system_within_border = {
+						limit = {
+							any_planet = {
+								not = {
+									exists = owner
+								}
+								is_planet_class = pc_gas_giant
+							}
+						}
+						random_system_planet = {
+							limit = {
+								not = {
+									exists = owner
+								}
+							}
+							save_event_target_as = human_fallen_empires_606_target
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = event_target:human_fallen_empires_606_target
+				}
+				set_global_flag = human_fallen_empires_has_event.606
+				event_target:human_fallen_empires_606_target_country = {
+					country_event = {
+						id = human_fallen_empires.607
+					}
+				}
+			}
+		}
+	}
+}
+
+# start special project
+country_event = {
+	id = human_fallen_empires.607
+	title = human_fallen_empires.607.name
+	desc = human_fallen_empires.607.desc
+	picture = GFX_evt_gas_giant
+	show_sound = event_sensor_ping
+	location = event_target:human_fallen_empires_606_target
+	trackable = yes
+	is_triggered_only = yes
+
+	immediate = {
+		enable_special_project = {
+			name = human_fallen_empires_project_drone_awake
+			location = event_target:human_fallen_empires_606_target
+			owner = root
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.607.0
+		tooltip = {
+			enable_special_project = {
+				name = human_fallen_empires_project_drone_awake
+				location = event_target:human_fallen_empires_606_target
+				owner = root
+			}
+		}
+	}
+}
+
+# project complete
+ship_event = {
+	id = human_fallen_empires.608
+	title = human_fallen_empires.608.name
+	desc = human_fallen_empires.608.desc
+	picture = GFX_evt_gas_giant
+	show_sound = event_ship_thrusters
+	location = event_target:human_fallen_empires_606_target
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:human_fallen_empires_drone_country
+	}
+
+	immediate = {
+		event_target:human_fallen_empires_drone_country = {
+			country_event = {
+				id = human_fallen_empires.611
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires_at_the_sreen
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = human_fallen_empires.609
+				}
+			}
+		}
+	}
+}
+
+# diplo event
+country_event = {
+	id = human_fallen_empires.609
+	title = TRANSMISSION
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.609.desc.0
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
+			fail_text = {
+				text = human_fallen_empires.609.desc.1
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
+		}
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = human_fallen_empires.609.0
+		exclusive_trigger = {
+			has_country_flag = human_fallen_empires_marked_as_human
+		}
+		custom_tooltip = human_fallen_empires.609.0.tooltip
+	}
+	option = {
+		name = human_fallen_empires.609.1
+		exclusive_trigger = {
+			has_communications = event_target:human_fallen_empires_drone_country
+		}
+		custom_tooltip = human_fallen_empires.609.0.tooltip
+	}
+	option = {
+		name = human_fallen_empires.609.2
+		exclusive_trigger = {
+			has_authority = auth_machine_intelligence
+		}
+		custom_tooltip = human_fallen_empires.609.0.tooltip
+	}
+	option = {
+		name = human_fallen_empires.609.3
+		custom_tooltip = human_fallen_empires.609.0.tooltip
+	}
+}
+
+# project failed
+country_event = {
+	id = human_fallen_empires.610
+	title = human_fallen_empires.610.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.610.desc.0.0
+				has_country_flag = human_fallen_empires_random_0
+			}
+			success_text = {
+				text = human_fallen_empires.610.desc.0.1
+				has_country_flag = human_fallen_empires_random_1
+			}
+			success_text = {
+				text = human_fallen_empires.610.desc.1
+				has_communications = event_target:human_fallen_empires_drone_country
+			}
+		}
+	}
+	picture = GFX_evt_gas_giant
+	show_sound = event_sensor_ping
+	location = event_target:human_fallen_empires_606_target
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:human_fallen_empires_drone_country
+	}
+
+	immediate = {
+		human_fallen_empires_effect_random_roll_flags_2_country = yes
+		event_target:human_fallen_empires_drone_country = {
+			country_event = {
+				id = human_fallen_empires.611
+			}
+		}
+	}
+
+	option = {
+		name = INTERESTING
+	}
+}
+
+# actual awake effect
+country_event = {
+	id = human_fallen_empires.611
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = human_fallen_empires_drone_awake
+		remove_global_flag = human_fallen_empires_has_event.606
+		every_system_within_border = {
+			every_neighbor_system = {
+				limit = {
+					is_surveyed = {
+						who = root.owner
+						status = no
+					}
+				}
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = root.owner
+					}
+				}
+			}
 		}
 	}
 }

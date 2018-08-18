@@ -29,7 +29,7 @@ ship_event = {
 				human_fallen_empires_effect_convert_to_asteroid = yes
 			}
 		}
-		log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
+		#log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
 		destroy_fleet = fleet
 	}
 }
@@ -41,12 +41,12 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		#always = no
+		always = no
 		exists = owner
 		owner = {
 			or = {
 				is_country_type = human_fallen_empires_drone
-				#is_country_type = human_fallen_empires_pirate
+				is_country_type = human_fallen_empires_pirate
 			}
 		}
 	}
@@ -70,7 +70,56 @@ planet_event = {
 	}
 
 	immediate = {
+		log = "converting to asteroid [this.GetName]"
 		human_fallen_empires_effect_convert_to_asteroid = yes
+	}
+}
+
+ship_event = {
+	id = human_fallen_empires_maintenance.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = solar_system
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_drone
+		}
+		has_global_flag = human_fallen_empires_drone_awake
+	}
+
+	immediate = {
+		solar_system = {
+			every_neighbor_system = {
+				limit = {
+					is_surveyed = {
+						who = root.owner
+						status = no
+					}
+				}
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = root.owner
+					}
+				}
+				every_neighbor_system = {
+					limit = {
+						is_surveyed = {
+							who = root.owner
+							status = no
+						}
+					}
+					every_system_planet = {
+						surveyed = {
+							set_surveyed = yes
+							surveyor = root.owner
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

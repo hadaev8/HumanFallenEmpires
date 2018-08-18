@@ -1,7 +1,28 @@
 #
 namespace = human_fallen_empires_pirate
 
-# spawn pirate birth of piracy
+# spawn pirate
+country_event = {
+	id = human_fallen_empires_pirate.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		count_country = {
+			limit = {
+				is_country_type = human_fallen_empires_pirate
+			}
+			count < 31
+		}
+	}
+
+	immediate = {
+		save_event_target_as = human_fallen_empires_pirate_target
+		human_fallen_empires_effect_pirate_init = yes
+	}
+}
+
+# birth of piracy info event
 country_event = {
 	id = human_fallen_empires_pirate.1
 	title = pirate.1.name
@@ -103,18 +124,16 @@ country_event = {
 		}
 	}
 
+	is_triggered_only = yes
 	trigger = {
+		is_ai = no
 		not = {
 			has_country_flag = human_fallen_empires_birth_of_piracy
 		}
 	}
 
-	is_triggered_only = yes
-
 	immediate = {
 		human_fallen_empires_effect_random_roll_flags_5_country = yes
-		save_event_target_as = human_fallen_empires_pirate_target
-		human_fallen_empires_effect_pirate_init = yes
 	}
 
 	option = {
@@ -184,6 +203,13 @@ country_event = {
 	}
 
 	immediate = {
+		every_owned_planet = {
+			limit = {
+				is_asteroid = yes
+			}
+			log = "fixing planet class for [this.GetName], owner: [this.owner.GetName]"
+			change_pc = human_fallen_empires_pc_pirate_base
+		}
 		# build new bases
 		country_event = {
 			id = human_fallen_empires_pirate.3
@@ -226,7 +252,7 @@ country_event = {
 				who = root
 				modifier = human_fallen_empires_opinion_pirate_prior_target
 			}
-			log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
+			#log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
 		}
 		country_event = {
 			id = human_fallen_empires_pirate.10
@@ -241,7 +267,7 @@ country_event = {
 	}
 }
 
-# pirate build base
+# pirate new build base
 country_event = {
 	id = human_fallen_empires_pirate.3
 	hide_window = yes
@@ -249,6 +275,7 @@ country_event = {
 
 	trigger = {
 		energy >= @human_fallen_empires_pirate_base_cost
+		exists = capital_scope
 	}
 
 	immediate = {
@@ -291,29 +318,7 @@ ship_event = {
 	}
 }
 
-# spawn pirate again
-country_event = {
-	id = human_fallen_empires_pirate.6
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		has_country_flag = human_fallen_empires_birth_of_piracy
-		count_country = {
-			count < 31
-			limit = {
-				is_country_type = human_fallen_empires_pirate
-			}
-		}
-	}
-
-	immediate = {
-		save_event_target_as = human_fallen_empires_pirate_target
-		human_fallen_empires_effect_pirate_init = yes
-	}
-}
-
-# inform event
+# info event
 country_event = {
 	id = human_fallen_empires_pirate.7
 	title = pirate.50.name
@@ -509,6 +514,7 @@ fleet_event = {
 		num_ships > 4
 		has_hp_percentage > 0.99
 		is_fleet_idle = yes
+		is_being_repaired = no
 		any_system = {
 			human_fallen_empires_pirate_valid_target_system = yes
 			any_planet = {
@@ -518,11 +524,11 @@ fleet_event = {
 	}
 
 	immediate = {
-		#log = "pirate fleet logic"
+		log = "pirate fleet logic fleet [this.GetName], owner [owner.GetName]"
 		clear_fleet_actions = this
 		queue_actions = {
 			repeat = {
-				# try found prior target
+				# try find prior target
 				find_closest_system = {
 					trigger = {
 						id = human_fallen_empires_pirate.50.trigger.0.0
@@ -600,27 +606,11 @@ fleet_event = {
 						}
 					}
 				}
-				repeat = {
-					max_iterations = 5
-					find_closest_planet = {
-						trigger = {
-							id = human_fallen_empires_pirate.50.trigger.1.0
-							root = {
-								has_hp_percentage > 0.9
-							}
-							not = { exists = owner }
-							human_fallen_empires_pirate_valid_target_planet = yes
-						}
-						found_planet = {
-							orbit_planet = this
-						}
-					}
-				}
 				find_closest_planet = {
 					trigger = {
 						id = human_fallen_empires_pirate.50.trigger.1.1
 						root = {
-							has_hp_percentage > 0.9
+							has_hp_percentage > 0.8
 						}
 						exists = owner
 						human_fallen_empires_pirate_valid_target_planet = yes
@@ -628,6 +618,24 @@ fleet_event = {
 					found_planet = {
 						orbit_planet = this
 						wait = 180
+					}
+				}
+				repeat = {
+					max_iterations = 10
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_pirate.50.trigger.1.0
+							root = {
+								has_hp_percentage > 0.8
+							}
+							not = {
+								exists = owner
+							}
+							human_fallen_empires_pirate_valid_target_planet = yes
+						}
+						found_planet = {
+							orbit_planet = this
+						}
 					}
 				}
 				effect = {
@@ -640,14 +648,14 @@ fleet_event = {
 					duration = 200
 					random = 150
 				}
-				effect = {
-					id = human_fallen_empires_pirate.50.effect.2.1
-					root = {
-						fleet_event = {
-							id = human_fallen_empires_pirate.50
-						}
-					}
-				}
+				# effect = {
+				# 	id = human_fallen_empires_pirate.50.effect.2.1
+				# 	root = {
+				# 		fleet_event = {
+				# 			id = human_fallen_empires_pirate.50
+				# 		}
+				# 	}
+				# }
 			}
 		}
 	}
@@ -742,7 +750,7 @@ planet_event = {
 	}
 
 	immediate = {
-		# log = "pirate bombarding on [Root.GetStarName]"
+		log = "pirate bombarding on [Root.GetStarName]"
 		if = {
 			limit = {
 				from = {
@@ -758,12 +766,9 @@ planet_event = {
 			human_fallen_empires_effect_pirate_ravage_planet = yes
 		}
 		else = {
-			random_list = {
-				8 = {
-				}
-				2 = {
-					human_fallen_empires_effect_pirate_ravage_planet = yes
-				}
+			random = {
+				chance = 20
+				human_fallen_empires_effect_pirate_ravage_planet = yes
 			}
 		}
 	}
@@ -830,12 +835,12 @@ ship_event = {
 	trigger = {
 		exists = this
 		exists = from.owner
+		exists = solar_system
 		exists = owner
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
 		is_ship_class = shipclass_starbase
-		exists = solar_system
 	}
 
 	immediate = {
@@ -854,14 +859,19 @@ ship_event = {
 				from.owner = {
 					num_owned_planets > 0
 				}
-				solar_system = {
-					any_neighbor_system = {
-						 ignore_hyperlanes = no
-						 owner = {
-							 is_country = from.owner
-						 }
+				or = {
+					solar_system = {
+						any_neighbor_system = {
+							ignore_hyperlanes = no
+							exists = owner
+							owner = {
+								is_country = from.owner
+							}
+						}
 					}
-
+					from.owner = {
+						is_country_type = human_fallen_empires_pirate
+					}
 				}
 			}
 			solar_system = {
@@ -979,6 +989,12 @@ planet_event = {
 
 	trigger = {
 		is_planet_class = human_fallen_empires_pc_pirate_base
+		nand = {
+			exists = owner
+			owner = {
+				is_country_type = human_fallen_empires_pirate
+			}
+		}
 	}
 
 	immediate = {
@@ -1209,6 +1225,52 @@ country_event = {
 		set_faction_hostility = {
 			target = from
 			set_hostile = yes
+		}
+	}
+}
+
+# A fleet has entered a system
+# Scope = Fleet
+# From = System
+# get disabled starbase
+fleet_event = {
+	id = human_fallen_empires_pirate.62
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = solar_system.starbase
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_pirate
+		}
+		solar_system = {
+			starbase = {
+				exists = owner
+				owner = {
+					is_country_type = human_fallen_empires_pirate
+				}
+			}
+			any_ship_in_system = {
+				#is_disabled = yes doesnt work
+				has_hp_percentage < 0.5
+				is_ship_class = shipclass_starbase
+			}
+			nor = {
+				is_owned_by = root.owner
+				any_ship_in_system = {
+					not = {
+						is_owned_by = root.owner
+					}
+					is_ship_class = shipclass_military
+				}
+			}
+		}
+	}
+
+	immediate = {
+		solar_system.starbase = {
+			set_owner = root.owner
 		}
 	}
 }

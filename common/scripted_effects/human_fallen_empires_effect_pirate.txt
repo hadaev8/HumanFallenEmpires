@@ -20,19 +20,6 @@ human_fallen_empires_effect_pirate_init = {
 			flag = human_fallen_empires_pirate_spawned
 			days = @human_fallen_empires_pirate_spawn_cooldown
 		}
-		if = {
-			limit = {
-				not = {
-					has_event_chain = human_fallen_empires_chain_pirate_count
-				}
-			}
-			begin_event_chain = {
-				event_chain = human_fallen_empires_chain_pirate_count
-				target = this
-			}
-			set_country_flag = human_fallen_empires_birth_of_piracy
-			set_country_flag = pirate_encountered
-		}
 		random_system = {
 			limit = {
 				distance_to_empire = {
@@ -45,6 +32,29 @@ human_fallen_empires_effect_pirate_init = {
 			save_event_target_as = pirate_system
 			human_fallen_empires_effect_pirate_init_country = yes
 			human_fallen_empires_effect_pirate_init_base = yes
+		}
+		country_event = {
+			id = human_fallen_empires_pirate.1
+			days = 1
+			random = 15
+		}
+		country_event = {
+			id = human_fallen_empires_pirate.7
+			days = 1
+			random = 15
+		}
+		if = {
+			limit = {
+				not = {
+					has_event_chain = human_fallen_empires_chain_pirate_count
+				}
+			}
+			begin_event_chain = {
+				event_chain = human_fallen_empires_chain_pirate_count
+				target = this
+			}
+			set_country_flag = human_fallen_empires_birth_of_piracy
+			set_country_flag = pirate_encountered
 		}
 	}
 }
@@ -87,24 +97,32 @@ human_fallen_empires_effect_pirate_init_base = {
 		}
 		event_target:human_fallen_empires_pirate_base = {
 			change_pc = human_fallen_empires_pc_pirate_base
+			if = {
+				limit = {
+					not = {
+						is_planet_class = human_fallen_empires_pc_pirate_base
+					}
+				}
+				log = "wrong planet class while init pirate base [this.GetName] system: [this.solar_system.GetName]"
+			}
 			create_colony = {
 				owner = event_target:human_fallen_empires_pirate_clan
 				species = owner
 			}
-			set_owner = event_target:human_fallen_empires_pirate_clan
-			# if = {
-			# 	limit = {
-			# 		not = {
-			# 			exists = owner
-			# 		}
-			# 	}
-			# 	set_owner = event_target:human_fallen_empires_pirate_clan
-			# 	log = "pirate base not created, try to set owner [this.GetName] system: [this.solar_system.GetName]"
-			# }
-			log = "pirate created new base [this.GetName] in [This.GetStarName] system, owner: [owner.GetName]"
 			every_owned_pop = {
 				kill_pop = yes
 			}
+			#set_owner = event_target:human_fallen_empires_pirate_clan
+			if = {
+			 	limit = {
+			 		not = {
+			 			exists = owner
+			 		}
+			 	}
+			 	#set_owner = event_target:human_fallen_empires_pirate_clan
+			 	log = "owner not exists [this.GetName] system: [this.solar_system.GetName]"
+			}
+			#log = "pirate created new base [this.GetName] in [this.GetStarName] system, owner: [owner.GetName]"
 			#set_planet_flag = human_fallen_empires_pirate_base
 			human_fallen_empires_effect_create_starbase_starport_from_planet = yes
 			human_fallen_empires_effect_starbase_add_shipyard_0 = yes
@@ -114,7 +132,6 @@ human_fallen_empires_effect_pirate_init_base = {
 		log = "cant find planet for pirate base, whats happen? system: [this.GetName]"
 	}
 }
-
 
 human_fallen_empires_effect_pirate_init_country = {
 	create_country = {
