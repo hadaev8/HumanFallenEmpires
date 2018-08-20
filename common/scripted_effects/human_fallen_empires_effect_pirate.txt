@@ -61,22 +61,15 @@ human_fallen_empires_effect_pirate_init = {
 
 # for system, asteroid ideally, need event target pirate_band
 human_fallen_empires_effect_pirate_init_base = {
-	if = {
+	random_system_planet = {
 		limit = {
-			not = {
-				exists = event_target:human_fallen_empires_pirate_base
+			human_fallen_empires_pirate_valid_base_planet = yes
+			exists = orbital_deposit_tile
+			orbital_deposit_tile = {
+				has_deposit = no
 			}
 		}
-		random_system_planet = {
-			limit = {
-				human_fallen_empires_pirate_valid_base_planet = yes
-				exists = orbital_deposit_tile
-				orbital_deposit_tile = {
-					has_deposit = no
-				}
-			}
-			save_event_target_as = human_fallen_empires_pirate_base
-		}
+		save_global_event_target_as = human_fallen_empires_pirate_base
 	}
 	if = {
 		limit = {
@@ -88,7 +81,7 @@ human_fallen_empires_effect_pirate_init_base = {
 			limit = {
 				human_fallen_empires_pirate_valid_base_planet = yes
 			}
-			save_event_target_as = human_fallen_empires_pirate_base
+			save_global_event_target_as = human_fallen_empires_pirate_base
 		}
 	}
 	if = {
@@ -103,7 +96,7 @@ human_fallen_empires_effect_pirate_init_base = {
 						is_planet_class = human_fallen_empires_pc_pirate_base
 					}
 				}
-				log = "wrong planet class while init pirate base [this.GetName] system: [this.solar_system.GetName]"
+				log = "wrong planet class while init pirate base [this.GetName] system: [solar_system.GetName]"
 			}
 			create_colony = {
 				owner = event_target:human_fallen_empires_pirate_clan
@@ -120,12 +113,13 @@ human_fallen_empires_effect_pirate_init_base = {
 			 		}
 			 	}
 			 	#set_owner = event_target:human_fallen_empires_pirate_clan
-			 	log = "owner not exists [this.GetName] system: [this.solar_system.GetName]"
+			 	log = "owner not exists [this.GetName] system: [solar_system.GetName]"
 			}
-			#log = "pirate created new base [this.GetName] in [this.GetStarName] system, owner: [owner.GetName]"
+			#log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
 			#set_planet_flag = human_fallen_empires_pirate_base
 			human_fallen_empires_effect_create_starbase_starport_from_planet = yes
 			human_fallen_empires_effect_starbase_add_shipyard_0 = yes
+			clear_global_event_target = event_target:human_fallen_empires_pirate_base
 		}
 	}
 	else = {
@@ -446,7 +440,7 @@ human_fallen_empires_effect_pirate_flee_fleets = {
 					is_ship_class = shipclass_military
 				}
 				set_owner = prevprev
-				log = "[this.GetName] flee to [owner.GetName]"
+				log = "[this.GetName] flee to [owner.GetName] from [prev.GetName]"
 			}
 		}
 	}
