@@ -131,8 +131,6 @@ country_event = {
 		create_species = {
 		 	name = Zombies
 		 	class = random_non_machine
-		 	portrait = random
-		 	traits = random
 		}
 		create_country = {
 			name = Zombies
@@ -825,7 +823,7 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "Plague zombies take planet [this.GetName] owner: [From.GetName]"
+		log = "Plague zombies take planet [this.GetName] owner: [owner.GetName]"
 		owner = {
 			country_event = {
 				id = human_fallen_empires_plague.62
@@ -867,15 +865,9 @@ planet_event = {
 			is_country_type = human_fallen_empires_plague_zombie
 		}
 		exists = fromfrom
-		# fromfrom = {
-		# 	not = {
-		# 		is_country_type = human_fallen_empires_plague_zombie
-		# 	}
-		# }
 	}
 
 	immediate = {
-		log = "Take planet [this.GetName] from zombies new owner: [owner.GetName]"
 		every_planet_army = {
 			limit = {
 				army_type = human_fallen_empires_plague_zombie_army
@@ -883,6 +875,7 @@ planet_event = {
 			remove_army = yes
 		}
 		set_owner = fromfrom
+		log = "Take planet [this.GetName] from zombies new owner: [owner.GetName]"
 	}
 
 	option = {
@@ -912,6 +905,7 @@ country_event = {
 
 	trigger = {
 		last_increased_tech = human_fallen_empires_tech_plague_study
+		has_global_flag = human_fallen_empires_plague_started
 	}
 
 	immediate = {
@@ -928,6 +922,12 @@ country_event = {
 		room = human_fallen_empires_lab_room
 	}
 
+	option = {
+		name = DISCONCERTING
+		exclusive_trigger = {
+			human_fallen_empires_trigger_is_hive = yes
+		}
+	}
 	option = {
 		name = human_fallen_empires_plague.9.0
 		custom_tooltip = human_fallen_empires_plague.9.0.tooltip
