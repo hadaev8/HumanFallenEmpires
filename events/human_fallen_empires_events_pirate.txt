@@ -216,9 +216,6 @@ country_event = {
 		}
 		# send fleet logic for unstuck fleets
 		every_owned_fleet = {
-			limit = {
-				num_ships > 4
-			}
 			fleet_event = {
 				id = human_fallen_empires_pirate.50
 			}
@@ -524,7 +521,7 @@ fleet_event = {
 	}
 
 	immediate = {
-		log = "pirate fleet logic fleet [this.GetName], owner [owner.GetName]"
+		#log = "pirate fleet logic fleet [this.GetName], owner [owner.GetName]"
 		clear_fleet_actions = this
 		queue_actions = {
 			repeat = {
@@ -641,12 +638,26 @@ fleet_event = {
 				effect = {
 					id = human_fallen_empires_pirate.50.effect.2.0
 					root = {
-						order_forced_return = yes
+						if = {
+							limit = {
+								has_hp_percentage > 0.9
+							}
+							root = {
+								clear_fleet_actions = this
+								#log = "continue raid"
+								fleet_event = {
+									id = human_fallen_empires_pirate.50
+								}
+							}
+						}
+						else = {
+							order_forced_return = yes
+						}
 					}
 				}
 				wait = {
-					duration = 200
-					random = 150
+					duration = 300
+					random = 50
 				}
 				# effect = {
 				# 	id = human_fallen_empires_pirate.50.effect.2.1
@@ -970,10 +981,14 @@ ship_event = {
 							species = this.species
 							effect = {
 								human_fallen_empires_effect_gov_fix = yes
+								prevprev = {
+									create_colony = {
+										owner = prev
+									}
+								}
 							}
 						}
 					}
-					set_owner = last_created_country
 				}
 			}
 			destroy_fleet = fleet

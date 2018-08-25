@@ -613,7 +613,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 			trigger = {
 				id = human_fallen_empires_find_new_home_trigger.0
 				any_planet = {
-					not = { exists = owner }
+					not = {
+						exists = owner
+					}
 					habitability = {
 						who = event_target:human_fallen_empires_varelse_species
 						value > 0.7
@@ -628,7 +630,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 					trigger = {
 						id = human_fallen_empires_find_new_home_trigger.1
 						any_planet = {
-							not = { exists = owner }
+							not = {
+								exists = owner
+							}
 							habitability = {
 								who = event_target:human_fallen_empires_varelse_species
 								value > 0.4
@@ -643,7 +647,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							trigger = {
 								id = human_fallen_empires_find_new_home_trigger.2
 								any_planet = {
-									not = { exists = owner }
+									not = {
+										exists = owner
+									}
 									habitability = {
 										who = event_target:human_fallen_empires_varelse_species
 										value > 0.1
@@ -702,7 +708,9 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 						find_closest_planet = {
 							trigger = {
 								id = human_fallen_empires_find_new_home_trigger.5
-								not = { exists = owner }
+								not = {
+									exists = owner
+								}
 								habitability = {
 									who = event_target:human_fallen_empires_varelse_species
 									value > 0.1
@@ -736,23 +744,29 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 		effect = {
 			human_fallen_empires_effect_gov_fix = yes
 			human_fallen_empires_effect_init_give_tech_t3 = yes
-		}
-	}
-	create_colony = {
-		owner = last_created_country
-		species = owner
-	}
-	event_target:human_fallen_empires_varelse_fleet = {
-		set_owner = last_created_country
-	}
-	last_created_country = {
-		every_owned_ship = {
-			repair_ship = yes
-			add_modifier = {
-				modifier = human_fallen_empires_unkeep
-				days = -1
+			set_country_flag = human_fallen_empires_varelse
+			prev = {
+				create_colony = {
+					owner = prev
+				}
+			}
+			event_target:human_fallen_empires_varelse_fleet = {
+				set_owner = prev
+			}
+			every_owned_ship = {
+				repair_ship = yes
+				add_modifier = {
+					modifier = human_fallen_empires_unkeep
+					days = -1
+				}
 			}
 		}
+	}
+	create_pop = {
+		species = owner
+	}
+	create_pop = {
+		species = owner
 	}
 	human_fallen_empires_effect_create_starbase_starport_from_planet = yes
 }
@@ -1510,6 +1524,16 @@ human_fallen_empires_effect_gov_fix = {
 	}
 	human_fallen_empires_effect_gov_fix_to_hive = yes
 	human_fallen_empires_effect_gov_fix_from_hive = yes
+	if = {
+		limit = {
+			not = {
+				exists = ruler
+			}
+		}
+		create_leader = {
+			type = ruler
+		}
+	}
 }
 
 # switch to hive

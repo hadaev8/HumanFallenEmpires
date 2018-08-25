@@ -1461,31 +1461,31 @@ ship_event = {
 					skill = 5
 				}
 				set_graphical_culture = reptilian_01
-			}
-		}
-		create_fleet = {
-			name = "11th Strike Force"
-			settings = {
-				can_change_composition = no
-				uses_naval_capacity = no
-			}
-			effect = {
-				set_owner = last_created_country
-				while = {
-					count = 10
-					create_ship = {
-						random_existing_design = cruiser
+				create_fleet = {
+					name = "11th Strike Force"
+					settings = {
+						can_change_composition = no
+						uses_naval_capacity = no
+					}
+					effect = {
+						set_owner = prev
+						while = {
+							count = 10
+							create_ship = {
+								random_existing_design = cruiser
+							}
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 40
+							create_ship = {
+								random_existing_design = corvette
+							}
+						}
+						set_location = event_target:human_fallen_empires_varelse_fleet_location
+						save_event_target_as = human_fallen_empires_varelse_fleet
 					}
 				}
-				assign_leader = last_created_leader
-				while = {
-					count = 40
-					create_ship = {
-						random_existing_design = corvette
-					}
-				}
-				set_location = event_target:human_fallen_empires_varelse_fleet_location
-				save_event_target_as = human_fallen_empires_varelse_fleet
 			}
 		}
 	}
@@ -2152,6 +2152,7 @@ ship_event = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.153
 		}
+		# need to rewrite it
 		event_target:human_fallen_empires_memorial_planet = {
 			create_country = {
 				name = Gnosis
@@ -2524,69 +2525,6 @@ country_event = {
 
 	immediate = {
 		set_country_flag = human_fallen_empires_has_event.205
-		if = {
-			limit = {
-				has_country_flag = human_fallen_empires_random_0
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = human_fallen_empires_random_1
-			}
-			event_target:human_fallen_empires_ship = {
-				fleet = {
-					kill_leader = {
-						type = scientist
-						show_notification = no
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = human_fallen_empires_random_2
-			}
-			event_target:human_fallen_empires_ship = {
-				fleet = {
-					exile_leader_as = human_fallen_empires_scientist_wounded
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				exists = event_target:human_fallen_empires_ship
-				event_target:human_fallen_empires_ship = {
-					not = {
-						exists = leader
-					}
-				}
-			}
-			event_target:human_fallen_empires_ship = {
-				fleet = {
-					set_leader = human_fallen_empires_scientist_wounded
-					leader = {
-						save_event_target_as = human_fallen_empires_205_scientist
-					}
-				}
-			}
-		}
-		else = {
-			create_fleet = {
-				effect = {
-					set_owner = root
-					create_ship = {
-						random_existing_design = science
-					}
-					set_location = root.capital_scope
-					set_leader = human_fallen_empires_scientist_wounded
-					leader = {
-						save_event_target_as = human_fallen_empires_205_scientist
-						unassign_leader = this
-					}
-					delete_fleet = this
-				}
-			}
-		}
 	}
 
 	option = {
@@ -2600,6 +2538,16 @@ country_event = {
 		exclusive_trigger = {
 			has_country_flag = human_fallen_empires_random_1
 		}
+		hidden_effect = {
+			event_target:human_fallen_empires_ship = {
+				fleet = {
+					kill_leader = {
+						type = scientist
+						show_notification = no
+					}
+				}
+			}
+		}
 	}
 	option = {
 		name = human_fallen_empires.205.2
@@ -2607,6 +2555,11 @@ country_event = {
 			has_country_flag = human_fallen_empires_random_2
 		}
 		hidden_effect = {
+			event_target:human_fallen_empires_ship = {
+				fleet = {
+					exile_leader_as = human_fallen_empires_scientist_wounded
+				}
+			}
 			country_event = {
 				id = human_fallen_empires.205
 				days = 60
@@ -2616,6 +2569,43 @@ country_event = {
 	}
 	option = {
 		name = human_fallen_empires.205.3
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = event_target:human_fallen_empires_ship
+					event_target:human_fallen_empires_ship = {
+						not = {
+							exists = leader
+						}
+					}
+				}
+				event_target:human_fallen_empires_ship = {
+					fleet = {
+						set_leader = human_fallen_empires_scientist_wounded
+						leader = {
+							save_event_target_as = human_fallen_empires_205_scientist
+						}
+					}
+				}
+			}
+			else = {
+				create_fleet = {
+					effect = {
+						set_owner = root
+						create_ship = {
+							random_existing_design = science
+						}
+						set_location = root.capital_scope
+						set_leader = human_fallen_empires_scientist_wounded
+						leader = {
+							save_event_target_as = human_fallen_empires_205_scientist
+							unassign_leader = this
+						}
+						delete_fleet = this
+					}
+				}
+			}
+		}
 		event_target:human_fallen_empires_205_scientist = {
 			add_trait = leader_trait_resilient
 		}
@@ -2840,44 +2830,44 @@ ship_event = {
 				#		set_faction_hostility = {
 				#			set_hostile = no
 				#		}
-			}
-		}
-		create_fleet = {
-			name = "Cruiser"
-			effect = {
-				#save_event_target_as = human_fallen_empires_cruiser # убрать, если работает owner
-				set_owner = event_target:human_fallen_empires_egypt_country
-				create_ship = {
-					random_existing_design = titan
-					prefix = no
-				}
-				set_owner = last_created_country
-				set_location = root
-				set_fleet_stance = aggressive
-				queue_actions = {
-					find_closest_system = {
-						trigger = {
-							id = human_fallen_empires.253.trigger.0
-							any_planet = {
-								has_planet_flag = human_fallen_empires_varelse_colony
+				create_fleet = {
+					name = "Cruiser"
+					effect = {
+						#save_event_target_as = human_fallen_empires_cruiser # убрать, если работает owner
+						set_owner = event_target:human_fallen_empires_egypt_country
+						create_ship = {
+							random_existing_design = titan
+							prefix = no
+						}
+						set_owner = prev
+						set_location = root
+						set_fleet_stance = aggressive
+						queue_actions = {
+							find_closest_system = {
+								trigger = {
+									id = human_fallen_empires.253.trigger.0
+									any_planet = {
+										has_planet_flag = human_fallen_empires_varelse_colony
+									}
+								}
+								found_system = {
+									move_to = this
+								}
 							}
-						}
-						found_system = {
-							move_to = this
-						}
-					}
-					find_closest_planet = {
-						trigger = {
-							id = human_fallen_empires.253.trigger.1
-							has_planet_flag = human_fallen_empires_varelse_colony
-						}
-						found_planet = {
-							orbit_planet = this
-							effect = {
-								id = human_fallen_empires.253.effect.0
-								owner = {
-									set_faction_hostility = {
-										set_hostile = yes
+							find_closest_planet = {
+								trigger = {
+									id = human_fallen_empires.253.trigger.1
+									has_planet_flag = human_fallen_empires_varelse_colony
+								}
+								found_planet = {
+									orbit_planet = this
+									effect = {
+										id = human_fallen_empires.253.effect.0
+										owner = {
+											set_faction_hostility = {
+												set_hostile = yes
+											}
+										}
 									}
 								}
 							}
@@ -2922,49 +2912,49 @@ ship_event = {
 				#			set_hostile = yes
 				#		}
 				establish_communications_no_message = root.owner
-			}
-		}
-		create_fleet = {
-			name = "Mad Cruiser"
-			effect = {
-				set_owner = event_target:human_fallen_empires_egypt_country
-				create_ship = {
-					random_existing_design = titan
-					prefix = no
-				}
-				set_owner = last_created_country
-				set_fleet_stance = aggressive
-				set_location = root
-				queue_actions = {
-					repeat = {
-						find_closest_system = {
-							trigger = {
-								id = human_fallen_empires.254.trigger.0
-								any_planet = {
-									has_orbital_station = yes
-									exists = controller
-									controller = {
-										is_country = root.owner
+				create_fleet = {
+					name = "Mad Cruiser"
+					effect = {
+						set_owner = event_target:human_fallen_empires_egypt_country
+						create_ship = {
+							random_existing_design = titan
+							prefix = no
+						}
+						set_owner = prev
+						set_fleet_stance = aggressive
+						set_location = root
+						queue_actions = {
+							repeat = {
+								find_closest_system = {
+									trigger = {
+										id = human_fallen_empires.254.trigger.0
+										any_planet = {
+											has_orbital_station = yes
+											exists = controller
+											controller = {
+												is_country = root.owner
+											}
+										}
+									}
+									found_system = {
+										move_to = THIS
 									}
 								}
-							}
-							found_system = {
-								move_to = THIS
-							}
-						}
-						find_closest_planet = {
-							trigger = {
-								id = human_fallen_empires.254.trigger.1
-								has_orbital_station = yes
-								exists = controller
-								controller = {
-									is_country = root.owner
-								}
-							}
-							found_planet = {
-								orbit_planet = THIS
-								wait = {
-									duration = 20
+								find_closest_planet = {
+									trigger = {
+										id = human_fallen_empires.254.trigger.1
+										has_orbital_station = yes
+										exists = controller
+										controller = {
+											is_country = root.owner
+										}
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 20
+										}
+									}
 								}
 							}
 						}
@@ -8037,12 +8027,13 @@ country_event = {
 				}
 				effect = {
 					human_fallen_empires_effect_gov_fix = yes
+					prev = {
+						create_colony = {
+							owner = prev
+						}
+					}
 					establish_communications_no_message = root
 				}
-			}
-			create_colony = {
-				owner = last_created_country
-				species = owner
 			}
 		}
 	}
