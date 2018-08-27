@@ -1879,6 +1879,7 @@ human_fallen_empires_effect_this_make_overlord_of_prev = {
 	}
 }
 
+# for country
 human_fallen_empires_effect_advisor_future_on = {
 	hidden_effect = {
 		if = {
@@ -2042,6 +2043,40 @@ human_fallen_empires_effect_assimilator_find_pop = {
 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
 			}
 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+		}
+	}
+}
+
+# need root.species
+human_fallen_empires_effect_remove_prescripted_ideal = {
+	while = {
+		count = 3
+		closest_system = {
+			limit = {
+				any_planet = {
+					not = {
+						exists = owner
+					}
+					habitable_planet = yes
+					habitability = {
+						who = root.species
+						value > 0.2
+					}
+				}
+			}
+			max_steps = 3
+			random_system_planet = {
+				limit = {
+					not = {
+						exists = owner
+					}
+					habitability = {
+						who = root.species
+						value > 0.2
+					}
+				}
+				change_pc = pc_barren
+			}
 		}
 	}
 }
