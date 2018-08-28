@@ -13,7 +13,7 @@
 
 human_fallen_empires_policies_brainworm_0 = {
 	potential = {
-		or = {
+		OR = {
 			has_country_flag = human_fallen_empires_brainworm_discovered
 			human_fallen_empires_trigger_brainworm_country = yes
 		}
@@ -21,6 +21,9 @@ human_fallen_empires_policies_brainworm_0 = {
 	# adopt
 	option = {
 		name = human_fallen_empires_policies_brainworm_0.0
+		valid = {
+			NOT = { has_country_flag = there_can_be_only_one_worm }
+		}
 		policy_flags = {
 			human_fallen_empires_policies_brainworm_0.0
 		}
@@ -43,6 +46,7 @@ human_fallen_empires_policies_brainworm_0 = {
 				fail_text = human_fallen_empires_policies_brainworm_is_worm
 				human_fallen_empires_trigger_brainworm_country = no
 			}
+			NOT = { has_country_flag = there_can_be_only_one_worm }
 		}
 		ai_weight = {
 			factor = 10
@@ -68,19 +72,38 @@ human_fallen_empires_policies_brainworm_0 = {
 				is_subject_type = signatory
 			}
 			is_pacifist = no
-			or = {
-				is_xenophile = no
-				is_militarist = yes
-			}
+			is_xenophile = no
+			NOT = { has_country_flag = there_can_be_only_one_worm }
 		}
 		ai_weight = {
 			factor = 10
 			modifier = {
 				factor = 0
-				or = {
+				OR = {
 					is_pacifist = yes
 					is_xenophile = yes
 				}
+			}
+		}
+	}
+	# The Worm-In-Waiting overrides lesser worms
+	option = {
+		name = human_fallen_empires_policies_brainworm_versus_worm_in_waiting
+		policy_flags = {
+			human_fallen_empires_policies_brainworm_versus_worm_in_waiting_policy_flag
+		}
+		valid = {
+			custom_tooltip = {
+				fail_text = cannot_into_waiting_worm
+			}
+			has_country_flag = there_can_only_be_one_worm
+			has_country_flag = worm_awaited
+		}
+		ai_weight = {
+			factor = 667
+			modifier = {
+				factor = 0
+				NOT = {	has_country_flag = there_can_be_only_one_worm }
 			}
 		}
 	}

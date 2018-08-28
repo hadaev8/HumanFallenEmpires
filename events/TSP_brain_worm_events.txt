@@ -1,0 +1,137 @@
+namespace = TSP_brain_worm_events
+
+country_event = { # Man can only serve one Worm
+	id = tsp_brain_worm_events.1
+	title = TSP_brain_worm_1_title
+	desc = TSP_brain_worm_1_desc
+	picture = GFX_evt_black_hole
+
+	fire_only_once = yes
+
+	trigger = {
+		AND = {
+			has_country_flag = worm_awaited
+			has_country_flag = worm_tomb_ending
+		}
+		OR = {
+			any_owned_pop = { pop_has_trait = human_fallen_empires_species_trait_brainworm }
+			has_civic = human_fallen_empires_civic_brainworm
+			human_fallen_empires_trigger_brainworm_country = yes
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 6
+	}
+	
+	option = {
+		name = TSP_brain_worm_option_1
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = no
+					is_sapient = yes
+				}
+				modify_species = {
+					species = THIS
+					remove_trait = trait_pc_ringworld_habitable_preference
+					remove_trait = trait_pc_gaia_preference
+					remove_trait = trait_pc_ai_preference
+					remove_trait = trait_pc_continental_preference
+					remove_trait = trait_pc_alpine_preference
+					remove_trait = trait_pc_tundra_preference
+					remove_trait = trait_pc_arctic_preference
+					remove_trait = trait_pc_ocean_preference
+					remove_trait = trait_pc_tropical_preference
+					remove_trait = trait_pc_savannah_preference
+					remove_trait = trait_pc_arid_preference
+					remove_trait = trait_pc_desert_preference
+					remove_trait = trait_pc_nuked_preference
+				}
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				is_robot_pop = no
+				is_sapient = yes
+			}
+			modify_species = {
+				species = THIS
+				remove_trait = human_fallen_empires_species_trait_brainworm
+				add_trait = trait_pc_nuked_preference
+			}
+		}
+		set_country_flag = there_can_only_be_one_worm
+		custom_tooltip = worm_shall_protect_us
+		hidden_effect = {
+			set_policy = {
+				policy = human_fallen_empires_policies_brainworm_0
+				option = human_fallen_empires_policies_brainworm_versus_worm_in_waiting
+				cooldown = 6666667
+			}
+		}
+	}
+}
+
+
+country_event = { # After the initial Brain Worm purge, the Worm-In-Waiting will return to kill off any future Brain Worms
+	id = tsp_brain_worm_events.2
+	title = TSP_brain_worm_2_title
+	desc = TSP_brain_worm_2_desc
+	picture = GFX_evt_black_hole
+
+	trigger = {
+		OR = {
+			has_country_flag = there_can_only_be_one_worm
+			has_policy_flag = human_fallen_empires_policies_brainworm_versus_worm_in_waiting_policy_flag
+		}
+		any_owned_pop = { pop_has_trait = human_fallen_empires_species_trait_brainworm }
+	}
+
+	mean_time_to_happen = {
+		days = 7
+	}
+
+	option = {
+		name = TSP_brain_worm_option_2
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = no
+					is_sapient = yes
+					pop_has_trait = human_fallen_empires_species_trait_brainworm
+				}
+				modify_species = {
+					species = THIS
+					remove_trait = trait_pc_ringworld_habitable_preference
+					remove_trait = trait_pc_gaia_preference
+					remove_trait = trait_pc_ai_preference
+					remove_trait = trait_pc_continental_preference
+					remove_trait = trait_pc_alpine_preference
+					remove_trait = trait_pc_tundra_preference
+					remove_trait = trait_pc_arctic_preference
+					remove_trait = trait_pc_ocean_preference
+					remove_trait = trait_pc_tropical_preference
+					remove_trait = trait_pc_savannah_preference
+					remove_trait = trait_pc_arid_preference
+					remove_trait = trait_pc_desert_preference
+					remove_trait = trait_pc_nuked_preference
+
+					add_trait = trait_pc_nuked_preference
+				}
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				is_robot_pop = no
+				is_sapient = yes
+				pop_has_trait = human_fallen_empires_species_trait_brainworm
+			}
+			modify_species = {
+				species = THIS
+				remove_trait = human_fallen_empires_species_trait_brainworm
+			}
+		}
+		custom_tooltip = worm_shall_protect_us
+	}
+}
