@@ -511,7 +511,7 @@ fleet_event = {
 		num_ships > 4
 		has_hp_percentage > 0.99
 		is_fleet_idle = yes
-		is_being_repaired = no
+		#is_being_repaired = no
 		any_system = {
 			human_fallen_empires_pirate_valid_target_system = yes
 			any_planet = {
@@ -535,8 +535,8 @@ fleet_event = {
 								modifier = human_fallen_empires_opinion_pirate_prior_target
 							}
 						}
-						human_fallen_empires_pirate_valid_target_system = yes
 						human_fallen_empires_pirate_valid_target_system_prior = yes
+						human_fallen_empires_pirate_valid_target_system = yes
 						any_planet = {
 							human_fallen_empires_pirate_valid_target_planet = yes
 						}
@@ -603,18 +603,21 @@ fleet_event = {
 						}
 					}
 				}
-				find_closest_planet = {
-					trigger = {
-						id = human_fallen_empires_pirate.50.trigger.1.1
-						root = {
-							has_hp_percentage > 0.8
+				repeat = {
+					max_iterations = 5
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_pirate.50.trigger.1.1
+							root = {
+								has_hp_percentage > 0.8
+							}
+							exists = owner
+							human_fallen_empires_pirate_valid_target_planet = yes
 						}
-						exists = owner
-						human_fallen_empires_pirate_valid_target_planet = yes
-					}
-					found_planet = {
-						orbit_planet = this
-						wait = 180
+						found_planet = {
+							orbit_planet = this
+							wait = 180
+						}
 					}
 				}
 				repeat = {
@@ -642,12 +645,10 @@ fleet_event = {
 							limit = {
 								has_hp_percentage > 0.9
 							}
-							root = {
-								clear_fleet_actions = this
-								#log = "continue raid"
-								fleet_event = {
-									id = human_fallen_empires_pirate.50
-								}
+							clear_fleet_actions = this
+							#log = "continue raid"
+							fleet_event = {
+								id = human_fallen_empires_pirate.50
 							}
 						}
 						else = {
@@ -659,14 +660,15 @@ fleet_event = {
 					duration = 300
 					random = 50
 				}
-				# effect = {
-				# 	id = human_fallen_empires_pirate.50.effect.2.1
-				# 	root = {
-				# 		fleet_event = {
-				# 			id = human_fallen_empires_pirate.50
-				# 		}
-				# 	}
-				# }
+				effect = {
+					id = human_fallen_empires_pirate.50.effect.2.1
+					root = {
+						clear_fleet_actions = this
+						fleet_event = {
+							id = human_fallen_empires_pirate.50
+						}
+					}
+				}
 			}
 		}
 	}
