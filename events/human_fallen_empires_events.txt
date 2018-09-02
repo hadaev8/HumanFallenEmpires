@@ -4182,10 +4182,11 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = from
+		exists = owner
 		from = {
 			has_star_flag = human_fallen_empires_ahet_home
 		}
-		exists = owner
 		owner = {
 			is_ai = no
 		}
@@ -4200,6 +4201,30 @@ ship_event = {
 
 	option = {
 		name = human_fallen_empires.410.0
+		from = {
+			if = {
+				limit = {
+					any_planet = {
+						has_planet_flag = human_fallen_empires_ahet_home
+						is_surveyed = {
+							who = root.owner
+							status = yes
+						}
+					}
+				}
+				random_system_planet = {
+					limit = {
+						has_planet_flag = human_fallen_empires_ahet_home
+					}
+					save_event_target_as = human_fallen_empires_target_ahet_home
+					enable_special_project = {
+						name = human_fallen_empires_project_ahet_home
+						location = this
+						owner = root.owner
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -4215,6 +4240,8 @@ ship_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = from
+		exists = owner
 		from = {
 			has_planet_flag = human_fallen_empires_ahet_home
 		}
