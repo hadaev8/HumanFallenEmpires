@@ -3970,7 +3970,7 @@ planet_event = {
 	}
 }
 
-# ahet section 400 - 401
+# ahet events section 400 - 401
 # ahet colonys after survey
 # сolony 1 400
 ship_event = {
@@ -3981,10 +3981,28 @@ ship_event = {
 			success_text = {
 				text = human_fallen_empires.400.desc.0
 				has_country_flag = human_fallen_empires_ahet_found
+				has_country_flag = human_fallen_empires_egypt_contacted
 			}
-			fail_text = {
+			success_text = {
 				text = human_fallen_empires.400.desc.1
 				has_country_flag = human_fallen_empires_ahet_found
+				not = {
+					has_country_flag = human_fallen_empires_egypt_contacted
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.400.desc.2
+				not = {
+					has_country_flag = human_fallen_empires_ahet_found
+				}
+				has_country_flag = human_fallen_empires_egypt_contacted
+			}
+			success_text = {
+				text = human_fallen_empires.400.desc.3
+				nor = {
+					has_country_flag = human_fallen_empires_ahet_found
+					has_country_flag = human_fallen_empires_egypt_contacted
+				}
 			}
 		}
 	}
@@ -4017,11 +4035,12 @@ ship_event = {
 
 	trigger = {
 		exists = owner
+		exists = from.owner
 		from = {
 			has_planet_flag = human_fallen_empires_ahet_colony_0
-		}
-		from.owner = {
-			is_country_type = primitive
+			owner = {
+				is_country_type = primitive
+			}
 		}
 	}
 
@@ -4074,10 +4093,28 @@ ship_event = {
 			success_text = {
 				text = human_fallen_empires.401.desc.0
 				has_country_flag = human_fallen_empires_ahet_found
+				has_country_flag = human_fallen_empires_egypt_contacted
 			}
-			fail_text = {
+			success_text = {
 				text = human_fallen_empires.401.desc.1
 				has_country_flag = human_fallen_empires_ahet_found
+				not = {
+					has_country_flag = human_fallen_empires_egypt_contacted
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.401.desc.2
+				not = {
+					has_country_flag = human_fallen_empires_ahet_found
+				}
+				has_country_flag = human_fallen_empires_egypt_contacted
+			}
+			success_text = {
+				text = human_fallen_empires.401.desc.3
+				nor = {
+					has_country_flag = human_fallen_empires_ahet_found
+					has_country_flag = human_fallen_empires_egypt_contacted
+				}
 			}
 		}
 	}
@@ -4110,11 +4147,12 @@ ship_event = {
 
 	trigger = {
 		exists = owner
+		exists = from.owner
 		from = {
 			has_planet_flag = human_fallen_empires_ahet_colony_1
-		}
-		from.owner = {
-			is_country_type = primitive
+			owner = {
+				is_country_type = primitive
+			}
 		}
 	}
 
@@ -4588,6 +4626,94 @@ country_event = {
 	}
 }
 
+# stargate anomaly 510 - 550
+# after anomaly 510
+ship_event = {
+	id = human_fallen_empires.510
+	title = human_fallen_empires.510.name
+	desc = human_fallen_empires.510.desc
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	show_sound = event_ship_explosion
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+	}
+
+	immediate = {
+		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.510.0
+	}
+}
+
+# after colonisation 511
+planet_event = {
+	id = human_fallen_empires.511
+	title = human_fallen_empires.511.name
+	desc = human_fallen_empires.511.desc
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	show_sound = event_ship_explosion
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = human_fallen_empires.511.0
+	}
+}
+
+# after special project
+# hidden gateway event 512
+ship_event = {
+	id = human_fallen_empires.512
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+	}
+}
+
+# outcomes
+# 1
+
+# 1.1
+
+# 2
+
+# 3
+
+# 4
+
+# 5
+
+# 5.1
+
+# 6
+
+# 7
+
+# 8
+
+# 9
+
+# 10
+
+# 11
+
+
 # terminator event part of memorial events 550 - 600
 # человек. есть пустынная планета. столица одного из классов. есть дружественная империя
 # start event nothing, complitly nothing
@@ -4596,7 +4722,7 @@ ship_event = {
 	title = human_fallen_empires.550.name
 	desc = human_fallen_empires.550.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	location = root #event_target:human_fallen_empires_memorial_planet
+	location = root
 	is_triggered_only = yes
 
 	trigger = {
@@ -5280,6 +5406,7 @@ country_event = {
 	option = {
 		name = human_fallen_empires.609.1
 		exclusive_trigger = {
+			exists = event_target:human_fallen_empires_drone_country
 			has_communications = event_target:human_fallen_empires_drone_country
 		}
 		custom_tooltip = human_fallen_empires.609.0.tooltip
@@ -5491,6 +5618,10 @@ ship_event = {
 	show_sound = event_ship_thrusters
 	location = root
 	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:human_fallen_empires_thoth_station
+	}
 
 	option = {
 		name = human_fallen_empires_at_the_sreen
@@ -7846,7 +7977,7 @@ country_event = {
 			# xenophobe
 			success_text = {
 				text = human_fallen_empires.5051.desc.2.2
-				nor = {
+				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
 				is_xenophobe = yes
@@ -7854,7 +7985,7 @@ country_event = {
 			# xenophile
 			success_text = {
 				text = human_fallen_empires.5051.desc.2.3
-				nor = {
+				not = {
 					has_country_flag = human_fallen_empires_marked_as_human
 				}
 				is_xenophile = yes
@@ -8241,6 +8372,11 @@ ship_event = {
 	show_sound = event_mystic_reveal
 	location = root
 	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+	}
 
 	immediate = {
 		from = {
