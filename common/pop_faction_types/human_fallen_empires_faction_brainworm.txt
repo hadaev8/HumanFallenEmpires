@@ -9,9 +9,9 @@ human_fallen_empires_faction_brainworm_free = {
 	is_potential = {
 		human_fallen_empires_trigger_is_hive = no
 		human_fallen_empires_trigger_brainworm_country = yes
-		any_owned_pop = {
-			human_fallen_empires_trigger_non_brainworm_in_brainworm_country = yes
-		}
+		# any_owned_pop = {
+		# 	human_fallen_empires_trigger_non_brainworm_in_brainworm_country = yes
+		# }
 	}
 
 	parameters = {
@@ -25,9 +25,6 @@ human_fallen_empires_faction_brainworm_free = {
 
 	can_join_faction = {
 		human_fallen_empires_trigger_non_brainworm_in_brainworm_country = yes
-		not = {
-			has_trait = trait_nerve_stapled
-		}
 	}
 
 	attraction = {
@@ -35,7 +32,7 @@ human_fallen_empires_faction_brainworm_free = {
 	}
 
 	leader = {
-		base = 0
+		base = 1
 	}
 
 	demand = {
@@ -57,31 +54,24 @@ human_fallen_empires_faction_brainworm_free = {
 	}
 
 	on_create = {
+		# need some new event
 		#pop_faction_event = { id = factions.1 }
 		owner = {
 			random_owned_pop = {
 				limit = {
 					human_fallen_empires_trigger_non_brainworm_in_brainworm_country = yes
-					not = {
-						has_trait = trait_nerve_stapled
-					}
 				}
-				species = {
-					root.owner = {
-						create_leader = {
-							type = governor
-							species = prev #.species # test it
-							skill = 1
-						}
-						last_created_leader = {
-							recruitable = no
-							root = {
-								assign_leader = prev
-							}
-						}
+				prev = {
+					create_leader = {
+						type = governor
+						species = prev.species
 					}
 				}
 			}
+		}
+		set_leader = last_created_leader
+		leader = {
+			recruitable = no
 		}
 	}
 

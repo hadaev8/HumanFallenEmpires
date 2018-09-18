@@ -13,11 +13,91 @@ country_event = {
 	}
 
 	immediate = {
-		set_country_type = human_fallen_empires_discovery
+		create_country = {
+			name = root
+			type = default
+			auto_delete = no
+			name_list = root
+			ship_prefix = ""
+			authority = root
+			civics = root
+			species = root
+			flag = root
+			ethos = root
+			ignore_initial_colony_error = yes
+			released_from_country = root
+			effect = {
+				set_country_flag = custom_start_screen
+				set_country_flag = human_fallen_empires_marked_as_human
+				set_country_flag = human_fallen_empires_discovery
+				change_government = {
+					authority = auth_democratic
+				}
+				change_government = {
+					authority = auth_oligarchic
+				}
+				root = {
+					every_owned_starbase = {
+						set_owner = prevprev
+					}
+					every_owned_planet = {
+						set_owner = prevprev
+						set_capital = yes
+					}
+					every_owned_fleet = {
+						log = "[this.GetName]"
+						set_owner = prevprev
+					}
+					every_owned_leader = {
+						if = {
+							limit = {
+								leader_class = ruler
+							}
+							prevprev = {
+								set_leader = prev
+							}
+						}
+						else = {
+							prevprev = {
+								clone_leader = {
+									target = prev
+								}
+							}
+						}
+					}
+				}
+				set_player = root
+				country_event = {
+					id = human_fallen_empires_discovery.1
+				}
+				root = {
+					set_country_flag = silence_destroy_event
+					destroy_country = yes
+				}
+			}
+		}
+		#set_country_type = human_fallen_empires_discovery
+	}
+}
+
+country_event = {
+	id = human_fallen_empires_discovery.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		add_modifier = {
+			modifier = human_fallen_empires_discovery_research
+		}
 		add_modifier = {
 			modifier = human_fallen_empires_discovery_translator
-			days = -1
 		}
+		set_country_flag = amoeba_encountered
+		set_country_flag = crystal_encountered
+		set_country_flag = drone_encountered
+		set_country_flag = cloud_encountered
+		set_country_flag = Story7
+		set_country_flag = day_0
 		set_country_flag = first_contact_event
 		give_technology = {
 			tech = tech_sensors_2
@@ -32,10 +112,22 @@ country_event = {
 			human_fallen_empires_effect_clear_buildings_and_destroy_colony = yes
 			reroll_planet = yes
 		}
-		create_leader = {
-			type = admiral
-			species = this
-			skill = 1
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				create_ship = {
+					random_existing_design = science
+				}
+				set_fleet_stance = evasive
+				set_location = owner.capital_star
+				owner = {
+					create_leader = {
+						type = scientist
+						sub_type = survey
+					}
+				}
+				set_leader = last_created_leader
+			}
 		}
 		create_fleet = {
 			name = human_fallen_empires_discovery
@@ -46,6 +138,11 @@ country_event = {
 					random_existing_design = human_fallen_empires_ship_size_discovery
 					effect = {
 						set_ship_flag = human_fallen_empires_discovery_ship
+					}
+				}
+				owner = {
+					create_leader = {
+						type = admiral
 					}
 				}
 				assign_leader = last_created_leader
@@ -118,7 +215,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 		fromfrom = {
 			has_ship_flag = human_fallen_empires_discovery_ship
 		}
@@ -142,52 +239,13 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		or = {
-			is_country_type = human_fallen_empires_discovery
-			has_country_flag = human_fallen_empires_discovery
-		}
+		has_country_flag = human_fallen_empires_discovery
 		from = {
-			OR = {
-				and = {
-					is_country_type = amoeba
-					not = {
-						root = {
-							has_country_flag = amoeba_encountered
-						}
-					}
-				}
-				and = {
-					is_country_type = crystal
-					not = {
-						root = {
-							has_country_flag = crystal_encountered
-						}
-					}
-				}
-				and = {
-					is_country_type = drone
-					not = {
-						root = {
-							has_country_flag = drone_encountered
-						}
-					}
-				}
-				and = {
-					is_country_type = cloud
-					not = {
-						root = {
-							has_country_flag = cloud_encountered
-						}
-					}
-				}
-				and = {
-					is_country_type = pirate
-					not = {
-						root = {
-							has_country_flag = pirate_encountered
-						}
-					}
-				}
+			or = {
+				is_country_type = amoeba
+				is_country_type = crystal
+				is_country_type = drone
+				is_country_type = cloud
 			}
 		}
 	}
@@ -210,7 +268,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 	}
 
 	immediate = {
@@ -248,7 +306,7 @@ country_event = {
 
 # 	trigger = {
 # 		#	has_country_flag = human_fallen_empires_discovery
-# 		is_country_type = human_fallen_empires_discovery
+# 		has_country_flag = human_fallen_empires_discovery
 # 		num_owned_planets > 0
 # 		num_pops > 0
 # 	}
@@ -273,7 +331,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 		not = {
 			has_country_flag = human_fallen_empires_discovery_has_event.55
 		}
@@ -297,7 +355,7 @@ ship_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_discovery
+			has_country_flag = human_fallen_empires_discovery
 		}
 		exists = solar_system
 		solar_system = {
@@ -345,7 +403,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 		exists = from
 		exists = fromfrom
 		exists = fromfromfrom
@@ -669,7 +727,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 		has_event_chain = human_fallen_empires_chain_discovery_contract_pirate_hunt
 		exists = fromfromfrom
 		fromfromfrom = {
@@ -700,7 +758,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_discovery
+		has_country_flag = human_fallen_empires_discovery
 		has_event_chain = human_fallen_empires_chain_discovery_contract_clear_system
 		exists = fromfromfrom.solar_system
 		fromfromfrom.solar_system = {
@@ -739,7 +797,7 @@ fleet_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_discovery
+			has_country_flag = human_fallen_empires_discovery
 			has_event_chain = human_fallen_empires_chain_discovery_contract_clear_system
 		}
 		exists = solar_system
@@ -777,7 +835,7 @@ fleet_event = {
 		is_ship_size = human_fallen_empires_ship_size_discovery
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_discovery
+			has_country_flag = human_fallen_empires_discovery
 		}
 		from = {
 			exists = owner
@@ -1043,27 +1101,23 @@ country_event = {
 				remove_modifier = human_fallen_empires_discovery_crew_1
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_2
-					days = -1
 				}
 			}
 			human_fallen_empires_discovery_crew_2 = {
 				remove_modifier = human_fallen_empires_discovery_crew_2
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_3
-					days = -1
 				}
 			}
 			human_fallen_empires_discovery_crew_3 = {
 				remove_modifier = human_fallen_empires_discovery_crew_3
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_4
-					days = -1
 				}
 			}
 			default = {
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_1
-					days = -1
 				}
 			}
 		}
@@ -1098,21 +1152,18 @@ country_event = {
 				remove_modifier = human_fallen_empires_discovery_crew_2
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_1
-					days = -1
 				}
 			}
 			human_fallen_empires_discovery_crew_3 = {
 				remove_modifier = human_fallen_empires_discovery_crew_3
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_2
-					days = -1
 				}
 			}
 			human_fallen_empires_discovery_crew_4 = {
 				remove_modifier = human_fallen_empires_discovery_crew_4
 				add_modifier = {
 					modifier = human_fallen_empires_discovery_crew_3
-					days = -1
 				}
 			}
 		}
@@ -1391,7 +1442,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_damage_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -1427,7 +1477,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_damage_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -1463,7 +1512,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_damage_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -1499,7 +1547,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_damage_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -1535,7 +1582,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_damage_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -1571,7 +1617,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_fire_rate_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -1607,7 +1652,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_fire_rate_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -1643,7 +1687,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_fire_rate_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -1679,7 +1722,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_fire_rate_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -1715,7 +1757,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_fire_rate_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -1751,7 +1792,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_accuracy_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -1787,7 +1827,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_accuracy_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -1823,7 +1862,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_accuracy_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -1859,7 +1897,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_accuracy_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -1895,7 +1932,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_accuracy_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -1931,7 +1967,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_range_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -1967,7 +2002,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_range_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2003,7 +2037,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_range_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2039,7 +2072,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_range_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2075,7 +2107,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_range_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -2111,7 +2142,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_hp_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -2147,7 +2177,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_hp_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2183,7 +2212,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_hp_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2219,7 +2247,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_hp_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2255,7 +2282,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_hp_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -2291,7 +2317,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_armor_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -2327,7 +2352,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_armor_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2363,7 +2387,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_armor_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2399,7 +2422,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_armor_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2435,7 +2457,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_armor_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -2471,7 +2492,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_shield_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -2507,7 +2527,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_shield_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2543,7 +2562,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_shield_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2579,7 +2597,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_shield_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2615,7 +2632,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_shield_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -2651,7 +2667,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_speed_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -2687,7 +2702,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_speed_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2723,7 +2737,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_speed_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2759,7 +2772,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_speed_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2795,7 +2807,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_speed_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -2831,7 +2842,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_interstellar_speed_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -2867,7 +2877,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_interstellar_speed_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -2903,7 +2912,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_interstellar_speed_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -2939,7 +2947,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_interstellar_speed_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -2975,7 +2982,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_interstellar_speed_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
@@ -3011,7 +3017,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_0
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t0_cost = yes
@@ -3047,7 +3052,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_1
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t1_cost = yes
@@ -3083,7 +3087,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_2
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t2_cost = yes
@@ -3119,7 +3122,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_3
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t3_cost = yes
@@ -3155,7 +3157,6 @@ country_event = {
 		event_target:human_fallen_empires_discovery_docking_ship = {
 			add_modifier = {
 				modifier = human_fallen_empires_discovery_winddown_4
-				days = -1
 			}
 		}
 		human_fallen_empires_effect_discovery_docking_t4_cost = yes
