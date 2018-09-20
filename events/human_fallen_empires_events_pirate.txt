@@ -127,9 +127,6 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		is_ai = no
-		not = {
-			has_country_flag = human_fallen_empires_birth_of_piracy
-		}
 	}
 
 	immediate = {
@@ -867,83 +864,22 @@ ship_event = {
 				human_fallen_empires_effect_pirate_flee_fleets = yes
 			}
 		}
+		# take starbase
 		if = {
 			limit = {
 				from.owner = {
 					num_owned_planets > 0
 				}
 				or = {
+					from.owner = {
+						is_country_type = human_fallen_empires_pirate
+					}
 					solar_system = {
 						any_neighbor_system = {
 							ignore_hyperlanes = no
 							exists = owner
 							owner = {
 								is_country = from.owner
-							}
-						}
-					}
-					from.owner = {
-						is_country_type = human_fallen_empires_pirate
-					}
-				}
-			}
-			solar_system = {
-				every_system_planet = {
-					limit = {
-						is_owned_by = root.owner
-					}
-					if = {
-						limit = {
-							or = {
-								from.owner = {
-									is_country_type = human_fallen_empires_pirate
-								}
-								and = {
-									num_pops > 0
-									not = {
-										is_planet_class = human_fallen_empires_pc_pirate_base
-									}
-								}
-
-							}
-						}
-						set_owner = from.owner
-					}
-					else_if = {
-						limit = {
-							is_planet_class = human_fallen_empires_pc_pirate_base
-						}
-						root.owner = {
-							set_timed_country_flag = {
-								flag = human_fallen_empires_refuge_country_prior@from.owner
-								days = 10
-							}
-						}
-						every_owned_pop = {
-							human_fallen_empires_effect_refuge_or_die = yes
-						}
-						human_fallen_empires_effect_convert_to_asteroid = yes
-						from = {
-							save_event_target_as = pirate_slayers
-							owner = {
-								random_list = {
-									80 = {
-										country_event = {
-											id = pirate.25
-										}
-									}
-									20 = {
-										modifier = {
-											factor = 0
-											not = {
-												has_event_chain = l_cluster_chain
-											}
-										}
-										country_event = {
-											id = pirate.26
-										}
-									}
-								}
 							}
 						}
 					}
@@ -964,19 +900,54 @@ ship_event = {
 			fleet = {
 				set_owner = from.owner
 			}
-			# убрать пиратские здания со старбазы
 		}
 		else = {
-			# протестить потом
-			solar_system = {
-				every_system_planet = {
+			destroy_fleet = fleet
+		}
+		# deal with planets
+		solar_system = {
+			every_system_planet = {
+				limit = {
+					is_owned_by = root.owner
+				}
+				if = {
 					limit = {
-						is_owned_by = root.owner
-						not = {
-							is_planet_class = human_fallen_empires_pc_pirate_base
-						}
-						num_pops > 0
+						is_planet_class = human_fallen_empires_pc_pirate_base
 					}
+					if = {
+						limit = {
+							from.owner = {
+								is_country_type = human_fallen_empires_pirate
+							}
+						}
+						set_owner = from.owner
+					}
+					else = {
+						from.owner = {
+							set_timed_country_flag = {
+								flag = human_fallen_empires_refuge_country_prior@root.owner
+								days = 10
+							}
+						}
+						every_owned_pop = {
+							human_fallen_empires_effect_refuge_or_die = yes
+						}
+						human_fallen_empires_effect_convert_to_asteroid = yes
+					}
+				}
+				else_if = {
+					limit = {
+						exists = starbase
+						starbase = {
+							exists = owner
+							owner = {
+								is_country = from.owner
+							}
+						}
+					}
+					set_owner = from.owner
+				}
+				else = {
 					random_owned_pop = {
 						create_country = {
 							type = default
@@ -984,17 +955,37 @@ ship_event = {
 							effect = {
 								human_fallen_empires_effect_gov_fix = yes
 								prevprev = {
-									create_colony = {
-										owner = prev
-									}
+									set_owner = prev
 								}
 							}
 						}
 					}
 				}
 			}
-			destroy_fleet = fleet
 		}
+		# from = {
+		# 	save_event_target_as = pirate_slayers
+		# 	owner = {
+		# 		random_list = {
+		# 			80 = {
+		# 				country_event = {
+		# 					id = pirate.25
+		# 				}
+		# 			}
+		# 			20 = {
+		# 				modifier = {
+		# 					factor = 0
+		# 					not = {
+		# 						has_event_chain = l_cluster_chain
+		# 					}
+		# 				}
+		# 				country_event = {
+		# 					id = pirate.26
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
 	}
 }
 
