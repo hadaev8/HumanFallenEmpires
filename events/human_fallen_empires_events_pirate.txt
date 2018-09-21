@@ -392,11 +392,11 @@ country_event = {
 	}
 
 	immediate = {
-		random_country = {
+		random_relation = {
 			limit = {
-				not = {
-					is_hostile = root
+				nor = {
 					has_country_flag = human_fallen_empires_pirate_offer_deal@root
+					has_country_flag = human_fallen_empires_pirate_offer_deal
 				}
 				energy >= 500
 				minerals >= 500
@@ -405,48 +405,32 @@ country_event = {
 					free_pop_tiles > 0
 				}
 			}
-			save_event_target_as = human_fallen_empires_pirate_diplo_target
-		}
-		if = {
-			limit = {
-				not = {
-					exists = event_target:human_fallen_empires_pirate_diplo_target
-				}
-			}
-			random_country = {
-				limit = {
+			weights = {
+				base = 1
+				modifier = {
+					mult = 10
 					not = {
-						has_country_flag = human_fallen_empires_pirate_offer_deal@root
-					}
-					energy >= 500
-					minerals >= 500
-					is_country_type = default
-					any_owned_planet = {
-						free_pop_tiles > 0
+						is_hostile = root
 					}
 				}
-				save_event_target_as = human_fallen_empires_pirate_diplo_target
 			}
-		}
-		if = {
-			limit = {
-				exists = event_target:human_fallen_empires_pirate_diplo_target
+			root = {
+				save_event_target_as = human_fallen_empires_pirate_country
+				human_fallen_empires_effect_save_slave_target = yes
 			}
-			event_target:human_fallen_empires_pirate_diplo_target = {
-				root = {
-					save_event_target_as = human_fallen_empires_pirate_country
-					human_fallen_empires_effect_save_slave_target = yes
-				}
-				set_country_flag = human_fallen_empires_pirate.101.deal_offer
-				set_country_flag = human_fallen_empires_pirate.101.slave_menu
-				log = "try to sell slaves to [this.GetName]"
-				set_timed_country_flag = {
-					flag = human_fallen_empires_pirate_offer_deal@root
-					days = 1825
-				}
-				country_event = {
-					id = human_fallen_empires_pirate.101
-				}
+			set_country_flag = human_fallen_empires_pirate.101.deal_offer
+			set_country_flag = human_fallen_empires_pirate.101.slave_menu
+			log = "try to sell slaves to [this.GetName]"
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirate_offer_deal@root
+				days = 1825
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirate_offer_deal
+				days = 365
+			}
+			country_event = {
+				id = human_fallen_empires_pirate.101
 			}
 		}
 	}
@@ -463,15 +447,24 @@ country_event = {
 	}
 
 	immediate = {
-		random_country = {
+		random_relation = {
 			limit = {
 				nor = {
-					is_hostile = root
 					has_country_flag = human_fallen_empires_pirate_offer_deal@root
+					has_country_flag = human_fallen_empires_pirate_offer_deal
 				}
 				minerals >= 1000
 				energy < 10000
 				is_country_type = default
+			}
+			weights = {
+				base = 1
+				modifier = {
+					mult = 10
+					not = {
+						is_hostile = root
+					}
+				}
 			}
 			root = {
 				save_event_target_as = human_fallen_empires_pirate_country
@@ -482,6 +475,10 @@ country_event = {
 			set_timed_country_flag = {
 				flag = human_fallen_empires_pirate_offer_deal@root
 				days = 1825
+			}
+			set_timed_country_flag = {
+				flag = human_fallen_empires_pirate_offer_deal
+				days = 365
 			}
 			country_event = {
 				id = human_fallen_empires_pirate.101
@@ -864,11 +861,76 @@ ship_event = {
 				human_fallen_empires_effect_pirate_flee_fleets = yes
 			}
 		}
+		# deal with planets
+		solar_system = {
+			every_system_planet = {
+				limit = {
+					is_owned_by = root.owner
+				}
+				if = {
+					limit = {
+						is_planet_class = human_fallen_empires_pc_pirate_base
+					}
+					if = {
+						limit = {
+							from.owner = {
+								is_country_type = human_fallen_empires_pirate
+							}
+						}
+						set_owner = from.owner
+					}
+					else = {
+						from.owner = {
+							set_timed_country_flag = {
+								flag = human_fallen_empires_refuge_country_prior@root.owner
+								days = 10
+							}
+						}
+						every_owned_pop = {
+							human_fallen_empires_effect_refuge_or_die = yes
+						}
+						human_fallen_empires_effect_convert_to_asteroid = yes
+					}
+				}
+				else_if = {
+					limit = {
+						from.owner = {
+							or = {
+								is_country_type = human_fallen_empires_pirate
+								num_pops > 0
+							}
+						}
+						# exists = starbase
+						# starbase = {
+						# 	exists = owner
+						# 	owner = {
+						# 		is_country = from.owner
+						# 	}
+						# }
+					}
+					set_owner = from.owner
+				}
+				else = {
+					random_owned_pop = {
+						create_country = {
+							type = default
+							species = this.species
+							effect = {
+								human_fallen_empires_effect_gov_fix = yes
+								prevprev = {
+									set_owner = prev
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		# take starbase
 		if = {
 			limit = {
 				from.owner = {
-					num_owned_planets > 0
+					num_pops > 0
 				}
 				or = {
 					from.owner = {
@@ -903,65 +965,6 @@ ship_event = {
 		}
 		else = {
 			destroy_fleet = fleet
-		}
-		# deal with planets
-		solar_system = {
-			every_system_planet = {
-				limit = {
-					is_owned_by = root.owner
-				}
-				if = {
-					limit = {
-						is_planet_class = human_fallen_empires_pc_pirate_base
-					}
-					if = {
-						limit = {
-							from.owner = {
-								is_country_type = human_fallen_empires_pirate
-							}
-						}
-						set_owner = from.owner
-					}
-					else = {
-						from.owner = {
-							set_timed_country_flag = {
-								flag = human_fallen_empires_refuge_country_prior@root.owner
-								days = 10
-							}
-						}
-						every_owned_pop = {
-							human_fallen_empires_effect_refuge_or_die = yes
-						}
-						human_fallen_empires_effect_convert_to_asteroid = yes
-					}
-				}
-				else_if = {
-					limit = {
-						exists = starbase
-						starbase = {
-							exists = owner
-							owner = {
-								is_country = from.owner
-							}
-						}
-					}
-					set_owner = from.owner
-				}
-				else = {
-					random_owned_pop = {
-						create_country = {
-							type = default
-							species = this.species
-							effect = {
-								human_fallen_empires_effect_gov_fix = yes
-								prevprev = {
-									set_owner = prev
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 		# from = {
 		# 	save_event_target_as = pirate_slayers

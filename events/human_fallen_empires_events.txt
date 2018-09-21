@@ -153,14 +153,16 @@ event = {
 			}
 		}
 		# egypt change vassal type
-		random_country = {
+		if = {
 			limit = {
-				has_country_flag = human_fallen_empires_egypt
+				exists = event_target:human_fallen_empires_egypt_country
 			}
-			country_event = {
-				id = human_fallen_empires_maintenance.51
-				days = 1
-				random = 700
+			event_target:human_fallen_empires_egypt_country = {
+				country_event = {
+					id = human_fallen_empires_maintenance.51
+					days = 1
+					random = 700
+				}
 			}
 		}
 		# varelse mehanicus event
@@ -1327,13 +1329,8 @@ ship_event = {
 		from = {
 			human_fallen_empires_effect_remove_signal_object_from_this = yes
 		}
-		random_country = {
-			limit = {
-				has_country_flag = human_fallen_empires_egypt
-			}
-			capital_scope = {
-				save_event_target_as = human_fallen_empires_ra_home
-			}
+		event_target:human_fallen_empires_egypt_country.capital_scope = {
+			save_event_target_as = human_fallen_empires_ra_home
 		}
 		owner = {
 			set_country_flag = human_fallen_empires_egypt_wormhole
@@ -1460,7 +1457,7 @@ ship_event = {
 					species = event_target:human_fallen_empires_varelse_species
 					skill = 5
 				}
-				set_graphical_culture = reptilian_01
+				#set_graphical_culture = reptilian_01
 				create_fleet = {
 					name = "11th Strike Force"
 					settings = {
@@ -5482,20 +5479,14 @@ country_event = {
 
 	immediate = {
 		random_playable_country = {
-			limit = {
-				is_ai = no
-			}
-			save_event_target_as = human_fallen_empires_606_target_country
-		}
-		if = {
-			limit = {
-				not = {
-					exists = event_target:human_fallen_empires_606_target_country
+			weights = {
+				base = 1
+				modifier = {
+					add = 1000
+					is_ai = no
 				}
 			}
-			random_playable_country = {
-				save_event_target_as = human_fallen_empires_606_target_country
-			}
+			save_event_target_as = human_fallen_empires_606_target_country
 		}
 		if = {
 			limit = {
@@ -6173,10 +6164,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			random_country = {
-				limit = {
-					has_country_flag = human_fallen_empires_egypt
-				}
+			event_target:human_fallen_empires_egypt_country = {
 				if = {
 					limit = {
 						not = {
