@@ -26,7 +26,7 @@ human_fallen_empires_effect_pirate_init = {
 					who = event_target:human_fallen_empires_pirate_target
 					distance <= 150
 				}
-				human_fallen_empires_pirate_valid_base_system = yes
+				human_fallen_empires_trigger_pirate_valid_base_system = yes
 			}
 			# for vanilla localization
 			save_event_target_as = pirate_system
@@ -66,66 +66,47 @@ human_fallen_empires_effect_pirate_init = {
 human_fallen_empires_effect_pirate_init_base = {
 	random_system_planet = {
 		limit = {
-			human_fallen_empires_pirate_valid_base_planet = yes
-			exists = orbital_deposit_tile
-			orbital_deposit_tile = {
-				has_deposit = no
-			}
+			human_fallen_empires_trigger_pirate_valid_base_planet = yes
 		}
-		save_global_event_target_as = human_fallen_empires_pirate_base
-	}
-	if = {
-		limit = {
-			not = {
-				exists = event_target:human_fallen_empires_pirate_base
-			}
-		}
-		random_system_planet = {
-			limit = {
-				human_fallen_empires_pirate_valid_base_planet = yes
-			}
-			save_global_event_target_as = human_fallen_empires_pirate_base
-		}
-	}
-	if = {
-		limit = {
-			exists = event_target:human_fallen_empires_pirate_base
-		}
-		event_target:human_fallen_empires_pirate_base = {
-			change_pc = human_fallen_empires_pc_pirate_base
-			if = {
-				limit = {
-					not = {
-						is_planet_class = human_fallen_empires_pc_pirate_base
-					}
+		weights = {
+			base = 10
+			modifier = {
+				mult = 100
+				exists = orbital_deposit_tile
+				orbital_deposit_tile = {
+					has_deposit = no
 				}
-				log = "wrong planet class while init pirate base [this.GetName] system: [solar_system.GetName]"
 			}
-			create_colony = {
-				owner = event_target:human_fallen_empires_pirate_clan
-			}
-			every_owned_pop = {
-				kill_pop = yes
-			}
-			#set_owner = event_target:human_fallen_empires_pirate_clan
-			if = {
-			 	limit = {
-			 		not = {
-			 			exists = owner
-			 		}
-			 	}
-			 	#set_owner = event_target:human_fallen_empires_pirate_clan
-			 	log = "owner not exists [this.GetName] system: [solar_system.GetName]"
-			}
-			#log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
-			#set_planet_flag = human_fallen_empires_pirate_base
-			human_fallen_empires_effect_create_starbase_starport_from_planet = yes
-			human_fallen_empires_effect_starbase_add_shipyard_0 = yes
-			clear_global_event_target = human_fallen_empires_pirate_base
 		}
-	}
-	else = {
-		log = "cant find planet for pirate base, whats happen? system: [this.GetName]"
+		change_pc = human_fallen_empires_pc_pirate_base
+		# if = {
+		# 	limit = {
+		# 		not = {
+		# 			is_planet_class = human_fallen_empires_pc_pirate_base
+		# 		}
+		# 	}
+		# 	log = "wrong planet class while init pirate base [this.GetName] system: [solar_system.GetName]"
+		# }
+		create_colony = {
+			owner = event_target:human_fallen_empires_pirate_clan
+		}
+		every_owned_pop = {
+			kill_pop = yes
+		}
+		#set_owner = event_target:human_fallen_empires_pirate_clan
+		# if = {
+		# 	 limit = {
+		# 		 not = {
+		# 			 exists = owner
+		# 		 }
+		# 	 }
+		# 	 #set_owner = event_target:human_fallen_empires_pirate_clan
+		# 	 log = "owner not exists [this.GetName] system: [solar_system.GetName]"
+		# }
+		#log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
+		#set_planet_flag = human_fallen_empires_pirate_base
+		human_fallen_empires_effect_create_starbase_starport_from_planet = yes
+		human_fallen_empires_effect_starbase_add_shipyard_0 = yes
 	}
 }
 
@@ -133,9 +114,9 @@ human_fallen_empires_effect_pirate_init_country = {
 	create_country = {
 		type = human_fallen_empires_pirate
 		species = event_target:human_fallen_empires_pirate_target
-		name_list = human_fallen_empires_pirate_namelist
+		name_list = human_fallen_empires_namelist_pirate
 		released_from_country = event_target:human_fallen_empires_pirate_target
-		#ignore_initial_colony_error = yes
+		ignore_initial_colony_error = yes
 		effect = {
 			human_fallen_empires_effect_gov_fix = yes
 			change_country_flag = {
@@ -174,6 +155,10 @@ human_fallen_empires_effect_pirate_init_country = {
 				10 = {
 					set_graphical_culture = human_fallen_empires_graphical_culture_pirate_full_color_4
 				}
+			}
+			give_technology = {
+				tech = tech_sensors_2
+				message = no
 			}
 			add_energy = 500
 			if = {
@@ -359,6 +344,13 @@ human_fallen_empires_effect_save_slave_target = {
 
 # this planet, from bombarder
 human_fallen_empires_effect_pirate_ravage_planet = {
+	solar_system = {
+		every_fleet_in_system = {
+			fleet_event = {
+				id = human_fallen_empires_pirate.304
+			}
+		}
+	}
 	random_tile = {
 		limit = {
 			has_building = yes
@@ -401,6 +393,9 @@ human_fallen_empires_effect_pirate_ravage_planet = {
 		if = {
 			limit = {
 				has_event_chain = human_fallen_empires_chain_pirate_count
+				from = {
+					is_country_type = human_fallen_empires_pirate
+				}
 			}
 			add_event_chain_counter = {
 				event_chain = human_fallen_empires_chain_pirate_count
@@ -460,8 +455,807 @@ human_fallen_empires_effect_pirate_flee_fleets = {
 					is_ship_class = shipclass_military
 				}
 				set_owner = prevprev
-				log = "[this.GetName] flee to [owner.GetName] from [prev.GetName]"
+				if = {
+					limit = {
+						prev = {
+							not = {
+								is_country_type = human_fallen_empires_pirate
+							}
+						}
+					}
+					log = "[this.GetName] flee to [owner.GetName] from [prev.GetName]"
+				}
 			}
+		}
+	}
+}
+
+# root fleet, this system
+# human_fallen_empires_effect_pirate_path_get_next = {
+# 	if = {
+# 		limit = {
+# 			has_hyperlane_to = root.solar_system
+# 		}
+# 		if = {
+# 			limit = {
+# 				human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+# 			}
+# 			save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+# 		}
+# 	}
+# 	else = {
+# 		root = {
+# 			closest_system = {
+# 				limit = {
+# 					not = {
+# 						has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+# 					}
+# 					has_hyperlane_to = prevprev
+# 					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+# 				}
+# 				root = {
+# 					log = "looping warning"
+# 				}
+# 				set_timed_star_flag = {
+# 					flag = human_fallen_empires_pirate_fleet_system_check@root
+# 					days = 1
+# 				}
+# 				human_fallen_empires_effect_pirate_path_get_next = yes
+# 			}
+# 		}
+# 	}
+# }
+
+human_fallen_empires_effect_pirate_path_get_next = {
+	if = {
+		limit = {
+			has_hyperlane_to = root.solar_system
+		}
+		if = {
+			limit = {
+				human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+			}
+			save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+		}
+	}
+	else = {
+		root = {
+			closest_system = {
+				limit = {
+					not = {
+						has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+					}
+					has_hyperlane_to = prevprev
+					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+				}
+				max_steps = 10
+				set_timed_star_flag = {
+					flag = human_fallen_empires_pirate_fleet_system_check@root
+					days = 1
+				}
+				if = {
+					limit = {
+						has_hyperlane_to = root.solar_system
+					}
+					if = {
+						limit = {
+							human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+						}
+						save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+					}
+				}
+				else = {
+					root = {
+						closest_system = {
+							limit = {
+								not = {
+									has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+								}
+								has_hyperlane_to = prevprev
+								human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+							}
+							max_steps = 9
+							set_timed_star_flag = {
+								flag = human_fallen_empires_pirate_fleet_system_check@root
+								days = 1
+							}
+							if = {
+								limit = {
+									has_hyperlane_to = root.solar_system
+								}
+								if = {
+									limit = {
+										human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+									}
+									save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+								}
+							}
+							else = {
+								root = {
+									closest_system = {
+										limit = {
+											not = {
+												has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+											}
+											has_hyperlane_to = prevprev
+											human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+										}
+										max_steps = 8
+										set_timed_star_flag = {
+											flag = human_fallen_empires_pirate_fleet_system_check@root
+											days = 1
+										}
+										if = {
+											limit = {
+												has_hyperlane_to = root.solar_system
+											}
+											if = {
+												limit = {
+													human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+												}
+												save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+											}
+										}
+										else = {
+											root = {
+												closest_system = {
+													limit = {
+														not = {
+															has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+														}
+														has_hyperlane_to = prevprev
+														human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+													}
+													max_steps = 7
+													set_timed_star_flag = {
+														flag = human_fallen_empires_pirate_fleet_system_check@root
+														days = 1
+													}
+													if = {
+														limit = {
+															has_hyperlane_to = root.solar_system
+														}
+														if = {
+															limit = {
+																human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+															}
+															save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+														}
+													}
+													else = {
+														root = {
+															closest_system = {
+																limit = {
+																	not = {
+																		has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																	}
+																	has_hyperlane_to = prevprev
+																	human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																}
+																max_steps = 6
+																set_timed_star_flag = {
+																	flag = human_fallen_empires_pirate_fleet_system_check@root
+																	days = 1
+																}
+																if = {
+																	limit = {
+																		has_hyperlane_to = root.solar_system
+																	}
+																	if = {
+																		limit = {
+																			human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																		}
+																		save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																	}
+																}
+																else = {
+																	root = {
+																		closest_system = {
+																			limit = {
+																				not = {
+																					has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																				}
+																				has_hyperlane_to = prevprev
+																				human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																			}
+																			max_steps = 5
+																			set_timed_star_flag = {
+																				flag = human_fallen_empires_pirate_fleet_system_check@root
+																				days = 1
+																			}
+																			if = {
+																				limit = {
+																					has_hyperlane_to = root.solar_system
+																				}
+																				if = {
+																					limit = {
+																						human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																					}
+																					save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																				}
+																			}
+																			else = {
+																				root = {
+																					closest_system = {
+																						limit = {
+																							not = {
+																								has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																							}
+																							has_hyperlane_to = prevprev
+																							human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																						}
+																						max_steps = 4
+																						set_timed_star_flag = {
+																							flag = human_fallen_empires_pirate_fleet_system_check@root
+																							days = 1
+																						}
+																						if = {
+																							limit = {
+																								has_hyperlane_to = root.solar_system
+																							}
+																							if = {
+																								limit = {
+																									human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																								}
+																								save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																							}
+																						}
+																						else = {
+																							root = {
+																								closest_system = {
+																									limit = {
+																										not = {
+																											has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																										}
+																										has_hyperlane_to = prevprev
+																										human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																									}
+																									max_steps = 4
+																									set_timed_star_flag = {
+																										flag = human_fallen_empires_pirate_fleet_system_check@root
+																										days = 1
+																									}
+																									if = {
+																										limit = {
+																											has_hyperlane_to = root.solar_system
+																										}
+																										if = {
+																											limit = {
+																												human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																											}
+																											save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																										}
+																									}
+																									else = {
+																										root = {
+																											closest_system = {
+																												limit = {
+																													not = {
+																														has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																													}
+																													has_hyperlane_to = prevprev
+																													human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																												}
+																												max_steps = 3
+																												set_timed_star_flag = {
+																													flag = human_fallen_empires_pirate_fleet_system_check@root
+																													days = 1
+																												}
+																												if = {
+																													limit = {
+																														has_hyperlane_to = root.solar_system
+																													}
+																													if = {
+																														limit = {
+																															human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																														}
+																														save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																													}
+																												}
+																												else = {
+																													root = {
+																														closest_system = {
+																															limit = {
+																																not = {
+																																	has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																																}
+																																has_hyperlane_to = prevprev
+																																human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																															}
+																															max_steps = 2
+																															set_timed_star_flag = {
+																																flag = human_fallen_empires_pirate_fleet_system_check@root
+																																days = 1
+																															}
+																															if = {
+																																limit = {
+																																	has_hyperlane_to = root.solar_system
+																																}
+																																if = {
+																																	limit = {
+																																		human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																																	}
+																																	save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																																}
+																															}
+																															else = {
+																																root = {
+																																	closest_system = {
+																																		limit = {
+																																			not = {
+																																				has_star_flag = human_fallen_empires_pirate_fleet_system_check@root
+																																			}
+																																			has_hyperlane_to = prevprev
+																																			human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																																		}
+																																		max_steps = 1
+																																		set_timed_star_flag = {
+																																			flag = human_fallen_empires_pirate_fleet_system_check@root
+																																			days = 1
+																																		}
+																																		save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_path_target_home = {
+	if = {
+		limit = {
+			solar_system = {
+				exists = owner
+				owner = {
+					not = {
+						is_country = root.owner
+					}
+				}
+			}
+		}
+		closest_system = {
+			limit = {
+				exists = owner
+				owner = {
+					is_country = root.owner
+				}
+				# heavy check to the end
+				human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+				human_fallen_empires_trigger_pirate_path_check = yes
+			}
+			root = {
+				set_timed_fleet_flag = {
+					flag = human_fallen_empires_pirate_fleet_target_system@prev
+					days = 365
+				}
+				set_timed_fleet_flag = {
+					flag = human_fallen_empires_pirate_fleet_has_target
+					days = 365
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_path_target_planet = {
+	solar_system = {
+		if = {
+			limit = {
+				exists = solar_system.starbase.owner
+				exists = solar_system.starbase.fleet
+				solar_system.starbase.owner = {
+					is_hostile = root.owner
+				}
+				solar_system.starbase.fleet = {
+					has_hp_percentage > 0.9
+				}
+			}
+			root = {
+				if = {
+					limit = {
+						has_fleet_flag = human_fallen_empires_pirate_log_fleet
+					}
+					log = "[this.GetName] will suppress starbase of [solar_system.GetName]"
+				}
+				set_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+				clear_fleet_actions = this
+				queue_actions = {
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_pirate.trigger.0
+							is_same_value = prevprev.system_star
+						}
+						found_planet = {
+							move_to = this
+						}
+					}
+				}
+				# auto_move_to_planet = {
+					# target = prev.system_star
+					# clear_auto_move_on_arrival = yes
+				# }
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					not = {
+						has_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					or = {
+						and = {
+							exists = controller
+							controller = {
+								is_hostile = root.owner
+							}
+							or = {
+								has_mining_station = yes
+								has_research_station = yes
+							}
+						}
+						and = {
+							exists = owner
+							owner = {
+								is_hostile = root.owner
+							}
+							not = {
+								has_modifier = human_fallen_empires_pirate_ravaged_planet
+							}
+							#has_orbital_bombardment = no
+						}
+					}
+				}
+				weights = {
+					base = 10
+					modifier = {
+						mult = 100
+						not = {
+							exists = owner
+						}
+					}
+				}
+				root = {
+					if = {
+						limit = {
+							has_fleet_flag = human_fallen_empires_pirate_log_fleet
+						}
+						log = "[this.GetName] want to plunder [prev.GetName]"
+					}
+					set_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+					clear_fleet_actions = this
+					queue_actions = {
+						find_closest_planet = {
+							trigger = {
+								id = human_fallen_empires_pirate.trigger.1
+								is_planet = prevprev
+							}
+							found_planet = {
+								orbit_planet = this
+								repeat = {
+									while = {
+										id = human_fallen_empires_pirate.trigger.1.1
+										num_pops > 0
+									}
+									#wait = 30
+									# lul
+									#move_to = this
+									orbit_planet = this
+								}
+							}
+						}
+					}
+					# if = {
+						# limit = {
+							# prev = {
+								# num_pops > 0
+							# }
+						# }
+						# human_fallen_empires_effect_pirate_path_fleet_clear_actions = yes
+						# auto_move_to_planet = {
+							# target = prev
+							# clear_auto_move_on_arrival = no
+						# }
+					# }
+					# else = {
+						# human_fallen_empires_effect_pirate_path_fleet_clear_actions = yes
+						# auto_move_to_planet = {
+							# target = prev
+							# clear_auto_move_on_arrival = yes
+						# }
+					# }
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_path_target_system = {
+	random_list = {
+		# go home
+		50 = {
+			modifier = {
+				factor = 0
+				has_hp_percentage > 0.99
+			}
+			modifier = {
+				factor = 2
+				has_hp_percentage < 0.9
+			}
+			modifier = {
+				factor = 2
+				has_hp_percentage < 0.8
+			}
+			if = {
+				limit = {
+					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				}
+				log = "[this.GetName] in [solar_system.GetName] go home system"
+			}
+			human_fallen_empires_effect_pirate_path_target_home = yes
+		}
+		# move ahead
+		100 = {
+			modifier = {
+				factor = 0
+				or = {
+					num_ships < 5
+					has_hp_percentage < 0.7
+				}
+			}
+			if = {
+				limit = {
+					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				}
+				log = "[this.GetName] in [solar_system.GetName] try to find system target"
+			}
+			closest_system = {
+				limit = {
+					exists = owner
+					owner = {
+						has_opinion_modifier = {
+							who = root.owner
+							modifier = human_fallen_empires_opinion_pirate_prior_target
+						}
+					}
+					# heavy check to the end
+					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+					human_fallen_empires_trigger_pirate_path_check = yes
+				}
+				max_steps = 10
+				root = {
+					if = {
+						limit = {
+							has_fleet_flag = human_fallen_empires_pirate_log_fleet
+						}
+						log = "[this.GetName] in [solar_system.GetName] find prior target, it is [prev.GetName]"
+					}
+					set_timed_fleet_flag = {
+						flag = human_fallen_empires_pirate_fleet_target_system@prev
+						days = 365
+					}
+					set_timed_fleet_flag = {
+						flag = human_fallen_empires_pirate_fleet_has_target
+						days = 365
+					}
+				}
+			}
+			# try to find planet
+			if = {
+				limit = {
+					not = {
+						has_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+					}
+				}
+				closest_system = {
+					limit = {
+						#exists = owner
+						any_planet = {
+							exists = owner
+							owner = {
+								is_hostile = root.owner
+							}
+							num_pops > 0
+							has_orbital_bombardment = no
+						}
+						# heavy check to the end
+						human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+						human_fallen_empires_trigger_pirate_path_check = yes
+					}
+					max_steps = 10
+					root = {
+						if = {
+							limit = {
+								has_fleet_flag = human_fallen_empires_pirate_log_fleet
+							}
+							log = "[this.GetName] in [solar_system.GetName] find target with planet, it is [prev.GetName]"
+						}
+						set_timed_fleet_flag = {
+							flag = human_fallen_empires_pirate_fleet_target_system@prev
+							days = 365
+						}
+						set_timed_fleet_flag = {
+							flag = human_fallen_empires_pirate_fleet_has_target
+							days = 365
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					not = {
+						has_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+					}
+				}
+				closest_system = {
+					limit = {
+						exists = owner
+						any_planet = {
+							exists = controller
+							controller = {
+								is_hostile = root.owner
+							}
+							or = {
+								has_mining_station = yes
+								has_research_station = yes
+							}
+						}
+						# heavy check to the end
+						human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+						human_fallen_empires_trigger_pirate_path_check = yes
+					}
+					max_steps = 10
+					root = {
+						if = {
+							limit = {
+								has_fleet_flag = human_fallen_empires_pirate_log_fleet
+							}
+							log = "[this.GetName] in [solar_system.GetName] find target with mining, it is [prev.GetName]"
+						}
+						set_timed_fleet_flag = {
+							flag = human_fallen_empires_pirate_fleet_target_system@prev
+							days = 365
+						}
+						set_timed_fleet_flag = {
+							flag = human_fallen_empires_pirate_fleet_has_target
+							days = 365
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_path_go_to_next = {
+	if = {
+		limit = {
+			not = {
+				has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					has_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+				}
+			}
+			human_fallen_empires_effect_pirate_path_target_system = yes
+		}
+		random_system = {
+			limit = {
+				root = {
+					has_fleet_flag = human_fallen_empires_pirate_fleet_target_system@prev
+				}
+			}
+			human_fallen_empires_effect_pirate_path_get_next = yes
+			# closest_system = {
+			# 	limit = {
+			# 		has_hyperlane_to = root.solar_system
+			# 		human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+			# 	}
+			# 	save_event_target_as = human_fallen_empires_pirate_fleet_target_system_next
+			# }
+		}
+		if = {
+			limit = {
+				exists = event_target:human_fallen_empires_pirate_fleet_target_system_next
+			}
+			set_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+			if = {
+				limit = {
+					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				}
+				log = "[this.GetName] move to [human_fallen_empires_pirate_fleet_target_system_next.GetName]"
+			}
+			clear_fleet_actions = this
+			queue_actions = {
+				find_closest_system = {
+					trigger = {
+						id = human_fallen_empires_pirate.trigger.2
+						is_same_value = event_target:human_fallen_empires_pirate_fleet_target_system_next
+					}
+					found_system = {
+						move_to = this
+					}
+				}
+			}
+			# auto_move_to_planet = {
+				# target = event_target:human_fallen_empires_pirate_fleet_target_system_next.system_star
+				# clear_auto_move_on_arrival = yes
+			# }
+		}
+		# next system not exists, remove target
+		else = {
+			if = {
+				limit = {
+					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				}
+				log = "[this.GetName] in [solar_system.GetName] target not find, wait 180 days"
+			}
+			human_fallen_empires_effect_pirate_path_fleet_reset = yes
+			if = {
+				limit = {
+					not = {
+						has_fleet_flag = human_fallen_empires_pirate_fleet_rest
+					}
+				}
+				set_timed_fleet_flag = {
+					flag = human_fallen_empires_pirate_fleet_rest
+					days = 179
+				}
+				fleet_event = {
+					id = human_fallen_empires_pirate.300
+					days = 180
+				}
+			}
+		}
+	}
+}
+
+human_fallen_empires_effect_pirate_path_fleet_reset = {
+	clear_fleet_actions = this
+	remove_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+	remove_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+	random_system = {
+		limit = {
+			root = {
+				has_fleet_flag = human_fallen_empires_pirate_fleet_target_system@prev
+			}
+		}
+		root = {
+			remove_fleet_flag = human_fallen_empires_pirate_fleet_target_system@prev
 		}
 	}
 }

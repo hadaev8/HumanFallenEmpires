@@ -25,268 +25,147 @@ human_fallen_empires_trigger_exists_any_slave_target = {
 	}
 }
 
-# valid pirate target planet for fleet logic, root.owner is pirate, owner planet's owner
-# for planet
-human_fallen_empires_pirate_valid_target_planet = {
+# root fleet, this system
+# human_fallen_empires_trigger_pirate_path_check = {
+# 	root = {
+# 		log = "[prev.GetName]"
+# 	}
+# 	or = {
+# 		is_same_value = root.solar_system
+# 		root = {
+# 			closest_system = {
+# 				limit = {
+# 					not = {
+# 						is_same_value = prevprevprevprev
+# 					}
+# 					has_hyperlane_to = prevprev
+# 					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+# 					root = {
+# 						log = "looping warning"
+# 					}
+# 					human_fallen_empires_trigger_pirate_path_check = yes
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+human_fallen_empires_trigger_pirate_path_check = {
 	or = {
-		and = {
-			not = {
-				exists = owner 
-			}
-			or = {
-				has_mining_station = yes
-				has_research_station = yes
-			}
-			exists = controller
-			controller = {
-				is_hostile = root.owner
-				#human_fallen_empires_pirate_valid_target_country = yes
-			}
-		}
-		and = {
-			exists = owner
-			owner = {
-				is_hostile = root.owner
-				#human_fallen_empires_pirate_valid_target_country = yes
-			}
-			human_fallen_empires_trigger_primitive_planet = no
-			not = {
-				has_modifier = human_fallen_empires_pirate_ravaged_planet
-			}
-			has_orbital_bombardment = no
-		}
-	}
-}
+		is_same_value = root.solar_system
+		root = {
+			closest_system = {
+				max_steps = 10
+				limit = {
+					has_hyperlane_to = prevprev
+					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+					or = {
+						is_same_value = root.solar_system
+						root = {
+							closest_system = {
+								max_steps = 9
+								limit = {
+									has_hyperlane_to = prevprev
+									human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+									or = {
+										is_same_value = root.solar_system
+										root = {
+											closest_system = {
+												max_steps = 8
+												limit = {
+													has_hyperlane_to = prevprev
+													human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+													or = {
+														is_same_value = root.solar_system
+														root = {
+															closest_system = {
+																max_steps = 7
+																limit = {
+																	has_hyperlane_to = prevprev
+																	human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																	or = {
+																		is_same_value = root.solar_system
+																		root = {
+																			closest_system = {
+																				max_steps = 6
+																				limit = {
+																					has_hyperlane_to = prevprev
+																					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																					or = {
+																						is_same_value = root.solar_system
+																						root = {
+																							closest_system = {
+																								max_steps = 5
+																								limit = {
+																									has_hyperlane_to = prevprev
+																									human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																									or = {
+																										is_same_value = root.solar_system
+																										root = {
+																											closest_system = {
+																												max_steps = 4
+																												limit = {
+																													has_hyperlane_to = prevprev
+																													human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																													or = {
+																														is_same_value = root.solar_system
+																														root = {
+																															closest_system = {
+																																max_steps = 3
+																																limit = {
+																																	has_hyperlane_to = prevprev
+																																	human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																																	or = {
+																																		is_same_value = root.solar_system
+																																		root = {
+																																			closest_system = {
+																																				max_steps = 2
+																																				limit = {
+																																					has_hyperlane_to = prevprev
+																																					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
+																																					or = {
+																																						is_same_value = root.solar_system
+																																						root = {
+																																							closest_system = {
+																																								max_steps = 1
+																																								limit = {
+																																									has_hyperlane_to = prevprev
+																																									human_fallen_empires_trigger_pirate_fleet_power_in_system_check = yes
 
-# for country
-human_fallen_empires_pirate_valid_target_country = {
-	is_hostile = root.owner
-	# nor = {
-	# 	is_country_type = human_fallen_empires_pirate
-	# 	is_country_type = human_fallen_empires_drone
-	# }
-}
-
-# for system
-human_fallen_empires_pirate_valid_target_system = {
-	nor = {
-		has_star_flag = human_fallen_empires_pirate_block
-		any_ship_in_system = {
-			exists = owner
-			owner = {
-				is_hostile = root.owner
-			}
-			exists = fleet
-			fleet = {
-				or = {
-					and = {
-						fleet_power > 237
-						root = {
-							fleet_power < 684
-						}
-					}
-					and = {
-						fleet_power > 284
-						root = {
-							fleet_power < 741
-						}
-					}
-					and = {
-						fleet_power > 341
-						root = {
-							fleet_power < 810
-						}
-					}
-					and = {
-						fleet_power > 410
-						root = {
-							fleet_power < 892
-						}
-					}
-					and = {
-						fleet_power > 492
-						root = {
-							fleet_power < 990
-						}
-					}
-					and = {
-						fleet_power > 590
-						root = {
-							fleet_power < 1108
-						}
-					}
-					and = {
-						fleet_power > 708
-						root = {
-							fleet_power < 1250
-						}
-					}
-					and = {
-						fleet_power > 850
-						root = {
-							fleet_power < 1420
-						}
-					}
-					and = {
-						fleet_power > 1020
-						root = {
-							fleet_power < 1624
-						}
-					}
-					and = {
-						fleet_power > 1224
-						root = {
-							fleet_power < 1869
-						}
-					}
-					and = {
-						fleet_power > 1469
-						root = {
-							fleet_power < 2163
-						}
-					}
-					and = {
-						fleet_power > 1763
-						root = {
-							fleet_power < 2516
-						}
-					}
-					and = {
-						fleet_power > 2116
-						root = {
-							fleet_power < 2939
-						}
-					}
-					and = {
-						fleet_power > 2539
-						root = {
-							fleet_power < 3447
-						}
-					}
-					and = {
-						fleet_power > 3047
-						root = {
-							fleet_power < 4057
-						}
-					}
-					and = {
-						fleet_power > 3657
-						root = {
-							fleet_power < 4788
-						}
-					}
-					and = {
-						fleet_power > 4388
-						root = {
-							fleet_power < 5666
-						}
-					}
-					and = {
-						fleet_power > 5266
-						root = {
-							fleet_power < 6719
-						}
-					}
-					and = {
-						fleet_power > 6319
-						root = {
-							fleet_power < 7983
-						}
-					}
-					and = {
-						fleet_power > 7583
-						root = {
-							fleet_power < 9500
-						}
-					}
-					and = {
-						fleet_power > 9100
-						root = {
-							fleet_power < 11320
-						}
-					}
-					and = {
-						fleet_power > 10920
-						root = {
-							fleet_power < 13504
-						}
-					}
-					and = {
-						fleet_power > 13104
-						root = {
-							fleet_power < 16125
-						}
-					}
-					and = {
-						fleet_power > 15725
-						root = {
-							fleet_power < 19270
-						}
-					}
-					and = {
-						fleet_power > 18870
-						root = {
-							fleet_power < 23044
-						}
-					}
-					and = {
-						fleet_power > 22644
-						root = {
-							fleet_power < 27573
-						}
-					}
-					and = {
-						fleet_power > 27173
-						root = {
-							fleet_power < 33008
-						}
-					}
-					and = {
-						fleet_power > 32608
-						root = {
-							fleet_power < 39530
-						}
-					}
-					and = {
-						fleet_power > 39130
-						root = {
-							fleet_power < 47356
-						}
-					}
-					and = {
-						fleet_power > 46956
-						root = {
-							fleet_power < 56747
-						}
-					}
-					and = {
-						fleet_power > 56347
-						root = {
-							fleet_power < 68017
-						}
-					}
-					and = {
-						fleet_power > 67617
-						root = {
-							fleet_power < 81540
-						}
-					}
-					and = {
-						fleet_power > 81140
-						root = {
-							fleet_power < 97768
-						}
-					}
-					and = {
-						fleet_power > 97368
-						root = {
-							fleet_power < 117242
-						}
-					}
-					and = {
-						fleet_power > 116842
-						root = {
-							fleet_power < 140610
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
@@ -295,18 +174,243 @@ human_fallen_empires_pirate_valid_target_system = {
 	}
 }
 
-human_fallen_empires_pirate_valid_target_system_prior = {
-	exists = owner
-	owner = {
-		has_opinion_modifier = {
-			who = root.owner
-			modifier = human_fallen_empires_opinion_pirate_prior_target
+# for system
+human_fallen_empires_trigger_pirate_fleet_power_in_system_check = {
+	not = {
+		# its not cool to check every ships and then its fleet
+		# for example 100 ships in fleet = 100 same checks
+		# no idea how to fix it
+		any_ship_in_system = {
+			exists = owner
+			owner = {
+				is_hostile = root.owner
+			}
+			exists = fleet
+			fleet = {
+				fleet_power > 100
+				human_fallen_empires_trigger_pirate_this_fleet_more_power_then_root = yes
+			}
+		}
+	}
+}
+
+human_fallen_empires_trigger_pirate_this_fleet_more_power_then_root = {
+	or = {
+		and = {
+			fleet_power > 237
+			root = {
+				fleet_power < 684
+			}
+		}
+		and = {
+			fleet_power > 284
+			root = {
+				fleet_power < 741
+			}
+		}
+		and = {
+			fleet_power > 341
+			root = {
+				fleet_power < 810
+			}
+		}
+		and = {
+			fleet_power > 410
+			root = {
+				fleet_power < 892
+			}
+		}
+		and = {
+			fleet_power > 492
+			root = {
+				fleet_power < 990
+			}
+		}
+		and = {
+			fleet_power > 590
+			root = {
+				fleet_power < 1108
+			}
+		}
+		and = {
+			fleet_power > 708
+			root = {
+				fleet_power < 1250
+			}
+		}
+		and = {
+			fleet_power > 850
+			root = {
+				fleet_power < 1420
+			}
+		}
+		and = {
+			fleet_power > 1020
+			root = {
+				fleet_power < 1624
+			}
+		}
+		and = {
+			fleet_power > 1224
+			root = {
+				fleet_power < 1869
+			}
+		}
+		and = {
+			fleet_power > 1469
+			root = {
+				fleet_power < 2163
+			}
+		}
+		and = {
+			fleet_power > 1763
+			root = {
+				fleet_power < 2516
+			}
+		}
+		and = {
+			fleet_power > 2116
+			root = {
+				fleet_power < 2939
+			}
+		}
+		and = {
+			fleet_power > 2539
+			root = {
+				fleet_power < 3447
+			}
+		}
+		and = {
+			fleet_power > 3047
+			root = {
+				fleet_power < 4057
+			}
+		}
+		and = {
+			fleet_power > 3657
+			root = {
+				fleet_power < 4788
+			}
+		}
+		and = {
+			fleet_power > 4388
+			root = {
+				fleet_power < 5666
+			}
+		}
+		and = {
+			fleet_power > 5266
+			root = {
+				fleet_power < 6719
+			}
+		}
+		and = {
+			fleet_power > 6319
+			root = {
+				fleet_power < 7983
+			}
+		}
+		and = {
+			fleet_power > 7583
+			root = {
+				fleet_power < 9500
+			}
+		}
+		and = {
+			fleet_power > 9100
+			root = {
+				fleet_power < 11320
+			}
+		}
+		and = {
+			fleet_power > 10920
+			root = {
+				fleet_power < 13504
+			}
+		}
+		and = {
+			fleet_power > 13104
+			root = {
+				fleet_power < 16125
+			}
+		}
+		and = {
+			fleet_power > 15725
+			root = {
+				fleet_power < 19270
+			}
+		}
+		and = {
+			fleet_power > 18870
+			root = {
+				fleet_power < 23044
+			}
+		}
+		and = {
+			fleet_power > 22644
+			root = {
+				fleet_power < 27573
+			}
+		}
+		and = {
+			fleet_power > 27173
+			root = {
+				fleet_power < 33008
+			}
+		}
+		and = {
+			fleet_power > 32608
+			root = {
+				fleet_power < 39530
+			}
+		}
+		and = {
+			fleet_power > 39130
+			root = {
+				fleet_power < 47356
+			}
+		}
+		and = {
+			fleet_power > 46956
+			root = {
+				fleet_power < 56747
+			}
+		}
+		and = {
+			fleet_power > 56347
+			root = {
+				fleet_power < 68017
+			}
+		}
+		and = {
+			fleet_power > 67617
+			root = {
+				fleet_power < 81540
+			}
+		}
+		and = {
+			fleet_power > 81140
+			root = {
+				fleet_power < 97768
+			}
+		}
+		and = {
+			fleet_power > 97368
+			root = {
+				fleet_power < 117242
+			}
+		}
+		and = {
+			fleet_power > 116842
+			root = {
+				fleet_power < 140610
+			}
 		}
 	}
 }
 
 # for planet
-human_fallen_empires_pirate_valid_base_planet = {
+human_fallen_empires_trigger_pirate_valid_base_planet = {
 	or = {
 		is_asteroid = yes
 		is_planet_class = human_fallen_empires_pc_pirate_base
@@ -317,7 +421,7 @@ human_fallen_empires_pirate_valid_base_planet = {
 	}
 }
 
-human_fallen_empires_pirate_valid_base_system = {
+human_fallen_empires_trigger_pirate_valid_base_system = {
 	or = {
 		has_presence = no
 		and = {
@@ -340,6 +444,6 @@ human_fallen_empires_pirate_valid_base_system = {
 		}
 	}
 	any_planet = {
-		human_fallen_empires_pirate_valid_base_planet = yes
+		human_fallen_empires_trigger_pirate_valid_base_planet = yes
 	}
 }

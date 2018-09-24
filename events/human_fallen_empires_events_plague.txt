@@ -213,7 +213,7 @@ planet_event = {
 				amount = 1
 			}
 		}
-		log = "Plague start on planet [root.GetName] owner: [owner.GetName]"
+		#log = "Plague start on planet [root.GetName] owner: [owner.GetName]"
 		# set modifier and inform
 		switch = {
 			trigger = has_global_flag
@@ -823,7 +823,7 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "Plague zombies take planet [this.GetName] owner: [owner.GetName]"
+		log = "Plague zombies take planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
 		owner = {
 			country_event = {
 				id = human_fallen_empires_plague.62
@@ -844,7 +844,7 @@ planet_event = {
 		# }
 		set_owner = fromfrom
 		every_owned_pop = {
-			kill_pop = yes
+			purge = yes
 		}
 	}
 }
@@ -868,6 +868,12 @@ planet_event = {
 	}
 
 	immediate = {
+		every_owned_pop = {
+			limit = {
+				is_being_force_purged = yes
+			}
+			purge = no
+		}
 		every_planet_army = {
 			limit = {
 				army_type = human_fallen_empires_plague_zombie_army
@@ -875,7 +881,7 @@ planet_event = {
 			remove_army = yes
 		}
 		set_owner = fromfrom
-		log = "Take planet [this.GetName] from zombies new owner: [owner.GetName]"
+		log = "Take planet [this.GetName] in [solar_system.GetName] from zombies new owner: [owner.GetName]"
 	}
 
 	option = {
@@ -1746,7 +1752,7 @@ ship_event = {
 
 	immediate = {
 		event_target:human_fallen_empires_project_plague_planet_bombardment_target = {
-			log = "Bombard plague planet [this.GetName] owner [owner.GetName]"
+			#log = "Bombard plague planet [this.GetName] owner [owner.GetName]"
 			set_timed_planet_flag = {
 				flag = human_fallen_empires_plague_bombardment_planet
 				days = 3650
@@ -1958,7 +1964,7 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "plague bombarding on [Root.GetStarName]"
+		log = "plague bombarding type on [root.GetName] in [solar_system.GetName]"
 		random_list = {
 			8 = {
 			}

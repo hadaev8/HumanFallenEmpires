@@ -208,7 +208,7 @@ human_fallen_empires_effect_settle_pop = {
 				planet = this
 			}
 			add_organic_sanctuaries = yes
-			log = "pop moved to [this.GetName]"
+			#log = "pop moved to [this.GetName]"
 		}
 	}
 }
@@ -917,7 +917,18 @@ human_fallen_empires_effect_add_psionic_trait = {
 
 # for planet
 human_fallen_empires_effect_convert_to_asteroid = {
-	log = "converting to asteroid [this.GetName]"
+	#log = "converting to asteroid [this.GetName]"
+	# flee fleets
+	if = {
+		limit = {
+			exists = owner
+			owner = {
+				is_country_type = human_fallen_empires_pirate
+				num_owned_planets = 1
+			}
+		}
+		human_fallen_empires_effect_pirate_flee_fleets = yes
+	}
 	human_fallen_empires_effect_clear_buildings_and_destroy_colony = yes
 	change_pc = pc_asteroid
 }
@@ -1711,7 +1722,7 @@ human_fallen_empires_effect_assimilator_find_pop = {
 					human_fallen_empires_trigger_assimilator_pop_to_move = yes
 				}
 			}
-			log = "looping warning, something go wrong if you see it a lot of time"
+			log = "looping warning"
 			human_fallen_empires_effect_assimilator_find_pop = yes
 		}
 	}
