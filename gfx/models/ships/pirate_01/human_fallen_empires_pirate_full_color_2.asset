@@ -2,6 +2,7 @@
 @corvette_scale = 1.05
 @destroyer_scale = 1.45
 
+# corvette
 entity = {
 	name = human_fallen_empires_graphical_culture_pirate_full_color_2_corvette_M1S1_entity
 	# vanilla copy past
@@ -20,7 +21,7 @@ entity = {
 	# actual change
 	meshsettings = {
 		name = "corvette_1m1s1Shape"
-		texture_diffuse = "human_fallen_empires_full_color_pirate_corvette_diffuse.dds"
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_corvette_diffuse.dds"
 	}
 }
 
@@ -44,10 +45,11 @@ entity = {
 	# actual change
 	meshsettings = {
 		name = "corvette_3s1Shape"
-		texture_diffuse = "human_fallen_empires_full_color_pirate_corvette_diffuse.dds"
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_corvette_diffuse.dds"
 	}
 }
 
+# destroyer
 entity = {
 	name = human_fallen_empires_graphical_culture_pirate_full_color_2_destroyer_stern_S2_entity
 	pdxmesh = pirates_destroyer01_1l_2s_mesh
@@ -66,7 +68,7 @@ entity = {
 	# actual change
 	meshsettings = {
 		name = "Pirates_Destroyer01_1l_2s1Shape"
-		texture_diffuse = "human_fallen_empires_full_color_pirate_destroyer_diffuse.dds"
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_destroyer_diffuse.dds"
 	}
 }
 
@@ -88,7 +90,70 @@ entity = {
 	# actual change
 	meshsettings = {
 		name = "Pirates_Destroyer01_1m_2s_1mShape"
-		texture_diffuse = "human_fallen_empires_full_color_pirate_destroyer_diffuse.dds"
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_destroyer_diffuse.dds"
 	}
 	locator = { name = "medium_gun_01" position = { 0.513008 1.20776 3.28479 } }
+}
+
+# cruiser
+entity = {
+	name = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_S2HB_entity
+	# vanilla copy past
+	pdxmesh = pirate_01_cruiser_mesh
+
+	default_state = "idle"
+	state = { name = "idle"	 animation = "idle" animation_blend_time = 4
+		event = { time = 0 node = "engine_medium_01" particle = "pirate_01_1_0_exhaust_idle_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "pirate_01_1_0_exhaust_idle_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "pirate_01_1_0_exhaust_idle_particle" trigger_once = yes keep_particle = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_cruiser_hum" } }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 2
+		event = { time = 0 node = "engine_medium_01" particle = "pirate_01_1_0_ship_exhaust_moving_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "pirate_01_1_0_ship_exhaust_moving_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "pirate_01_1_0_ship_exhaust_moving_particle" trigger_once = yes keep_particle = yes }
+		event = { trigger_once = yes sound = { soundeffect = "moving_out_cruiser" } }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 4.63 node = "ship_main" particle = "massive_ship_explosion_particle" }
+		event = { time = 0.0 node = "explosion_1" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion" } }
+		event = { time = 1.6 node = "explosion_2" particle = "ship_explosion_particle" }
+		event = { time = 2.83 node = "explosion_3" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion" } }
+		event = { time = 3.26 node = "explosion_4" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion_large" } }
+		event = { time = 3.9 node = "explosion_5" particle = "ship_explosion_particle" }
+		event = { time = 4.1 node = "explosion_6" particle = "ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } }
+	}
+	# actual change
+	locator = { name = "strike_craft_locator_01" position = { -0.236655 3.24759 5.51895 } }
+	locator = { name = "medium_gun_03" position = { -0.236655 3.24759 5.51895 } }
+	meshsettings = {
+		name = "pirate_cruiserShape"
+		index = 1
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_base_diffuse.dds"
+	}
+	meshsettings = {
+		name = "pirate_cruiserShape"
+		index = 2
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_corvette_diffuse.dds"
+	}
+	meshsettings = {
+		name = "pirate_cruiserShape"
+		index = 3
+		texture_diffuse = "human_fallen_empires_full_color_2_pirate_destroyer_diffuse.dds"
+	}
+}
+
+entity = {
+	name = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_L1M1_entity
+	clone = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_S2HB_entity
+}
+
+entity = {
+	name = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_M3_entity
+	clone = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_S2HB_entity
+}
+
+entity = {
+	name = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_M2S2_entity
+	clone = human_fallen_empires_graphical_culture_pirate_full_color_2_cruiser_mid_S2HB_entity
 }
