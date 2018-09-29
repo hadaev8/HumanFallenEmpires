@@ -720,12 +720,12 @@ pop_event = {
 			planet_event = {
 				id = human_fallen_empires_plague.1
 			}
-			log = "Plague migration on planet [this.GetName] owner: [owner.GetName]"
+			#log = "Plague migration on planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
 		}
 	}
 }
 
-# reduce the counter after 10 years
+# reduce the counter after 10 years 4
 planet_event = {
 	id = human_fallen_empires_plague.4
 	hide_window = yes
@@ -808,7 +808,7 @@ planet_event = {
 	}
 }
 
-# zombies take planet for on_planet_occupied
+# zombies take planet for on_planet_occupied 5
 planet_event = {
 	id = human_fallen_empires_plague.5
 	hide_window = yes
@@ -823,17 +823,12 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "Plague zombies take planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
+		#log = "Plague zombies take planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
 		owner = {
 			country_event = {
 				id = human_fallen_empires_plague.62
 			}
 		}
-		# fromfrom = {
-		# 	every_owned_fleet = {
-		# 		destroy_fleet = this
-		# 	}
-		# }
 		# every_planet_army = {
 		# 	limit = {
 		# 		not = {
@@ -849,7 +844,7 @@ planet_event = {
 	}
 }
 
-# retake zombie planet for on_planet_occupied
+# retake zombie planet for on_planet_occupied 7
 planet_event = {
 	id = human_fallen_empires_plague.7
 	title = human_fallen_empires_plague.7.name
@@ -890,7 +885,30 @@ planet_event = {
 	}
 }
 
-# report event after lvl 2 for on_tech_increased
+# Planet has reached 0 health from orbital bombardment
+# This = Planet
+# From = Bombarder
+# clear zombie planet by orbital bombardment
+planet_event = {
+	id = human_fallen_empires_plague.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_country_type = human_fallen_empires_plague_zombie
+		}
+		num_pops = 0
+	}
+
+	immediate = {
+		#log = "Destroy zombie colony [this.GetName] in [solar_system.GetName]"
+		destroy_colony = yes
+	}
+}
+
+# report event after lvl 2 for on_tech_increased 9
 country_event = {
 	id = human_fallen_empires_plague.9
 	title = human_fallen_empires_plague.9.name
@@ -1617,7 +1635,7 @@ country_event = {
 		}
 		add_research_option = human_fallen_empires_tech_plague_immune
 		set_country_flag = human_fallen_empires_plague_know_immune
-		log = "[Root.GetName] now know immune"
+		#log = "[Root.GetName] now know immune"
 	}
 	option = {
 		name = human_fallen_empires_plague.58.1

@@ -235,6 +235,10 @@ country_event = {
 		}
 		# send fleet logic for unstuck fleets
 		every_owned_fleet = {
+			limit = {
+				num_ships > 1
+				is_ship_class = shipclass_military
+			}
 			fleet_event = {
 				id = human_fallen_empires_pirate.300
 			}
@@ -293,7 +297,12 @@ country_event = {
 		energy >= @human_fallen_empires_pirate_base_cost
 		exists = capital_scope
 		any_owned_planet = {
-			free_pop_tiles < 4
+			free_pop_tiles < 3
+		}
+		not = {
+			any_owned_planet = {
+				free_pop_tiles > 3
+			}
 		}
 	}
 
@@ -323,10 +332,13 @@ ship_event = {
 	trigger = {
 		exists = owner
 		exists = fleet
+		fleet = {
+			num_ships > 1
+			is_ship_class = shipclass_military
+		}
 		owner = {
 			is_country_type = human_fallen_empires_pirate
 		}
-		is_ship_class = shipclass_military
 	}
 
 	immediate = {
@@ -450,7 +462,7 @@ country_event = {
 			}
 			set_country_flag = human_fallen_empires_pirate.101.deal_offer
 			set_country_flag = human_fallen_empires_pirate.101.slave_menu
-			log = "try to sell slaves to [this.GetName]"
+			#log = "try to sell slaves to [this.GetName]"
 			set_timed_country_flag = {
 				flag = human_fallen_empires_pirate_offer_deal@root
 				days = 1825
@@ -474,6 +486,7 @@ country_event = {
 
 	trigger = {
 		energy >= 1000
+		minerals < 5000
 	}
 
 	immediate = {
@@ -584,7 +597,6 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "pirate bombarding [this.GetName] in [solar_system.GetName]"
 		if = {
 			limit = {
 				from = {
@@ -598,11 +610,13 @@ planet_event = {
 				}
 			}
 			human_fallen_empires_effect_pirate_ravage_planet = yes
+			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
 		}
 		else = {
 			random = {
 				chance = 20
 				human_fallen_empires_effect_pirate_ravage_planet = yes
+				log = "pirate bombarding [this.GetName] in [solar_system.GetName] by default"
 			}
 		}
 	}
@@ -811,21 +825,16 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		# or = {
-			# is_country_type = human_fallen_empires_pirate
-		 	# is_country_type = default
-		# }
+		or = {
+			is_country_type = human_fallen_empires_pirate
+			is_country_type = default
+			is_country_type = awakened_fallen_empire
+		}
 		any_country = {
 			is_country_type = human_fallen_empires_pirate
 			not = {
 				is_country = root
 			}
-		}
-		nor = {
-			is_country_type = neutral_faction
-			is_country_type = faction
-			is_country_type = marauder_raiders
-			is_country_type = human_fallen_empires_discovery
 		}
 	}
 
@@ -1250,12 +1259,6 @@ country_event = {
 					who = root
 					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
 				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
-				}
 			}
 		}
 	}
@@ -1465,12 +1468,6 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_0
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
-				}
 			}
 		}
 	}
@@ -1516,12 +1513,6 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_1
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
-				}
 			}
 		}
 	}
@@ -1565,12 +1556,6 @@ country_event = {
 				add_opinion_modifier = {
 					who = event_target:human_fallen_empires_event_target_2
 					modifier = human_fallen_empires_opinion_pirate_prior_target
-				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
 				}
 			}
 		}
@@ -1616,12 +1601,6 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_3
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
-				}
 			}
 		}
 	}
@@ -1666,12 +1645,6 @@ country_event = {
 					who = event_target:human_fallen_empires_event_target_4
 					modifier = human_fallen_empires_opinion_pirate_prior_target
 				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
-				}
 			}
 		}
 	}
@@ -1715,12 +1688,6 @@ country_event = {
 				add_opinion_modifier = {
 					who = event_target:human_fallen_empires_event_target_5
 					modifier = human_fallen_empires_opinion_pirate_prior_target
-				}
-				every_owned_fleet = {
-					clear_fleet_actions = this
-					fleet_event = {
-						id = human_fallen_empires_pirate.300
-					}
 				}
 			}
 		}
@@ -2144,6 +2111,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
+			log = "[this.GetName] buy slaves 2"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -2227,7 +2195,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 2"
+			log = "[this.GetName] buy slaves 3"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -2311,7 +2279,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 3"
+			log = "[this.GetName] buy slaves 4"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -2395,7 +2363,7 @@ country_event = {
 					save_event_target_as = human_fallen_empires_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 4"
+			log = "[this.GetName] buy slaves 5"
 		}
 		human_fallen_empires_effect_settle_pop = yes
 		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
@@ -2887,14 +2855,17 @@ country_event = {
 				id = human_fallen_empires_pirate.101
 			}
 		}
+		ai_chance = {
+			factor = 0
+		}
 	}
 	# exit
 	option = {
 		name = human_fallen_empires_end_transmission
 		default_hide_option = yes
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires_pirate.101_block
 			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
+			remove_country_flag = human_fallen_empires_pirate.101_block
 		}
 		ai_chance = {
 			factor = 100
@@ -3282,8 +3253,7 @@ fleet_event = {
 			fleet_power > 500
 		}
 		has_hp_percentage > 0.99
-		is_fleet_idle = yes
-		#is_being_repaired = no
+		#is_fleet_idle = yes
 	}
 
 	immediate = {
@@ -3314,7 +3284,12 @@ fleet_event = {
 					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = no
 				}
 			}
-			#log = "[this.GetName] in [solar_system.GetName] in dangerous, try to go home"
+			if = {
+				limit = {
+					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				}
+				log = "pirate fleet [this.GetName] in [solar_system.GetName] in dangerous, try to go home"
+			}
 			human_fallen_empires_effect_pirate_path_target_home = yes
 		}
 		# plunder current system if have sonething to plunder
@@ -3371,7 +3346,12 @@ fleet_event = {
 					has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
 					human_fallen_empires_trigger_pirate_this_fleet_more_power_then_root = no
 				}
-				#log = "[this.GetName] in [solar_system.GetName] recalcing due to new fleet in system"
+				if = {
+					limit = {
+						has_fleet_flag = human_fallen_empires_pirate_log_fleet
+					}
+					log = "[this.GetName] in [solar_system.GetName] recalcing due to new fleet in system"
+				}
 				fleet_event = {
 					id = human_fallen_empires_pirate.302
 				}
@@ -3424,17 +3404,15 @@ fleet_event = {
 
 	trigger = {
 		has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
-		#exists = solar_system
 	}
 
 	immediate = {
-		# solar_system = {
-		# 	set_timed_star_flag = {
-		# 		flag = human_fallen_empires_pirate_block
-		# 		days = 180
-		# 	}
-		# }
-		#log = "pirate fleet emercy ftl at [solar_system.GetName]"
+		if = {
+			limit = {
+				has_fleet_flag = human_fallen_empires_pirate_log_fleet
+			}
+			log = "pirate fleet [this.GetName] in [solar_system.GetName] emercy ftl"
+		}
 		human_fallen_empires_effect_pirate_path_fleet_reset = yes
 	}
 }
