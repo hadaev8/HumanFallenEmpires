@@ -421,3 +421,29 @@ can_colonize_outside_borders = {
 		}
 	}
 }
+
+# this = country
+can_have_piracy_risk = {
+	years_passed > 10
+	is_country_type = default
+	or = {
+		and = {
+			nor = {
+				has_global_flag = human_fallen_empires_disable_pirate
+				has_country_flag = human_fallen_empires_pirate_spawned
+			}
+			human_fallen_empires_trigger_is_human_fallen = no
+			human_fallen_empires_trigger_is_hive = no
+		}
+		and = {
+			has_global_flag = human_fallen_empires_disable_pirate
+			# vanilla
+			has_country_flag = birth_of_piracy
+			NOT = { has_country_flag = had_pirates_spawn }
+			OR = {
+				has_isolated_system = yes
+				has_bordering_system = yes
+			}
+		}
+	}
+}
