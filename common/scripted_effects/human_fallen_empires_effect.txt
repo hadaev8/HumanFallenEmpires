@@ -51,6 +51,36 @@ human_fallen_empires_effect_refuge_or_die = {
 				weights = {
 					base = 10
 					modifier = {
+						mult = 0
+						has_policy_flag = refugees_not_allowed
+						event_target:human_fallen_empires_refuge_pop_target = {
+							not = {
+								is_same_species = prev
+							}
+						}
+					}
+					modifier = {
+						mult = 0
+						has_policy_flag = refugees_only_citizens
+						event_target:human_fallen_empires_refuge_pop_target = {
+							nor = {
+								is_same_species = prev
+								has_citizenship_type = {
+									type = citizenship_full
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = prev
+								}
+								has_citizenship_type = {
+									type = citizenship_organic_trophy
+									country = prev
+								}
+							}
+						}
+					}
+					modifier = {
 						mult = 100
 						has_country_flag = human_fallen_empires_refuge_country_prior@prev
 					}
@@ -89,6 +119,30 @@ human_fallen_empires_effect_refuge_or_die = {
 						}
 					}
 					modifier = {
+						mult = 2
+						has_policy_flag = refugees_allowed
+					}
+					modifier = {
+						mult = 2
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+							habitability = {
+								who = event_target:human_fallen_empires_refuge_pop_target
+								value >= 0.6
+							}
+						}
+					}
+					modifier = {
+						mult = 2
+						any_owned_planet = {
+							human_fallen_empires_trigger_planet_valid_for_settle = yes
+							habitability = {
+								who = event_target:human_fallen_empires_refuge_pop_target
+								value >= 0.4
+							}
+						}
+					}
+					modifier = {
 						mult = 0.5
 						event_target:human_fallen_empires_refuge_pop_target = {
 							has_citizenship_type = {
@@ -106,11 +160,6 @@ human_fallen_empires_effect_refuge_or_die = {
 							}
 						}
 					}
-					modifier = {
-						mult = 2
-						has_policy_flag = refugees_allowed
-					}
-					# доделать другие политики беженцев
 				}
 				event_target:human_fallen_empires_refuge_pop_target = {
 					remove_modifier = pop_recently_conquered

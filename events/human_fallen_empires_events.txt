@@ -1444,11 +1444,11 @@ ship_event = {
 		}
 		create_country = {
 			name = "Varelse Hegemony"
-			type = human_fallen_empires_placeholder_t3_tech
+			type = faction
 			species = event_target:human_fallen_empires_varelse_species
 			ignore_initial_colony_error = yes
 			effect = {
-				set_country_type = faction
+				human_fallen_empires_effect_init_give_tech_t3 = yes
 				establish_communications_no_message = root.owner
 				set_faction_hostility = {
 					set_hostile = no
@@ -1458,7 +1458,6 @@ ship_event = {
 					species = event_target:human_fallen_empires_varelse_species
 					skill = 5
 				}
-				#set_graphical_culture = reptilian_01
 				create_fleet = {
 					name = "11th Strike Force"
 					settings = {
@@ -3388,6 +3387,7 @@ country_event = {
 
 # copernicus event 355 - 365
 # enter system
+# в теории планета может быть исследована при отсутствии хозяина системы
 ship_event = {
 	id = human_fallen_empires.355
 	title = human_fallen_empires.355.name
@@ -3396,15 +3396,11 @@ ship_event = {
 			text = human_fallen_empires.355.desc.0
 			fail_text = {
 				text = human_fallen_empires.355.desc.1.0
-				owner = {
-					has_country_flag = human_fallen_empires_copernicus_has_owner
-				}
+				exists = event_target:human_fallen_empires_copernicus_owner
 			}
 			success_text = {
 				text = human_fallen_empires.355.desc.1.1
-				owner = {
-					has_country_flag = human_fallen_empires_copernicus_has_owner
-				}
+				exists = event_target:human_fallen_empires_copernicus_owner
 			}
 		}
 	}
@@ -3436,15 +3432,18 @@ ship_event = {
 				}
 				if = {
 					limit = {
-						exists = owner
-						owner = {
-							is_country_type = default
+						is_surveyed = {
+							who = root.owner
+							status = yes
 						}
 					}
-					save_event_target_as = human_fallen_empires_copernicus_owner
-					# set flag if stop event chain
-					root.owner = {
-						set_country_flag = human_fallen_empires_copernicus_has_owner
+					if = {
+						limit = {
+							exists = solar_system.owner
+						}
+						solar_system.owner = {
+							save_event_target_as = human_fallen_empires_copernicus_owner
+						}
 					}
 				}
 				else = {
@@ -3459,7 +3458,6 @@ ship_event = {
 							}
 						}
 						owner = {
-							#establish_communications_no_message = root.owner
 							species = {
 								save_global_event_target_as = human_fallen_empires_copernicus_species
 							}
