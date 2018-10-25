@@ -1000,9 +1000,9 @@ country_event = {
 				set_star_flag = human_fallen_empires_sol_target@root
 			}
 			create_point_of_interest = {
-				id = human_fallen_empires_sol.1
+				id = human_fallen_empires_chain_find_sol.0
 				name = sol_1_poi
-				desc = human_fallen_empires_chain_find_sol_desc.1
+				desc = human_fallen_empires_chain_find_sol_desc.0
 				event_chain = human_fallen_empires_chain_find_sol
 				location = event_target:human_fallen_empires_sol
 			}
@@ -2898,16 +2898,14 @@ ship_event = {
 		owner = {
 			set_country_flag = human_fallen_empires_has_event.254
 		}
-		# может сделать через ванильный кантри туп и берсеркера
 		create_country = {
 			name = "Mad Cruiser"
-			type = faction
+			type = human_fallen_empires_berserk
 			species = root.owner
 			effect = {
-				#		set_faction_hostility = {
-				#			set_hostile = yes
-				#		}
-				establish_communications_no_message = root.owner
+				every_country = {
+					establish_communications_no_message = prev
+				}
 				create_fleet = {
 					name = "Mad Cruiser"
 					effect = {
@@ -2919,41 +2917,6 @@ ship_event = {
 						set_owner = prev
 						set_fleet_stance = aggressive
 						set_location = root
-						queue_actions = {
-							repeat = {
-								find_closest_system = {
-									trigger = {
-										id = human_fallen_empires.254.trigger.0
-										any_planet = {
-											has_orbital_station = yes
-											exists = controller
-											controller = {
-												is_country = root.owner
-											}
-										}
-									}
-									found_system = {
-										move_to = THIS
-									}
-								}
-								find_closest_planet = {
-									trigger = {
-										id = human_fallen_empires.254.trigger.1
-										has_orbital_station = yes
-										exists = controller
-										controller = {
-											is_country = root.owner
-										}
-									}
-									found_planet = {
-										orbit_planet = THIS
-										wait = {
-											duration = 20
-										}
-									}
-								}
-							}
-						}
 					}
 				}
 			}
@@ -4629,7 +4592,160 @@ country_event = {
 ship_event = {
 	id = human_fallen_empires.510
 	title = human_fallen_empires.510.name
-	desc = human_fallen_empires.510.desc
+	desc = {
+		trigger = {
+			# non hive
+			# all
+			success_text = {
+				text = human_fallen_empires.510.desc.0.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+				}
+			}
+			# have discovered L gate
+			success_text = {
+				text = human_fallen_empires.510.desc.0.1.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					has_seen_any_bypass = lgate
+				}
+			}
+			# have discovered regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.0.1.1
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					not = {
+						has_seen_any_bypass = lgate
+					}
+					has_seen_any_bypass = gateway
+				}
+			}
+			# not L gateway and not regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.0.1.2
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					nor = {
+						has_seen_any_bypass = lgate
+						has_seen_any_bypass = gateway
+					}
+				}
+			}
+			# all
+			success_text = {
+				text = human_fallen_empires.510.desc.0.2
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+				}
+			}
+			# have discovered L gate
+			success_text = {
+				text = human_fallen_empires.510.desc.0.3.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					has_seen_any_bypass = lgate
+				}
+			}
+			# have discovered regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.0.3.1
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					not = {
+						has_seen_any_bypass = lgate
+					}
+					has_seen_any_bypass = gateway
+				}
+			}
+			# not L gateway and not regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.0.3.2
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					nor = {
+						has_seen_any_bypass = lgate
+						has_seen_any_bypass = gateway
+					}
+				}
+			}
+			# all
+			success_text = {
+				text = human_fallen_empires.510.desc.0.4
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+				}
+			}
+			# non synth
+			success_text = {
+				text = human_fallen_empires.510.desc.0.5.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					not = {
+						has_trait = trait_robotic_3
+					}
+				}
+			}
+			# synth
+			success_text = {
+				text = human_fallen_empires.510.desc.0.5.1
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+					has_trait = trait_robotic_3
+				}
+			}
+			# robo hive
+			success_text = {
+				text = human_fallen_empires.510.desc.1.0
+				owner = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+			# have discovered L gate
+			success_text = {
+				text = human_fallen_empires.510.desc.1.1.0
+				owner = {
+					has_authority = auth_machine_intelligence
+					has_seen_any_bypass = lgate
+				}
+			}
+			# have discovered regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.1.1.1
+				owner = {
+					has_authority = auth_machine_intelligence
+					not = {
+						has_seen_any_bypass = lgate
+					}
+					has_seen_any_bypass = gateway
+				}
+			}
+			# not L gateway and not regular gateway
+			success_text = {
+				text = human_fallen_empires.510.desc.1.1.2
+				owner = {
+					has_authority = auth_machine_intelligence
+					nor = {
+						has_seen_any_bypass = lgate
+						has_seen_any_bypass = gateway
+					}
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.510.desc.1.2
+				owner = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+			# bio hive
+			success_text = {
+				text = human_fallen_empires.510.desc.2
+				owner = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_holocube_2
 	show_sound = event_ship_explosion
 	location = root
@@ -4641,14 +4757,87 @@ ship_event = {
 	}
 
 	immediate = {
+		fleet = {
+			set_event_locked = yes
+		}
 		from = {
 			human_fallen_empires_effect_remove_signal_object_from_this = yes
 			set_planet_flag = human_fallen_empires_stargate_planet
+			save_event_target_as = human_fallen_empires_stargate_planet
 		}
 	}
 
 	option = {
 		name = human_fallen_empires.510.0
+		exclusive_trigger = {
+			owner = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.510.1
+		exclusive_trigger = {
+			owner = {
+				has_authority = auth_hive_mind
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.510.2
+	}
+	after = {
+		begin_event_chain = {
+			event_chain = human_fallen_empires_chain_stargate
+			target = owner
+		}
+		create_point_of_interest = {
+			id = human_fallen_empires_chain_stargate.0
+			name = human_fallen_empires_chain_stargate_name.0
+			desc = human_fallen_empires_chain_stargate_desc.0
+			event_chain = human_fallen_empires_chain_stargate
+			location = from
+		}
+		hidden_effect = {
+			fleet = {
+				set_event_locked = no
+			}
+			create_country = {
+				name = "Drontection"
+				type = human_fallen_empires_berserk
+				species = root.owner
+				effect = {
+					set_graphical_culture = human_fallen_empires_graphical_culture_drone
+					every_country = {
+						establish_communications_no_message = prev
+					}
+					human_fallen_empires_effect_init_give_tech_t2 = yes
+					create_fleet = {
+						name = "Drontection"
+						effect = {
+							set_owner = prev
+							while = {
+								count = 20
+								create_ship = {
+									random_existing_design = corvette
+									prefix = no
+								}
+							}
+							while = {
+								count = 20
+								create_ship = {
+									random_existing_design = destroyer
+									prefix = no
+								}
+							}
+							set_fleet_stance = aggressive
+							set_location = root
+						}
+					}
+				}
+			}
+			destroy_fleet = fleet
+		}
 	}
 }
 
@@ -4656,9 +4845,24 @@ ship_event = {
 planet_event = {
 	id = human_fallen_empires.511
 	title = human_fallen_empires.511.name
-	desc = human_fallen_empires.511.desc
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.511.desc.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.511.desc.1
+				owner = {
+					human_fallen_empires_trigger_is_hive = yes
+				}
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_ship_explosion
+	show_sound = event_conversation
 	location = root
 	is_triggered_only = yes
 
@@ -4669,21 +4873,214 @@ planet_event = {
 
 	immediate = {
 		remove_planet_flag = human_fallen_empires_stargate_planet
+		save_event_target_as = human_fallen_empires_stargate_planet
+		owner = {
+			add_event_chain_counter = {
+				event_chain = human_fallen_empires_chain_stargate
+				counter = colony_established
+				amount = 1
+			}
+			remove_point_of_interest = human_fallen_empires_chain_stargate.0
+		}
 	}
 
 	option = {
 		name = human_fallen_empires.511.0
+		enable_special_project = {
+			name = human_fallen_empires_project_stargate
+			owner = owner
+			location = this
+		}
+	}
+	option = {
+		name = human_fallen_empires.511.1
+		trigger = {
+			owner = {
+				is_materialist = no
+				human_fallen_empires_trigger_is_hive = no
+			}
+		}
+		owner = {
+			end_event_chain = human_fallen_empires_chain_stargate
+		}
+	}
+	option = {
+		name = human_fallen_empires.511.2
+		trigger = {
+			owner = {
+				is_materialist = yes
+			}
+		}
+		owner = {
+			end_event_chain = human_fallen_empires_chain_stargate
+		}
+	}
+	option = {
+		name = human_fallen_empires.511.3
+		trigger = {
+			owner = {
+				human_fallen_empires_trigger_is_hive = yes
+			}
+		}
+		owner = {
+			end_event_chain = human_fallen_empires_chain_stargate
+		}
 	}
 }
 
-# after special project
-# hidden gateway event 512
+# after special project gateway event 512
 ship_event = {
 	id = human_fallen_empires.512
-	hide_window = yes
+	title = human_fallen_empires.512.name
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.512.desc.0
+				owner = {
+					human_fallen_empires_trigger_is_hive = no
+				}
+			}
+			success_text = {
+				text = human_fallen_empires.512.desc.1
+				owner = {
+					human_fallen_empires_trigger_is_hive = yes
+				}
+			}
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_holocube_2
+	show_sound = event_mystic_reveal
+	location = root
 	is_triggered_only = yes
 
+	trigger = {
+		exists = leader
+		exists = owner
+	}
+
 	immediate = {
+		leader = {
+			save_event_target_as = human_fallen_empires_stargate_scientist
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.512.0
+		custom_tooltip = human_fallen_empires.512.tooltip
+		exclusive_trigger = {
+			owner = {
+				is_spiritualist = yes
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.512.1
+		custom_tooltip = human_fallen_empires.512.tooltip
+		exclusive_trigger = {
+			owner = {
+				is_materialist = yes
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.512.2
+		custom_tooltip = human_fallen_empires.512.tooltip
+		exclusive_trigger = {
+			owner = {
+				human_fallen_empires_trigger_is_hive = yes
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.512.3
+		custom_tooltip = human_fallen_empires.512.tooltip
+	}
+	after = {
+		hidden_effect = {
+			owner = {
+				random_list = {
+					10 = {
+						country_event = {
+							id = human_fallen_empires.520
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							human_fallen_empires_trigger_is_hive = no
+						}
+						country_event = {
+							id = human_fallen_empires.522
+						}
+					}
+					10 = {
+						country_event = {
+							id = human_fallen_empires.523
+						}
+					}
+					10 = {
+						country_event = {
+							id = human_fallen_empires.524
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								is_species_class = HUM
+							}
+						}
+						country_event = {
+							id = human_fallen_empires.525
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								is_species_class = HUM
+							}
+						}
+						country_event = {
+							id = human_fallen_empires.527
+						}
+					}
+					10 = {
+						country_event = {
+							id = human_fallen_empires.528
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								is_species_class = FUN
+							}
+						}
+						country_event = {
+							id = human_fallen_empires.529
+						}
+					}
+					10 = {
+						country_event = {
+							id = human_fallen_empires.531
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_authority = auth_machine_intelligence
+							not = {
+								has_valid_civic = civic_machine_servitor
+							}
+						}
+						country_event = {
+							id = human_fallen_empires.532
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -4692,37 +5089,153 @@ ship_event = {
 country_event = {
 	id = human_fallen_empires.520
 	title = human_fallen_empires.520.name
-	desc = human_fallen_empires.520.desc
+	desc = {
+		trigger = {
+			success_text = {
+				text = human_fallen_empires.520.desc.0
+				human_fallen_empires_trigger_is_hive = no
+			}
+			success_text = {
+				text = human_fallen_empires.520.desc.1
+				human_fallen_empires_trigger_is_hive = yes
+			}
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_holocube_2
 	show_sound = event_laboratory_sound
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		event_target:human_fallen_empires_stargate_scientist = {
+			kill_leader = { show_notification = yes }
+		}
+		from = {
+			destroy_fleet = fleet
+		}
+		human_fallen_empires_effect_stargate_off = yes
+		random = {
+			chance = 50
+			country_event = {
+				id = human_fallen_empires.521
+				days = 180
+				random = 30
+			}
+		}
 	}
 
 	option = {
 		name = human_fallen_empires.520.0
+		exclusive_trigger = {
+			human_fallen_empires_trigger_is_hive = no
+		}
+	}
+	option = {
+		name = human_fallen_empires.520.1
 	}
 }
 
-# 1.1
+# 1.1 Forsakens
 country_event = {
 	id = human_fallen_empires.521
 	title = human_fallen_empires.521.name
 	desc = human_fallen_empires.521.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_space_battle
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		human_fallen_empires_trigger_is_hive = no
+		exists = event_target:human_fallen_empires_stargate
+		exists = event_target:human_fallen_empires_stargate_planet.starbase
 	}
 
 	immediate = {
+		create_country = {
+			name = "Forsakens"
+			type = default
+			species = root
+			#auto_delete = no
+			authority = auth_dictatorial
+			ignore_initial_colony_error = yes
+			ethos = {
+				ethic = ethic_authoritarian
+				ethic = ethic_fanatic_militarist
+			}
+			effect = {
+				human_fallen_empires_effect_gov_fix = yes
+				set_country_flag = human_fallen_empires_forsaken
+				set_graphical_culture = human_fallen_empires_graphical_culture_pirate
+				event_target:human_fallen_empires_stargate_planet = {
+					conquer = prev
+					starbase = {
+						set_owner = prevprev
+					}
+					while = {
+						limit = {
+							num_pops < 10
+						}
+						create_pop = {
+							species = root
+						}
+					}
+				}
+				copy_techs_from = {
+					target = root
+				}
+				establish_communications_no_message = root
+				add_opinion_modifier = {
+					who = root
+					modifier = human_fallen_empires_opinion_forsaken
+				}
+				add_modifier = {
+					modifier = human_fallen_empires_navy_size
+				}
+				create_fleet_from_naval_cap = 1
+				create_leader = {
+					type = admiral
+				}
+				last_created_fleet = {
+					add_modifier = {
+						modifier = human_fallen_empires_unkeep_80
+					}
+					assign_leader = last_created_leader
+				}
+				create_leader = {
+					type = general
+				}
+				create_fleet = {
+					effect = {
+						set_owner = prev
+						while = {
+							count = 20
+							create_army_transport = {
+								army_type = assault_army
+							}
+						}
+						assign_leader = last_created_leader
+						set_location = event_target:human_fallen_empires_stargate
+					}
+				}
+				add_minerals = 5000
+				add_energy = 5000
+				declare_war = {
+					target = root
+					name = "War with Forsakens"
+					attacker_war_goal = human_fallen_empires_wg_annex
+				}
+				set_war_goal = {
+					type = human_fallen_empires_wg_annex
+					target = root
+					enemy = this
+				}
+			}
+		}
 	}
 
 	option = {
@@ -4730,7 +5243,7 @@ country_event = {
 	}
 }
 
-# 2
+# 2 horror confirmed
 country_event = {
 	id = human_fallen_empires.522
 	title = human_fallen_empires.522.name
@@ -4741,9 +5254,17 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		event_target:human_fallen_empires_stargate_scientist = {
+			kill_leader = { show_notification = yes }
+		}
+		from = {
+			destroy_fleet = fleet
+		}
+		human_fallen_empires_effect_stargate_off = yes
 	}
 
 	option = {
@@ -4751,7 +5272,7 @@ country_event = {
 	}
 }
 
-# 3
+# 3 drone evolution
 country_event = {
 	id = human_fallen_empires.523
 	title = human_fallen_empires.523.name
@@ -4762,17 +5283,20 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		human_fallen_empires_effect_stargate_off = yes
 	}
 
 	option = {
 		name = human_fallen_empires.523.0
+		# добавить потом минус к счастью через ванильный модификатор media_coverage_negative
 	}
 }
 
-# 4
+# 4 start of universe
 country_event = {
 	id = human_fallen_empires.524
 	title = human_fallen_empires.524.name
@@ -4783,118 +5307,354 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-	}
-
-	immediate = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	option = {
 		name = human_fallen_empires.524.0
+		human_fallen_empires_effect_add_physics_research.5 = yes
+		# добавить модификатор на энергию из другой вселенной, там же много водорода и тд
 	}
 }
 
-# 5
+# 5 exodus
 country_event = {
 	id = human_fallen_empires.525
 	title = human_fallen_empires.525.name
 	desc = human_fallen_empires.525.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_radio_chatter_02
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		event_target:human_fallen_empires_stargate_scientist = {
+			kill_leader = { show_notification = yes }
+		}
+		from = {
+			destroy_fleet = fleet
+		}
+		human_fallen_empires_effect_stargate_off = yes
+		create_fleet = {
+			effect = {
+				set_owner = root
+				create_ship = {
+					random_existing_design = colonizer
+				}
+				set_location = event_target:human_fallen_empires_stargate
+				add_modifier = {
+				 	modifier = human_fallen_empires_unkeep_80
+				}
+				save_event_target_as = human_fallen_empires_stargate_exodus_fleet
+			}
+		}
 	}
 
+	# niarest planet
 	option = {
 		name = human_fallen_empires.525.0
+		custom_tooltip = human_fallen_empires.525.0.tooltip
+		human_fallen_empires_effect_add_physics_research.2 = yes
+		human_fallen_empires_effect_add_society_research.2 = yes
+		hidden_effect = {
+			event_target:human_fallen_empires_stargate_exodus_fleet = {
+				queue_actions = {
+					find_closest_system = {
+						trigger = {
+							id = human_fallen_empires_stargate_exodus_fleet_trigger.0.0
+							any_planet = {
+								is_owned_by = root
+								free_pop_tiles > 0
+								habitability = {
+									who = root.species
+									value > 0.7
+								}
+							}
+						}
+						found_system = {
+							move_to = this
+						}
+					}
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_stargate_exodus_fleet_trigger.0.1
+							is_owned_by = root
+							free_pop_tiles > 0
+							habitability = {
+								who = root.species
+								value > 0.7
+							}
+						}
+						found_planet = {
+							move_to = this
+							effect = {
+								id = human_fallen_empires_stargate_exodus_fleet_effect.0.1
+								create_pop = {
+									species = root
+								}
+								delete_fleet = event_target:human_fallen_empires_stargate_exodus_fleet
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	# make new colony
+	option = {
+		name = human_fallen_empires.525.1
+		custom_tooltip = human_fallen_empires.525.0.tooltip
+		human_fallen_empires_effect_add_physics_research.2 = yes
+		human_fallen_empires_effect_add_society_research.2 = yes
+		hidden_effect = {
+			event_target:human_fallen_empires_stargate_exodus_fleet = {
+				queue_actions = {
+					find_closest_system = {
+						trigger = {
+							id = human_fallen_empires_stargate_exodus_fleet_trigger.1.0
+							any_planet = {
+								not = {
+									exists = owner
+								}
+								habitability = {
+									who = root.species
+									value > 0.7
+								}
+							}
+						}
+						found_system = {
+							move_to = this
+						}
+					}
+					find_closest_planet = {
+						trigger = {
+							id = human_fallen_empires_stargate_exodus_fleet_trigger.1.1
+							not = {
+								exists = owner
+							}
+							habitability = {
+								who = root.species
+								value > 0.7
+							}
+						}
+						found_planet = {
+							move_to = this
+							effect = {
+								id = human_fallen_empires_stargate_exodus_fleet_effect.1.1
+								start_colony = {
+									owner = root
+								}
+								planet_event = {
+									id = human_fallen_empires.526
+								}
+								delete_fleet = event_target:human_fallen_empires_stargate_exodus_fleet
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	# kill them
+	option = {
+		name = human_fallen_empires.525.2
+		trigger = {
+			is_xenophobe = yes
+		}
+		custom_tooltip = human_fallen_empires.525.0.tooltip
+		destroy_fleet = event_target:human_fallen_empires_stargate_exodus_fleet
+		human_fallen_empires_effect_add_physics_research.2 = yes
+		human_fallen_empires_effect_add_society_research.2 = yes
+		human_fallen_empires_effect_xenophobe_attraction.3 = yes
 	}
 }
 
-# 5.1
-country_event = {
+# 5.1 live long and prosper
+planet_event = {
 	id = human_fallen_empires.526
 	title = human_fallen_empires.526.name
 	desc = human_fallen_empires.526.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
-	location = event_target:human_fallen_empires_stargate
+	show_sound = event_celebration
+	location = root
 	is_triggered_only = yes
-
-	trigger = {
-	}
-
-	immediate = {
-	}
 
 	option = {
 		name = human_fallen_empires.526.0
 	}
 }
 
-# 6
+# 6 records from empty ship
 country_event = {
 	id = human_fallen_empires.527
 	title = human_fallen_empires.527.name
 	desc = human_fallen_empires.527.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		event_target:human_fallen_empires_stargate_scientist = {
+			kill_leader = { show_notification = yes }
+		}
+		from = {
+			destroy_fleet = fleet
+		}
+		human_fallen_empires_effect_stargate_off = yes
 	}
 
 	option = {
 		name = human_fallen_empires.527.0
 	}
+	option = {
+		name = human_fallen_empires.527.1
+		exclusive_trigger = {
+			allows_slavery = yes
+		}
+		add_modifier = {
+			modifier = human_fallen_empires_event_527
+		}
+	}
 }
 
-# 7
+# 7 Shambhala
 country_event = {
 	id = human_fallen_empires.528
 	title = human_fallen_empires.528.name
 	desc = human_fallen_empires.528.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
-	}
-
-	immediate = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	option = {
 		name = human_fallen_empires.528.0
+		custom_tooltip = human_fallen_empires.528.0.tooltip
+		if = {
+			limit = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+			human_fallen_empires_effect_add_unity.5 = yes
+		}
+		else_if = {
+			limit = {
+				is_spiritualist = yes
+			}
+			shift_ethic = ethic_spiritualist
+			human_fallen_empires_effect_add_unity.4 = yes
+		}
+		else = {
+			shift_ethic = ethic_spiritualist
+			shift_ethic = ethic_spiritualist
+			human_fallen_empires_effect_add_unity.3 = yes
+		}
+		add_modifier = {
+			modifier = human_fallen_empires_event_528.0.0
+		}
+		event_target:human_fallen_empires_stargate_planet = {
+			add_modifier = {
+				modifier = human_fallen_empires_event_528.0.1
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.528.1
+		custom_tooltip = human_fallen_empires.528.1.tooltip
+		exclusive_trigger = {
+			is_materialist = yes
+		}
+		add_modifier = {
+			modifier = human_fallen_empires_event_528.1
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_stargate_scientist = {
+				kill_leader = { show_notification = yes }
+			}
+			from = {
+				destroy_fleet = fleet
+			}
+			play_sound = amb_super_explosion
+			human_fallen_empires_effect_stargate_off = yes
+		}
+	}
+	option = {
+		name = human_fallen_empires.528.2
+		custom_tooltip = human_fallen_empires.528.2.tooltip
+		exclusive_trigger = {
+			is_xenophobe = yes
+		}
+		add_modifier = {
+			modifier = human_fallen_empires_event_528.2
+		}
+		hidden_effect = {
+			event_target:human_fallen_empires_stargate_scientist = {
+				kill_leader = { show_notification = yes }
+			}
+			from = {
+				destroy_fleet = fleet
+			}
+			play_sound = amb_super_explosion
+			human_fallen_empires_effect_stargate_off = yes
+		}
 	}
 }
 
-# 8
+# 8 hands from portal
 country_event = {
 	id = human_fallen_empires.529
 	title = human_fallen_empires.529.name
-	desc = human_fallen_empires.529.desc
+	desc = {
+		trigger = {
+			text = human_fallen_empires.529.desc.0
+			success_text = {
+				text = human_fallen_empires.529.desc.1.0
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
+			fail_text = {
+				text = human_fallen_empires.529.desc.1.1
+				has_country_flag = human_fallen_empires_marked_as_human
+			}
+			text = human_fallen_empires.529.desc.2
+		}
+	}
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		event_target:human_fallen_empires_stargate_scientist = {
+			kill_leader = { show_notification = yes }
+		}
+		from = {
+			destroy_fleet = fleet
+		}
 	}
 
 	option = {
-		name = human_fallen_empires.529.0
+		name = human_fallen_empires_next
+		hidden_effect = {
+			country_event = {
+				id = human_fallen_empires.530
+			}
+		}
 	}
 }
 
@@ -4904,39 +5664,57 @@ country_event = {
 	title = human_fallen_empires.530.name
 	desc = human_fallen_empires.530.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_mystic_reveal
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		human_fallen_empires_effect_stargate_off = yes
 	}
 
 	option = {
 		name = human_fallen_empires.530.0
+		exclusive_trigger = {
+			is_xenophobe = no
+		}
+		add_modifier = {
+			modifier = human_fallen_empires_event_530
+		}
+	}
+	option = {
+		name = human_fallen_empires.530.1
+		add_modifier = {
+			modifier = human_fallen_empires_event_530
+		}
 	}
 }
 
-# 9
+# 9 galaxy war
 country_event = {
 	id = human_fallen_empires.531
 	title = human_fallen_empires.531.name
 	desc = human_fallen_empires.531.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_space_battle
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		human_fallen_empires_effect_stargate_off = yes
 	}
 
 	option = {
-		name = human_fallen_empires.531.0
+		name = FASCINATING
+		# какая-то награда, простите потомки, не придумал ничего лучше
+		human_fallen_empires_effect_add_engineering_research.4 = yes
 	}
 }
 
@@ -4946,18 +5724,27 @@ country_event = {
 	title = human_fallen_empires.532.name
 	desc = human_fallen_empires.532.desc
 	picture = GFX_evt_human_fallen_empires_holocube_2
-	show_sound = event_laboratory_sound
+	show_sound = event_activating_unknown_technology
 	location = event_target:human_fallen_empires_stargate
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:human_fallen_empires_stargate
 	}
 
 	immediate = {
+		human_fallen_empires_effect_stargate_off = yes
+		set_country_flag = human_fallen_empires_has_event_532
 	}
 
 	option = {
 		name = human_fallen_empires.532.0
+	}
+	option = {
+		name = human_fallen_empires.532.1
+	}
+	option = {
+		name = human_fallen_empires.532.2
 	}
 }
 
@@ -8760,9 +9547,9 @@ country_event = {
 			set_star_flag = human_fallen_empires_chain_find_future_star@root
 			root = {
 				create_point_of_interest = {
-					id = human_fallen_empires_chain_find_future_star.1
-					name = human_fallen_empires_chain_find_future_star_name.1
-					desc = human_fallen_empires_chain_find_future_star_desc.1
+					id = human_fallen_empires_chain_find_future_star.0
+					name = human_fallen_empires_chain_find_future_star_name.0
+					desc = human_fallen_empires_chain_find_future_star_desc.0
 					event_chain = human_fallen_empires_chain_find_future_star
 					location = prev
 				}
