@@ -2296,21 +2296,8 @@ ship_event = {
 		name = human_fallen_empires.156.0
 		human_fallen_empires_effect_leader_add_exp_100 = yes
 		hidden_effect = {
-			event_target:human_fallen_empires_memorial_planet = {
-				random_list = {
-					30 = {
-						add_modifier = {
-							modifier = human_fallen_empires_tomb_happy
-							days = 360
-						}
-					}
-					70 = {
-						add_modifier = {
-							modifier = human_fallen_empires_tomb_unhappy
-							days = 360
-						}
-					}
-				}
+			owner = {
+				human_fallen_empires_effect_media_random = yes
 			}
 		}
 	}
@@ -2659,11 +2646,8 @@ ship_event = {
 	option = {
 		name = human_fallen_empires.207.0
 		human_fallen_empires_effect_leader_add_exp_100 = yes
-		event_target:human_fallen_empires_memorial_planet = {
-			add_modifier = {
-				modifier = human_fallen_empires_tomb_unhappy
-				days = 360
-			}
+		owner = {
+			human_fallen_empires_effect_media_negative = yes
 		}
 	}
 }
@@ -5114,9 +5098,7 @@ country_event = {
 		event_target:human_fallen_empires_stargate_scientist = {
 			kill_leader = { show_notification = yes }
 		}
-		from = {
-			destroy_fleet = fleet
-		}
+		destroy_fleet = from.fleet
 		human_fallen_empires_effect_stargate_off = yes
 		random = {
 			chance = 50
@@ -5261,9 +5243,7 @@ country_event = {
 		event_target:human_fallen_empires_stargate_scientist = {
 			kill_leader = { show_notification = yes }
 		}
-		from = {
-			destroy_fleet = fleet
-		}
+		destroy_fleet = from.fleet
 		human_fallen_empires_effect_stargate_off = yes
 	}
 
@@ -5292,7 +5272,7 @@ country_event = {
 
 	option = {
 		name = human_fallen_empires.523.0
-		# добавить потом минус к счастью через ванильный модификатор media_coverage_negative
+		human_fallen_empires_effect_media_negative = yes
 	}
 }
 
@@ -5335,9 +5315,7 @@ country_event = {
 		event_target:human_fallen_empires_stargate_scientist = {
 			kill_leader = { show_notification = yes }
 		}
-		from = {
-			destroy_fleet = fleet
-		}
+		destroy_fleet = from.fleet
 		human_fallen_empires_effect_stargate_off = yes
 		create_fleet = {
 			effect = {
@@ -5506,9 +5484,7 @@ country_event = {
 		event_target:human_fallen_empires_stargate_scientist = {
 			kill_leader = { show_notification = yes }
 		}
-		from = {
-			destroy_fleet = fleet
-		}
+		destroy_fleet = from.fleet
 		human_fallen_empires_effect_stargate_off = yes
 	}
 
@@ -5522,6 +5498,16 @@ country_event = {
 		}
 		add_modifier = {
 			modifier = human_fallen_empires_event_527
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				exists = ruler
+			}
+			ruler = {
+				add_trait = human_fallen_empires_generic_trait_nightmare
+			}
 		}
 	}
 }
@@ -5583,9 +5569,6 @@ country_event = {
 			event_target:human_fallen_empires_stargate_scientist = {
 				kill_leader = { show_notification = yes }
 			}
-			from = {
-				destroy_fleet = fleet
-			}
 			play_sound = amb_super_explosion
 			human_fallen_empires_effect_stargate_off = yes
 		}
@@ -5602,9 +5585,6 @@ country_event = {
 		hidden_effect = {
 			event_target:human_fallen_empires_stargate_scientist = {
 				kill_leader = { show_notification = yes }
-			}
-			from = {
-				destroy_fleet = fleet
 			}
 			play_sound = amb_super_explosion
 			human_fallen_empires_effect_stargate_off = yes
@@ -5643,9 +5623,7 @@ country_event = {
 		event_target:human_fallen_empires_stargate_scientist = {
 			kill_leader = { show_notification = yes }
 		}
-		from = {
-			destroy_fleet = fleet
-		}
+		destroy_fleet = from.fleet
 	}
 
 	option = {
@@ -5718,7 +5696,7 @@ country_event = {
 	}
 }
 
-# 10
+# 10 geck
 country_event = {
 	id = human_fallen_empires.532
 	title = human_fallen_empires.532.name
