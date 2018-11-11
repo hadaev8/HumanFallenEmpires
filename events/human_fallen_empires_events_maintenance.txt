@@ -140,6 +140,68 @@ country_event = {
 	}
 }
 
+# trait opinion modifier
+country_event = {
+	id = human_fallen_empires_maintenance.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_homicidal = no
+	}
+
+	immediate = {
+		every_relation = {
+			limit = {
+				is_homicidal = no
+				is_country_type = default
+			}
+			if = {
+				limit = {
+					root = {
+						exists = ruler
+						ruler = {
+							has_trait = human_fallen_empires_ruler_trait_imperialist
+						}
+					}
+					# not = {
+					# 	has_opinion_modifier = {
+					# 		who = root
+					# 		modifier = human_fallen_empires_opinion_features_imperialist
+					# 	}
+					# }
+				 }
+				 add_opinion_modifier = {
+					 who = root
+					 modifier = human_fallen_empires_opinion_features_imperialist
+				 }
+				 log = "1"
+			}
+			else_if = {
+				limit = {
+					not = {
+						root = {
+							exists = ruler
+							ruler = {
+								has_trait = human_fallen_empires_ruler_trait_imperialist
+							}
+						}
+					}
+					has_opinion_modifier = {
+						who = root
+						modifier = human_fallen_empires_opinion_features_imperialist
+					}
+				}
+				remove_opinion_modifier = {
+					who = root
+					modifier = human_fallen_empires_opinion_features_imperialist
+				}
+				log = "2"
+			}
+		}
+	}
+}
+
 # building_assimilator feature
 # on_purge_complete
 planet_event = {
