@@ -200,8 +200,6 @@ human_fallen_empires_trigger_assimilator_pop_valid = {
 	human_fallen_empires_trigger_is_robot = no
 }
 
-
-
 human_fallen_empires_trigger_assimilator_on_tile = {
 	exists = tile
 	tile = {
@@ -311,3 +309,52 @@ human_fallen_empires_trigger_non_sapient_robot = {
 	}
 }
 
+# terminator event trigger
+human_fallen_empires_trigger_terminator_event = {
+	# скажем нет охуительным историям во время войны
+	is_at_war = no
+	has_country_flag = human_fallen_empires_marked_as_human
+	exists = ruler.species
+	ruler.species = {
+		is_species_class = HUM
+	}
+	exists = capital_scope
+	capital_scope = {
+		or = {
+			habitable_structure = yes
+			is_planet_class = pc_tropical
+			is_planet_class = pc_continental
+			is_planet_class = pc_ocean
+			is_planet_class = pc_gaia
+			is_planet_class = pc_desert
+			is_planet_class = pc_arid
+			is_planet_class = pc_savannah
+			is_planet_class = pc_tundra
+			is_planet_class = pc_arctic
+			is_planet_class = pc_alpine
+			is_planet_class = pc_nuked
+		}
+	}
+	any_relation = {
+		opinion = {
+			who = prev
+			value > 100
+		}
+	}
+	any_planet_within_border = {
+		or = {
+			is_planet_class = pc_desert
+			is_planet_class = pc_arid
+			is_planet_class = pc_savannah
+		}
+		not = {
+			is_planet = prev.capital_scope
+		}
+	}
+	any_planet_within_border = {
+		is_planet_class = pc_ocean
+		not = {
+			is_planet = prev.capital_scope
+		}
+	}
+}
