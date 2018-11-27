@@ -1,8 +1,8 @@
 #
 
 # wormhole
-human_fallen_empires_wormhole_category = {
-	desc = human_fallen_empires_wormhole_category_desc
+human_fallen_empires_anomaly_wormhole = {
+	desc = human_fallen_empires_anomaly_wormhole_desc
 	picture = GFX_evt_human_fallen_empires_wormhole
 	level = 1
 	max_once_global = yes
@@ -30,8 +30,8 @@ human_fallen_empires_wormhole_category = {
 }
 
 # criopods
-human_fallen_empires_criopods_category = {
-	desc = human_fallen_empires_criopods_category_desc
+human_fallen_empires_anomaly_criopods = {
+	desc = human_fallen_empires_anomaly_criopods_desc
 	# эта пикча тут ни к месту
 	picture = GFX_evt_human_fallen_empires_criopods
 	level = 3
@@ -79,8 +79,8 @@ human_fallen_empires_criopods_category = {
 }
 
 # dead worms
-human_fallen_empires_dead_worms_category = {
-	desc = human_fallen_empires_dead_worms_category_desc
+human_fallen_empires_anomaly_dead_worms = {
+	desc = human_fallen_empires_anomaly_dead_worms_desc
 	picture = GFX_evt_human_fallen_empires_space_debris
 	level = 2
 	max_once_global = yes
@@ -111,8 +111,8 @@ human_fallen_empires_dead_worms_category = {
 }
 
 # necrotic autoevolution
-human_fallen_empires_necrotic_autoevolution_category = {
-	desc = human_fallen_empires_necrotic_autoevolution_category_desc
+human_fallen_empires_anomaly_necrotic_autoevolution = {
+	desc = human_fallen_empires_anomaly_necrotic_autoevolution_desc
 	picture = GFX_evt_human_fallen_empires_ruins_robots
 	level = 3
 	max_once_global = yes
@@ -157,8 +157,41 @@ human_fallen_empires_anomaly_stargate = {
 			habitable_planet = yes
 		}
 		modifier = {
-			factor = 0
-			always = yes
+			factor = 2
+			years_passed > 30
+		}
+		modifier = {
+			factor = 2
+			years_passed > 60
+		}
+		modifier = {
+			factor = 2
+			years_passed > 90
+		}
+	}
+	on_spawn = {
+		human_fallen_empires_effect_create_signal_object_for_planet = yes
+	}
+	on_success = human_fallen_empires.510
+}
+
+# blight
+human_fallen_empires_anomaly_blight = {
+	desc = signal_uninhabitable_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	max_once_global = yes
+	spawn_chance = {
+		modifier = {
+			add = 1
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			human_fallen_empires_trigger_story_enabled = yes
+			uninhabitable_regular_planet = yes
+			exists = from.owner
+			from.owner = {
+				human_fallen_empires_trigger_is_hive = no
+				num_owned_planets > 10
+			}
 		}
 		modifier = {
 			factor = 2
@@ -176,5 +209,5 @@ human_fallen_empires_anomaly_stargate = {
 	on_spawn = {
 		human_fallen_empires_effect_create_signal_object_for_planet = yes
 	}
-	on_success = human_fallen_empires.510
+	on_success = human_fallen_empires.5080
 }

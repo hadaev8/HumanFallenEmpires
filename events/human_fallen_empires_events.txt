@@ -23,6 +23,12 @@ event = {
 				days = 1
 				random = 355
 			}
+			# blight
+			country_event = {
+				id = human_fallen_empires.5083
+				days = 1
+				random = 355
+			}
 		}
 		every_playable_country = {
 			country_event = {
@@ -4962,7 +4968,7 @@ country_event = {
 			name = "Forsakens"
 			type = default
 			species = root
-			#auto_delete = no
+			auto_delete = no
 			authority = auth_dictatorial
 			ignore_initial_colony_error = yes
 			ethos = {
@@ -4981,7 +4987,7 @@ country_event = {
 					}
 					while = {
 						limit = {
-							num_pops < 10
+							num_pops < 20
 						}
 						create_pop = {
 							species = root
@@ -5864,6 +5870,7 @@ planet_event = {
 			}
 		}
 		owner = {
+			save_global_event_target_as = human_fallen_empires_555_room_target
 			random_planet_within_border = {
 				limit = {
 					or = {
@@ -5918,9 +5925,6 @@ planet_event = {
 		default_hide_option = yes
 		hidden_effect = {
 			clear_global_event_target = human_fallen_empires_555_planet
-			event_target:human_fallen_empires_555_room = {
-				destroy_country = yes
-			}
 			owner = {
 				country_event = {
 					id = human_fallen_empires.556
@@ -6007,7 +6011,7 @@ country_event = {
 	diplomatic = yes
 
 	picture_event_data = {
-		room = no_video_feed_room # event_target:human_fallen_empires_555_room.ruler
+		room = event_target:human_fallen_empires_555_room.ruler
 	}
 
 	# step 0
@@ -6060,6 +6064,10 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires_556.2.0.0
+			clear_global_event_target = human_fallen_empires_555_room_target
+			event_target:human_fallen_empires_555_room = {
+				destroy_country = yes
+			}
 		}
 	}
 	option = {
@@ -6072,6 +6080,10 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires_556.2.0.1
+			clear_global_event_target = human_fallen_empires_555_room_target
+			event_target:human_fallen_empires_555_room = {
+				destroy_country = yes
+			}
 		}
 	}
 	# step 1 dont left pekar and run away
@@ -6123,6 +6135,10 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires_556.2.1.0.1
+			clear_global_event_target = human_fallen_empires_555_room_target
+			event_target:human_fallen_empires_555_room = {
+				destroy_country = yes
+			}
 		}
 	}
 	option = {
@@ -6135,6 +6151,10 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires_556.2.1.1
+			clear_global_event_target = human_fallen_empires_555_room_target
+			event_target:human_fallen_empires_555_room = {
+				destroy_country = yes
+			}
 		}
 	}
 	# step 1 attack
@@ -6200,6 +6220,10 @@ country_event = {
 		hidden_effect = {
 			remove_country_flag = human_fallen_empires_556.3.0
 			remove_country_flag = human_fallen_empires_556.3.1
+			clear_global_event_target = human_fallen_empires_555_room_target
+			event_target:human_fallen_empires_555_room = {
+				destroy_country = yes
+			}
 		}
 	}
 }
@@ -9154,6 +9178,11 @@ ship_event = {
 	location = root
 	is_triggered_only = yes
 
+	trigger = {
+		exists = from
+		exists = owner
+	}
+
 	immediate = {
 		from = {
 			human_fallen_empires_effect_remove_signal_object_from_this = yes
@@ -9446,6 +9475,288 @@ country_event = {
 	}
 }
 
+# blight event 5080
+# event after anomaly
+ship_event = {
+	id = human_fallen_empires.5080
+	title = human_fallen_empires.5080.name
+	desc = {
+		trigger = {
+			text = human_fallen_empires.5080.desc.0
+			success_text = {
+				text = human_fallen_empires.5080.desc.1.0
+				has_country_flag = human_fallen_empires_future_contacted
+			}
+			fail_text = {
+				text = human_fallen_empires.5080.desc.1.1
+				has_country_flag = human_fallen_empires_future_contacted
+			}
+			text = human_fallen_empires.5080.desc.2
+		}
+	}
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	show_sound = event_mystic_reveal
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+	}
+
+	immediate = {
+		from = {
+			human_fallen_empires_effect_remove_signal_object_from_this = yes
+		}
+		owner = {
+			save_event_target_as = human_fallen_empires_blight_remnants
+		}
+		create_country = {
+			type = default
+			name = "Blight" # погибель
+			authority = auth_machine_intelligence
+			civics = {
+				civic = civic_machine_assimilator
+				civic = human_fallen_empires_civic_instant_assimilation
+			}
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			flag = {
+				icon = {
+					category = human_fallen_empires_emblem
+					file = human_fallen_empires_emblem_blight.dds
+				}
+				background = {
+					category = backgrounds
+					file = 00_solid.dds
+				}
+				colors = {
+					dark_green
+					black
+					null
+					null
+				}
+			}
+			ignore_initial_colony_error = yes
+			released_from_country = event_target:human_fallen_empires_blight_remnants
+			species = event_target:human_fallen_empires_blight_remnants
+			effect = {
+				modify_species = {
+					add_trait = trait_cybernetic
+				}
+				add_minerals = 1000
+				add_energy = 1000
+				if = {
+					limit = {
+						exists = event_target:human_fallen_empires_blight_remnants.ruler
+					}
+					clone_leader = {
+						target = event_target:human_fallen_empires_blight_remnants.ruler
+						traits = {
+							trait = leader_trait_ruler_cyborg
+						}
+						effect = {
+							owner = {
+								assign_leader = prev
+							}
+						}
+					}
+				}
+				save_event_target_as = human_fallen_empires_blight
+				event_target:human_fallen_empires_blight_remnants.capital_scope = {
+					while = {
+						count = 100
+						limit = {
+							event_target:human_fallen_empires_blight_remnants = {
+								check_variable = {
+									which = human_fallen_empires_blight_counter
+									value < 5
+								}
+							}
+						}
+						closest_system = {
+							limit = {
+								is_owned_by = event_target:human_fallen_empires_blight_remnants
+							}
+							every_system_planet = {
+								limit = {
+									is_owned_by = event_target:human_fallen_empires_blight_remnants
+								}
+								set_owner = event_target:human_fallen_empires_blight
+								every_planet_army = {
+									limit = {
+										is_owned_by = event_target:human_fallen_empires_blight_remnants
+									}
+									set_owner = event_target:human_fallen_empires_blight
+								}
+								event_target:human_fallen_empires_blight_remnants = {
+									change_variable = {
+										which = human_fallen_empires_blight_counter
+										value = 1
+									}
+								}
+							}
+							every_fleet_in_system = {
+								limit = {
+									owner = {
+										is_country = event_target:human_fallen_empires_blight_remnants
+									}
+								}
+								set_owner = event_target:human_fallen_empires_blight
+							}
+							starbase = {
+								set_owner = event_target:human_fallen_empires_blight
+							}
+						}
+					}
+				}
+				every_owned_pop = {
+					pop_event = {
+						id = human_fallen_empires.5085
+					}
+				}
+				declare_war = {
+					target = event_target:human_fallen_empires_blight_remnants
+					attacker_war_goal = human_fallen_empires_wg_annex
+					name = "Blight"
+				}
+				event_target:human_fallen_empires_blight_remnants = {
+					set_name = "[species.GetName] Remnants"
+					kill_leader = {
+						type = ruler
+					}
+					set_variable = {
+						which = human_fallen_empires_blight_counter
+						value = 0
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.5080.0
+		event_target:human_fallen_empires_blight = {
+			set_player = event_target:human_fallen_empires_blight_remnants
+			hidden_effect = {
+				country_event = {
+					id = human_fallen_empires.5081
+				}
+			}
+		}
+	}
+	option = {
+		name = human_fallen_empires.5080.1
+		hidden_effect = {
+			event_target:human_fallen_empires_blight_remnants = {
+				country_event = {
+					id = human_fallen_empires.5082
+				}
+			}
+		}
+	}
+}
+# event for blight
+country_event = {
+	id = human_fallen_empires.5081
+	title = human_fallen_empires.5081.name
+	desc = human_fallen_empires.5081.desc
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	show_sound = event_activating_unknown_technology
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.5081.0
+	}
+}
+
+# event for remnants
+country_event = {
+	id = human_fallen_empires.5082
+	title = human_fallen_empires.5082.name
+	desc = human_fallen_empires.5082.desc
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	show_sound = event_air_raid_siren
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = human_fallen_empires.5082.0
+	}
+}
+
+# event for blight then no other empires for assimilation
+country_event = {
+	id = human_fallen_empires.5083
+	title = human_fallen_empires.5083.name
+	desc = human_fallen_empires.5083.desc
+	picture = GFX_evt_human_fallen_empires_ruins_robots
+	show_sound = event_activating_unknown_technology
+	is_triggered_only = yes
+
+	trigger = {
+		has_valid_civic = human_fallen_empires_civic_instant_assimilation
+		not = {
+			any_playable_country = {
+				exists = this
+			}
+		}
+	}
+
+	option = {
+		name = human_fallen_empires.5083.0
+		custom_tooltip = human_fallen_empires.5083.0.tooltip
+		human_fallen_empires_effect_gov_fix_from_hive = yes
+	}
+}
+
+# instant assimilation event planet on_planet_transfer
+planet_event = {
+	id = human_fallen_empires.5084
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			has_valid_civic = human_fallen_empires_civic_instant_assimilation
+		}
+	}
+
+	immediate = {
+		every_owned_pop = {
+			pop_event = {
+				id = human_fallen_empires.5085
+			}
+		}
+	}
+}
+
+# instant assimilation event pop
+pop_event = {
+	id = human_fallen_empires.5085
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			has_valid_civic = human_fallen_empires_civic_instant_assimilation
+		}
+		human_fallen_empires_trigger_is_robot = no
+		not = {
+			has_trait = trait_cybernetic
+		}
+	}
+
+	immediate = {
+		modify_species = {
+			add_trait = trait_cybernetic
+		}
+	}
+}
+
 # other dialogs 5100 - 5200
 # buy robots 5100
 country_event = {
@@ -9463,7 +9774,6 @@ country_event = {
 			}
 		}
 	}
-	#	show_sound = event_alien_signal
 	is_triggered_only = yes
 	diplomatic = yes
 
@@ -9473,14 +9783,22 @@ country_event = {
 	}
 
 	trigger = {
-		any_owned_pop = {
+		any_owned_pop_species = {
 			has_trait = trait_mechanical
 		}
 		exists = event_target:human_fallen_empires_future_country
 	}
 
 	immediate = {
-		set_country_flag = human_fallen_empires_future_try_take_robot
+		if = {
+			limit = {
+				not = {
+					has_country_flag = human_fallen_empires_future_try_take_robot
+				}
+			}
+			play_sound = event_alien_signal
+			set_country_flag = human_fallen_empires_future_try_take_robot
+		}
 	}
 
 	option = {
