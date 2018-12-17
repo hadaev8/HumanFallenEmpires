@@ -2,15 +2,21 @@
 
 human_fallen_empires_building_thoth_temple = {
 	icon = building_great_pyramid
-	is_listed = no
-	ai_replace = no
-	#event_building = yes
-	base_buildtime = @fetime	# For repair
-	cost = {
-		minerals = @fecost	# For repair
+	base_buildtime = @fetime
+	can_build = no
+	category = research
+	planet_modifier = {
+		# заменить на работу терраформеров
+		job_researcher_add = 2
 	}
-	produced_resources = {
-		unity = 5
+	resources = {
+		category = planet_buildings
+		upkeep = {
+			energy = 4
+		}
+		produces = {
+			unity = 5
+		}
 	}
 	country_modifier = {
 		pop_environment_tolerance = 0.05
@@ -18,219 +24,206 @@ human_fallen_empires_building_thoth_temple = {
 	planet_modifier = {
 		pop_environment_tolerance = 0.20
 	}
-	active = {
-		is_growing = no
-	}
 }
 
-human_fallen_empires_building_assimilator = {
-	icon = building_great_pyramid
-	base_buildtime = @fetime	# For repair
-	cost = {
-		minerals = @fecost	# For repair
-	}
-	is_listed = no
-	ai_replace = no
-	#event_building = yes
-	produced_resources = {
-		unity = 1
-	}
-	active = {
-		human_fallen_empires_trigger_assimilator_pop_valid_with_ai_block = yes
-	}
-}
+# human_fallen_empires_building_assimilator = {
+# 	icon = building_great_pyramid
+# 	base_buildtime = @fetime	# For repair
+# 	cost = {
+# 		minerals = @fecost	# For repair
+# 	}
+# 	is_listed = no
+# 	ai_replace = no
+# 	#event_building = yes
+# 	produced_resources = {
+# 		unity = 1
+# 	}
+# 	active = {
+# 		human_fallen_empires_trigger_assimilator_pop_valid_with_ai_block = yes
+# 	}
+# }
 
-human_fallen_empires_building_crio = {
-	icon = human_fallen_empires_thoth_module_science
-	base_buildtime = @fetime	# For repair
-	cost = {
-		minerals = @fecost	# For repair
-	}
-	is_listed = no
-	ai_replace = no
-	#event_building = yes
-	planet_modifier_with_pop_trigger = {
-		key = human_fallen_empires_building_crio
-		potential = {
-			exists = tile
-			tile = {
-				has_building = human_fallen_empires_building_crio
-				is_ruined = no
-			}
-		}
-		modifier = {
-			pop_consumer_goods_mult = -1
-			pop_consumer_goods_add = -1
-		}
-	}
-}
+# human_fallen_empires_building_crio = {
+# 	icon = human_fallen_empires_thoth_module_science
+# 	base_buildtime = @fetime	# For repair
+# 	cost = {
+# 		minerals = @fecost	# For repair
+# 	}
+# 	is_listed = no
+# 	ai_replace = no
+# 	#event_building = yes
+# 	planet_modifier_with_pop_trigger = {
+# 		key = human_fallen_empires_building_crio
+# 		potential = {
+# 			exists = tile
+# 			tile = {
+# 				has_building = human_fallen_empires_building_crio
+# 				is_ruined = no
+# 			}
+# 		}
+# 		modifier = {
+# 			pop_consumer_goods_mult = -1
+# 			pop_consumer_goods_add = -1
+# 		}
+# 	}
+# }
 
 human_fallen_empires_building_thoth_module_energy = {
 	icon = human_fallen_empires_thoth_module_energy
 	base_buildtime = 60
-	planet_unique = yes
-	ai_replace = no
-	#event_building = yes
-	produced_resources = {
-		energy = 3
+	can_build = no
+	resources = {
+		category = planet_buildings
+		produces = {
+			energy = 5
+		}
 	}
 	planet_modifier = {
 		planet_jobs_energy_produces_mult = 0.2
 	}
-	potential = {
-		owner = {
-			check_variable = {
-				which = human_fallen_empires_building_thoth_module_energy
-				value > 0
-			}
-		}
-	}
-	on_queued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_energy
-				value = -1
-			}
-		}
-	}
-	on_unqueued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_energy
-				value = 1
-			}
-		}
-	}
-	ai_weight = {
-		weight = 0
-	}
+	# potential = {
+	# 	owner = {
+	# 		check_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_energy
+	# 			value > 0
+	# 		}
+	# 	}
+	# }
+	# on_queued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_energy
+	# 			value = -1
+	# 		}
+	# 	}
+	# }
+	# on_unqueued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_energy
+	# 			value = 1
+	# 		}
+	# 	}
+	# }
 }
 
 human_fallen_empires_building_thoth_module_mineral = {
 	icon = human_fallen_empires_thoth_module_mineral
 	base_buildtime = 60
-	planet_unique = yes
-	ai_replace = no
-	#event_building = yes
-	produced_resources = {
-		minerals = 3
+	can_build = no
+	resources = {
+		category = planet_buildings
+		produces = {
+			minerals = 5
+		}
 	}
 	planet_modifier = {
 		planet_jobs_minerals_produces_mult = 0.2
 	}
-	potential = {
-		owner = {
-			check_variable = {
-				which = human_fallen_empires_building_thoth_module_mineral
-				value > 0
-			}
-		}
-	}
-
-	on_queued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_mineral
-				value = -1
-			}
-		}
-	}
-
-	on_unqueued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_mineral
-				value = 1
-			}
-		}
-	}
-	ai_weight = {
-		weight = 0
-	}
+	# potential = {
+	# 	owner = {
+	# 		check_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_mineral
+	# 			value > 0
+	# 		}
+	# 	}
+	# }
+	# on_queued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_mineral
+	# 			value = -1
+	# 		}
+	# 	}
+	# }
+	# on_unqueued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_mineral
+	# 			value = 1
+	# 		}
+	# 	}
+	# }
 }
 
 human_fallen_empires_building_thoth_module_food = {
 	icon = human_fallen_empires_thoth_module_food
 	base_buildtime = 60
-	planet_unique = yes
-	ai_replace = no
-	#event_building = yes
-	produced_resources = {
-		food = 3
+	can_build = no
+	resources = {
+		category = planet_buildings
+		produces = {
+			food = 5
+		}
 	}
 	planet_modifier = {
 		planet_jobs_food_produces_mult = 0.2
 	}
-	potential = {
-		owner = {
-			check_variable = {
-				which = human_fallen_empires_building_thoth_module_food
-				value > 0
-			}
-		}
-	}
-	on_queued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_food
-				value = -1
-			}
-		}
-	}
-	on_unqueued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_food
-				value = 1
-			}
-		}
-	}
-	ai_weight = {
-		weight = 0
-	}
+	# potential = {
+	# 	owner = {
+	# 		check_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_food
+	# 			value > 0
+	# 		}
+	# 	}
+	# }
+	# on_queued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_food
+	# 			value = -1
+	# 		}
+	# 	}
+	# }
+	# on_unqueued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_food
+	# 			value = 1
+	# 		}
+	# 	}
+	# }
 }
 
 human_fallen_empires_building_thoth_module_science = {
 	icon = human_fallen_empires_thoth_module_science
 	base_buildtime = 60
-	planet_unique = yes
-	ai_replace = no
-	#event_building = yes
-	produced_resources = {
-		engineering_research = @science1
-		physics_research = @science1
-		society_research = @science1
+	can_build = no
+	resources = {
+		category = planet_buildings
+		produces = {
+			engineering_research = 5
+			physics_research = 5
+			society_research = 5
+		}
 	}
 	planet_modifier = {
 		planet_jobs_physics_research_produces_mult = 0.2
 		planet_jobs_society_research_produces_mult = 0.2
 		planet_jobs_engineering_research_produces_mult = 0.2
 	}
-	potential = {
-		owner = {
-			check_variable = {
-				which = human_fallen_empires_building_thoth_module_science
-				value > 0
-			}
-		}
-	}
-	on_queued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_science
-				value = -1
-			}
-		}
-	}
-	on_unqueued = {
-		owner = {
-			change_variable = {
-				which = human_fallen_empires_building_thoth_module_science
-				value = 1
-			}
-		}
-	}
-	ai_weight = {
-		weight = 0
-	}
+	# potential = {
+	# 	owner = {
+	# 		check_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_science
+	# 			value > 0
+	# 		}
+	# 	}
+	# }
+	# on_queued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_science
+	# 			value = -1
+	# 		}
+	# 	}
+	# }
+	# on_unqueued = {
+	# 	owner = {
+	# 		change_variable = {
+	# 			which = human_fallen_empires_building_thoth_module_science
+	# 			value = 1
+	# 		}
+	# 	}
+	# }
 }
