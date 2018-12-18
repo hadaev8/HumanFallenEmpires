@@ -8,8 +8,23 @@ slavery = {
 	option = {
 		name = "slavery_not_allowed"
 
+		valid = {
+			NOR = {
+				has_valid_civic = civic_slaver_guilds
+				has_valid_civic = civic_indentured_assets
+			}
+		}
+
 		policy_flags = {
 			slavery_not_allowed
+		}
+
+		on_enabled = {
+			hidden_effect = { every_owned_planet = { remove_modifier = slave_colony } }
+		}
+
+		modifier = {
+			slave_market_cost_mult = 1
 		}
 	}
 
@@ -18,7 +33,7 @@ slavery = {
 
 		valid = {
 			NOT = { is_subject_type = signatory }
-			or = {
+			OR = {
 				has_ethic = ethic_authoritarian
 				has_ethic = ethic_fanatic_authoritarian
 				has_ethic = ethic_xenophobe
@@ -39,10 +54,7 @@ slavery = {
 			modifier = {
 				factor = 0
 				has_valid_ai_personality = yes
-				NOR = {
-					has_ai_personality_behaviour = slaver
-					has_ai_personality_behaviour = caste_system
-				}
+				NOT = { has_ai_personality_behaviour = slaver }
 			}
 			modifier = {
 				factor = 0
