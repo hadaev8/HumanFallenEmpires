@@ -1,61 +1,61 @@
 #
-namespace = human_fallen_empires_pirate
+namespace = hfe_pirate
 
 # spawn pirate
 country_event = {
-	id = human_fallen_empires_pirate.0
+	id = hfe_pirate.0
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		not = {
-			has_global_flag = human_fallen_empires_disable_pirate
+			has_global_flag = hfe_disable_pirate
 		}
 		count_country = {
 			limit = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 			}
 			count < 31
 		}
 	}
 
 	immediate = {
-		save_event_target_as = human_fallen_empires_pirate_target
-		human_fallen_empires_effect_pirate_init = yes
+		save_event_target_as = hfe_pirate_target
+		hfe_effect_pirate_init = yes
 	}
 }
 
 # birth of piracy info event
 country_event = {
-	id = human_fallen_empires_pirate.1
+	id = hfe_pirate.1
 	title = pirate.1.name
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_0
+			has_country_flag = hfe_random_0
 		}
-		picture = GFX_evt_human_fallen_empires_pirate
+		picture = GFX_evt_hfe_pirate
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_1
+			has_country_flag = hfe_random_1
 		}
 		picture = GFX_evt_pirate_armada
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_2
+			has_country_flag = hfe_random_2
 		}
 		picture = GFX_evt_smugglers_in_bar
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_3
+			has_country_flag = hfe_random_3
 		}
 		picture = GFX_evt_unknown_ships
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_4
+			has_country_flag = hfe_random_4
 		}
 		picture = GFX_evt_machine_space_battle
 	}
@@ -133,7 +133,7 @@ country_event = {
 	}
 
 	immediate = {
-		human_fallen_empires_effect_random_roll_flags_5_country = yes
+		hfe_effect_random_roll_flags_5_country = yes
 	}
 
 	option = {
@@ -194,12 +194,12 @@ country_event = {
 
 # pirate life simulation
 country_event = {
-	id = human_fallen_empires_pirate.2
+	id = hfe_pirate.2
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_pirate
+		is_country_type = hfe_pirate
 		exists = capital_scope
 	}
 
@@ -209,24 +209,24 @@ country_event = {
 				is_asteroid = yes
 			}
 			log = "fixing planet class for [this.GetName], owner: [owner.GetName]"
-			change_pc = human_fallen_empires_pc_pirate_base
+			change_pc = hfe_pc_pirate_base
 		}
 		# move capital if have normal planet
 		if = {
 			limit = {
 				capital_scope = {
-					is_planet_class = human_fallen_empires_pc_pirate_base
+					is_planet_class = hfe_pc_pirate_base
 				}
 				any_owned_planet = {
 					not = {
-						is_planet_class = human_fallen_empires_pc_pirate_base
+						is_planet_class = hfe_pc_pirate_base
 					}
 				}
 			}
 			random_owned_planet = {
 				limit = {
 					not = {
-						is_planet_class = human_fallen_empires_pc_pirate_base
+						is_planet_class = hfe_pc_pirate_base
 					}
 				}
 				set_capital = yes
@@ -234,7 +234,7 @@ country_event = {
 		}
 		# build new bases
 		country_event = {
-			id = human_fallen_empires_pirate.3
+			id = hfe_pirate.3
 		}
 		# send fleet logic for unstuck fleets
 		every_owned_fleet = {
@@ -243,13 +243,13 @@ country_event = {
 				is_ship_class = shipclass_military
 			}
 			fleet_event = {
-				id = human_fallen_empires_pirate.300
+				id = hfe_pirate.300
 			}
 		}
 		# try to hunt weaker near pirate
 		random_relation = {
 			limit = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 				relative_power = {
 					who = root
 					category = fleet
@@ -267,23 +267,23 @@ country_event = {
 				not = {
 					has_opinion_modifier = {
 						who = root
-						modifier = human_fallen_empires_opinion_pirate_prior_target
+						modifier = hfe_opinion_pirate_prior_target
 					}
 				}
 			}
 			add_opinion_modifier = {
 				who = root
-				modifier = human_fallen_empires_opinion_pirate_prior_target
+				modifier = hfe_opinion_pirate_prior_target
 			}
 			#log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
 		}
 		country_event = {
-			id = human_fallen_empires_pirate.10
+			id = hfe_pirate.10
 			days = 1
 			random = 360
 		}
 		country_event = {
-			id = human_fallen_empires_pirate.11
+			id = hfe_pirate.11
 			days = 1
 			random = 360
 		}
@@ -292,12 +292,12 @@ country_event = {
 
 # pirate build new base
 country_event = {
-	id = human_fallen_empires_pirate.3
+	id = hfe_pirate.3
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_base_cost }
+		resource_stockpile_compare = { resource = energy value >= @hfe_pirate_base_cost }
 		exists = capital_scope
 		# TODO
 		# any_owned_planet = {
@@ -311,16 +311,16 @@ country_event = {
 	}
 
 	immediate = {
-		save_event_target_as = human_fallen_empires_pirate_clan
+		save_event_target_as = hfe_pirate_clan
 		capital_scope = {
 			closest_system = {
 				max_steps = 20
 				limit = {
-					human_fallen_empires_trigger_pirate_valid_base_system = yes
+					hfe_trigger_pirate_valid_base_system = yes
 				}
-				human_fallen_empires_effect_pirate_init_base = yes
+				hfe_effect_pirate_init_base = yes
 				root = {
-					add_resource = { energy = @human_fallen_empires_pirate_base_cost_minus }
+					add_resource = { energy = @hfe_pirate_base_cost_minus }
 				}
 			}
 		}
@@ -329,7 +329,7 @@ country_event = {
 
 # pirate fleet logic set by ship build on action
 ship_event = {
-	id = human_fallen_empires_pirate.4
+	id = hfe_pirate.4
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -341,14 +341,14 @@ ship_event = {
 			is_ship_class = shipclass_military
 		}
 		owner = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 		}
 	}
 
 	immediate = {
 		fleet = {
 			fleet_event = {
-				id = human_fallen_empires_pirate.300
+				id = hfe_pirate.300
 			}
 		}
 	}
@@ -356,35 +356,35 @@ ship_event = {
 
 # info event
 country_event = {
-	id = human_fallen_empires_pirate.7
+	id = hfe_pirate.7
 	title = pirate.50.name
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_0
+			has_country_flag = hfe_random_0
 		}
-		picture = GFX_evt_human_fallen_empires_pirate
+		picture = GFX_evt_hfe_pirate
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_1
+			has_country_flag = hfe_random_1
 		}
 		picture = GFX_evt_pirate_armada
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_2
+			has_country_flag = hfe_random_2
 		}
 		picture = GFX_evt_smugglers_in_bar
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_3
+			has_country_flag = hfe_random_3
 		}
 		picture = GFX_evt_unknown_ships
 	}
 	picture = {
 		trigger = {
-			has_country_flag = human_fallen_empires_random_4
+			has_country_flag = hfe_random_4
 		}
 		picture = GFX_evt_machine_space_battle
 	}
@@ -392,17 +392,17 @@ country_event = {
 	desc = pirate.50.b.desc
 	desc = pirate.50.c.desc
 	show_sound = event_ship_bridge
-	location = event_target:human_fallen_empires_pirate_clan
+	location = event_target:hfe_pirate_clan
 	is_triggered_only = yes
 
 	immediate = {
-		human_fallen_empires_effect_random_roll_flags_5_country = yes
+		hfe_effect_random_roll_flags_5_country = yes
 	}
 
 	trigger = {
 		is_ai = no
 		not = {
-			has_country_flag = human_fallen_empires_pirate.7_block
+			has_country_flag = hfe_pirate.7_block
 		}
 	}
 
@@ -411,10 +411,10 @@ country_event = {
 	}
 
 	option = {
-		name = human_fallen_empires_block
-		custom_tooltip = human_fallen_empires_block.tooltip
+		name = hfe_block
+		custom_tooltip = hfe_block.tooltip
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_pirate.7_block
+			set_country_flag = hfe_pirate.7_block
 		}
 	}
 }
@@ -422,7 +422,7 @@ country_event = {
 # pirate diplo simulation
 # sell slaves
 country_event = {
-	id = human_fallen_empires_pirate.10
+	id = hfe_pirate.10
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -438,8 +438,8 @@ country_event = {
 		random_relation = {
 			limit = {
 				nor = {
-					has_country_flag = human_fallen_empires_pirate_offer_deal@root
-					has_country_flag = human_fallen_empires_pirate_offer_deal
+					has_country_flag = hfe_pirate_offer_deal@root
+					has_country_flag = hfe_pirate_offer_deal
 				}
 				resource_stockpile_compare = { resource = energy value >= 500 }
 				resource_stockpile_compare = { resource = minerals value >= 500 }
@@ -463,22 +463,22 @@ country_event = {
 				}
 			}
 			root = {
-				save_event_target_as = human_fallen_empires_pirate_country
-				human_fallen_empires_effect_save_slave_target = yes
+				save_event_target_as = hfe_pirate_country
+				hfe_effect_save_slave_target = yes
 			}
-			set_country_flag = human_fallen_empires_pirate.101.deal_offer
-			set_country_flag = human_fallen_empires_pirate.101.slave_menu
+			set_country_flag = hfe_pirate.101.deal_offer
+			set_country_flag = hfe_pirate.101.slave_menu
 			#log = "try to sell slaves to [this.GetName]"
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_offer_deal@root
+				flag = hfe_pirate_offer_deal@root
 				days = 1825
 			}
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_offer_deal
+				flag = hfe_pirate_offer_deal
 				days = 365
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
@@ -486,7 +486,7 @@ country_event = {
 
 # sell energy
 country_event = {
-	id = human_fallen_empires_pirate.11
+	id = hfe_pirate.11
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -499,8 +499,8 @@ country_event = {
 		random_relation = {
 			limit = {
 				nor = {
-					has_country_flag = human_fallen_empires_pirate_offer_deal@root
-					has_country_flag = human_fallen_empires_pirate_offer_deal
+					has_country_flag = hfe_pirate_offer_deal@root
+					has_country_flag = hfe_pirate_offer_deal
 				}
 				resource_stockpile_compare = { resource = minerals value >= 1000 }
 				resource_stockpile_compare = { resource = energy value < 10000 }
@@ -520,21 +520,21 @@ country_event = {
 				}
 			}
 			root = {
-				save_event_target_as = human_fallen_empires_pirate_country
+				save_event_target_as = hfe_pirate_country
 			}
-			set_country_flag = human_fallen_empires_pirate.101.deal_offer
-			set_country_flag = human_fallen_empires_pirate.101.traid_menu
+			set_country_flag = hfe_pirate.101.deal_offer
+			set_country_flag = hfe_pirate.101.traid_menu
 			#log = "try to sell energy to [this.GetName]"
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_offer_deal@root
+				flag = hfe_pirate_offer_deal@root
 				days = 1825
 			}
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_offer_deal
+				flag = hfe_pirate_offer_deal
 				days = 365
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
@@ -542,12 +542,12 @@ country_event = {
 
 # pirate gain resources after kill station
 country_event = {
-	id = human_fallen_empires_pirate.52
+	id = hfe_pirate.52
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_pirate
+		is_country_type = hfe_pirate
 		exists = fromfromfrom
 		fromfromfrom = {
 			or = {
@@ -562,27 +562,27 @@ country_event = {
 	immediate = {
 		#log = "pirate kill station"
 		set_timed_country_flag = {
-			flag = human_fallen_empires_pirate_attack@from
+			flag = hfe_pirate_attack@from
 			days = 365
 		}
 		from = {
 			change_variable = {
-				which = human_fallen_empires_pirate_attack_count
+				which = hfe_pirate_attack_count
 				value = 1
 			}
-			human_fallen_empires_effect_pirate_attack_count_check = yes
+			hfe_effect_pirate_attack_count_check = yes
 			if = {
 				limit = {
-					has_event_chain = human_fallen_empires_chain_pirate_count
+					has_event_chain = hfe_chain_pirate_count
 				}
 				add_event_chain_counter = {
-					event_chain = human_fallen_empires_chain_pirate_count
-					counter = human_fallen_empires_chain_pirate_count_lost_station
+					event_chain = hfe_chain_pirate_count
+					counter = hfe_chain_pirate_count_lost_station
 					amount = 1
 				}
 			}
 		}
-		human_fallen_empires_effect_pirate_resource_reward = yes
+		hfe_effect_pirate_resource_reward = yes
 	}
 }
 
@@ -591,7 +591,7 @@ country_event = {
 # This = Planet
 # From = Bombarder
 planet_event = {
-	id = human_fallen_empires_pirate.53
+	id = hfe_pirate.53
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -599,29 +599,29 @@ planet_event = {
 		num_pops > 0
 		exists = owner
 		exists = from
-		has_orbital_bombardment_stance = human_fallen_empires_stance_pirate_raid
+		has_orbital_bombardment_stance = hfe_stance_pirate_raid
 	}
 
 	immediate = {
 		if = {
 			limit = {
 				from = {
-					is_country_type = human_fallen_empires_pirate
+					is_country_type = hfe_pirate
 				}
 			}
 			owner = {
 				set_timed_country_flag = {
-					flag = human_fallen_empires_pirate_attacked
+					flag = hfe_pirate_attacked
 					days = 365
 				}
 			}
-			human_fallen_empires_effect_pirate_ravage_planet = yes
+			hfe_effect_pirate_ravage_planet = yes
 			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
 		}
 		else = {
 			random = {
 				chance = 20
-				human_fallen_empires_effect_pirate_ravage_planet = yes
+				hfe_effect_pirate_ravage_planet = yes
 				log = "pirate bombarding [this.GetName] in [solar_system.GetName] by default"
 			}
 		}
@@ -630,12 +630,12 @@ planet_event = {
 
 # add pirate trait to admiral 55 on_leader_spawned
 country_event = {
-	id = human_fallen_empires_pirate.55
+	id = hfe_pirate.55
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_country_type = human_fallen_empires_pirate
+		is_country_type = hfe_pirate
 		exists = from
 		from = {
 			leader_class = admiral
@@ -644,7 +644,7 @@ country_event = {
 
 	immediate = {
 		from = {
-			add_trait = human_fallen_empires_admiral_trait_pirate
+			add_trait = hfe_admiral_trait_pirate
 		}
 	}
 }
@@ -653,7 +653,7 @@ country_event = {
 # From = Disabler Ship
 # take starbases of pirate on_ship_disabled
 ship_event = {
-	id = human_fallen_empires_pirate.56
+	id = hfe_pirate.56
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -663,7 +663,7 @@ ship_event = {
 		exists = solar_system
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 		}
 		is_ship_class = shipclass_starbase
 	}
@@ -679,7 +679,7 @@ ship_event = {
 				if = {
 					limit = {
 						from.owner = {
-							is_country_type = human_fallen_empires_pirate
+							is_country_type = hfe_pirate
 						}
 					}
 					#log = "pirate take planet [this.GetName] in [solar_system.GetName] from pirate new owner is [from.owner.GetName]"
@@ -687,24 +687,24 @@ ship_event = {
 				}
 				else_if = {
 					limit = {
-						is_planet_class = human_fallen_empires_pc_pirate_base
+						is_planet_class = hfe_pc_pirate_base
 					}
 					from.owner = {
 						set_timed_country_flag = {
-							flag = human_fallen_empires_refuge_country_prior@root.owner
+							flag = hfe_refuge_country_prior@root.owner
 							days = 10
 						}
 					}
 					every_owned_pop = {
-						human_fallen_empires_effect_refuge_or_die = yes
+						hfe_effect_refuge_or_die = yes
 					}
-					human_fallen_empires_effect_convert_to_asteroid = yes
+					hfe_effect_convert_to_asteroid = yes
 				}
 				else_if = {
 					limit = {
 						from.owner = {
 							num_pops > 0
-							human_fallen_empires_trigger_is_awake = yes
+							hfe_trigger_is_awake = yes
 						}
 						# exists = starbase
 						# starbase = {
@@ -722,7 +722,7 @@ ship_event = {
 							type = default
 							species = this.species
 							effect = {
-								human_fallen_empires_effect_gov_fix = yes
+								hfe_effect_gov_fix = yes
 								prevprev = {
 									set_owner = prev
 								}
@@ -736,15 +736,15 @@ ship_event = {
 		if = {
 			limit = {
 				from.owner = {
-					human_fallen_empires_trigger_is_awake = yes
+					hfe_trigger_is_awake = yes
 					or = {
 						num_pops > 0
-						is_country_type = human_fallen_empires_pirate
+						is_country_type = hfe_pirate
 					}
 				}
 				or = {
 					from.owner = {
-						is_country_type = human_fallen_empires_pirate
+						is_country_type = hfe_pirate
 					}
 					solar_system = {
 						any_neighbor_system = {
@@ -760,11 +760,11 @@ ship_event = {
 			from.owner = {
 				if = {
 					limit = {
-						has_event_chain = human_fallen_empires_chain_pirate_count
+						has_event_chain = hfe_chain_pirate_count
 					}
 					add_event_chain_counter = {
-						event_chain = human_fallen_empires_chain_pirate_count
-						counter = human_fallen_empires_chain_pirate_count_outpost_balance
+						event_chain = hfe_chain_pirate_count
+						counter = hfe_chain_pirate_count_outpost_balance
 						amount = 1
 					}
 				}
@@ -804,40 +804,40 @@ ship_event = {
 
 # fix pirate planet class ownerless on_planet_ownerless on_planet_transfer
 planet_event = {
-	id = human_fallen_empires_pirate.57
+	id = hfe_pirate.57
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = human_fallen_empires_pc_pirate_base
+		is_planet_class = hfe_pc_pirate_base
 		nand = {
 			exists = owner
 			owner = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 			}
 		}
 	}
 
 	immediate = {
-		human_fallen_empires_effect_convert_to_asteroid = yes
+		hfe_effect_convert_to_asteroid = yes
 	}
 }
 
 # send default or pirate country fleets before get destroyed on_country_destroyed
 # looks like not worked
 country_event = {
-	id = human_fallen_empires_pirate.58
+	id = hfe_pirate.58
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		or = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 			is_country_type = default
 			is_country_type = awakened_fallen_empire
 		}
 		any_country = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 			not = {
 				is_country = root
 			}
@@ -845,7 +845,7 @@ country_event = {
 	}
 
 	immediate = {
-		human_fallen_empires_effect_pirate_flee_fleets = yes
+		hfe_effect_pirate_flee_fleets = yes
 	}
 }
 
@@ -853,7 +853,7 @@ country_event = {
 # This = Ship
 # From = Disabler Ship
 ship_event = {
-	id = human_fallen_empires_pirate.59
+	id = hfe_pirate.59
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -864,7 +864,7 @@ ship_event = {
 		exists = fleet
 		exists = solar_system
 		from.owner = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 		}
 		is_ship_class = shipclass_starbase
 	}
@@ -872,87 +872,87 @@ ship_event = {
 	immediate = {
 		from.owner = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_pirate_attack@root.owner
+				flag = hfe_pirate_attack@root.owner
 				days = 365
 			}
 		}
 		from.owner = {
-			human_fallen_empires_effect_pirate_resource_reward = yes
+			hfe_effect_pirate_resource_reward = yes
 		}
 		fleet = {
 			change_variable = {
-				which = human_fallen_empires_pirate_outpost_attack_count
+				which = hfe_pirate_outpost_attack_count
 				value = 1
 			}
 			owner = {
 				change_variable = {
-					which = human_fallen_empires_pirate_attack_count
+					which = hfe_pirate_attack_count
 					value = 1
 				}
-				human_fallen_empires_effect_pirate_attack_count_check = yes
+				hfe_effect_pirate_attack_count_check = yes
 			}
 			if = {
 				limit = {
 					or = {
 						check_variable = {
-							which = human_fallen_empires_pirate_outpost_attack_count
+							which = hfe_pirate_outpost_attack_count
 							value > 7
 						}
 						and = {
 							is_difficulty > 0
 							check_variable = {
-								which = human_fallen_empires_pirate_outpost_attack_count
+								which = hfe_pirate_outpost_attack_count
 								value > 6
 							}
 						}
 						and = {
 							is_difficulty > 1
 							check_variable = {
-								which = human_fallen_empires_pirate_outpost_attack_count
+								which = hfe_pirate_outpost_attack_count
 								value > 5
 							}
 						}
 						and = {
 							is_difficulty > 2
 							check_variable = {
-								which = human_fallen_empires_pirate_outpost_attack_count
+								which = hfe_pirate_outpost_attack_count
 								value > 4
 							}
 						}
 						and = {
 							is_difficulty > 3
 							check_variable = {
-								which = human_fallen_empires_pirate_outpost_attack_count
+								which = hfe_pirate_outpost_attack_count
 								value > 3
 							}
 						}
 						and = {
 							is_difficulty > 4
 							check_variable = {
-								which = human_fallen_empires_pirate_outpost_attack_count
+								which = hfe_pirate_outpost_attack_count
 								value > 2
 							}
 						}
 					}
 				}
 				set_variable = {
-					which = human_fallen_empires_pirate_outpost_attack_count
+					which = hfe_pirate_outpost_attack_count
 					value = 0
 				}
 				#log = "pirate get starbase from [owner.GetName] at [solar_system.GetName]"
 				owner = {
 					change_variable = {
-						which = human_fallen_empires_pirate_attack_count
+						which = hfe_pirate_attack_count
 						value = 2
 					}
-					human_fallen_empires_effect_pirate_attack_count_check = yes
+					hfe_effect_pirate_attack_count_check = yes
 					if = {
 						limit = {
-							has_event_chain = human_fallen_empires_chain_pirate_count
+							has_event_chain = hfe_chain_pirate_count
 						}
 						add_event_chain_counter = {
-							event_chain = human_fallen_empires_chain_pirate_count
-							counter = human_fallen_empires_chain_pirate_count_outpost_balance
+							event_chain = hfe_chain_pirate_count
+							counter = hfe_chain_pirate_count_outpost_balance
 							amount = -1
 						}
 					}
@@ -976,9 +976,9 @@ ship_event = {
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
 # FromFromFrom = ship 2
-# for human_fallen_empires_chain_pirate_count counters on_ship_destroyed_perp
+# for hfe_chain_pirate_count counters on_ship_destroyed_perp
 country_event = {
-	id = human_fallen_empires_pirate.60
+	id = hfe_pirate.60
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -989,15 +989,15 @@ country_event = {
 			is_ship_class = shipclass_military
 		}
 		or = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 			from = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 			}
 		}
 		or = {
-			has_event_chain = human_fallen_empires_chain_pirate_count
+			has_event_chain = hfe_chain_pirate_count
 			from = {
-				has_event_chain = human_fallen_empires_chain_pirate_count
+				has_event_chain = hfe_chain_pirate_count
 			}
 		}
 	}
@@ -1005,20 +1005,20 @@ country_event = {
 	immediate = {
 		if = {
 			limit = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 			}
 			from = {
 				add_event_chain_counter = {
-					event_chain = human_fallen_empires_chain_pirate_count
-					counter = human_fallen_empires_chain_pirate_count_lost_ship
+					event_chain = hfe_chain_pirate_count
+					counter = hfe_chain_pirate_count_lost_ship
 					amount = 1
 				}
 			}
 		}
 		else = {
 			add_event_chain_counter = {
-				event_chain = human_fallen_empires_chain_pirate_count
-				counter = human_fallen_empires_chain_pirate_count_killed_ship
+				event_chain = hfe_chain_pirate_count
+				counter = hfe_chain_pirate_count_killed_ship
 				amount = 1
 			}
 		}
@@ -1031,7 +1031,7 @@ country_event = {
 # FromFromFrom = fleet 2
 # fix pirate non hostile then attacked by player on_entering_battle
 country_event = {
-	id = human_fallen_empires_pirate.61
+	id = hfe_pirate.61
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -1056,7 +1056,7 @@ country_event = {
 # From = System
 # get disabled starbase
 fleet_event = {
-	id = human_fallen_empires_pirate.62
+	id = hfe_pirate.62
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -1064,13 +1064,13 @@ fleet_event = {
 		exists = solar_system.starbase
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 		}
 		solar_system = {
 			starbase = {
 				exists = owner
 				owner = {
-					is_country_type = human_fallen_empires_pirate
+					is_country_type = hfe_pirate
 				}
 			}
 			any_ship_in_system = {
@@ -1100,17 +1100,17 @@ fleet_event = {
 # pirate diplomacy 100-150
 # start event diplomacy
 country_event = {
-	id = human_fallen_empires_pirate.100
+	id = hfe_pirate.100
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		exists = from
 		from = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 		}
 		not = {
-			has_country_flag = human_fallen_empires_pirate.101_block
+			has_country_flag = hfe_pirate.101_block
 		}
 		or = {
 			is_homicidal = no
@@ -1120,82 +1120,82 @@ country_event = {
 
 	immediate = {
 		from = {
-			save_event_target_as = human_fallen_empires_pirate_country
+			save_event_target_as = hfe_pirate_country
 		}
 		country_event = {
-			id = human_fallen_empires_pirate.101
+			id = hfe_pirate.101
 		}
-		set_country_flag = human_fallen_empires_pirate.101_block
+		set_country_flag = hfe_pirate.101_block
 	}
 }
 
 # pirate diplomacy main menu
 country_event = {
-	id = human_fallen_empires_pirate.101
-	title = human_fallen_empires_nothing
-	#message_desc = human_fallen_empires_pirate.101.desc.0 # не пашет
+	id = hfe_pirate.101
+	title = hfe_nothing
+	#message_desc = hfe_pirate.101.desc.0 # не пашет
 	desc = {
 		trigger = {
 			# start
 			success_text = {
-				text = human_fallen_empires_pirate.101.desc.0
-				human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+				text = hfe_pirate.101.desc.0
+				hfe_trigger_pirate_diplomacy_any_menu = no
 			}
 			# raid
 			success_text = {
-				text = human_fallen_empires_pirate.101.raid_menu.desc.0
-				has_country_flag = human_fallen_empires_pirate.101.raid_menu
-				human_fallen_empires_trigger_exists_any_event_target = yes
+				text = hfe_pirate.101.raid_menu.desc.0
+				has_country_flag = hfe_pirate.101.raid_menu
+				hfe_trigger_exists_any_event_target = yes
 			}
 			success_text = {
-				text = human_fallen_empires_pirate.101.raid_menu.desc.1
-				has_country_flag = human_fallen_empires_pirate.101.raid_menu
-				human_fallen_empires_trigger_exists_any_event_target = no
+				text = hfe_pirate.101.raid_menu.desc.1
+				has_country_flag = hfe_pirate.101.raid_menu
+				hfe_trigger_exists_any_event_target = no
 			}
 			# trade
 			success_text = {
-				text = human_fallen_empires_pirate.101.traid_menu.desc.0
-				has_country_flag = human_fallen_empires_pirate.101.traid_menu
+				text = hfe_pirate.101.traid_menu.desc.0
+				has_country_flag = hfe_pirate.101.traid_menu
 				not = {
-					has_country_flag = human_fallen_empires_pirate.101.deal_offer
+					has_country_flag = hfe_pirate.101.deal_offer
 				}
 			}
 			# if pirates contacted with country
 			success_text = {
-				text = human_fallen_empires_pirate.101.traid_menu.desc.1
-				has_country_flag = human_fallen_empires_pirate.101.traid_menu
-				has_country_flag = human_fallen_empires_pirate.101.deal_offer
+				text = hfe_pirate.101.traid_menu.desc.1
+				has_country_flag = hfe_pirate.101.traid_menu
+				has_country_flag = hfe_pirate.101.deal_offer
 			}
 			# slave
 			success_text = {
-				text = human_fallen_empires_pirate.101.slave_menu.desc.0
-				has_country_flag = human_fallen_empires_pirate.101.slave_menu
-				human_fallen_empires_trigger_exists_any_slave_target = no
+				text = hfe_pirate.101.slave_menu.desc.0
+				has_country_flag = hfe_pirate.101.slave_menu
+				hfe_trigger_exists_any_slave_target = no
 			}
 			# if pirates contacted with country
 			success_text = {
-				text = human_fallen_empires_pirate.101.slave_menu.desc.1.0
-				has_country_flag = human_fallen_empires_pirate.101.deal_offer
-				has_country_flag = human_fallen_empires_pirate.101.slave_menu
-				human_fallen_empires_trigger_exists_any_slave_target = yes
+				text = hfe_pirate.101.slave_menu.desc.1.0
+				has_country_flag = hfe_pirate.101.deal_offer
+				has_country_flag = hfe_pirate.101.slave_menu
+				hfe_trigger_exists_any_slave_target = yes
 			}
 			success_text = {
-				text = human_fallen_empires_pirate.101.slave_menu.desc.1.1
-				has_country_flag = human_fallen_empires_pirate.101.slave_menu
-				human_fallen_empires_trigger_exists_any_slave_target = yes
+				text = hfe_pirate.101.slave_menu.desc.1.1
+				has_country_flag = hfe_pirate.101.slave_menu
+				hfe_trigger_exists_any_slave_target = yes
 			}
 			# psi test start
 			success_text = {
-				text = human_fallen_empires_pirate.101.psi_test_menu.desc.0
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+				text = hfe_pirate.101.psi_test_menu.desc.0
+				has_country_flag = hfe_pirate.101.psi_test_menu
 				check_variable = {
 					which = take_place_1
 					value = 0
 				}
 			}
 			# success_text = {
-			# 	text = human_fallen_empires_pirate.101.psi_test_menu.desc.1
-			# 	has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			# 	text = hfe_pirate.101.psi_test_menu.desc.1
+			# 	has_country_flag = hfe_pirate.101.psi_test_menu
 			# 	check_variable = {
 			# 		which = take_place_1
 			# 		value = 1
@@ -1203,17 +1203,17 @@ country_event = {
 			# }
 			# psi test end
 			success_text = {
-				text = human_fallen_empires_pirate.101.psi_test_menu.desc.2
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
+				text = hfe_pirate.101.psi_test_menu.desc.2
+				has_country_flag = hfe_pirate.101.psi_test_end_lose
 			}
 			# success_text = {
-			# 	text = human_fallen_empires_pirate.101.psi_test_menu.desc.3
-			# 	has_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
+			# 	text = hfe_pirate.101.psi_test_menu.desc.3
+			# 	has_country_flag = hfe_pirate.101.psi_test_end_win
 			# }
 			# casino
 			success_text = {
-				text = human_fallen_empires_pirate.101.casino_menu.desc.0
-				has_country_flag = human_fallen_empires_pirate.101.casino_menu
+				text = hfe_pirate.101.casino_menu.desc.0
+				has_country_flag = hfe_pirate.101.casino_menu
 			}
 		}
 	}
@@ -1222,39 +1222,39 @@ country_event = {
 	force_open = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_pirate_country
-		room = event_target:human_fallen_empires_pirate_country
+		portrait = event_target:hfe_pirate_country
+		room = event_target:hfe_pirate_country
 	}
 
 	# pay for protect
 	option = {
-		name = human_fallen_empires_pirate.101.0
+		name = hfe_pirate.101.0
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		allow = {
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.0.tooltip_fail
-				is_hostile = event_target:human_fallen_empires_pirate_country
+				text = hfe_pirate.101.0.tooltip_fail
+				is_hostile = event_target:hfe_pirate_country
 			}
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_protect_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_protect_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_protect_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_protect_cost }
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.0.response
-		add_resource = { energy = @human_fallen_empires_pirate_protect_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_protect_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_protect_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_protect_cost }
+		response_text = hfe_pirate.101.0.response
+		add_resource = { energy = @hfe_pirate_protect_cost_minus }
+		add_resource = { minerals = @hfe_pirate_protect_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_protect_cost }
+			add_resource = { minerals = @hfe_pirate_protect_cost }
 		}
 		hidden_effect = {
 			# event to return hostile
 			country_event = {
-				id = human_fallen_empires_pirate.200
-				days = @human_fallen_empires_pirate_protect_days
+				id = hfe_pirate.200
+				days = @hfe_pirate_protect_days
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				set_faction_hostility = {
 					target = root
 					set_hostile = no
@@ -1263,19 +1263,19 @@ country_event = {
 				}
 				add_opinion_modifier = {
 					who = root
-					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+					modifier = hfe_opinion_pirate_pay_for_protect
 				}
 			}
 		}
 	}
 	# raid menu
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu
+		name = hfe_pirate.101.raid_menu
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			# human_fallen_empires_effect_clear_event_target = yes
+			# hfe_effect_clear_event_target = yes
 			every_relation = {
 				limit = {
 					is_country_type = default
@@ -1283,216 +1283,216 @@ country_event = {
 						is_at_war_with = root
 						is_hostile = root
 					}
-					is_hostile = event_target:human_fallen_empires_pirate_country
+					is_hostile = event_target:hfe_pirate_country
 					not = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
-				human_fallen_empires_effect_save_event_target = yes
+				hfe_effect_save_event_target = yes
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_rival = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_domineering_to = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_hostile_to = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_dismissive_to = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_unfriendly_to = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
 						is_threatened_to = root
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
 			if = {
 				limit = {
-					human_fallen_empires_trigger_exists_all_event_targets = no
+					hfe_trigger_exists_all_event_targets = no
 				}
 				every_relation = {
 					limit = {
 						is_country_type = default
-						is_hostile = event_target:human_fallen_empires_pirate_country
+						is_hostile = event_target:hfe_pirate_country
 						not = {
 							has_opinion_modifier = {
-								who = event_target:human_fallen_empires_pirate_country
-								modifier = human_fallen_empires_opinion_pirate_prior_target
+								who = event_target:hfe_pirate_country
+								modifier = hfe_opinion_pirate_prior_target
 							}
 						}
 					}
-					human_fallen_empires_effect_save_event_target = yes
+					hfe_effect_save_event_target = yes
 				}
 			}
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.raid_menu
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.raid_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# select target menu
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.0
+		name = hfe_pirate.101.raid_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_0
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_0
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_0 = {
+					event_target:hfe_event_target_0 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.0.response
+		response_text = hfe_pirate.101.raid_menu.0.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_0 = {
+			event_target:hfe_event_target_0 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_0
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_0
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.1
+		name = hfe_pirate.101.raid_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_1
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_1
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_1 = {
+					event_target:hfe_event_target_1 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
@@ -1500,243 +1500,243 @@ country_event = {
 		}
 
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.1.response
+		response_text = hfe_pirate.101.raid_menu.1.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_1 = {
+			event_target:hfe_event_target_1 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_1
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_1
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.2
+		name = hfe_pirate.101.raid_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_2
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_2
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_2 = {
+					event_target:hfe_event_target_2 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.2.response
+		response_text = hfe_pirate.101.raid_menu.2.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_2 = {
+			event_target:hfe_event_target_2 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_2
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_2
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.3
+		name = hfe_pirate.101.raid_menu.3
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_3
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_3
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_3 = {
+					event_target:hfe_event_target_3 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.3.response
+		response_text = hfe_pirate.101.raid_menu.3.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_3 = {
+			event_target:hfe_event_target_3 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_3
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_3
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.4
+		name = hfe_pirate.101.raid_menu.4
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_4
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_4
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_4 = {
+					event_target:hfe_event_target_4 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.4.response
+		response_text = hfe_pirate.101.raid_menu.4.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_4 = {
+			event_target:hfe_event_target_4 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_4
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_4
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.5
+		name = hfe_pirate.101.raid_menu.5
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.raid_menu
-			exists = event_target:human_fallen_empires_event_target_5
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_5
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 500 }
 			resource_stockpile_compare = { resource = minerals value >= 500 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.raid_menu.fail_prior_target
+				text = hfe_pirate.101.raid_menu.fail_prior_target
 				not = {
-					event_target:human_fallen_empires_event_target_5 = {
+					event_target:hfe_event_target_5 = {
 						has_opinion_modifier = {
-							who = event_target:human_fallen_empires_pirate_country
-							modifier = human_fallen_empires_opinion_pirate_prior_target
+							who = event_target:hfe_pirate_country
+							modifier = hfe_opinion_pirate_prior_target
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.raid_menu.5.response
+		response_text = hfe_pirate.101.raid_menu.5.response
 		add_resource = { energy = -500 }
 		add_resource = { minerals = -500 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 500 }
 			add_resource = { minerals = 500 }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_5 = {
+			event_target:hfe_event_target_5 = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_pirate_country
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_pirate_country
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
-					who = event_target:human_fallen_empires_event_target_5
-					modifier = human_fallen_empires_opinion_pirate_prior_target
+					who = event_target:hfe_event_target_5
+					modifier = hfe_opinion_pirate_prior_target
 				}
 			}
 		}
 	}
 	# trade menu
 	option = {
-		name = human_fallen_empires_pirate.101.traid_menu
+		name = hfe_pirate.101.traid_menu
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.traid_menu
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.traid_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# sell minerals
 	option = {
-		name = human_fallen_empires_pirate.101.traid_menu.0
+		name = hfe_pirate.101.traid_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+			has_country_flag = hfe_pirate.101.traid_menu
 		}
 		allow = {
 			resource_stockpile_compare = { resource = minerals value >= 150 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.traid_menu.fail
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.traid_menu.fail
+				event_target:hfe_pirate_country = {
 					resource_stockpile_compare = { resource = energy value >= 100 }
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.traid_menu.0.response
+		response_text = hfe_pirate.101.traid_menu.0.response
 		add_resource = { energy = 100 }
 		add_resource = { minerals = -150 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = -100 }
 			add_resource = { minerals = 150 }
 		}
 		hidden_effect = {
-			#log = "[root.GetName] sell minerals to pirate [human_fallen_empires_pirate_country.GetName]"
+			#log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
 		}
 		ai_chance = {
 			factor = 100
@@ -1751,68 +1751,68 @@ country_event = {
 	}
 	# hire pirate admiral
 	option = {
-		name = human_fallen_empires_pirate.101.traid_menu.2
+		name = hfe_pirate.101.traid_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+			has_country_flag = hfe_pirate.101.traid_menu
 		}
 		allow = {
 			resource_stockpile_compare = { resource = energy value >= 1000 }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.traid_menu.2.fail
+				text = hfe_pirate.101.traid_menu.2.fail
 				or = {
-					human_fallen_empires_trigger_leaders_recrutment_enabled = no
+					hfe_trigger_leaders_recrutment_enabled = no
 					check_variable = {
-						which = human_fallen_empires_leaders_admiral_capacity
+						which = hfe_leaders_admiral_capacity
 						value > 0
 					}
 				}
-				event_target:human_fallen_empires_pirate_country = {
+				event_target:hfe_pirate_country = {
 					any_pool_leader = {
 						leader_class = admiral
 						not = {
-							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+							has_leader_flag = hfe_pirate_admiral_to_kill
 						}
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.traid_menu.2.response
+		response_text = hfe_pirate.101.traid_menu.2.response
 		add_resource = { energy = -1000 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 1000 }
-			custom_tooltip = human_fallen_empires_pirate.101.traid_menu.2.effect
+			custom_tooltip = hfe_pirate.101.traid_menu.2.effect
 			hidden_effect = {
 				random_pool_leader = {
 					limit = {
 						leader_class = admiral
 						not = {
-							has_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+							has_leader_flag = hfe_pirate_admiral_to_kill
 						}
 					}
 					root = {
 						clone_leader = {
 							target = prev
 							effect = {
-								save_event_target_as = human_fallen_empires_pirate_admiral_hired
+								save_event_target_as = hfe_pirate_admiral_hired
 							}
 						}
 						if = {
 							limit = {
-								human_fallen_empires_trigger_leaders_recrutment_enabled = yes
+								hfe_trigger_leaders_recrutment_enabled = yes
 							}
 							change_variable = {
-								which = human_fallen_empires_leaders_admiral_capacity
+								which = hfe_leaders_admiral_capacity
 								value = -1
 							}
 						}
 					}
-					set_leader_flag = human_fallen_empires_pirate_admiral_to_kill
+					set_leader_flag = hfe_pirate_admiral_to_kill
 					kill_leader = {
 						show_notification = no
 					}
 				}
-				#log = "pirate admiral hired by [root.GetName] from [human_fallen_empires_pirate_country.GetName]"
+				#log = "pirate admiral hired by [root.GetName] from [hfe_pirate_country.GetName]"
 			}
 		}
 		ai_chance = {
@@ -1842,18 +1842,18 @@ country_event = {
 	}
 	# buy slave
 	option = {
-		name = human_fallen_empires_pirate.101.traid_menu.1
+		name = hfe_pirate.101.traid_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.traid_menu
+			has_country_flag = hfe_pirate.101.traid_menu
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.slave_menu
-			event_target:human_fallen_empires_pirate_country = {
-				human_fallen_empires_effect_save_slave_target = yes
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.slave_menu
+			event_target:hfe_pirate_country = {
+				hfe_effect_save_slave_target = yes
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 		ai_chance = {
@@ -1885,72 +1885,72 @@ country_event = {
 			# }
 			modifier = {
 				factor = 0
-				event_target:human_fallen_empires_pirate_country = {
+				event_target:hfe_pirate_country = {
 					num_pops = 0
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.0
+		name = hfe_pirate.101.slave_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			event_target:human_fallen_empires_pirate_country = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			event_target:hfe_pirate_country = {
 				is_egalitarian = yes
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.0.response
+		response_text = hfe_pirate.101.slave_menu.0.response
 		ai_chance = {
 			factor = 0
 		}
 	}
 	# select slave menu
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.1
+		name = hfe_pirate.101.slave_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_0
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_0
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+						is_exact_same_species = event_target:hfe_slave_target_0
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.1.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.1.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_0
+						is_exact_same_species = event_target:hfe_slave_target_0
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 0"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -1972,69 +1972,69 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_0 = {
+				event_target:hfe_slave_target_0 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_0 = {
+				event_target:hfe_slave_target_0 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_0 = {
+				event_target:hfe_slave_target_0 = {
 					num_trait_points > 4
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.2
+		name = hfe_pirate.101.slave_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_1
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_1
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+						is_exact_same_species = event_target:hfe_slave_target_1
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.2.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.2.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_1
+						is_exact_same_species = event_target:hfe_slave_target_1
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 1"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -2056,69 +2056,69 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_1 = {
+				event_target:hfe_slave_target_1 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_1 = {
+				event_target:hfe_slave_target_1 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_1 = {
+				event_target:hfe_slave_target_1 = {
 					num_trait_points > 4
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.3
+		name = hfe_pirate.101.slave_menu.3
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_2
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_2
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+						is_exact_same_species = event_target:hfe_slave_target_2
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.3.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.3.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_2
+						is_exact_same_species = event_target:hfe_slave_target_2
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 2"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -2140,69 +2140,69 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_2 = {
+				event_target:hfe_slave_target_2 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_2 = {
+				event_target:hfe_slave_target_2 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_2 = {
+				event_target:hfe_slave_target_2 = {
 					num_trait_points > 4
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.4
+		name = hfe_pirate.101.slave_menu.4
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_3
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_3
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+						is_exact_same_species = event_target:hfe_slave_target_3
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.4.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.4.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_3
+						is_exact_same_species = event_target:hfe_slave_target_3
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 3"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -2224,69 +2224,69 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_3 = {
+				event_target:hfe_slave_target_3 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_3 = {
+				event_target:hfe_slave_target_3 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_3 = {
+				event_target:hfe_slave_target_3 = {
 					num_trait_points > 4
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.5
+		name = hfe_pirate.101.slave_menu.5
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_4
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+						is_exact_same_species = event_target:hfe_slave_target_4
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.5.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.5.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_4
+						is_exact_same_species = event_target:hfe_slave_target_4
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 4"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -2308,69 +2308,69 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_4 = {
+				event_target:hfe_slave_target_4 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_4 = {
+				event_target:hfe_slave_target_4 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_4 = {
+				event_target:hfe_slave_target_4 = {
 					num_trait_points > 4
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.slave_menu.6
+		name = hfe_pirate.101.slave_menu.6
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.slave_menu
-			exists = event_target:human_fallen_empires_slave_target_5
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_5
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_slave_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_space
+				text = hfe_pirate.101.slave_menu.fail_havent_space
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 				}
 			}
 			custom_tooltip = {
-				text = human_fallen_empires_pirate.101.slave_menu.fail_havent_slave
-				event_target:human_fallen_empires_pirate_country = {
+				text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
 					any_owned_pop = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_5
+						is_exact_same_species = event_target:hfe_slave_target_5
 					}
 				}
 			}
 		}
 		is_dialog_only = yes
-		response_text = human_fallen_empires_pirate.101.slave_menu.6.response
-		add_resource = { energy = @human_fallen_empires_pirate_slave_cost_minus }
-		add_resource = { minerals = @human_fallen_empires_pirate_slave_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { energy = @human_fallen_empires_pirate_slave_cost }
-			add_resource = { minerals = @human_fallen_empires_pirate_slave_cost }
+		response_text = hfe_pirate.101.slave_menu.6.response
+		add_resource = { energy = @hfe_pirate_slave_cost_minus }
+		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { energy = @hfe_pirate_slave_cost }
+			add_resource = { minerals = @hfe_pirate_slave_cost }
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
-						is_exact_same_species = event_target:human_fallen_empires_slave_target_5
+						is_exact_same_species = event_target:hfe_slave_target_5
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
 			}
 			log = "[this.GetName] buy slaves 5"
 		}
-		human_fallen_empires_effect_settle_pop = yes
-		human_fallen_empires_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_settle_pop = yes
+		hfe_effect_settle_pop_from_slavery_buff = yes
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -2392,19 +2392,19 @@ country_event = {
 			# pop
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_5 = {
+				event_target:hfe_slave_target_5 = {
 					num_trait_points > 2
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_5 = {
+				event_target:hfe_slave_target_5 = {
 					num_trait_points > 3
 				}
 			}
 			modifier = {
 				factor = 2
-				event_target:human_fallen_empires_slave_target_5 = {
+				event_target:hfe_slave_target_5 = {
 					num_trait_points > 4
 				}
 			}
@@ -2412,15 +2412,15 @@ country_event = {
 	}
 	# service menu
 	option = {
-		name = human_fallen_empires_pirate.101.service_menu
+		name = hfe_pirate.101.service_menu
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.service_menu
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.service_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 		ai_chance = {
@@ -2429,421 +2429,421 @@ country_event = {
 	}
 	# psi test menu
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu
+		name = hfe_pirate.101.psi_test_menu
 		trigger = {
 			always = no
-			has_country_flag = human_fallen_empires_pirate.101.service_menu
+			has_country_flag = hfe_pirate.101.service_menu
 			exists = ruler
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				is_spiritualist = no
 			}
 		}
 		add_resource = { energy = -50 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = 50 }
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.psi_test_menu
-			save_event_target_as = human_fallen_empires_blackjack_target_0
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.psi_test_menu
+			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# clubs
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.0
+		name = hfe_pirate.101.psi_test_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			has_country_flag = hfe_pirate.101.psi_test_menu
 			not = {
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+				has_country_flag = hfe_pirate.101.psi_test_end
 			}
 		}
-		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.0
+		set_country_flag = hfe_pirate.101.psi_test_menu.0
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			hfe_effect_pirate_psi_test_turn = yes
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# diamonds
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.1
+		name = hfe_pirate.101.psi_test_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			has_country_flag = hfe_pirate.101.psi_test_menu
 			not = {
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+				has_country_flag = hfe_pirate.101.psi_test_end
 			}
 		}
-		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.1
+		set_country_flag = hfe_pirate.101.psi_test_menu.1
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			hfe_effect_pirate_psi_test_turn = yes
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# hearts
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.2
+		name = hfe_pirate.101.psi_test_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			has_country_flag = hfe_pirate.101.psi_test_menu
 			not = {
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+				has_country_flag = hfe_pirate.101.psi_test_end
 			}
 		}
-		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.2
+		set_country_flag = hfe_pirate.101.psi_test_menu.2
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			hfe_effect_pirate_psi_test_turn = yes
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# spades
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.3
+		name = hfe_pirate.101.psi_test_menu.3
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_menu
+			has_country_flag = hfe_pirate.101.psi_test_menu
 			not = {
-				has_country_flag = human_fallen_empires_pirate.101.psi_test_end
+				has_country_flag = hfe_pirate.101.psi_test_end
 			}
 		}
-		set_country_flag = human_fallen_empires_pirate.101.psi_test_menu.3
+		set_country_flag = hfe_pirate.101.psi_test_menu.3
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_psi_test_turn = yes
+			hfe_effect_pirate_psi_test_turn = yes
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# end lose
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.4
+		name = hfe_pirate.101.psi_test_menu.4
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
+			has_country_flag = hfe_pirate.101.psi_test_end_lose
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end_lose
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_menu
-			human_fallen_empires_effect_cards_clean_all = yes
+			remove_country_flag = hfe_pirate.101.psi_test_end
+			remove_country_flag = hfe_pirate.101.psi_test_end_lose
+			remove_country_flag = hfe_pirate.101.psi_test_menu
+			hfe_effect_cards_clean_all = yes
 			set_variable = {
-				which = human_fallen_empires_pirate_psi_test_score
+				which = hfe_pirate_psi_test_score
 				value = 0
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# end win
 	option = {
-		name = human_fallen_empires_pirate.101.psi_test_menu.5
+		name = hfe_pirate.101.psi_test_menu.5
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
+			has_country_flag = hfe_pirate.101.psi_test_end_win
 		}
 		add_resource = { energy = 10000 }
-		event_target:human_fallen_empires_pirate_country = {
+		event_target:hfe_pirate_country = {
 			add_resource = { energy = -10000 }
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_end_win
-			remove_country_flag = human_fallen_empires_pirate.101.psi_test_menu
-			human_fallen_empires_effect_cards_clean_all = yes
+			remove_country_flag = hfe_pirate.101.psi_test_end
+			remove_country_flag = hfe_pirate.101.psi_test_end_win
+			remove_country_flag = hfe_pirate.101.psi_test_menu
+			hfe_effect_cards_clean_all = yes
 			set_variable = {
-				which = human_fallen_empires_pirate_psi_test_score
+				which = hfe_pirate_psi_test_score
 				value = 0
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# casino menu
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu
+		name = hfe_pirate.101.casino_menu
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.service_menu
+			has_country_flag = hfe_pirate.101.service_menu
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
-			save_event_target_as = human_fallen_empires_blackjack_target_0
-			save_event_target_as = human_fallen_empires_blackjack_target_enemy
-			event_target:human_fallen_empires_pirate_country = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.casino_menu
+			save_event_target_as = hfe_blackjack_target_0
+			save_event_target_as = hfe_blackjack_target_enemy
+			event_target:hfe_pirate_country = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# select bet
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.bet.0
+		name = hfe_pirate.101.casino_menu.bet.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_0 }
+			resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_0 }
 			custom_tooltip = {
-				text = human_fallen_empires_not_enough_energy
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_0 }
+				text = hfe_not_enough_energy
+				event_target:hfe_blackjack_target_1 = {
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_0 }
 				}
 			}
 		}
 		tooltip = {
-			add_resource = { energy = @human_fallen_empires_blackjack_bet_0_minus }
+			add_resource = { energy = @hfe_blackjack_bet_0_minus }
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_bet_0
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				set_country_flag = human_fallen_empires_blackjack_bet_0
+			set_country_flag = hfe_blackjack_bet_0
+			event_target:hfe_blackjack_target_1 = {
+				set_country_flag = hfe_blackjack_bet_0
 				country_event = {
-					id = human_fallen_empires_pirate.151
+					id = hfe_pirate.151
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.bet.1
+		name = hfe_pirate.101.casino_menu.bet.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_1 }
+			resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_1 }
 			custom_tooltip = {
-				text = human_fallen_empires_not_enough_energy
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_1 }
+				text = hfe_not_enough_energy
+				event_target:hfe_blackjack_target_1 = {
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_1 }
 				}
 			}
 		}
 		tooltip = {
-			add_resource = { energy = @human_fallen_empires_blackjack_bet_1_minus }
+			add_resource = { energy = @hfe_blackjack_bet_1_minus }
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_bet_1
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				set_country_flag = human_fallen_empires_blackjack_bet_1
+			set_country_flag = hfe_blackjack_bet_1
+			event_target:hfe_blackjack_target_1 = {
+				set_country_flag = hfe_blackjack_bet_1
 				country_event = {
-					id = human_fallen_empires_pirate.151
+					id = hfe_pirate.151
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.bet.2
+		name = hfe_pirate.101.casino_menu.bet.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_2 }
+			resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_2 }
 			custom_tooltip = {
-				text = human_fallen_empires_not_enough_energy
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_2 }
+				text = hfe_not_enough_energy
+				event_target:hfe_blackjack_target_1 = {
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_2 }
 				}
 			}
 		}
 		tooltip = {
-			add_resource = { energy = @human_fallen_empires_blackjack_bet_2_minus }
+			add_resource = { energy = @hfe_blackjack_bet_2_minus }
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_bet_2
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				set_country_flag = human_fallen_empires_blackjack_bet_2
+			set_country_flag = hfe_blackjack_bet_2
+			event_target:hfe_blackjack_target_1 = {
+				set_country_flag = hfe_blackjack_bet_2
 				country_event = {
-					id = human_fallen_empires_pirate.151
+					id = hfe_pirate.151
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.bet.3
+		name = hfe_pirate.101.casino_menu.bet.3
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_3 }
+			resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_3 }
 			custom_tooltip = {
-				text = human_fallen_empires_not_enough_energy
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_3 }
+				text = hfe_not_enough_energy
+				event_target:hfe_blackjack_target_1 = {
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_3 }
 				}
 			}
 		}
 		tooltip = {
-			add_resource = { energy = @human_fallen_empires_blackjack_bet_3_minus }
+			add_resource = { energy = @hfe_blackjack_bet_3_minus }
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_bet_3
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				set_country_flag = human_fallen_empires_blackjack_bet_3
+			set_country_flag = hfe_blackjack_bet_3
+			event_target:hfe_blackjack_target_1 = {
+				set_country_flag = hfe_blackjack_bet_3
 				country_event = {
-					id = human_fallen_empires_pirate.151
+					id = hfe_pirate.151
 				}
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.bet.4
+		name = hfe_pirate.101.casino_menu.bet.4
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_4 }
+			resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_4 }
 			custom_tooltip = {
-				text = human_fallen_empires_not_enough_energy
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_4 }
+				text = hfe_not_enough_energy
+				event_target:hfe_blackjack_target_1 = {
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_4 }
 				}
 			}
 		}
 		tooltip = {
-			add_resource = { energy = @human_fallen_empires_blackjack_bet_4_minus }
+			add_resource = { energy = @hfe_blackjack_bet_4_minus }
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_bet_4
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				set_country_flag = human_fallen_empires_blackjack_bet_4
+			set_country_flag = hfe_blackjack_bet_4
+			event_target:hfe_blackjack_target_1 = {
+				set_country_flag = hfe_blackjack_bet_4
 				country_event = {
-					id = human_fallen_empires_pirate.151
+					id = hfe_pirate.151
 				}
 			}
 		}
 	}
 	# for mp menu
 	option = {
-		name = human_fallen_empires_pirate.101.casino_menu.challenge
+		name = hfe_pirate.101.casino_menu.challenge
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu
+			has_country_flag = hfe_pirate.101.casino_menu
 			any_relation = {
 				is_ai = no
-				resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_0 }
+				resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_0 }
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
+			remove_country_flag = hfe_pirate.101.casino_menu
+			set_country_flag = hfe_pirate.101.casino_menu.challenge
 			every_relation = {
 				limit = {
 					is_ai = no
-					resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_blackjack_bet_0 }
-					human_fallen_empires_trigger_pirate_diplomacy_any_menu = no
+					resource_stockpile_compare = { resource = energy value >= @hfe_blackjack_bet_0 }
+					hfe_trigger_pirate_diplomacy_any_menu = no
 				}
-				human_fallen_empires_effect_save_event_target = yes
+				hfe_effect_save_event_target = yes
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	# select target menu
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.0
+		name = hfe_pirate.101.raid_menu.0
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_0
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_0
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_0 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_0 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.1
+		name = hfe_pirate.101.raid_menu.1
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_1
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_1
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_1 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_1 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.2
+		name = hfe_pirate.101.raid_menu.2
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_2
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_2
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_2 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_2 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.3
+		name = hfe_pirate.101.raid_menu.3
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_3
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_3
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_3 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_3 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.4
+		name = hfe_pirate.101.raid_menu.4
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_4
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_4
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_4 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_4 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.101.raid_menu.5
+		name = hfe_pirate.101.raid_menu.5
 		trigger = {
-			has_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			exists = event_target:human_fallen_empires_event_target_5
+			has_country_flag = hfe_pirate.101.casino_menu.challenge
+			exists = event_target:hfe_event_target_5
 		}
 		hidden_effect = {
-			event_target:human_fallen_empires_event_target_5 = {
-				save_event_target_as = human_fallen_empires_blackjack_target_1
+			event_target:hfe_event_target_5 = {
+				save_event_target_as = hfe_blackjack_target_1
 			}
-			remove_country_flag = human_fallen_empires_pirate.101.casino_menu.challenge
-			set_country_flag = human_fallen_empires_pirate.101.casino_menu
+			remove_country_flag = hfe_pirate.101.casino_menu.challenge
+			set_country_flag = hfe_pirate.101.casino_menu
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 	}
@@ -2851,12 +2851,12 @@ country_event = {
 	option = {
 		name = modmenu_return
 		trigger = {
-			human_fallen_empires_trigger_pirate_diplomacy_any_menu = yes
+			hfe_trigger_pirate_diplomacy_any_menu = yes
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
+			hfe_effect_pirate_diplomacy_remove_flags = yes
 			country_event = {
-				id = human_fallen_empires_pirate.101
+				id = hfe_pirate.101
 			}
 		}
 		ai_chance = {
@@ -2865,11 +2865,11 @@ country_event = {
 	}
 	# exit
 	option = {
-		name = human_fallen_empires_end_transmission
+		name = hfe_end_transmission
 		default_hide_option = yes
 		hidden_effect = {
-			human_fallen_empires_effect_pirate_diplomacy_remove_flags = yes
-			remove_country_flag = human_fallen_empires_pirate.101_block
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			remove_country_flag = hfe_pirate.101_block
 			#log = "exiting pirate diplo [this.GetName]"
 		}
 		ai_chance = {
@@ -2881,44 +2881,44 @@ country_event = {
 # blackjack event 150 - 200
 # main blackjack event
 country_event = {
-	id = human_fallen_empires_pirate.150
+	id = hfe_pirate.150
 	title = TRANSMISSION
 	desc = {
 		trigger = {
 			success_text = {
-				text = human_fallen_empires_blackjack_win.defined_text
-				has_country_flag = human_fallen_empires_blackjack_end_win
+				text = hfe_blackjack_win.defined_text
+				has_country_flag = hfe_blackjack_end_win
 			}
 			success_text = {
-				text = human_fallen_empires_blackjack_stay.defined_text
-				has_country_flag = human_fallen_empires_blackjack_end_stay
+				text = hfe_blackjack_stay.defined_text
+				has_country_flag = hfe_blackjack_end_stay
 			}
 			success_text = {
-				text = human_fallen_empires_blackjack_lose.defined_text
-				has_country_flag = human_fallen_empires_blackjack_end
+				text = hfe_blackjack_lose.defined_text
+				has_country_flag = hfe_blackjack_end
 				nor = {
-					has_country_flag = human_fallen_empires_blackjack_end_win
-					has_country_flag = human_fallen_empires_blackjack_end_stay
+					has_country_flag = hfe_blackjack_end_win
+					has_country_flag = hfe_blackjack_end_stay
 				}
 			}
-			text = human_fallen_empires_blackjack_show_my_stats
-			text = human_fallen_empires_blackjack_show_my_stats_cards
-			text = human_fallen_empires_newline_3
+			text = hfe_blackjack_show_my_stats
+			text = hfe_blackjack_show_my_stats_cards
+			text = hfe_newline_3
 			fail_text = {
-				text = human_fallen_empires_blackjack_show_enemy_stats_hide
-				has_country_flag = human_fallen_empires_blackjack_end
+				text = hfe_blackjack_show_enemy_stats_hide
+				has_country_flag = hfe_blackjack_end
 			}
 			fail_text = {
-				text = human_fallen_empires_blackjack_show_enemy_stats_hide_cards
-				has_country_flag = human_fallen_empires_blackjack_end
+				text = hfe_blackjack_show_enemy_stats_hide_cards
+				has_country_flag = hfe_blackjack_end
 			}
 			success_text = {
-				text = human_fallen_empires_blackjack_show_enemy_stats
-				has_country_flag = human_fallen_empires_blackjack_end
+				text = hfe_blackjack_show_enemy_stats
+				has_country_flag = hfe_blackjack_end
 			}
 			success_text = {
-				text = human_fallen_empires_blackjack_show_enemy_stats_cards
-				has_country_flag = human_fallen_empires_blackjack_end
+				text = hfe_blackjack_show_enemy_stats_cards
+				has_country_flag = hfe_blackjack_end
 			}
 		}
 	}
@@ -2927,37 +2927,37 @@ country_event = {
 	force_open = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_blackjack_target_enemy
-		planet_background = event_target:human_fallen_empires_blackjack_target_enemy
-		graphical_culture = event_target:human_fallen_empires_blackjack_target_enemy
-		city_level = event_target:human_fallen_empires_blackjack_target_enemy
-		room = event_target:human_fallen_empires_blackjack_target_enemy.ruler
+		portrait = event_target:hfe_blackjack_target_enemy
+		planet_background = event_target:hfe_blackjack_target_enemy
+		graphical_culture = event_target:hfe_blackjack_target_enemy
+		city_level = event_target:hfe_blackjack_target_enemy
+		room = event_target:hfe_blackjack_target_enemy.ruler
 	}
 
 	immediate = {
 		if = {
 			limit = {
-				event_target:human_fallen_empires_blackjack_target_0 = {
-					has_country_flag = human_fallen_empires_blackjack_stand
+				event_target:hfe_blackjack_target_0 = {
+					has_country_flag = hfe_blackjack_stand
 				}
-				event_target:human_fallen_empires_blackjack_target_1 = {
-					has_country_flag = human_fallen_empires_blackjack_stand
+				event_target:hfe_blackjack_target_1 = {
+					has_country_flag = hfe_blackjack_stand
 				}
 			}
-			human_fallen_empires_effect_blackjack_calc_winner = yes
+			hfe_effect_blackjack_calc_winner = yes
 		}
 	}
 
 	option = {
-		name = human_fallen_empires_blackjack_hit.defined_text
+		name = hfe_blackjack_hit.defined_text
 		trigger = {
 			not = {
-				has_country_flag = human_fallen_empires_blackjack_end
+				has_country_flag = hfe_blackjack_end
 			}
 		}
 		allow = {
 			custom_tooltip = {
-				text = human_fallen_empires_blackjack_have_21
+				text = hfe_blackjack_have_21
 				check_variable = {
 					which = blackjack_calc
 					value < 21
@@ -2975,17 +2975,17 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			human_fallen_empires_effect_cards_get_card = yes
-			human_fallen_empires_effect_blackjack_calc_cards = yes
-			human_fallen_empires_effect_cards_take_cards_in_place = yes
-			human_fallen_empires_effect_blackjack_next_turn = yes
+			hfe_effect_cards_get_card = yes
+			hfe_effect_blackjack_calc_cards = yes
+			hfe_effect_cards_take_cards_in_place = yes
+			hfe_effect_blackjack_next_turn = yes
 		}
 	}
 	option = {
-		name = human_fallen_empires_blackjack_stand.defined_text
+		name = hfe_blackjack_stand.defined_text
 		trigger = {
 			not = {
-				has_country_flag = human_fallen_empires_blackjack_end
+				has_country_flag = hfe_blackjack_end
 			}
 		}
 		ai_chance = {
@@ -2999,62 +2999,62 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_stand
-			human_fallen_empires_effect_blackjack_next_turn = yes
+			set_country_flag = hfe_blackjack_stand
+			hfe_effect_blackjack_next_turn = yes
 		}
 	}
 	option = {
-		name = human_fallen_empires_blackjack_end_game
+		name = hfe_blackjack_end_game
 		trigger = {
-			has_country_flag = human_fallen_empires_blackjack_end
+			has_country_flag = hfe_blackjack_end
 		}
 		ai_chance = {
 			factor = 100
 		}
-		human_fallen_empires_effect_blackjack_calc_bet = yes
+		hfe_effect_blackjack_calc_bet = yes
 		hidden_effect = {
-			set_country_flag = human_fallen_empires_blackjack_end_shown
-			human_fallen_empires_effect_blackjack_next_turn = yes
+			set_country_flag = hfe_blackjack_end_shown
+			hfe_effect_blackjack_next_turn = yes
 		}
 	}
 }
 
 # blackjack challenge
 country_event = {
-	id = human_fallen_empires_pirate.151
+	id = hfe_pirate.151
 	title = TRANSMISSION
-	desc = human_fallen_empires_pirate.151.desc
+	desc = hfe_pirate.151.desc
 	diplomatic = yes
 	is_triggered_only = yes
 	force_open = yes
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_blackjack_target_0
-		planet_background = event_target:human_fallen_empires_blackjack_target_0
-		graphical_culture = event_target:human_fallen_empires_blackjack_target_0
-		city_level = event_target:human_fallen_empires_blackjack_target_0
-		room = event_target:human_fallen_empires_blackjack_target_0.ruler
+		portrait = event_target:hfe_blackjack_target_0
+		planet_background = event_target:hfe_blackjack_target_0
+		graphical_culture = event_target:hfe_blackjack_target_0
+		city_level = event_target:hfe_blackjack_target_0
+		room = event_target:hfe_blackjack_target_0.ruler
 	}
 
 	option = {
-		name = human_fallen_empires_blackjack_challenge_yes.defined_text
-		human_fallen_empires_effect_blackjack_remove_bet = yes
+		name = hfe_blackjack_challenge_yes.defined_text
+		hfe_effect_blackjack_remove_bet = yes
 		hidden_effect = {
-			human_fallen_empires_effect_blackjack_turn_0 = yes
+			hfe_effect_blackjack_turn_0 = yes
 		}
 		ai_chance = {
 			factor = 100
 		}
 	}
 	option = {
-		name = human_fallen_empires_blackjack_challenge_no.defined_text
+		name = hfe_blackjack_challenge_no.defined_text
 		default_hide_option = yes
 		hidden_effect = {
-			event_target:human_fallen_empires_blackjack_target_0 = {
-				human_fallen_empires_effect_blackjack_clean_all = yes
+			event_target:hfe_blackjack_target_0 = {
+				hfe_effect_blackjack_clean_all = yes
 			}
-			event_target:human_fallen_empires_blackjack_target_1 = {
-				human_fallen_empires_effect_blackjack_clean_all = yes
+			event_target:hfe_blackjack_target_1 = {
+				hfe_effect_blackjack_clean_all = yes
 			}
 		}
 		ai_chance = {
@@ -3066,33 +3066,33 @@ country_event = {
 # other pirate related diplo events 200 - 250
 # offer protection and extend protection later
 country_event = {
-	id = human_fallen_empires_pirate.200
+	id = hfe_pirate.200
 	title = TRANSMISSION
 	desc = {
 		trigger = {
 			success_text = {
-				text = human_fallen_empires_pirate.200.desc.0
-				is_hostile = event_target:human_fallen_empires_pirate_country
+				text = hfe_pirate.200.desc.0
+				is_hostile = event_target:hfe_pirate_country
 			}
 			fail_text = {
-				text = human_fallen_empires_pirate.200.desc.1
-				is_hostile = event_target:human_fallen_empires_pirate_country
+				text = hfe_pirate.200.desc.1
+				is_hostile = event_target:hfe_pirate_country
 			}
 		}
 	}
 	diplomatic = yes
 	is_triggered_only = yes
 	force_open = yes
- 	location = event_target:human_fallen_empires_pirate_country.capital_scope
+ 	location = event_target:hfe_pirate_country.capital_scope
 
 	picture_event_data = {
-		portrait = event_target:human_fallen_empires_pirate_country
-		room = event_target:human_fallen_empires_pirate_country.ruler
+		portrait = event_target:hfe_pirate_country
+		room = event_target:hfe_pirate_country.ruler
 	}
 
 	trigger = {
-		#exists = event_target:human_fallen_empires_pirate_country
-		exists = event_target:human_fallen_empires_pirate_country.ruler
+		#exists = event_target:hfe_pirate_country
+		exists = event_target:hfe_pirate_country.ruler
 	}
 
 	immediate = {
@@ -3100,38 +3100,38 @@ country_event = {
 	}
 
 	option = {
-		name = human_fallen_empires_pirate.200.0
+		name = hfe_pirate.200.0
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @human_fallen_empires_pirate_protect_cost }
-			resource_stockpile_compare = { resource = minerals value >= @human_fallen_empires_pirate_protect_cost }
+			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_protect_cost }
+			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_protect_cost }
 		}
-		add_resource = { minerals = @human_fallen_empires_pirate_protect_cost_minus }
-		add_resource = { energy = @human_fallen_empires_pirate_protect_cost_minus }
-		event_target:human_fallen_empires_pirate_country = {
-			add_resource = { minerals = @human_fallen_empires_pirate_protect_cost }
-			add_resource = { energy = @human_fallen_empires_pirate_protect_cost }
+		add_resource = { minerals = @hfe_pirate_protect_cost_minus }
+		add_resource = { energy = @hfe_pirate_protect_cost_minus }
+		event_target:hfe_pirate_country = {
+			add_resource = { minerals = @hfe_pirate_protect_cost }
+			add_resource = { energy = @hfe_pirate_protect_cost }
 		}
 		hidden_effect = {
 			log = "[root.GetName] agree for protection pay"
 			if = {
 				limit = {
-					is_hostile = event_target:human_fallen_empires_pirate_country
+					is_hostile = event_target:hfe_pirate_country
 				}
 				set_faction_hostility = {
-					target = event_target:human_fallen_empires_pirate_country
+					target = event_target:hfe_pirate_country
 					set_hostile = no
 					set_neutral = yes
 					set_friendly = no
 				}
 			}
 			country_event = {
-				id = human_fallen_empires_pirate.200
-				days = @human_fallen_empires_pirate_protect_days
+				id = hfe_pirate.200
+				days = @hfe_pirate_protect_days
 			}
-			event_target:human_fallen_empires_pirate_country = {
+			event_target:hfe_pirate_country = {
 				add_opinion_modifier = {
 					who = root
-					modifier = human_fallen_empires_opinion_pirate_pay_for_protect
+					modifier = hfe_opinion_pirate_pay_for_protect
 				}
 			}
 		}
@@ -3153,7 +3153,7 @@ country_event = {
 			modifier = {
 				factor = 0.5
 				relative_power = {
-					who = event_target:human_fallen_empires_pirate_country
+					who = event_target:hfe_pirate_country
 					category = fleet
 					value >= overwhelming
 				}
@@ -3161,7 +3161,7 @@ country_event = {
 			modifier = {
 				factor = 0.5
 				relative_power = {
-					who = event_target:human_fallen_empires_pirate_country
+					who = event_target:hfe_pirate_country
 					category = fleet
 					value >= superior
 				}
@@ -3169,7 +3169,7 @@ country_event = {
 			modifier = {
 				factor = 2
 				relative_power = {
-					who = event_target:human_fallen_empires_pirate_country
+					who = event_target:hfe_pirate_country
 					category = fleet
 					value <= equivalent
 				}
@@ -3177,7 +3177,7 @@ country_event = {
 			modifier = {
 				factor = 2
 				relative_power = {
-					who = event_target:human_fallen_empires_pirate_country
+					who = event_target:hfe_pirate_country
 					category = fleet
 					value <= inferior
 				}
@@ -3185,7 +3185,7 @@ country_event = {
 			modifier = {
 				factor = 2
 				relative_power = {
-					who = event_target:human_fallen_empires_pirate_country
+					who = event_target:hfe_pirate_country
 					category = fleet
 					value <= pathetic
 				}
@@ -3214,17 +3214,17 @@ country_event = {
 		}
 	}
 	option = {
-		name = human_fallen_empires_pirate.200.1
+		name = hfe_pirate.200.1
 		default_hide_option = yes
 		log = "[root.GetName] not agree for protection pay"
 		if = {
 			limit = {
 				not = {
-					is_hostile = event_target:human_fallen_empires_pirate_country
+					is_hostile = event_target:hfe_pirate_country
 				}
 			}
 			set_faction_hostility = {
-				target = event_target:human_fallen_empires_pirate_country
+				target = event_target:hfe_pirate_country
 				set_hostile = yes
 				set_neutral = no
 				set_friendly = no
@@ -3237,19 +3237,19 @@ country_event = {
 
 # trigger gateway
 fleet_event = {
-	id = human_fallen_empires_pirate.300
+	id = hfe_pirate.300
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		exists = this
 		nor = {
-			has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
-			has_fleet_flag = human_fallen_empires_pirate_fleet_rest
+			has_fleet_flag = hfe_pirate_fleet_move_to_target
+			has_fleet_flag = hfe_pirate_fleet_rest
 		}
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_pirate
+			is_country_type = hfe_pirate
 			is_ai = yes
 		}
 		is_ship_class = shipclass_military
@@ -3263,17 +3263,17 @@ fleet_event = {
 
 	immediate = {
 		#log = "pirate fleet logic for [this.GetName], owner [owner.GetName]"
-		set_fleet_bombardment_stance = human_fallen_empires_stance_pirate_raid
-		human_fallen_empires_effect_pirate_path_fleet_reset = yes
+		set_fleet_bombardment_stance = hfe_stance_pirate_raid
+		hfe_effect_pirate_path_fleet_reset = yes
 		fleet_event = {
-			id = human_fallen_empires_pirate.301
+			id = hfe_pirate.301
 		}
 	}
 }
 
 # select target
 fleet_event = {
-	id = human_fallen_empires_pirate.301
+	id = hfe_pirate.301
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -3287,55 +3287,55 @@ fleet_event = {
 		if = {
 			limit = {
 				solar_system = {
-					human_fallen_empires_trigger_pirate_fleet_power_in_system_check = no
+					hfe_trigger_pirate_fleet_power_in_system_check = no
 				}
 			}
 			if = {
 				limit = {
-					has_fleet_flag = human_fallen_empires_pirate_log_fleet
+					has_fleet_flag = hfe_pirate_log_fleet
 				}
 				log = "pirate fleet [this.GetName] in [solar_system.GetName] in dangerous, try to go home"
 			}
-			human_fallen_empires_effect_pirate_path_target_home = yes
+			hfe_effect_pirate_path_target_home = yes
 		}
 		# plunder current system if have sonething to plunder
 		else = {
-			human_fallen_empires_effect_pirate_path_target_planet = yes
+			hfe_effect_pirate_path_target_planet = yes
 		}
 		# go next system
-		human_fallen_empires_effect_pirate_path_go_to_next = yes
+		hfe_effect_pirate_path_go_to_next = yes
 	}
 }
 
 # on_entering_system_fleet
 fleet_event = {
-	id = human_fallen_empires_pirate.302
+	id = hfe_pirate.302
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+		has_fleet_flag = hfe_pirate_fleet_move_to_target
 	}
 
 	immediate = {
 		#log = "[this.GetName] in [solar_system.GetName] looking for targets"
-		remove_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+		remove_fleet_flag = hfe_pirate_fleet_move_to_target
 		if = {
 			limit = {
-				has_fleet_flag = human_fallen_empires_pirate_fleet_target_system@solar_system
+				has_fleet_flag = hfe_pirate_fleet_target_system@solar_system
 			}
-			remove_fleet_flag = human_fallen_empires_pirate_fleet_target_system@solar_system
-			remove_fleet_flag = human_fallen_empires_pirate_fleet_has_target
+			remove_fleet_flag = hfe_pirate_fleet_target_system@solar_system
+			remove_fleet_flag = hfe_pirate_fleet_has_target
 		}
 		fleet_event = {
-			id = human_fallen_empires_pirate.301
+			id = hfe_pirate.301
 		}
 	}
 }
 
 # on_entering_system_fleet
 fleet_event = {
-	id = human_fallen_empires_pirate.303
+	id = hfe_pirate.303
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -3349,17 +3349,17 @@ fleet_event = {
 		solar_system = {
 			every_fleet_in_system = {
 				limit = {
-					has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
-					human_fallen_empires_trigger_pirate_this_fleet_more_power_then_root = no
+					has_fleet_flag = hfe_pirate_fleet_move_to_target
+					hfe_trigger_pirate_this_fleet_more_power_then_root = no
 				}
 				if = {
 					limit = {
-						has_fleet_flag = human_fallen_empires_pirate_log_fleet
+						has_fleet_flag = hfe_pirate_log_fleet
 					}
 					log = "[this.GetName] in [solar_system.GetName] recalcing due to new fleet in system"
 				}
 				fleet_event = {
-					id = human_fallen_empires_pirate.302
+					id = hfe_pirate.302
 				}
 			}
 		}
@@ -3368,34 +3368,34 @@ fleet_event = {
 
 # same as 303 but fleet scope
 fleet_event = {
-	id = human_fallen_empires_pirate.304
+	id = hfe_pirate.304
 	hide_window = yes
 	is_triggered_only = yes
 
 	immediate = {
 		fleet_event = {
-			id = human_fallen_empires_pirate.302
+			id = hfe_pirate.302
 		}
 	}
 }
 
 # on_space_battle_won
 country_event = {
-	id = human_fallen_empires_pirate.305
+	id = hfe_pirate.305
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		exists = fromfrom
 		fromfrom = {
-			has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+			has_fleet_flag = hfe_pirate_fleet_move_to_target
 		}
 	}
 
 	immediate = {
 		fromfrom = {
 			fleet_event = {
-				id = human_fallen_empires_pirate.302
+				id = hfe_pirate.302
 				days = 1
 			}
 		}
@@ -3404,21 +3404,21 @@ country_event = {
 
 # clean fleet actions after emercy ftl
 fleet_event = {
-	id = human_fallen_empires_pirate.306
+	id = hfe_pirate.306
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_fleet_flag = human_fallen_empires_pirate_fleet_move_to_target
+		has_fleet_flag = hfe_pirate_fleet_move_to_target
 	}
 
 	immediate = {
 		if = {
 			limit = {
-				has_fleet_flag = human_fallen_empires_pirate_log_fleet
+				has_fleet_flag = hfe_pirate_log_fleet
 			}
 			log = "pirate fleet [this.GetName] in [solar_system.GetName] emercy ftl"
 		}
-		human_fallen_empires_effect_pirate_path_fleet_reset = yes
+		hfe_effect_pirate_path_fleet_reset = yes
 	}
 }

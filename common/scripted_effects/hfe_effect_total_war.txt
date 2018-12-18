@@ -1,25 +1,25 @@
 #
 
 # total war cb, need 2 event targets
-human_fallen_empires_effect_total_war_declare = {
+hfe_effect_total_war_declare = {
 	if = {
 		limit = {
 			not = {
-				event_target:human_fallen_empires_total_war_attaker = {
-					is_at_war_with = event_target:human_fallen_empires_total_war_defender
+				event_target:hfe_total_war_attaker = {
+					is_at_war_with = event_target:hfe_total_war_defender
 				}
 			}
 		}
-		event_target:human_fallen_empires_total_war_attaker = {
+		event_target:hfe_total_war_attaker = {
 			declare_war = {
-				target = event_target:human_fallen_empires_total_war_defender
-				attacker_war_goal = human_fallen_empires_wg_total_war
+				target = event_target:hfe_total_war_defender
+				attacker_war_goal = hfe_wg_total_war
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_create_vassal = {
+hfe_effect_create_vassal = {
 	every_owned_planet = {
 		add_threat = {
 			who = root
@@ -32,64 +32,64 @@ human_fallen_empires_effect_create_vassal = {
 		}
 		random_country = {
 			limit = {
-				has_country_flag = human_fallen_empires_total_war_new_country
+				has_country_flag = hfe_total_war_new_country
 				num_owned_planets < 4
 			}
-			save_global_event_target_as = human_fallen_empires_total_war_new_country
+			save_global_event_target_as = hfe_total_war_new_country
 		}
 		if = {
 			limit = {
 				not = {
-					exists = event_target:human_fallen_empires_total_war_new_country
+					exists = event_target:hfe_total_war_new_country
 				}
 			}
 			create_country = {
 				released_by_country = root
-				released_from_country = event_target:human_fallen_empires_total_war_loser
-				species = event_target:human_fallen_empires_total_war_loser
+				released_from_country = event_target:hfe_total_war_loser
+				species = event_target:hfe_total_war_loser
 				ethos = root
 				type = default
 				day_zero_contact = no
 				ignore_initial_colony_error = yes
 				effect = {
-					human_fallen_empires_effect_gov_fix = yes
-					save_global_event_target_as = human_fallen_empires_total_war_new_country
+					hfe_effect_gov_fix = yes
+					save_global_event_target_as = hfe_total_war_new_country
 					set_timed_country_flag = {
-						flag = human_fallen_empires_total_war_new_country
+						flag = hfe_total_war_new_country
 						days = 3
 					}
 					#establish_communications_no_message = root
 					root = {
-						human_fallen_empires_effect_this_make_overlord_of_prev = yes
+						hfe_effect_this_make_overlord_of_prev = yes
 					}
 				}
 			}
 		}
 		random_owned_planet = {
-			set_owner = event_target:human_fallen_empires_total_war_new_country
+			set_owner = event_target:hfe_total_war_new_country
 			solar_system = {
 				every_system_planet = {
 					limit = {
 						exists = owner
 						owner = {
-							is_country = event_target:human_fallen_empires_total_war_loser
+							is_country = event_target:hfe_total_war_loser
 						}
 					}
-					set_owner = event_target:human_fallen_empires_total_war_new_country
+					set_owner = event_target:hfe_total_war_new_country
 				}
 				if = {
 					limit = {
 						exists = starbase
 					}
 					starbase = {
-						set_owner = event_target:human_fallen_empires_total_war_new_country
+						set_owner = event_target:hfe_total_war_new_country
 					}
 				}
 			}
 			while = {
 				count = 3
 				limit = {
-					event_target:human_fallen_empires_total_war_new_country = {
+					event_target:hfe_total_war_new_country = {
 						num_owned_planets < 4
 					}
 				}
@@ -98,7 +98,7 @@ human_fallen_empires_effect_create_vassal = {
 						any_planet = {
 							exists = owner
 							owner = {
-								is_country = event_target:human_fallen_empires_total_war_loser
+								is_country = event_target:hfe_total_war_loser
 							}
 						}
 					}
@@ -106,23 +106,23 @@ human_fallen_empires_effect_create_vassal = {
 						limit = {
 							exists = owner
 							owner = {
-								is_country = event_target:human_fallen_empires_total_war_loser
+								is_country = event_target:hfe_total_war_loser
 							}
 						}
-						set_owner = event_target:human_fallen_empires_total_war_new_country
+						set_owner = event_target:hfe_total_war_new_country
 					}
 					if = {
 						limit = {
 							exists = starbase
 						}
 						starbase = {
-							set_owner = event_target:human_fallen_empires_total_war_new_country
+							set_owner = event_target:hfe_total_war_new_country
 						}
 					}
 				}
 			}
 		}
-		clear_global_event_target = human_fallen_empires_total_war_new_country
+		clear_global_event_target = hfe_total_war_new_country
 	}
 	every_owned_starbase = {
 		delete_fleet = fleet

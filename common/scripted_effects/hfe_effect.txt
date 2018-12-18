@@ -1,20 +1,20 @@
 #
 
 # for country/planet
-human_fallen_empires_effect_refuge_10 = {
+hfe_effect_refuge_10 = {
 	every_owned_pop = {
 		random_list = {
 			90 = {
 			}
 			10 = {
-				human_fallen_empires_effect_refuge_or_die = yes
+				hfe_effect_refuge_or_die = yes
 			}
 		}
 	}
 }
 
 # for pop
-human_fallen_empires_effect_refuge_or_die = {
+hfe_effect_refuge_or_die = {
 	#log = "pop refuge effect"
 	if = {
 		limit = {
@@ -27,23 +27,23 @@ human_fallen_empires_effect_refuge_or_die = {
 			owner = {
 				any_relation = {
 					num_pops > 0
-					human_fallen_empires_trigger_is_awake = yes
+					hfe_trigger_is_awake = yes
 					any_owned_planet = {
-						human_fallen_empires_trigger_planet_valid_for_settle = yes
+						hfe_trigger_planet_valid_for_settle = yes
 					}
 				}
 			}
 		}
-		save_event_target_as = human_fallen_empires_refuge_pop_target
+		save_event_target_as = hfe_refuge_pop_target
 		owner = {
 			random_relation = {
 				limit = {
 					num_pops > 0
-					human_fallen_empires_trigger_is_awake = yes
+					hfe_trigger_is_awake = yes
 					any_owned_planet = {
-						human_fallen_empires_trigger_planet_valid_for_settle = yes
+						hfe_trigger_planet_valid_for_settle = yes
 						habitability = {
-							who = event_target:human_fallen_empires_refuge_pop_target
+							who = event_target:hfe_refuge_pop_target
 							value >= 0.2
 						}
 					}
@@ -53,7 +53,7 @@ human_fallen_empires_effect_refuge_or_die = {
 					modifier = {
 						mult = 0
 						has_policy_flag = refugees_not_allowed
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							not = {
 								is_same_species = prev
 							}
@@ -62,7 +62,7 @@ human_fallen_empires_effect_refuge_or_die = {
 					modifier = {
 						mult = 0
 						has_policy_flag = refugees_only_citizens
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							nor = {
 								is_same_species = prev
 								has_citizenship_type = {
@@ -82,11 +82,11 @@ human_fallen_empires_effect_refuge_or_die = {
 					}
 					modifier = {
 						mult = 100
-						has_country_flag = human_fallen_empires_refuge_country_prior@prev
+						has_country_flag = hfe_refuge_country_prior@prev
 					}
 					modifier = {
 						mult = 8
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							or = {
 								has_citizenship_type = {
 									type = citizenship_full
@@ -105,7 +105,7 @@ human_fallen_empires_effect_refuge_or_die = {
 					}
 					modifier = {
 						mult = 2
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							or = {
 								has_citizenship_type = {
 									type = citizenship_limited
@@ -125,9 +125,9 @@ human_fallen_empires_effect_refuge_or_die = {
 					modifier = {
 						mult = 2
 						any_owned_planet = {
-							human_fallen_empires_trigger_planet_valid_for_settle = yes
+							hfe_trigger_planet_valid_for_settle = yes
 							habitability = {
-								who = event_target:human_fallen_empires_refuge_pop_target
+								who = event_target:hfe_refuge_pop_target
 								value >= 0.6
 							}
 						}
@@ -135,16 +135,16 @@ human_fallen_empires_effect_refuge_or_die = {
 					modifier = {
 						mult = 2
 						any_owned_planet = {
-							human_fallen_empires_trigger_planet_valid_for_settle = yes
+							hfe_trigger_planet_valid_for_settle = yes
 							habitability = {
-								who = event_target:human_fallen_empires_refuge_pop_target
+								who = event_target:hfe_refuge_pop_target
 								value >= 0.4
 							}
 						}
 					}
 					modifier = {
 						mult = 0.5
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							has_citizenship_type = {
 								type = citizenship_assimilation
 								country = prev
@@ -153,7 +153,7 @@ human_fallen_empires_effect_refuge_or_die = {
 					}
 					modifier = {
 						mult = 0.25
-						event_target:human_fallen_empires_refuge_pop_target = {
+						event_target:hfe_refuge_pop_target = {
 							has_citizenship_type = {
 								type = citizenship_slavery
 								country = prev
@@ -161,15 +161,15 @@ human_fallen_empires_effect_refuge_or_die = {
 						}
 					}
 				}
-				event_target:human_fallen_empires_refuge_pop_target = {
+				event_target:hfe_refuge_pop_target = {
 					remove_modifier = pop_recently_conquered
 					add_modifier = {
 						modifier = recent_refugee
 						days = 3600
 					}
-					save_event_target_as = human_fallen_empires_settle_pop_target
+					save_event_target_as = hfe_settle_pop_target
 				}
-				human_fallen_empires_effect_settle_pop = yes
+				hfe_effect_settle_pop = yes
 			}
 		}
 	}
@@ -179,31 +179,31 @@ human_fallen_empires_effect_refuge_or_die = {
 	}
 }
 
-# for country need human_fallen_empires_settle_pop_target
-human_fallen_empires_effect_settle_pop = {
+# for country need hfe_settle_pop_target
+hfe_effect_settle_pop = {
 	if = {
 		limit = {
 			not = {
 				any_owned_planet = {
-					human_fallen_empires_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle = yes
 					# habitability = {
-						# who = event_target:human_fallen_empires_settle_pop_target
+						# who = event_target:hfe_settle_pop_target
 						# value >= 0.2
 					# }
 				}
 			}
 		}
-		event_target:human_fallen_empires_settle_pop_target = {
+		event_target:hfe_settle_pop_target = {
 			log = "looping in settle pop"
-			human_fallen_empires_effect_refuge_or_die = yes
+			hfe_effect_refuge_or_die = yes
 		}
 	}
 	else = {
 		random_owned_planet = {
 			limit = {
-				human_fallen_empires_trigger_planet_valid_for_settle = yes
+				hfe_trigger_planet_valid_for_settle = yes
 				# habitability = {
-					# who = event_target:human_fallen_empires_settle_pop_target
+					# who = event_target:hfe_settle_pop_target
 					# value > 0.2
 				# }
 			}
@@ -212,51 +212,51 @@ human_fallen_empires_effect_settle_pop = {
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.8
 					}
 				}
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.7
 					}
 				}
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.6
 					}
 				}
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.5
 					}
 				}
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.4
 					}
 				}
 				modifier = {
 					mult = 2
 					habitability = {
-						who = event_target:human_fallen_empires_settle_pop_target
+						who = event_target:hfe_settle_pop_target
 						value > 0.3
 					}
 				}
 			}
-			# event_target:human_fallen_empires_settle_pop_target = {
+			# event_target:hfe_settle_pop_target = {
 			# 	purge = no
 			# }
 			resettle_pop = {
-				pop = event_target:human_fallen_empires_settle_pop_target
+				pop = event_target:hfe_settle_pop_target
 				planet = this
 			}
 			#log = "pop moved to [this.GetName]"
@@ -264,9 +264,9 @@ human_fallen_empires_effect_settle_pop = {
 	}
 }
 
-# for country need human_fallen_empires_settle_pop_target
-human_fallen_empires_effect_settle_pop_from_slavery_buff = {
-	event_target:human_fallen_empires_settle_pop_target = {
+# for country need hfe_settle_pop_target
+hfe_effect_settle_pop_from_slavery_buff = {
+	event_target:hfe_settle_pop_target = {
 		if = {
 			limit = {
 				nor = {
@@ -291,7 +291,7 @@ human_fallen_empires_effect_settle_pop_from_slavery_buff = {
 		}
 		else = {
 			add_modifier = {
-				modifier = human_fallen_empires_pirate_pop_purchased
+				modifier = hfe_pirate_pop_purchased
 				days = 3650
 			}
 		}
@@ -299,191 +299,191 @@ human_fallen_empires_effect_settle_pop_from_slavery_buff = {
 }
 
 # for pop
-human_fallen_empires_effect_add_random_trait = {
+hfe_effect_add_random_trait = {
 	random_list = {
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = human_fallen_empires_species_trait_hucksters
+				has_trait = hfe_species_trait_hucksters
 			}
 			modify_species = {
-				add_trait = human_fallen_empires_species_trait_hucksters
+				add_trait = hfe_species_trait_hucksters
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = human_fallen_empires_species_trait_war_fans
+				has_trait = hfe_species_trait_war_fans
 			}
 			modify_species = {
-				add_trait = human_fallen_empires_species_trait_war_fans
+				add_trait = hfe_species_trait_war_fans
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = human_fallen_empires_species_trait_error
+				has_trait = hfe_species_trait_error
 			}
 			modify_species = {
-				add_trait = human_fallen_empires_species_trait_error
+				add_trait = hfe_species_trait_error
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = human_fallen_empires_species_trait_happy_slave
+				has_trait = hfe_species_trait_happy_slave
 			}
 			modify_species = {
-				add_trait = human_fallen_empires_species_trait_happy_slave
+				add_trait = hfe_species_trait_happy_slave
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = human_fallen_empires_species_trait_clever_beast
+				has_trait = hfe_species_trait_clever_beast
 			}
 			modify_species = {
-				add_trait = human_fallen_empires_species_trait_clever_beast
+				add_trait = hfe_species_trait_clever_beast
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_event_47_next = {
+hfe_effect_event_47_next = {
 	hidden_effect = {
 		switch = {
 			trigger = has_country_flag
-			human_fallen_empires.47.step0 = {
-				remove_country_flag = human_fallen_empires.47.step0
-				set_country_flag = human_fallen_empires.47.step1
+			hfe.47.step0 = {
+				remove_country_flag = hfe.47.step0
+				set_country_flag = hfe.47.step1
 				country_event = {
-					id = human_fallen_empires.47
+					id = hfe.47
 				}
 			}
-			human_fallen_empires.47.step1 = {
-				remove_country_flag = human_fallen_empires.47.step1
-				set_country_flag = human_fallen_empires.47.step2
+			hfe.47.step1 = {
+				remove_country_flag = hfe.47.step1
+				set_country_flag = hfe.47.step2
 				country_event = {
-					id = human_fallen_empires.47
+					id = hfe.47
 				}
 			}
-			human_fallen_empires.47.step2 = {
-				remove_country_flag = human_fallen_empires.47.step2
-				set_country_flag = human_fallen_empires.47.step3
+			hfe.47.step2 = {
+				remove_country_flag = hfe.47.step2
+				set_country_flag = hfe.47.step3
 				country_event = {
-					id = human_fallen_empires.47
+					id = hfe.47
 				}
 			}
-			human_fallen_empires.47.step3 = {
-				remove_country_flag = human_fallen_empires.47.step3
-				set_country_flag = human_fallen_empires.47.step4
+			hfe.47.step3 = {
+				remove_country_flag = hfe.47.step3
+				set_country_flag = hfe.47.step4
 				country_event = {
-					id = human_fallen_empires.47
+					id = hfe.47
 				}
 			}
-			human_fallen_empires.47.step4 = {
+			hfe.47.step4 = {
 				# it also remove other non step flags
-				human_fallen_empires_effect_event_47_clear_flags = yes
+				hfe_effect_event_47_clear_flags = yes
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_event_47_clear_flags = {
+hfe_effect_event_47_clear_flags = {
 	hidden_effect = {
-		remove_country_flag = human_fallen_empires.47.step3_bad_news
-		remove_country_flag = human_fallen_empires_egypt_wormhole
-		remove_country_flag = human_fallen_empires.47.step0
-		remove_country_flag = human_fallen_empires.47.step1
-		remove_country_flag = human_fallen_empires.47.step2
-		remove_country_flag = human_fallen_empires.47.step3
-		remove_country_flag = human_fallen_empires.47.step4
+		remove_country_flag = hfe.47.step3_bad_news
+		remove_country_flag = hfe_egypt_wormhole
+		remove_country_flag = hfe.47.step0
+		remove_country_flag = hfe.47.step1
+		remove_country_flag = hfe.47.step2
+		remove_country_flag = hfe.47.step3
+		remove_country_flag = hfe.47.step4
 	}
 }
 
-human_fallen_empires_effect_event_702_next = {
+hfe_effect_event_702_next = {
 	hidden_effect = {
 		switch = {
 			trigger = has_country_flag
-			human_fallen_empires.702.0 = {
-				remove_country_flag = human_fallen_empires.702.0
-				set_country_flag = human_fallen_empires.702.1
+			hfe.702.0 = {
+				remove_country_flag = hfe.702.0
+				set_country_flag = hfe.702.1
 			}
-			human_fallen_empires.702.1 = {
-				remove_country_flag = human_fallen_empires.702.1
-				set_country_flag = human_fallen_empires.702.2
+			hfe.702.1 = {
+				remove_country_flag = hfe.702.1
+				set_country_flag = hfe.702.2
 			}
-			human_fallen_empires.702.2 = {
-				remove_country_flag = human_fallen_empires.702.2
-				set_country_flag = human_fallen_empires.702.3
+			hfe.702.2 = {
+				remove_country_flag = hfe.702.2
+				set_country_flag = hfe.702.3
 			}
-			human_fallen_empires.702.3 = {
-				remove_country_flag = human_fallen_empires.702.3
-				set_country_flag = human_fallen_empires.702.4
+			hfe.702.3 = {
+				remove_country_flag = hfe.702.3
+				set_country_flag = hfe.702.4
 			}
-			human_fallen_empires.702.4 = {
-				remove_country_flag = human_fallen_empires.702.4
-				set_country_flag = human_fallen_empires.702.5
+			hfe.702.4 = {
+				remove_country_flag = hfe.702.4
+				set_country_flag = hfe.702.5
 			}
-			human_fallen_empires.702.5 = {
-				remove_country_flag = human_fallen_empires.702.5
-				set_country_flag = human_fallen_empires.702.6
+			hfe.702.5 = {
+				remove_country_flag = hfe.702.5
+				set_country_flag = hfe.702.6
 			}
-			human_fallen_empires.702.6 = {
-				remove_country_flag = human_fallen_empires.702.6
-				set_country_flag = human_fallen_empires.702.7
+			hfe.702.6 = {
+				remove_country_flag = hfe.702.6
+				set_country_flag = hfe.702.7
 			}
-			human_fallen_empires.702.7 = {
-				remove_country_flag = human_fallen_empires.702.7
+			hfe.702.7 = {
+				remove_country_flag = hfe.702.7
 			}
 		}
 		country_event = {
-			id = human_fallen_empires.703
+			id = hfe.703
 		}
 	}
 }
 
-human_fallen_empires_effect_event_711_next = {
+hfe_effect_event_711_next = {
 	hidden_effect = {
 		switch = {
 			trigger = has_country_flag
 			default = {
-				set_country_flag = human_fallen_empires.711.4.1
+				set_country_flag = hfe.711.4.1
 				country_event = {
-					id = human_fallen_empires.711
+					id = hfe.711
 				}
 			}
-			human_fallen_empires.711.4.1 = {
-				remove_country_flag = human_fallen_empires.711.4.1
-				set_country_flag = human_fallen_empires.711.4.2
+			hfe.711.4.1 = {
+				remove_country_flag = hfe.711.4.1
+				set_country_flag = hfe.711.4.2
 				country_event = {
-					id = human_fallen_empires.711
+					id = hfe.711
 				}
 			}
-			human_fallen_empires.711.4.2 = {
-				remove_country_flag = human_fallen_empires.711.4.2
-				set_country_flag = human_fallen_empires.711.4.3
+			hfe.711.4.2 = {
+				remove_country_flag = hfe.711.4.2
+				set_country_flag = hfe.711.4.3
 				country_event = {
-					id = human_fallen_empires.711
+					id = hfe.711
 				}
 			}
-			human_fallen_empires.711.4.3 = {
-				remove_country_flag = human_fallen_empires.711.4.3
-				set_country_flag = human_fallen_empires.711.4.4
+			hfe.711.4.3 = {
+				remove_country_flag = hfe.711.4.3
+				set_country_flag = hfe.711.4.4
 				country_event = {
-					id = human_fallen_empires.711
+					id = hfe.711
 				}
 			}
-			human_fallen_empires.711.4.4 = {
-				remove_country_flag = human_fallen_empires.711.4.4
-				set_country_flag = human_fallen_empires.711.4.5
+			hfe.711.4.4 = {
+				remove_country_flag = hfe.711.4.4
+				set_country_flag = hfe.711.4.5
 				country_event = {
-					id = human_fallen_empires.711
+					id = hfe.711
 				}
 			}
-			human_fallen_empires.711.4.5 = {
-				remove_country_flag = human_fallen_empires.711.4.5
-				set_country_flag = human_fallen_empires.711.dialog.0.complete
+			hfe.711.4.5 = {
+				remove_country_flag = hfe.711.4.5
+				set_country_flag = hfe.711.dialog.0.complete
 			}
 		}
 	}
@@ -491,65 +491,65 @@ human_fallen_empires_effect_event_711_next = {
 
 
 
-human_fallen_empires_effect_event_5001_next = {
+hfe_effect_event_5001_next = {
 	hidden_effect = {
 		switch = {
 			trigger = has_country_flag
-			human_fallen_empires.5001.step0 = {
-				remove_country_flag = human_fallen_empires.5001.step0
-				set_country_flag = human_fallen_empires.5001.step1
+			hfe.5001.step0 = {
+				remove_country_flag = hfe.5001.step0
+				set_country_flag = hfe.5001.step1
 				country_event = {
-					id = human_fallen_empires.5001
+					id = hfe.5001
 				}
 			}
-			human_fallen_empires.5001.step1 = {
-				remove_country_flag = human_fallen_empires.5001.step1
-				set_country_flag = human_fallen_empires.5001.step2
+			hfe.5001.step1 = {
+				remove_country_flag = hfe.5001.step1
+				set_country_flag = hfe.5001.step2
 				country_event = {
-					id = human_fallen_empires.5001
+					id = hfe.5001
 				}
 			}
-			human_fallen_empires.5001.step2 = {
-				remove_country_flag = human_fallen_empires.5001.step2
-				set_country_flag = human_fallen_empires.5001.step3
+			hfe.5001.step2 = {
+				remove_country_flag = hfe.5001.step2
+				set_country_flag = hfe.5001.step3
 				country_event = {
-					id = human_fallen_empires.5001
+					id = hfe.5001
 				}
 			}
-			human_fallen_empires.5001.step3 = {
-				remove_country_flag = human_fallen_empires.5001.step3
-				set_country_flag = human_fallen_empires.5001.step4
+			hfe.5001.step3 = {
+				remove_country_flag = hfe.5001.step3
+				set_country_flag = hfe.5001.step4
 				country_event = {
-					id = human_fallen_empires.5001
+					id = hfe.5001
 				}
 			}
-			human_fallen_empires.5001.step4 = {
-				remove_country_flag = human_fallen_empires.5001.step4
-				set_country_flag = human_fallen_empires.5001.step5
+			hfe.5001.step4 = {
+				remove_country_flag = hfe.5001.step4
+				set_country_flag = hfe.5001.step5
 				country_event = {
-					id = human_fallen_empires.5001
+					id = hfe.5001
 				}
 			}
-			human_fallen_empires.5001.step5 = {
-				remove_country_flag = human_fallen_empires.5001.step5
-				set_country_flag = human_fallen_empires.5001.step6
+			hfe.5001.step5 = {
+				remove_country_flag = hfe.5001.step5
+				set_country_flag = hfe.5001.step6
 				country_event = {
-					id = human_fallen_empires.5002
+					id = hfe.5002
 				}
 			}
-			human_fallen_empires.5001.step6 = {
-				remove_country_flag = human_fallen_empires.5001.step6
-				set_country_flag = human_fallen_empires.5001.step7
+			hfe.5001.step6 = {
+				remove_country_flag = hfe.5001.step6
+				set_country_flag = hfe.5001.step7
 				country_event = {
-					id = human_fallen_empires.5002
+					id = hfe.5002
 				}
 			}
-			human_fallen_empires.5001.step7 = {
-				remove_country_flag = human_fallen_empires.5001.step7
-				remove_country_flag = human_fallen_empires.5001.step5.human
-				remove_country_flag = human_fallen_empires.5001.step4.human
-				remove_country_flag = human_fallen_empires.5001.step3.human
-				remove_country_flag = human_fallen_empires.5001.step2.human
+			hfe.5001.step7 = {
+				remove_country_flag = hfe.5001.step7
+				remove_country_flag = hfe.5001.step5.human
+				remove_country_flag = hfe.5001.step4.human
+				remove_country_flag = hfe.5001.step3.human
+				remove_country_flag = hfe.5001.step2.human
 			}
 		}
 	}
@@ -557,39 +557,39 @@ human_fallen_empires_effect_event_5001_next = {
 
 # varelse fleet event
 # for fleet
-human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
+hfe_effect_varelse_fleet_attack_home_of_light = {
 	set_fleet_stance = aggressive
 	clear_fleet_actions = this
 	queue_actions = {
 		find_closest_system = {
 			trigger = {
-				id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_trigger.0
+				id = hfe_effect_varelse_fleet_attack_home_of_light_trigger.0
 				any_planet = {
-					has_planet_flag = human_fallen_empires_home_of_light
+					has_planet_flag = hfe_home_of_light
 				}
 			}
 			found_system = {
 				move_to = this
 				effect = {
-					id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.1
+					id = hfe_effect_varelse_fleet_attack_home_of_light_effect.1
 					if = {
 						limit = {
 							any_planet = {
-								has_planet_flag = human_fallen_empires_home_of_light
+								has_planet_flag = hfe_home_of_light
 								nand = {
 									exists = owner
 									owner = {
-										has_country_flag = human_fallen_empires_egypt
+										has_country_flag = hfe_egypt
 									}
 								}
 							}
 						}
-						event_target:human_fallen_empires_varelse_fleet = {
-							human_fallen_empires_effect_varelse_fleet_find_new_home = yes
+						event_target:hfe_varelse_fleet = {
+							hfe_effect_varelse_fleet_find_new_home = yes
 						}
 					}
 					else = {
-						event_target:human_fallen_empires_varelse_fleet.owner = {
+						event_target:hfe_varelse_fleet.owner = {
 							set_faction_hostility = {
 								set_hostile = yes
 							}
@@ -598,22 +598,22 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 				}
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_trigger.1
-						has_planet_flag = human_fallen_empires_home_of_light
+						id = hfe_effect_varelse_fleet_attack_home_of_light_trigger.1
+						has_planet_flag = hfe_home_of_light
 					}
 					found_planet = {
 						move_to = this
 						repeat = {
 							while = {
-								id = human_fallen_empires.53.attact_trigger.2
+								id = hfe.53.attact_trigger.2
 								num_pops > 0
 							}
 							wait = 60
 						}
 						effect = {
-							id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.2
-							event_target:human_fallen_empires_varelse_fleet = {
-								human_fallen_empires_effect_varelse_fleet_find_new_home = yes
+							id = hfe_effect_varelse_fleet_attack_home_of_light_effect.2
+							event_target:hfe_varelse_fleet = {
+								hfe_effect_varelse_fleet_find_new_home = yes
 							}
 						}
 					}
@@ -622,9 +622,9 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 			failed = {
 				wait = 100
 				effect = {
-					id = human_fallen_empires_effect_varelse_fleet_attack_home_of_light_effect.3
-					event_target:human_fallen_empires_varelse_fleet = {
-						human_fallen_empires_effect_varelse_fleet_find_new_home = yes
+					id = hfe_effect_varelse_fleet_attack_home_of_light_effect.3
+					event_target:hfe_varelse_fleet = {
+						hfe_effect_varelse_fleet_find_new_home = yes
 					}
 				}
 			}
@@ -632,18 +632,18 @@ human_fallen_empires_effect_varelse_fleet_attack_home_of_light = {
 	}
 }
 
-human_fallen_empires_effect_varelse_fleet_find_new_home = {
+hfe_effect_varelse_fleet_find_new_home = {
 	clear_fleet_actions = this
 	queue_actions = {
 		find_closest_system = {
 			trigger = {
-				id = human_fallen_empires_find_new_home_trigger.0
+				id = hfe_find_new_home_trigger.0
 				any_planet = {
 					not = {
 						exists = owner
 					}
 					habitability = {
-						who = event_target:human_fallen_empires_varelse_species
+						who = event_target:hfe_varelse_species
 						value > 0.7
 					}
 				}
@@ -654,13 +654,13 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 			failed = {
 				find_closest_system = {
 					trigger = {
-						id = human_fallen_empires_find_new_home_trigger.1
+						id = hfe_find_new_home_trigger.1
 						any_planet = {
 							not = {
 								exists = owner
 							}
 							habitability = {
-								who = event_target:human_fallen_empires_varelse_species
+								who = event_target:hfe_varelse_species
 								value > 0.4
 							}
 						}
@@ -671,13 +671,13 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 					failed = {
 						find_closest_system = {
 							trigger = {
-								id = human_fallen_empires_find_new_home_trigger.2
+								id = hfe_find_new_home_trigger.2
 								any_planet = {
 									not = {
 										exists = owner
 									}
 									habitability = {
-										who = event_target:human_fallen_empires_varelse_species
+										who = event_target:hfe_varelse_species
 										value > 0.1
 									}
 								}
@@ -688,8 +688,8 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 							failed = {
 								wait = 100
 								effect = {
-									id = human_fallen_empires_find_new_home_effect.0
-									human_fallen_empires_effect_varelse_fleet_attack_home_of_light = yes
+									id = hfe_find_new_home_effect.0
+									hfe_effect_varelse_fleet_attack_home_of_light = yes
 								}
 							}
 						}
@@ -699,54 +699,54 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 		}
 		find_closest_planet = {
 			trigger = {
-				id = human_fallen_empires_find_new_home_trigger.3
+				id = hfe_find_new_home_trigger.3
 				not = { exists = owner }
 				habitability = {
-					who = event_target:human_fallen_empires_varelse_species
+					who = event_target:hfe_varelse_species
 					value > 0.7
 				}
 			}
 			found_planet = {
 				move_to = this
 				effect = {
-					id = human_fallen_empires_find_new_home_effect.1
-					human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
+					id = hfe_find_new_home_effect.1
+					hfe_effect_varelse_fleet_find_new_home_colony = yes
 				}
 			}
 			failed = {
 				find_closest_planet = {
 					trigger = {
-						id = human_fallen_empires_find_new_home_trigger.4
+						id = hfe_find_new_home_trigger.4
 						not = { exists = owner }
 						habitability = {
-							who = event_target:human_fallen_empires_varelse_species
+							who = event_target:hfe_varelse_species
 							value > 0.4
 						}
 					}
 					found_planet = {
 						move_to = this
 						effect = {
-							id = human_fallen_empires_find_new_home_effect.2
-							human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
+							id = hfe_find_new_home_effect.2
+							hfe_effect_varelse_fleet_find_new_home_colony = yes
 						}
 					}
 					failed = {
 						find_closest_planet = {
 							trigger = {
-								id = human_fallen_empires_find_new_home_trigger.5
+								id = hfe_find_new_home_trigger.5
 								not = {
 									exists = owner
 								}
 								habitability = {
-									who = event_target:human_fallen_empires_varelse_species
+									who = event_target:hfe_varelse_species
 									value > 0.1
 								}
 							}
 							found_planet = {
 								move_to = this
 								effect = {
-									id = human_fallen_empires_find_new_home_effect.3
-									human_fallen_empires_effect_varelse_fleet_find_new_home_colony = yes
+									id = hfe_find_new_home_effect.3
+									hfe_effect_varelse_fleet_find_new_home_colony = yes
 								}
 							}
 						}
@@ -757,32 +757,32 @@ human_fallen_empires_effect_varelse_fleet_find_new_home = {
 	}
 }
 
-human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
+hfe_effect_varelse_fleet_find_new_home_colony = {
 	create_country = {
 		name = "Varelse Hegemony"
 		type = default
-		species = event_target:human_fallen_empires_varelse_species
+		species = event_target:hfe_varelse_species
 		ethos = {
 			ethic = ethic_xenophobe
 			ethic = ethic_militarist
 			ethic = ethic_materialist
 		}
 		effect = {
-			human_fallen_empires_effect_gov_fix = yes
-			human_fallen_empires_effect_init_give_tech_t3 = yes
-			set_country_flag = human_fallen_empires_varelse
+			hfe_effect_gov_fix = yes
+			hfe_effect_init_give_tech_t3 = yes
+			set_country_flag = hfe_varelse
 			prev = {
 				create_colony = {
 					owner = prev
 				}
 			}
-			event_target:human_fallen_empires_varelse_fleet = {
+			event_target:hfe_varelse_fleet = {
 				set_owner = prev
 			}
 			every_owned_ship = {
 				repair_ship = yes
 				add_modifier = {
-					modifier = human_fallen_empires_unkeep
+					modifier = hfe_unkeep
 				}
 			}
 		}
@@ -793,92 +793,92 @@ human_fallen_empires_effect_varelse_fleet_find_new_home_colony = {
 	create_pop = {
 		species = owner
 	}
-	human_fallen_empires_effect_create_starbase_starport_from_planet = yes
+	hfe_effect_create_starbase_starport_from_planet = yes
 }
 
 # for country return 6 event targets
-human_fallen_empires_effect_save_event_target = {
+hfe_effect_save_event_target = {
 	if = {
 		limit = {
-			exists = event_target:human_fallen_empires_event_target_5
+			exists = event_target:hfe_event_target_5
 		}
 	}
 	else_if = {
 		limit = {
 			not = {
-				exists = event_target:human_fallen_empires_event_target_0
+				exists = event_target:hfe_event_target_0
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_0
+		save_event_target_as = hfe_event_target_0
 	}
 	else_if = {
 		limit = {
 			nor = {
-				is_same_value = event_target:human_fallen_empires_event_target_0
-				exists = event_target:human_fallen_empires_event_target_1
+				is_same_value = event_target:hfe_event_target_0
+				exists = event_target:hfe_event_target_1
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_1
+		save_event_target_as = hfe_event_target_1
 	}
 	else_if = {
 		limit = {
 			nor = {
-				is_same_value = event_target:human_fallen_empires_event_target_0
-				is_same_value = event_target:human_fallen_empires_event_target_1
-				exists = event_target:human_fallen_empires_event_target_2
+				is_same_value = event_target:hfe_event_target_0
+				is_same_value = event_target:hfe_event_target_1
+				exists = event_target:hfe_event_target_2
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_2
+		save_event_target_as = hfe_event_target_2
 	}
 	else_if = {
 		limit = {
 			nor = {
-				is_same_value = event_target:human_fallen_empires_event_target_0
-				is_same_value = event_target:human_fallen_empires_event_target_1
-				is_same_value = event_target:human_fallen_empires_event_target_2
-				exists = event_target:human_fallen_empires_event_target_3
+				is_same_value = event_target:hfe_event_target_0
+				is_same_value = event_target:hfe_event_target_1
+				is_same_value = event_target:hfe_event_target_2
+				exists = event_target:hfe_event_target_3
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_3
+		save_event_target_as = hfe_event_target_3
 	}
 	else_if = {
 		limit = {
 			nor = {
-				is_same_value = event_target:human_fallen_empires_event_target_0
-				is_same_value = event_target:human_fallen_empires_event_target_1
-				is_same_value = event_target:human_fallen_empires_event_target_2
-				is_same_value = event_target:human_fallen_empires_event_target_3
-				exists = event_target:human_fallen_empires_event_target_4
+				is_same_value = event_target:hfe_event_target_0
+				is_same_value = event_target:hfe_event_target_1
+				is_same_value = event_target:hfe_event_target_2
+				is_same_value = event_target:hfe_event_target_3
+				exists = event_target:hfe_event_target_4
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_4
+		save_event_target_as = hfe_event_target_4
 	}
 	else_if = {
 		limit = {
 			nor = {
-				is_same_value = event_target:human_fallen_empires_event_target_0
-				is_same_value = event_target:human_fallen_empires_event_target_1
-				is_same_value = event_target:human_fallen_empires_event_target_2
-				is_same_value = event_target:human_fallen_empires_event_target_3
-				is_same_value = event_target:human_fallen_empires_event_target_4
-				exists = event_target:human_fallen_empires_event_target_5
+				is_same_value = event_target:hfe_event_target_0
+				is_same_value = event_target:hfe_event_target_1
+				is_same_value = event_target:hfe_event_target_2
+				is_same_value = event_target:hfe_event_target_3
+				is_same_value = event_target:hfe_event_target_4
+				exists = event_target:hfe_event_target_5
 			}
 		}
-		save_event_target_as = human_fallen_empires_event_target_5
+		save_event_target_as = hfe_event_target_5
 	}
 }
 
-human_fallen_empires_effect_clear_event_target = {
-	clear_global_event_target = human_fallen_empires_event_target_0
-	clear_global_event_target = human_fallen_empires_event_target_1
-	clear_global_event_target = human_fallen_empires_event_target_2
-	clear_global_event_target = human_fallen_empires_event_target_3
-	clear_global_event_target = human_fallen_empires_event_target_4
-	clear_global_event_target = human_fallen_empires_event_target_5
+hfe_effect_clear_event_target = {
+	clear_global_event_target = hfe_event_target_0
+	clear_global_event_target = hfe_event_target_1
+	clear_global_event_target = hfe_event_target_2
+	clear_global_event_target = hfe_event_target_3
+	clear_global_event_target = hfe_event_target_4
+	clear_global_event_target = hfe_event_target_5
 }
 
 # for country
-human_fallen_empires_effect_create_egypt_fleet = {
+hfe_effect_create_egypt_fleet = {
 	create_leader = {
 		class = admiral
 		species = this
@@ -916,7 +916,7 @@ human_fallen_empires_effect_create_egypt_fleet = {
 }
 
 # for country
-human_fallen_empires_effect_create_future_fleet = {
+hfe_effect_create_future_fleet = {
 	create_leader = {
 		class = admiral
 		species = this
@@ -953,35 +953,35 @@ human_fallen_empires_effect_create_future_fleet = {
 }
 
 # for tile
-# human_fallen_empires_effect_set_random_deposit = {
+# hfe_effect_set_random_deposit = {
 # 	random_list = {
 # 		30 = {
-# 			human_fallen_empires_effect_set_science_deposit = yes
+# 			hfe_effect_set_science_deposit = yes
 # 		}
 # 		10 = {
-# 			human_fallen_empires_effect_set_energy_deposit = yes
+# 			hfe_effect_set_energy_deposit = yes
 # 		}
 # 		10 = {
-# 			human_fallen_empires_effect_set_mineral_deposit = yes
+# 			hfe_effect_set_mineral_deposit = yes
 # 		}
 # 	}
 # }
 
-# human_fallen_empires_effect_set_science_deposit = {
+# hfe_effect_set_science_deposit = {
 # 	random_list = {
 # 		10 = {
-# 			human_fallen_empires_effect_set_physics_deposit = yes
+# 			hfe_effect_set_physics_deposit = yes
 # 		}
 # 		10 = {
-# 			human_fallen_empires_effect_set_society_deposit = yes
+# 			hfe_effect_set_society_deposit = yes
 # 		}
 # 		10 = {
-# 			human_fallen_empires_effect_set_engineering_deposit = yes
+# 			hfe_effect_set_engineering_deposit = yes
 # 		}
 # 	}
 # }
 
-# human_fallen_empires_effect_set_energy_deposit = {
+# hfe_effect_set_energy_deposit = {
 # 	random_list = {
 # 		10 = {
 # 			set_deposit = d_energy_deposit
@@ -998,7 +998,7 @@ human_fallen_empires_effect_create_future_fleet = {
 # 	}
 # }
 
-human_fallen_empires_effect_set_mineral_orbital_deposit = {
+hfe_effect_set_mineral_orbital_deposit = {
 	random_list = {
 		10 = {
 			set_deposit = d_minerals_1
@@ -1033,7 +1033,7 @@ human_fallen_empires_effect_set_mineral_orbital_deposit = {
 	}
 }
 
-human_fallen_empires_effect_set_energy_orbital_deposit = {
+hfe_effect_set_energy_orbital_deposit = {
 	random_list = {
 		10 = {
 			set_deposit = d_energy_1
@@ -1068,7 +1068,7 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 	}
 }
 
-# human_fallen_empires_effect_set_food_deposit = {
+# hfe_effect_set_food_deposit = {
 # 	random_list = {
 # 		10 = {
 # 			set_deposit = d_farmland_deposit
@@ -1085,7 +1085,7 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 # 	}
 # }
 
-# human_fallen_empires_effect_set_physics_deposit = {
+# hfe_effect_set_physics_deposit = {
 # 	random_list = {
 # 		10 = {
 # 			set_deposit = d_physics_deposit
@@ -1102,7 +1102,7 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 # 	}
 # }
 
-# human_fallen_empires_effect_set_society_deposit = {
+# hfe_effect_set_society_deposit = {
 # 	random_list = {
 # 		10 = {
 # 			set_deposit = d_society_deposit
@@ -1119,7 +1119,7 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 # 	}
 # }
 
-# human_fallen_empires_effect_set_engineering_deposit = {
+# hfe_effect_set_engineering_deposit = {
 # 	random_list = {
 # 		10 = {
 # 			set_deposit = d_engineering_deposit
@@ -1136,7 +1136,7 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 # 	}
 # }
 
-# human_fallen_empires_effect_set_memorial_tile = {
+# hfe_effect_set_memorial_tile = {
 # 	random_list = {
 # 		20 = {
 # 		}
@@ -1168,13 +1168,13 @@ human_fallen_empires_effect_set_energy_orbital_deposit = {
 # 			set_building = building_ancient_archives
 # 		}
 # 		20 = {
-# 			human_fallen_empires_effect_set_random_deposit = yes
+# 			hfe_effect_set_random_deposit = yes
 # 		}
 # 	}
 # }
 
 # for leader
-human_fallen_empires_effect_add_psionic_trait = {
+hfe_effect_add_psionic_trait = {
 	if = {
 		limit = {
 			nor = {
@@ -1216,111 +1216,111 @@ human_fallen_empires_effect_add_psionic_trait = {
 }
 
 # for planet
-human_fallen_empires_effect_convert_to_asteroid = {
+hfe_effect_convert_to_asteroid = {
 	#log = "converting to asteroid [this.GetName]"
 	# flee fleets
 	if = {
 		limit = {
 			exists = owner
 			owner = {
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_pirate
 				num_owned_planets = 1
 			}
 		}
 		owner = {
-			human_fallen_empires_effect_pirate_flee_fleets = yes
+			hfe_effect_pirate_flee_fleets = yes
 		}
 	}
-	human_fallen_empires_effect_clear_buildings_and_destroy_colony = yes
+	hfe_effect_clear_buildings_and_destroy_colony = yes
 	change_pc = pc_asteroid
 }
 
 # for system
-human_fallen_empires_effect_create_starbase = {
+hfe_effect_create_starbase = {
 	if = {
 		limit = {
 			exists = starbase
 		}
 		starbase = {
-			set_owner = event_target:human_fallen_empires_starbase_owner
+			set_owner = event_target:hfe_starbase_owner
 		}
 	}
 	else = {
 		create_starbase = {
 			size = starbase_outpost
 			#module = shipyard
-			owner = event_target:human_fallen_empires_starbase_owner
+			owner = event_target:hfe_starbase_owner
 		}
 	}
 }
 
 # for planet
-human_fallen_empires_effect_create_starbase_outpost_from_planet = {
+hfe_effect_create_starbase_outpost_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		human_fallen_empires_effect_create_starbase = yes
+		hfe_effect_create_starbase = yes
 	}
 }
 
-human_fallen_empires_effect_create_starbase_starport_from_planet = {
+hfe_effect_create_starbase_starport_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		human_fallen_empires_effect_create_starbase = yes
+		hfe_effect_create_starbase = yes
 		starbase = {
 			set_starbase_size = starbase_starport
 		}
 	}
 }
 
-human_fallen_empires_effect_create_starbase_starhold_from_planet = {
+hfe_effect_create_starbase_starhold_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		human_fallen_empires_effect_create_starbase = yes
+		hfe_effect_create_starbase = yes
 		starbase = {
 			set_starbase_size = starbase_starhold
 		}
 	}
 }
 
-human_fallen_empires_effect_create_starbase_starfortress_from_planet = {
+hfe_effect_create_starbase_starfortress_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		human_fallen_empires_effect_create_starbase = yes
+		hfe_effect_create_starbase = yes
 		starbase = {
 			set_starbase_size = starbase_starfortress
 		}
 	}
 }
 
-human_fallen_empires_effect_create_starbase_citadel_from_planet = {
+hfe_effect_create_starbase_citadel_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		human_fallen_empires_effect_create_starbase = yes
+		hfe_effect_create_starbase = yes
 		starbase = {
 			set_starbase_size = starbase_citadel
 		}
 	}
 }
 
-human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet = {
+hfe_effect_create_starbase_citadel_with_buildings_from_planet = {
 	owner = {
-		save_event_target_as = human_fallen_empires_starbase_owner
+		save_event_target_as = hfe_starbase_owner
 	}
 	solar_system = {
-		#human_fallen_empires_effect_create_starbase = yes
+		#hfe_effect_create_starbase = yes
 		create_starbase = {
 			size = starbase_citadel
-			owner = event_target:human_fallen_empires_starbase_owner
+			owner = event_target:hfe_starbase_owner
 			module = shipyard
 			module = shipyard
 			module = shipyard
@@ -1337,7 +1337,7 @@ human_fallen_empires_effect_create_starbase_citadel_with_buildings_from_planet =
 	}
 }
 
-human_fallen_empires_effect_starbase_add_shipyard_0 = {
+hfe_effect_starbase_add_shipyard_0 = {
 	starbase = {
 		set_starbase_module = {
 			slot = 0
@@ -1347,7 +1347,7 @@ human_fallen_empires_effect_starbase_add_shipyard_0 = {
 }
 
 # for starbase
-human_fallen_empires_effect_create_starbase_upgrade = {
+hfe_effect_create_starbase_upgrade = {
 	owner = {
 		switch = {
 			trigger = has_technology
@@ -1376,7 +1376,7 @@ human_fallen_empires_effect_create_starbase_upgrade = {
 }
 
 # for solar system
-human_fallen_empires_effect_add_hyperlanes = {
+hfe_effect_add_hyperlanes = {
 	while = {
 		count = 3
 		random_system = {
@@ -1428,17 +1428,17 @@ human_fallen_empires_effect_add_hyperlanes = {
 	}
 }
 
-human_fallen_empires_effect_create_signal_object_for_planet = {
+hfe_effect_create_signal_object_for_planet = {
 	create_ambient_object = {
-		type = human_fallen_empires_object_signal
+		type = hfe_object_signal
 		entity_offset_height = {
 			min = -15
 			max = -15
 		}
 	}
 	last_created_ambient_object = {
-		set_ambient_object_flag = human_fallen_empires_signal_object
-		set_ambient_object_flag = human_fallen_empires_signal_object@prev
+		set_ambient_object_flag = hfe_signal_object
+		set_ambient_object_flag = hfe_signal_object@prev
 		set_location = {
 			target = prev
 			distance = 0
@@ -1447,13 +1447,13 @@ human_fallen_empires_effect_create_signal_object_for_planet = {
 	}
 }
 
-human_fallen_empires_effect_create_signal_object = {
+hfe_effect_create_signal_object = {
 	create_ambient_object = {
-		type = human_fallen_empires_object_signal
+		type = hfe_object_signal
 	}
 	last_created_ambient_object = {
-		set_ambient_object_flag = human_fallen_empires_signal_object
-		set_ambient_object_flag = human_fallen_empires_signal_object@prev
+		set_ambient_object_flag = hfe_signal_object
+		set_ambient_object_flag = hfe_signal_object@prev
 		set_location = {
 			target = prev
 			distance = 0
@@ -1462,146 +1462,146 @@ human_fallen_empires_effect_create_signal_object = {
 	}
 }
 
-human_fallen_empires_effect_remove_signal_object_from_this = {
+hfe_effect_remove_signal_object_from_this = {
 	solar_system = {
 		every_system_ambient_object = {
 			limit = {
-				has_ambient_object_flag = human_fallen_empires_signal_object@prevprev
+				has_ambient_object_flag = hfe_signal_object@prevprev
 			}
 			destroy_ambient_object = this
 		}
 	}
 }
 
-human_fallen_empires_effect_remove_all_signal_object = {
+hfe_effect_remove_all_signal_object = {
 	solar_system = {
 		every_system_ambient_object = {
 			limit = {
-				has_ambient_object_flag = human_fallen_empires_signal_object
+				has_ambient_object_flag = hfe_signal_object
 			}
 			destroy_ambient_object = this
 		}
 	}
 }
 
-human_fallen_empires_effect_clear_buildings_and_destroy_colony = {
+hfe_effect_clear_buildings_and_destroy_colony = {
 	# TODO
 	#clear_buildings = yes
 	destroy_colony = yes
 }
 
-human_fallen_empires_effect_random_roll_flags_2_country = {
-	remove_country_flag = human_fallen_empires_random_0
-	remove_country_flag = human_fallen_empires_random_1
+hfe_effect_random_roll_flags_2_country = {
+	remove_country_flag = hfe_random_0
+	remove_country_flag = hfe_random_1
 	random_list = {
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_0
+				flag = hfe_random_0
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_1
+				flag = hfe_random_1
 				days = 1
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_random_roll_flags_3_country = {
-	remove_country_flag = human_fallen_empires_random_0
-	remove_country_flag = human_fallen_empires_random_1
-	remove_country_flag = human_fallen_empires_random_2
+hfe_effect_random_roll_flags_3_country = {
+	remove_country_flag = hfe_random_0
+	remove_country_flag = hfe_random_1
+	remove_country_flag = hfe_random_2
 	random_list = {
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_0
+				flag = hfe_random_0
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_1
+				flag = hfe_random_1
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_2
+				flag = hfe_random_2
 				days = 1
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_random_roll_flags_4_country = {
-	remove_country_flag = human_fallen_empires_random_0
-	remove_country_flag = human_fallen_empires_random_1
-	remove_country_flag = human_fallen_empires_random_2
-	remove_country_flag = human_fallen_empires_random_3
+hfe_effect_random_roll_flags_4_country = {
+	remove_country_flag = hfe_random_0
+	remove_country_flag = hfe_random_1
+	remove_country_flag = hfe_random_2
+	remove_country_flag = hfe_random_3
 	random_list = {
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_0
+				flag = hfe_random_0
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_1
+				flag = hfe_random_1
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_2
+				flag = hfe_random_2
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_3
+				flag = hfe_random_3
 				days = 1
 			}
 		}
 	}
 }
 
-human_fallen_empires_effect_random_roll_flags_5_country = {
-	remove_country_flag = human_fallen_empires_random_0
-	remove_country_flag = human_fallen_empires_random_1
-	remove_country_flag = human_fallen_empires_random_2
-	remove_country_flag = human_fallen_empires_random_3
-	remove_country_flag = human_fallen_empires_random_4
+hfe_effect_random_roll_flags_5_country = {
+	remove_country_flag = hfe_random_0
+	remove_country_flag = hfe_random_1
+	remove_country_flag = hfe_random_2
+	remove_country_flag = hfe_random_3
+	remove_country_flag = hfe_random_4
 	random_list = {
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_0
+				flag = hfe_random_0
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_1
+				flag = hfe_random_1
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_2
+				flag = hfe_random_2
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_3
+				flag = hfe_random_3
 				days = 1
 			}
 		}
 		10 = {
 			set_timed_country_flag = {
-				flag = human_fallen_empires_random_4
+				flag = hfe_random_4
 				days = 1
 			}
 		}
@@ -1609,13 +1609,13 @@ human_fallen_empires_effect_random_roll_flags_5_country = {
 }
 
 # used in create country to avoid random spawn with started civics
-human_fallen_empires_effect_gov_fix = {
+hfe_effect_gov_fix = {
 	change_government = {
 		authority = random
 		civics = random
 	}
-	human_fallen_empires_effect_gov_fix_to_hive = yes
-	human_fallen_empires_effect_gov_fix_from_hive = yes
+	hfe_effect_gov_fix_to_hive = yes
+	hfe_effect_gov_fix_from_hive = yes
 	if = {
 		limit = {
 			not = {
@@ -1629,11 +1629,11 @@ human_fallen_empires_effect_gov_fix = {
 }
 
 # switch to hive
-human_fallen_empires_effect_gov_fix_to_hive = {
+hfe_effect_gov_fix_to_hive = {
 	if = {
 		limit = {
 			host_has_dlc = "Synthetic Dawn Story Pack"
-			human_fallen_empires_trigger_non_sapient_robot = yes
+			hfe_trigger_non_sapient_robot = yes
 			not = {
 				has_authority = auth_machine_intelligence
 			}
@@ -1654,7 +1654,7 @@ human_fallen_empires_effect_gov_fix_to_hive = {
 					factor = 0.1
 					not = {
 						any_owned_pop_species = {
-							human_fallen_empires_trigger_is_robot = no
+							hfe_trigger_is_robot = no
 						}
 					}
 				}
@@ -1670,7 +1670,7 @@ human_fallen_empires_effect_gov_fix_to_hive = {
 					factor = 0.1
 					not = {
 						any_owned_pop_species = {
-							human_fallen_empires_trigger_is_robot = no
+							hfe_trigger_is_robot = no
 						}
 					}
 				}
@@ -1685,7 +1685,7 @@ human_fallen_empires_effect_gov_fix_to_hive = {
 				modifier = {
 					factor = 0.1
 					any_owned_pop_species = {
-						human_fallen_empires_trigger_is_robot = no
+						hfe_trigger_is_robot = no
 					}
 				}
 				change_government = {
@@ -1761,11 +1761,11 @@ human_fallen_empires_effect_gov_fix_to_hive = {
 	}
 }
 
-human_fallen_empires_effect_gov_fix_from_hive = {
+hfe_effect_gov_fix_from_hive = {
 	if = {
 		limit = {
-			human_fallen_empires_trigger_is_hive = yes
-			human_fallen_empires_trigger_non_sapient = no
+			hfe_trigger_is_hive = yes
+			hfe_trigger_non_sapient = no
 		}
 		create_country = {
 			type = default
@@ -1780,7 +1780,7 @@ human_fallen_empires_effect_gov_fix_from_hive = {
 	}
 }
 
-human_fallen_empires_effect_gov_reset_non_hive = {
+hfe_effect_gov_reset_non_hive = {
 	create_country = {
 		type = default
 		species = this
@@ -1793,7 +1793,7 @@ human_fallen_empires_effect_gov_reset_non_hive = {
 	set_name = random
 }
 
-human_fallen_empires_effect_root_this_change_pc_to_ideal = {
+hfe_effect_root_this_change_pc_to_ideal = {
 	change_pc = rl_habitable_normal
 	root = {
 		switch = {
@@ -1857,7 +1857,7 @@ human_fallen_empires_effect_root_this_change_pc_to_ideal = {
 	}
 }
 
-human_fallen_empires_effect_leader_add_exp_100 = {
+hfe_effect_leader_add_exp_100 = {
 	if = {
 		limit = {
 			exists = leader
@@ -1871,7 +1871,7 @@ human_fallen_empires_effect_leader_add_exp_100 = {
 	}
 }
 
-human_fallen_empires_effect_leader_add_exp_200 = {
+hfe_effect_leader_add_exp_200 = {
 	if = {
 		limit = {
 			exists = leader
@@ -1885,7 +1885,7 @@ human_fallen_empires_effect_leader_add_exp_200 = {
 	}
 }
 
-human_fallen_empires_effect_this_make_overlord_of_prev = {
+hfe_effect_this_make_overlord_of_prev = {
 	if = {
 		limit = {
 			is_country_type = awakened_fallen_empire
@@ -1937,26 +1937,26 @@ human_fallen_empires_effect_this_make_overlord_of_prev = {
 	}
 	else_if = {
 		limit = {
-			exists = event_target:human_fallen_empires_coalition_leader
-			is_country = event_target:human_fallen_empires_coalition_leader
+			exists = event_target:hfe_coalition_leader
+			is_country = event_target:hfe_coalition_leader
 		}
 		prev = {
 			set_subject_of = {
 				who = prev
-				subject_type = human_fallen_empires_future_vassal
+				subject_type = hfe_future_vassal
 			}
-			human_fallen_empires_effect_advisor_future_on = yes
+			hfe_effect_advisor_future_on = yes
 		}
 	}
 	else_if = {
 		limit = {
-			exists = event_target:human_fallen_empires_egypt_country
-			is_country = event_target:human_fallen_empires_egypt_country
+			exists = event_target:hfe_egypt_country
+			is_country = event_target:hfe_egypt_country
 		}
 		prev = {
 			set_subject_of = {
 				who = prev
-				subject_type = human_fallen_empires_egypt_vassal
+				subject_type = hfe_egypt_vassal
 			}
 		}
 	}
@@ -1971,17 +1971,17 @@ human_fallen_empires_effect_this_make_overlord_of_prev = {
 }
 
 # for country
-human_fallen_empires_effect_advisor_future_on = {
+hfe_effect_advisor_future_on = {
 	hidden_effect = {
 		if = {
 			limit = {
 				is_ai = no
 				not = {
-					has_global_flag = human_fallen_empires_advisor_future_on
+					has_global_flag = hfe_advisor_future_on
 				}
 			}
-			set_global_flag = human_fallen_empires_advisor_future_on
-			custom_tooltip = human_fallen_empires_advisor_future_on
+			set_global_flag = hfe_advisor_future_on
+			custom_tooltip = hfe_advisor_future_on
 			# lol
 			random_playable_country = {
 				limit = {
@@ -1997,7 +1997,7 @@ human_fallen_empires_effect_advisor_future_on = {
 }
 
 # assimilator
-# human_fallen_empires_effect_assimilator_find_pop = {
+# hfe_effect_assimilator_find_pop = {
 # 	# 0 all
 # 	# 1 non citizen
 # 	# 2 xenos
@@ -2010,136 +2010,136 @@ human_fallen_empires_effect_advisor_future_on = {
 # 		limit = {
 # 			is_overlord = yes
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.2
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.3
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.4
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.1
+# 				has_policy_flag = hfe_policies_assimilator.2
+# 				has_policy_flag = hfe_policies_assimilator.3
+# 				has_policy_flag = hfe_policies_assimilator.4
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_subject = {
 # 			limit = {
 # 				any_owned_pop = {
-# 					human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 					hfe_trigger_assimilator_pop_to_move = yes
 # 				}
 # 			}
 # 			log = "looping warning"
-# 			human_fallen_empires_effect_assimilator_find_pop = yes
+# 			hfe_effect_assimilator_find_pop = yes
 # 		}
 # 	}
 # 	# check already purged
 # 	if = {
 # 		limit = {
 # 			not = {
-# 				exists = event_target:human_fallen_empires_assimilator_pop_target
+# 				exists = event_target:hfe_assimilator_pop_target
 # 			}
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.2
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.3
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.6
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.1
+# 				has_policy_flag = hfe_policies_assimilator.2
+# 				has_policy_flag = hfe_policies_assimilator.3
+# 				has_policy_flag = hfe_policies_assimilator.6
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_owned_pop = {
 # 			limit = {
-# 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 				hfe_trigger_assimilator_pop_to_move = yes
 # 				is_being_purged = yes
 # 			}
-# 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+# 			save_event_target_as = hfe_assimilator_pop_target
 # 		}
 # 	}
 # 	# check slave
 # 	if = {
 # 		limit = {
 # 			not = {
-# 				exists = event_target:human_fallen_empires_assimilator_pop_target
+# 				exists = event_target:hfe_assimilator_pop_target
 # 			}
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.2
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.3
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.6
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.1
+# 				has_policy_flag = hfe_policies_assimilator.2
+# 				has_policy_flag = hfe_policies_assimilator.3
+# 				has_policy_flag = hfe_policies_assimilator.6
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_owned_pop = {
 # 			limit = {
-# 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 				hfe_trigger_assimilator_pop_to_move = yes
 # 				is_enslaved = yes
 # 			}
-# 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+# 			save_event_target_as = hfe_assimilator_pop_target
 # 		}
 # 	}
 # 	# check xenos
 # 	if = {
 # 		limit = {
 # 			not = {
-# 				exists = event_target:human_fallen_empires_assimilator_pop_target
+# 				exists = event_target:hfe_assimilator_pop_target
 # 			}
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.2
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.5
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.1
+# 				has_policy_flag = hfe_policies_assimilator.2
+# 				has_policy_flag = hfe_policies_assimilator.5
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_owned_pop = {
 # 			limit = {
-# 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 				hfe_trigger_assimilator_pop_to_move = yes
 # 				not = {
 # 					is_same_species	= root
 # 				}
 # 			}
-# 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+# 			save_event_target_as = hfe_assimilator_pop_target
 # 		}
 # 	}
 # 	# check non citizen
 # 	if = {
 # 		limit = {
 # 			not = {
-# 				exists = event_target:human_fallen_empires_assimilator_pop_target
+# 				exists = event_target:hfe_assimilator_pop_target
 # 			}
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.1
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_owned_pop = {
 # 			limit = {
-# 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 				hfe_trigger_assimilator_pop_to_move = yes
 # 				has_citizenship_rights = no
 # 			}
-# 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+# 			save_event_target_as = hfe_assimilator_pop_target
 # 		}
 # 	}
 # 	# anyone
 # 	if = {
 # 		limit = {
 # 			not = {
-# 				exists = event_target:human_fallen_empires_assimilator_pop_target
+# 				exists = event_target:hfe_assimilator_pop_target
 # 			}
 # 			or = {
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 				has_policy_flag = human_fallen_empires_policies_assimilator.8
+# 				has_policy_flag = hfe_policies_assimilator.0
+# 				has_policy_flag = hfe_policies_assimilator.8
 # 			}
 # 		}
 # 		random_owned_pop = {
 # 			limit = {
-# 				human_fallen_empires_trigger_assimilator_pop_to_move = yes
+# 				hfe_trigger_assimilator_pop_to_move = yes
 # 			}
-# 			save_event_target_as = human_fallen_empires_assimilator_pop_target
+# 			save_event_target_as = hfe_assimilator_pop_target
 # 		}
 # 	}
 # }
 
 # need root.species
-human_fallen_empires_effect_remove_prescripted_ideal = {
+hfe_effect_remove_prescripted_ideal = {
 	while = {
 		count = 3
 		closest_system = {
@@ -2172,42 +2172,42 @@ human_fallen_empires_effect_remove_prescripted_ideal = {
 	}
 }
 
-human_fallen_empires_effect_stargate_on = {
-	event_target:human_fallen_empires_stargate = {
+hfe_effect_stargate_on = {
+	event_target:hfe_stargate = {
 		create_ambient_object = {
-			type = human_fallen_empires_object_stargate_1
+			type = hfe_object_stargate_1
 			location = this
 		}
 		last_created_ambient_object = {
-			save_event_target_as = human_fallen_empires_stargate
+			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
 	}
 }
 
-human_fallen_empires_effect_stargate_off = {
-	event_target:human_fallen_empires_stargate = {
+hfe_effect_stargate_off = {
+	event_target:hfe_stargate = {
 		create_ambient_object = {
-			type = human_fallen_empires_object_stargate_0
+			type = hfe_object_stargate_0
 			location = this
 		}
 		last_created_ambient_object = {
-			save_event_target_as = human_fallen_empires_stargate
+			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
 	}
 }
 
-human_fallen_empires_effect_stargate_add = {
+hfe_effect_stargate_add = {
 	create_ambient_object = {
-		type = human_fallen_empires_object_stargate_0
-		location = event_target:human_fallen_empires_stargate_planet
+		type = hfe_object_stargate_0
+		location = event_target:hfe_stargate_planet
 	}
 	last_created_ambient_object = {
-		save_event_target_as = human_fallen_empires_stargate
+		save_event_target_as = hfe_stargate
 	}
 }
 
-human_fallen_empires_effect_stargate_remove = {
-	destroy_ambient_object = event_target:human_fallen_empires_stargate
+hfe_effect_stargate_remove = {
+	destroy_ambient_object = event_target:hfe_stargate
 }

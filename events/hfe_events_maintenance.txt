@@ -1,11 +1,11 @@
 #
-namespace = human_fallen_empires_maintenance
+namespace = hfe_maintenance
 
 # This = Ship
 # From = Disabler Ship
 # kill starbases of drone on_ship_disabled
 ship_event = {
-	id = human_fallen_empires_maintenance.0
+	id = hfe_maintenance.0
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -13,7 +13,7 @@ ship_event = {
 		exists = this
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_drone
+			is_country_type = hfe_drone
 		}
 		is_ship_class = shipclass_starbase
 	}
@@ -26,7 +26,7 @@ ship_event = {
 						is_same_value = root.solar_system
 					}
 				}
-				human_fallen_empires_effect_convert_to_asteroid = yes
+				hfe_effect_convert_to_asteroid = yes
 			}
 		}
 		#log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
@@ -36,7 +36,7 @@ ship_event = {
 
 # log drone outpost
 ship_event = {
-	id = human_fallen_empires_maintenance.1
+	id = hfe_maintenance.1
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -45,8 +45,8 @@ ship_event = {
 		exists = owner
 		owner = {
 			or = {
-				is_country_type = human_fallen_empires_drone
-				is_country_type = human_fallen_empires_pirate
+				is_country_type = hfe_drone
+				is_country_type = hfe_pirate
 			}
 		}
 	}
@@ -58,25 +58,25 @@ ship_event = {
 
 #
 planet_event = {
-	id = human_fallen_empires_maintenance.2
+	id = hfe_maintenance.2
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_drone
+			is_country_type = hfe_drone
 		}
 	}
 
 	immediate = {
 		#log = "converting to asteroid [this.GetName]"
-		human_fallen_empires_effect_convert_to_asteroid = yes
+		hfe_effect_convert_to_asteroid = yes
 	}
 }
 
 ship_event = {
-	id = human_fallen_empires_maintenance.3
+	id = hfe_maintenance.3
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -84,9 +84,9 @@ ship_event = {
 		exists = solar_system
 		exists = owner
 		owner = {
-			is_country_type = human_fallen_empires_drone
+			is_country_type = hfe_drone
 		}
-		has_global_flag = human_fallen_empires_drone_awake
+		has_global_flag = hfe_drone_awake
 	}
 
 	immediate = {
@@ -125,12 +125,12 @@ ship_event = {
 
 # clean countries
 country_event = {
-	id = human_fallen_empires_maintenance.4
+	id = hfe_maintenance.4
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_country_flag = human_fallen_empires_auto_delete
+		has_country_flag = hfe_auto_delete
 		num_fleets < 1
 		num_owned_planets < 1
 	}
@@ -142,7 +142,7 @@ country_event = {
 
 # trait opinion modifiers
 country_event = {
-	id = human_fallen_empires_maintenance.5
+	id = hfe_maintenance.5
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -161,19 +161,19 @@ country_event = {
 					root = {
 						exists = ruler
 						ruler = {
-							has_trait = human_fallen_empires_ruler_trait_imperialist
+							has_trait = hfe_ruler_trait_imperialist
 						}
 					}
 					# not = {
 					# 	has_opinion_modifier = {
 					# 		who = root
-					# 		modifier = human_fallen_empires_opinion_features_imperialist
+					# 		modifier = hfe_opinion_features_imperialist
 					# 	}
 					# }
 				 }
 				 add_opinion_modifier = {
 					 who = root
-					 modifier = human_fallen_empires_opinion_features_imperialist
+					 modifier = hfe_opinion_features_imperialist
 				 }
 			}
 			else_if = {
@@ -182,18 +182,18 @@ country_event = {
 						root = {
 							exists = ruler
 							ruler = {
-								has_trait = human_fallen_empires_ruler_trait_imperialist
+								has_trait = hfe_ruler_trait_imperialist
 							}
 						}
 					}
 					has_opinion_modifier = {
 						who = root
-						modifier = human_fallen_empires_opinion_features_imperialist
+						modifier = hfe_opinion_features_imperialist
 					}
 				}
 				remove_opinion_modifier = {
 					who = root
-					modifier = human_fallen_empires_opinion_features_imperialist
+					modifier = hfe_opinion_features_imperialist
 				}
 			}
 		}
@@ -202,17 +202,17 @@ country_event = {
 
 # pop hooks on_pop_fully_grown on_buildable_pop_created on_pop_birth on_added_pop on_pop_migration_end on_pop_resettled
 pop_event = {
-	id = human_fallen_empires_maintenance.6
+	id = hfe_maintenance.6
 	hide_window = yes
 	is_triggered_only = yes
 
 	immediate = {
 		# pop_event = {
-		# 	id = human_fallen_empires_population.0
+		# 	id = hfe_population.0
 		# }
 		# instant assimilation
 		# pop_event = {
-		# 	id = human_fallen_empires.5085
+		# 	id = hfe.5085
 		# }
 	}
 }
@@ -221,85 +221,85 @@ pop_event = {
 # TODO
 # on_purge_complete
 # planet_event = {
-# 	id = human_fallen_empires_maintenance.10
+# 	id = hfe_maintenance.10
 # 	hide_window = yes
 # 	is_triggered_only = yes
 
 # 	trigger = {
 # 		any_owned_pop = {
-# 			has_pop_flag = human_fallen_empires_building_assimilator
+# 			has_pop_flag = hfe_building_assimilator
 # 			is_being_force_purged = yes
-# 			human_fallen_empires_trigger_assimilator_on_tile = yes
+# 			hfe_trigger_assimilator_on_tile = yes
 # 		}
 # 	}
 
 # 	immediate = {
 # 		random_tile = {
 # 			limit = {
-# 				has_building = human_fallen_empires_building_assimilator
+# 				has_building = hfe_building_assimilator
 # 				is_ruined = no
 # 				not = {
 # 					exists = pop
 # 				}
 # 			}
 # 			#log = "assimilator tile saved"
-# 			save_event_target_as = human_fallen_empires_assimilator_tile_target
+# 			save_event_target_as = hfe_assimilator_tile_target
 # 		}
 # 		owner = {
 # 			country_event = {
-# 				id = human_fallen_empires_maintenance.14
+# 				id = hfe_maintenance.14
 # 				days = 1
 # 			}
-# 			human_fallen_empires_effect_add_unity.1 = yes
-# 			human_fallen_empires_effect_add_society_research.2 = yes
+# 			hfe_effect_add_unity.1 = yes
+# 			hfe_effect_add_society_research.2 = yes
 # 		}
 # 	}
 # }
 
 # # on_pop_migration_end on_pop_moved on_pop_resettled
 # pop_event = {
-# 	id = human_fallen_empires_maintenance.11
+# 	id = hfe_maintenance.11
 # 	hide_window = yes
 # 	is_triggered_only = yes
 
 # 	trigger = {
-# 		human_fallen_empires_trigger_assimilator_pop_valid_with_ai_block = yes
-# 		human_fallen_empires_trigger_assimilator_on_tile = yes
+# 		hfe_trigger_assimilator_pop_valid_with_ai_block = yes
+# 		hfe_trigger_assimilator_on_tile = yes
 # 	}
 
 # 	immediate = {
-# 		set_pop_flag = human_fallen_empires_building_assimilator
+# 		set_pop_flag = hfe_building_assimilator
 # 		purge = yes
 # 	}
 # }
 
 # # on_pop_migration_end on_pop_moved on_pop_resettled
 # pop_event = {
-# 	id = human_fallen_empires_maintenance.12
+# 	id = hfe_maintenance.12
 # 	hide_window = yes
 # 	is_triggered_only = yes
 
 # 	trigger = {
-# 		has_pop_flag = human_fallen_empires_building_assimilator
+# 		has_pop_flag = hfe_building_assimilator
 # 		is_being_force_purged = yes
-# 		human_fallen_empires_trigger_assimilator_on_tile = no
+# 		hfe_trigger_assimilator_on_tile = no
 # 	}
 
 # 	immediate = {
-# 		remove_pop_flag = human_fallen_empires_building_assimilator
+# 		remove_pop_flag = hfe_building_assimilator
 # 		purge = no
 # 	}
 # }
 
 # planet_event = {
-# 	id = human_fallen_empires_maintenance.13
+# 	id = hfe_maintenance.13
 # 	hide_window = yes
 # 	is_triggered_only = yes
 
 # 	immediate = {
 # 		every_owned_pop = {
 # 			pop_event = {
-# 				id = human_fallen_empires_maintenance.12
+# 				id = hfe_maintenance.12
 # 			}
 # 		}
 # 	}
@@ -307,23 +307,23 @@ pop_event = {
 
 # assimilator auto resettle
 # country_event = {
-# 	id = human_fallen_empires_maintenance.14
+# 	id = hfe_maintenance.14
 # 	hide_window = yes
 # 	is_triggered_only = yes
 
 # 	trigger = {
-# 		has_country_flag = human_fallen_empires_assimilator_discovered
+# 		has_country_flag = hfe_assimilator_discovered
 # 		not = {
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.7
+# 			has_policy_flag = hfe_policies_assimilator.7
 # 		}
 # 		or = {
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.0
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.1
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.2
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.3
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.4
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.5
-# 			has_policy_flag = human_fallen_empires_policies_assimilator.6
+# 			has_policy_flag = hfe_policies_assimilator.0
+# 			has_policy_flag = hfe_policies_assimilator.1
+# 			has_policy_flag = hfe_policies_assimilator.2
+# 			has_policy_flag = hfe_policies_assimilator.3
+# 			has_policy_flag = hfe_policies_assimilator.4
+# 			has_policy_flag = hfe_policies_assimilator.5
+# 			has_policy_flag = hfe_policies_assimilator.6
 # 		}
 # 	}
 
@@ -331,13 +331,13 @@ pop_event = {
 # 		if = {
 # 			limit = {
 # 				not = {
-# 					exists = event_target:human_fallen_empires_assimilator_tile_target
+# 					exists = event_target:hfe_assimilator_tile_target
 # 				}
 # 			}
 # 			random_owned_planet = {
 # 				limit = {
 # 					any_tile = {
-# 						has_building = human_fallen_empires_building_assimilator
+# 						has_building = hfe_building_assimilator
 # 						is_ruined = no
 # 						not = {
 # 							exists = pop
@@ -346,33 +346,33 @@ pop_event = {
 # 				}
 # 				random_tile = {
 # 					limit = {
-# 						has_building = human_fallen_empires_building_assimilator
+# 						has_building = hfe_building_assimilator
 # 						is_ruined = no
 # 						not = {
 # 							exists = pop
 # 						}
 # 					}
-# 					save_event_target_as = human_fallen_empires_assimilator_tile_target
+# 					save_event_target_as = hfe_assimilator_tile_target
 # 				}
 # 			}
 # 		}
 # 		if = {
 # 			limit = {
-# 				exists = event_target:human_fallen_empires_assimilator_tile_target
+# 				exists = event_target:hfe_assimilator_tile_target
 # 			}
-# 			human_fallen_empires_effect_assimilator_find_pop = yes
+# 			hfe_effect_assimilator_find_pop = yes
 # 			if = {
 # 				limit = {
-# 					exists = event_target:human_fallen_empires_assimilator_pop_target
+# 					exists = event_target:hfe_assimilator_pop_target
 # 				}
 # 				resettle_pop = {
-# 					pop = event_target:human_fallen_empires_assimilator_pop_target
-# 					planet = event_target:human_fallen_empires_assimilator_tile_target.planet
-# 					tile = event_target:human_fallen_empires_assimilator_tile_target
+# 					pop = event_target:hfe_assimilator_pop_target
+# 					planet = event_target:hfe_assimilator_tile_target.planet
+# 					tile = event_target:hfe_assimilator_tile_target
 # 				}
-# 				event_target:human_fallen_empires_assimilator_pop_target = {
+# 				event_target:hfe_assimilator_pop_target = {
 # 					pop_event = {
-# 						id = human_fallen_empires_maintenance.11
+# 						id = hfe_maintenance.11
 # 					}
 # 				}
 # 			}
@@ -382,7 +382,7 @@ pop_event = {
 
 # fix psi traits
 country_event = {
-	id = human_fallen_empires_maintenance.50
+	id = hfe_maintenance.50
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -401,7 +401,7 @@ country_event = {
 
 # change subject type
 country_event = {
-	id = human_fallen_empires_maintenance.51
+	id = hfe_maintenance.51
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -409,12 +409,12 @@ country_event = {
 		every_subject = {
 			limit = {
 				not = {
-					is_subject_type = human_fallen_empires_egypt_vassal
+					is_subject_type = hfe_egypt_vassal
 				}
 			}
 			set_subject_of = {
 				who = root
-				subject_type = human_fallen_empires_egypt_vassal
+				subject_type = hfe_egypt_vassal
 			}
 		}
 	}
