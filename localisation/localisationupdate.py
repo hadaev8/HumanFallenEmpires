@@ -15,10 +15,8 @@ loc_indexes = [loc_rows.index(i) for i in loc_rows if i.startswith('l_')]
 eng_fallback = sh.col_values(1+loc_rows.index('l_english:'))
 for loc_index in loc_indexes:
     loc = sh.col_values(1+loc_index)
-    out_file = 'human_fallen_empires_' + loc_rows[loc_index].replace(':', '') + '.yml'
-    if os.path.exists(out_file):
-        os.remove(out_file)
-    with open(out_file, 'a', encoding='utf-8') as f:
+    out_file = 'hfe_' + loc_rows[loc_index].replace(':', '') + '.yml'
+    with open(out_file, 'w', encoding='utf-8') as f:
         f.write(u'\uFEFF')
         f.write(loc_rows[loc_index] + '\n')
         for i, j in enumerate(loc):
