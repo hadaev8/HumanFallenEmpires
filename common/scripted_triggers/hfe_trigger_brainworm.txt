@@ -1,23 +1,8 @@
 #
 
 # for pop
-hfe_trigger_is_brainworm_target = {
-	# TODO is_growing = no
-	hfe_trigger_is_brainworm_target_growing = yes
-}
-
-hfe_trigger_is_brainworm_target_growing = {
-	hfe_trigger_can_be_brainworm = yes
-	#exists = tile
-	# TODO
-	# tile = {
-	# 	nor = {
-	# 		has_building = hfe_brainworm_reservation_0
-	# 		has_building = hfe_brainworm_reservation_1
-	# 		has_building_construction = hfe_brainworm_reservation_0
-	# 		has_building_construction = hfe_brainworm_reservation_1
-	# 	}
-	# }
+hfe_trigger_is_brainworm_species = {
+	has_trait = hfe_species_trait_brainworm
 }
 
 hfe_trigger_is_brainworm = {
@@ -25,10 +10,11 @@ hfe_trigger_is_brainworm = {
 	is_being_purged = no
 }
 
-hfe_trigger_non_brainworm_in_brainworm_country = {
-	hfe_trigger_can_be_brainworm = yes
-	owner = {
-		hfe_trigger_brainworm_country = yes
+hfe_trigger_non_brainworm_species = {
+	hfe_trigger_is_robot = no
+	hfe_trigger_is_brainworm_species = no
+	not = {
+		has_trait = trait_nerve_stapled
 	}
 }
 
@@ -36,6 +22,10 @@ hfe_trigger_can_be_brainworm = {
 	exists = owner
 	hfe_trigger_non_brainworm_species = yes
 	is_being_purged = no
+	nor = {
+		has_job = job_hfe_job_brainworm_breeder_target
+		has_job = job_hfe_job_brainworm_preserved
+	}
 }
 
 hfe_trigger_brainworm_country = {
@@ -50,24 +40,29 @@ hfe_trigger_brainworm_country = {
 	}
 }
 
-hfe_trigger_non_brainworm_species = {
-	hfe_trigger_is_robot = no
-	hfe_trigger_is_brainworm_species = no
-	not = {
-		has_trait = trait_nerve_stapled
+hfe_trigger_non_brainworm_in_brainworm_country = {
+	hfe_trigger_can_be_brainworm = yes
+	owner = {
+		hfe_trigger_brainworm_country = yes
 	}
-}
-
-hfe_trigger_is_brainworm_species = {
-	has_trait = hfe_species_trait_brainworm
 }
 
 # for planet
 hfe_trigger_brainworm_planet_for_assimilation = {
-	any_owned_pop = {
-		hfe_trigger_is_brainworm = yes
-	}
-	any_owned_pop = {
-		hfe_trigger_is_brainworm_target = yes
+	or = {
+		and = {
+			exists = owner
+			owner = {
+				hfe_trigger_brainworm_country = yes
+			}
+		}
+		and = {
+			any_owned_pop = {
+				hfe_trigger_is_brainworm = yes
+			}
+			any_owned_pop = {
+				hfe_trigger_can_be_brainworm = yes
+			}
+		}
 	}
 }

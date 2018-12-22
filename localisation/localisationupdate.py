@@ -1,31 +1,46 @@
+# update localisation
 # coding: utf-8
 import gspread
 import os
 from oauth2client.service_account import ServiceAccountCredentials
+import re
+import numpy as np
+
+mod_prefix = 'hfe_'
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('localisationupdate.json', scope)
 gc = gspread.authorize(credentials)
-sh = gc.open_by_key('1wrlW6mMMhEI_EPnSCPDSih1gvnDreK4qV4vyHt0WHK4').get_worksheet(0)
+sht = gc.open_by_key('1wrlW6mMMhEI_EPnSCPDSih1gvnDreK4qV4vyHt0WHK4')
+worksheets = sht.worksheets()
 
-loc_keys = sh.col_values(1)
-loc_rows = sh.row_values(1)
-loc_indexes = [loc_rows.index(i) for i in loc_rows if i.startswith('l_')]
-eng_fallback = sh.col_values(1+loc_rows.index('l_english:'))
-for loc_index in loc_indexes:
-    loc = sh.col_values(1+loc_index)
-    out_file = 'hfe_' + loc_rows[loc_index].replace(':', '') + '.yml'
+localisations = []
+texts = {}
+for worksheet in worksheets:
+    sh = sht.worksheet(re.search("'.*'", str(worksheet)).group().replace("'", ''))
+    sh_all_values = np.array(sh.get_all_values()).transpose()
+    for collumn in sh_all_values:
+        if collumn[0].startswith('l_') or '# loc keys' in collumn[0]:
+            if collumn[0].startswith('l_'):
+                localisations.append(collumn[0])
+            if collumn[0] in texts:
+                texts[collumn[0]] = np.concatenate([np.array(texts[collumn[0]]), collumn[1:]])
+            else:
+                texts[collumn[0]] = collumn[1:]
+
+loc_keys = texts['# loc keys']
+for localisation in set(localisations):
+    out_file = mod_prefix + localisation.replace(':', '') + '.yml'
     with open(out_file, 'w', encoding='utf-8') as f:
-        f.write(u'\uFEFF')
-        f.write(loc_rows[loc_index] + '\n')
-        for i, j in enumerate(loc):
+        f.write(u'\uFEFF' + localisation + '\n')
+        for i, j in enumerate(texts[localisation]):
             if loc_keys[i] != '':
                 if loc_keys[i].startswith('#'):
                     f.write(' ' + loc_keys[i] + '\n')
-                elif loc[i] != '':
-                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], loc[i]))
-                elif eng_fallback[i] == '':
+                elif j != '':
+                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], j))
+                elif texts['l_english:'][i] == '':
                     f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], ' '))
                 else:
-                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], eng_fallback[i]))
+                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], texts['l_english:'][i]))
