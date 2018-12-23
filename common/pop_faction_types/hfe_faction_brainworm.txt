@@ -1,1092 +1,1092 @@
 #
 # for free pops
-hfe_faction_brainworm_free = {
-	election_header = "GFX_faction_header_yellow"
-	guiding_ethic = ethic_xenophobe
-	unique = yes
-	support_multiplier = 1
-
-	resources = {
-		category = pop_factions
-		produces = {
-			influence = 2
-		}
-	}
-
-	is_potential = {
-		hfe_trigger_is_hive = no
-		hfe_trigger_brainworm_country = yes
-		# any_owned_pop = {
-		# 	hfe_trigger_non_brainworm_in_brainworm_country = yes
-		# }
-	}
-
-	parameters = {
-		empire = {
-			type = country
-			valid_objects = {
-				is_same_value = root
-			}
-		}
-	}
-
-	can_join_faction = {
-		hfe_trigger_non_brainworm_in_brainworm_country = yes
-	}
-
-	attraction = {
-		base = 10000
-	}
-
-	leader = {
-		base = 1
-	}
-
-	demand = {
-		title = hfe_faction_brainworm_free_0
-		unfulfilled_title = hfe_faction_brainworm_free_0
-		desc = hfe_faction_brainworm_free_0.desc
-
-		#fulfilled_effect = 5
-		unfulfilled_effect = -100
-
-		potential = {
-		}
-
-		trigger = {
-			owner = {
-				hfe_trigger_brainworm_country = no
-			}
-		}
-	}
-
-	on_create = {
-		# need some new event
-		#pop_faction_event = { id = factions.1 }
-		owner = {
-			random_owned_pop = {
-				limit = {
-					hfe_trigger_non_brainworm_in_brainworm_country = yes
-				}
-				prev = {
-					create_leader = {
-						class = governor
-						species = prev.species
-					}
-				}
-			}
-		}
-		set_leader = last_created_leader
-		leader = {
-			recruitable = no
-		}
-	}
-
-	on_destroy = {
-		leader = {
-			kill_leader = {
-				show_notification = no
-			}
-		}
-	}
-
-	actions = {
-	}
-}
-
-# for worms
-hfe_faction_brainworm_main = {
-	election_header = "GFX_faction_header_yellow"
-	guiding_ethic = ethic_xenophile
-
-	unique = yes
-	support_multiplier = 1
-
-	resources = {
-		category = pop_factions
-		produces = {
-			influence = 2
-		}
-	}
-
-	is_potential = {
-		hfe_trigger_is_hive = no
-		any_owned_pop = {
-			hfe_trigger_is_brainworm = yes
-		}
-	}
-
-	parameters = {
-		empire = {
-			type = country
-			valid_objects = {
-				is_same_value = root
-			}
-		}
-	}
-
-	can_join_faction = {
-		hfe_trigger_is_brainworm = yes
-		not = {
-			has_trait = trait_nerve_stapled
-		}
-	}
-
-	attraction = {
-		base = 10000
-	}
-
-	leader = {
-		base = 100
-		modifier = {
-			factor = 2
-			exists = from
-			from = {
-				exists = leader
-				leader = { leader_class = ruler }
-			}
-		}
-	}
-
-	demand = {
-		title = hfe_faction_brainworm_main_0
-		unfulfilled_title = hfe_faction_brainworm_main_0
-		desc = hfe_faction_brainworm_main_0.desc
-
-		fulfilled_effect = 10
-		unfulfilled_effect = -50
-
-		#potential = {
-		#}
-
-		trigger = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-		}
-	}
-
-	# have planets
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 1
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 0
-				num_owned_planets < 6
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 0
-				num_owned_planets < 6
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 2
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 5
-				num_owned_planets < 11
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 5
-				num_owned_planets < 11
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 3
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 10
-				num_owned_planets < 16
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 10
-				num_owned_planets < 16
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 4
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 15
-				num_owned_planets < 21
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 15
-				num_owned_planets < 21
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 5
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 20
-				num_owned_planets < 26
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 20
-				num_owned_planets < 26
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 6
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 25
-				num_owned_planets < 31
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 25
-				num_owned_planets < 31
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 7
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 30
-				num_owned_planets < 36
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 30
-				num_owned_planets < 36
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 8
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 35
-				num_owned_planets < 41
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 35
-				num_owned_planets < 41
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 9
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 40
-				num_owned_planets < 46
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 40
-				num_owned_planets < 46
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_1
-		unfulfilled_title = hfe_faction_brainworm_main_1
-		desc = hfe_faction_brainworm_main_1.desc
-
-		fulfilled_effect = 10
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				num_owned_planets > 45
-				num_owned_planets < 51
-			}
-		}
-
-		trigger = {
-			owner = {
-				num_owned_planets > 45
-				num_owned_planets < 51
-			}
-		}
-	}
-
-	# have species
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 1
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 0
-			num_unique_species < 6
-		}
-
-		trigger = {
-			num_unique_species > 0
-			num_unique_species < 6
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 2
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 5
-			num_unique_species < 11
-		}
-
-		trigger = {
-			num_unique_species > 5
-			num_unique_species < 11
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 3
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 10
-			num_unique_species < 16
-		}
-
-		trigger = {
-			num_unique_species > 10
-			num_unique_species < 16
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 4
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 15
-			num_unique_species < 21
-		}
-
-		trigger = {
-			num_unique_species > 15
-			num_unique_species < 21
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 5
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 20
-			num_unique_species < 26
-		}
-
-		trigger = {
-			num_unique_species > 20
-			num_unique_species < 26
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 6
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 25
-			num_unique_species < 31
-		}
-
-		trigger = {
-			num_unique_species > 25
-			num_unique_species < 31
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 7
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 30
-			num_unique_species < 36
-		}
-
-		trigger = {
-			num_unique_species > 30
-			num_unique_species < 36
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 8
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 35
-			num_unique_species < 41
-		}
-
-		trigger = {
-			num_unique_species > 35
-			num_unique_species < 41
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 9
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 40
-			num_unique_species < 46
-		}
-
-		trigger = {
-			num_unique_species > 40
-			num_unique_species < 46
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_2
-		unfulfilled_title = hfe_faction_brainworm_main_2
-		desc = hfe_faction_brainworm_main_2.desc
-
-		fulfilled_effect = 10
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-			}
-			num_unique_species > 45
-			num_unique_species < 51
-		}
-
-		trigger = {
-			num_unique_species > 45
-			num_unique_species < 51
-		}
-	}
-
-	# migration
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 1
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 0
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 4
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 0
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 4
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 2
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 3
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 7
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 3
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 7
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 3
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 6
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 10
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 6
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 10
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 4
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 9
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 13
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 9
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 13
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 5
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 12
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 16
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 12
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 16
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 6
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 15
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 19
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 15
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 19
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 7
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 18
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 22
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 18
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 22
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 8
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 21
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 25
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 21
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 25
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 9
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 24
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 28
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 24
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 28
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-	demand = {
-		title = hfe_faction_brainworm_main_3
-		unfulfilled_title = hfe_faction_brainworm_main_3
-		desc = hfe_faction_brainworm_main_3.desc
-
-		fulfilled_effect = 10
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				count_relation = {
-					count > 27
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 31
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				count_relation = {
-					count > 27
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-				count_relation = {
-					count < 31
-					limit = {
-						exists = this
-						has_migration_access = prev
-					}
-				}
-			}
-		}
-	}
-
-	# have non worm relation
-	demand = {
-		title = hfe_faction_brainworm_main_4
-		unfulfilled_title = hfe_faction_brainworm_main_4
-		desc = hfe_faction_brainworm_main_4.desc
-
-		unfulfilled_effect = -5
-
-		potential = {
-			owner = {
-				hfe_trigger_brainworm_country = yes
-				any_relation = {
-					hfe_trigger_brainworm_country = no
-				}
-			}
-		}
-
-		trigger = {
-			owner = {
-				not = {
-					any_relation = {
-						hfe_trigger_brainworm_country = no
-					}
-				}
-			}
-		}
-	}
-
-	# on_create = {
-	# 	pop_faction_event = { id = factions.1 }
-	# }
-
-	on_destroy = {
-	}
-
-	actions = {
-	}
-}
+# hfe_faction_brainworm_free = {
+# 	election_header = "GFX_faction_header_yellow"
+# 	guiding_ethic = ethic_xenophobe
+# 	unique = yes
+# 	support_multiplier = 1
+
+# 	resources = {
+# 		category = pop_factions
+# 		produces = {
+# 			influence = 2
+# 		}
+# 	}
+
+# 	is_potential = {
+# 		hfe_trigger_is_hive = no
+# 		hfe_trigger_brainworm_country = yes
+# 		# any_owned_pop = {
+# 		# 	hfe_trigger_non_brainworm_in_brainworm_country = yes
+# 		# }
+# 	}
+
+# 	parameters = {
+# 		empire = {
+# 			type = country
+# 			valid_objects = {
+# 				is_same_value = root
+# 			}
+# 		}
+# 	}
+
+# 	can_join_faction = {
+# 		hfe_trigger_non_brainworm_in_brainworm_country = yes
+# 	}
+
+# 	attraction = {
+# 		base = 10000
+# 	}
+
+# 	leader = {
+# 		base = 1
+# 	}
+
+# 	demand = {
+# 		title = hfe_faction_brainworm_free_0
+# 		unfulfilled_title = hfe_faction_brainworm_free_0
+# 		desc = hfe_faction_brainworm_free_0.desc
+
+# 		#fulfilled_effect = 5
+# 		unfulfilled_effect = -100
+
+# 		potential = {
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = no
+# 			}
+# 		}
+# 	}
+
+# 	on_create = {
+# 		# need some new event
+# 		#pop_faction_event = { id = factions.1 }
+# 		owner = {
+# 			random_owned_pop = {
+# 				limit = {
+# 					hfe_trigger_non_brainworm_in_brainworm_country = yes
+# 				}
+# 				prev = {
+# 					create_leader = {
+# 						class = governor
+# 						species = prev.species
+# 					}
+# 				}
+# 			}
+# 		}
+# 		set_leader = last_created_leader
+# 		leader = {
+# 			recruitable = no
+# 		}
+# 	}
+
+# 	on_destroy = {
+# 		leader = {
+# 			kill_leader = {
+# 				show_notification = no
+# 			}
+# 		}
+# 	}
+
+# 	actions = {
+# 	}
+# }
+
+# # for worms
+# hfe_faction_brainworm_main = {
+# 	election_header = "GFX_faction_header_yellow"
+# 	guiding_ethic = ethic_xenophile
+
+# 	unique = yes
+# 	support_multiplier = 1
+
+# 	resources = {
+# 		category = pop_factions
+# 		produces = {
+# 			influence = 2
+# 		}
+# 	}
+
+# 	is_potential = {
+# 		hfe_trigger_is_hive = no
+# 		any_owned_pop = {
+# 			hfe_trigger_is_brainworm = yes
+# 		}
+# 	}
+
+# 	parameters = {
+# 		empire = {
+# 			type = country
+# 			valid_objects = {
+# 				is_same_value = root
+# 			}
+# 		}
+# 	}
+
+# 	can_join_faction = {
+# 		hfe_trigger_is_brainworm = yes
+# 		not = {
+# 			has_trait = trait_nerve_stapled
+# 		}
+# 	}
+
+# 	attraction = {
+# 		base = 10000
+# 	}
+
+# 	leader = {
+# 		base = 100
+# 		modifier = {
+# 			factor = 2
+# 			exists = from
+# 			from = {
+# 				exists = leader
+# 				leader = { leader_class = ruler }
+# 			}
+# 		}
+# 	}
+
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_0
+# 		unfulfilled_title = hfe_faction_brainworm_main_0
+# 		desc = hfe_faction_brainworm_main_0.desc
+
+# 		fulfilled_effect = 10
+# 		unfulfilled_effect = -50
+
+# 		#potential = {
+# 		#}
+
+# 		trigger = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 		}
+# 	}
+
+# 	# have planets
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 1
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 0
+# 				num_owned_planets < 6
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 0
+# 				num_owned_planets < 6
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 2
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 5
+# 				num_owned_planets < 11
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 5
+# 				num_owned_planets < 11
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 3
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 10
+# 				num_owned_planets < 16
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 10
+# 				num_owned_planets < 16
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 4
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 15
+# 				num_owned_planets < 21
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 15
+# 				num_owned_planets < 21
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 5
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 20
+# 				num_owned_planets < 26
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 20
+# 				num_owned_planets < 26
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 6
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 25
+# 				num_owned_planets < 31
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 25
+# 				num_owned_planets < 31
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 7
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 30
+# 				num_owned_planets < 36
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 30
+# 				num_owned_planets < 36
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 8
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 35
+# 				num_owned_planets < 41
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 35
+# 				num_owned_planets < 41
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 9
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 40
+# 				num_owned_planets < 46
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 40
+# 				num_owned_planets < 46
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_1
+# 		unfulfilled_title = hfe_faction_brainworm_main_1
+# 		desc = hfe_faction_brainworm_main_1.desc
+
+# 		fulfilled_effect = 10
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				num_owned_planets > 45
+# 				num_owned_planets < 51
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				num_owned_planets > 45
+# 				num_owned_planets < 51
+# 			}
+# 		}
+# 	}
+
+# 	# have species
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 1
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 0
+# 			num_unique_species < 6
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 0
+# 			num_unique_species < 6
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 2
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 5
+# 			num_unique_species < 11
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 5
+# 			num_unique_species < 11
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 3
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 10
+# 			num_unique_species < 16
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 10
+# 			num_unique_species < 16
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 4
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 15
+# 			num_unique_species < 21
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 15
+# 			num_unique_species < 21
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 5
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 20
+# 			num_unique_species < 26
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 20
+# 			num_unique_species < 26
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 6
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 25
+# 			num_unique_species < 31
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 25
+# 			num_unique_species < 31
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 7
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 30
+# 			num_unique_species < 36
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 30
+# 			num_unique_species < 36
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 8
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 35
+# 			num_unique_species < 41
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 35
+# 			num_unique_species < 41
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 9
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 40
+# 			num_unique_species < 46
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 40
+# 			num_unique_species < 46
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_2
+# 		unfulfilled_title = hfe_faction_brainworm_main_2
+# 		desc = hfe_faction_brainworm_main_2.desc
+
+# 		fulfilled_effect = 10
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 			}
+# 			num_unique_species > 45
+# 			num_unique_species < 51
+# 		}
+
+# 		trigger = {
+# 			num_unique_species > 45
+# 			num_unique_species < 51
+# 		}
+# 	}
+
+# 	# migration
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 1
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 0
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 4
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 0
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 4
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 2
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 3
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 7
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 3
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 7
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 3
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 6
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 10
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 6
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 10
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 4
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 9
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 13
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 9
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 13
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 5
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 12
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 16
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 12
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 16
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 6
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 15
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 19
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 15
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 19
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 7
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 18
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 22
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 18
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 22
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 8
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 21
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 25
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 21
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 25
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 9
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 24
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 28
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 24
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 28
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_3
+# 		unfulfilled_title = hfe_faction_brainworm_main_3
+# 		desc = hfe_faction_brainworm_main_3.desc
+
+# 		fulfilled_effect = 10
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				count_relation = {
+# 					count > 27
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 31
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				count_relation = {
+# 					count > 27
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 				count_relation = {
+# 					count < 31
+# 					limit = {
+# 						exists = this
+# 						has_migration_access = prev
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+
+# 	# have non worm relation
+# 	demand = {
+# 		title = hfe_faction_brainworm_main_4
+# 		unfulfilled_title = hfe_faction_brainworm_main_4
+# 		desc = hfe_faction_brainworm_main_4.desc
+
+# 		unfulfilled_effect = -5
+
+# 		potential = {
+# 			owner = {
+# 				hfe_trigger_brainworm_country = yes
+# 				any_relation = {
+# 					hfe_trigger_brainworm_country = no
+# 				}
+# 			}
+# 		}
+
+# 		trigger = {
+# 			owner = {
+# 				not = {
+# 					any_relation = {
+# 						hfe_trigger_brainworm_country = no
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+
+# 	# on_create = {
+# 	# 	pop_faction_event = { id = factions.1 }
+# 	# }
+
+# 	on_destroy = {
+# 	}
+
+# 	actions = {
+# 	}
+# }
