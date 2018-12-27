@@ -37,8 +37,6 @@ on_game_start_country = {
 		hfe_features.10
 		# early contact civic
 		hfe_features.11
-		# brainworm_reservation civic
-		hfe_brainworm.101
 		# spiral_of_death civic
 		hfe_features_spiral_of_death.0
 		# sanctuary civic
@@ -55,17 +53,6 @@ on_leader_spawned = {
 		hfe_brainworm.6
 		# fixing leaders traits
 		hfe_leaders.104
-	}
-}
-
-# Called during empire initialization when starting a new game if has_secondary_species game rule is true.
-# Called before empire_init_create_capital_pops.
-# scope: planet
-# from: secondary species
-empire_init_create_capital_secondary_pops = {
-	events = {
-		hfe_brainworm.100	# secondary species: assign trait_machine_unit, turn into robotics, then create pops
-		# at this point the species might have changed (because we added traits), so FROM might not be the secondary species anymore
 	}
 }
 
@@ -457,109 +444,31 @@ on_planet_defenders_win = {
 	}
 }
 
-on_added_pop = {
+# A pop has finished growing
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_grown = {
 	events = {
-		# pop hooks
-		hfe_maintenance.6
-		# brainworm
-		hfe_brainworm.1
-		# building_assimilator feature
-		#hfe_maintenance.11
-		#hfe_maintenance.12
-	}
-}
-
-# A pop has finished migrating to another planet
-# Root = pop
-# From = Tile on the new planet
-# FromFrom = Tile on the old planet
-on_pop_migration_end = {
-	events = {
-		# pop hooks
-		hfe_maintenance.6
-		# plague
-		hfe_plague.3
-		# brainworm
-		hfe_brainworm.1
-		# building_assimilator feature
-		#hfe_maintenance.11
-		#hfe_maintenance.12
-	}
-}
-
-# A pop has been moved to another tile
-# Root = pop
-# From = previous tile
-on_pop_moved = {
-	events = {
-		# brainworm
-		hfe_brainworm.2
-		# building_assimilator feature
-		#hfe_maintenance.11
-		#hfe_maintenance.12
-	}
-}
-
-# A pop has been resettled to another planet
-# Root = pop
-# From = Tile on the old planet
-on_pop_resettled = {
-	events = {
-		# pop hooks
-		hfe_maintenance.6
-		# brainworm
-		hfe_brainworm.2
-		# building_assimilator feature
-		#hfe_maintenance.11
-		#hfe_maintenance.12
-	}
-}
-
-# A pop has been born
-# This = pop
-on_pop_birth = {
-	events = {
-		# pop hooks
-		hfe_maintenance.6
-		# brainworm
-		hfe_brainworm.2
-	}
-}
-
-# A pop has been built
-# This = pop
-on_buildable_pop_created = {
-	events = {
-		# pop hooks
-		hfe_maintenance.6
-	}
-}
-
-# A pop has become fully grown
-# This = pop
-on_pop_fully_grown = {
-	events = {
-		# pop hooks
-		hfe_maintenance.6
-		# brainworm
+		# brainworm assimilation
 		hfe_brainworm.2
 		# gain governor
 		hfe_leaders.13
 	}
 }
 
-# Pop is released from slavery
-# This = Pop scope
-# owner_species = { (species)
-# owner = { owner_species = { (empire main species)
-# owner = { (empire)
-on_pop_emancipated = {
+# A pop has finished assembling
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_assembled = {
 	events = {
-		#hfe_population.11
+		# gain governor
+		hfe_leaders.13
 	}
 }
 
-#A building construction has been completed.
+# A building construction has been completed.
 # This = Planet
 # From = Tile
 on_building_complete = {

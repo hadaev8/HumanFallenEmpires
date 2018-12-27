@@ -22,408 +22,105 @@
 # 	}
 # }
 
-# #This rule is a condition for bombarding planets
-# #Root = fleet, potential attacker
-# #From = planet, potential target
-# can_orbital_bombard = {
-# 	exists = FROM.OWNER
-# 	NOT = {
-# 		any_owned_ship = {
-# 			is_ship_size = colossus
-# 		}
-# 	}
-# 	# mod
-# 	exists = ROOT.OWNER
-# 	exists = FROM.CONTROLLER
-# 	ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
-# 	# OR = {
-# 		# AND = {
-# 			# ROOT.OWNER = {
-# 				# NOT = { has_communications = FROM.OWNER }
-# 			# }
-# 			# FROM.OWNER = {
-# 				# NOT = { is_country_type = primitive }
-# 			# }
-# 		# }
-# 		# AND = {
-# 			# ROOT.OWNER = {
-# 				# NOR = {
-# 					# has_policy_flag = interference_passive
-# 					# has_policy_flag = interference_active
-# 				# }
-# 			# }
-# 			# FROM.OWNER = { is_country_type = primitive }
-# 		# }
-# 		# ROOT.OWNER = { is_at_war_with = FROM.CONTROLLER }
-# 		# FROM = { is_planet_class = pc_infested }
-# 		# FROM.CONTROLLER = {
-# 			# OR = {
-# 				# is_country_type = swarm
-# 				# is_country_type = ai_empire
-# 				# is_country_type = cybrex_empire
-# 			# }
-# 		# }
-# 		# ROOT.OWNER = {
-# 			# OR = {
-# 				# is_country_type = extradimensional
-# 				# is_country_type = extradimensional_2
-# 				# is_country_type = extradimensional_3
-# 				# is_country_type = swarm
-# 				# is_country_type = ai_empire
-# 				# is_country_type = cybrex_empire
-# 				# is_country_type = dormant_marauders
-# 				# is_country_type = marauder_raiders
-# 				# is_country_type = ruined_marauders
-# 				# is_country_type = awakened_marauders
-# 			# }
-# 		# }
-# 	# }
-# }
+#This rule is a condition for bombarding planets
+#Root = fleet, potential attacker
+#From = planet, potential target
+can_orbital_bombard = {
+	exists = FROM.OWNER
+	NOT = {
+		any_owned_ship = {
+			is_ship_size = colossus
+		}
+	}
+	# mod
+	exists = ROOT.OWNER
+	exists = FROM.CONTROLLER
+	ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
+}
 
-# #Root = country
-# #This = pop
-# #also evaluates true if pop_can_live_planet is false on current planet
-# can_auto_migrate_pop = {
-# 	exists = root
-# 	exists = planet
-# 	exists = tile
-# 	# some special buildings
-# 	tile = {
-# 		nand = {
-# 			or = {
-# 				has_building = hfe_brainworm_reservation_0
-# 				has_building = hfe_brainworm_reservation_1
-# 				has_building = hfe_building_crio
-# 				has_building = hfe_building_assimilator
-# 			}
-# 			is_ruined = yes
-# 		}
-# 	}
-# 	# plague
-# 	nand = {
-# 		root = {
-# 			has_edict = hfe_plague_quarantine
-# 		}
-# 		planet = {
-# 			has_planet_flag = hfe_plague_planet
-# 		}
-# 	}
-# 	# migration
-# 	planet = {
-# 		not = {
-# 			has_modifier = hfe_population_ban_auto_migrate
-# 		}
-# 	}
-# 	# проверить
-# 	or = {
-# 		is_enslaved = no
-# 		and = {
-# 			has_citizenship_type = {
-# 				type = citizenship_caste_system
-# 				country = root
-# 			}
-# 			root = {
-# 				has_edict = hfe_population_allow_for_caste
-# 			}
-# 		}
-# 	}
-# 	# vanilla
-# 	root = {
-# 		is_country_type = default
-# 	}
-# 	is_sapient = yes
-# 	is_being_purged = no
-# 	has_migration_control = no
-# 	is_robot_pop = no
-# 	OR = {
-# 		NOT = { has_trait = trait_self_modified }
-# 		is_same_species = root
-# 	}
-# 	NOT = { has_modifier = recently_migrated }
-# 	NOT = { has_modifier = recent_refugee }
-# }
-
-# #Root = planet
-# #This = pop
-# pop_can_live_on_planet = {
-# 	exists = planet
-# 	# vanilla thing
-# 	custom_tooltip = {
-# 		fail_text = POP_HABITABILITY_TOO_LOW
-# 		root = {
-# 			or = {
-# 				is_planet_class = hfe_pc_pirate_base
-# 				not = {
-# 					habitability = {
-# 						who = prev
-# 						value < 0.2
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-# 	# vanilla thing re factored
-# 	custom_tooltip = {
-# 		fail_text = POP_MAY_NOT_LIVE_ON_PLANET
-# 		OR = {
-# 			is_robot_pop = yes
-# 			# is_sapient = no # проверить нормально ли все с предразумными
-# 			# everyone may live in sectors
-# 			root = { sector_controlled = yes }
-# 			# citizens may always live in core worlds
-# 			has_citizenship_type = { type = citizenship_full }
-# 			has_citizenship_type = { type = citizenship_caste_system }
-# 			has_citizenship_type = { type = citizenship_full_machine }
-# 			has_citizenship_type = { type = citizenship_organic_trophy }
-# 			AND = {
-# 				exists = owner
-# 				OR = {
-# 					# core_worlds_all / hive minds let everyone live in core worlds
-# 					owner = { has_policy_flag = core_worlds_all }
-# 					owner = { has_ethic = ethic_gestalt_consciousness }
-# 					owner = { NOT = { is_country_type = default } }
-# 					# core_worlds_citizens_and_slaves lets slaves live in core worlds
-# 					and = {
-# 						has_citizenship_type = { type = citizenship_slavery }
-# 						owner = { has_policy_flag = core_worlds_citizens_and_slaves }
-# 					}
-# 				}
-# 				# stop non-citizens from moving to planets with recent land appropriation
-# 				# будут мигрировать на планету с присвоением земли, если она в секторе, так и должно быть или пофиксить?
-# 				NAND = {
-# 					root = { sector_controlled = yes }
-# 					root = { has_modifier = land_appropriation }
-# 					planet = { NOT = { is_same_value = root } }
-# 				}
-# 			}
-# 			# everyone can live here
-# 			root = {
-# 				has_modifier = hfe_population_allow_all
-# 			}
-# 			# everyone can live here, in reservation
-# 			# and = {
-# 				# exists = tile
-# 				# tile = {
-# 					# or = {
-# 						# has_building = hfe_brainworm_reservation_0
-# 						# has_building = hfe_brainworm_reservation_1
-# 					# }
-# 				# }
-# 			# }
-# 		}
-# 		nand = {
-# 			has_citizenship_type = { type = citizenship_purge }
-# 			has_purge_type = { type = purge_displacement }
-# 		}
-# 	}
-# 	# population rings
-# 	custom_tooltip = {
-# 		fail_text = POP_MAY_NOT_LIVE_ON_PLANET
-# 		nor = {
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_yellow_ring
-# 				}
-# 				hfe_trigger_is_thrifty = no
-# 			}
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_red_ring
-# 				}
-# 				hfe_trigger_is_industrious = no
-# 			}
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_green_ring
-# 				}
-# 				hfe_trigger_is_agrarian = no
-# 			}
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_blue_ring
-# 				}
-# 				hfe_trigger_is_clever = no
-# 			}
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_grey_ring
-# 				}
-# 				hfe_trigger_is_robot = no
-# 			}
-# 			and = {
-# 				root = {
-# 					has_modifier = hfe_population_ban_auto_migrate
-# 				}
-# 				planet = {
-# 					not = {
-# 						is_planet = root
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-# 	# building_assimilator
-# 	nand = {
-# 		exists = owner
-# 		owner = {
-# 			is_ai = yes
-# 		}
-# 		root = {
-# 			has_building = hfe_building_assimilator
-# 		}
-# 		planet = {
-# 			not = {
-# 				is_planet = root
-# 			}
-# 		}
-# 	}
-# }
-
-# #Root = country
-# #This = pop
-# can_colonize_with_pop = {
-# 	has_colonization_control = no
-# 	OR = {
-# 		NOT = { has_trait = trait_self_modified }
-# 		is_same_species = root
-# 	}
-# 	if = {
-# 		limit = {
-# 			OR = {
-# 				has_culture_shock = yes
-# 				is_sapient = no
-# 				# mod
-# 				has_pop_flag = hfe_plague_pop
-# 			}
-# 		}
-# 		custom_tooltip = {
-# 			always = no
-# 		}
-# 		else = {
-# 			always = yes
-# 		}
-# 	}
-# }
-
-# # Checks if a pop can procreate
-# # This = Pop
-# can_pop_procreate = {
-# 	is_sapient = yes
-# 	is_being_purged = no
-# 	has_culture_shock = no
-# 	pop_can_reproduce = yes
-# 	exists = planet
-# 	OR = {
-# 		planet = { NOT = { has_modifier = land_appropriation } }
-# 		has_citizenship_rights = yes
-# 	}
-# 	# mod
-# 	hfe_trigger_is_brainworm_species = no
-# 	or = {
-# 		has_population_control = no
-# 		planet = {
-# 			has_modifier = hfe_population_birthcontrol_free
-# 		}
-# 	}
-# 	nor = {
-# 		has_trait = hfe_species_trait_infertile
-# 		planet = {
-# 			or = {
-# 				is_planet_class = hfe_pc_pirate_base
-# 				has_modifier = hfe_population_birthcontrol
-# 				has_building = hfe_building_assimilator
-# 			}
-# 		}
-# 	}
-# }
+# Checks if a pop can procreate
+# This = Species
+# Root = Planet
+can_species_procreate = {
+	is_sapient = yes
+	NOR = {
+		has_trait = trait_machine_unit
+		has_trait = trait_mechanical
+	}
+	NAND = {
+		root = { has_modifier = slave_colony }
+		NOT = { has_citizenship_type = { type = citizenship_slavery country = root.owner } }
+    }
+    # mod
+    not = {
+        has_trait = hfe_species_trait_brainworm
+    }
+}
 
 # # this = ship
 # # root = country that kills ship
-# can_spawn_debris = {
-# 	root = {
-# 		or = {
-# 			is_country_type = default
-# 			is_country_type = hfe_pirate
-# 		}
-# 	}
-# 	exists = owner
-# 	owner = {
-# 		NOT = {
-# 			has_ascension_perk = ap_enigmatic_engineering
-# 		}
-# 	}
-# }
+can_spawn_debris = {
+	root = {
+		or = {
+			is_country_type = default
+			is_country_type = hfe_pirate
+		}
+	}
+	exists = owner
+	owner = {
+		NOT = {
+			has_ascension_perk = ap_enigmatic_engineering
+		}
+	}
+}
 
-# # Determines if notification messages should be sent after a ground combat
-# # this: planet
-# # from: winner
-# # root: loser
-# # show_notification_for_ground_combat = {
-# # 	NOT = {
-# # 		has_planet_flag = slave_revolt
-# # 		has_planet_flag = revolt_in_progress
-# # 		has_planet_flag = hfe_plague_planet
-# # 	}
-# # }
+#Root = country
+#This = planet
+can_colonize_outside_borders = {
+	exists = root
+	root = {
+		is_country_type = hfe_features_exodus
+	}
+	exists = solar_system
+	solar_system = {
+		not = {
+			exists = owner
+		}
+	}
+}
 
-# # Root = Pop
-# # From = Country
-# # This = Pop
-# pop_has_no_happiness = {
-# 	FROM = {
-# 		or = {
-# 			is_country_type = default
-# 			is_country_type = human_fallen_empire
-# 		}
-# 	}
-# 	OR = {
-# 		AND = {
-# 			from = { has_authority = auth_machine_intelligence }
-# 			has_trait = trait_machine_unit # Native machine
-# 		}
-# 		AND = {
-# 			from = {
-# 				OR = {
-# 					has_authority = auth_machine_intelligence
-# 					has_policy_flag = ai_outlawed
-# 				}
-# 			}
-# 			has_trait = trait_mechanical # Robot
-# 		}
-# 		AND = {
-# 			from = {
-# 				has_authority = auth_machine_intelligence
-# 				has_civic = civic_machine_assimilator # Assimilator empire
-# 			}
-# 			has_trait = trait_cybernetic # Cyborg pop
-# 		}
-# 		and = {
-# 			exists = tile
-# 			tile = {
-# 				or = {
-# 					has_building = hfe_building_assimilator
-# 					has_building = hfe_building_crio
-# 				}
-# 				is_ruined = no
-# 			}
-# 		}
-# 	}
-# }
+#Root = country
+#This = species
+can_colonize_with_species = {
+	has_colonization_control = {
+		value = no
+		country = root
+	}
+	OR = {
+		NOT = { has_trait = trait_self_modified }
+		is_same_species = root
+	}
+	if = {
+		limit = {
+			or = {
+				is_sapient = no
+				and = {
+					root = {
+						
+					}
+				}
+			}
 
-# #Root = country
-# #This = planet
-# can_colonize_outside_borders = {
-# 	exists = root
-# 	root = {
-# 		is_country_type = hfe_features_exodus
-# 	}
-# 	exists = solar_system
-# 	solar_system = {
-# 		not = {
-# 			exists = owner
-# 		}
-# 	}
-# }
+
+		}
+		custom_tooltip = {
+			always = no
+		}
+	}
+	else = {
+		always = yes
+	}
+}
 
 # # this = country
 # can_have_piracy_risk = {

@@ -8,17 +8,36 @@ event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_country = {
+		if = {
 			limit = {
-				is_country_type = global_event
+				any_country = {
+					is_country_type = default
+					is_ai = no
+				}
 			}
-			country_event = {
-				id = hfe_init.49
-				days = 1
+			random_country = {
+				limit = {
+					is_country_type = default
+					is_ai = no
+				}
+				country_event = {
+					id = hfe_init.50
+				}
 			}
-			country_event = {
-				id = hfe_init.100
-				days = 100
+		}
+		else = {
+			random_country = {
+				limit = {
+					is_country_type = global_event
+				}
+				country_event = {
+					id = hfe_init.49
+					days = 1
+				}
+				country_event = {
+					id = hfe_init.100
+					days = 100
+				}
 			}
 		}
 	}
@@ -787,6 +806,11 @@ country_event = {
 				}
 				hfe_trigger_system_in_free_space = yes
 			}
+			create_cluster = {
+				id = fe1_cluster
+				radius = 80
+				center = this
+			}
 			spawn_system = {
 				min_distance = 10
 				max_distance = 20
@@ -802,6 +826,11 @@ country_event = {
 					exists = owner
 				}
 				hfe_trigger_system_in_free_space = yes
+			}
+			create_cluster = {
+				id = fe1_cluster
+				radius = 80
+				center = this
 			}
 			spawn_system = {
 				min_distance = 10
@@ -828,7 +857,7 @@ country_event = {
 						min_distance = 10
 						max_distance = 20
 						hyperlane = no
-						initializer = hfe_initializer_egypt_col_0
+						initializer = hfe_initializer_egypt_col_1
 					}
 				}
 			}
@@ -959,6 +988,11 @@ country_event = {
 				}
 				hfe_trigger_system_in_free_space = yes
 			}
+			create_cluster = {
+				id = fe1_cluster
+				radius = 80
+				center = this
+			}
 			spawn_system = {
 				min_distance = 10
 				max_distance = 20
@@ -995,6 +1029,12 @@ country_event = {
 				id = hfe_init.103
 				days = 2
 			}
+			every_owned_planet = {
+				planet_event = {
+					id = hfe_init.106
+					days = 2
+				}
+			}
 			# country_event = {
 			# id = hfe_init.103
 			# days = 3
@@ -1009,6 +1049,12 @@ country_event = {
 				id = hfe_init.103
 				days = 4
 			}
+			every_owned_planet = {
+				planet_event = {
+					id = hfe_init.106
+					days = 2
+				}
+			}
 		}
 		event_target:hfe_drone_country = {
 			country_event = {
@@ -1019,6 +1065,7 @@ country_event = {
 	}
 }
 
+# expand borders
 country_event = {
 	id = hfe_init.103
 	is_triggered_only = yes
@@ -1033,6 +1080,7 @@ country_event = {
 	}
 }
 
+# set mining
 country_event = {
 	id = hfe_init.104
 	is_triggered_only = yes
@@ -1043,6 +1091,7 @@ country_event = {
 	}
 }
 
+# set districts
 planet_event = {
 	id = hfe_init.106
 	is_triggered_only = yes
@@ -1053,6 +1102,6 @@ planet_event = {
 	}
 
 	immediate = {
-		# TODO hfe_effect_init_develop_planet = yes
+		hfe_effect_init_set_all_districs = yes
 	}
 }

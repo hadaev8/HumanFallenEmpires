@@ -171,30 +171,83 @@ hfe_effect_init_make_colony = {
 	}
 }
 
-hfe_effect_init_set_pops_20 = {
+hfe_effect_init_set_pops_50 = {
 	while = {
-		count = 20
+		count = 50
 		create_pop = {
 			species = owner
 		}
 	}
 }
 
-hfe_effect_init_set_pops_40 = {
+hfe_effect_init_set_pops_100 = {
 	while = {
-		count = 40
+		count = 100
 		create_pop = {
 			species = owner
+		}
+	}
+}
+
+hfe_effect_init_set_all_districs = {
+	while = {
+		limit = {
+			free_district_slots > 0
+		}
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_city
+						value = 0
+					}
+				}
+				modifier = {
+					factor = 2
+					is_capital = yes
+				}
+				add_district = district_city
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_generator
+						value = 0
+					}
+				}
+				add_district = district_generator
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_mining
+						value = 0
+					}
+				}
+				add_district = district_mining
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_farming
+						value = 0
+					}
+				}
+				add_district = district_farming
+			}
 		}
 	}
 }
 
 hfe_effect_init_develop_planet = {
-	# remove low tier buildings from capital
 	# set buildings
 	# TODO
-
-	hfe_effect_init_set_pops_20 = yes
+	hfe_effect_init_set_all_districs = yes
+	hfe_effect_init_set_pops_50 = yes
 	hfe_effect_init_set_starbase = yes
 }
 
@@ -244,7 +297,14 @@ hfe_effect_init_expand_borders = {
 				not = {
 					exists = owner
 				}
-				has_presence = no
+				any_ship_in_system = {
+					exists = owner
+					owner = {
+						not = {
+							is_hostile = event_target:hfe_starbase_owner
+						}
+					}
+				}
 			}
 			ignore_hyperlanes = no
 			hfe_effect_create_starbase = yes

@@ -1,7 +1,6 @@
 #
 
 # egypt
-# reneame initializers
 hfe_initializer_egypt_main = {
 	prevent_anomalies = yes
 	flags = {
@@ -61,20 +60,16 @@ hfe_initializer_egypt_main = {
 	}
 	planet = {
 		name = "Home of Light"
-		orbit_distance = 20
 		class = pc_nuked
+		modifiers = none
+		deposit_blockers = none
+		size = 25
+		orbit_distance = 20
 		orbit_angle = {
 			min = 90
 			max = 270
 		}
-		size = 25
-		deposit_blockers = none
 		init_effect = {
-			create_cluster = {
-				id = fe1_cluster
-				radius = 100
-				center = this.solar_system
-			}
 			create_country = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
@@ -144,8 +139,29 @@ hfe_initializer_egypt_main = {
 			set_owner = event_target:hfe_egypt_country
 			set_planet_flag = hfe_home_of_light
 			set_capital = yes
-			hfe_effect_init_set_pops_40 = yes
-			add_building = building_ancient_palace
+			hfe_effect_init_set_pops_100 = yes
+			create_pop = {
+				species = event_target:hfe_ahet_species
+			}
+			last_created_pop = {
+				modify_species = {
+					add_trait = hfe_species_trait_happy_slave
+				}
+				species = {
+					save_global_event_target_as = hfe_ahet_servant_species
+				}
+				kill_pop = yes
+			}
+			every_owned_pop = {
+				random_list = {
+					40 = {
+					}
+					10 = {
+						change_species = event_target:hfe_ahet_servant_species
+					}
+				}
+			}
+			add_building = building_system_capital
 			add_building = hfe_building_terraformer
 			add_building = building_master_archive
 			add_building = building_fe_stronghold
@@ -161,27 +177,6 @@ hfe_initializer_egypt_main = {
 			add_building = building_dimensional_fabricator
 			add_building = building_nano_forge
 			add_building = building_nano_forge
-			while = {
-				count = 15
-				add_district = district_city
-			}
-			create_pop = {
-				species = event_target:hfe_ahet_species
-			}
-			last_created_pop = {
-				modify_species = {
-					add_trait = hfe_species_trait_happy_slave
-				}
-				species = {
-					save_global_event_target_as = hfe_ahet_servant_species
-				}
-			}
-			while = {
-				count = 20
-				create_pop = {
-					species = event_target:hfe_ahet_servant_species
-				}
-			}
 			while = {
 				count = 12
 				create_army = {
@@ -300,6 +295,7 @@ hfe_initializer_egypt_main = {
 	}
 }
 
+# hope
 hfe_initializer_egypt_col_0 = {
 	prevent_anomalies = yes
 	flags = {
@@ -324,6 +320,8 @@ hfe_initializer_egypt_col_0 = {
 	planet = {
 		name = Hope
 		class = pc_continental
+		modifiers = none
+		deposit_blockers = none
 		orbit_distance = 0
 		orbit_angle = {
 			min = 90
@@ -335,7 +333,17 @@ hfe_initializer_egypt_col_0 = {
 		}
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
-			add_building = building_ancient_palace
+			hfe_effect_init_set_pops_50 = yes
+			every_owned_pop = {
+				random_list = {
+					40 = {
+					}
+					10 = {
+						change_species = event_target:hfe_ahet_servant_species
+					}
+				}
+			}
+			add_building = building_system_capital
 			add_building = building_master_archive
 			add_building = building_fe_stronghold
 			add_building = building_fe_dome
@@ -350,11 +358,6 @@ hfe_initializer_egypt_col_0 = {
 			add_building = building_dimensional_fabricator
 			add_building = building_nano_forge
 			add_building = building_nano_forge
-			while = {
-				count = 15
-				add_district = district_city
-			}
-			hfe_effect_init_set_pops_20 = yes
 			while = {
 				count = 10
 				create_pop = {
@@ -458,7 +461,7 @@ hfe_initializer_egypt_col_0 = {
 	# 		init_effect = {
 	# 			set_owner = event_target:hfe_egypt_country
 	# 			# TODO
-	# 			add_building = building_ancient_palace
+	# 			add_building = building_system_capital
 	# 			add_building = building_master_archive
 	# 			add_building = building_fe_stronghold
 	# 			add_building = building_fe_dome
@@ -473,11 +476,7 @@ hfe_initializer_egypt_col_0 = {
 	# 			add_building = building_dimensional_fabricator
 	# 			add_building = building_nano_forge
 	# 			add_building = building_nano_forge
-	# 			while = {
-	# 				count = 15
-	# 				add_district = district_city
-	# 			}
-	# 			hfe_effect_init_set_pops_20 = yes
+	# 			hfe_effect_init_set_pops_50 = yes
 	# 			while = {
 	# 				count = 10
 	# 				create_pop = {
@@ -524,6 +523,8 @@ hfe_initializer_egypt_col_1 = {
 	planet = {
 		name = Gift
 		class = pc_continental
+		modifiers = none
+		deposit_blockers = none
 		orbit_distance = 0
 		orbit_angle = {
 			min = 90
@@ -535,8 +536,18 @@ hfe_initializer_egypt_col_1 = {
 		}
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
+			hfe_effect_init_set_pops_50 = yes
+			every_owned_pop = {
+				random_list = {
+					40 = {
+					}
+					10 = {
+						change_species = event_target:hfe_ahet_servant_species
+					}
+				}
+			}
 			# TODO
-			add_building = building_ancient_palace
+			add_building = building_system_capital
 			add_building = building_master_archive
 			add_building = building_fe_stronghold
 			add_building = building_fe_dome
@@ -551,17 +562,6 @@ hfe_initializer_egypt_col_1 = {
 			add_building = building_dimensional_fabricator
 			add_building = building_nano_forge
 			add_building = building_nano_forge
-			while = {
-				count = 15
-				add_district = district_city
-			}
-			hfe_effect_init_set_pops_20 = yes
-			while = {
-				count = 10
-				create_pop = {
-					species = event_target:hfe_ahet_servant_species
-				}
-			}
 			hfe_effect_create_starbase_citadel_with_buildings_from_planet = yes
 		}
 		change_orbit = @base_moon_distance
@@ -738,7 +738,7 @@ hfe_initializer_ahet_0 = {
 				kill_pop = yes
 			}
 			hfe_effect_primitive_set_buildings = yes
-			hfe_effect_primitive_set_pops = yes
+			hfe_effect_primitive_add_pops = yes
 			create_army = {
 				name = "National Army of Pluan Zialeo"
 				owner = owner
@@ -893,7 +893,7 @@ hfe_initializer_ahet_1 = {
 				kill_pop = yes
 			}
 			hfe_effect_primitive_set_buildings = yes
-			hfe_effect_primitive_set_pops = yes
+			hfe_effect_primitive_add_pops = yes
 			every_owned_pop = {
 				random_list = {
 					10 = {
@@ -951,6 +951,7 @@ hfe_initializer_ahet_1 = {
 # varelse
 hfe_initializer_varelse = {
 	prevent_anomalies = yes
+	#name = "test"
 	class = rl_standard_stars
 	flags = {
 		primitive_system
@@ -987,6 +988,7 @@ hfe_initializer_varelse = {
 			min = 15
 			max = 25
 		}
+		modifiers = none
 		deposit_blockers = none
 		init_effect = {
 			create_country = {
@@ -1020,9 +1022,15 @@ hfe_initializer_varelse = {
 			add_modifier = {
 				modifier = hfe_varelse
 			}
+			hfe_effect_primitive_add_pops = yes
 			hfe_effect_primitive_set_buildings = yes
-			hfe_effect_primitive_set_pops = yes
 			add_building = building_nano_forge
+			while = {
+				count = 7
+				create_pop = {
+					species = owner
+				}
+			}
 			# TODO
 			# war blockers
 			while = {
@@ -1510,7 +1518,7 @@ hfe_initializer_copernicus = {
 				kill_pop = yes
 			}
 			hfe_effect_primitive_set_buildings = yes
-			hfe_effect_primitive_set_pops = yes
+			hfe_effect_primitive_add_pops = yes
 		}
 		planet = {
 			init_effect = {
@@ -1965,17 +1973,13 @@ hfe_initializer_future_main = {
 		moon = {
 			name = "Terra Nova"
 			class = pc_gaia
-					entity = hfe_entity_gaia_orange
+			entity = hfe_entity_gaia_orange
 			size = 25
 			orbit_distance = 20
 			orbit_angle = 20
+			modifiers = none
 			deposit_blockers = none
 			init_effect = {
-				create_cluster = {
-					id = fe1_cluster
-					radius = 100
-					center = this.solar_system
-				}
 				create_country = {
 					name = "Kad Republic"
 					type = human_fallen_empire
@@ -2000,7 +2004,7 @@ hfe_initializer_future_main = {
 				set_owner = event_target:hfe_future_country
 				set_capital = yes
 				# TODO
-				add_building = building_ancient_palace
+				add_building = building_system_capital
 				add_building = building_master_archive
 				add_building = building_fe_stronghold
 				add_building = building_fe_dome
@@ -2015,11 +2019,7 @@ hfe_initializer_future_main = {
 				add_building = building_dimensional_fabricator
 				add_building = building_nano_forge
 				add_building = building_nano_forge
-				while = {
-					count = 15
-					add_district = district_city
-				}
-				hfe_effect_init_set_pops_40 = yes
+				hfe_effect_init_set_pops_100 = yes
 				while = {
 					count = 12
 					create_army = {
@@ -2079,10 +2079,11 @@ hfe_initializer_future_main = {
 			size = 15
 			orbit_distance = 8
 			orbit_angle = 10
+			modifiers = none
 			deposit_blockers = none
 			init_effect = {
 				set_owner = event_target:hfe_future_country
-				add_building = building_ancient_palace
+				add_building = building_system_capital
 				add_building = building_master_archive
 				add_building = building_fe_stronghold
 				add_building = building_fe_dome
@@ -2097,11 +2098,7 @@ hfe_initializer_future_main = {
 				add_building = building_dimensional_fabricator
 				add_building = building_nano_forge
 				add_building = building_nano_forge
-				while = {
-					count = 15
-					add_district = district_city
-				}
-				hfe_effect_init_set_pops_40 = yes
+				hfe_effect_init_set_pops_100 = yes
 			}
 		}
 	}
