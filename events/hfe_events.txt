@@ -1835,14 +1835,13 @@ country_event = {
 	title = hfe.152.name
 	desc = {
 		trigger = {
-			switch = {
-				trigger = has_country_flag
-				hfe.152.0 = {
-					text = hfe.152.desc.1
-				}
-				default = {
-					text = hfe.152.desc.0
-				}
+			fail_text = {
+				text = hfe.152.desc.0
+				has_country_flag = hfe.152.0
+			}
+			success_text = {
+				text = hfe.152.desc.1
+				has_country_flag = hfe.152.0
 			}
 		}
 	}
@@ -2589,15 +2588,13 @@ ship_event = {
 	title = hfe.253.name
 	desc = {
 		trigger = {
-			fail_text = {
-				text = hfe.253.desc.0
-				owner = {
+			hidden:owner = {
+				fail_text = {
+					text = hfe.253.desc.0
 					has_country_flag = hfe_egypt_contacted
 				}
-			}
-			success_text = {
-				text = hfe.253.desc.1
-				owner = {
+				success_text = {
+					text = hfe.253.desc.1
 					has_country_flag = hfe_egypt_contacted
 				}
 			}
@@ -2983,40 +2980,38 @@ fleet_event = {
 	title = hfe.350.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = hfe.350.desc.0.0
-				owner = {
+			hidden:owner = {
+				success_text = {
+					text = hfe.350.desc.0.0
 					has_country_flag = hfe_marked_as_human
 				}
-			}
-			fail_text = {
-				text = hfe.350.desc.0.1
-				owner = {
+				fail_text = {
+					text = hfe.350.desc.0.1
 					has_country_flag = hfe_marked_as_human
 				}
-			}
-			success_text = {
-				text = hfe.350.desc.1.0
-				exists = event_target:hfe_earth
-				event_target:hfe_earth = {
-					not = {
+				success_text = {
+					text = hfe.350.desc.1.0
+					exists = event_target:hfe_earth
+					event_target:hfe_earth = {
+						not = {
+							is_planet_class = pc_nuked
+						}
+						or = {
+							not = {
+								exists = owner
+							}
+							owner = {
+								is_country_type = primitive
+							}
+						}
+					}
+				}
+				success_text = {
+					text = hfe.350.desc.1.1
+					exists = event_target:hfe_earth
+					event_target:hfe_earth = {
 						is_planet_class = pc_nuked
 					}
-					or = {
-						not = {
-							exists = owner
-						}
-						owner = {
-							is_country_type = primitive
-						}
-					}
-				}
-			}
-			success_text = {
-				text = hfe.350.desc.1.1
-				exists = event_target:hfe_earth
-				event_target:hfe_earth = {
-					is_planet_class = pc_nuked
 				}
 			}
 		}
@@ -3271,16 +3266,14 @@ ship_event = {
 	title = hfe.356.name
 	desc = {
 		trigger = {
-			text = hfe.356.desc.0
-			success_text = {
-				text = hfe.356.desc.1
-				owner = {
+			hidden:owner = {
+				text = hfe.356.desc.0
+				success_text = {
+					text = hfe.356.desc.1
 					has_country_flag = hfe_copernicus_has_primitive
 				}
-			}
-			success_text = {
-				text = hfe.356.desc.2
-				owner = {
+				success_text = {
+					text = hfe.356.desc.2
 					has_country_flag = hfe_copernicus_has_primitive
 					has_completed_event_chain_counter = {
 						event_chain = hfe_chain_copernicus
@@ -3565,26 +3558,18 @@ country_event = {
 	title = hfe.362.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = hfe.362.desc.0
-				from = {
-					observation_outpost = {
+			hidden:from = {
+				observation_outpost = {
+					success_text = {
+						text = hfe.362.desc.0
 						has_mission = passive_observation
 					}
-				}
-			}
-			success_text = {
-				text = hfe.362.desc.1
-				from = {
-					observation_outpost = {
+					success_text = {
+						text = hfe.362.desc.1
 						has_mission = specimen_collection
 					}
-				}
-			}
-			success_text = {
-				text = hfe.362.desc.2
-				from = {
-					observation_outpost = {
+					success_text = {
+						text = hfe.362.desc.2
 						or = {
 							has_mission = technological_enlightenment_1
 							has_mission = technological_enlightenment_2
@@ -4397,154 +4382,122 @@ ship_event = {
 	title = hfe.510.name
 	desc = {
 		trigger = {
-			# non hive
-			# all
-			success_text = {
-				text = hfe.510.desc.0.0
-				owner = {
+			hidden:owner = {
+				# non hive
+				# all
+				success_text = {
+					text = hfe.510.desc.0.0
 					hfe_trigger_is_hive = no
 				}
-			}
-			# have discovered L gate
-			success_text = {
-				text = hfe.510.desc.0.1.0
-				owner = {
+				# have discovered L gate
+				success_text = {
+					text = hfe.510.desc.0.1.0
 					hfe_trigger_is_hive = no
 					has_seen_any_bypass = lgate
 				}
-			}
-			# have discovered regular gateway
-			success_text = {
-				text = hfe.510.desc.0.1.1
-				owner = {
+				# have discovered regular gateway
+				success_text = {
+					text = hfe.510.desc.0.1.1
 					hfe_trigger_is_hive = no
 					not = {
 						has_seen_any_bypass = lgate
 					}
 					has_seen_any_bypass = gateway
 				}
-			}
-			# not L gateway and not regular gateway
-			success_text = {
-				text = hfe.510.desc.0.1.2
-				owner = {
+				# not L gateway and not regular gateway
+				success_text = {
+					text = hfe.510.desc.0.1.2
 					hfe_trigger_is_hive = no
 					nor = {
 						has_seen_any_bypass = lgate
 						has_seen_any_bypass = gateway
 					}
 				}
-			}
-			# all
-			success_text = {
-				text = hfe.510.desc.0.2
-				owner = {
+				# all
+				success_text = {
+					text = hfe.510.desc.0.2
 					hfe_trigger_is_hive = no
 				}
-			}
-			# have discovered L gate
-			success_text = {
-				text = hfe.510.desc.0.3.0
-				owner = {
+				# have discovered L gate
+				success_text = {
+					text = hfe.510.desc.0.3.0
 					hfe_trigger_is_hive = no
 					has_seen_any_bypass = lgate
 				}
-			}
-			# have discovered regular gateway
-			success_text = {
-				text = hfe.510.desc.0.3.1
-				owner = {
+				# have discovered regular gateway
+				success_text = {
+					text = hfe.510.desc.0.3.1
 					hfe_trigger_is_hive = no
 					not = {
 						has_seen_any_bypass = lgate
 					}
 					has_seen_any_bypass = gateway
 				}
-			}
-			# not L gateway and not regular gateway
-			success_text = {
-				text = hfe.510.desc.0.3.2
-				owner = {
+				# not L gateway and not regular gateway
+				success_text = {
+					text = hfe.510.desc.0.3.2
 					hfe_trigger_is_hive = no
 					nor = {
 						has_seen_any_bypass = lgate
 						has_seen_any_bypass = gateway
 					}
 				}
-			}
-			# all
-			success_text = {
-				text = hfe.510.desc.0.4
-				owner = {
+				# all
+				success_text = {
+					text = hfe.510.desc.0.4
 					hfe_trigger_is_hive = no
 				}
-			}
-			# non synth
-			success_text = {
-				text = hfe.510.desc.0.5.0
-				owner = {
+				# non synth
+				success_text = {
+					text = hfe.510.desc.0.5.0
 					hfe_trigger_is_hive = no
 					not = {
 						#TODO has_trait = trait_robotic_3
 					}
 				}
-			}
-			# synth
-			success_text = {
-				text = hfe.510.desc.0.5.1
-				owner = {
+				# synth
+				success_text = {
+					text = hfe.510.desc.0.5.1
 					hfe_trigger_is_hive = no
 					#TODO has_trait = trait_robotic_3
 				}
-			}
-			# robo hive
-			success_text = {
-				text = hfe.510.desc.1.0
-				owner = {
+				# robo hive
+				success_text = {
+					text = hfe.510.desc.1.0
 					has_authority = auth_machine_intelligence
 				}
-			}
-			# have discovered L gate
-			success_text = {
-				text = hfe.510.desc.1.1.0
-				owner = {
+				# have discovered L gate
+				success_text = {
+					text = hfe.510.desc.1.1.0
 					has_authority = auth_machine_intelligence
 					has_seen_any_bypass = lgate
 				}
-			}
-			# have discovered regular gateway
-			success_text = {
-				text = hfe.510.desc.1.1.1
-				owner = {
+				# have discovered regular gateway
+				success_text = {
+					text = hfe.510.desc.1.1.1
 					has_authority = auth_machine_intelligence
 					not = {
 						has_seen_any_bypass = lgate
 					}
 					has_seen_any_bypass = gateway
 				}
-			}
-			# not L gateway and not regular gateway
-			success_text = {
-				text = hfe.510.desc.1.1.2
-				owner = {
+				# not L gateway and not regular gateway
+				success_text = {
+					text = hfe.510.desc.1.1.2
 					has_authority = auth_machine_intelligence
 					nor = {
 						has_seen_any_bypass = lgate
 						has_seen_any_bypass = gateway
 					}
 				}
-			}
-			success_text = {
-				text = hfe.510.desc.1.2
-				owner = {
+				success_text = {
+					text = hfe.510.desc.1.2
 					has_authority = auth_machine_intelligence
 				}
-			}
-			# bio hive
-			success_text = {
-				text = hfe.510.desc.2
-				owner = {
-					has_authority = auth_machine_intelligence
+				# bio hive
+				success_text = {
+					text = hfe.510.desc.2
+					has_authority = auth_hive_mind
 				}
 			}
 		}
@@ -4650,15 +4603,13 @@ planet_event = {
 	title = hfe.511.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = hfe.511.desc.0
-				owner = {
+			hidden:owner = {
+				success_text = {
+					text = hfe.511.desc.0
 					hfe_trigger_is_hive = no
 				}
-			}
-			success_text = {
-				text = hfe.511.desc.1
-				owner = {
+				success_text = {
+					text = hfe.511.desc.1
 					hfe_trigger_is_hive = yes
 				}
 			}
@@ -4746,15 +4697,13 @@ ship_event = {
 	title = hfe.512.name
 	desc = {
 		trigger = {
-			success_text = {
-				text = hfe.512.desc.0
-				owner = {
+			hidden:owner = {
+				success_text = {
+					text = hfe.512.desc.0
 					hfe_trigger_is_hive = no
 				}
-			}
-			success_text = {
-				text = hfe.512.desc.1
-				owner = {
+				success_text = {
+					text = hfe.512.desc.1
 					hfe_trigger_is_hive = yes
 				}
 			}
@@ -9296,22 +9245,20 @@ ship_event = {
 	title = hfe.5060.name
 	desc = {
 		trigger = {
-			text = hfe.5060.desc.0
-			text = newline
-			success_text = {
-				text = hfe.5060.desc.1.0
-				owner = {
+			hidden:owner = {
+				text = hfe.5060.desc.0
+				text = newline
+				success_text = {
+					text = hfe.5060.desc.1.0
 					has_country_flag = hfe_future_contacted
 				}
-			}
-			fail_text = {
-				text = hfe.5060.desc.1.1
-				owner = {
+				fail_text = {
+					text = hfe.5060.desc.1.1
 					has_country_flag = hfe_future_contacted
 				}
+				text = newline
+				text = hfe.5060.desc.2
 			}
-			text = newline
-			text = hfe.5060.desc.2
 		}
 	}
 	picture = GFX_evt_hfe_ruins_robots
