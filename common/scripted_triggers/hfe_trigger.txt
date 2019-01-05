@@ -223,7 +223,11 @@ hfe_trigger_hardcore_enabled = {
 
 hfe_trigger_system_in_free_space = {
 	is_fe_cluster = no
-	not = {
+	nor = {
+		has_star_flag = hfe_star_spawn_block
+		has_star_flag = empire_cluster
+		has_star_flag = hostile_system
+		exists = owner
 		any_system = {
 			distance = {
 				source = prev
@@ -232,7 +236,21 @@ hfe_trigger_system_in_free_space = {
 				type = hyperlane
 				#uses_bypass = no # выдает ошибку в логе
 			}
-			exists = owner
+			or = {
+				exists = owner
+				has_star_flag = hfe_star_spawn_block
+				has_star_flag = empire_cluster
+			}
+		}
+		any_system = {
+			distance = {
+				source = prev
+				min_jumps = 0
+				max_jumps = 5
+				type = hyperlane
+				#uses_bypass = no # выдает ошибку в логе
+			}
+			has_star_flag = hostile_system
 		}
 	}
 }
