@@ -13,6 +13,9 @@ event = {
 				any_country = {
 					is_country_type = default
 					is_ai = no
+					not = {
+						has_country_flag = hfe_discovery
+					}
 				}
 			}
 			random_country = {
@@ -823,9 +826,6 @@ country_event = {
 		# future
 		random_rim_system = {
 			limit = {
-				not = {
-					exists = owner
-				}
 				hfe_trigger_system_in_free_space = yes
 			}
 			set_timed_star_flag = {
@@ -840,12 +840,32 @@ country_event = {
 			}
 			set_global_flag = hfe_future_spawned
 		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_future_country
+				}
+			}
+			random_system = {
+				limit = {
+					hfe_trigger_system_in_free_space = yes
+				}
+				set_timed_star_flag = {
+					flag = hfe_star_spawn_block
+					days = 10
+				}
+				spawn_system = {
+					min_distance = 10
+					max_distance = 20
+					hyperlane = no
+					initializer = hfe_initializer_future_main
+				}
+				set_global_flag = hfe_future_spawned
+			}
+		}
 		# egypt
 		random_system = {
 			limit = {
-				not = {
-					exists = owner
-				}
 				hfe_trigger_system_in_free_space = yes
 			}
 			set_timed_star_flag = {
@@ -1003,9 +1023,6 @@ country_event = {
 		# drone
 		random_system = {
 			limit = {
-				not = {
-					exists = owner
-				}
 				hfe_trigger_system_in_free_space = yes
 			}
 			set_timed_star_flag = {
