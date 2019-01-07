@@ -55,77 +55,77 @@ event = {
 					random = 355
 				}
 			}
-			# every_playable_country = {
-			# 	limit = {
-			# 		not = {
-			# 			has_country_flag = hfe_pirate_spawned
-			# 		}
-			# 		num_owned_planets > 2
-			# 		hfe_trigger_is_human_fallen = no
-			# 		is_gestalt = no
-			# 		is_country_type = default
-			# 	}
-			# 	# spawn pirate
-			# 	random_list = {
-			# 		9 = {
-			# 		}
-			# 		1 = {
-			# 			modifier = {
-			# 				factor = 2
-			# 				or = {
-			# 					is_difficulty > 0
-			# 					is_difficulty > 1
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 2
-			# 				or = {
-			# 					is_difficulty > 2
-			# 					is_difficulty > 3
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 2
-			# 				or = {
-			# 					is_at_war = yes
-			# 					recently_lost_war = yes
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 2
-			# 				or = {
-			# 					is_militarist = yes
-			# 					is_egalitarian = yes
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 0.5
-			# 				or = {
-			# 					is_pacifist = yes
-			# 					is_authoritarian = yes
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 2
-			# 				any_owned_planet = {
-			# 					is_occupied_flag = yes
-			# 				}
-			# 			}
-			# 			modifier = {
-			# 				factor = 2
-			# 				exists = capital_scope
-			# 				capital_scope = {
-			# 					is_occupied_flag = yes
-			# 				}
-			# 			}
-			# 			country_event = {
-			# 				id = hfe_pirate.0
-			# 				days = 1
-			# 				random = 355
-			# 			}
-			# 		}
-			# 	}
-			# }
+			every_playable_country = {
+				limit = {
+					not = {
+						has_country_flag = hfe_pirate_spawned
+					}
+					num_owned_planets > 2
+					hfe_trigger_is_human_fallen = no
+					is_gestalt = no
+					is_country_type = default
+				}
+				# spawn pirate
+				random_list = {
+					9 = {
+					}
+					1 = {
+						modifier = {
+							factor = 2
+							or = {
+								is_difficulty > 0
+								is_difficulty > 1
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								is_difficulty > 2
+								is_difficulty > 3
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								is_at_war = yes
+								recently_lost_war = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							or = {
+								is_militarist = yes
+								is_egalitarian = yes
+							}
+						}
+						modifier = {
+							factor = 0.5
+							or = {
+								is_pacifist = yes
+								is_authoritarian = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							any_owned_planet = {
+								is_occupied_flag = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							exists = capital_scope
+							capital_scope = {
+								is_occupied_flag = yes
+							}
+						}
+						country_event = {
+							id = hfe_pirate.0
+							days = 1
+							random = 355
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -6656,6 +6656,7 @@ ship_event = {
 			name = "Station AI"
 			type = hfe_thoth
 			species = root.owner
+			day_zero_contact = yes
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
@@ -6959,7 +6960,7 @@ country_event = {
 				}
 				random_owned_fleet = {
 					limit = {
-						fleet_power > 30000
+						fleet_power > 10000
 					}
 					set_location = {
 						target = event_target:hfe_thoth_location
@@ -6971,29 +6972,20 @@ country_event = {
 			hfe_effect_event_702_next = yes
 		}
 	}
-	option = {
-		name = hfe.702.goodend
-		trigger = {
-			has_country_flag = hfe.702.goodend
-		}
-		hidden_effect = {
-			remove_country_flag = hfe.702.goodend
-		}
-	}
 	# if haven't ju ahet
 	option = {
 		name = hfe.702.5.1
-		# trigger = {
-		# 	has_country_flag = hfe.702.5
-		# 	not = {
-		# 		any_country = {
-		# 			has_country_flag = hfe_egypt
-		# 			any_owned_fleet = {
-		# 				fleet_power > 30000
-		# 			}
-		# 		}
-		# 	}
-		# }
+		trigger = {
+			has_country_flag = hfe.702.5
+			nand = {
+				exists = event_target:hfe_egypt_country
+				event_target:hfe_egypt_country = {
+					any_owned_fleet = {
+						fleet_power > 10000
+					}
+				}
+			}
+		}
 		hidden_effect = {
 			remove_country_flag = hfe.702.5
 			set_country_flag = hfe.702.6
@@ -7002,7 +6994,7 @@ country_event = {
 			}
 		}
 	}
-	# step 6
+	# step 6 if haven't ju ahet
 	option = {
 		name = hfe.702.6.0
 		response_text = hfe.702.6.0.response
@@ -7026,7 +7018,7 @@ country_event = {
 			event_target:hfe_egypt_country = {
 				not = {
 					any_owned_fleet = {
-						fleet_power > 20000
+						fleet_power > 5000
 					}
 				}
 			}
@@ -7047,6 +7039,16 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = hfe.702.6
+		}
+	}
+	# end
+	option = {
+		name = hfe.702.goodend
+		trigger = {
+			has_country_flag = hfe.702.goodend
+		}
+		hidden_effect = {
+			remove_country_flag = hfe.702.goodend
 		}
 	}
 }
@@ -7117,6 +7119,7 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe.702.7
 			event_target:hfe_egypt_country = {
+				# TODO поменять на числовое значение
 				or = {
 					is_patronizing_to = root
 					is_friendly_to = root
