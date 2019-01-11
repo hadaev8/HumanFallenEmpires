@@ -164,6 +164,29 @@ hfe_effect_pirate_init_country = {
 				}
 			}
 			randomize_flag_symbol = pirate
+			if = {
+				limit = {
+					has_authority = auth_corporate
+				}
+				change_government = {
+					authority = auth_oligarchic
+					civics = random
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+				}
+				country_remove_ethic = ethic_pacifist
+				country_add_ethic = ethic_militarist
+			}
+			else_if = {
+				limit = {
+					has_ethic = ethic_fanatic_pacifist
+				}
+				country_remove_ethic = ethic_fanatic_pacifist
+				country_add_ethic = ethic_fanatic_militarist
+			}
 			add_modifier = {
 				modifier = hfe_pirate_country_unkeep
 			}
@@ -191,12 +214,17 @@ hfe_effect_pirate_init_country = {
 				tech = tech_sensors_2
 				message = no
 			}
-			add_resource = { energy = 500 }
+			add_resource = {
+				energy = 500
+			}
 			if = {
 				limit = {
-					years_passed > 60
+					end_game_years_passed > 0
 				}
-				add_resource = { minerals = 10000 }
+				add_resource = {
+					minerals = 10000
+					alloys = 2500
+				}
 				add_modifier = {
 					modifier = hfe_pirate_country_boost
 					days = 3650
@@ -204,16 +232,22 @@ hfe_effect_pirate_init_country = {
 			}
 			else_if = {
 				limit = {
-					years_passed > 30
+					mid_game_years_passed > 0
 				}
-				add_resource = { minerals = 5000 }
+				add_resource = {
+					minerals = 5000
+					alloys = 1250
+				}
 				add_modifier = {
 					modifier = hfe_pirate_country_boost
 					days = 1825
 				}
 			}
 			else = {
-				add_resource = { minerals = 1000 }
+				add_resource = {
+					minerals = 1000
+					alloys = 250
+				}
 				add_modifier = {
 					modifier = hfe_pirate_country_boost
 					days = 365
@@ -222,20 +256,6 @@ hfe_effect_pirate_init_country = {
 			set_relation_flag = {
 				who = event_target:hfe_pirate_target
 				flag = pirate_relation
-			}
-			if = {
-				limit = {
-					has_ethic = ethic_pacifist
-				}
-				country_remove_ethic = ethic_pacifist
-				country_add_ethic = ethic_militarist
-			}
-			else_if = {
-				limit = {
-					has_ethic = ethic_fanatic_pacifist
-				}
-				country_remove_ethic = ethic_fanatic_pacifist
-				country_add_ethic = ethic_fanatic_militarist
 			}
 			save_event_target_as = hfe_pirate_clan
 			# for vanilla localization
@@ -271,7 +291,7 @@ hfe_effect_pirate_init_country = {
 				}
 			}
 			while = {
-				count = 4
+				count = 5
 				create_leader = {
 					class = scientist
 				}

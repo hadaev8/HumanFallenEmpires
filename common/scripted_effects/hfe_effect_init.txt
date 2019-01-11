@@ -155,8 +155,13 @@ hfe_effect_init_make_colony = {
 						exists = owner
 					}
 				}
-				create_colony = {
-					owner = event_target:hfe_init_target
+				# seems broken
+				# create_colony = {
+				# 	owner = event_target:hfe_init_target
+				# }
+				set_owner = event_target:hfe_init_target
+				create_pop = {
+					species = owner
 				}
 				if = {
 					limit = {
@@ -243,12 +248,35 @@ hfe_effect_init_set_all_districs = {
 	}
 }
 
+hfe_effect_init_set_all_buildings = {
+	if = {
+		limit = {
+			#has_fully_upgraded_capital =
+		}
+	}
+	while = {
+		limit = {
+			free_building_slots > 0
+		}
+		random_list = {
+			10 = {
+				add_building = building_research_lab_1
+			}
+			10 = {
+				add_building = building_foundry_1
+			}
+			10 = {
+				add_building = building_factory_1
+			}
+		}
+	}
+}
+
 hfe_effect_init_develop_planet = {
-	# set buildings
-	# TODO
-	hfe_effect_init_set_all_districs = yes
 	hfe_effect_init_set_pops_50 = yes
 	hfe_effect_init_set_starbase = yes
+	hfe_effect_init_set_all_buildings = yes
+	hfe_effect_init_set_all_districs = yes
 }
 
 hfe_effect_init_set_starbase = {

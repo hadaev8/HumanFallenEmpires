@@ -175,18 +175,41 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		capital_scope = {
-			random_owned_pop = {
-				create_country = {
-					type = default
-					species = this.species
-					ignore_initial_colony_error = yes
-					effect = {
-						set_player = root
+		closest_system = {
+			limit = {
+				or = {
+					and = {
+						exists = owner
+						owner = {
+							is_country = root
+						}
+					}
+					has_presence = no
+				}
+				any_planet = {
+					habitability = {
+						who = root.species
+						value > 0.2
+					}
+					not = {
+						exists = owner
 					}
 				}
 			}
-			set_owner = last_created_country
+			random_system_planet = {
+				limit = {
+					habitability = {
+						who = root.species
+						value > 0.2
+					}
+					not = {
+						exists = owner
+					}
+				}
+				create_colony = {
+					owner = root
+				}
+			}
 		}
 	}
 }

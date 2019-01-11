@@ -17,6 +17,7 @@ country_event = {
 			name = root
 			type = default
 			auto_delete = no
+			day_zero_contact = no
 			name_list = root
 			ship_prefix = ""
 			authority = root
@@ -30,12 +31,12 @@ country_event = {
 				set_country_flag = custom_start_screen
 				set_country_flag = hfe_marked_as_human
 				set_country_flag = hfe_discovery
-				change_government = {
-					authority = auth_democratic
-				}
-				change_government = {
-					authority = auth_oligarchic
-				}
+				# change_government = {
+				# 	authority = auth_democratic
+				# }
+				# change_government = {
+				# 	authority = auth_oligarchic
+				# }
 				root = {
 					every_owned_starbase = {
 						set_owner = prevprev
@@ -56,10 +57,47 @@ country_event = {
 								set_leader = prev
 							}
 						}
-						else = {
+						if = {
+							limit = {
+								leader_class = governor
+							}
 							prevprev = {
 								clone_leader = {
 									target = prev
+									class = governor
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								leader_class = scientist
+							}
+							prevprev = {
+								clone_leader = {
+									target = prev
+									class = scientist
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								leader_class = admiral
+							}
+							prevprev = {
+								clone_leader = {
+									target = prev
+									class = admiral
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								leader_class = general
+							}
+							prevprev = {
+								clone_leader = {
+									target = prev
+									class = general
 								}
 							}
 						}
@@ -85,9 +123,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		add_modifier = {
-			modifier = hfe_discovery_research
-		}
+		# add_modifier = {
+		# 	modifier = hfe_discovery_research
+		# }
 		add_modifier = {
 			modifier = hfe_discovery_translator
 		}
@@ -148,8 +186,10 @@ country_event = {
 				set_location = owner.capital_star
 			}
 		}
-		add_resource = { minerals = 500 }
-		add_resource = { energy = 500 }
+		add_resource = {
+			minerals = 500
+			energy = 500
+		}
 	}
 }
 
