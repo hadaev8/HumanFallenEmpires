@@ -1,230 +1,73 @@
 namespace = hfe_population
 
 # set modifier on planet by pop by on actions
-# pop_event = {
-# 	id = hfe_population.0
-# 	hide_window = yes
-# 	is_triggered_only = yes
+planet_event = {
+	id = hfe_population.0
+	hide_window = yes
+	is_triggered_only = yes
 
-# 	trigger = {
-# 		hfe_trigger_population_enabled = yes
-# 		exists = planet
-# 	}
+	trigger = {
+		hfe_trigger_population_enabled = yes
+		exists = planet
+	}
 
-# 	immediate = {
-# 		planet = {
-# 			planet_event = {
-# 				id = hfe_population.1
-# 			}
-# 		}
-# 	}
-# }
-
-# # set modifier on planet by on actions
-# planet_event = {
-# 	id = hfe_population.1
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		hfe_trigger_population_enabled = yes
-# 	}
-
-# 	immediate = {
-# 		planet_event = {
-# 			id = hfe_population.2
-# 		}
-# 		planet_event = {
-# 			id = hfe_population.3
-# 		}
-# 		planet_event = {
-# 			id = hfe_population.4
-# 		}
-# 		planet_event = {
-# 			id = hfe_population.5
-# 		}
-# 	}
-# }
-
-# # set overpopulated modifier on planet
-# planet_event = {
-# 	id = hfe_population.2
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		free_pop_tiles < 2
-# 		not = {
-# 			has_modifier = hfe_population_overpopulated_planet
-# 		}
-# 		exists = owner
-# 		owner = {
-# 			is_country_type = default
-# 		}
-# 		pop_percentage = {
-# 			percentage > 0.5
-# 			limit = {
-# 				is_robot_pop = no
-# 			}
-# 		}
-# 	}
-
-# 	immediate = {
-# 		add_modifier = {
-# 			modifier = hfe_population_overpopulated_planet
-# 		}
-# 	}
-# }
-
-# # remove overpopulated modifier on planet
-# planet_event = {
-# 	id = hfe_population.3
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		free_pop_tiles > 1
-# 		has_modifier = hfe_population_overpopulated_planet
-# 	}
-
-# 	immediate = {
-# 		remove_modifier = hfe_population_overpopulated_planet
-# 	}
-# }
-
-# # set unpopulated modifier on planet
-# planet_event = {
-# 	id = hfe_population.4
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		free_pop_tiles > 4
-# 		not = {
-# 			has_modifier = hfe_population_unpopulated_planet
-# 		}
-# 		exists = owner
-# 		owner = {
-# 			is_country_type = default
-# 			is_gestalt = no
-# 		}
-# 	}
-
-# 	immediate = {
-# 		add_modifier = {
-# 			modifier = hfe_population_unpopulated_planet
-# 		}
-# 	}
-# }
-
-# # remove unpopulated modifier on planet
-# planet_event = {
-# 	id = hfe_population.5
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		free_pop_tiles < 5
-# 		has_modifier = hfe_population_unpopulated_planet
-# 	}
-
-# 	immediate = {
-# 		remove_modifier = hfe_population_unpopulated_planet
-# 	}
-# }
-
-# # remove pop from planet after colony ship build
-# ship_event = {
-# 	id = hfe_population.6
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		hfe_trigger_population_enabled = yes
-# 		is_ship_class = shipclass_colonizer
-# 	}
-
-# 	immediate = {
-# 		if = {
-# 			limit = {
-# 				exists = orbit.planet
-# 			}
-# 			orbit.planet = {
-# 				random_owned_pop = {
-# 					limit = {
-# 						is_exact_same_species = root
-# 						is_growing = no
-# 					}
-# 					kill_pop = yes
-# 				}
-# 			}
-# 		}
-# 		else = {
-# 			solar_system = {
-# 				random_system_planet = {
-# 					limit = {
-# 						exists = owner
-# 						any_owned_pop = {
-# 							is_exact_same_species = root
-# 							is_growing = no
-# 						}
-# 					}
-# 					random_owned_pop = {
-# 						limit = {
-# 							is_exact_same_species = root
-# 							is_growing = no
-# 						}
-# 						kill_pop = yes
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-# }
-
-# # remove modifiers on_planet_ownerless
-# planet_event = {
-# 	id = hfe_population.7
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		or = {
-# 			has_modifier = hfe_population_unpopulated_planet
-# 			has_modifier = hfe_population_overpopulated_planet
-# 		}
-# 	}
-
-# 	immediate = {
-# 		remove_modifier = hfe_population_unpopulated_planet
-# 		remove_modifier = hfe_population_overpopulated_planet
-# 	}
-# }
-
-# remove pop_was_enslaved modifier
-# pop_event = {
-# 	id = hfe_population.11
-# 	hide_window = yes
-# 	is_triggered_only = yes
-
-# 	trigger = {
-# 		hfe_trigger_population_enabled = yes
-# 		or = {
-# 			has_ethic = ethic_authoritarian
-# 			and = {
-# 				has_ethic = ethic_spiritualist
-# 				exists = owner
-# 				owner = {
-# 					has_spiritualist_government = yes
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	immediate = {
-# 		remove_modifier = pop_was_enslaved
-# 	}
-# }
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					is_regular_empire = yes
+				}
+			}
+			# temporal solution while it bugs
+			if = {
+				limit = {
+					or = {
+						has_building = building_deployment_post
+						has_building = building_machine_capital
+						has_building = building_machine_major_capital
+						has_building = building_machine_system_capital
+						has_building = building_hive_capital
+						has_building = building_hive_major_capital
+					}
+				}
+				remove_building = building_deployment_post
+				remove_building = building_machine_capital
+				remove_building = building_machine_major_capital
+				remove_building = building_machine_system_capital
+				remove_building = building_hive_capital
+				remove_building = building_hive_major_capital
+				add_building = building_colony_shelter
+			}
+			every_owned_pop = {
+				limit = {
+					has_trait = trait_machine_unit
+				}
+				modify_species = {
+					remove_trait = trait_machine_unit
+					add_trait = trait_mechanical
+				}
+				remove_modifier = pop_recently_conquered
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+			every_owned_pop = {
+				limit = {
+					has_trait = trait_mechanical
+				}
+				modify_species = {
+					remove_trait = trait_mechanical
+					add_trait = trait_machine_unit
+				}
+				remove_modifier = pop_recently_conquered
+			}
+		}
+	}
+}
 
 # change main species 50
 country_event = {

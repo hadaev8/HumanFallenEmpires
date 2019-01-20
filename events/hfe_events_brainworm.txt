@@ -94,11 +94,13 @@ planet_event = {
 				}
 			}
 		}
+		# secondary civics
+		
 	}
 }
 
 # functional events 1 - 50
-# kick events by pop by on_pop_resettled on_pop_birth
+# kick events by pop by on_pop_resettled
 pop_event = {
 	id = hfe_brainworm.1
 	hide_window = yes
@@ -109,15 +111,16 @@ pop_event = {
 	}
 
 	immediate = {
-		planet = {
-			planet_event = {
-				id = hfe_brainworm.2
-			}
-		}
+		log = "is this work?"
+		# planet = {
+		# 	planet_event = {
+		# 		id = hfe_brainworm.2
+		# 	}
+		# }
 	}
 }
 
-# planet assimilation event for brainworm owner
+# planet assimilation event for brainworm owner 2
 # on_pop_grown
 @hfe_brainworm_assimilation_block_evil = 90
 @hfe_brainworm_assimilation_block_good = 1800
@@ -132,13 +135,62 @@ planet_event = {
 			has_planet_flag = hfe_brainworm_assimilation_block
 		}
 		exists = owner
-		owner = {
-			hfe_trigger_brainworm_country = yes
+		or = {
+			owner = {
+				hfe_trigger_brainworm_country = yes
+			}
+			any_owned_pop = {
+				has_trait = hfe_species_trait_brainworm
+			}
 		}
 	}
 
 	immediate = {
 		if = {
+			limit = {
+				owner = {
+					hfe_trigger_brainworm_country = no
+				}
+				not = {
+					has_planet_flag = hfe_brainworm_infect
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						any_relation = {
+							has_migration_access = PREV
+							hfe_trigger_brainworm_country_sneak = yes
+						}
+					}
+				}
+				set_planet_flag = hfe_brainworm_infect
+				# send message
+				owner = {
+					random_relation = {
+						limit = {
+							has_migration_access = PREV
+							hfe_trigger_brainworm_country_sneak = yes
+						}
+						root = {
+							set_planet_flag = hfe_brainworm_infect@prev
+						}
+						country_event = {
+							id = hfe_brainworm.50
+						}
+					}
+				}
+			}
+			# still have no flag
+			if = {
+				limit = {
+					not = {
+						has_planet_flag = hfe_brainworm_infect
+					}
+				}
+			}
+		}
+		else_if = {
 			limit = {
 				owner = {
 					has_valid_civic = hfe_civic_brainworm_elite
@@ -243,7 +295,6 @@ planet_event = {
 		}
 	}
 }
-
 # add planet to brainworm empire 5
 planet_event = {
 	id = hfe_brainworm.5

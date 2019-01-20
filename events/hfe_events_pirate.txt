@@ -297,17 +297,14 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		resource_stockpile_compare = { resource = energy value >= @hfe_pirate_base_cost }
+		resource_stockpile_compare = {
+			resource = energy
+			value >= @hfe_pirate_base_cost
+		}
 		exists = capital_scope
-		# TODO
-		# any_owned_planet = {
-		# 	free_pop_tiles < 3
-		# }
-		# not = {
-		# 	any_owned_planet = {
-		# 		free_pop_tiles > 3
-		# 	}
-		# }
+		any_owned_planet = {
+			free_housing < 0
+		}
 	}
 
 	immediate = {
@@ -428,10 +425,9 @@ country_event = {
 
 	trigger = {
 		num_pops > 0
-		# TODO
-		# any_owned_planet = {
-		# 	free_pop_tiles < 3
-		# }
+		any_owned_planet = {
+			free_housing < -2
+		}
 	}
 
 	immediate = {
@@ -441,13 +437,15 @@ country_event = {
 					has_country_flag = hfe_pirate_offer_deal@root
 					has_country_flag = hfe_pirate_offer_deal
 				}
-				resource_stockpile_compare = { resource = energy value >= 500 }
-				resource_stockpile_compare = { resource = minerals value >= 500 }
-				is_country_type = default
-				any_owned_planet = {
-					# TODO
-					#free_pop_tiles > 0
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 500
 				}
+				resource_stockpile_compare = {
+					resource = minerals
+					value >= 500
+				}
+				is_country_type = default
 			}
 			weights = {
 				base = 10
@@ -1875,15 +1873,14 @@ country_event = {
 				factor = 2
 				allows_slavery = yes
 			}
-			# TODO
-			# modifier = {
-			# 	factor = 0
-			# 	not = {
-			# 		any_owned_planet = {
-			# 			free_pop_tiles > 0
-			# 		}
-			# 	}
-			# }
+			modifier = {
+				factor = 0
+				not = {
+					any_owned_planet = {
+						free_housing < 0
+					}
+				}
+			}
 			modifier = {
 				factor = 0
 				event_target:hfe_pirate_country = {
