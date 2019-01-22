@@ -548,25 +548,36 @@ hfe_effect_pirate_resource_reward = {
 hfe_effect_pirate_attack_count_check = {
 	if = {
 		limit = {
-			check_variable = {
-				which = hfe_pirate_attack_count
-				value > 10
-			}
+			is_country_type = default
 		}
-		set_variable = {
+		change_variable = {
 			which = hfe_pirate_attack_count
-			value = 0
+			value = 1
 		}
-		random_country = {
+		if = {
 			limit = {
-				has_country_flag = hfe_pirate_attack@prev
+				check_variable = {
+					which = hfe_pirate_attack_count
+					value > 10
+				}
 			}
-			save_event_target_as = hfe_pirate_country
-		}
-		country_event = {
-			id = hfe_pirate.200
-			days = 1
-			random = 30
+			set_variable = {
+				which = hfe_pirate_attack_count
+				value = 0
+			}
+			random_country = {
+				limit = {
+					has_country_flag = hfe_pirate_attack@prev
+					is_hostile = prev
+				}
+				save_event_target_as = hfe_pirate_country
+			}
+			log = "fire effect hfe_effect_pirate_attack_count_check for [this.GetName] pirate is [hfe_pirate_country.GetName]"
+			country_event = {
+				id = hfe_pirate.200
+				days = 1
+				random = 30
+			}
 		}
 	}
 }

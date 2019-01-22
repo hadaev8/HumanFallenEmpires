@@ -554,6 +554,7 @@ country_event = {
 
 	trigger = {
 		is_country_type = hfe_pirate
+		exists = from
 		exists = fromfromfrom
 		fromfromfrom = {
 			or = {
@@ -572,10 +573,6 @@ country_event = {
 			days = 365
 		}
 		from = {
-			change_variable = {
-				which = hfe_pirate_attack_count
-				value = 1
-			}
 			hfe_effect_pirate_attack_count_check = yes
 			if = {
 				limit = {
@@ -669,39 +666,167 @@ ship_event = {
 
 	trigger = {
 		exists = this
-		exists = from.owner
-		exists = solar_system
 		exists = owner
-		owner = {
-			is_country_type = hfe_pirate
-		}
+		exists = from.owner
+		exists = fleet
+		exists = solar_system
+		# from.owner = {
+		# 	is_country_type = hfe_pirate
+		# }
+		# owner = {
+		# 	is_country_type = hfe_pirate
+		# }
 		is_ship_class = shipclass_starbase
 	}
 
 	immediate = {
-		#log = "get pirate starbase on [root.solar_system.GetName]"
-		# deal with planets
-		solar_system = {
+		from.owner = {
+			save_event_target_as = hfe_pirate_starbase_att
+		}
+		owner = {
+			save_event_target_as = hfe_pirate_starbase_def
+		}
+		# pirate vs pirate, get all planets and starbase
+		if = {
+			limit = {
+				event_target:hfe_pirate_starbase_att = {
+					is_country_type = hfe_pirate
+				}
+				event_target:hfe_pirate_starbase_def = {
+					is_country_type = hfe_pirate
+				}
+			}
+			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
 			every_system_planet = {
 				limit = {
-					is_owned_by = root.owner
+					is_owned_by = event_target:hfe_pirate_starbase_def
+				}
+				set_owner = event_target:hfe_pirate_starbase_att
+			}
+			starbase = {
+				set_owner = event_target:hfe_pirate_starbase_att
+			}
+		}
+		# pirate vs default
+		else_if = {
+			limit = {
+				event_target:hfe_pirate_starbase_att = {
+					is_country_type = hfe_pirate
+				}
+				event_target:hfe_pirate_starbase_def = {
+					is_country_type = default
+				}
+			}
+			event_target:hfe_pirate_starbase_att = {
+				set_timed_country_flag = {
+					flag = hfe_pirate_attack@event_target:hfe_pirate_starbase_def
+					days = 365
+				}
+				hfe_effect_pirate_resource_reward = yes
+			}
+			fleet = {
+				change_variable = {
+					which = hfe_pirate_outpost_attack_count
+					value = 1
+				}
+				owner = {
+					hfe_effect_pirate_attack_count_check = yes
 				}
 				if = {
 					limit = {
-						from.owner = {
-							is_country_type = hfe_pirate
+						or = {
+							check_variable = {
+								which = hfe_pirate_outpost_attack_count
+								value > 7
+							}
+							and = {
+								is_difficulty > 0
+								check_variable = {
+									which = hfe_pirate_outpost_attack_count
+									value > 6
+								}
+							}
+							and = {
+								is_difficulty > 1
+								check_variable = {
+									which = hfe_pirate_outpost_attack_count
+									value > 5
+								}
+							}
+							and = {
+								is_difficulty > 2
+								check_variable = {
+									which = hfe_pirate_outpost_attack_count
+									value > 4
+								}
+							}
+							and = {
+								is_difficulty > 3
+								check_variable = {
+									which = hfe_pirate_outpost_attack_count
+									value > 3
+								}
+							}
+							and = {
+								is_difficulty > 4
+								check_variable = {
+									which = hfe_pirate_outpost_attack_count
+									value > 2
+								}
+							}
 						}
 					}
-					#log = "pirate take planet [this.GetName] in [solar_system.GetName] from pirate new owner is [from.owner.GetName]"
-					set_owner = from.owner
+					log = "[hfe_pirate_starbase_def.GetName] lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+					set_variable = {
+						which = hfe_pirate_outpost_attack_count
+						value = 0
+					}
+					owner = {
+						if = {
+							limit = {
+								has_event_chain = hfe_chain_pirate_count
+							}
+							add_event_chain_counter = {
+								event_chain = hfe_chain_pirate_count
+								counter = hfe_chain_pirate_count_outpost_balance
+								amount = -1
+							}
+						}
+					}
+					solar_system = {
+						every_system_planet = {
+							limit = {
+								is_owned_by = event_target:hfe_pirate_starbase_def
+							}
+							log = "[hfe_pirate_starbase_att.GetName] pirate get planet [this.GetName] in [solar_system.GetName] from [owner.GetName]"
+							set_owner = event_target:hfe_pirate_starbase_att
+						}
+					}
+					starbase = {
+						set_owner = event_target:hfe_pirate_starbase_att
+					}
 				}
-				else_if = {
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:hfe_pirate_starbase_att = {
+					is_country_type = default
+				}
+				event_target:hfe_pirate_starbase_def = {
+					is_country_type = hfe_pirate
+				}
+			}
+			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			solar_system = {
+				every_system_planet = {
 					limit = {
+						is_owned_by = event_target:hfe_pirate_starbase_def
 						is_planet_class = hfe_pc_pirate_base
 					}
-					from.owner = {
+					event_target:hfe_pirate_starbase_att = {
 						set_timed_country_flag = {
-							flag = hfe_refuge_country_prior@root.owner
+							flag = hfe_refuge_country_prior@event_target:hfe_pirate_starbase_def
 							days = 10
 						}
 					}
@@ -710,105 +835,98 @@ ship_event = {
 					}
 					hfe_effect_convert_to_asteroid = yes
 				}
-				else_if = {
+				if = {
 					limit = {
-						from.owner = {
-							num_pops > 0
-							hfe_trigger_is_awake = yes
-						}
-						# exists = starbase
-						# starbase = {
-						# 	exists = owner
-						# 	owner = {
-						# 		is_country = from.owner
-						# 	}
-						# }
-					}
-					set_owner = from.owner
-				}
-				else = {
-					random_owned_pop = {
-						create_country = {
-							type = default
-							species = this.species
-							effect = {
-								hfe_effect_gov_fix = yes
-								prevprev = {
-									set_owner = prev
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		# take starbase
-		if = {
-			limit = {
-				from.owner = {
-					hfe_trigger_is_awake = yes
-					or = {
-						num_pops > 0
-						is_country_type = hfe_pirate
-					}
-				}
-				or = {
-					from.owner = {
-						is_country_type = hfe_pirate
-					}
-					solar_system = {
 						any_neighbor_system = {
 							ignore_hyperlanes = no
 							exists = owner
 							owner = {
-								is_country = from.owner
+								is_country = event_target:hfe_pirate_starbase_att
+							}
+						}
+					}
+					every_system_planet = {
+						limit = {
+							is_owned_by = event_target:hfe_pirate_starbase_def
+							not = {
+								is_planet_class = hfe_pc_pirate_base
+							}
+							num_pops > 0
+						}
+						set_owner = event_target:hfe_pirate_starbase_att
+					}
+					starbase = {
+						set_owner = event_target:hfe_pirate_starbase_att
+					}
+					event_target:hfe_pirate_starbase_att = {
+						if = {
+							limit = {
+								has_event_chain = hfe_chain_pirate_count
+							}
+							add_event_chain_counter = {
+								event_chain = hfe_chain_pirate_count
+								counter = hfe_chain_pirate_count_outpost_balance
+								amount = 1
 							}
 						}
 					}
 				}
-			}
-			from.owner = {
-				if = {
-					limit = {
-						has_event_chain = hfe_chain_pirate_count
+				else = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = event_target:hfe_pirate_starbase_def
+							not = {
+								is_planet_class = hfe_pc_pirate_base
+							}
+							num_pops > 0
+						}
+						random_owned_pop = {
+							create_country = {
+								type = default
+								species = this.species
+								effect = {
+									hfe_effect_gov_fix = yes
+									prevprev = {
+										set_owner = prev
+									}
+								}
+							}
+						}
 					}
-					add_event_chain_counter = {
-						event_chain = hfe_chain_pirate_count
-						counter = hfe_chain_pirate_count_outpost_balance
-						amount = 1
+					starbase = {
+						destroy_fleet = fleet
 					}
 				}
 			}
-			fleet = {
-				set_owner = from.owner
+		}
+		else_if = {
+			limit = {
+				event_target:hfe_pirate_starbase_att = {
+					not = {
+						is_country_type = default
+					}
+				}
+				event_target:hfe_pirate_starbase_def = {
+					is_country_type = hfe_pirate
+				}
+			}
+			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to not default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = event_target:hfe_pirate_starbase_def
+					}
+					every_owned_pop = {
+						hfe_effect_refuge_or_die = yes
+					}
+					destroy_colony = yes
+					#hfe_effect_convert_to_asteroid = yes
+				}
+			}
+			starbase = {
+				destroy_fleet = fleet
 			}
 		}
-		else = {
-			destroy_fleet = fleet
-		}
-		# from = {
-		# 	save_event_target_as = pirate_slayers
-		# 	owner = {
-		# 		random_list = {
-		# 			80 = {
-		# 				country_event = {
-		# 					id = pirate.25
-		# 				}
-		# 			}
-		# 			20 = {
-		# 				modifier = {
-		# 					factor = 0
-		# 					not = {
-		# 						has_event_chain = l_cluster_chain
-		# 					}
-		# 				}
-		# 				country_event = {
-		# 					id = pirate.26
-		# 				}
-		# 			}
-		# 		}
-		# 	}
-		# }
 	}
 }
 
@@ -859,128 +977,7 @@ country_event = {
 	}
 }
 
-# pirate gain resources after disabling starbase on_ship_disabled
-# This = Ship
-# From = Disabler Ship
-ship_event = {
-	id = hfe_pirate.59
-	hide_window = yes
-	is_triggered_only = yes
 
-	trigger = {
-		exists = this
-		exists = owner
-		exists = from.owner
-		exists = fleet
-		exists = solar_system
-		from.owner = {
-			is_country_type = hfe_pirate
-		}
-		is_ship_class = shipclass_starbase
-	}
-
-	immediate = {
-		from.owner = {
-			set_timed_country_flag = {
-				flag = hfe_pirate_attack@root.owner
-				days = 365
-			}
-		}
-		from.owner = {
-			hfe_effect_pirate_resource_reward = yes
-		}
-		fleet = {
-			change_variable = {
-				which = hfe_pirate_outpost_attack_count
-				value = 1
-			}
-			owner = {
-				change_variable = {
-					which = hfe_pirate_attack_count
-					value = 1
-				}
-				hfe_effect_pirate_attack_count_check = yes
-			}
-			if = {
-				limit = {
-					or = {
-						check_variable = {
-							which = hfe_pirate_outpost_attack_count
-							value > 7
-						}
-						and = {
-							is_difficulty > 0
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 6
-							}
-						}
-						and = {
-							is_difficulty > 1
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 5
-							}
-						}
-						and = {
-							is_difficulty > 2
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 4
-							}
-						}
-						and = {
-							is_difficulty > 3
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 3
-							}
-						}
-						and = {
-							is_difficulty > 4
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 2
-							}
-						}
-					}
-				}
-				set_variable = {
-					which = hfe_pirate_outpost_attack_count
-					value = 0
-				}
-				#log = "pirate get starbase from [owner.GetName] at [solar_system.GetName]"
-				owner = {
-					change_variable = {
-						which = hfe_pirate_attack_count
-						value = 2
-					}
-					hfe_effect_pirate_attack_count_check = yes
-					if = {
-						limit = {
-							has_event_chain = hfe_chain_pirate_count
-						}
-						add_event_chain_counter = {
-							event_chain = hfe_chain_pirate_count
-							counter = hfe_chain_pirate_count_outpost_balance
-							amount = -1
-						}
-					}
-				}
-				solar_system = {
-					every_system_planet = {
-						limit = {
-							is_owned_by = prevprev.owner
-						}
-						log = "pirate get planet [this.GetName] in [solar_system.GetName] from [owner.GetName]"
-						set_owner = from.owner
-					}
-				}
-				set_owner = from.owner
-			}
-		}
-	}
-}
 
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
@@ -1234,6 +1231,15 @@ country_event = {
 	picture_event_data = {
 		portrait = event_target:hfe_pirate_country
 		room = event_target:hfe_pirate_country
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_country = event_target:hfe_pirate_country
+			}
+			log = "WARNING PIRATE CONTACT WITH ITSELF"
+		}
 	}
 
 	# pay for protect
@@ -2933,7 +2939,7 @@ country_event = {
 	}
 
 	immediate = {
-		log = "pirates offer protection for [root.GetName]"
+		log = "[event_target:hfe_pirate_country.GetName] pirates offer protection for [root.GetName]"
 	}
 
 	option = {
