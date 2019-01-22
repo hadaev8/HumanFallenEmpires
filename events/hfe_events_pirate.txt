@@ -437,14 +437,7 @@ country_event = {
 					has_country_flag = hfe_pirate_offer_deal@root
 					has_country_flag = hfe_pirate_offer_deal
 				}
-				resource_stockpile_compare = {
-					resource = energy
-					value >= 500
-				}
-				resource_stockpile_compare = {
-					resource = minerals
-					value >= 500
-				}
+				hfe_trigger_pirate_slave_cost = yes
 				is_country_type = default
 			}
 			weights = {
@@ -489,8 +482,14 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		resource_stockpile_compare = { resource = energy value >= 1000 }
-		resource_stockpile_compare = { resource = minerals value < 5000 }
+		resource_stockpile_compare = {
+			resource = energy
+			value >= 1000
+		}
+		resource_stockpile_compare = {
+			resource = minerals
+			value < 5000
+		}
 	}
 
 	immediate = {
@@ -500,8 +499,14 @@ country_event = {
 					has_country_flag = hfe_pirate_offer_deal@root
 					has_country_flag = hfe_pirate_offer_deal
 				}
-				resource_stockpile_compare = { resource = minerals value >= 1000 }
-				resource_stockpile_compare = { resource = energy value < 10000 }
+				resource_stockpile_compare = {
+					resource = minerals
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value < 10000
+				}
 				is_country_type = default
 			}
 			weights = {
@@ -598,6 +603,9 @@ planet_event = {
 		exists = owner
 		exists = from
 		has_orbital_bombardment_stance = hfe_stance_pirate_raid
+		not = {
+			has_modifier = hfe_pirate_ravaged_planet
+		}
 	}
 
 	immediate = {
@@ -613,16 +621,17 @@ planet_event = {
 					days = 365
 				}
 			}
-			hfe_effect_pirate_ravage_planet = yes
-			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
 		}
-		else = {
-			random = {
-				chance = 20
-				hfe_effect_pirate_ravage_planet = yes
-				log = "pirate bombarding [this.GetName] in [solar_system.GetName] by default"
-			}
-		}
+		hfe_effect_pirate_ravage_planet = yes
+		log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
+		# }
+		# else = {
+		# 	random = {
+		# 		chance = 20
+		# 		hfe_effect_pirate_ravage_planet = yes
+		# 		log = "pirate bombarding [this.GetName] in [solar_system.GetName] by default"
+		# 	}
+		# }
 	}
 }
 
@@ -1235,17 +1244,11 @@ country_event = {
 				text = hfe_pirate.101.0.tooltip_fail
 				is_hostile = event_target:hfe_pirate_country
 			}
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_protect_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_protect_cost }
+			hfe_trigger_pirate_protect_cost = yes
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.0.response
-		add_resource = { energy = @hfe_pirate_protect_cost_minus }
-		add_resource = { minerals = @hfe_pirate_protect_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_protect_cost }
-			add_resource = { minerals = @hfe_pirate_protect_cost }
-		}
+		hfe_effect_pirate_protect_cost_shift = yes
 		hidden_effect = {
 			# event to return hostile
 			country_event = {
@@ -1282,12 +1285,7 @@ country_event = {
 						is_hostile = root
 					}
 					is_hostile = event_target:hfe_pirate_country
-					not = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 				hfe_effect_save_event_target = yes
 			}
@@ -1300,12 +1298,7 @@ country_event = {
 						is_country_type = default
 						is_rival = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1319,12 +1312,7 @@ country_event = {
 						is_country_type = default
 						is_domineering_to = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1338,12 +1326,7 @@ country_event = {
 						is_country_type = default
 						is_hostile_to = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1357,12 +1340,7 @@ country_event = {
 						is_country_type = default
 						is_dismissive_to = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1376,12 +1354,7 @@ country_event = {
 						is_country_type = default
 						is_unfriendly_to = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1395,12 +1368,7 @@ country_event = {
 						is_country_type = default
 						is_threatened_to = root
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1413,12 +1381,7 @@ country_event = {
 					limit = {
 						is_country_type = default
 						is_hostile = event_target:hfe_pirate_country
-						not = {
-							has_opinion_modifier = {
-								who = event_target:hfe_pirate_country
-								modifier = hfe_opinion_pirate_prior_target
-							}
-						}
+						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1438,40 +1401,20 @@ country_event = {
 			exists = event_target:hfe_event_target_0
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_0 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_0 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.0.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_0 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_0
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1482,41 +1425,20 @@ country_event = {
 			exists = event_target:hfe_event_target_1
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_1 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_1 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.1.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_1 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_1
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1527,40 +1449,20 @@ country_event = {
 			exists = event_target:hfe_event_target_2
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_2 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_2 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.2.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_2 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_2
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1571,40 +1473,20 @@ country_event = {
 			exists = event_target:hfe_event_target_3
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_3 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_3 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.3.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_3 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_3
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1615,40 +1497,20 @@ country_event = {
 			exists = event_target:hfe_event_target_4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_4 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_4 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.4.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_4 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_4
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1659,40 +1521,20 @@ country_event = {
 			exists = event_target:hfe_event_target_5
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
+			hfe_trigger_pirate_raid_cost = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.raid_menu.fail_prior_target
-				not = {
-					event_target:hfe_event_target_5 = {
-						has_opinion_modifier = {
-							who = event_target:hfe_pirate_country
-							modifier = hfe_opinion_pirate_prior_target
-						}
-					}
+				event_target:hfe_event_target_5 = {
+					hfe_trigger_pirate_raid_have_flag = no
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.5.response
-		add_resource = { energy = -500 }
-		add_resource = { minerals = -500 }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = 500 }
-			add_resource = { minerals = 500 }
-		}
+		hfe_effect_pirate_raid_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_event_target_5 = {
-				add_opinion_modifier = {
-					who = event_target:hfe_pirate_country
-					modifier = hfe_opinion_pirate_prior_target
-				}
-			}
-			event_target:hfe_pirate_country = {
-				add_opinion_modifier = {
-					who = event_target:hfe_event_target_5
-					modifier = hfe_opinion_pirate_prior_target
-				}
+				hfe_effect_pirate_raid_set_flag = yes
 			}
 		}
 	}
@@ -1717,21 +1559,31 @@ country_event = {
 			has_country_flag = hfe_pirate.101.traid_menu
 		}
 		allow = {
-			resource_stockpile_compare = { resource = minerals value >= 150 }
+			resource_stockpile_compare = {
+				resource = minerals
+				value >= 150
+			}
 			custom_tooltip = {
 				text = hfe_pirate.101.traid_menu.fail
 				event_target:hfe_pirate_country = {
-					resource_stockpile_compare = { resource = energy value >= 100 }
+					resource_stockpile_compare = {
+						resource = energy
+						value >= 100
+					}
 				}
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.0.response
-		add_resource = { energy = 100 }
-		add_resource = { minerals = -150 }
+		add_resource = {
+			energy = 100
+			minerals = -150
+		}
 		event_target:hfe_pirate_country = {
-			add_resource = { energy = -100 }
-			add_resource = { minerals = 150 }
+			add_resource = {
+				energy = -100
+				minerals = 150
+			}
 		}
 		hidden_effect = {
 			#log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
@@ -1741,8 +1593,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value >= 10000 }
+					resource_stockpile_compare = {
+						resource = minerals
+						value < 1000
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value >= 10000
+					}
 				}
 			}
 		}
@@ -1776,9 +1634,13 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.2.response
-		add_resource = { energy = -1000 }
+		add_resource = {
+			energy = -1000
+		}
 		event_target:hfe_pirate_country = {
-			add_resource = { energy = 1000 }
+			add_resource = {
+				energy = 1000
+			}
 			custom_tooltip = hfe_pirate.101.traid_menu.2.effect
 			hidden_effect = {
 				random_pool_leader = {
@@ -1860,8 +1722,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -1877,7 +1745,7 @@ country_event = {
 				factor = 0
 				not = {
 					any_owned_planet = {
-						free_housing < 0
+						free_housing > 0
 					}
 				}
 			}
@@ -1911,14 +1779,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_0
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -1930,12 +1792,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.1.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -1954,8 +1811,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -1995,14 +1858,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_1
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -2014,12 +1871,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.2.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -2038,8 +1890,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -2079,14 +1937,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_2
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -2098,12 +1950,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.3.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -2122,8 +1969,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -2163,14 +2016,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_3
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -2182,12 +2029,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.4.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -2206,8 +2048,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -2247,14 +2095,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -2266,12 +2108,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.5.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -2290,8 +2127,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -2331,14 +2174,8 @@ country_event = {
 			exists = event_target:hfe_slave_target_5
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_slave_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_slave_cost }
-			custom_tooltip = {
-				text = hfe_pirate.101.slave_menu.fail_havent_space
-				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
-				}
-			}
+			hfe_trigger_pirate_slave_cost = yes
+			hfe_trigger_pirate_slave_have_valid_planet = yes
 			custom_tooltip = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
@@ -2350,12 +2187,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.6.response
-		add_resource = { energy = @hfe_pirate_slave_cost_minus }
-		add_resource = { minerals = @hfe_pirate_slave_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { energy = @hfe_pirate_slave_cost }
-			add_resource = { minerals = @hfe_pirate_slave_cost }
-		}
+		hfe_effect_pirate_slave_cost_shift = yes
 		hidden_effect = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
@@ -2374,8 +2206,14 @@ country_event = {
 			modifier = {
 				factor = 0
 				or = {
-					resource_stockpile_compare = { resource = minerals value < 1000 }
-					resource_stockpile_compare = { resource = energy value < 1000 }
+					resource_stockpile_compare = {
+						resource = alloys
+						value < 500
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value < 1000
+					}
 				}
 			}
 			# ethics
@@ -3100,15 +2938,9 @@ country_event = {
 	option = {
 		name = hfe_pirate.200.0
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= @hfe_pirate_protect_cost }
-			resource_stockpile_compare = { resource = minerals value >= @hfe_pirate_protect_cost }
+			hfe_trigger_pirate_protect_cost = yes
 		}
-		add_resource = { minerals = @hfe_pirate_protect_cost_minus }
-		add_resource = { energy = @hfe_pirate_protect_cost_minus }
-		event_target:hfe_pirate_country = {
-			add_resource = { minerals = @hfe_pirate_protect_cost }
-			add_resource = { energy = @hfe_pirate_protect_cost }
-		}
+		hfe_effect_pirate_protect_cost_shift = yes
 		hidden_effect = {
 			log = "[root.GetName] agree for protection pay"
 			if = {
@@ -3192,22 +3024,27 @@ country_event = {
 			modifier = {
 				factor = 0.5
 				resource_stockpile_compare = { resource = energy value < 5000 }
-				resource_stockpile_compare = { resource = minerals value < 5000 }
+				resource_stockpile_compare = { resource = alloys value < 2500 }
 			}
 			modifier = {
 				factor = 0.5
-				resource_stockpile_compare = { resource = energy value < 2500 }
-				resource_stockpile_compare = { resource = minerals value < 2500 }
+				resource_stockpile_compare = { resource = energy value < 4000 }
+				resource_stockpile_compare = { resource = alloys value < 2000 }
+			}
+			modifier = {
+				factor = 0.5
+				resource_stockpile_compare = { resource = energy value < 3000 }
+				resource_stockpile_compare = { resource = alloys value < 1500 }
+			}
+			modifier = {
+				factor = 0.5
+				resource_stockpile_compare = { resource = energy value < 2000 }
+				resource_stockpile_compare = { resource = alloys value < 1000 }
 			}
 			modifier = {
 				factor = 0.5
 				resource_stockpile_compare = { resource = energy value < 1000 }
-				resource_stockpile_compare = { resource = minerals value < 1000 }
-			}
-			modifier = {
-				factor = 0
-				resource_stockpile_compare = { resource = energy value < 500 }
-				resource_stockpile_compare = { resource = minerals value < 500 }
+				resource_stockpile_compare = { resource = alloys value < 500 }
 			}
 		}
 	}

@@ -12,6 +12,80 @@ hfe_effect_pirate_diplomacy_remove_flags = {
 	remove_country_flag = hfe_pirate.101.casino_menu.challenge
 }
 
+hfe_effect_pirate_protect_cost_shift = {
+	if = {
+		limit = {
+			relative_power = {
+				who = event_target:hfe_pirate_country
+				value > superior
+				category = fleet
+			}
+		}
+		add_resource = {
+			energy = -250
+			alloys = -100
+		}
+		event_target:hfe_pirate_country = {
+			add_resource = {
+				energy = 250
+				alloys = 100
+			}
+		}
+	}
+	else = {
+		add_resource = {
+			energy = -500
+			alloys = -200
+		}
+		event_target:hfe_pirate_country = {
+			add_resource = {
+				energy = 500
+				alloys = 200
+			}
+		}
+	}
+}
+
+hfe_effect_pirate_raid_cost_shift = {
+	add_resource = {
+		energy = @hfe_pirate_raid_cost_energy_minus
+		alloys = @hfe_pirate_raid_cost_alloys_minus
+	}
+	event_target:hfe_pirate_country = {
+		add_resource = {
+			energy = @hfe_pirate_raid_cost_energy
+			alloys = @hfe_pirate_raid_cost_alloys
+		}
+	}
+}
+
+hfe_effect_pirate_slave_cost_shift = {
+	add_resource = {
+		energy = @hfe_pirate_slave_cost_energy_minus
+		alloys = @hfe_pirate_slave_cost_alloys_minus
+	}
+	event_target:hfe_pirate_country = {
+		add_resource = {
+			energy = @hfe_pirate_slave_cost_energy
+			alloys = @hfe_pirate_slave_cost_alloys
+		}
+	}
+}
+
+# this is raid target
+hfe_effect_pirate_raid_set_flag = {
+	add_opinion_modifier = {
+		who = event_target:hfe_pirate_country
+		modifier = hfe_opinion_pirate_prior_target
+	}
+	event_target:hfe_pirate_country = {
+		add_opinion_modifier = {
+			who = prev
+			modifier = hfe_opinion_pirate_prior_target
+		}
+	}
+}
+
 # create pirate
 # return event target pirate_band, need event target hfe_pirate_target
 hfe_effect_pirate_init = {
@@ -408,18 +482,42 @@ hfe_effect_pirate_ravage_planet = {
 		limit = {
 			is_sapient = yes
 		}
-		save_event_target_as = hfe_settle_pop_target
+		if = {
+			limit = {
+				has_trait = trait_hive_mind
+			}
+			kill_pop = yes
+		}
+		else = {
+			save_event_target_as = hfe_settle_pop_target
+		}
 	}
 	from = {
 		hfe_effect_pirate_resource_reward = yes
 		hfe_effect_settle_pop = yes
 	}
 	# remove_modifier = hfe_pirate_ravaged_planet
-	# add_modifier = {
-	# 	modifier = hfe_pirate_ravaged_planet
-	# 	days = @hfe_pirate_ravaged_planet_time
-	# }
+	add_modifier = {
+		modifier = hfe_pirate_ravaged_planet
+		days = @hfe_pirate_ravaged_planet_time
+	}
 	owner = {
+		create_message = {
+			type = hfe_message_type_pirate_raid
+			localization = hfe_message_type_pirate_raid_desc
+			days = 30
+			target = prev
+			variable = {
+				type = name
+				localization = planet
+				scope = prev
+			}
+			variable = {
+				type = name
+				localization = country
+				scope = prev.from # not sure
+			}
+		}
 		if = {
 			limit = {
 				has_event_chain = hfe_chain_pirate_count
@@ -561,7 +659,7 @@ hfe_effect_pirate_path_get_next = {
 					has_hyperlane_to = prevprev
 					hfe_trigger_pirate_fleet_power_in_system_check = yes
 				}
-				max_steps = 10
+				max_steps = 15
 				set_timed_star_flag = {
 					flag = hfe_pirate_fleet_system_check@root
 					days = 1
@@ -587,7 +685,7 @@ hfe_effect_pirate_path_get_next = {
 								has_hyperlane_to = prevprev
 								hfe_trigger_pirate_fleet_power_in_system_check = yes
 							}
-							max_steps = 9
+							max_steps = 14
 							set_timed_star_flag = {
 								flag = hfe_pirate_fleet_system_check@root
 								days = 1
@@ -613,7 +711,7 @@ hfe_effect_pirate_path_get_next = {
 											has_hyperlane_to = prevprev
 											hfe_trigger_pirate_fleet_power_in_system_check = yes
 										}
-										max_steps = 8
+										max_steps = 13
 										set_timed_star_flag = {
 											flag = hfe_pirate_fleet_system_check@root
 											days = 1
@@ -639,7 +737,7 @@ hfe_effect_pirate_path_get_next = {
 														has_hyperlane_to = prevprev
 														hfe_trigger_pirate_fleet_power_in_system_check = yes
 													}
-													max_steps = 7
+													max_steps = 12
 													set_timed_star_flag = {
 														flag = hfe_pirate_fleet_system_check@root
 														days = 1
@@ -665,7 +763,7 @@ hfe_effect_pirate_path_get_next = {
 																	has_hyperlane_to = prevprev
 																	hfe_trigger_pirate_fleet_power_in_system_check = yes
 																}
-																max_steps = 6
+																max_steps = 11
 																set_timed_star_flag = {
 																	flag = hfe_pirate_fleet_system_check@root
 																	days = 1
@@ -691,7 +789,7 @@ hfe_effect_pirate_path_get_next = {
 																				has_hyperlane_to = prevprev
 																				hfe_trigger_pirate_fleet_power_in_system_check = yes
 																			}
-																			max_steps = 5
+																			max_steps = 10
 																			set_timed_star_flag = {
 																				flag = hfe_pirate_fleet_system_check@root
 																				days = 1
@@ -717,7 +815,7 @@ hfe_effect_pirate_path_get_next = {
 																							has_hyperlane_to = prevprev
 																							hfe_trigger_pirate_fleet_power_in_system_check = yes
 																						}
-																						max_steps = 4
+																						max_steps = 9
 																						set_timed_star_flag = {
 																							flag = hfe_pirate_fleet_system_check@root
 																							days = 1
@@ -743,7 +841,7 @@ hfe_effect_pirate_path_get_next = {
 																										has_hyperlane_to = prevprev
 																										hfe_trigger_pirate_fleet_power_in_system_check = yes
 																									}
-																									max_steps = 4
+																									max_steps = 8
 																									set_timed_star_flag = {
 																										flag = hfe_pirate_fleet_system_check@root
 																										days = 1
@@ -769,7 +867,7 @@ hfe_effect_pirate_path_get_next = {
 																													has_hyperlane_to = prevprev
 																													hfe_trigger_pirate_fleet_power_in_system_check = yes
 																												}
-																												max_steps = 3
+																												max_steps = 7
 																												set_timed_star_flag = {
 																													flag = hfe_pirate_fleet_system_check@root
 																													days = 1
@@ -795,7 +893,7 @@ hfe_effect_pirate_path_get_next = {
 																																has_hyperlane_to = prevprev
 																																hfe_trigger_pirate_fleet_power_in_system_check = yes
 																															}
-																															max_steps = 2
+																															max_steps = 6
 																															set_timed_star_flag = {
 																																flag = hfe_pirate_fleet_system_check@root
 																																days = 1
@@ -821,12 +919,157 @@ hfe_effect_pirate_path_get_next = {
 																																			has_hyperlane_to = prevprev
 																																			hfe_trigger_pirate_fleet_power_in_system_check = yes
 																																		}
-																																		max_steps = 1
+																																		max_steps = 5
 																																		set_timed_star_flag = {
 																																			flag = hfe_pirate_fleet_system_check@root
 																																			days = 1
 																																		}
-																																		save_event_target_as = hfe_pirate_fleet_target_system_next
+																																		if = {
+																																			limit = {
+																																				has_hyperlane_to = root.solar_system
+																																			}
+																																			if = {
+																																				limit = {
+																																					hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																				}
+																																				save_event_target_as = hfe_pirate_fleet_target_system_next
+																																			}
+																																		}
+																																		else = {
+																																			root = {
+																																				closest_system = {
+																																					limit = {
+																																						not = {
+																																							has_star_flag = hfe_pirate_fleet_system_check@root
+																																						}
+																																						has_hyperlane_to = prevprev
+																																						hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																					}
+																																					max_steps = 4
+																																					set_timed_star_flag = {
+																																						flag = hfe_pirate_fleet_system_check@root
+																																						days = 1
+																																					}
+																																					if = {
+																																						limit = {
+																																							has_hyperlane_to = root.solar_system
+																																						}
+																																						if = {
+																																							limit = {
+																																								hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																							}
+																																							save_event_target_as = hfe_pirate_fleet_target_system_next
+																																						}
+																																					}
+																																					else = {
+																																						root = {
+																																							closest_system = {
+																																								limit = {
+																																									not = {
+																																										has_star_flag = hfe_pirate_fleet_system_check@root
+																																									}
+																																									has_hyperlane_to = prevprev
+																																									hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																								}
+																																								max_steps = 4
+																																								set_timed_star_flag = {
+																																									flag = hfe_pirate_fleet_system_check@root
+																																									days = 1
+																																								}
+																																								if = {
+																																									limit = {
+																																										has_hyperlane_to = root.solar_system
+																																									}
+																																									if = {
+																																										limit = {
+																																											hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																										}
+																																										save_event_target_as = hfe_pirate_fleet_target_system_next
+																																									}
+																																								}
+																																								else = {
+																																									root = {
+																																										closest_system = {
+																																											limit = {
+																																												not = {
+																																													has_star_flag = hfe_pirate_fleet_system_check@root
+																																												}
+																																												has_hyperlane_to = prevprev
+																																												hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																											}
+																																											max_steps = 3
+																																											set_timed_star_flag = {
+																																												flag = hfe_pirate_fleet_system_check@root
+																																												days = 1
+																																											}
+																																											if = {
+																																												limit = {
+																																													has_hyperlane_to = root.solar_system
+																																												}
+																																												if = {
+																																													limit = {
+																																														hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																													}
+																																													save_event_target_as = hfe_pirate_fleet_target_system_next
+																																												}
+																																											}
+																																											else = {
+																																												root = {
+																																													closest_system = {
+																																														limit = {
+																																															not = {
+																																																has_star_flag = hfe_pirate_fleet_system_check@root
+																																															}
+																																															has_hyperlane_to = prevprev
+																																															hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																														}
+																																														max_steps = 2
+																																														set_timed_star_flag = {
+																																															flag = hfe_pirate_fleet_system_check@root
+																																															days = 1
+																																														}
+																																														if = {
+																																															limit = {
+																																																has_hyperlane_to = root.solar_system
+																																															}
+																																															if = {
+																																																limit = {
+																																																	hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																																}
+																																																save_event_target_as = hfe_pirate_fleet_target_system_next
+																																															}
+																																														}
+																																														else = {
+																																															root = {
+																																																closest_system = {
+																																																	limit = {
+																																																		not = {
+																																																			has_star_flag = hfe_pirate_fleet_system_check@root
+																																																		}
+																																																		has_hyperlane_to = prevprev
+																																																		hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																																	}
+																																																	max_steps = 1
+																																																	set_timed_star_flag = {
+																																																		flag = hfe_pirate_fleet_system_check@root
+																																																		days = 1
+																																																	}
+																																																	save_event_target_as = hfe_pirate_fleet_target_system_next
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
 																																	}
 																																}
 																															}

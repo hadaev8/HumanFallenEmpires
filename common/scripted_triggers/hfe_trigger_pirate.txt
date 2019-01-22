@@ -25,6 +25,79 @@ hfe_trigger_exists_any_slave_target = {
 	}
 }
 
+hfe_trigger_pirate_protect_cost = {
+	or = {
+		and = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 250
+			}
+			resource_stockpile_compare = {
+				resource = alloys
+				value >= 100
+			}
+			relative_power = {
+				who = event_target:hfe_pirate_country
+				value > superior
+				category = fleet
+			}
+		}
+		and = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 500
+			}
+			resource_stockpile_compare = {
+				resource = alloys
+				value >= 200
+			}
+			relative_power = {
+				who = event_target:hfe_pirate_country
+				value < superior
+				category = fleet
+			}
+		}
+	}
+}
+
+hfe_trigger_pirate_raid_cost = {
+	resource_stockpile_compare = {
+		resource = energy
+		value >= @hfe_pirate_raid_cost_energy
+	}
+	resource_stockpile_compare = {
+		resource = alloys
+		value >= @hfe_pirate_raid_cost_alloys
+	}
+}
+
+hfe_trigger_pirate_slave_cost = {
+	resource_stockpile_compare = {
+		resource = energy
+		value >= @hfe_pirate_slave_cost_energy
+	}
+	resource_stockpile_compare = {
+		resource = alloys
+		value >= @hfe_pirate_slave_cost_alloys
+	}
+}
+
+hfe_trigger_pirate_raid_have_flag = {
+	has_opinion_modifier = {
+		who = event_target:hfe_pirate_country
+		modifier = hfe_opinion_pirate_prior_target
+	}
+}
+
+hfe_trigger_pirate_slave_have_valid_planet = {
+	custom_tooltip = {
+		text = hfe_pirate.101.slave_menu.fail_havent_space
+		any_owned_planet = {
+			hfe_trigger_planet_valid_for_settle = yes
+		}
+	}
+}
+
 # root fleet, this system
 # hfe_trigger_pirate_path_check = {
 # 	root = {
@@ -55,7 +128,7 @@ hfe_trigger_pirate_path_check = {
 		is_same_value = root.solar_system
 		root = {
 			closest_system = {
-				max_steps = 10
+				max_steps = 15
 				limit = {
 					has_hyperlane_to = prevprev
 					hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -63,7 +136,7 @@ hfe_trigger_pirate_path_check = {
 						is_same_value = root.solar_system
 						root = {
 							closest_system = {
-								max_steps = 9
+								max_steps = 14
 								limit = {
 									has_hyperlane_to = prevprev
 									hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -71,7 +144,7 @@ hfe_trigger_pirate_path_check = {
 										is_same_value = root.solar_system
 										root = {
 											closest_system = {
-												max_steps = 8
+												max_steps = 13
 												limit = {
 													has_hyperlane_to = prevprev
 													hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -79,7 +152,7 @@ hfe_trigger_pirate_path_check = {
 														is_same_value = root.solar_system
 														root = {
 															closest_system = {
-																max_steps = 7
+																max_steps = 12
 																limit = {
 																	has_hyperlane_to = prevprev
 																	hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -87,7 +160,7 @@ hfe_trigger_pirate_path_check = {
 																		is_same_value = root.solar_system
 																		root = {
 																			closest_system = {
-																				max_steps = 6
+																				max_steps = 11
 																				limit = {
 																					has_hyperlane_to = prevprev
 																					hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -95,7 +168,7 @@ hfe_trigger_pirate_path_check = {
 																						is_same_value = root.solar_system
 																						root = {
 																							closest_system = {
-																								max_steps = 5
+																								max_steps = 10
 																								limit = {
 																									has_hyperlane_to = prevprev
 																									hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -103,7 +176,7 @@ hfe_trigger_pirate_path_check = {
 																										is_same_value = root.solar_system
 																										root = {
 																											closest_system = {
-																												max_steps = 4
+																												max_steps = 9
 																												limit = {
 																													has_hyperlane_to = prevprev
 																													hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -111,7 +184,7 @@ hfe_trigger_pirate_path_check = {
 																														is_same_value = root.solar_system
 																														root = {
 																															closest_system = {
-																																max_steps = 3
+																																max_steps = 8
 																																limit = {
 																																	has_hyperlane_to = prevprev
 																																	hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -119,7 +192,7 @@ hfe_trigger_pirate_path_check = {
 																																		is_same_value = root.solar_system
 																																		root = {
 																																			closest_system = {
-																																				max_steps = 2
+																																				max_steps = 7
 																																				limit = {
 																																					has_hyperlane_to = prevprev
 																																					hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -127,11 +200,71 @@ hfe_trigger_pirate_path_check = {
 																																						is_same_value = root.solar_system
 																																						root = {
 																																							closest_system = {
-																																								max_steps = 1
+																																								max_steps = 6
 																																								limit = {
 																																									has_hyperlane_to = prevprev
 																																									hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																									or = {
+																																										is_same_value = root.solar_system
+																																										root = {
+																																											closest_system = {
+																																												max_steps = 5
+																																												limit = {
+																																													has_hyperlane_to = prevprev
+																																													hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																													or = {
+																																														is_same_value = root.solar_system
+																																														root = {
+																																															closest_system = {
+																																																max_steps = 4
+																																																limit = {
+																																																	has_hyperlane_to = prevprev
+																																																	hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																																	or = {
+																																																		is_same_value = root.solar_system
+																																																		root = {
+																																																			closest_system = {
+																																																				max_steps = 3
+																																																				limit = {
+																																																					has_hyperlane_to = prevprev
+																																																					hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																																					or = {
+																																																						is_same_value = root.solar_system
+																																																						root = {
+																																																							closest_system = {
+																																																								max_steps = 2
+																																																								limit = {
+																																																									has_hyperlane_to = prevprev
+																																																									hfe_trigger_pirate_fleet_power_in_system_check = yes
+																																																									or = {
+																																																										is_same_value = root.solar_system
+																																																										root = {
+																																																											closest_system = {
+																																																												max_steps = 1
+																																																												limit = {
+																																																													has_hyperlane_to = prevprev
+																																																													hfe_trigger_pirate_fleet_power_in_system_check = yes
 
+																																																												}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
 																																								}
 																																							}
 																																						}

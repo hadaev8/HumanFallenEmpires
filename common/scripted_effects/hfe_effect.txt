@@ -18,7 +18,7 @@ hfe_effect_refuge_or_die = {
 	#log = "pop refuge effect"
 	if = {
 		limit = {
-			is_robot_pop = no
+			hfe_trigger_is_robot = no
 			nor = {
 				has_trait = trait_hive_mind
 				has_trait = trait_nerve_stapled
@@ -35,6 +35,7 @@ hfe_effect_refuge_or_die = {
 			}
 		}
 		save_event_target_as = hfe_refuge_pop_target
+		save_event_target_as = hfe_refuge_pop_target_owner
 		owner = {
 			random_relation = {
 				limit = {
@@ -143,6 +144,16 @@ hfe_effect_refuge_or_die = {
 						}
 					}
 					modifier = {
+						mult = 2
+						any_owned_planet = {
+							hfe_trigger_planet_valid_for_settle = yes
+							habitability = {
+								who = event_target:hfe_refuge_pop_target
+								value >= 0.4
+							}
+						}
+					}
+					modifier = {
 						mult = 0.5
 						event_target:hfe_refuge_pop_target = {
 							has_citizenship_type = {
@@ -184,12 +195,15 @@ hfe_effect_settle_pop = {
 	if = {
 		limit = {
 			not = {
+				exists = event_target:hfe_settle_pop_target
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
 				any_owned_planet = {
 					hfe_trigger_planet_valid_for_settle = yes
-					# habitability = {
-						# who = event_target:hfe_settle_pop_target
-						# value >= 0.2
-					# }
 				}
 			}
 		}
@@ -202,10 +216,6 @@ hfe_effect_settle_pop = {
 		random_owned_planet = {
 			limit = {
 				hfe_trigger_planet_valid_for_settle = yes
-				# habitability = {
-					# who = event_target:hfe_settle_pop_target
-					# value > 0.2
-				# }
 			}
 			weights = {
 				base = 10
@@ -251,13 +261,55 @@ hfe_effect_settle_pop = {
 						value > 0.3
 					}
 				}
+				modifier = {
+					mult = 2
+					free_jobs > 5
+				}
+				modifier = {
+					mult = 2
+					free_jobs > 0
+				}
+				modifier = {
+					mult = 0.5
+					free_housing < 0
+				}
+				modifier = {
+					mult = 0.1
+					free_housing < -5
+				}
 			}
-			# event_target:hfe_settle_pop_target = {
-			# 	purge = no
-			# }
 			resettle_pop = {
 				pop = event_target:hfe_settle_pop_target
 				planet = this
+			}
+			event_target:hfe_settle_pop_target = {
+				if = {
+					limit = {
+						has_modifier = recent_refugee
+					}
+					create_message = {
+						type = MESSAGE_TYPE_REFUGEES_ARRIVED
+						localization = MESSAGE_REFUGEES_ARRIVED
+						days = 10
+						target = prev
+						variable = {
+							type = name
+							localization = SPECIES
+							scope = this.species
+						}
+						variable = {
+							type = name
+							localization = PLANET
+							scope = prev
+						}
+						variable = {
+							type = name
+							localization = COUNTRY
+							scope = event_target:hfe_refuge_pop_target_owner
+						}
+					}
+				}
+				hfe_effect_fix_robot_pop = yes
 			}
 			#log = "pop moved to [this.GetName]"
 		}
@@ -295,6 +347,37 @@ hfe_effect_settle_pop_from_slavery_buff = {
 				days = 3650
 			}
 		}
+	}
+}
+
+hfe_effect_fix_robot_pop = {
+	if = {
+		limit = {
+			has_trait = trait_machine_unit
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		modify_species = {
+			remove_trait = trait_machine_unit
+			add_trait = trait_mechanical
+		}
+		remove_modifier = pop_recently_conquered
+	}
+	else_if = {
+		limit = {
+			has_trait = trait_mechanical
+			exists = owner
+			owner = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+		modify_species = {
+			remove_trait = trait_mechanical
+			add_trait = trait_machine_unit
+		}
+		remove_modifier = pop_recently_conquered
 	}
 }
 
@@ -504,8 +587,6 @@ hfe_effect_event_711_next = {
 		}
 	}
 }
-
-
 
 hfe_effect_event_5001_next = {
 	hidden_effect = {
