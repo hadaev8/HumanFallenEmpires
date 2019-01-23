@@ -96,38 +96,28 @@ hfe_effect_pirate_init = {
 		}
 		random_system = {
 			limit = {
-				distance_to_empire = {
-					who = event_target:hfe_pirate_target
-					distance <= 100
+				closest_system = {
+					max_steps = 10
+					limit = {
+						is_owned_by = event_target:hfe_pirate_target
+					}
 				}
 				hfe_trigger_pirate_valid_base_system = yes
 			}
 			weights = {
 				base = 1
 				modifier = {
-					mult = 1600
-					has_trade_route = yes
-					trade_intercepted_percentage >= 80
-				}
-				modifier = {
-					mult = 800
-					has_trade_route = yes
-					trade_intercepted_percentage >= 60
-				}
-				modifier = {
-					mult = 400
-					has_trade_route = yes
-					trade_intercepted_percentage >= 40
-				}
-				modifier = {
-					mult = 100
-					has_trade_route = yes
-					trade_intercepted_percentage >= 20
-				}
-				modifier = {
 					mult = 10
 					has_trade_route = yes
 					trade_intercepted_value > 0
+				}
+				modifier = {
+					mult = 10
+					not = {
+						any_neighbor_system = {
+							has_presence = yes
+						}
+					}
 				}
 			}
 			# for vanilla localization
@@ -137,29 +127,23 @@ hfe_effect_pirate_init = {
 		}
 		if = {
 			limit = {
-				not = {
-					has_event_chain = hfe_chain_pirate_count
-				}
-			}
-			begin_event_chain = {
-				event_chain = hfe_chain_pirate_count
-				target = this
-			}
-			set_country_flag = hfe_birth_of_piracy
-			set_country_flag = pirate_encountered
-			set_variable = {
-				which = pirates_active
-				value = 5
+				has_event_chain = hfe_chain_pirate_count
 			}
 			country_event = {
-				id = hfe_pirate.1
+				id = hfe_pirate.7
 				days = 1
 				random = 15
 			}
 		}
 		else = {
+			begin_event_chain = {
+				event_chain = hfe_chain_pirate_count
+				target = this
+			}
+			#set_country_flag = hfe_birth_of_piracy
+			set_country_flag = pirate_encountered
 			country_event = {
-				id = hfe_pirate.7
+				id = hfe_pirate.1
 				days = 1
 				random = 15
 			}
@@ -180,7 +164,7 @@ hfe_effect_pirate_init_base = {
 				has_deposit = no
 			}
 		}
-		change_pc = hfe_pc_pirate_base
+		hfe_effect_pirate_change_to_pc_pirate_base = yes
 		# if = {
 		# 	limit = {
 		# 		not = {
@@ -206,10 +190,25 @@ hfe_effect_pirate_init_base = {
 		# 	 log = "owner not exists [this.GetName] system: [solar_system.GetName]"
 		# }
 		#log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
-		#set_planet_flag = hfe_pirate_base
 		hfe_effect_create_starbase_starport_from_planet = yes
 		hfe_effect_starbase_add_shipyard_0 = yes
 	}
+}
+
+hfe_effect_pirate_change_to_pc_pirate_base = {
+	if = {
+		limit = {
+			is_planet_class = pc_ice_asteroid
+		}
+		set_planet_flag = hfe_former_pc_ice_asteroid
+	}
+	else_if = {
+		limit = {
+			is_planet_class = pc_asteroid
+		}
+		set_planet_flag = hfe_former_pc_crystal_asteroid
+	}
+	change_pc = hfe_pc_pirate_base
 }
 
 hfe_effect_pirate_init_country = {
@@ -558,7 +557,7 @@ hfe_effect_pirate_attack_count_check = {
 			limit = {
 				check_variable = {
 					which = hfe_pirate_attack_count
-					value > 10
+					value > 20
 				}
 			}
 			set_variable = {

@@ -209,7 +209,7 @@ country_event = {
 				is_asteroid = yes
 			}
 			log = "fixing planet class for [this.GetName], owner: [owner.GetName]"
-			change_pc = hfe_pc_pirate_base
+			hfe_effect_pirate_change_to_pc_pirate_base = yes
 		}
 		# move capital if have normal planet
 		if = {
@@ -547,6 +547,10 @@ country_event = {
 }
 
 # pirate gain resources after kill station
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
 country_event = {
 	id = hfe_pirate.52
 	hide_window = yes
@@ -567,7 +571,8 @@ country_event = {
 	}
 
 	immediate = {
-		#log = "pirate kill station"
+		#log = "[this.GetName] pirate kill station"
+		hfe_effect_pirate_resource_reward = yes
 		set_timed_country_flag = {
 			flag = hfe_pirate_attack@from
 			days = 365
@@ -585,12 +590,11 @@ country_event = {
 				}
 			}
 		}
-		hfe_effect_pirate_resource_reward = yes
 	}
 }
 
-# pirate bombard colony by on_planet_zero_health
-# Planet has reached 0 health from orbital bombardment
+# pirate bombard colony by on_planet_bombarded
+# Planet has taken damage from orbital bombardment
 # This = Planet
 # From = Bombarder
 planet_event = {
@@ -624,14 +628,6 @@ planet_event = {
 		}
 		hfe_effect_pirate_ravage_planet = yes
 		log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
-		# }
-		# else = {
-		# 	random = {
-		# 		chance = 20
-		# 		hfe_effect_pirate_ravage_planet = yes
-		# 		log = "pirate bombarding [this.GetName] in [solar_system.GetName] by default"
-		# 	}
-		# }
 	}
 }
 
@@ -650,6 +646,7 @@ country_event = {
 	}
 
 	immediate = {
+		log = "work event hfe_pirate.55 add pirate trait to admiral 55 on_leader_spawned"
 		from = {
 			add_trait = hfe_admiral_trait_pirate
 		}
@@ -697,11 +694,13 @@ ship_event = {
 				}
 			}
 			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
-			every_system_planet = {
-				limit = {
-					is_owned_by = event_target:hfe_pirate_starbase_def
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = event_target:hfe_pirate_starbase_def
+					}
+					set_owner = event_target:hfe_pirate_starbase_att
 				}
-				set_owner = event_target:hfe_pirate_starbase_att
 			}
 			starbase = {
 				set_owner = event_target:hfe_pirate_starbase_att
