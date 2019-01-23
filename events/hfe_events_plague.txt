@@ -300,7 +300,7 @@ planet_event = {
 		}
 		# send plague
 		planet_event = {
-			id = hfe_plague.6
+			id = hfe_plague.3
 			days = 180
 			random = 180
 		}
@@ -336,7 +336,7 @@ planet_event = {
 	immediate = {
 		planet_event = {
 			id = hfe_plague.2
-			days = 180
+			days = 90
 			random = 180
 		}
 		# log = "Plague pulse on planet [Root.GetName] owner: [Root.Owner.GetName]"
@@ -346,21 +346,72 @@ planet_event = {
 				has_global_flag = hfe_plague_lvl_2
 			}
 			random_list = {
-				# die
+				# not die
 				10 = {
 					modifier = {
-						factor = 0.75
+						factor = 2
 						has_building = building_clinic
 					}
 					modifier = {
-						factor = 0.5
+						factor = 4
 						has_building = building_hospital
 					}
 					modifier = {
-						factor = 0.5
+						factor = 2
+						habitable_structure = yes
+					}
+					modifier = {
+						factor = 2
+						owner = {
+							has_edict = hfe_plague_quarantine
+						}
+					}
+					modifier = {
+						factor = 2
 						owner = {
 							is_ai = yes
 						}
+					}
+					modifier = {
+						factor = 2
+						owner = {
+							has_technology = hfe_tech_plague_immune
+						}
+					}
+					log = "plague pop not die"
+					random_list = {
+						90 = {
+						}
+						# get immune
+						10 = {
+							modifier = {
+								factor = 2
+								owner = {
+									has_technology = hfe_tech_plague_immune
+								}
+							}
+							owner = {
+								country_event = {
+									id = hfe_plague.58
+									days = 1
+								}
+							}
+							random_owned_pop = {
+								limit = {
+									hfe_trigger_plague_is_immune = no
+								}
+								modify_species = {
+									add_trait = hfe_species_trait_immune
+								}
+							}
+						}
+					}
+				}
+				# die
+				1 = {
+					modifier = {
+						factor = 2
+						is_difficulty > 4
 					}
 					modifier = {
 						factor = 2
@@ -380,15 +431,112 @@ planet_event = {
 					}
 					modifier = {
 						factor = 2
-						num_pops > 20
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 100
+						}
 					}
 					modifier = {
 						factor = 2
-						num_pops > 10
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 90
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 80
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 70
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 60
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 50
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 40
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 30
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 20
+						}
+					}
+					modifier = {
+						factor = 2
+						count_pops = {
+							limit = {
+								hfe_trigger_plague_is_immune = no
+							}
+							count > 10
+						}
 					}
 					random_owned_pop = {
 						limit = {
 							hfe_trigger_plague_is_immune = no
+						}
+						weights = {
+							base = 10
+							modifier = {
+								mult = 0.5
+								has_citizenship_rights = yes
+							}
+							modifier = {
+								mult = 0.5
+								hfe_trigger_plague_is_resist = yes
+							}
+							modifier = {
+								mult = 2
+								is_enslaved = yes
+							}
 						}
 						random_list = {
 							2 = {
@@ -449,33 +597,9 @@ planet_event = {
 										}
 									}
 								}
+								log = "plague pop die"
 								kill_pop = yes
 							}
-						}
-					}
-				}
-				# or not to die
-				30 = {
-					random_list = {
-						# get immune
-						10 = {
-							owner = {
-								country_event = {
-									id = hfe_plague.58
-									days = 1
-								}
-							}
-							random_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								modify_species = {
-									add_trait = hfe_species_trait_immune
-								}
-							}
-						}
-						# nothing
-						90 = {
 						}
 					}
 				}
@@ -484,9 +608,9 @@ planet_event = {
 	}
 }
 
-# send plague pulse 6
+# send plague pulse 3
 planet_event = {
-	id = hfe_plague.6
+	id = hfe_plague.3
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -502,15 +626,17 @@ planet_event = {
 	}
 
 	immediate = {
+		# новое заражение примерно раз в 2 года, итого 5 заражений за декаду
 		planet_event = {
-			id = hfe_plague.6
-			days = 720
-			random = 180
+			id = hfe_plague.3
+			days = 540
+			random = 360
 		}
 		# send plague
 		closest_system = {
 			max_steps = 15
 			limit = {
+				exists = owner
 				any_system_planet = {
 					hfe_trigger_plague_valid_planet = yes
 				}
@@ -520,38 +646,54 @@ planet_event = {
 					hfe_trigger_plague_valid_planet = yes
 				}
 				random_list = {
-					# nothing
+					# not send plague
 					10 = {
 						modifier = {
-							factor = 1.1
+							factor = 2
 							has_building = building_clinic
 						}
 						modifier = {
-							factor = 1.2
+							factor = 4
 							has_building = building_hospital
 						}
 						modifier = {
-							factor = 1.4
+							factor = 2
 							habitable_structure = yes
+						}
+						modifier = {
+							factor = 2
+							owner = {
+								has_edict = hfe_plague_quarantine
+							}
+						}
+						modifier = {
+							factor = 2
+							owner = {
+								is_ai = yes
+							}
+						}
+						modifier = {
+							factor = 2
+							owner = {
+								has_technology = hfe_tech_plague_immune
+							}
 						}
 						modifier = {
 							factor = 2
 							has_global_flag = hfe_plague_lvl_2
 						}
 						modifier = {
-							factor = 1.5
+							factor = 2
+							has_global_flag = hfe_plague_lvl_3
+						}
+						modifier = {
+							factor = 2
 							owner = {
 								hfe_trigger_is_fallen = yes
 							}
 						}
 						modifier = {
-							factor = 1.2
-							owner = {
-								has_edict = hfe_plague_quarantine
-							}
-						}
-						modifier = {
-							factor = 1.2
+							factor = 2
 							owner = {
 								not = {
 									is_country = root.owner
@@ -559,7 +701,7 @@ planet_event = {
 							}
 						}
 						modifier = {
-							factor = 1.2
+							factor = 2
 							owner = {
 								not = {
 									is_country = root.owner
@@ -576,7 +718,7 @@ planet_event = {
 								is_homicidal = yes
 							}
 						}
-						#log = "not send plague"
+						log = "plague not send to new planet"
 					}
 					# send plague
 					10 = {
@@ -590,137 +732,124 @@ planet_event = {
 							# calc = pop_count
 						# }
 						modifier = {
-							add = 1.6
+							factor = 2
+							is_difficulty > 4
+						}
+						modifier = {
+							factor = 2
+							is_difficulty > 3
+						}
+						modifier = {
+							factor = 2
+							is_difficulty > 2
+						}
+						modifier = {
+							factor = 2
+							is_difficulty > 1
+						}
+						modifier = {
+							factor = 2
+							is_difficulty > 0
+						}
+						modifier = {
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 3
+								count > 100
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 5
+								count > 90
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 7
+								count > 80
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 9
+								count > 70
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 11
+								count > 60
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 13
+								count > 50
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 15
+								count > 40
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 17
+								count > 30
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 19
+								count > 20
 							}
 						}
 						modifier = {
-							add = 1.6
+							factor = 2
 							count_pops = {
 								limit = {
 									hfe_trigger_plague_is_immune = no
 								}
-								count > 21
+								count > 10
 							}
 						}
-						modifier = {
-							add = 1.6
-							count_pops = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 23
-							}
-						}
+						log = "plague send to new planet"
 						planet_event = {
 							id = hfe_plague.1
 							days = 180
 							random = 180
 						}
-						#log = "send plague"
 					}
 				}
 			}
-		}
-	}
-}
-
-# start by migration 3
-pop_event = {
-	id = hfe_plague.3
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		has_pop_flag = hfe_plague_pop
-		exists = planet
-		planet = {
-			hfe_trigger_plague_valid_planet = yes
-		}
-	}
-
-	immediate = {
-		planet = {
-			planet_event = {
-				id = hfe_plague.1
-			}
-			#log = "Plague migration on planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
 		}
 	}
 }
@@ -1635,17 +1764,22 @@ country_event = {
 		name = hfe_plague.58.0
 		trigger = {
 			not = {
-				has_country_flag = hfe_plague_know_immune
+				has_tech_option = hfe_tech_plague_immune
 			}
 		}
 		add_research_option = hfe_tech_plague_immune
-		set_country_flag = hfe_plague_know_immune
-		#log = "[Root.GetName] now know immune"
+		if = {
+			limit = {
+				is_difficulty < 2
+			}
+			add_research_option = tech_gene_tailoring
+		}
+		log = "plague [Root.GetName] now know immune"
 	}
 	option = {
 		name = hfe_plague.58.1
 		trigger = {
-			has_country_flag = hfe_plague_know_immune
+			has_tech_option = hfe_tech_plague_immune
 		}
 		add_tech_progress = {
 			tech = hfe_tech_plague_immune
@@ -1988,14 +2122,8 @@ planet_event = {
 
 	immediate = {
 		log = "plague bombarding type on [root.GetName] in [solar_system.GetName]"
-		random_list = {
-			8 = {
-			}
-			2 = {
-				planet_event = {
-					id = hfe_plague.1
-				}
-			}
+		planet_event = {
+			id = hfe_plague.1
 		}
 	}
 }
