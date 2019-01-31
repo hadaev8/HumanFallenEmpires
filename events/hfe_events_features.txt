@@ -130,14 +130,42 @@ country_event = {
 				}
 			}
 		}
+		if = {
+			limit = {
+				is_materialist = yes
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = random
+						random_existing_design = science
+					}
+					set_fleet_stance = evasive
+					set_location = root.capital_scope.star
+					root = {
+						create_leader = {
+							class = scientist
+							sub_type = survey
+						}
+					}
+					set_leader = last_created_leader
+				}
+			}
+		}
 		every_owned_pop = {
 			prev = {
 				change_variable = {
 					which = hfe_features_exodus_pop
 					value = 1
 				}
-				add_resource = { energy = 50 }
-				add_resource = { minerals = 50 }
+				add_resource = {
+					energy = 50
+					minerals = 50
+					# alloys = 50
+					# consumer_goods = 50
+					# food = 50
+				}
 			}
 			kill_pop = yes
 		}
@@ -149,7 +177,7 @@ country_event = {
 						name = "New Hope"
 						random_existing_design = colonizer
 					}
-					set_location = prev
+					set_location = root.capital_scope.star
 				}
 			}
 			hfe_effect_clear_buildings_and_destroy_colony = yes
