@@ -26,36 +26,31 @@ hfe_trigger_exists_any_slave_target = {
 }
 
 hfe_trigger_pirate_protect_cost = {
-	or = {
-		and = {
-			resource_stockpile_compare = {
-				resource = energy
-				value >= 250
-			}
-			resource_stockpile_compare = {
-				resource = alloys
-				value >= 100
-			}
+	if = {
+		limit = {
 			relative_power = {
 				who = event_target:hfe_pirate_country
 				value > superior
 				category = fleet
 			}
 		}
-		and = {
-			resource_stockpile_compare = {
-				resource = energy
-				value >= 500
-			}
-			resource_stockpile_compare = {
-				resource = alloys
-				value >= 200
-			}
-			relative_power = {
-				who = event_target:hfe_pirate_country
-				value < superior
-				category = fleet
-			}
+		resource_stockpile_compare = {
+			resource = energy
+			value >= 250
+		}
+		resource_stockpile_compare = {
+			resource = alloys
+			value >= 100
+		}
+	}
+	else = {
+		resource_stockpile_compare = {
+			resource = energy
+			value >= 500
+		}
+		resource_stockpile_compare = {
+			resource = alloys
+			value >= 200
 		}
 	}
 }
