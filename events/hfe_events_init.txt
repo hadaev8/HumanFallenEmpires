@@ -402,6 +402,28 @@ country_event = {
 			}
 		}
 	}
+	# random
+	option = {
+		name = hfe_init.50.1.9.defined_text
+		custom_tooltip = hfe_init.50.1.9.tooltip.defined_text
+		trigger = {
+			hfe_trigger_fast_start_enabled = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_global_flag = hfe_init_random
+				}
+				remove_global_flag = hfe_init_random
+			}
+			else = {
+				set_global_flag = hfe_init_random
+			}
+			country_event = {
+				id = hfe_init.50
+			}
+		}
+	}
 	# hardcore mod
 	option = {
 		name = hfe_init.50.2.defined_text
@@ -500,64 +522,47 @@ country_event = {
 				limit = {
 					num_pops > 0
 				}
-				save_event_target_as = hfe_init_target
-				hfe_effect_init_make_colony = yes
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								has_global_flag = hfe_init_random
+							}
+						}
+					}
+					10 = {
+						save_event_target_as = hfe_init_target
+						hfe_effect_init_make_colony = yes
+					}
+				}
 			}
 		}
 		# tech and res
 		every_playable_country = {
-			switch = {
-				trigger = has_global_flag
-				hfe_init_tech_t4 = {
-					hfe_effect_init_give_tech_t4 = yes
-					add_resource = {
-						energy = 10000
-						minerals = 10000
-						influence = 500
-					}
-					every_owned_pop = {
-						owner = {
-							add_resource = {
-								unity = 250
+			random_list = {
+				# t1
+				10 = {
+					modifier = {
+						factor = 0
+						nor = {
+							has_global_flag = hfe_init_tech_t1
+							and = {
+								has_global_flag = hfe_init_random
+								or = {
+									has_global_flag = hfe_init_tech_t2
+									has_global_flag = hfe_init_tech_t3
+									has_global_flag = hfe_init_tech_t4
+								}
 							}
 						}
 					}
-				}
-				hfe_init_tech_t3 = {
-					hfe_effect_init_give_tech_t3 = yes
-					add_resource = {
-						energy = 8000
-						minerals = 8000
-						influence = 400
-					}
-					every_owned_pop = {
-						owner = {
-							add_resource = {
-								unity = 200
-							}
-						}
-					}
-				}
-				hfe_init_tech_t2 = {
-					hfe_effect_init_give_tech_t2 = yes
-					add_resource = {
-						energy = 6000
-						minerals = 6000
-						influence = 300
-					}
-					every_owned_pop = {
-						owner = {
-							add_resource = {
-								unity = 150
-							}
-						}
-					}
-				}
-				hfe_init_tech_t1 = {
 					hfe_effect_init_give_tech_t1 = yes
 					add_resource = {
 						energy = 4000
 						minerals = 4000
+						alloys = 1000
+						consumer_goods = 1000
 						influence = 200
 					}
 					every_owned_pop = {
@@ -568,13 +573,109 @@ country_event = {
 						}
 					}
 				}
+				# t2
+				10 = {
+					modifier = {
+						factor = 0
+						nor = {
+							has_global_flag = hfe_init_tech_t2
+							and = {
+								has_global_flag = hfe_init_random
+								or = {
+									has_global_flag = hfe_init_tech_t3
+									has_global_flag = hfe_init_tech_t4
+								}
+							}
+						}
+					}
+					hfe_effect_init_give_tech_t2 = yes
+					add_resource = {
+						energy = 6000
+						minerals = 6000
+						alloys = 1500
+						consumer_goods = 1500
+						influence = 400
+					}
+					every_owned_pop = {
+						owner = {
+							add_resource = {
+								unity = 150
+							}
+						}
+					}
+				}
+				# t3
+				10 = {
+					modifier = {
+						factor = 0
+						nor = {
+							has_global_flag = hfe_init_tech_t3
+							and = {
+								has_global_flag = hfe_init_random
+								has_global_flag = hfe_init_tech_t4
+							}
+						}
+					}
+					hfe_effect_init_give_tech_t3 = yes
+					add_resource = {
+						energy = 8000
+						minerals = 8000
+						alloys = 2000
+						consumer_goods = 2000
+						influence = 600
+					}
+					every_owned_pop = {
+						owner = {
+							add_resource = {
+								unity = 200
+							}
+						}
+					}
+				}
+				# t4
+				10 = {
+					modifier = {
+						factor = 0
+						nand = {
+							has_global_flag = hfe_init_tech_t4
+							has_global_flag = hfe_init_random
+						}
+					}
+					hfe_effect_init_give_tech_t4 = yes
+					add_resource = {
+						energy = 10000
+						minerals = 10000
+						alloys = 2500
+						consumer_goods = 2500
+						influence = 800
+					}
+					every_owned_pop = {
+						owner = {
+							add_resource = {
+								unity = 250
+							}
+						}
+					}
+				}
 			}
 		}
 		# more fleets
 		while = {
 			count = hfe_init_fast_start_fleet_num
-			every_playable_country = {
-				hfe_effect_init_make_fleet = yes
+			random_list = {
+				10 = {
+					modifier = {
+						factor = 0
+						not = {
+							has_global_flag = hfe_init_random
+						}
+					}
+				}
+				10 = {
+					every_playable_country = {
+						hfe_effect_init_make_fleet = yes
+					}
+				}
 			}
 		}
 		# more pirate
@@ -585,8 +686,20 @@ country_event = {
 					is_country_type = default
 					is_gestalt = no
 				}
-				save_event_target_as = hfe_pirate_target
-				hfe_effect_pirate_init = yes
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								has_global_flag = hfe_init_random
+							}
+						}
+					}
+					10 = {
+						save_event_target_as = hfe_pirate_target
+						hfe_effect_pirate_init = yes
+					}
+				}
 			}
 		}
 		# mining
@@ -631,7 +744,7 @@ country_event = {
 				}
 			}
 		}
-		# survey
+		# auto survey
 		if = {
 			limit = {
 				has_global_flag = hfe_init_survey
