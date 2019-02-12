@@ -945,8 +945,79 @@ country_event = {
 			}
 		}
 		# spawn story systems
-		set_spawn_system_batch = begin
-		# future
+		country_event = {
+			id = hfe_init.110
+		}
+		country_event = {
+			id = hfe_init.111
+			days = 1
+		}
+	}
+}
+
+# expand borders
+country_event = {
+	id = hfe_init.103
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		hfe_effect_init_expand_borders = yes
+		country_event = {
+			id = hfe_init.104
+			days = 1
+		}
+	}
+}
+
+# set mining
+country_event = {
+	id = hfe_init.104
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		hfe_effect_init_set_minings_stations = yes
+	}
+}
+
+# develop planet
+planet_event = {
+	id = hfe_init.106
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		hfe_effect_init_develop_planet = yes
+	}
+}
+
+# set districts
+planet_event = {
+	id = hfe_init.107
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		hfe_effect_init_set_all_districs = yes
+	}
+}
+
+# future spawn event
+country_event = {
+	id = hfe_init.110
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
 		random_rim_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
@@ -986,7 +1057,33 @@ country_event = {
 				set_global_flag = hfe_future_spawned
 			}
 		}
-		# egypt
+		event_target:hfe_future_country = {
+			country_event = {
+				id = hfe_init.103
+				days = 1
+			}
+			country_event = {
+				id = hfe_init.103
+				days = 2
+			}
+			every_owned_planet = {
+				planet_event = {
+					id = hfe_init.107
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# egypt spawn event
+country_event = {
+	id = hfe_init.111
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_spawn_system_batch = begin
 		random_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
@@ -1143,7 +1240,39 @@ country_event = {
 				initializer = hfe_initializer_copernicus
 			}
 		}
-		# drone
+		set_spawn_system_batch = end
+		# expand borders and develop
+		event_target:hfe_egypt_country = {
+			country_event = {
+				id = hfe_init.103
+				days = 1
+			}
+			every_owned_planet = {
+				planet_event = {
+					id = hfe_init.107
+					days = 2
+				}
+			}
+			# country_event = {
+			# id = hfe_init.103
+			# days = 3
+			# }
+		}
+		country_event = {
+			id = hfe_init.112
+			days = 1
+		}
+	}
+}
+
+# drone spawn event
+country_event = {
+	id = hfe_init.112
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_spawn_system_batch = begin
 		random_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
@@ -1183,84 +1312,11 @@ country_event = {
 		}
 		set_spawn_system_batch = end
 		# expand borders and develop
-		event_target:hfe_egypt_country = {
-			country_event = {
-				id = hfe_init.103
-				days = 2
-			}
-			every_owned_planet = {
-				planet_event = {
-					id = hfe_init.106
-					days = 2
-				}
-			}
-			# country_event = {
-			# id = hfe_init.103
-			# days = 3
-			# }
-		}
-		event_target:hfe_future_country = {
-			country_event = {
-				id = hfe_init.103
-				days = 2
-			}
-			country_event = {
-				id = hfe_init.103
-				days = 4
-			}
-			every_owned_planet = {
-				planet_event = {
-					id = hfe_init.106
-					days = 2
-				}
-			}
-		}
 		event_target:hfe_drone_country = {
 			country_event = {
 				id = hfe_init.103
-				days = 2
+				days = 1
 			}
 		}
-	}
-}
-
-# expand borders
-country_event = {
-	id = hfe_init.103
-	is_triggered_only = yes
-	hide_window = yes
-
-	immediate = {
-		hfe_effect_init_expand_borders = yes
-		country_event = {
-			id = hfe_init.104
-			days = 1
-		}
-	}
-}
-
-# set mining
-country_event = {
-	id = hfe_init.104
-	is_triggered_only = yes
-	hide_window = yes
-
-	immediate = {
-		hfe_effect_init_set_minings_stations = yes
-	}
-}
-
-# develop planet
-planet_event = {
-	id = hfe_init.106
-	is_triggered_only = yes
-	hide_window = yes
-
-	trigger = {
-		exists = owner
-	}
-
-	immediate = {
-		hfe_effect_init_develop_planet = yes
 	}
 }
