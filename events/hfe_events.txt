@@ -1053,32 +1053,39 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		not = {
-			has_global_flag = hfe_egypt_in_expansion
+		nor = {
+			has_global_flag = hfe_future_in_expansion
+			has_global_flag = hfe_expansion_block
 		}
+		mid_game_years_passed > 0
 		or = {
-			mid_game_years_passed > 50
 			end_game_years_passed > 0
-		}
-		or = {
 			has_global_flag = galactic_crisis_happened
 			has_global_flag = hfe_war_in_heaven_started
+			is_at_war = yes
 			recently_lost_war = yes
-			any_country = {
-				is_country_type = default
+			any_playable_country = {
 				or = {
 					and = {
 						is_difficulty > 0
 						relative_power = {
 							who = root
 							category = fleet
-							value >= inferior
+							value > inferior
+						}
+					}
+					and = {
+						is_difficulty > 1
+						relative_power = {
+							who = root
+							category = fleet
+							value > pathetic
 						}
 					}
 					relative_power = {
 						who = root
 						category = fleet
-						value >= equivalent
+						value > equivalent
 					}
 				}
 			}
@@ -1086,6 +1093,10 @@ country_event = {
 	}
 
 	immediate = {
+		set_timed_global_flag = {
+			flag = hfe_expansion_block
+			days = 1825
+		}
 		# проверить будет ли 2 модификатора
 		add_modifier = {
 			modifier = hfe_navy_size
@@ -6345,7 +6356,29 @@ country_event = {
 			has_global_flag = hfe_drone_awake
 			has_global_flag = hfe_has_event.606
 		}
-		years_passed > 10
+		or = {
+			years_passed > 35
+			and = {
+				is_difficulty > 0
+				years_passed > 30
+			}
+			and = {
+				is_difficulty > 1
+				years_passed > 25
+			}
+			and = {
+				is_difficulty > 2
+				years_passed > 20
+			}
+			and = {
+				is_difficulty > 3
+				years_passed > 15
+			}
+			and = {
+				is_difficulty > 4
+				years_passed > 10
+			}
+		}
 	}
 
 	immediate = {
@@ -8574,32 +8607,39 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		not = {
+		nor = {
 			has_global_flag = hfe_future_in_expansion
+			has_global_flag = hfe_expansion_block
 		}
+		mid_game_years_passed > 0
 		or = {
-			mid_game_years_passed > 50
 			end_game_years_passed > 0
-		}
-		or = {
 			has_global_flag = galactic_crisis_happened
 			has_global_flag = hfe_war_in_heaven_started
+			is_at_war = yes
 			recently_lost_war = yes
-			any_country = {
-				is_country_type = default
+			any_playable_country = {
 				or = {
 					and = {
 						is_difficulty > 0
 						relative_power = {
 							who = root
 							category = fleet
-							value >= inferior
+							value > inferior
+						}
+					}
+					and = {
+						is_difficulty > 1
+						relative_power = {
+							who = root
+							category = fleet
+							value > pathetic
 						}
 					}
 					relative_power = {
 						who = root
 						category = fleet
-						value >= equivalent
+						value > equivalent
 					}
 				}
 			}
@@ -8607,6 +8647,10 @@ country_event = {
 	}
 
 	immediate = {
+		set_timed_global_flag = {
+			flag = hfe_expansion_block
+			days = 1825
+		}
 		add_modifier = {
 			modifier = hfe_navy_size
 			days = 3600
