@@ -66,51 +66,6 @@ country_event = {
 		# 	}
 		# 	log = "is_difficulty > 5"
 		# }
-
-		if = {
-			limit = {
-				exploitable_planets > -2
-			}
-			log = "exploitable_planets > -2"
-		}
-		if = {
-			limit = {
-				exploitable_planets > -1
-			}
-			log = "exploitable_planets > -1"
-		}
-		if = {
-			limit = {
-				exploitable_planets > 0
-			}
-			log = "exploitable_planets > 0"
-		}
-		if = {
-			limit = {
-				exploitable_planets > 1
-			}
-			log = "exploitable_planets > 1"
-		}
-		if = {
-			limit = {
-				exploitable_planets > 2
-			}
-			log = "exploitable_planets > 2"
-		}
-		if = {
-			limit = {
-				exploitable_planets > 3
-			}
-			log = "exploitable_planets > 3"
-		}
-		if = {
-			limit = {
-				exploitable_planets > 4
-			}
-			log = "exploitable_planets > 4"
-		}
-
-
 		# if = {
 		# 	limit = {
 		# 		is_difficulty > 6
@@ -306,16 +261,11 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_owned_pop = {
-			limit = {
-				not = {
-					has_citizenship_type = {
-						country = owner
-						type = citizenship_purge_machine
-					}
-				}
+		every_owned_pop = {
+			modify_species = {
+				add_trait = hfe_species_trait_hucksters
+				add_trait = hfe_species_trait_happy_slave
 			}
-			log = "[this.GetName]"
 		}
 	}
 }
@@ -441,15 +391,34 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_country = {
+		every_country = {
 			limit = {
-				not = {
-					is_country = root
-				}
-				is_country_type = hfe_pirate
+				is_gestalt = no
 			}
-			set_player = prev
+			every_owned_pop = {
+				limit = {
+					is_unemployed = yes
+				}
+				root = {
+					change_variable = {
+						which = unemployed
+						value = 1
+					}
+				}
+			}
+			every_owned_pop = {
+				limit = {
+					has_job = administrator
+				}
+				root = {
+					change_variable = {
+						which = administrator
+						value = 1
+					}
+				}
+			}
 		}
+		log = "unemployed [this.unemployed] administrator [this.administrator]"
 	}
 }
 
@@ -489,6 +458,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		set_global_flag = hfe_pirate_logs
 		every_country = {
 			limit = {
 				is_country_type = hfe_pirate
@@ -501,52 +471,30 @@ country_event = {
 }
 
 
-# country_event = {
-# 	id = hfe_test.19
-# 	#hide_window = yes
-# 	is_triggered_only = yes
-# 	option = {
-# 		name = x
-# 		ai_chance = {
-# 			#factor = 1
-# 			modifier = {
-# 				factor = 0.0001
-# 				always = yes
-# 			}
-# 		}
-# 	}
-# 	option = {
-# 		name = x
-# 		ai_chance = {
-# 			#factor = 1
-# 			modifier = {
-# 				factor = 0.0001
-# 				always = yes
-# 			}
-# 		}
-# 	}
-# }
+country_event = {
+	id = hfe_test.19
+	hide_window = yes
+	is_triggered_only = yes
 
-
-# country_event = {
-# 	id = hfe_test.140
-# 	hide_window = yes
-# 	mean_time_to_happen = {
-# 		months = 1
-# 		modifier = {
-# 			factor = 2
-# 			log = "mtth modifier"
-# 		}
-# 	}
-
-# 	trigger = {
-# 		log = "mtth trigger"
-# 	}
-
-# 	immediate = {
-# 		log = "mtth immediate"
-# 	}
-# }
+	immediate = {
+		log = "destroed [this.GetName]"
+		every_owned_fleet = {
+			log = "remain fleet [this.GetName]"
+		}
+		every_owned_planet = {
+			log = "remain planet [this.GetName]"
+		}
+		every_owned_leader = {
+			log = "remain leader [this.GetName]"
+		}
+		every_owned_starbase = {
+			log = "remain starbase [this.GetName]"
+		}
+		every_system_within_border = {
+			log = "remain system [this.GetName]"
+		}
+	}
+}
 
 country_event = {
 	id = hfe_test.120

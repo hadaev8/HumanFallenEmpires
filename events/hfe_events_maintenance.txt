@@ -200,7 +200,7 @@ country_event = {
 	}
 }
 
-# trait opinion modifiers
+# set saved from slavery flag
 pop_event = {
 	id = hfe_maintenance.6
 	hide_window = yes
@@ -229,7 +229,10 @@ pop_event = {
 				days = 3650
 			}
 		}
-		else = {
+		else_if = {
+			limit = {
+				is_sapient = yes
+			}
 			add_modifier = {
 				modifier = pop_saved_from_slavery
 				days = 3650
@@ -436,6 +439,434 @@ country_event = {
 			set_subject_of = {
 				who = root
 				subject_type = hfe_vassal_egypt
+			}
+		}
+	}
+}
+
+
+# pulse events 100 - 200
+# on_yearly_pulse_country
+country_event = {
+	id = hfe_maintenance.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# leaders module
+		country_event = {
+			id = hfe_leaders.0
+			days = 1
+			random = 355
+		}
+		country_event = {
+			id = hfe_leaders.101
+			days = 1
+			random = 355
+		}
+		country_event = {
+			id = hfe_maintenance.5
+			days = 1
+			random = 355
+		}
+		# blight end
+		country_event = {
+			id = hfe.5083
+			days = 1
+			random = 355
+		}
+	}
+}
+
+# on_bi_yearly_pulse_country
+country_event = {
+	id = hfe_maintenance.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# pirate life
+		country_event = {
+			id = hfe_pirate.2
+			days = 1
+			random = 700
+		}
+		# spawn pirate
+		if = {
+			limit = {
+				nor = {
+					has_global_flag = hfe_disable_pirate
+					has_country_flag = hfe_pirate_spawned
+				}
+				num_owned_planets > 2
+				hfe_trigger_is_human_fallen = no
+				is_gestalt = no
+				is_country_type = default
+			}
+			# spawn pirate
+			random_list = {
+				10 = {
+				}
+				1 = {
+					modifier = {
+						factor = 1.5
+						is_difficulty > 0
+					}
+					modifier = {
+						factor = 1.5
+						is_difficulty > 1
+					}
+					modifier = {
+						factor = 1.5
+						is_difficulty > 2
+					}
+					modifier = {
+						factor = 1.5
+						is_difficulty > 3
+					}
+					modifier = {
+						factor = 1.5
+						is_difficulty > 4
+					}
+					modifier = {
+						factor = 2
+						or = {
+							is_at_war = yes
+							recently_lost_war = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						or = {
+							is_militarist = yes
+							is_egalitarian = yes
+						}
+					}
+					modifier = {
+						factor = 0.5
+						or = {
+							is_pacifist = yes
+							is_authoritarian = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						any_owned_planet = {
+							is_occupied_flag = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						exists = capital_scope
+						capital_scope = {
+							is_occupied_flag = yes
+						}
+					}
+					country_event = {
+						id = hfe_pirate.0
+						days = 1
+						random = 700
+					}
+				}
+			}
+		}
+		# change main species
+		country_event = {
+			id = hfe_population.50
+			days = 1
+			random = 700
+		}
+	}
+}
+
+# on_bi_yearly_pulse
+event = {
+	id = hfe_maintenance.102
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# assimilation event for coalition
+		if = {
+			limit = {
+				exists = event_target:hfe_coalition_leader
+			}
+			event_target:hfe_coalition_leader = {
+				country_event = {
+					id = hfe.5020
+					days = 1
+					random = 700
+				}
+			}
+		}
+		# egypt change vassal type
+		if = {
+			limit = {
+				exists = event_target:hfe_egypt_country
+			}
+			event_target:hfe_egypt_country = {
+				country_event = {
+					id = hfe_maintenance.51
+					days = 1
+					random = 700
+				}
+			}
+		}
+		# varelse mehanicus event
+		if = {
+			limit = {
+				not = {
+					has_global_flag = hfe_varelse_mehanicus
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = primitive
+					any_owned_planet = {
+						has_planet_flag = hfe_varelse_colony
+					}
+				}
+				random_owned_planet = {
+					limit = {
+						has_planet_flag = hfe_varelse_colony
+						has_observation_outpost = yes
+					}
+					planet_event = {
+						id = hfe.101
+						days = 1
+						random = 700
+					}
+				}
+			}
+		}
+		# copernicus observation event
+		if = {
+			limit = {
+				not = {
+					has_global_flag = hfe_has_event.362
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = primitive
+					any_owned_planet = {
+						has_planet_flag = hfe_copernicus.0
+					}
+				}
+				random_owned_planet = {
+					limit = {
+						has_planet_flag = hfe_copernicus.0
+						has_observation_outpost = yes
+						not = {
+							has_planet_flag = hfe_has_event.362
+						}
+					}
+					planet_event = {
+						id = hfe.361
+						days = 1
+						random = 700
+					}
+				}
+			}
+		}
+		random_playable_country = {
+			limit = {
+				is_country_type = default
+				not = {
+					has_authority = auth_machine_intelligence
+				}
+			}
+			random_list = {
+				10 = {
+				}
+				10 = {
+					country_event = {
+						id = hfe_plague.160
+						days = 1
+						random = 700
+					}
+				}
+			}
+		}
+		# fallen empire drain recurses from vassals
+		# need to test
+		if = {
+			limit = {
+				has_global_flag = hfe_war_in_heaven_started
+			}
+			random_country = {
+				limit = {
+					is_country_type = awakened_fallen_empire
+					is_at_war = yes
+					is_war_leader = yes
+					is_overlord = yes
+					any_war = {
+						or = {
+							and = {
+								any_defender = {
+									is_country = prevprev
+								}
+								defender_war_exhaustion > 20
+							}
+							and = {
+								any_attacker = {
+									is_country = prevprev
+								}
+								attacker_war_exhaustion > 20
+							}
+						}
+					}
+				}
+				every_subject = {
+					country_event = {
+						id = hfe_total_war.50
+						days = 1
+						random = 700
+					}
+				}
+			}
+		}
+	}
+}
+
+# on_decade_pulse_country
+country_event = {
+	id = hfe_maintenance.103
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# planet decay feature
+		if = {
+			limit = {
+				mid_game_years_passed > 0
+				not = {
+					has_global_flag = hfe_disable_planet_decay
+				}
+			}
+			every_owned_planet = {
+				planet_event = {
+					id = hfe_decay.0
+					days = 1
+					random = 3650
+				}
+			}
+			every_controlled_planet = {
+				planet_event = {
+					id = hfe_decay.5
+					days = 1
+					random = 3650
+				}
+			}
+		}
+		country_event = {
+			id = hfe_primitive.200
+			days = 1
+			random = 3650
+		}
+	}
+}
+
+# on_decade_pulse
+event = {
+	id = hfe_maintenance.104
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# kad republic buy robots dialog
+		if = {
+			limit = {
+				not = {
+					has_global_flag = hfe_future_take_robot
+				}
+				exists = event_target:hfe_future_country
+				any_country = {
+					is_ai = no
+					any_owned_pop = {
+						has_trait = trait_mechanical
+					}
+					not = {
+						has_country_flag = hfe_future_try_take_robot
+					}
+					event_target:hfe_future_country = {
+						has_communications = prev
+					}
+				}
+			}
+			random_list = {
+				2 = {
+				}
+				1 = {
+					random_country = {
+						limit = {
+							is_ai = no
+							any_owned_pop = {
+								has_trait = trait_mechanical
+							}
+							not = {
+								has_country_flag = hfe_future_try_take_robot
+							}
+						}
+						country_event = {
+							id = hfe.5100
+							days = 1
+							random = 3650
+						}
+					}
+				}
+			}
+		}
+		# future is in expansion
+		if = {
+			limit = {
+				exists = event_target:hfe_future_country
+			}
+			event_target:hfe_future_country = {
+				country_event = {
+					id = hfe.5010
+					days = 1
+					random = 3650
+				}
+			}
+		}
+		# egypt is in expansion
+		if = {
+			limit = {
+				exists = event_target:hfe_egypt_country
+			}
+			event_target:hfe_egypt_country = {
+				country_event = {
+					id = hfe.48
+					days = 1
+					random = 3650
+				}
+			}
+		}
+		random_country = {
+			# plague start
+			country_event = {
+				id = hfe_plague.0
+				days = 1
+				random = 3650
+			}
+			# awake fallen
+			country_event = {
+				id = hfe_total_war.1000
+				days = 1
+				random = 3650
+			}
+			# war in heavens trigger
+			country_event = {
+				id = hfe_total_war.1010
+				days = 1
+				random = 3650
+			}
+			# drone awake
+			country_event = {
+				id = hfe.606
+				days = 1
+				random = 3650
 			}
 		}
 	}

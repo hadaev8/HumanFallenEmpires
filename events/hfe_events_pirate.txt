@@ -204,6 +204,35 @@ country_event = {
 	}
 
 	immediate = {
+		if = {
+			limit = {
+				years_passed < 50
+				not = {
+					has_modifier = hfe_pirate_starbase_debuff
+				}
+			}
+			add_modifier = {
+				modifier = hfe_pirate_starbase_debuff
+			}
+		}
+		else_if = {
+			limit = {
+				years_passed >= 50
+				has_modifier = hfe_pirate_starbase_debuff
+			}
+			remove_modifier = hfe_pirate_starbase_debuff
+		}
+		else_if = {
+			limit = {
+				years_passed >= 100
+				not = {
+					has_modifier = hfe_pirate_starbase_buff
+				}
+			}
+			add_modifier = {
+				modifier = hfe_pirate_starbase_buff
+			}
+		}
 		every_owned_planet = {
 			limit = {
 				is_asteroid = yes
@@ -214,6 +243,7 @@ country_event = {
 		# move capital if have normal planet
 		if = {
 			limit = {
+				exists = capital_scope
 				capital_scope = {
 					is_planet_class = hfe_pc_pirate_base
 				}
@@ -244,16 +274,30 @@ country_event = {
 			}
 			fleet_event = {
 				id = hfe_pirate.300
+				days = 1
+				random = 180
 			}
 		}
 		# try to hunt weaker near pirate
 		random_relation = {
 			limit = {
 				is_country_type = hfe_pirate
-				relative_power = {
-					who = root
-					category = fleet
-					value < equivalent
+				or = {
+					relative_power = {
+						who = root
+						category = fleet
+						value <= equivalent
+					}
+					and = {
+						root = {
+							has_valid_civic = hfe_civic_pirate_rat_king
+						}
+						relative_power = {
+							who = root
+							category = fleet
+							value <= superior
+						}
+					}
 				}
 				or = {
 					is_neighbor_of = root
@@ -271,17 +315,48 @@ country_event = {
 					}
 				}
 			}
+			weights = {
+				base = 1
+				modifier = {
+					mult = 10
+					has_country_flag = hfe_pirate_prior_hunting_target
+				}
+				modifier = {
+					mult = 2
+					relative_power = {
+						who = root
+						category = fleet
+						value < inferior
+					}
+				}
+				modifier = {
+					mult = 2
+					relative_power = {
+						who = root
+						category = fleet
+						value < equivalent
+					}
+				}
+			}
 			add_opinion_modifier = {
 				who = root
 				modifier = hfe_opinion_pirate_prior_target
 			}
-			#log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "pirate try to hunt pirate hunter: [prev.GetName] target: [this.GetName]"
+			}
 		}
+		# pirate diplo simulation
+		# sell slaves
 		country_event = {
 			id = hfe_pirate.10
 			days = 1
 			random = 360
 		}
+		# sell energy
 		country_event = {
 			id = hfe_pirate.11
 			days = 1
@@ -462,7 +537,12 @@ country_event = {
 			}
 			set_country_flag = hfe_pirate.101.deal_offer
 			set_country_flag = hfe_pirate.101.slave_menu
-			#log = "try to sell slaves to [this.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "pirate try to sell slaves to [this.GetName]"
+			}
 			set_timed_country_flag = {
 				flag = hfe_pirate_offer_deal@root
 				days = 1825
@@ -530,7 +610,6 @@ country_event = {
 			}
 			set_country_flag = hfe_pirate.101.deal_offer
 			set_country_flag = hfe_pirate.101.traid_menu
-			#log = "try to sell energy to [this.GetName]"
 			set_timed_country_flag = {
 				flag = hfe_pirate_offer_deal@root
 				days = 1825
@@ -538,6 +617,12 @@ country_event = {
 			set_timed_country_flag = {
 				flag = hfe_pirate_offer_deal
 				days = 365
+			}
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "pirate try to sell energy to [this.GetName]"
 			}
 			country_event = {
 				id = hfe_pirate.101
@@ -627,7 +712,12 @@ planet_event = {
 			}
 		}
 		hfe_effect_pirate_ravage_planet = yes
-		log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
+		}
 	}
 }
 
@@ -646,7 +736,12 @@ country_event = {
 	}
 
 	immediate = {
-		log = "work event hfe_pirate.55 add pirate trait to admiral 55 on_leader_spawned"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "work event hfe_pirate.55 add pirate trait to admiral 55 on_leader_spawned"
+		}
 		from = {
 			add_trait = hfe_admiral_trait_pirate
 		}
@@ -693,7 +788,12 @@ ship_event = {
 					is_country_type = hfe_pirate
 				}
 			}
-			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[hfe_pirate_starbase_def.GetName] pirate lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			}
 			solar_system = {
 				every_system_planet = {
 					limit = {
@@ -775,7 +875,12 @@ ship_event = {
 							}
 						}
 					}
-					log = "[hfe_pirate_starbase_def.GetName] lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+					if = {
+						limit = {
+							has_global_flag = hfe_pirate_logs
+						}
+						log = "[hfe_pirate_starbase_def.GetName] lost system to pirate [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+					}
 					set_variable = {
 						which = hfe_pirate_outpost_attack_count
 						value = 0
@@ -797,16 +902,36 @@ ship_event = {
 							limit = {
 								is_owned_by = event_target:hfe_pirate_starbase_def
 							}
-							log = "[hfe_pirate_starbase_att.GetName] pirate get planet [this.GetName] in [solar_system.GetName] from [owner.GetName]"
+							if = {
+								limit = {
+									has_global_flag = hfe_pirate_logs
+								}
+								log = "[hfe_pirate_starbase_att.GetName] pirate get planet [this.GetName] in [solar_system.GetName] from [owner.GetName]"
+							}
 							set_owner = event_target:hfe_pirate_starbase_att
 						}
-					}
-					starbase = {
-						set_owner = event_target:hfe_pirate_starbase_att
+						starbase = {
+							set_owner = event_target:hfe_pirate_starbase_att
+						}
+						if = {
+							limit = {
+								not = {
+									event_target:hfe_pirate_starbase_def = {
+										has_claim = prev
+									}
+								}
+							}
+							add_claims = {
+								who = event_target:hfe_pirate_starbase_def
+								num_of_claims = 1
+								show_notification = no
+							}
+						}
 					}
 				}
 			}
 		}
+		# default vs pirate
 		else_if = {
 			limit = {
 				event_target:hfe_pirate_starbase_att = {
@@ -816,7 +941,12 @@ ship_event = {
 					is_country_type = hfe_pirate
 				}
 			}
-			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[hfe_pirate_starbase_def.GetName] pirate lost system to default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			}
 			solar_system = {
 				every_system_planet = {
 					limit = {
@@ -855,7 +985,12 @@ ship_event = {
 						set_owner = event_target:hfe_pirate_starbase_att
 					}
 					starbase = {
-						set_owner = event_target:hfe_pirate_starbase_att
+						destroy_fleet = fleet
+						#set_owner = event_target:hfe_pirate_starbase_att
+					}
+					create_starbase = {
+						size = starbase_outpost
+						owner = event_target:hfe_pirate_starbase_att
 					}
 					event_target:hfe_pirate_starbase_att = {
 						if = {
@@ -898,6 +1033,7 @@ ship_event = {
 				}
 			}
 		}
+		# non default vs pirate
 		else_if = {
 			limit = {
 				event_target:hfe_pirate_starbase_att = {
@@ -909,7 +1045,12 @@ ship_event = {
 					is_country_type = hfe_pirate
 				}
 			}
-			log = "[hfe_pirate_starbase_def.GetName] pirate lost system to not default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[hfe_pirate_starbase_def.GetName] pirate lost system to not default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
+			}
 			solar_system = {
 				every_system_planet = {
 					limit = {
@@ -961,6 +1102,7 @@ country_event = {
 		or = {
 			is_country_type = hfe_pirate
 			is_country_type = default
+			is_country_type = fallen_empire
 			is_country_type = awakened_fallen_empire
 		}
 		any_country = {
@@ -975,8 +1117,6 @@ country_event = {
 		hfe_effect_pirate_flee_fleets = yes
 	}
 }
-
-
 
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
@@ -1049,7 +1189,12 @@ country_event = {
 	}
 
 	immediate = {
-		log = "set pirate hostile"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "set pirate hostile then attaked"
+		}
 		set_faction_hostility = {
 			target = from
 			set_hostile = yes
@@ -1249,8 +1394,12 @@ country_event = {
 		}
 		allow = {
 			custom_tooltip = {
-				text = hfe_pirate.101.0.tooltip_fail
+				fail_text = hfe_pirate.101.0.tooltip_fail.0
 				is_hostile = event_target:hfe_pirate_country
+			}
+			custom_tooltip = {
+				fail_text = hfe_pirate.101.0.tooltip_fail.1
+				hfe_trigger_pirate_raid_have_flag = no
 			}
 			hfe_trigger_pirate_protect_cost = yes
 		}
@@ -1264,6 +1413,12 @@ country_event = {
 				days = @hfe_pirate_protect_days
 			}
 			event_target:hfe_pirate_country = {
+				every_owned_fleet = {
+					limit = {
+						has_fleet_flag = hfe_pirate_fleet_has_target
+					}
+					hfe_effect_pirate_path_fleet_reset = yes
+				}
 				set_faction_hostility = {
 					target = root
 					set_hostile = no
@@ -1284,9 +1439,9 @@ country_event = {
 			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			# hfe_effect_clear_event_target = yes
 			every_relation = {
 				limit = {
+					hfe_trigger_pirate_raid_distance_check = yes
 					is_country_type = default
 					or = {
 						is_at_war_with = root
@@ -1303,6 +1458,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_rival = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1317,6 +1473,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_domineering_to = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1331,6 +1488,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_hostile_to = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1345,6 +1503,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_dismissive_to = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1359,6 +1518,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_unfriendly_to = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1373,6 +1533,7 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
 						is_threatened_to = root
 						is_hostile = event_target:hfe_pirate_country
@@ -1387,7 +1548,22 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
 						is_country_type = default
+						is_hostile = event_target:hfe_pirate_country
+						hfe_trigger_pirate_raid_have_flag = no
+					}
+					hfe_effect_save_event_target = yes
+				}
+			}
+			if = {
+				limit = {
+					hfe_trigger_exists_all_event_targets = no
+				}
+				every_relation = {
+					limit = {
+						hfe_trigger_pirate_raid_distance_check = yes
+						is_country_type = hfe_pirate
 						is_hostile = event_target:hfe_pirate_country
 						hfe_trigger_pirate_raid_have_flag = no
 					}
@@ -1593,7 +1769,12 @@ country_event = {
 				minerals = 150
 			}
 		}
-		#log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
+		}
 		ai_chance = {
 			factor = 100
 			modifier = {
@@ -1679,7 +1860,12 @@ country_event = {
 						show_notification = no
 					}
 				}
-				#log = "pirate admiral hired by [root.GetName] from [hfe_pirate_country.GetName]"
+				if = {
+					limit = {
+						has_global_flag = hfe_pirate_logs
+					}
+					log = "pirate admiral hired by [root.GetName] from [hfe_pirate_country.GetName]"
+				}
 			}
 		}
 		ai_chance = {
@@ -1824,7 +2010,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 0"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves 0"
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -1903,7 +2094,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 1"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves "
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -1982,7 +2178,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 2"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves 2"
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -2061,7 +2262,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 3"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves 3"
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -2140,7 +2346,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 4"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves 4"
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -2219,7 +2430,12 @@ country_event = {
 					save_event_target_as = hfe_settle_pop_target
 				}
 			}
-			log = "[this.GetName] buy slaves 5"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[this.GetName] buy slaves 5"
+			}
 		}
 		hfe_effect_settle_pop = yes
 		hfe_effect_settle_pop_from_slavery_buff = yes
@@ -2728,7 +2944,12 @@ country_event = {
 		hidden_effect = {
 			hfe_effect_pirate_diplomacy_remove_flags = yes
 			remove_country_flag = hfe_pirate.101_block
-			#log = "exiting pirate diplo [this.GetName]"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "exiting pirate diplo [this.GetName]"
+			}
 		}
 		ai_chance = {
 			factor = 100
@@ -2950,13 +3171,16 @@ country_event = {
 
 	trigger = {
 		exists = event_target:hfe_pirate_country.ruler
-		not = {
-			is_country_type = hfe_pirate
-		}
+		hfe_trigger_pirate_raid_have_flag = no
 	}
 
 	immediate = {
-		log = "[event_target:hfe_pirate_country.GetName] pirates offer protection for [root.GetName]"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[event_target:hfe_pirate_country.GetName] pirates offer protection for [root.GetName]"
+		}
 	}
 
 	option = {
@@ -2966,7 +3190,12 @@ country_event = {
 		}
 		hfe_effect_pirate_protect_cost_shift = yes
 		hidden_effect = {
-			log = "[root.GetName] agree for protection pay"
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[root.GetName] agree for protection pay"
+			}
 			if = {
 				limit = {
 					is_hostile = event_target:hfe_pirate_country
@@ -2991,6 +3220,11 @@ country_event = {
 		}
 		ai_chance = {
 			factor = 100
+			# politic situation
+			modifier = {
+				factor = 2
+				is_at_war = yes
+			}
 			# ethics
 			modifier = {
 				factor = 0.5
@@ -3075,7 +3309,12 @@ country_event = {
 	option = {
 		name = hfe_pirate.200.1
 		default_hide_option = yes
-		log = "[root.GetName] not agree for protection pay"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[root.GetName] not agree for protection pay"
+		}
 		if = {
 			limit = {
 				not = {
@@ -3121,11 +3360,32 @@ fleet_event = {
 	}
 
 	immediate = {
-		#log = "pirate fleet logic for [this.GetName], owner [owner.GetName]"
-		set_fleet_bombardment_stance = hfe_stance_pirate_raid
-		hfe_effect_pirate_path_fleet_reset = yes
-		fleet_event = {
-			id = hfe_pirate.301
+		# not at same day
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate.300_same_day
+			}
+			fleet_event = {
+				id = hfe_pirate.300
+				days = 1
+			}
+		}
+		else = {
+			set_timed_global_flag = {
+				flag = hfe_pirate.300_same_day
+				days = 1
+			}
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "pirate fleet logic for [this.GetName], owner [owner.GetName]"
+			}
+			set_fleet_bombardment_stance = hfe_stance_pirate_raid
+			hfe_effect_pirate_path_fleet_reset = yes
+			fleet_event = {
+				id = hfe_pirate.301
+			}
 		}
 	}
 }
@@ -3177,7 +3437,12 @@ fleet_event = {
 	}
 
 	immediate = {
-		#log = "[this.GetName] in [solar_system.GetName] looking for targets"
+		if = {
+			limit = {
+				has_fleet_flag = hfe_pirate_log_fleet
+			}
+			log = "[this.GetName] in [solar_system.GetName] looking for targets"
+		}
 		remove_fleet_flag = hfe_pirate_fleet_move_to_target
 		if = {
 			limit = {

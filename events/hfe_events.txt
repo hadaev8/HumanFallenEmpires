@@ -3,432 +3,6 @@ namespace = hfe
 
 # functional section 0 - 50
 
-# functional events and features
-# functional events for yearly pulse
-event = {
-	id = hfe.1
-	hide_window = yes
-	is_triggered_only = yes
-
-	immediate = {
-		# leaders module
-		every_country = {
-			country_event = {
-				id = hfe_leaders.0
-				days = 1
-				random = 355
-			}
-			country_event = {
-				id = hfe_leaders.101
-				days = 1
-				random = 355
-			}
-		}
-		every_playable_country = {
-			country_event = {
-				id = hfe_maintenance.5
-				days = 1
-				random = 355
-			}
-			# blight end
-			country_event = {
-				id = hfe.5083
-				days = 1
-				random = 355
-			}
-		}
-	}
-}
-
-# functional events for bi yearly pulse
-event = {
-	id = hfe.2
-	hide_window = yes
-	is_triggered_only = yes
-
-	immediate = {
-		# pirate module
-		if = {
-			limit = {
-				not = {
-					has_global_flag = hfe_disable_pirate
-				}
-			}
-			# pirate life
-			every_country = {
-				limit = {
-					is_country_type = hfe_pirate
-				}
-				country_event = {
-					id = hfe_pirate.2
-					days = 1
-					random = 355
-				}
-			}
-			every_playable_country = {
-				limit = {
-					not = {
-						has_country_flag = hfe_pirate_spawned
-					}
-					num_owned_planets > 2
-					hfe_trigger_is_human_fallen = no
-					is_gestalt = no
-					is_country_type = default
-				}
-				# spawn pirate
-				random_list = {
-					10 = {
-					}
-					1 = {
-						modifier = {
-							factor = 1.5
-							is_difficulty > 0
-						}
-						modifier = {
-							factor = 1.5
-							is_difficulty > 1
-						}
-						modifier = {
-							factor = 1.5
-							is_difficulty > 2
-						}
-						modifier = {
-							factor = 1.5
-							is_difficulty > 3
-						}
-						modifier = {
-							factor = 1.5
-							is_difficulty > 4
-						}
-						modifier = {
-							factor = 2
-							or = {
-								is_at_war = yes
-								recently_lost_war = yes
-							}
-						}
-						modifier = {
-							factor = 2
-							or = {
-								is_militarist = yes
-								is_egalitarian = yes
-							}
-						}
-						modifier = {
-							factor = 0.5
-							or = {
-								is_pacifist = yes
-								is_authoritarian = yes
-							}
-						}
-						modifier = {
-							factor = 2
-							any_owned_planet = {
-								is_occupied_flag = yes
-							}
-						}
-						modifier = {
-							factor = 2
-							exists = capital_scope
-							capital_scope = {
-								is_occupied_flag = yes
-							}
-						}
-						country_event = {
-							id = hfe_pirate.0
-							days = 1
-							random = 355
-						}
-					}
-				}
-			}
-		}
-		# change main species
-		every_country = {
-			country_event = {
-				id = hfe_population.50
-				days = 1
-				random = 700
-			}
-		}
-		# assimilation event for coalition
-		if = {
-			limit = {
-				exists = event_target:hfe_coalition_leader
-			}
-			event_target:hfe_coalition_leader = {
-				country_event = {
-					id = hfe.5020
-					days = 1
-					random = 700
-				}
-			}
-		}
-		# egypt change vassal type
-		if = {
-			limit = {
-				exists = event_target:hfe_egypt_country
-			}
-			event_target:hfe_egypt_country = {
-				country_event = {
-					id = hfe_maintenance.51
-					days = 1
-					random = 700
-				}
-			}
-		}
-		# varelse mehanicus event
-		if = {
-			limit = {
-				not = {
-					has_global_flag = hfe_varelse_mehanicus
-				}
-			}
-			random_country = {
-				limit = {
-					is_country_type = primitive
-					any_owned_planet = {
-						has_planet_flag = hfe_varelse_colony
-					}
-				}
-				random_owned_planet = {
-					limit = {
-						has_planet_flag = hfe_varelse_colony
-						has_observation_outpost = yes
-					}
-					planet_event = {
-						id = hfe.101
-						days = 1
-						random = 700
-					}
-				}
-			}
-		}
-		# copernicus observation event
-		if = {
-			limit = {
-				not = {
-					has_global_flag = hfe_has_event.362
-				}
-			}
-			random_country = {
-				limit = {
-					is_country_type = primitive
-					any_owned_planet = {
-						has_planet_flag = hfe_copernicus.0
-					}
-				}
-				random_owned_planet = {
-					limit = {
-						has_planet_flag = hfe_copernicus.0
-						has_observation_outpost = yes
-						not = {
-							has_planet_flag = hfe_has_event.362
-						}
-					}
-					planet_event = {
-						id = hfe.361
-						days = 1
-						random = 700
-					}
-				}
-			}
-		}
-		random_playable_country = {
-			limit = {
-				is_country_type = default
-				not = {
-					has_authority = auth_machine_intelligence
-				}
-			}
-			random_list = {
-				10 = {
-				}
-				10 = {
-					country_event = {
-						id = hfe_plague.160
-						days = 1
-						random = 700
-					}
-				}
-			}
-		}
-		# fallen empire drain recurses from vassals
-		# need to test
-		if = {
-			limit = {
-				has_global_flag = hfe_war_in_heaven_started
-			}
-			random_country = {
-				limit = {
-					is_country_type = awakened_fallen_empire
-					is_at_war = yes
-					is_war_leader = yes
-					is_overlord = yes
-					any_war = {
-						or = {
-							and = {
-								any_defender = {
-									is_country = prevprev
-								}
-								defender_war_exhaustion > 20
-							}
-							and = {
-								any_attacker = {
-									is_country = prevprev
-								}
-								attacker_war_exhaustion > 20
-							}
-						}
-					}
-				}
-				every_subject = {
-					country_event = {
-						id = hfe_total_war.50
-						days = 1
-						random = 700
-					}
-				}
-			}
-		}
-	}
-}
-
-# functional events for decade pulse
-event = {
-	id = hfe.3
-	hide_window = yes
-	is_triggered_only = yes
-
-	immediate = {
-		# planet decay feature
-		if = {
-			limit = {
-				mid_game_years_passed > 0
-				not = {
-					has_global_flag = hfe_disable_planet_decay
-				}
-			}
-			every_playable_country = {
-				every_owned_planet = {
-					planet_event = {
-						id = hfe_decay.0
-						days = 1
-						random = 3600
-					}
-				}
-				every_controlled_planet = {
-					planet_event = {
-						id = hfe_decay.5
-						days = 1
-						random = 3600
-					}
-				}
-			}
-		}
-		# kad republic buy robots dialog
-		if = {
-			limit = {
-				not = {
-					has_global_flag = hfe_future_take_robot
-				}
-				exists = event_target:hfe_future_country
-				# event_target:hfe_future_country = {
-				# 	any_owned_planet = {
-				# 		free_pop_tiles > 0
-				# 	}
-				# }
-				any_country = {
-					is_ai = no
-					any_owned_pop = {
-						has_trait = trait_mechanical
-					}
-					not = {
-						has_country_flag = hfe_future_try_take_robot
-					}
-					event_target:hfe_future_country = {
-						has_communications = prev
-					}
-				}
-			}
-			random_list = {
-				2 = {
-				}
-				1 = {
-					random_country = {
-						limit = {
-							is_ai = no
-							any_owned_pop = {
-								has_trait = trait_mechanical
-							}
-							not = {
-								has_country_flag = hfe_future_try_take_robot
-							}
-						}
-						country_event = {
-							id = hfe.5100
-							days = 1
-							random = 3600
-						}
-					}
-				}
-			}
-		}
-		# future is in expansion
-		if = {
-			limit = {
-				exists = event_target:hfe_future_country
-			}
-			event_target:hfe_future_country = {
-				country_event = {
-					id = hfe.5010
-					days = 1
-					random = 3600
-				}
-			}
-		}
-		# egypt is in expansion
-		if = {
-			limit = {
-				exists = event_target:hfe_egypt_country
-			}
-			event_target:hfe_egypt_country = {
-				country_event = {
-					id = hfe.48
-					days = 1
-					random = 3600
-				}
-			}
-		}
-		random_country = {
-			# plague start
-			country_event = {
-				id = hfe_plague.0
-				days = 1
-				random = 3600
-			}
-			# awake fallen
-			country_event = {
-				id = hfe_total_war.1000
-				days = 1
-				random = 3600
-			}
-			# war in heavens trigger
-			country_event = {
-				id = hfe_total_war.1010
-				days = 1
-				random = 3600
-			}
-			# drone awake
-			country_event = {
-				id = hfe.606
-				days = 1
-				random = 3600
-			}
-		}
-	}
-}
-
 # egypt features 10 - 46
 # assimilator policy notification
 country_event = {
@@ -4129,30 +3703,31 @@ country_event = {
 	location = event_target:hfe_target_ahet_home
 	is_triggered_only = yes
 
-	option = {
-		name = hfe.413.0
-		hidden_effect = {
-			create_fleet = {
-				effect = {
-					set_owner = root
-					create_ship = {
-						random_existing_design = science
-					}
-					set_location = root.capital_scope
-					set_leader = hfe_412_scientist
-					leader = {
-						save_event_target_as = hfe_413_scientist
-						unassign_leader = this
-					}
-					delete_fleet = this
+	immediate = {
+		create_fleet = {
+			effect = {
+				set_owner = root
+				create_ship = {
+					random_existing_design = science
 				}
-			}
-			event_target:hfe_target_ahet_home = {
-				set_planet_entity = {
-					entity = hfe_entity_gaia_red_shield
+				set_location = root.capital_scope
+				set_leader = hfe_412_scientist
+				leader = {
+					save_event_target_as = hfe_413_scientist
+					unassign_leader = this
 				}
+				delete_fleet = this
 			}
 		}
+		event_target:hfe_target_ahet_home = {
+			set_planet_entity = {
+				entity = hfe_entity_gaia_red_shield
+			}
+		}
+	}
+
+	option = {
+		name = hfe.413.0
 		event_target:hfe_413_scientist = {
 			add_trait = leader_trait_maniacal
 		}
@@ -4463,14 +4038,14 @@ ship_event = {
 					text = hfe.510.desc.0.5.0
 					is_gestalt = no
 					not = {
-						#TODO has_trait = trait_robotic_3
+						has_trait = trait_mechanical
 					}
 				}
 				# synth
 				success_text = {
 					text = hfe.510.desc.0.5.1
 					is_gestalt = no
-					#TODO has_trait = trait_robotic_3
+					has_trait = trait_mechanical
 				}
 				# robo hive
 				success_text = {
