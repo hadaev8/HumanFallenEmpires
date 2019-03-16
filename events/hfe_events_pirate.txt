@@ -656,7 +656,12 @@ country_event = {
 	}
 
 	immediate = {
-		#log = "[this.GetName] pirate kill station"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[this.GetName] pirate kill station system: [solar_system.GetName]"
+		}
 		hfe_effect_pirate_resource_reward = yes
 		set_timed_country_flag = {
 			flag = hfe_pirate_attack@from
@@ -717,6 +722,47 @@ planet_event = {
 				has_global_flag = hfe_pirate_logs
 			}
 			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
+		}
+	}
+}
+
+# clear system if someone killed pirate starbase
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+# on_ship_destroyed_perp
+country_event = {
+	id = hfe_pirate.54
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = hfe_pirate
+		exists = fromfrom
+		fromfrom = {
+			is_ship_class = shipclass_starbase
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[root.GetName] pirate lost starbase system: [solar_system.GetName]"
+		}
+		solar_system = {
+			every_system_planet = {
+				limit = {
+					is_owned_by = root
+				}
+				every_owned_pop = {
+					hfe_effect_refuge_or_die = yes
+				}
+				destroy_colony = yes
+				#hfe_effect_convert_to_asteroid = yes
+			}
 		}
 	}
 }
