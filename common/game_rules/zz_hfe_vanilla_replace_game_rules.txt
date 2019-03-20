@@ -35,7 +35,18 @@ can_orbital_bombard = {
 	# mod
 	exists = ROOT.OWNER
 	exists = FROM.CONTROLLER
-	ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
+	or = {
+		ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
+		AND = {
+			ROOT.OWNER = {
+				NOR = {
+					has_policy_flag = interference_passive
+					has_policy_flag = interference_active
+				}
+			}
+			FROM.OWNER = { is_country_type = primitive }
+		}
+	}
 }
 
 # Checks if a pop can procreate
@@ -99,6 +110,73 @@ can_use_galactic_market = {
 		has_civic = civic_fanatic_purifiers
 		has_civic = civic_hive_devouring_swarm
 		has_civic = civic_machine_terminator
+	}
+}
+
+# This = planet
+# Root = country
+can_build_branch_office_on_planet = {
+	custom_tooltip = {
+		fail_text = requires_recipient_not_fanatic_purifiers
+		exists = owner
+		owner = {
+			OR = {
+				is_same_species = root
+				NOT = { has_civic = civic_fanatic_purifiers }
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
+		exists = owner
+		OR = {
+			root = { is_criminal_syndicate = yes }
+			owner = { has_commercial_pact = root }
+			owner = { is_in_federation_with = root }
+
+			# allow branch offices in subsidiaries and vice versa
+			root = {
+				is_subject = yes
+				is_subject_type = subsidiary
+				overlord = { is_same_value = owner }
+			}
+			owner = {
+				is_subject = yes
+				is_subject_type = subsidiary
+				overlord = { is_same_value = root }
+			}
+			# mod
+			root = {
+				exists = overlord
+				overlord = {
+					is_country = prevprev.owner
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_CRIMINAL_HERITAGE_HAS_TRUCE
+		exists = owner
+		OR = {
+			root = { is_criminal_syndicate = no }
+			owner = {
+				NOR = {
+					has_truce = root
+					is_at_war_with = root
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_CRIMINAL_COOLDOWN
+		exists = owner
+		OR = {
+			root = { is_criminal_syndicate = no }
+			AND = {
+				root = { is_criminal_syndicate = yes }
+				NOT = { has_planet_flag = criminal_branch_closed_cooldown_planet@root }
+			}
+		}
 	}
 }
 

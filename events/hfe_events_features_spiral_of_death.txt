@@ -110,23 +110,96 @@ country_event = {
 				days = 3230
 			}
 			owner = {
-				# random leader killed
-				country_event = {
-					id = hfe_features_spiral_of_death.50
-					days = 365
-					random = 2000
+			}
+			solar_system = {
+				system_star = {
+					set_deposit = d_energy_10
+					add_deposit = d_energy_10
+					add_modifier = {
+						modifier = hfe_features_spiral_of_death_deposit_1
+					}
+					if = {
+						limit = {
+							has_mining_station = no
+						}
+						create_mining_station = {
+							owner = root
+						}
+					}
 				}
-				# event before planet killed
-				country_event = {
-					id = hfe_features_spiral_of_death.10
-					days = 3229
+				random_system_planet = {
+					limit = {
+						nor = {
+							exists = owner
+							has_modifier = hfe_features_spiral_of_death_deposit_1
+						}
+					}
+					weights = {
+						base = 1
+						modifier = {
+							mult = 1000
+							has_deposit = no
+						}
+					}
+					set_deposit = d_minerals_10
+					add_deposit = d_minerals_10
+					add_modifier = {
+						modifier = hfe_features_spiral_of_death_deposit_2
+					}
+					if = {
+						limit = {
+							has_mining_station = no
+						}
+						create_mining_station = {
+							owner = root
+						}
+					}
 				}
-				# event after planet killed
-				country_event = {
-					id = hfe_features_spiral_of_death.11
-					days = 3231
+				random_system_planet = {
+					limit = {
+						nor = {
+							exists = owner
+							has_modifier = hfe_features_spiral_of_death_deposit_1
+							has_modifier = hfe_features_spiral_of_death_deposit_2
+						}
+					}
+					weights = {
+						base = 1
+						modifier = {
+							mult = 1000
+							has_deposit = no
+						}
+					}
+					set_deposit = hfe_deposit_features_spiral_of_death_0
+					add_modifier = {
+						modifier = hfe_features_spiral_of_death_deposit_0
+					}
+					if = {
+						limit = {
+							has_mining_station = no
+						}
+						create_mining_station = {
+							owner = root
+						}
+					}
 				}
 			}
+		}
+		# random leader killed
+		country_event = {
+			id = hfe_features_spiral_of_death.50
+			days = 365
+			random = 2860
+		}
+		# event before planet killed
+		country_event = {
+			id = hfe_features_spiral_of_death.10
+			days = 3229
+		}
+		# event after planet killed
+		country_event = {
+			id = hfe_features_spiral_of_death.11
+			days = 3231
 		}
 	}
 }
