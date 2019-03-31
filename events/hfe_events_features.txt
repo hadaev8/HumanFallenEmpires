@@ -385,16 +385,35 @@ country_event = {
 		set_spawn_system_batch = begin
 		no_scope = {
 			spawn_system = {
-				initializer = hfe_init_features_sanctuary
-				min_distance >= 450
-				max_distance <= 460
-				min_orientation_angle = 0
+				initializer = hfe_init_features_sanctuary_0
+				min_distance >= 500
+				max_distance <= 510
+				min_orientation_angle = 90
 				max_orientation_angle = 180
 				hyperlane = no
 			}
 		}
+		event_target:hfe_features_sanctuary_planet.solar_system = {
+			spawn_system = {
+				initializer = hfe_init_features_sanctuary_1
+				min_distance >= 10
+				max_distance <= 20
+				min_orientation_angle = 0
+				max_orientation_angle = 80
+				hyperlane = yes
+			}
+			spawn_system = {
+				initializer = hfe_init_features_sanctuary_2
+				min_distance >= 10
+				max_distance <= 20
+				min_orientation_angle = 100
+				max_orientation_angle = 180
+				hyperlane = yes
+			}
+		}
 		set_spawn_system_batch = end
 		event_target:hfe_features_sanctuary_planet = {
+			set_name = hfe_features_sanctuary_rename
 			set_owner = root
 			hfe_effect_root_this_change_pc_to_ideal = yes
 			generate_start_buildings_and_districts = yes
@@ -422,13 +441,16 @@ country_event = {
 				}
 				capital_scope = {
 					hfe_effect_clear_buildings_and_destroy_colony = yes
+					change_pc = pc_nuked
+					reroll_planet = yes
 				}
 			}
 			set_capital = yes
+			every_deposit = {
+				clear_blocker = yes
+			}
 			hfe_effect_create_starbase_starport_from_planet = yes
 			hfe_effect_starbase_add_shipyard_0 = yes
 		}
 	}
 }
-
-# get claim on bordering system

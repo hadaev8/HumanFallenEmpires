@@ -18,7 +18,7 @@ planet_event = {
 	}
 }
 
-# change main species 50
+# change main species 50 - 100
 country_event = {
 	id = hfe_population.50
 	hide_window = yes
@@ -975,5 +975,145 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = hfe_population.52_block
 		}
+	}
+}
+
+# border conflict 100
+country_event = {
+	id = hfe_population.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		hfe_trigger_population_enabled = yes
+	}
+
+	immediate = {
+		random_neighbor_country = {
+			limit = {
+				has_communications = root
+				is_country_type = default
+				nor = {
+					is_in_federation_with = root
+					and = {
+						exists = overlord
+						overlord = {
+							is_country = root
+						}
+					}
+				}
+				any_system_within_border = {
+					is_neighbor_of = root
+					not = {
+						root = {
+							has_claim = prev
+						}
+					}
+				}
+			}
+			weights = {
+				base = 1
+				modifier = {
+					add = 10
+					# проверяется отношение империи
+					their_opinion = {
+						who = root
+						value < 0
+					}
+				}
+				modifier = {
+					add = 10
+					their_opinion = {
+						who = root
+						value < -50
+					}
+				}
+				modifier = {
+					add = 10
+					their_opinion = {
+						who = root
+						value < -100
+					}
+				}
+				modifier = {
+					add = 10
+					their_opinion = {
+						who = root
+						value < -150
+					}
+				}
+				modifier = {
+					add = 10
+					their_opinion = {
+						who = root
+						value < -200
+					}
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					not = {
+						root = {
+							has_claim = prev
+						}
+					}
+				}
+				add_claims = {
+					who = root
+				}
+				save_event_target_as = hfe_population_100_location
+				owner = {
+					country_event = {
+						id = hfe_population.102
+						days = 1
+						random = 15
+					}
+				}
+			}
+		}
+		country_event = {
+			id = hfe_population.101
+			days = 1
+			random = 15
+		}
+	}
+}
+
+country_event = {
+	id = hfe_population.101
+	title = hfe_population.101.name
+	desc = hfe_population.101.desc
+	picture = GFX_evt_mining_station #a name of a picture to display
+	location = event_target:hfe_population_100_location
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		exists = event_target:hfe_population_100_location
+	}
+
+	option = {
+		name = hfe_population.101.0
+	}
+}
+
+country_event = {
+	id = hfe_population.102
+	title = hfe_population.102.name
+	desc = hfe_population.102.desc
+	picture = GFX_evt_mining_station #a name of a picture to display
+	location = event_target:hfe_population_100_location
+	show_sound = event_space_battle
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		exists = event_target:hfe_population_100_location
+	}
+
+	option = {
+		name = hfe_population.102.0
 	}
 }

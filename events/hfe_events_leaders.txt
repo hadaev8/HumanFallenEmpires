@@ -1034,3 +1034,37 @@ country_event = {
 		}
 	}
 }
+
+# admiral satanist can kill retreating admiral
+# on_space_battle_won
+# This = owner of fleet 1 (winner)
+# From = owner of fleet 2 (loser)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = hfe_leaders.107
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = fromfromfrom.leader
+		exists = fromfrom.leader
+		fromfrom.leader = {
+			has_trait = hfe_admiral_trait_satanist
+		}
+	}
+
+	immediate = {
+		random_list = {
+			70 = {
+			}
+			30 = {
+				fromfromfrom = {
+					kill_leader = {
+						show_notification = yes
+					}
+				}
+			}
+		}
+	}
+}
