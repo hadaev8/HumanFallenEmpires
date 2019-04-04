@@ -964,14 +964,16 @@ country_event = {
 				}
 				modify_species = {
 					add_trait = hfe_species_trait_leader_skill_levels_1
+					#change_scoped_species = no
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					has_trait = hfe_scientist_trait_diligent
 				}
 				modify_species = {
 					add_trait = hfe_species_trait_leader_skill_levels_2
+					#change_scoped_species = no
 				}
 			}
 		}
@@ -1064,6 +1066,38 @@ country_event = {
 						show_notification = yes
 					}
 				}
+			}
+		}
+	}
+}
+
+# notifications?
+
+
+# scientist satanist can generate tech
+# on_tech_increased
+country_event = {
+	id = hfe_leaders.107
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			has_trait = hfe_scientist_trait_satanist
+			or = {
+				is_researching_area = physics
+				is_researching_area = engineering
+				is_researching_area = society
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			95 = {
+			}
+			5 = {
+				hfe_effect_give_random_tech = yes
 			}
 		}
 	}
