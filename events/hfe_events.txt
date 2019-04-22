@@ -1059,6 +1059,116 @@ country_event = {
 	}
 }
 
+# presapient dolphin anomaly 60
+ship_event = {
+	id = hfe.60
+	title = hfe.60.name
+	desc = {
+		trigger = {
+			hidden:owner = {
+				text = hfe.60.desc.0
+				success_text = {
+					text = hfe.60.desc.1.0
+					has_country_flag = found_presapients
+				}
+				fail_text = {
+					text = hfe.60.desc.1.1
+					has_country_flag = found_presapients
+				}
+				text = hfe.60.desc.2
+			}
+		}
+	}
+	picture = GFX_evt_ocean
+	location = from
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+	}
+
+	immediate = {
+		from = {
+			hfe_effect_remove_signal_object_from_this = yes
+			if = {
+				limit = {
+					root.owner = {
+						has_country_flag = hfe_marked_as_human
+					}
+				}
+				root = {
+					set_name = "[solar_system.GetName] Delphinidae"
+				}
+				create_species = {
+					name = root
+					class = PRE_MAM
+					traits = {
+						trait = hfe_species_trait_dolphin
+					}
+					homeworld = this
+					sapient = no
+				}
+				root = {
+					set_name = random
+				}
+			}
+			else = {
+				create_species = {
+					name = "Ksotry"
+					class = PRE_MAM
+					traits = {
+						trait = hfe_species_trait_dolphin
+					}
+					homeworld = this
+					sapient = no
+				}
+			}
+			while = {
+				count = 3
+				create_pop = {
+					species = last_created_species
+				}
+			}
+		}
+	}
+	after = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = found_presapients
+				country_event = {
+					id = tutorial.57
+					days = 5
+				}
+				country_event = {
+					id = story.4
+					days = 30
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = {
+				has_technology = tech_epigenetic_triggers
+			}
+		}
+	}
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = {
+				not = {
+					has_technology = tech_epigenetic_triggers
+				}
+			}
+		}
+	}
+}
+
 # varelse section 100 - 150
 # varelse colony after survey 100
 ship_event = {
@@ -7735,6 +7845,9 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe.5001.step0
 			is_xenophobe = yes
+			not = {
+				has_country_flag = hfe_marked_as_human
+			}
 		}
 		hfe_effect_xenophobe_attraction.0 = yes
 		hfe_effect_event_5001_next = yes
@@ -9070,7 +9183,7 @@ ship_event = {
 			}
 		}
 	}
-	picture = GFX_evt_hfe_ruins_robots
+	picture = GFX_evt_hfe_robot_city
 	show_sound = event_mystic_reveal
 	location = root
 	is_triggered_only = yes
@@ -9244,12 +9357,13 @@ ship_event = {
 		}
 	}
 }
+
 # event for blight
 country_event = {
 	id = hfe.5081
 	title = hfe.5081.name
 	desc = hfe.5081.desc
-	picture = GFX_evt_hfe_ruins_robots
+	picture = GFX_evt_hfe_robot_city
 	show_sound = event_activating_unknown_technology
 	location = root
 	is_triggered_only = yes
@@ -9264,7 +9378,7 @@ country_event = {
 	id = hfe.5082
 	title = hfe.5082.name
 	desc = hfe.5082.desc
-	picture = GFX_evt_hfe_ruins_robots
+	picture = GFX_evt_hfe_robot_city
 	show_sound = event_air_raid_siren
 	location = root
 	is_triggered_only = yes
@@ -9279,14 +9393,15 @@ country_event = {
 	id = hfe.5083
 	title = hfe.5083.name
 	desc = hfe.5083.desc
-	picture = GFX_evt_hfe_ruins_robots
+	picture = GFX_evt_hfe_robot_city
 	show_sound = event_activating_unknown_technology
 	is_triggered_only = yes
 
 	trigger = {
 		has_valid_civic = hfe_civic_blight
 		not = {
-			any_playable_country = {
+			any_relation = {
+				is_country_type = default
 				exists = this
 			}
 		}

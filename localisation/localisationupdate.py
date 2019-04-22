@@ -40,7 +40,5 @@ for localisation in set(localisations):
                     f.write(' ' + loc_keys[i] + '\n')
                 elif j != '':
                     f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], j))
-                elif texts['l_english:'][i] == '':
-                    f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], ' '))
                 else:
                     f.write(' {0}:0 "{1}"\n'.format(loc_keys[i], texts['l_english:'][i]))

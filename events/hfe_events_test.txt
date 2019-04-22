@@ -279,8 +279,8 @@ country_event = {
 	immediate = {
 		every_owned_pop = {
 			modify_species = {
+				#add_trait = hfe_species_trait_happy_slave
 				add_trait = hfe_species_trait_hucksters
-				add_trait = hfe_species_trait_happy_slave
 			}
 		}
 	}
@@ -368,18 +368,39 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_system = {
+		every_system = {
 			limit = {
 				has_star_flag = hfe_memorial_system
 			}
-			prev = {
-				create_point_of_interest = {
-					id = hfe_test.13
-					name = hfe_test.13
-					event_chain = abandoned_terraforming_chain
-					location = prev
-				}
-			}
+			hfe_effect_save_event_target = yes
+			log = "[this.GetName]"
+		}
+		begin_event_chain = {
+			event_chain = abandoned_terraforming_chain
+		}
+		create_point_of_interest = {
+			id = hfe_test.13.0
+			name = hfe_test.13
+			event_chain = abandoned_terraforming_chain
+			location = event_target:hfe_event_target_0
+		}
+		create_point_of_interest = {
+			id = hfe_test.13.1
+			name = hfe_test.13
+			event_chain = abandoned_terraforming_chain
+			location = event_target:hfe_event_target_1
+		}
+		create_point_of_interest = {
+			id = hfe_test.13.2
+			name = hfe_test.13
+			event_chain = abandoned_terraforming_chain
+			location = event_target:hfe_event_target_2
+		}
+		create_point_of_interest = {
+			id = hfe_test.13.3
+			name = hfe_test.13
+			event_chain = abandoned_terraforming_chain
+			location = event_target:hfe_event_target_3
 		}
 	}
 }
@@ -491,22 +512,22 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		log = "destroed [this.GetName]"
-		every_owned_fleet = {
-			log = "remain fleet [this.GetName]"
-		}
-		every_owned_planet = {
-			log = "remain planet [this.GetName]"
-		}
-		every_owned_leader = {
-			log = "remain leader [this.GetName]"
-		}
-		every_owned_starbase = {
-			log = "remain starbase [this.GetName]"
-		}
-		every_system_within_border = {
-			log = "remain system [this.GetName]"
-		}
+		# log = "destroed [this.GetName] country"
+		# every_owned_fleet = {
+		# 	log = "remain fleet [this.GetName]"
+		# }
+		# every_owned_planet = {
+		# 	log = "remain planet [this.GetName]"
+		# }
+		# every_owned_leader = {
+		# 	log = "remain leader [this.GetName]"
+		# }
+		# every_owned_starbase = {
+		# 	log = "remain starbase [this.GetName]"
+		# }
+		# every_system_within_border = {
+		# 	log = "remain system [this.GetName]"
+		# }
 	}
 }
 
@@ -516,16 +537,45 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		random_owned_pop = {
+		every_country = {
 			limit = {
-				is_unemployed = yes
+				is_country_type = hfe_pirate
 			}
-			if = {
-				limit = {
-					has_job = no
+			add_resource = {
+				alloys = 10000
+			}
+			country_event = {
+				id = hfe_pirate.2
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = hfe_test.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			or = {
+				is_country_type = hfe_pirate
+				is_country_type = hfe_drone
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					is_country_type = hfe_pirate
 				}
-				log = "work fine"
 			}
+			log = "pirate ship upgraded [fleet.GetName] [owner.GetName]"
+		}
+		else = {
+			log = "drone ship upgraded [fleet.GetName] [owner.GetName]"
 		}
 	}
 }
