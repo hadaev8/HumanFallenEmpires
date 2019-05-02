@@ -1,0 +1,75 @@
+#ai_weight - checks that required resources are available by AI will be made in code for performance reasons
+
+#modifiers that can be added from modules
+#"modifier", category: MODIFIER_CATEGORY_SPACEPORT. things that affect the builder part of the spaceport. like construction costs and speeds
+#"orbit_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. applied on all orbiting fleets and ships
+#"planet_modifier", category: MODIFIER_CATEGORY_PLANET | MODIFIER_CATEGORY_POP | MODIFIER_CATEGORY_TILE. affects the planet
+#"station_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. affects the ship part of the spaceport. like health and armor
+#"ship_modifier", category: MODIFIER_CATEGORY_SHIP. affects all ships that are built by this space port
+
+hfe_starbase_building_population_navigator = {
+	icon = GFX_hfe_starbase_building_population_navigator
+	construction_days = 180
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+			sr_zro = 100
+		}
+		upkeep = {
+			energy = 2
+			sr_zro = 1
+		}
+	}
+	potential = {
+		exists = owner
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			has_starbase_size >= starbase_starport
+		}
+		custom_tooltip = {
+			fail_text = "requires_colonized_planet"
+			solar_system = {
+				any_system_planet = {
+					is_owned_by = from
+				}
+			}
+		}
+	}
+	system_modifier = {
+		job_hfe_job_population_navigator.0_add = 1
+		job_hfe_job_population_navigator.1_add = 3
+	}
+	ship_modifier = {
+		ship_base_speed_mult = 0.1
+		ship_interstellar_speed_mult = 0.1
+		ship_sensor_range_add = 1
+	}
+	show_in_tech = hfe_tech_population_navigator
+	ai_build_at_chokepoint = yes
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 1000
+		modifier = {
+			factor = 0
+			owner = {
+				hfe_trigger_is_psionic = no
+			}
+		}
+		modifier = {
+			factor = 0
+			owner = {
+				resource_stockpile_compare = {
+					resource = sr_zro
+					value < 1000
+				}
+				resource_income_compare = {
+					resource = sr_zro
+					value = 0
+				}
+			}
+		}
+	}
+}

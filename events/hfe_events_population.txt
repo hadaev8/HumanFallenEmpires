@@ -1117,3 +1117,153 @@ country_event = {
 		name = hfe_population.102.0
 	}
 }
+
+# navigator spawn anomaly 110
+country_event = {
+	id = hfe_population.110
+	title = hfe_population.110.name
+	desc = hfe_population.110.desc
+	picture = GFX_evt_psionics
+	location = event_target:hfe_population_110_location
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_global_flag = hfe_has_event_population.110
+		}
+		hfe_trigger_population_enabled = yes
+		hfe_trigger_is_psionic = yes
+	}
+
+	immediate = {
+		set_global_flag = hfe_has_event_population.110
+		random_system_within_border = {
+			limit = {
+				count_planets = {
+					count = 1
+					limit = {
+						is_star = yes
+					}
+				}
+				any_system_planet = {
+					not = {
+						exists = owner
+					}
+					is_star = no
+					habitable_planet = no
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_event_target_as = hfe_population_110_location
+				add_anomaly = hfe_anomaly_population_navigator
+			}
+		}
+	}
+
+	option = {
+		name = hfe_population.110.0
+		tooltip = {
+			event_target:hfe_population_110_location = {
+				add_anomaly = hfe_anomaly_population_navigator
+			}
+		}
+	}
+}
+
+# after anomaly
+ship_event = {
+	id = hfe_population.111
+	title = hfe_population.111.name
+	desc = hfe_population.111.desc
+	picture = GFX_evt_psionics
+	location = event_target:hfe_population_110_location
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+		exists = solar_system
+	}
+
+	immediate = {
+		from = {
+			hfe_effect_remove_signal_object_from_this = yes
+			save_event_target_as = hfe_population_110_location
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					not = {
+						exists = owner
+					}
+					is_star = no
+					habitable_planet = no
+				}
+				save_event_target_as = hfe_population_110_planet
+			}
+		}
+	}
+
+	option = {
+		name = hfe_population.111.0
+		owner = {
+			add_research_option = hfe_tech_population_navigator
+		}
+	}
+}
+
+country_event = {
+	id = hfe_population.112
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = hfe_tech_population_navigator
+	}
+
+	immediate = {
+		every_relation = {
+			country_event = {
+				id = hfe_population.113
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = hfe_population.113
+	title = hfe_population.113.name
+	desc = {
+		trigger = {
+			text = hfe_population.113.desc.0
+			success_text = {
+				text = hfe_population.113.desc.1.0
+				has_technology = tech_mine_zro
+			}
+			fail_text = {
+				text = hfe_population.113.desc.1.1
+				has_technology = tech_mine_zro
+			}
+		}
+	}
+	picture = GFX_evt_psionics
+	location = from.capital_scope
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		exists = from.capital_scope
+		hfe_trigger_is_psionic = yes
+	}
+
+	option = {
+		name = hfe_population.113.0
+	}
+}
