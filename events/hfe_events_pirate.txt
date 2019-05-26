@@ -59,6 +59,12 @@ country_event = {
 		}
 		picture = GFX_evt_machine_space_battle
 	}
+	picture = {
+		trigger = {
+			has_country_flag = hfe_random_5
+		}
+		picture = GFX_evt_pirates_attacking_cargo
+	}
 	show_sound = event_space_battle
 	location = event_target:pirate_system
 
@@ -133,7 +139,7 @@ country_event = {
 	}
 
 	immediate = {
-		hfe_effect_random_roll_flags_5_country = yes
+		hfe_effect_random_roll_flags_6_country = yes
 	}
 
 	option = {
@@ -466,6 +472,12 @@ country_event = {
 		}
 		picture = GFX_evt_machine_space_battle
 	}
+	picture = {
+		trigger = {
+			has_country_flag = hfe_random_5
+		}
+		picture = GFX_evt_pirates_attacking_cargo
+	}
 	desc = pirate.50.a.desc
 	desc = pirate.50.b.desc
 	desc = pirate.50.c.desc
@@ -474,7 +486,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		hfe_effect_random_roll_flags_5_country = yes
+		hfe_effect_random_roll_flags_6_country = yes
 	}
 
 	trigger = {
@@ -1296,6 +1308,51 @@ fleet_event = {
 	immediate = {
 		solar_system.starbase = {
 			set_owner = root.owner
+		}
+	}
+}
+
+country_event = {
+	id = hfe_pirate.63
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = fromfrom
+	}
+
+	immediate = {
+		fromfrom = {
+			random_owned_pop = {
+				save_event_target_as = hfe_pirate_63_kidnap_pop_species
+			}
+			observation_outpost = {
+				add_mission_progress = -1
+			}
+			planet_event = {
+				id = hfe_pirate.64
+				days = 1
+			}
+		}
+		random_owned_planet = {
+			create_pop = {
+				species = event_target:hfe_pirate_63_kidnap_pop_species
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = hfe_pirate.64
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		observation_outpost = {
+			set_mission = hfe_mission_pirate_kidnap
 		}
 	}
 }

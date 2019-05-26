@@ -4634,8 +4634,8 @@ country_event = {
 				ethic = ethic_fanatic_militarist
 			}
 			effect = {
-				hfe_effect_gov_fix = yes
 				set_country_flag = hfe_forsaken
+				hfe_effect_gov_fix = yes
 				set_country_flag = hfe_auto_delete
 				set_graphical_culture = hfe_graphical_culture_pirate
 				event_target:hfe_stargate_planet = {
@@ -4689,8 +4689,10 @@ country_event = {
 						set_location = event_target:hfe_stargate
 					}
 				}
-				add_resource = { minerals = 5000 }
-				add_resource = { energy = 5000 }
+				add_resource = {
+					minerals = 5000
+					energy = 5000
+				}
 				declare_war = {
 					target = root
 					name = "War with Forsakens"
@@ -9238,7 +9240,7 @@ country_event = {
 	}
 }
 
-# blight event 5080
+# blight event 5080 - 5090
 # event after anomaly
 ship_event = {
 	id = hfe.5080
@@ -9533,6 +9535,251 @@ pop_event = {
 		modify_species = {
 			add_trait = trait_cybernetic
 		}
+	}
+}
+
+# future advisor anomaly 5090-5100
+# event after anomaly
+ship_event = {
+	id = hfe.5090
+	title = hfe.5090.name
+	desc = {
+		trigger = {
+			hidden:owner = {
+				text = hfe.5090.desc.0
+				success_text = {
+					text = hfe.5090.desc.1.0
+					or = {
+						is_homicidal = no
+						and = {
+							exists = event_target:hfe_future_country
+							is_same_species = event_target:hfe_future_country
+						}
+					}
+				}
+				fail_text = {
+					text = hfe.5090.desc.1.1
+					or = {
+						is_homicidal = no
+						and = {
+							exists = event_target:hfe_future_country
+							is_same_species = event_target:hfe_future_country
+						}
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_mystic_reveal
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		exists = owner
+	}
+
+	immediate = {
+		from = {
+			hfe_effect_remove_signal_object_from_this = yes
+		}
+	}
+
+	option = {
+		name = hfe_next
+		exclusive_trigger = {
+			owner = {
+				or = {
+					is_homicidal = no
+					and = {
+						exists = event_target:hfe_future_country
+						is_same_species = event_target:hfe_future_country
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				create_saved_leader = {
+					key = hfe_5090_leader
+					class = admiral #hfe_admiral_general
+					species = event_target:hfe_future_species
+					gender = female
+					skill = 5
+					traits = {
+						trait = hfe_admiral_trait_future_train
+					}
+					effect = {
+						#change_leader_portrait = hfe_portrait_future
+						save_event_target_as = hfe_5090_leader
+					}
+				}
+				set_country_flag = hfe.5091.step0
+				country_event = {
+					id = hfe.5091
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe.5080.1
+		hfe_effect_give_random_tech = yes
+	}
+}
+
+country_event = {
+	id = hfe.5091
+	title = TRANSMISSION
+	desc = {
+		trigger = {
+			success_text = {
+				text = hfe.5091.desc.0
+				has_country_flag = hfe.5091.step0
+			}
+			success_text = {
+				text = hfe.5091.desc.1
+				has_country_flag = hfe.5091.step1
+			}
+			success_text = {
+				text = hfe.5091.desc.2
+				has_country_flag = hfe.5091.step2
+			}
+			success_text = {
+				text = hfe.5091.desc.3
+				has_country_flag = hfe.5091.step3
+			}
+		}
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:hfe_5090_leader
+		room = ship_room
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = hfe.5091.step0
+			}
+			play_sound = event_alien_signal
+		}
+	}
+
+	option = {
+		name = hfe.5091.0
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step0
+			not = {
+				has_country_flag = hfe_marked_as_human
+			}
+			any_relation = {
+				has_country_flag = hfe_marked_as_human
+			}
+		}
+		custom_tooltip = hfe.5091.0.tooltip.0
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.0
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step0
+			has_country_flag = hfe_marked_as_human
+			nor = {
+				has_country_flag = hfe_egypt_contacted
+				has_country_flag = hfe_future_contacted
+			}
+		}
+		custom_tooltip = hfe.5091.0.tooltip.1
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.0
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step0
+			is_gestalt = no
+			not = {
+				has_country_flag = first_contact_event
+			}
+		}
+		custom_tooltip = hfe.5091.0.tooltip.2
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.0
+		trigger = {
+			has_country_flag = hfe.5091.step0
+		}
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.1
+		trigger = {
+			has_country_flag = hfe.5091.step1
+		}
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.2
+		trigger = {
+			has_country_flag = hfe.5091.step2
+		}
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.3.0
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step3
+			is_subject_type = hfe_vassal_future
+		}
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.3.1
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step3
+			has_valid_civic = civic_machine_servitor
+		}
+		hfe_effect_advisor_future_on = yes
+		default_hide_option = yes
+	}
+	option = {
+		name = hfe.5091.3.2
+		exclusive_trigger = {
+			has_country_flag = hfe.5091.step3
+			has_valid_civic = civic_machine_assimilator
+		}
+		hfe_effect_advisor_future_on = yes
+		activate_saved_leader = {
+			add_to_owned = yes
+			key = hfe_5090_leader
+		}
+		default_hide_option = yes
+	}
+	# take advisor
+	option = {
+		name = hfe.5091.3.3
+		trigger = {
+			has_country_flag = hfe.5091.step3
+		}
+		hfe_effect_advisor_future_on = yes
+		default_hide_option = yes
+	}
+	# take general admiral
+	option = {
+		name = hfe.5091.3.4
+		trigger = {
+			has_country_flag = hfe.5091.step3
+		}
+		activate_saved_leader = {
+			add_to_owned = yes
+			key = hfe_5090_leader
+		}
+	}
+	after = {
+		hfe_effect_event_5091_next = yes
 	}
 }
 
