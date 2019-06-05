@@ -9,35 +9,55 @@ country_event = {
 			text = hfe_menu.1.desc.0
 			success_text = {
 				text = hfe_menu.1.desc.1.0
+				hfe_trigger_menu_has_submenu = no
 				has_global_flag = hfe_installed
 			}
-			fail_text = {
+			success_text = {
 				text = hfe_menu.1.desc.1.1
-				has_global_flag = hfe_installed
+				hfe_trigger_menu_has_submenu = no
+				not = {
+					has_global_flag = hfe_installed
+				}
 			}
 			success_text = {
 				text = hfe_menu.1.desc.2.0
+				hfe_trigger_menu_has_submenu = no
 				exists = event_target:hfe_egypt_country
 			}
-			fail_text = {
+			success_text = {
 				text = hfe_menu.1.desc.2.1
-				exists = event_target:hfe_egypt_country
+				hfe_trigger_menu_has_submenu = no
+				not = {
+					exists = event_target:hfe_egypt_country
+				}
 			}
 			success_text = {
 				text = hfe_menu.1.desc.3.0
-				exists = event_target:hfe_future_country
-			}
-			fail_text = {
-				text = hfe_menu.1.desc.3.1
+				hfe_trigger_menu_has_submenu = no
 				exists = event_target:hfe_future_country
 			}
 			success_text = {
+				text = hfe_menu.1.desc.3.1
+				hfe_trigger_menu_has_submenu = no
+				not = {
+					exists = event_target:hfe_future_country
+				}
+			}
+			success_text = {
 				text = hfe_menu.1.desc.4.0
+				hfe_trigger_menu_has_submenu = no
 				has_global_flag = hfe_plague_started
 			}
-			fail_text = {
+			success_text = {
 				text = hfe_menu.1.desc.4.1
-				has_global_flag = hfe_plague_started
+				hfe_trigger_menu_has_submenu = no
+				not = {
+					has_global_flag = hfe_plague_started
+				}
+			}
+			success_text = {
+				text = hfe_menu.1.submenu.desc.0
+				has_country_flag = hfe_menu_have_submenu_pirate
 			}
 		}
 	}
@@ -70,6 +90,7 @@ country_event = {
 		name = hfe_menu.0
 		custom_tooltip = hfe_menu.0.tooltip
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			has_global_flag = hfe_installed
 			has_country_flag = hfe_marked_as_human
 		}
@@ -108,6 +129,7 @@ country_event = {
 		name = hfe_menu.1
 		custom_tooltip = hfe_menu.1.tooltip
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			has_global_flag = hfe_installed
 			not = {
 				has_country_flag = hfe_marked_as_human
@@ -120,56 +142,83 @@ country_event = {
 			}
 		}
 	}
-	# disable pirate
+	# pirate menu
 	option = {
-		name = hfe_menu.2.on
-		trigger = {
-			has_global_flag = hfe_disable_pirate
-		}
-		custom_tooltip = hfe_menu.2.on.tooltip
+		name = hfe_menu.2.defined_text
+		custom_tooltip = hfe_menu.2.tooltip.defined_text
 		hidden_effect = {
-			remove_global_flag = hfe_disable_pirate
-			every_country = {
+			if = {
 				limit = {
-					is_country_type = default
+					hfe_trigger_pirate_enabled = no
 				}
-				set_country_flag = pirates_spawned
+				remove_global_flag = hfe_disable_pirate
+				every_country = {
+					limit = {
+						is_country_type = default
+					}
+					set_country_flag = pirates_spawned
+				}
+				every_country = {
+					limit = {
+						is_country_type = pirate
+					}
+					destroy_country = yes
+				}
+				country_event = {
+					id = hfe_menu.1
+				}
 			}
-			every_country = {
+			else_if = {
 				limit = {
-					is_country_type = pirate
+					has_country_flag = hfe_menu_have_submenu_pirate
 				}
-				destroy_country = yes
+				set_global_flag = hfe_disable_pirate
+				remove_country_flag = hfe_menu_have_submenu_pirate
+				every_country = {
+					limit = {
+						is_country_type = default
+					}
+					remove_country_flag = pirates_spawned
+				}
+				every_country = {
+					limit = {
+						is_country_type = hfe_pirate
+					}
+					every_owned_planet = {
+						limit = {
+							is_planet_class = hfe_pc_pirate_base
+						}
+						hfe_effect_convert_to_asteroid = yes
+					}
+					destroy_country = yes
+				}
+				country_event = {
+					id = hfe_menu.1
+				}
 			}
-			country_event = {
-				id = hfe_menu.1
+			else = {
+				set_country_flag = hfe_menu_have_submenu_pirate
+				country_event = {
+					id = hfe_menu.1
+				}
 			}
 		}
 	}
 	option = {
-		name = hfe_menu.2.off
+		name = hfe_menu.submenu_pirate.0.defined_text
+		custom_tooltip = hfe_menu.submenu_pirate.0.tooltip.defined_text
 		trigger = {
-			not = {
-				has_global_flag = hfe_disable_pirate
-			}
+			has_country_flag = hfe_menu_have_submenu_pirate
 		}
-		custom_tooltip = hfe_menu.2.off.tooltip
 		hidden_effect = {
-			set_global_flag = hfe_disable_pirate
-			every_country = {
+			if = {
 				limit = {
-					is_country_type = default
+					hfe_trigger_pirate_pathfind_enabled = yes
 				}
-				remove_country_flag = pirates_spawned
+				set_global_flag = hfe_pirate_pathfind_disabled
 			}
-			every_country = {
-				limit = {
-					is_country_type = hfe_pirate
-				}
-				every_owned_planet = {
-					hfe_effect_convert_to_asteroid = yes
-				}
-				destroy_country = yes
+			else = {
+				remove_global_flag = hfe_pirate_pathfind_disabled
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -180,6 +229,7 @@ country_event = {
 	option = {
 		name = hfe_menu.3.on
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			has_global_flag = hfe_disable_planet_decay
 		}
 		custom_tooltip = hfe_menu.3.on.tooltip
@@ -193,6 +243,7 @@ country_event = {
 	option = {
 		name = hfe_menu.3.off
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			not = {
 				has_global_flag = hfe_disable_planet_decay
 			}
@@ -209,6 +260,7 @@ country_event = {
 	option = {
 		name = hfe_menu.4.on
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			hfe_trigger_population_enabled = no
 		}
 		custom_tooltip = hfe_menu.4.on.tooltip
@@ -222,6 +274,7 @@ country_event = {
 	option = {
 		name = hfe_menu.4.off
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			hfe_trigger_population_enabled = yes
 		}
 		custom_tooltip = hfe_menu.4.off.tooltip
@@ -250,6 +303,7 @@ country_event = {
 	option = {
 		name = hfe_menu.5.on
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			has_global_flag = hfe_disable_plague
 		}
 		custom_tooltip = hfe_menu.5.on.tooltip
@@ -263,6 +317,7 @@ country_event = {
 	option = {
 		name = hfe_menu.5.off
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			not = {
 				has_global_flag = hfe_disable_plague
 			}
@@ -309,6 +364,9 @@ country_event = {
 	option = {
 		name = hfe_menu.7.0.defined_text
 		custom_tooltip = hfe_menu.7.0.tooltip.defined_text
+		trigger = {
+			hfe_trigger_menu_has_submenu = no
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -334,6 +392,9 @@ country_event = {
 	option = {
 		name = hfe_menu.7.1.defined_text
 		custom_tooltip = hfe_menu.7.1.tooltip.defined_text
+		trigger = {
+			hfe_trigger_menu_has_submenu = no
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -353,6 +414,9 @@ country_event = {
 	option = {
 		name = hfe_menu.8.defined_text
 		custom_tooltip = hfe_menu.8.tooltip.defined_text
+		trigger = {
+			hfe_trigger_menu_has_submenu = no
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -371,6 +435,9 @@ country_event = {
 	# stats
 	option = {
 		name = hfe_menu.6
+		trigger = {
+			hfe_trigger_menu_has_submenu = no
+		}
 		hidden_effect = {
 			country_event = {
 				id = hfe_statistics.0
@@ -381,6 +448,7 @@ country_event = {
 	option = {
 		name = hfe_customization
 		trigger = {
+			hfe_trigger_menu_has_submenu = no
 			exists = ruler
 		}
 		hidden_effect = {
@@ -390,7 +458,22 @@ country_event = {
 		}
 	}
 	option = {
+		name = modmenu_return
+		trigger = {
+			hfe_trigger_menu_has_submenu = yes
+		}
+		hidden_effect = {
+			hfe_effect_menu_remove_submenu = yes
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	option = {
 		name = modmenu_exit
 		default_hide_option = yes
+		hidden_effect = {
+			hfe_effect_menu_remove_submenu = yes
+		}
 	}
 }
