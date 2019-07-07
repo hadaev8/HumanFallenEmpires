@@ -153,22 +153,6 @@ country_event = {
 				}
 			}
 		}
-		every_owned_pop = {
-			prev = {
-				change_variable = {
-					which = hfe_features_exodus_pop
-					value = 1
-				}
-				add_resource = {
-					energy = 50
-					minerals = 50
-					# alloys = 50
-					# consumer_goods = 50
-					# food = 50
-				}
-			}
-			kill_pop = yes
-		}
 		every_owned_planet = {
 			create_fleet = {
 				effect = {
@@ -180,7 +164,24 @@ country_event = {
 					set_location = root.capital_scope.star
 				}
 			}
-			hfe_effect_clear_buildings_and_destroy_colony = yes
+			#hfe_effect_clear_buildings_and_destroy_colony = yes
+			remove_all_buildings = yes
+			every_owned_pop = {
+				prevprev = {
+					change_variable = {
+						which = hfe_features_exodus_pop
+						value = 1
+					}
+					add_resource = {
+						energy = 50
+						minerals = 50
+						food = 50
+						alloys = 10
+						consumer_goods = 10
+					}
+				}
+				kill_pop = yes
+			}
 			change_pc = pc_molten
 		}
 		hfe_effect_remove_prescripted_ideal = yes
@@ -412,9 +413,16 @@ country_event = {
 			}
 		}
 		set_spawn_system_batch = end
+		capital_scope = {
+			remove_all_buildings = yes
+			#hfe_effect_clear_buildings_and_destroy_colony = yes
+			change_pc = pc_nuked
+			reroll_planet = yes
+		}
 		event_target:hfe_features_sanctuary_planet = {
 			set_name = hfe_features_sanctuary_rename
 			set_owner = root
+			set_capital = yes
 			hfe_effect_root_this_change_pc_to_ideal = yes
 			clear_deposits = yes
 			generate_start_deposits_and_blockers = yes
@@ -442,13 +450,7 @@ country_event = {
 						set_location = prevprev.system_star
 					}
 				}
-				capital_scope = {
-					hfe_effect_clear_buildings_and_destroy_colony = yes
-					change_pc = pc_nuked
-					reroll_planet = yes
-				}
 			}
-			set_capital = yes
 			hfe_effect_create_starbase_starport_from_planet = yes
 			hfe_effect_starbase_add_shipyard_0 = yes
 		}
