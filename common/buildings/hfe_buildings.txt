@@ -4,8 +4,21 @@ hfe_building_terraformer = {
 	icon = building_great_pyramid
 	base_buildtime = @fetime
 	can_build = no
-	#can_demolish = no
+	can_demolish = no
 	category = research
+	potential = {
+		exists = owner
+		owner = { is_gestalt = no }
+	}
+	destroy_trigger = {
+		exists = owner
+		owner = { is_gestalt = yes }
+	}
+	convert_to = {
+		hfe_building_terraformer_machine
+		hfe_building_terraformer_machine_rogue_servitor
+		hfe_building_terraformer_hive_mind
+	}
 	resources = {
 		category = planet_buildings
 		upkeep = {
@@ -17,6 +30,123 @@ hfe_building_terraformer = {
 	}
 	planet_modifier = {
 		job_hfe_job_terraformer_add = 4
+	}
+}
+
+hfe_building_terraformer_machine = {
+	icon = building_great_pyramid
+	base_buildtime = @fetime
+	can_build = no
+	can_demolish = no
+	category = research
+	resources = {
+		category = planet_buildings
+		upkeep = {
+			energy = 4
+		}
+	}
+	potential = {
+		exists = owner
+		owner = { 
+			is_machine_empire = yes
+			NOT = { has_valid_civic = civic_machine_servitor }
+		}
+	}
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			OR = {
+				is_machine_empire = no
+				has_valid_civic = civic_machine_servitor
+			}
+		}
+	}
+	convert_to = {
+		hfe_building_terraformer
+		hfe_building_terraformer_machine_rogue_servitor
+		hfe_building_terraformer_hive_mind
+	}
+	country_modifier = {
+		job_hfe_job_terraformer_machine_add = 1
+	}
+	planet_modifier = {
+		job_hfe_job_terraformer_machine_add = 4
+	}
+}
+
+hfe_building_terraformer_machine_rogue_servitor = {
+	icon = building_great_pyramid
+	base_buildtime = @fetime
+	can_build = no
+	can_demolish = no
+	category = research
+	resources = {
+		category = planet_buildings
+		upkeep = {
+			energy = 4
+		}
+	}
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			has_valid_civic = civic_machine_servitor
+		}
+	}
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			has_valid_civic = civic_machine_servitor
+		}
+	}
+	convert_to = {
+		hfe_building_terraformer
+		hfe_building_terraformer_machine
+		hfe_building_terraformer_hive_mind
+	}
+	country_modifier = {
+		job_hfe_job_terraformer_machine_rogue_servitor_add = 1
+	}
+	planet_modifier = {
+		job_hfe_job_terraformer_machine_rogue_servitor_add = 4
+	}
+}
+
+hfe_building_terraformer_hive_mind = {
+	icon = building_great_pyramid
+	base_buildtime = @fetime
+	can_build = no
+	can_demolish = no
+	category = research
+	resources = {
+		category = planet_buildings
+		upkeep = {
+			energy = 4
+		}
+	}
+	potential = {
+		exists = owner
+		owner = {
+			is_hive_empire = yes
+		}
+	}
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			is_hive_empire = no
+		}
+	}
+	convert_to = {
+		hfe_building_terraformer
+		hfe_building_terraformer_machine
+		hfe_building_terraformer_machine_rogue_servitor
+	}
+	country_modifier = {
+		job_hfe_job_terraformer_hive_mind_add = 1
+	}
+	planet_modifier = {
+		job_hfe_job_terraformer_hive_mind_add = 4
 	}
 }
 
