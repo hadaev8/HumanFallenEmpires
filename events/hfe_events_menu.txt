@@ -101,11 +101,11 @@ country_event = {
 			every_country = {
 				limit = {
 					has_country_flag = hfe_marked_as_human
-					species = {
-						not = {
-							is_same_species = event_target:hfe_human_species
-						}
-					}
+#					species = {
+#						not = {
+#							is_same_species = event_target:hfe_human_species
+#						}
+#					}
 				}
 				species = {
 					set_species_identity = event_target:hfe_human_species
@@ -113,7 +113,11 @@ country_event = {
 			}
 			every_owned_pop_species = {
 				limit = {
-					species_portrait = human
+					OR = {
+						species_portrait = human
+						species_portrait = hfe_portrait_future
+						species_portrait = hfe_portrait_egypt
+					}
 					not = {
 						is_same_species = event_target:hfe_human_species
 					}
@@ -426,6 +430,28 @@ country_event = {
 			}
 			else = {
 				set_global_flag = hfe_features_opinion_disable
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# disable global events
+	option = {
+		name = hfe_menu.9.defined_text
+		custom_tooltip = hfe_menu.9.tooltip.defined_text
+		trigger = {
+			hfe_trigger_menu_has_submenu = no
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_global_enabled = yes
+				}
+				remove_global_flag = hfe_global_disable
+			}
+			else = {
+				set_global_flag = hfe_global_disable
 			}
 			country_event = {
 				id = hfe_menu.1

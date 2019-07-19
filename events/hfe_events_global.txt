@@ -1,0 +1,515 @@
+#
+namespace = hfe_global
+
+# gateway
+country_event = {
+	id = hfe_global.0
+	hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+		years_passed > 30
+        hfe_trigger_global_enabled = yes
+    }
+
+	immediate = {
+		random_list = {
+			0 = {
+			}
+			1 = {
+				random_list = {
+					# happies buff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_0_0
+						}
+						set_global_flag = hfe_global_events_0_0
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_0_0
+								days = 1
+							}
+							if = {
+								limit = {
+									is_gestalt = no
+								}
+								add_modifier = {
+									modifier = hfe_global_events_0_0
+								}
+								remove_modifier = hfe_global_events_0_1
+							}
+						}
+					}
+					# happies debuff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_0_1
+						}
+						set_global_flag = hfe_global_events_0_1
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_0_1
+								days = 1
+							}
+							if = {
+                                limit = {
+                                    is_gestalt = no
+                                }
+                                add_modifier = {
+                                    modifier = hfe_global_events_0_1
+                                }
+                                remove_modifier = hfe_global_events_0_0
+                            }
+						}
+					}
+					# ftl buff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_1_0
+						}
+						set_global_flag = hfe_global_events_1_0
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_1_0
+								days = 1
+							}
+							add_modifier = {
+								modifier = hfe_global_events_1_0
+							}
+							remove_modifier = hfe_global_events_1_1
+						}
+					}
+					# ftl debuff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_1_1
+						}
+						set_global_flag = hfe_global_events_1_1
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_1_1
+								days = 1
+							}
+							add_modifier = {
+								modifier = hfe_global_events_1_1
+							}
+							remove_modifier = hfe_global_events_1_0
+						}
+					}
+					# cosmic monsters spawn
+					1 = {
+						set_timed_global_flag = {
+							flag = hfe_global_events_2
+							days = 1
+						}
+						while = {
+							count = 5
+							random_system = {
+								weights = {
+									base = 1
+									modifier = {
+										add = 100
+										has_presence = no
+									}
+								}
+								hfe_effect_spawn_space_monster = yes
+							}
+						}
+					}
+					# trade buff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_3_0
+						}
+						set_global_flag = hfe_global_events_3_0
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_3_0
+								days = 1
+							}
+							add_modifier = {
+								modifier = hfe_global_events_3_0
+							}
+							remove_modifier = hfe_global_events_3_1
+						}
+					}
+					# trade debuff
+					1 = {
+						modifier = {
+							factor = 0
+							has_global_flag = hfe_global_events_3_1
+						}
+						set_global_flag = hfe_global_events_3_1
+						every_country = {
+							set_timed_country_flag = {
+								flag = hfe_global_events_3_1
+								days = 1
+							}
+							add_modifier = {
+								modifier = hfe_global_events_3_1
+							}
+							remove_modifier = hfe_global_events_3_0
+						}
+					}
+                }
+                every_country = {
+                    country_event = {
+                        id = hfe_global.1
+                    }
+				}
+				country_event = {
+					id = hfe_global.2
+					days = 3650
+					random = 10950
+				}
+			}
+		}
+	}
+}
+
+# start notification
+country_event = {
+	id = hfe_global.1
+	title = TRANSMISSION
+    desc = hfe_global.1.desc
+    picture = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_1_0
+                has_country_flag = hfe_global_events_1_1
+            }
+        }
+        picture = GFX_evt_space_station
+    }
+    picture = {
+        trigger = {
+            has_global_flag = hfe_global_events_2
+        }
+        picture = GFX_evt_space_dragon_blue
+    }
+    picture = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_3_0
+                has_country_flag = hfe_global_events_3_1
+            }
+        }
+        picture = GFX_evt_galactic_market
+    }
+    picture = GFX_evt_alien_city
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_0_0
+                has_country_flag = hfe_global_events_1_0
+                has_country_flag = hfe_global_events_3_0
+            }
+        }
+        name = EXCELLENT
+        tooltip = {
+            if = {
+                limit = {
+                    has_country_flag = hfe_global_events_0_0
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_0_0
+                }
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_1_0
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_1_0
+                }
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_3_0
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_3_0
+                }
+            }
+        }
+	}
+	option = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_0_1
+                has_country_flag = hfe_global_events_1_1
+                has_global_flag = hfe_global_events_2
+                has_country_flag = hfe_global_events_3_1
+            }
+        }
+		name = UNFORTUNATE
+        tooltip = {
+            if = {
+                limit = {
+                    has_country_flag = hfe_global_events_0_1
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_0_1
+                }
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_1_1
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_1_1
+                }
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_3_1
+                }
+                add_modifier = {
+                    modifier = hfe_global_events_3_1
+                }
+            }
+        }
+	}
+}
+
+# end gateway
+country_event = {
+	id = hfe_global.2
+	hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+		#hfe_trigger_global_enabled = yes
+		or = {
+			has_global_flag = hfe_global_events_0_0
+			has_global_flag = hfe_global_events_0_1
+			has_global_flag = hfe_global_events_1_0
+			has_global_flag = hfe_global_events_1_1
+			has_global_flag = hfe_global_events_3_0
+			has_global_flag = hfe_global_events_3_1
+		}
+    }
+
+	immediate = {
+		random_list = {
+			# happies buff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_0_0
+					}
+				}
+				remove_global_flag = hfe_global_events_0_0
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_0_0
+						days = 1
+					}
+					remove_modifier = hfe_global_events_0_0
+				}
+			}
+			# happies debuff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_0_1
+					}
+				}
+				remove_global_flag = hfe_global_events_0_1
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_0_1
+						days = 1
+					}
+					remove_modifier = hfe_global_events_0_1
+				}
+			}
+			# ftl buff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_1_0
+					}
+				}
+				remove_global_flag = hfe_global_events_1_0
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_1_0
+						days = 1
+					}
+					remove_modifier = hfe_global_events_1_0
+				}
+			}
+			# ftl debuff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_1_1
+					}
+				}
+				remove_global_flag = hfe_global_events_1_1
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_1_1
+						days = 1
+					}
+					remove_modifier = hfe_global_events_1_1
+				}
+			}
+			# trade buff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_3_0
+					}
+				}
+				remove_global_flag = hfe_global_events_3_0
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_3_0
+						days = 1
+					}
+					remove_modifier = hfe_global_events_3_0
+				}
+			}
+			# trade debuff
+			1 = {
+				modifier = {
+					factor = 0
+					not = {
+						has_global_flag = hfe_global_events_3_1
+					}
+				}
+				remove_global_flag = hfe_global_events_3_1
+				every_country = {
+					set_timed_country_flag = {
+						flag = hfe_global_events_3_1
+						days = 1
+					}
+					remove_modifier = hfe_global_events_3_1
+				}
+			}
+		}
+		every_country = {
+			country_event = {
+				id = hfe_global.3
+			}
+		}
+	}
+}
+
+# end notification
+country_event = {
+	id = hfe_global.3
+	title = hfe_global.1.name
+    desc = {
+		trigger = {
+			success_text = {
+				text = hfe_global.3.desc.0
+                has_country_flag = hfe_global_events_0_0
+			}
+			success_text = {
+				text = hfe_global.3.desc.1
+                has_country_flag = hfe_global_events_0_1
+			}
+			success_text = {
+				text = hfe_global.3.desc.2
+                has_country_flag = hfe_global_events_1_0
+			}
+			success_text = {
+				text = hfe_global.3.desc.3
+                has_country_flag = hfe_global_events_1_1
+			}
+			success_text = {
+				text = hfe_global.3.desc.4
+                has_country_flag = hfe_global_events_3_0
+			}
+			success_text = {
+				text = hfe_global.3.desc.5
+                has_country_flag = hfe_global_events_3_1
+			}
+		}
+	}
+    picture = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_1_0
+                has_country_flag = hfe_global_events_1_1
+            }
+        }
+        picture = GFX_evt_space_station
+    }
+    picture = {
+        trigger = {
+            or = {
+                has_country_flag = hfe_global_events_3_0
+                has_country_flag = hfe_global_events_3_1
+            }
+        }
+        picture = GFX_evt_galactic_market
+    }
+    picture = GFX_evt_alien_city
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+        name = hfe_global.3.0
+        tooltip = {
+            if = {
+                limit = {
+                    has_country_flag = hfe_global_events_0_0
+                }
+                remove_modifier = hfe_global_events_0_0
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_1_0
+                }
+                remove_modifier = hfe_global_events_1_0
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_3_0
+                }
+                remove_modifier = hfe_global_events_3_0
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_0_1
+                }
+                remove_modifier = hfe_global_events_0_1
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_1_1
+                }
+                remove_modifier = hfe_global_events_1_1
+            }
+            else_if = {
+                limit = {
+                    has_country_flag = hfe_global_events_3_1
+                }
+                remove_modifier = hfe_global_events_3_1
+            }
+        }
+	}
+}
