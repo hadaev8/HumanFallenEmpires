@@ -496,38 +496,37 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		while = {
-			count = 10
-			random_system = {
-				# weights = {
-				# 	base = 1
-				# 	modifier = {
-				# 		add = 100
-				# 		not = {
-				# 			exists = owner
-				# 		}
-				# 		has_presence = no
-				# 	}
-				# }
-				hfe_effect_spawn_space_monster = yes
-			}
+		log = "destroed [this.GetName] country"
+		every_owned_fleet = {
+			log = "remain fleet [this.GetName]"
 		}
-		# log = "destroed [this.GetName] country"
-		# every_owned_fleet = {
-		# 	log = "remain fleet [this.GetName]"
-		# }
-		# every_owned_planet = {
-		# 	log = "remain planet [this.GetName]"
-		# }
-		# every_owned_leader = {
-		# 	log = "remain leader [this.GetName]"
-		# }
-		# every_owned_starbase = {
-		# 	log = "remain starbase [this.GetName]"
-		# }
-		# every_system_within_border = {
-		# 	log = "remain system [this.GetName]"
-		# }
+		every_owned_planet = {
+			log = "remain planet [this.GetName]"
+		}
+		every_owned_leader = {
+			log = "remain leader [this.GetName]"
+		}
+		every_owned_starbase = {
+			log = "remain starbase [this.GetName]"
+		}
+		every_system_within_border = {
+			log = "remain system [this.GetName]"
+		}
+		if = {
+			limit = {
+				has_relic = r_galatron
+			}
+			log = "relics also remain"
+		}
+		if = {
+			limit = {
+				resource_stockpile_compare = {
+					resource = alloys
+					value > 0
+				}
+			}
+			log = "resources also remain"
+		}
 	}
 }
 
@@ -577,6 +576,56 @@ ship_event = {
 		}
 		else = {
 			log = "drone ship upgraded [fleet.GetName] [owner.GetName]"
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.22
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		while = {
+			count = 10
+			random_system = {
+				weights = {
+					base = 1
+					modifier = {
+						add = 100
+						not = {
+							exists = owner
+						}
+						has_presence = no
+					}
+				}
+				hfe_effect_spawn_space_monster = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.23
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				not = {
+					is_country = root
+				}
+			}
+			add_relic = r_galatron
+			establish_communications_no_message = root
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_liberated_us
+			}
+			every_owned_pop = {
+				kill_pop = yes
+			}
 		}
 	}
 }
