@@ -1770,8 +1770,8 @@ planet_event = {
 				#is_robot_pop = no
 			}
 			modify_species = {
-		 		add_trait = hfe_species_trait_test
-		 	}
+				add_trait = hfe_species_trait_test
+			}
 		}
 		random_owned_pop = {
 			limit = {
@@ -1786,8 +1786,8 @@ planet_event = {
 				has_trait = hfe_species_trait_test
 			}
 			modify_species = {
-		 		remove_trait = hfe_species_trait_test
-		 	}
+				remove_trait = hfe_species_trait_test
+			}
 		}
 	}
 
@@ -4833,7 +4833,7 @@ country_event = {
 				}
 				set_location = event_target:hfe_stargate
 				add_modifier = {
-				 	modifier = hfe_unkeep_80
+					modifier = hfe_unkeep_80
 				}
 				save_event_target_as = hfe_stargate_exodus_fleet
 			}
@@ -6402,7 +6402,7 @@ ship_event = {
 			name = "Station AI"
 			type = hfe_thoth
 			species = root.owner
-			day_zero_contact = yes
+			day_zero_contact = no
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
@@ -7586,70 +7586,23 @@ fleet_event = {
 
 	trigger = {
 		is_ship_class = shipclass_military
+		exists = owner
 		exists = event_target:hfe_thoth
-		exists = event_target:hfe_thoth_station
+		owner = {
+			is_hostile = event_target:hfe_thoth
+		}
 		exists = solar_system
+		solar_system = {
+			any_ship_in_system = {
+				has_ship_flag = hfe_thoth_station
+			}
+		}
 	}
 
 	immediate = {
-		solar_system = {
-			every_fleet_in_system = {
-				limit = {
-					has_fleet_flag = hfe_thoth_station
-					exists = owner
-					owner = {
-						is_hostile = root.owner
-					}
-				}
-				owner = {
-					random_relation = {
-						limit = {
-							not = {
-								is_hostile = event_target:hfe_thoth
-							}
-							any_system_within_border = {
-								not = {
-									any_ship_in_system = {
-										exists = owner
-										owner = {
-											is_hostile = event_target:hfe_thoth
-										}
-									}
-								}
-							}
-						}
-						weights = {
-							base = 1
-							modifier = {
-								add = 1000
-								is_ai = no
-							}
-						}
-						random_system_within_border = {
-							limit = {
-								not = {
-									any_ship_in_system = {
-										exists = owner
-										owner = {
-											is_hostile = event_target:hfe_thoth
-										}
-									}
-								}
-							}
-							random_system_planet = {
-								event_target:hfe_thoth_station = {
-									set_location = {
-										target = prev
-										distance = 10
-									}
-								}
-							}
-						}
-						country_event = {
-							id = hfe.728
-						}
-					}
-				}
+		event_target:hfe_thoth = {
+			country_event = {
+				id = hfe.728
 			}
 		}
 	}
@@ -7666,13 +7619,56 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		exists = fromfrom
+		exists = event_target:hfe_thoth
+		is_country = event_target:hfe_thoth
 	}
 
 	immediate = {
-		fromfrom = {
-			fleet_event = {
-				id = hfe.727
+		random_relation = {
+			limit = {
+				not = {
+					is_hostile = event_target:hfe_thoth
+				}
+				any_system_within_border = {
+					not = {
+						any_ship_in_system = {
+							exists = owner
+							owner = {
+								is_hostile = event_target:hfe_thoth
+							}
+						}
+					}
+				}
+			}
+			weights = {
+				base = 1
+				modifier = {
+					add = 1000
+					is_ai = no
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					not = {
+						any_ship_in_system = {
+							exists = owner
+							owner = {
+								is_hostile = event_target:hfe_thoth
+							}
+						}
+					}
+				}
+				random_system_planet = {
+					event_target:hfe_thoth_station = {
+						set_location = {
+							target = prev
+							distance = 10
+						}
+					}
+				}
+			}
+			country_event = {
+				id = hfe.729
 			}
 		}
 	}

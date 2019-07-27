@@ -207,7 +207,8 @@ hfe_effect_settle_pop = {
 		}
 		event_target:hfe_settle_pop_target = {
 		#	log = "looping in settle pop"
-			hfe_effect_refuge_or_die = yes
+			#hfe_effect_refuge_or_die = yes
+			kill_pop = yes
 		}
 	}
 	else = {
@@ -318,7 +319,7 @@ hfe_effect_settle_pop = {
 						}
 					}
 				}
-				hfe_effect_fix_robot_pop = yes
+				hfe_effect_population_fix_robot_pop = yes
 			}
 			#log = "pop moved to [this.GetName]"
 		}
@@ -334,82 +335,66 @@ hfe_effect_settle_pop_from_slavery_buff = {
 	}
 }
 
-hfe_effect_fix_robot_pop = {
-	if = {
-		limit = {
-			has_trait = trait_machine_unit
-			exists = owner
-			owner = {
-				is_regular_empire = yes
-			}
-		}
-		modify_species = {
-			remove_trait = trait_machine_unit
-			add_trait = trait_mechanical
-		}
-		remove_modifier = pop_recently_conquered
-	}
-	else_if = {
-		limit = {
-			has_trait = trait_mechanical
-			exists = owner
-			owner = {
-				has_authority = auth_machine_intelligence
-			}
-		}
-		modify_species = {
-			remove_trait = trait_mechanical
-			add_trait = trait_machine_unit
-		}
-		remove_modifier = pop_recently_conquered
-	}
-}
-
 # for pop
 hfe_effect_add_random_trait = {
 	random_list = {
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = hfe_species_trait_hucksters
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_hucksters
+				}
 			}
 			modify_species = {
+				species = $hfe_species$
 				add_trait = hfe_species_trait_hucksters
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = hfe_species_trait_war_fans
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_war_fans
+				}
 			}
 			modify_species = {
+				species = $hfe_species$
 				add_trait = hfe_species_trait_war_fans
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = hfe_species_trait_error
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_error
+				}
 			}
 			modify_species = {
+				species = $hfe_species$
 				add_trait = hfe_species_trait_error
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = hfe_species_trait_happy_slave
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_happy_slave
+				}
 			}
 			modify_species = {
+				species = $hfe_species$
 				add_trait = hfe_species_trait_happy_slave
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				has_trait = hfe_species_trait_clever_beast
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_clever_beast
+				}
 			}
 			modify_species = {
+				species = $hfe_species$
 				add_trait = hfe_species_trait_clever_beast
 			}
 		}
@@ -2443,6 +2428,423 @@ hfe_effect_give_random_tech = {
 							}
 						}
 					}
+				}
+			}
+		}
+	}
+}
+
+hfe_effect_create_crystal_fleet = {
+	random_list = {
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_green
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_blue
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_yellow
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_red
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_green_elite
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_blue_elite
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_yellow_elite
+				days = 1
+			}
+		}
+		10 = {
+			set_timed_fleet_flag = {
+				flag = hfe_crystal_fleet_red_elite
+				days = 1
+			}
+		}
+	}
+	# large
+	while = {
+		count = 10
+		random_list = {
+			# nothing
+			40 = {
+				modifier = {
+					factor = 0.75
+					is_difficulty > 0
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 1
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 2
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 3
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 4
+				}
+				# at least 1 ship in fleet
+				modifier = {
+					factor = 0
+					num_ships = 0
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Green"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Blue"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Yellow"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Red"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Green_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Blue_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Yellow_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Large_Crystal_Entity_Red_Elite"
+					}
+				}
+			}
+		}
+	}
+	# medium
+	while = {
+		count = 20
+		random_list = {
+			# nothing
+			40 = {
+				modifier = {
+					factor = 0.75
+					is_difficulty > 0
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 1
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 2
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 3
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 4
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Green"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Blue"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Yellow"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Red"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Green_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Blue_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Yellow_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Medium_Crystal_Entity_Red_Elite"
+					}
+				}
+			}
+		}
+	}
+	# small
+	while = {
+		count = 40
+		random_list = {
+			# nothing
+			40 = {
+				modifier = {
+					factor = 0.75
+					is_difficulty > 0
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 1
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 2
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 3
+				}
+				modifier = {
+					factor = 0.75
+					is_difficulty > 4
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Green"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Blue"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Yellow"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Red"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_green_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Green_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_blue_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Blue_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_yellow_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Yellow_Elite"
+					}
+				}
+				else_if = {
+					limit = {
+						has_fleet_flag = hfe_crystal_fleet_red_elite
+					}
+					create_ship = {
+						name = ""
+						design = "hfe_NAME_Small_Crystal_Entity_Red_Elite"
+					}
+				}
+			}
+		}
+	}
+}
+
+hfe_effect_get_space_monster_country = {
+	if = {
+		limit = {
+			exists = event_target:hfe_global_space_monster
+		}
+	}
+	else = {
+		create_country = {
+			type = hfe_berserk
+			name = "Awoken Berserk"
+			effect = {
+				every_country = {
+					establish_communications_no_message = prev
+				}
+				save_global_event_target_as = hfe_global_space_monster
+			}
+		}
+	}
+}
+
+hfe_effect_spawn_space_monster = {
+	random_system_planet = {
+		hfe_effect_get_space_monster_country = yes
+		while = {
+			count = 5
+			random_list = {
+				10 = {
+				}
+				10 = {
+					# some crystals
+					create_fleet = {
+						name = "NAME_Emerald_Roamers"
+						effect = {
+							hfe_effect_create_crystal_fleet = yes
+							set_owner = event_target:hfe_global_space_monster
+							set_fleet_stance = aggressive
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random
+							}
+						}
+					}
+					# add other types later
 				}
 			}
 		}
