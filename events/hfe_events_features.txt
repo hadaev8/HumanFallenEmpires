@@ -68,7 +68,6 @@ planet_event = {
 	immediate = {
 		owner = {
 			set_country_type = default
-			remove_modifier = hfe_discovery_translator
 			while = {
 				limit = {
 					check_variable = {
@@ -87,9 +86,71 @@ planet_event = {
 				}
 			}
 		}
+		clr_country_flag = is_government_in_exile
+		set_country_flag = was_government_in_exile
+
 		# need this to fix game's broken economy bug
-		# TODO
 		set_capital = yes
+
+		# Prevent the player from running deficits they can't fix
+		add_building = building_foundry_1
+		add_building = building_factory_1
+		add_building = building_research_lab_1
+
+		# You're not going to settle on a planet smaller than size nine, are you?
+
+		if = {
+			limit = { owner = { has_valid_civic = civic_mechanists } }
+			add_building = building_robot_assembly_plant
+		}
+
+		# You're landing on a PLANET, right?
+
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						is_gestalt = yes
+					}
+				}
+				habitable_structure = no
+			}
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+		}
+
+		if = {
+			limit = {
+				owner = {
+					is_gestalt = yes
+				}
+				habitable_structure = no
+			}
+			add_district = district_hive
+			add_district = district_hive
+			add_district = district_hive
+		}
+
+		if = {
+			limit = { habitable_structure = no }
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+
+		if = {
+			limit = {
+				NOT = { planet_class = hfe_pc_memorial }
+				habitable_structure = no
+			}
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
 	}
 }
 
@@ -112,11 +173,12 @@ country_event = {
 		}
 		add_modifier = {
 			modifier = hfe_discovery_translator
+			duration = -1
 		}
 		set_country_type = hfe_features_exodus
 		if = {
 			limit = {
-				is_militarist = yes
+				NOT = { is_pacifist = yes }
 			}
 			create_fleet = {
 				effect = {
@@ -174,16 +236,17 @@ country_event = {
 						value = 1
 					}
 					add_resource = {
-						energy = 50
-						minerals = 50
-						food = 50
-						alloys = 10
-						consumer_goods = 10
+						energy = 5000
+						minerals = 5000
+						food = 5000
+						alloys = 5000
+						consumer_goods = 5000
 					}
 				}
 				kill_pop = yes
 			}
-			change_pc = pc_molten
+			change_pc = pc_broken
+			starbase = { destroy_fleet = fleet }
 		}
 		hfe_effect_remove_prescripted_ideal = yes
 	}
