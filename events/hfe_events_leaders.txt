@@ -1337,10 +1337,107 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 
+	trigger = {
+		always = no
+	}
+
 	immediate = {
-		country_event = {
-			id = hfe_leaders.109
+		remove_country_flag = hfe_pirate_spawned
+		every_owned_leader = {
+			random_list = {
+				# nothing
+				10 = {
+				}
+				# flee to friend
+				10 = {
+					root = {
+						random_relation = {
+							limit = {
+								hfe_trigger_is_awake = yes
+								num_pops > 0
+								or = {
+									trust = {
+										who = root
+										value >= 5
+									}
+									has_country_flag = hfe_leaders_refuge@root
+								}
+							}
+							clone_leader = {
+								target = prevprev
+								effect = {
+									set_timed_leader_flag = {
+										flag = hfe_leaders_refuge
+										days = 1
+									}
+								}
+							}
+							country_event = {
+								id = hfe_leaders.111
+							}
+						}
+					}
+				}
+				# form pirate nation
+				10 = {
+					modifier = {
+						factor = 0
+						hfe_trigger_pirate_enabled = no
+					}
+					modifier = {
+						factor = 0
+						root = {
+							has_country_flag = hfe_pirate_spawned
+						}
+					}
+					modifier = {
+						factor = 0.5
+						root = {
+							is_pacifist = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						root = {
+							is_militarist = yes
+						}
+					}
+					root = {
+						hfe_effect_pirate_init = yes
+					}
+					event_target:hfe_pirate_clan = {
+						set_graphical_culture = root
+						set_country_flag = hfe_leaders_refuge@root
+						assign_leader = prev
+						#set_name = "[root.species.GetName] Remnants"
+						hfe_effect_transfer_resources_from_root_to_this = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_leaders.111
+	title = hfe_leaders.111.name
+	desc = hfe_leaders.111.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			has_country_flag = hfe_leaders.111_block
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = hfe_leaders.111_block
 			days = 1
 		}
+	}
+	option = {
+		name = hfe_leaders.111.0
 	}
 }

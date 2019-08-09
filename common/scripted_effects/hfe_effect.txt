@@ -15,7 +15,7 @@ hfe_effect_refuge_10 = {
 
 # for pop
 hfe_effect_refuge_or_die = {
-	#log = "pop refuge effect"
+	#log = "pop refuge effect $thisgetname$"
 	if = {
 		limit = {
 			hfe_trigger_is_robot = no
@@ -35,8 +35,8 @@ hfe_effect_refuge_or_die = {
 			}
 		}
 		save_event_target_as = hfe_refuge_pop_target
-		save_event_target_as = hfe_refuge_pop_target_owner
 		owner = {
+			save_event_target_as = hfe_refuge_pop_target_owner
 			random_relation = {
 				limit = {
 					num_pops > 0
@@ -52,14 +52,14 @@ hfe_effect_refuge_or_die = {
 				weights = {
 					base = 10
 					modifier = {
-						mult = 0
+						mult = 0.001
 						has_policy_flag = refugees_not_allowed
 						not = {
 							is_same_species = event_target:hfe_refuge_pop_target
 						}
 					}
 					modifier = {
-						mult = 0
+						mult = 0.001
 						has_policy_flag = refugees_only_citizens
 						event_target:hfe_refuge_pop_target = {
 							nor = {
@@ -183,7 +183,7 @@ hfe_effect_refuge_or_die = {
 		}
 	}
 	else = {
-	#	log = "refuge pop killed"
+		#log = "refuge pop killed $thisgetname$"
 		kill_pop = yes
 	}
 }
@@ -2850,3 +2850,151 @@ hfe_effect_spawn_space_monster = {
 		}
 	}
 }
+
+# country scope
+hfe_effect_transfer_resources_from_root_to_this = {
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			energy = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = minerals
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			minerals = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = food
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			food = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = alloys
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			alloys = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = consumer_goods
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			consumer_goods = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			volatile_motes = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = exotic_gases
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			exotic_gases = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = rare_crystals
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			rare_crystals = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = sr_living_metal
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			sr_living_metal = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = sr_zro
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			sr_zro = 1
+		}
+	}
+	while = {
+		limit = {
+			root = {
+				resource_stockpile_compare = {
+					resource = sr_dark_matter
+					value >= 1
+				}
+			}
+		}
+		add_resource = {
+			sr_dark_matter = 1
+		}
+	}
+}
+

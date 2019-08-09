@@ -13,7 +13,10 @@ hfe_vassal_future = {
 		from = {
 			or = {
 				has_country_flag = hfe_future
-				is_country = event_target:hfe_coalition_leader
+				and = {
+					exists = event_target:hfe_coalition_leader
+					is_country = event_target:hfe_coalition_leader
+				}
 			}
 		}
 	}
@@ -35,6 +38,18 @@ hfe_vassal_future = {
 			country_add_ethic = ethic_militarist
 			change_government = {
 				authority = auth_democratic
+			}
+		}
+		else_if = {
+			limit = {
+				is_machine_empire = yes
+			}
+			change_government = {
+				authority = auth_machine_intelligence
+				civics = {
+					civic = civic_machine_servitor
+					civic = hfe_civic_auto_paradise
+				}
 			}
 		}
 		hfe_effect_advisor_future_on = yes

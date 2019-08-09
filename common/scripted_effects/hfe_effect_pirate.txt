@@ -89,113 +89,112 @@ hfe_effect_pirate_raid_set_flag = {
 # create pirate
 # return event target pirate_band, need event target hfe_pirate_target
 hfe_effect_pirate_init = {
-	event_target:hfe_pirate_target = {
-		set_timed_country_flag = {
-			flag = hfe_pirate_spawned
-			days = @hfe_pirate_spawn_cooldown
+	save_event_target_as = hfe_pirate_target
+	set_timed_country_flag = {
+		flag = hfe_pirate_spawned
+		days = @hfe_pirate_spawn_cooldown
+	}
+	if = {
+		limit = {
+			has_event_chain = hfe_chain_pirate_count
 		}
-		if = {
-			limit = {
-				has_event_chain = hfe_chain_pirate_count
-			}
-			country_event = {
-				id = hfe_pirate.7
-				days = 1
-				random = 15
-			}
+		country_event = {
+			id = hfe_pirate.7
+			days = 1
+			random = 15
 		}
-		else = {
-			begin_event_chain = {
-				event_chain = hfe_chain_pirate_count
-				target = this
-			}
-			set_country_flag = pirate_encountered
-			country_event = {
-				id = hfe_pirate.1
-				days = 1
-				random = 15
-			}
+	}
+	else = {
+		begin_event_chain = {
+			event_chain = hfe_chain_pirate_count
+			target = this
 		}
-		random_system = {
-			limit = {
-				closest_system = {
-					max_steps = 10
+		set_country_flag = pirate_encountered
+		country_event = {
+			id = hfe_pirate.1
+			days = 1
+			random = 15
+		}
+	}
+	random_system = {
+		limit = {
+			closest_system = {
+				max_steps = 10
+				limit = {
+					is_owned_by = event_target:hfe_pirate_target
+				}
+			}
+			hfe_trigger_pirate_valid_base_system = yes
+		}
+		weights = {
+			base = 1
+			modifier = {
+				mult = 10
+				has_trade_route = yes
+			}
+			modifier = {
+				mult = 10
+				not = {
+					any_neighbor_system = {
+						has_presence = yes
+					}
+				}
+			}
+			modifier = {
+				mult = 2
+				count_planets = {
+					count > 0
 					limit = {
-						is_owned_by = event_target:hfe_pirate_target
-					}
-				}
-				hfe_trigger_pirate_valid_base_system = yes
-			}
-			weights = {
-				base = 1
-				modifier = {
-					mult = 10
-					has_trade_route = yes
-				}
-				modifier = {
-					mult = 10
-					not = {
-						any_neighbor_system = {
-							has_presence = yes
-						}
-					}
-				}
-				modifier = {
-					mult = 2
-					count_planets = {
-						count > 0
-						limit = {
-							has_deposit = yes
-						}
-					}
-				}
-				modifier = {
-					mult = 2
-					count_planets = {
-						count > 1
-						limit = {
-							has_deposit = yes
-						}
-					}
-				}
-				modifier = {
-					mult = 2
-					count_planets = {
-						count > 2
-						limit = {
-							has_deposit = yes
-						}
-					}
-				}
-				modifier = {
-					mult = 2
-					count_planets = {
-						count > 3
-						limit = {
-							has_deposit = yes
-						}
-					}
-				}
-				modifier = {
-					mult = 2
-					count_planets = {
-						count > 4
-						limit = {
-							has_deposit = yes
-						}
+						has_deposit = yes
 					}
 				}
 			}
-			# for vanilla localization
-			save_event_target_as = pirate_system
-			hfe_effect_pirate_init_country = yes
-			hfe_effect_pirate_init_base = yes
+			modifier = {
+				mult = 2
+				count_planets = {
+					count > 1
+					limit = {
+						has_deposit = yes
+					}
+				}
+			}
+			modifier = {
+				mult = 2
+				count_planets = {
+					count > 2
+					limit = {
+						has_deposit = yes
+					}
+				}
+			}
+			modifier = {
+				mult = 2
+				count_planets = {
+					count > 3
+					limit = {
+						has_deposit = yes
+					}
+				}
+			}
+			modifier = {
+				mult = 2
+				count_planets = {
+					count > 4
+					limit = {
+						has_deposit = yes
+					}
+				}
+			}
 		}
+		# for vanilla localization
+		save_event_target_as = pirate_system
+		hfe_effect_pirate_init_country = yes
+		hfe_effect_pirate_init_colony = yes
 	}
 }
 
 # for system, asteroid ideally, need event target pirate_band
-hfe_effect_pirate_init_base = {
+hfe_effect_pirate_init_colony = {
 	random_system_planet = {
 		limit = {
 			hfe_trigger_pirate_valid_base_planet = yes
@@ -214,7 +213,12 @@ hfe_effect_pirate_init_base = {
 		every_owned_pop = {
 			kill_pop = yes
 		}
-		#log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
+		# if = {
+			# limit = {
+				# has_global_flag = hfe_pirate_logs
+			# }
+			# log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
+		# }
 		hfe_effect_create_starbase_starport_from_planet = yes
 		hfe_effect_starbase_add_shipyard_0 = yes
 	}
@@ -368,12 +372,12 @@ hfe_effect_pirate_init_country = {
 						limit = {
 							is_xenophobe = no
 						}
-					}
-					set_faction_hostility = {
-						target = prev
-						set_hostile = no
-						set_neutral = yes
-						set_friendly = no
+						set_faction_hostility = {
+							target = prev
+							set_hostile = no
+							set_neutral = yes
+							set_friendly = no
+						}
 					}
 				}
 			}
@@ -1097,26 +1101,6 @@ hfe_effect_pirate_path_target_planet = {
 							}
 						}
 					}
-					# or = {
-					# 	and = {
-					# 		exists = controller
-					# 		controller = {
-					# 			is_hostile = root.owner
-					# 		}
-					# 		or = {
-					# 			has_mining_station = yes
-					# 			has_research_station = yes
-					# 		}
-					# 	}
-					# 	and = {
-					# 		exists = owner
-					# 		owner = {
-					# 			is_hostile = root.owner
-					# 		}
-					# 		is_occupied_flag = no
-					# 		#has_orbital_bombardment = no
-					# 	}
-					# }
 				}
 				weights = {
 					base = 10
@@ -1414,7 +1398,6 @@ hfe_effect_pirate_path_go_to_next = {
 			}
 			if = {
 				limit = {
-					#always = yes
 					has_fleet_flag = hfe_pirate_log_fleet
 				}
 			#	log = "[this.GetName] in [solar_system.GetName] target not find, wait 180 days"

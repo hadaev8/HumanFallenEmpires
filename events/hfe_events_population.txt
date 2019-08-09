@@ -1274,3 +1274,64 @@ country_event = {
 		name = hfe_population.113.0
 	}
 }
+
+# on_building_complete on_building_upgraded on_building_demolished on_building_replaced
+# planet shield
+planet_event = {
+	id = hfe_population.114
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		hfe_trigger_population_enabled = yes
+		#last_building_changed = building_planetary_shield_generator
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_building = building_planetary_shield_generator
+			}
+			if = {
+				limit = {
+					is_planet_class = pc_ringworld_habitable
+				}
+				# create_ambient_object = {
+				# 	location = root
+				# 	type = hfe_object_population_shield_ringworld
+				# 	entity_offset_angle = {
+				# 		min = 90
+				# 		max = 90
+				# 	}
+				# 	use_3d_location = yes
+				# 	entity_face_object = star
+				# 	entity_scale_to_size = yes
+				# 	scale = 0.15
+				# }
+			}
+			else = {
+				create_ambient_object = {
+					location = root
+					type = hfe_object_population_shield
+					use_3d_location = yes
+					entity_scale_to_size = yes
+					scale = 0.15
+				}
+			}
+			last_created_ambient_object = {
+				set_ambient_object_flag = hfe_population_object_shield
+				set_ambient_object_flag = hfe_population_object_shield@root
+			}
+		}
+		else = {
+			solar_system = {
+				every_system_ambient_object = {
+					limit = {
+						has_ambient_object_flag = hfe_population_object_shield@root
+					}
+					destroy_ambient_object = this
+				}
+			}
+		}
+	}
+}
