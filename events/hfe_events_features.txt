@@ -112,7 +112,10 @@ planet_event = {
 		}
 		if = {
 			limit = {
-				owner = { has_country_flag = chosen_to_exodus }
+				OR = {
+					owner = { NOT = { has_valid_civic = hfe_civic_features_exodus } }
+					owner = { has_country_flag = chosen_to_exodus }
+				}
 			}
 
 			owner = {
@@ -227,17 +230,20 @@ country_event = {
 			days = -1
 		}
 
-		add_modifier = {
-			modfier = tsp_hfe_features_exodus_game_over_prevention
-			days = -1
-		}
-		add_modifier = {
-			modifier = tsp_hfe_features_exodus_resources_science
-			days = -1
-		}
-		add_modifier = {
-			modifier = tsp_hfe_features_exodus_resources_other
-			days = -1
+		if = {
+			limit = { has_global_flag hfe_hardcore_disable }
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_game_over_prevention
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_science
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_other
+				days = -1
+			}
 		}
 
 		add_resource = {
