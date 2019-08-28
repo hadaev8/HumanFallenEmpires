@@ -145,6 +145,12 @@ country_event = {
 	option = {
 		name = hfe_menu.2.defined_text
 		custom_tooltip = hfe_menu.2.tooltip.defined_text
+		trigger = {
+			or = {
+				hfe_trigger_menu_has_submenu = no
+				has_country_flag = hfe_menu_have_submenu_pirate
+			}
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -255,54 +261,86 @@ country_event = {
 			}
 		}
 	}
-	# disable population
+	# population menu
 	option = {
-		name = hfe_menu.4.on
+		name = hfe_menu.4.defined_text
+		custom_tooltip = hfe_menu.4.tooltip.defined_text
 		trigger = {
-			hfe_trigger_menu_has_submenu = no
-			hfe_trigger_population_enabled = no
-		}
-		custom_tooltip = hfe_menu.4.on.tooltip
-		hidden_effect = {
-			remove_global_flag = hfe_population_disable
-			country_event = {
-				id = hfe_menu.1
+			or = {
+				hfe_trigger_menu_has_submenu = no
+				has_country_flag = hfe_menu_have_submenu_population
 			}
-			every_planet = {
-				planet_event = {
-					id = hfe_population.114
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_population_enabled = no
+				}
+				remove_global_flag = hfe_population_disable
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = hfe_menu_have_submenu_population
+				}
+				set_global_flag = hfe_population_disable
+				remove_country_flag = hfe_menu_have_submenu_population
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else = {
+				set_country_flag = hfe_menu_have_submenu_population
+				country_event = {
+					id = hfe_menu.1
 				}
 			}
 		}
 	}
 	option = {
-		name = hfe_menu.4.off
+		name = hfe_menu.submenu_population.0.defined_text
+		custom_tooltip = hfe_menu.submenu_population.0.tooltip.defined_text
 		trigger = {
-			hfe_trigger_menu_has_submenu = no
-			hfe_trigger_population_enabled = yes
+			has_country_flag = hfe_menu_have_submenu_population
 		}
-		custom_tooltip = hfe_menu.4.off.tooltip
 		hidden_effect = {
-			every_planet = {
+			if = {
 				limit = {
-					or = {
-						has_modifier = hfe_population_yellow_ring
-						has_modifier = hfe_population_red_ring
-						has_modifier = hfe_population_green_ring
-						has_modifier = hfe_population_blue_ring
+					hfe_trigger_population_procreate_housing_block_enabled = yes
+				}
+				remove_global_flag = hfe_population_procreate_housing_block
+			}
+			else = {
+				set_global_flag = hfe_population_procreate_housing_block
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	option = {
+		name = hfe_menu.submenu_population.1.defined_text
+		custom_tooltip = hfe_menu.submenu_population.1.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_submenu_population
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_population_planetary_shield_enabled = yes
+				}
+				set_global_flag = hfe_population_planetary_shield_disabled
+				hfe_effect_population_remove_object_shield_global = yes
+			}
+			else = {
+				remove_global_flag = hfe_population_planetary_shield_disabled
+				every_planet = {
+					planet_event = {
+						id = hfe_population.114
 					}
 				}
-				remove_modifier = hfe_population_yellow_ring
-				remove_modifier = hfe_population_red_ring
-				remove_modifier = hfe_population_green_ring
-				remove_modifier = hfe_population_blue_ring
-			}
-			set_global_flag = hfe_population_disable
-			every_ambient_object = {
-				limit = {
-					has_ambient_object_flag = hfe_population_object_shield
-				}
-				destroy_ambient_object = this
 			}
 			country_event = {
 				id = hfe_menu.1
