@@ -1350,6 +1350,7 @@ country_event = {
 				}
 				# flee to friend
 				10 = {
+					save_event_target_as = hfe_effect_clone_leader_target
 					root = {
 						random_relation = {
 							limit = {
@@ -1362,14 +1363,52 @@ country_event = {
 									}
 									has_country_flag = hfe_leaders_refuge@root
 								}
-							}
-							clone_leader = {
-								target = prevprev
-								effect = {
-									set_timed_leader_flag = {
-										flag = hfe_leaders_refuge
-										days = 1
+								weights = {
+									base = 1
+									modifier = {
+										mult = 2
+										is_country_type = hfe_pirate
 									}
+									modifier = {
+										mult = 2
+										is_same_species = root
+									}
+									modifier = {
+										mult = 2
+										trust = {
+											who = root
+											value >= 25
+										}
+									}
+									modifier = {
+										mult = 2
+										trust = {
+											who = root
+											value >= 50
+										}
+									}
+									modifier = {
+										mult = 2
+										trust = {
+											who = root
+											value >= 75
+										}
+									}
+									modifier = {
+										mult = 2
+										trust = {
+											who = root
+											value >= 100
+										}
+									}
+								}
+							}
+							save_event_target_as = hfe_effect_clone_leader_new_owner
+							hfe_effect_clone_leader = yes
+							last_created_leader = {
+								set_timed_leader_flag = {
+									flag = hfe_leaders_refuge
+									days = 1
 								}
 							}
 							country_event = {
