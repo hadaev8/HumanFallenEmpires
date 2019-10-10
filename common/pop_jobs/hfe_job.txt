@@ -715,7 +715,12 @@ hfe_job_egypt_workless = {
 	icon = entertainer
 	possible = {
 		exists = owner
+		has_citizenship_rights = yes
 		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
+		NOT = {
+			is_shackled_robot = yes
+			is_non_sapient_robot = yes
+		}
 		owner = {
 			OR = {
 				has_valid_civic = hfe_civic_egypt_genetic
@@ -744,8 +749,11 @@ hfe_job_future_workless = {
 	possible = {
 		exists = owner
 		exists = planet
-		planet = {
-			has_building = hfe_building_virtual
+		OR = {
+			planet = {
+				has_building = hfe_building_virtual
+			}
+			has_country_flag = hfe_future
 		}
 	}
 	pop_modifier = {
