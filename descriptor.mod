@@ -1,5 +1,3 @@
-name="Human Fallen Empires"
-path="mod/humanfallenempires-master"
 tags={
 	"Diplomacy"
 	"Galaxy Generation"
@@ -8,7 +6,8 @@ tags={
 	"Gameplay"
 	"Species"
 	"Mod Menu"
+	"Human Fallen Empires"
+	"Mod Pharaoh"
 }
-picture="humanfallenempires.jpg"
+picture="thumbnail.gif"
 remote_file_id="901039859"
-supported_version="2.3.*"
