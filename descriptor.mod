@@ -9,5 +9,5 @@ tags={
 	"Human Fallen Empires"
 	"Mod Pharaoh"
 }
-picture="thumbnail.gif"
+picture="thumbnail.jpg"
 remote_file_id="901039859"
