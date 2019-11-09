@@ -1,5 +1,4 @@
 namespace = hfe_menu
-
 # menu
 country_event = {
 	id = hfe_menu.1
@@ -55,9 +54,18 @@ country_event = {
 					has_global_flag = hfe_plague_started
 				}
 			}
+			# submenu
 			success_text = {
-				text = hfe_menu.1.submenu.desc.0
-				has_country_flag = hfe_menu_have_submenu_pirate
+				text = hfe_menu.pirate.submenu.desc
+				has_country_flag = hfe_menu_have_pirate_submenu
+			}
+			success_text = {
+				text = hfe_menu.population.submenu.desc
+				has_country_flag = hfe_menu_have_population_submenu
+			}
+			success_text = {
+				text = hfe_menu.leaders.submenu.desc
+				has_country_flag = hfe_menu_have_leaders_submenu
 			}
 		}
 	}
@@ -80,11 +88,9 @@ country_event = {
 		picture = GFX_evt_hfe_fallen_3
 	}
 	is_triggered_only = yes
-
 	immediate = {
 		hfe_effect_random_roll_flags_3_country = yes
 	}
-
 	# make humans undivided
 	option = {
 		name = hfe_menu.0
@@ -143,12 +149,12 @@ country_event = {
 	}
 	# pirate menu
 	option = {
-		name = hfe_menu.2.defined_text
-		custom_tooltip = hfe_menu.2.tooltip.defined_text
+		name = hfe_menu.pirate.defined_text
+		custom_tooltip = hfe_menu.pirate.tooltip.defined_text
 		trigger = {
 			or = {
 				hfe_trigger_menu_has_submenu = no
-				has_country_flag = hfe_menu_have_submenu_pirate
+				has_country_flag = hfe_menu_have_pirate_submenu
 			}
 		}
 		hidden_effect = {
@@ -156,7 +162,7 @@ country_event = {
 				limit = {
 					hfe_trigger_pirate_enabled = no
 				}
-				remove_global_flag = hfe_disable_pirate
+				remove_global_flag = hfe_pirate_disable
 				every_country = {
 					limit = {
 						is_country_type = default
@@ -175,10 +181,10 @@ country_event = {
 			}
 			else_if = {
 				limit = {
-					has_country_flag = hfe_menu_have_submenu_pirate
+					has_country_flag = hfe_menu_have_pirate_submenu
 				}
-				set_global_flag = hfe_disable_pirate
-				remove_country_flag = hfe_menu_have_submenu_pirate
+				set_global_flag = hfe_pirate_disable
+				remove_country_flag = hfe_menu_have_pirate_submenu
 				every_country = {
 					limit = {
 						is_country_type = default
@@ -202,18 +208,19 @@ country_event = {
 				}
 			}
 			else = {
-				set_country_flag = hfe_menu_have_submenu_pirate
+				set_country_flag = hfe_menu_have_pirate_submenu
 				country_event = {
 					id = hfe_menu.1
 				}
 			}
 		}
 	}
+	# pathfind
 	option = {
-		name = hfe_menu.submenu_pirate.0.defined_text
-		custom_tooltip = hfe_menu.submenu_pirate.0.tooltip.defined_text
+		name = hfe_menu.pirate.submenu.0.defined_text
+		custom_tooltip = hfe_menu.pirate.submenu.0.tooltip.defined_text
 		trigger = {
-			has_country_flag = hfe_menu_have_submenu_pirate
+			has_country_flag = hfe_menu_have_pirate_submenu
 		}
 		hidden_effect = {
 			if = {
@@ -224,6 +231,182 @@ country_event = {
 			}
 			else = {
 				remove_global_flag = hfe_pirate_pathfind_disabled
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# population menu
+	option = {
+		name = hfe_menu.population.defined_text
+		custom_tooltip = hfe_menu.population.tooltip.defined_text
+		trigger = {
+			or = {
+				hfe_trigger_menu_has_submenu = no
+				has_country_flag = hfe_menu_have_population_submenu
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_population_enabled = no
+				}
+				remove_global_flag = hfe_population_disable
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = hfe_menu_have_population_submenu
+				}
+				set_global_flag = hfe_population_disable
+				remove_country_flag = hfe_menu_have_population_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else = {
+				set_country_flag = hfe_menu_have_population_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+		}
+	}
+	# housing procreate
+	option = {
+		name = hfe_menu.population.submenu.0.defined_text
+		custom_tooltip = hfe_menu.population.submenu.0.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_population_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_population_procreate_housing_block_enabled = yes
+				}
+				remove_global_flag = hfe_population_procreate_housing_block
+			}
+			else = {
+				set_global_flag = hfe_population_procreate_housing_block
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# planet shield
+	option = {
+		name = hfe_menu.population.submenu.1.defined_text
+		custom_tooltip = hfe_menu.population.submenu.1.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_population_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_population_planetary_shield_enabled = yes
+				}
+				set_global_flag = hfe_population_planetary_shield_disabled
+				hfe_effect_population_remove_object_shield_global = yes
+			}
+			else = {
+				remove_global_flag = hfe_population_planetary_shield_disabled
+				every_planet = {
+					planet_event = {
+						id = hfe_population.114
+					}
+				}
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# leaders menu
+	option = {
+		name = hfe_menu.leaders.defined_text
+		custom_tooltip = hfe_menu.leaders.tooltip.defined_text
+		trigger = {
+			or = {
+				hfe_trigger_menu_has_submenu = no
+				has_country_flag = hfe_menu_have_leaders_submenu
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_leaders_enabled = no
+				}
+				remove_global_flag = hfe_leaders_disable
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = hfe_menu_have_leaders_submenu
+				}
+				set_global_flag = hfe_leaders_disable
+				remove_country_flag = hfe_menu_have_leaders_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else = {
+				set_country_flag = hfe_menu_have_leaders_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+		}
+	}
+	# leaders recrutment
+	option = {
+		name = hfe_menu.leaders.submenu.0.defined_text
+		custom_tooltip = hfe_menu.leaders.submenu.0.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_leaders_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_leaders_recrutment_enabled = yes
+				}
+				every_country = {
+					limit = {
+						has_modifier = hfe_leaders_started
+					}
+					remove_modifier = hfe_leaders_started
+				}
+				remove_global_flag = hfe_leaders_recrutment
+			}
+			else = {
+				set_global_flag = hfe_leaders_recrutment
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# leaders traits
+	option = {
+		name = hfe_menu.leaders.submenu.1.defined_text
+		custom_tooltip = hfe_menu.leaders.submenu.1.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_leaders_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_leaders_traits_enabled = yes
+				}
+				remove_global_flag = hfe_leaders_traits_disable
+			}
+			else = {
+				set_global_flag = hfe_leaders_traits_disable
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -256,92 +439,6 @@ country_event = {
 		custom_tooltip = hfe_menu.3.off.tooltip
 		hidden_effect = {
 			set_global_flag = hfe_disable_planet_decay
-			country_event = {
-				id = hfe_menu.1
-			}
-		}
-	}
-	# population menu
-	option = {
-		name = hfe_menu.4.defined_text
-		custom_tooltip = hfe_menu.4.tooltip.defined_text
-		trigger = {
-			or = {
-				hfe_trigger_menu_has_submenu = no
-				has_country_flag = hfe_menu_have_submenu_population
-			}
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_population_enabled = no
-				}
-				remove_global_flag = hfe_population_disable
-				country_event = {
-					id = hfe_menu.1
-				}
-			}
-			else_if = {
-				limit = {
-					has_country_flag = hfe_menu_have_submenu_population
-				}
-				set_global_flag = hfe_population_disable
-				remove_country_flag = hfe_menu_have_submenu_population
-				country_event = {
-					id = hfe_menu.1
-				}
-			}
-			else = {
-				set_country_flag = hfe_menu_have_submenu_population
-				country_event = {
-					id = hfe_menu.1
-				}
-			}
-		}
-	}
-	option = {
-		name = hfe_menu.submenu_population.0.defined_text
-		custom_tooltip = hfe_menu.submenu_population.0.tooltip.defined_text
-		trigger = {
-			has_country_flag = hfe_menu_have_submenu_population
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_population_procreate_housing_block_enabled = yes
-				}
-				remove_global_flag = hfe_population_procreate_housing_block
-			}
-			else = {
-				set_global_flag = hfe_population_procreate_housing_block
-			}
-			country_event = {
-				id = hfe_menu.1
-			}
-		}
-	}
-	option = {
-		name = hfe_menu.submenu_population.1.defined_text
-		custom_tooltip = hfe_menu.submenu_population.1.tooltip.defined_text
-		trigger = {
-			has_country_flag = hfe_menu_have_submenu_population
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_population_planetary_shield_enabled = yes
-				}
-				set_global_flag = hfe_population_planetary_shield_disabled
-				hfe_effect_population_remove_object_shield_global = yes
-			}
-			else = {
-				remove_global_flag = hfe_population_planetary_shield_disabled
-				every_planet = {
-					planet_event = {
-						id = hfe_population.114
-					}
-				}
-			}
 			country_event = {
 				id = hfe_menu.1
 			}
@@ -402,56 +499,6 @@ country_event = {
 				remove_country_flag = hfe_plague_block_planet
 				remove_country_flag = hfe_plague_block_pulse
 				end_event_chain = hfe_chain_plague_count
-			}
-			country_event = {
-				id = hfe_menu.1
-			}
-		}
-	}
-	# disable leaders recrutment
-	option = {
-		name = hfe_menu.7.0.defined_text
-		custom_tooltip = hfe_menu.7.0.tooltip.defined_text
-		trigger = {
-			hfe_trigger_menu_has_submenu = no
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_leaders_recrutment_enabled = yes
-				}
-				every_country = {
-					limit = {
-						has_modifier = hfe_leaders_started
-					}
-					remove_modifier = hfe_leaders_started
-				}
-				remove_global_flag = hfe_leaders_recrutment
-			}
-			else = {
-				set_global_flag = hfe_leaders_recrutment
-			}
-			country_event = {
-				id = hfe_menu.1
-			}
-		}
-	}
-	# disable leaders traits
-	option = {
-		name = hfe_menu.7.1.defined_text
-		custom_tooltip = hfe_menu.7.1.tooltip.defined_text
-		trigger = {
-			hfe_trigger_menu_has_submenu = no
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_leaders_traits_enabled = yes
-				}
-				remove_global_flag = hfe_leaders_traits_disable
-			}
-			else = {
-				set_global_flag = hfe_leaders_traits_disable
 			}
 			country_event = {
 				id = hfe_menu.1
