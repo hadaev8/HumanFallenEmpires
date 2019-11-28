@@ -1297,9 +1297,11 @@ country_event = {
 								hfe_trigger_is_awake = yes
 								num_pops > 0
 								or = {
-									trust = {
-										who = root
-										value >= 5
+									root = {
+										trust = {
+											who = prev
+											value >= 5
+										}
 									}
 									has_country_flag = hfe_leaders_refuge@root
 								}
@@ -1316,30 +1318,42 @@ country_event = {
 								}
 								modifier = {
 									mult = 2
-									trust = {
-										who = root
-										value >= 25
+									is_same_species = event_target:hfe_effect_clone_leader_target
+								}
+								modifier = {
+									mult = 2
+									root = {
+										trust = {
+											who = prev
+											value >= 25
+										}
 									}
 								}
 								modifier = {
 									mult = 2
-									trust = {
-										who = root
-										value >= 50
+									root = {
+										trust = {
+											who = prev
+											value >= 50
+										}
 									}
 								}
 								modifier = {
 									mult = 2
-									trust = {
-										who = root
-										value >= 75
+									root = {
+										trust = {
+											who = prev
+											value >= 75
+										}
 									}
 								}
 								modifier = {
 									mult = 2
-									trust = {
-										who = root
-										value >= 100
+									root = {
+										trust = {
+											who = prev
+											value >= 100
+										}
 									}
 								}
 							}
@@ -1355,8 +1369,8 @@ country_event = {
 								which = hfe_leaders_refuge
 								value = 1
 							}
-							country_event = {
-								id = hfe_leaders.111
+							set_timed_country_flag = {
+								flag = hfe_leaders.111
 								days = 1
 							}
 						}
@@ -1399,6 +1413,12 @@ country_event = {
 				}
 			}
 		}
+		every_country = {
+			country_event = {
+				id = hfe_leaders.111
+				days = 1
+			}
+		}
 	}
 }
 
@@ -1427,15 +1447,13 @@ country_event = {
 	picture = GFX_evt_galactic_senate
 	is_triggered_only = yes
 	trigger = {
-		not = {
-			has_country_flag = hfe_leaders.111_block
+		is_ai = no
+		check_variable = {
+			which = hfe_leaders_refuge
+			value > 0
 		}
 	}
 	immediate = {
-		set_timed_country_flag = {
-			flag = hfe_leaders.111_block
-			days = 1
-		}
 		random_owned_leader = {
 			limit = {
 				has_leader_flag = hfe_leaders_refuge
@@ -1445,11 +1463,11 @@ country_event = {
 	}
 	option = {
 		name = hfe_leaders.111.0
-	}
-	after = {
-		set_variable = {
-			which = hfe_leaders_refuge
-			value = 0
+		hidden_effect = {
+			set_variable = {
+				which = hfe_leaders_refuge
+				value = 0
+			}
 		}
 	}
 }
