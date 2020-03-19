@@ -68,7 +68,9 @@ planet_event = {
 	immediate = {
 		owner = {
 			set_country_type = default
-			remove_modifier = hfe_discovery_translator
+			remove_modifier = tsp_hfe_features_exodus_game_over_prevention
+			remove_modifier = tsp_hfe_features_exodus_resources_science
+			remove_modifier = tsp_hfe_features_exodus_resources_other
 			while = {
 				limit = {
 					check_variable = {
@@ -87,9 +89,121 @@ planet_event = {
 				}
 			}
 		}
+
+		if = {
+			limit = {
+				owner = { has_valid_civic = hfe_civic_features_exodus }
+			}
+
+			owner = {
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_1
+					days = -1
+				}
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_2
+					days = -1
+				}
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_3
+					days = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					owner = { NOT = { has_valid_civic = hfe_civic_features_exodus } }
+					owner = { has_country_flag = chosen_to_exodus }
+				}
+			}
+
+			owner = {
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_3
+					days = -1
+				}
+			}
+		}
+
+		owner = { remove_country_flag = is_government_in_exile }
+		owner = { set_country_flag = was_government_in_exile }
+
 		# need this to fix game's broken economy bug
-		# TODO
 		set_capital = yes
+
+		# Prevent the player from running deficits they can't fix
+		add_building = building_foundry_1
+		add_building = building_factory_1
+		add_building = building_research_lab_1
+
+		set_planet_flag = hfe_features_exodus_planet
+
+		# You're not going to settle on a planet smaller than size nine, are you?
+
+		if = {
+			limit = { owner = { has_valid_civic = civic_mechanists } }
+			add_building = building_robot_assembly_plant
+		}
+
+		# You're landing on a PLANET, right?
+
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						is_gestalt = yes
+					}
+				}
+				habitable_structure = no
+			}
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+		}
+
+		if = {
+			limit = {
+				owner = {
+					is_gestalt = yes
+				}
+				habitable_structure = no
+			}
+			add_district = district_hive
+			add_district = district_hive
+			add_district = district_hive
+		}
+
+		if = {
+			limit = { habitable_structure = no }
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+		}
+
+		if = {
+			limit = {
+				NOT = { planet_class = hfe_pc_memorial }
+				habitable_structure = no
+			}
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
+
+		if = {
+			limit = {
+				habitable_structure = yes
+				planet_class = pc_habitat
+			}
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+		}
 	}
 }
 
@@ -110,17 +224,46 @@ country_event = {
 			message = no
 			tech = hfe_tech_features_exodus
 		}
+
 		add_modifier = {
 			modifier = hfe_discovery_translator
+			days = -1
 		}
+
+		if = {
+			limit = { has_global_flag hfe_hardcore_disable }
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_game_over_prevention
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_science
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_other
+				days = -1
+			}
+		}
+
+		add_resource = {
+			energy = 5000
+			minerals = 5000
+			food = 5000
+			alloys = 5000
+			consumer_goods = 5000
+			influence = 1000
+		}
+
 		set_country_type = hfe_features_exodus
 		if = {
 			limit = {
-				is_militarist = yes
+				NOT = { is_pacifist = yes }
 			}
 			create_fleet = {
 				effect = {
 					set_owner = root
+					set_fleet_stance = evasive
 					while = {
 						count = 3
 						create_army_transport = {
@@ -162,10 +305,11 @@ country_event = {
 						name = "New Hope"
 						random_existing_design = colonizer
 					}
+					set_fleet_stance = evasive
 					set_location = root.capital_scope.star
 				}
 			}
-			#hfe_effect_clear_buildings_and_destroy_colony = yes
+#			# hfe_effect_clear_buildings_and_destroy_colony = yes
 			remove_all_buildings = yes
 			every_owned_pop = {
 				prevprev = {
@@ -173,17 +317,13 @@ country_event = {
 						which = hfe_features_exodus_pop
 						value = 1
 					}
-					add_resource = {
-						energy = 50
-						minerals = 50
-						food = 50
-						alloys = 10
-						consumer_goods = 10
-					}
 				}
 				kill_pop = yes
 			}
-			change_pc = pc_molten
+			change_pc = pc_broken
+			set_planet_flag = hfe_exodus_civic_former_home
+			set_planet_flag = exodus_happened_here
+			starbase = { destroy_fleet = fleet }
 		}
 		hfe_effect_remove_prescripted_ideal = yes
 	}

@@ -1,8 +1,9 @@
+#
 
 # exodus
 hfe_decision_features_exodus = {
 	owned_planets_only = yes
-	sound = event_administrative_work
+	sound = event_red_alert
 	icon = decision_landing_ship
 	resources = {
 		category = decisions
@@ -78,21 +79,36 @@ hfe_decision_features_exodus = {
 	prerequisites = {
 		hfe_tech_features_exodus
 	}
+	potential = {
+		NOT = { owner = { has_valid_civic = hfe_civic_features_exodus } }
+		NOT = { owner = { has_country_flag = chosen_to_exodus } }
+		NOT = { owner = { has_country_flag = was_government_in_exile } }
+	}
 	allow = {
 		exists = owner
 		owner = {
 			is_ai = no
-			num_owned_planets = 1
+			num_owned_planets = 1 # The Exodus is an emergency to deliver an OPM from death
 		}
 	}
 	effect = {
+		owner = {
+			set_country_flag = chosen_to_exodus
+			set_country_flag = is_government_in_exile # Used to check if a country is currently undergoing the Exodus
+			set_country_flag = was_government_in_exile # Used to calculate flavor and special features once the Exodus ends
+		}
+		owner = {
+			set_country_type = hfe_features_exodus
+		}
 		hidden_effect = {
 			owner = {
 				add_modifier = {
-					modifier = hfe_discovery_translator
+					modifier = tsp_hfe_features_exodus_game_over_prevention
+					days = -1
 				}
-				set_country_type = hfe_features_exodus
 			}
+		}
+		hidden_effect = {
 			every_owned_pop = {
 				owner = {
 					change_variable = {
@@ -102,6 +118,8 @@ hfe_decision_features_exodus = {
 					add_resource = {
 						energy = 50
 						minerals = 50
+						alloys = 25
+						influence = 1000
 					}
 				}
 				kill_pop = yes
@@ -117,6 +135,8 @@ hfe_decision_features_exodus = {
 				set_location = root
 			}
 		}
+
+		set_planet_flag = exodus_happened_here
 		hfe_effect_clear_buildings_and_destroy_colony = yes
 	}
 	ai_weight = {

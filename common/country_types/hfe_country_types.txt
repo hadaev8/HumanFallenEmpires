@@ -1,4 +1,4 @@
-# Country types specify the rules by which a country plays the game.
+﻿# Country types specify the rules by which a country plays the game.
 # Example:
 #name_of_country_type = {
 #	can_own_empty_planets					#no by default, decides if empty planets belonging to country are automatically removed from the country.
@@ -22,7 +22,7 @@
 #	min_navy_for_wars = 0					#default 0, decides how large a navy this country wants (out of desired size) before declaring any wars
 # 	min_assault_armies_for_wars = 1			#default 1, deciades how many assault armies the country wants before declaring any wars
 # 	share_communications = no				#default yes, decides if they share communciations with anyone you have contact with
-#	relations = no							#default no, this controls whether the country makes us of opinion
+#	relations = no							#default no, this controls whether the country makes use of opinion
 #	fallen_empire = no						#default no, this controls whether the empire uses the special Fallen Empire AI
 #	awakened_fallen_empire = no				#default no, this controls whether the empire uses the special Awakened Fallen Empire AI
 #	piracy_risk	= no						#default no, this controls whether the empire has piracy risk
@@ -146,6 +146,20 @@ human_fallen_empire = {
 			}
 		}
 	}
+	resources = {
+		category = country_base
+		produces = {
+			energy = 50
+			minerals = 50
+			food = 50
+			alloys = 50
+			consumer_goods = 50
+			physics_research = 5
+			society_research = 5
+			engineering_research = 5
+			influence = 5
+			unity = 20
+		}
 }
 
 hfe_drone = {
@@ -154,17 +168,18 @@ hfe_drone = {
 	relations = yes # без этого не строит корабли лул
 	observable = yes
 	needs_survey = yes
-
+	has_complete_sensor = yes
 	playable = no
 	destroys_starbases = yes
 	share_survey_data = no
-	is_space_critter = yes
+	is_space_critter = yes # This fixes a bug where the Drones can capture Habtiable Planets and have a primary ruling species
+#	can_own_empty_planets = yes
 	blocks_piracy = yes
 	government = no
 	has_capital = no
 	enforces_borders = no
 	share_communications = no
-	can_have_their_comms_shared = no
+	can_have_their_comms_shared = yes
 	mid_game_crisis = yes
 	sub_title = personality_hfe_personality_drone
 
@@ -174,9 +189,9 @@ hfe_drone = {
 
 	ai = {
 		enabled = yes
-		#declare_war = yes
-		#min_navy_for_wars = 0.5
-		colonizer = yes
+#		declare_war = yes
+#		min_navy_for_wars = 0.5
+		colonizer = no # Space drones can't colonize a planet!
 		internal_policies = yes # нужно для постройки станций
 		construction = yes
 		tech = yes
@@ -231,13 +246,12 @@ hfe_drone = {
 		category = country_base
 		produces = {
 			influence = 3
+			minerals = 50
+			alloys = 50
+			energy = 50
 		}
 		produces = {
-			trigger = {
-				is_difficulty > 0
-			}
-			physics_research = 10
-			society_research = 10
+			physics_research = 1
 			engineering_research = 10
 		}
 	}
@@ -361,7 +375,7 @@ hfe_berserk = {
 	observable = no
 	attack_unarmed_orbital_stations = yes
 	scaled_difficulty_bonuses = 1.0
-	destroys_starbases = yes
+#	destroys_starbases = yes
 	show_in_contacts_list = no
 	share_survey_data = no
 	enforces_borders = no

@@ -6,19 +6,24 @@ hfe_job_population_navigator.0 = {
 	building_icon = building_psi_corps
 	clothes_texture_index = 4
 	possible = {
-		or = {
-			has_job = hfe_job_population_navigator.0
-			hfe_trigger_uncapped_job = yes
-		}
+#		or = {
+#			has_job = hfe_job_population_navigator.0
+#			hfe_trigger_uncapped_job = yes
+#		}
 		exists = owner
-		hfe_trigger_is_psionic = yes
+#		hfe_trigger_is_psionic = yes # Anyone can use Zro
 		specialist_job_check_trigger = yes
+		NOT = { is_enslaved = yes } # The Navigator Academy is an elite institution, it will not admit lowly slaves
+		NOR = { # Per Had's request, must be organic
+			has_trait = trait_mechanical
+			has_trait = trait_machine_unit
+		}
 	}
 	resources = {
 		category = hfe_job_population_navigator.0
 		upkeep = {
-			society_research = 2
-			consumer_goods = 2
+			society_research = 10
+			consumer_goods = 3
 		}
 	}
 	planet_modifier = {
@@ -30,6 +35,10 @@ hfe_job_population_navigator.0 = {
 			factor = 0.1
 			can_take_servant_job = yes
 		}
+		modifier = {
+			factor = 3
+			hfe_trigger_is_psionic = yes # Always prefer psychic Pops
+		}
 	}
 }
 
@@ -39,14 +48,22 @@ hfe_job_population_navigator.1 = {
 	building_icon = building_psi_corps
 	clothes_texture_index = 4
 	icon = hfe_job_population_navigator.0
+	possible_pre_triggers = {
+		is_enslaved = no
+	}
 	possible = {
-		or = {
-			has_job = hfe_job_population_navigator.1
-			hfe_trigger_uncapped_job = yes
-		}
+#		or = {
+#			has_job = hfe_job_population_navigator.1
+#			hfe_trigger_uncapped_job = yes
+#		}
 		exists = owner
-		hfe_trigger_is_psionic = yes
+#		hfe_trigger_is_psionic = yes
 		worker_job_check_trigger = yes
+		 # The Navigator Academy is an elite institution, it will not admit lowly slaves
+		NOR = { # Per Had's request, must be organic
+			has_trait = trait_mechanical
+			has_trait = trait_machine_unit
+		}
 	}
 	resources = {
 		category = hfe_job_population_navigator.1
@@ -59,6 +76,10 @@ hfe_job_population_navigator.1 = {
 		modifier = {
 			factor = 0.1
 			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 3
+			hfe_trigger_is_psionic = yes # Always prefer psychic Pops
 		}
 	}
 }
