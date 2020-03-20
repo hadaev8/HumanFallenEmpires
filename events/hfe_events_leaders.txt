@@ -959,22 +959,22 @@ country_event = {
 
 	immediate = {
 		from = {
-			if = {
-				limit = {
-					has_trait = hfe_generic_trait_talented
-				}
-				modify_species = {
-					add_trait = hfe_species_trait_leader_skill_levels_1
-				}
-			}
-			else_if = {
-				limit = {
-					has_trait = hfe_scientist_trait_diligent
-				}
-				modify_species = {
-					add_trait = hfe_species_trait_leader_skill_levels_2
-				}
-			}
+#			if = {
+#				limit = {
+#					has_trait = hfe_generic_trait_talented
+#				}
+#				modify_species = {
+#					add_trait = hfe_species_trait_leader_skill_levels_1
+#				}
+#			}
+#			else_if = {
+#				limit = {
+#					has_trait = hfe_scientist_trait_diligent
+#				}
+#				modify_species = {
+#					add_trait = hfe_species_trait_leader_skill_levels_2
+#				}
+#			}
 			if = {
 				limit = {
 					species = {
@@ -1345,61 +1345,24 @@ country_event = {
 		remove_country_flag = hfe_pirate_spawned
 		every_owned_leader = {
 			random_list = {
-				# nothing
-				5 = {}
 				# flee to friend
-				10 = {
+				15 = {
 					save_event_target_as = hfe_effect_clone_leader_target
+#					modifier = {
+#						mult = 2
+#						is_country_type = hfe_pirate
+#					}
 					root = {
 						random_relation = {
 							limit = {
 								hfe_trigger_is_awake = yes
 								num_pops > 0
-								or = {
+							OR = {
 									trust = {
 										who = root
 										value >= 5
 									}
 									has_country_flag = hfe_leaders_refuge@root
-								}
-								weights = {
-									base = 1
-									modifier = {
-										mult = 2
-										is_country_type = hfe_pirate
-									}
-									modifier = {
-										mult = 2
-										is_same_species = root
-									}
-									modifier = {
-										mult = 2
-										trust = {
-											who = root
-											value >= 25
-										}
-									}
-									modifier = {
-										mult = 2
-										trust = {
-											who = root
-											value >= 50
-										}
-									}
-									modifier = {
-										mult = 2
-										trust = {
-											who = root
-											value >= 75
-										}
-									}
-									modifier = {
-										mult = 2
-										trust = {
-											who = root
-											value >= 100
-										}
-									}
 								}
 							}
 							save_event_target_as = hfe_effect_clone_leader_new_owner
@@ -1415,6 +1378,42 @@ country_event = {
 							}
 						}
 					}
+					modifier = {
+						factor = 1.05
+						PREV = {
+							trust = {
+								who = root
+								value >= 25
+							}
+						}
+					}
+					modifier = {
+						factor = 1.5
+						PREV = {
+							trust = {
+								who = root
+								value >= 50
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						PREV = {
+							trust = {
+								who = root
+								value >= 75
+							}
+						}
+					}
+					modifier = {
+						factor = 5
+						event_target:hfe_effect_clone_leader_new_owner = {
+							trust = {
+								who = root
+								value >= 100
+							}
+						}
+					}
 				}
 				# form pirate nation
 				20 = {
@@ -1425,13 +1424,13 @@ country_event = {
 					modifier = {
 						factor = 0
 						root = {
-							has_country_flag = hfe_pirate_spawned
+							is_pacifist = yes
 						}
 					}
 					modifier = {
 						factor = 0
-						root = {
-							is_pacifist = yes
+						ROOT = {
+							is_xenophile = yes
 						}
 					}
 					modifier = {
@@ -1440,15 +1439,22 @@ country_event = {
 							is_militarist = yes
 						}
 					}
+					modifier = {
+						factor = 2
+						ROOT = {
+							is_xenophobe = yes
+						}
+					}
 					root = {
 						hfe_effect_pirate_init = yes
 					}
 					event_target:hfe_pirate_clan = {
 						set_graphical_culture = root
 						set_country_flag = hfe_leaders_refuge@root
-						assign_leader = prev
+						assign_leader = PREV
 						set_name = "[root.species.GetNamePlural]' Last Stand'"
 						hfe_effect_transfer_resources_from_root_to_this = yes
+						set_country_flag = hfe_pirate
 					}
 				}
 			}
