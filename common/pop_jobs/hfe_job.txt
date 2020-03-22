@@ -1,26 +1,39 @@
-﻿
+#
+
 hfe_job_egypt_ruler_0 = {
 	category = ruler
 	condition_string = RULER_JOB_TRIGGER
-	building_icon = building_palace
+	building_icon = building_great_pyramid
 	clothes_texture_index = 1
 	icon = administrator
+
+#	possible_pre_triggers = {
+#		exists = owner
+#		exists = planet		
+#	}
+
 	possible = {
-		or = {
+		exists = owner
+		exists = planet
+		is_same_species = owner
+		OR = {
+			owner = { has_civic = hfe_civic_egypt_rulers }
+			owner = { has_origin = hfe_civic_egypt_rulers_origin }
+		}
+		OR = {
 			has_job = hfe_job_egypt_ruler_0
 			hfe_trigger_uncapped_job = yes
 		}
-		exists = owner
-		is_same_species = owner
-		exists = planet
 		planet = {
 			has_upgraded_capital = yes
 		}
 		ruler_job_check_trigger = yes
 	}
+
 	resources = {
 		category = hfe_job_egypt_ruler_0
 	}
+
 	# this job scales by planet capital
 	# t1 capital
 	planet_modifier = {
@@ -160,7 +173,7 @@ hfe_job_egypt_ruler_0 = {
 hfe_job_egypt_ruler_1 = {
 	category = ruler
 	condition_string = RULER_JOB_TRIGGER
-	building_icon = building_palace
+	building_icon = building_stone_palace
 	clothes_texture_index = 1
 	icon = administrator
 	possible = {
@@ -250,7 +263,7 @@ hfe_job_egypt_ruler_1 = {
 hfe_job_egypt_ruler_2 = {
 	category = ruler
 	condition_string = RULER_JOB_TRIGGER
-	building_icon = building_palace
+	building_icon = building_great_pyramid
 	clothes_texture_index = 1
 	icon = administrator
 	possible = {
@@ -355,7 +368,7 @@ hfe_job_terraformer = {
 				who = prev
 				value < 1
 			}
-			# потенциальная проблема
+			# ????????????? ????????
 		}
 		complex_specialist_job_check_trigger = yes
 	}
@@ -537,7 +550,7 @@ hfe_job_terraformer_machine_rogue_servitor = {
 				who = prev
 				value < 1
 			}
-			# потенциальная проблема
+			# ????????????? ????????
 		}
 		drone_job_check_trigger = yes
 	}
@@ -631,7 +644,7 @@ hfe_job_terraformer_hive_mind = {
 				who = prev
 				value < 1
 			}
-			# потенциальная проблема
+			# ????????????? ????????
 		}
 		drone_job_check_trigger = yes
 	}
@@ -710,13 +723,18 @@ hfe_job_terraformer_hive_mind = {
 hfe_job_egypt_workless = {
 	category = worker
 	is_capped_by_modifier = no
-	building_icon = building_virtual_entertainment_studios
+	building_icon = building_luxury_residence
 	clothes_texture_index = 3
 	icon = entertainer
+
+	possible_pre_triggers = {
+		is_enslaved = no # Must be a freeman to enjoy the opulence and privilege of a Citizen
+	}
+
 	possible = {
 		exists = owner
 		has_citizenship_rights = yes
-		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
+#		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
 		NOT = {
 			is_shackled_robot = yes
 			is_non_sapient_robot = yes
@@ -743,9 +761,12 @@ hfe_job_egypt_workless = {
 hfe_job_future_workless = {
 	category = worker
 	is_capped_by_modifier = no
-	building_icon = building_virtual_entertainment_studios
+	building_icon = building_underground_clubs
 	clothes_texture_index = 3
 	icon = entertainer
+	possible_pre_triggers = {
+		is_enslaved = no
+	}
 	possible = {
 		exists = owner
 		exists = planet
