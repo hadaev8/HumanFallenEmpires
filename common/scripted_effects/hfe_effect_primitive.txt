@@ -529,11 +529,26 @@ hfe_effect_primitive_set_default = {
 
 # for planet
 hfe_effect_primitive_make_primitive = {
+	random_owned_pop = {
+		limit = {
+			is_sapient = yes
+		}
+		weights = {
+			base = 1
+			modifier = {
+				add = 1000
+				hfe_trigger_is_robot_or_hive = no
+			}
+		}
+		species = {
+			save_event_target_as = hfe_new_country_species
+		}
+	}
 	owner = {
 		save_event_target_as = hfe_primitive_owner
 	}
 	create_country = {
-		species = event_target:hfe_primitive_owner
+		species = event_target:hfe_new_country_species
 		type = primitive
 		effect = {
 			hfe_effect_primitive_set_random_age = yes
@@ -556,13 +571,7 @@ hfe_effect_primitive_make_primitive = {
 			}
 		}
 	}
-	# нужны блокеры
 	hfe_effect_primitive_add_buildings = yes
-	owner = {
-		every_owned_fleet = {
-			delete_fleet = this
-		}
-	}
 	# TODO idk about buildings, need to think
 	# every_tile = {
 	# 	limit = {
