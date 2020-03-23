@@ -135,7 +135,11 @@ planet_event = {
 		# Prevent the player from running deficits they can't fix
 		add_building = building_foundry_1
 		add_building = building_factory_1
-		add_building = building_research_lab_1
+
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_building = building_research_lab_1
+		}
 
 		set_planet_flag = hfe_features_exodus_planet
 
@@ -146,6 +150,13 @@ planet_event = {
 				OR = {
 					owner = { has_origin = origin_mechanists }
 					owner = { has_authority = auth_machine_intelligence }
+					owner = {
+						AND = {
+							is_materialist = yes
+							has_technology = tech_robotic_workers
+						}
+
+					}
 				}
 			}
 			add_building = building_robot_assembly_plant
@@ -162,8 +173,6 @@ planet_event = {
 				}
 				habitable_structure = no
 			}
-			add_district = district_city
-			add_district = district_city
 			add_district = district_city
 			add_district = district_generator
 			add_district = district_mining
@@ -184,7 +193,10 @@ planet_event = {
 		}
 
 		if = {
-			limit = { habitable_structure = no }
+			limit = {
+				habitable_structure = no
+				has_global_flag = hfe_hardcore_disable
+			}
 			add_district = district_generator
 			add_district = district_generator
 			add_district = district_generator
@@ -202,7 +214,10 @@ planet_event = {
 
 		if = {
 			limit = {
-				NOT = { is_planet_class = hfe_pc_memorial }
+				has_global_flag = hfe_hardcore_disable
+				NOT = {
+					is_planet_class = hfe_pc_memorial
+				}
 				owner = { NOT = { is_lithoid = yes } }
 				habitable_structure = no
 			}
@@ -217,34 +232,21 @@ planet_event = {
 				is_planet_class = pc_habitat
 			}
 			add_district = district_hab_housing
-			add_district = district_hab_housing
-			add_district = district_hab_housing
 			add_building = building_hydroponics_farm
 		}
 
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+				has_global_flag = hfe_hardcore_disable
+			}
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+		}
+
 		hfe_effect_exodus_reset_capital = yes
-#		remove_building = building_colony_shelter
-#		remove_building = building_hive_capital
-#		remove_building = building_deployment_post
-#		remove_building = building_resort_capital
-#		remove_building = building_slave_capital
-#		remove_building = building_capital
-#		remove_building = building_hive_capital
-#		remove_building = building_machine_capital
-#		remove_building = building_resort_capital
-#		remove_building = building_slave_capital
-#		remove_building = building_major_capital
-#		remove_building = building_hive_major_capital
-#		remove_building = building_machine_major_capital
-#		remove_building = building_resort_major_capital
-#		remove_building = building_slave_major_capital
-#		remove_building = building_system_capital
-#		remove_building = building_machine_system_capital
-#		remove_building = building_hive_system_capital
-#		remove_building = building_hab_capital
-#		remove_building = building_hab_major_capital
-#		remove_building = building_ancient_control_center
-#		remove_building = building_ancient_palace
 	
 		if = {
 			limit = {
@@ -347,7 +349,7 @@ country_event = {
 			food = 2000
 			alloys = 1000
 			consumer_goods = 1000
-			influence = 250
+			influence = 1000
 		}
 
 		set_country_type = hfe_features_exodus

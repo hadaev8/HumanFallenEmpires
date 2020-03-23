@@ -847,7 +847,7 @@ ship_event = {
 			species = event_target:hfe_varelse_species
 			ignore_initial_colony_error = yes
 			effect = {
-				hfe_effect_init_give_tech_t4 = yes
+				hfe_effect_init_give_tech_t5 = yes
 				establish_communications_no_message = root.owner
 				set_faction_hostility = {
 					set_hostile = no
@@ -1216,6 +1216,7 @@ planet_event = {
 	immediate = {
 		set_global_flag = hfe_varelse_mehanicus
 		save_event_target_as = hfe_varelse_colony
+		save_global_event_target_as = hfe_varelse_mechanicus
 		observation_outpost_owner = {
 			country_event = {
 				id = hfe.102
@@ -1272,14 +1273,15 @@ country_event = {
 			}
 		}
 	}
-	# lets infiltrate
+	# lets infiltrate and make them our friend
 	option = {
 		name = hfe.102.3
 		custom_tooltip = hfe.102.3.tooltip
 		trigger = {
 			from = {
-				observation_outpost = {
-					has_mission = covert_infiltration
+				NOT = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
 				}
 			}
 		}
@@ -1343,6 +1345,20 @@ country_event = {
 		response_text = hfe.104.2.response
 		default_hide_option = yes
 		hfe_effect_add_physics_research.2 = yes
+		hidden_effect = {
+			event_target:hfe_varelse_colony = {
+				owner = {
+					set_country_flag = high_mechanicus_retained
+					change_government = {
+						authority = auth_dictatorial
+						civics = {
+							civic = hfe_civic_high_mechanicus
+							civic = civic_exalted_priesthood
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -1389,6 +1405,20 @@ country_event = {
 					kill_pop = yes
 				}
 			}
+			hidden_effect = {
+				event_target:hfe_varelse_colony = {
+					owner = {
+						set_country_flag = high_mechanicus_retained
+						change_government = {
+							authority = auth_dictatorial
+							civics = {
+								civic = hfe_civic_high_mechanicus
+								civic = civic_exalted_priesthood
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -1398,6 +1428,20 @@ country_event = {
 			is_xenophobe = no
 		}
 		hfe_effect_add_engineering_research.2 = yes
+		hidden_effect = {
+			event_target:hfe_varelse_colony = {
+				set_country_flag = high_mechanicus_retained
+				owner = {
+					change_government = {
+						authority = auth_dictatorial
+						civics = {
+							civic = hfe_civic_high_mechanicus
+							civic = civic_exalted_priesthood
+						}
+					}
+				}
+			}
+		}
 	}
 	option = {
 		name = hfe.105.1
@@ -1407,6 +1451,21 @@ country_event = {
 		hfe_effect_xenophobe_attraction.2 = yes
 		hfe_effect_add_engineering_research.2 = yes
 		hfe_effect_add_society_research.1 = yes
+
+		hidden_effect = {
+			event_target:hfe_varelse_colony = {
+				owner = {
+					set_country_flag = high_mechanicus_retained
+					change_government = {
+						authority = auth_dictatorial
+						civics = {
+							civic = hfe_civic_high_mechanicus
+							civic = civic_exalted_priesthood
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -1423,18 +1482,32 @@ country_event = {
 	immediate = {
 		event_target:hfe_varelse_colony = {
 			owner = {
-				country_remove_ethic = ethic_spiritualist
-				country_add_ethic = ethic_materialist
+				set_empire_name = "Colony Beta"
+				hidden_effect = {
+					hfe_effect_cleanse_ethics = yes
+				}
+				country_add_ethic = ethic_fanatic_materialist
+				country_add_ethic = ethic_fanatic_militarist
 				hfe_effect_primitive_up = yes
+			}
+			owner = {
+				set_country_flag = varelse_fedora_governance
+				change_government = {
+					authority = auth_oligarchic
+					civics = {
+						civic = civic_technocracy
+						civic = hfe_civic_overthrown_mechanicus
+					}
+				}
 			}
 		}
 	}
 
 	option = {
 		name = hfe.107.0
-		trigger = {
-			is_materialist = yes
-		}
+#		trigger = {
+#			is_materialist = yes
+#		}
 		hfe_effect_materialist_attraction.2 = yes
 		hfe_effect_add_society_research.3 = yes
 	}
@@ -1451,15 +1524,167 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		event_target:hfe_varelse_colony = {
-			observation_outpost = {
-				add_mission_progress = 0.5
+		if = {
+			limit = {
+				event_target:hfe_varelse_colony = {
+					observation_outpost = {
+						has_mission = covert_infiltration
+					}
+				}
+			}
+			event_target:hfe_varelse_colony = {
+				observation_outpost = {
+					add_mission_progress = 0.5
+				}
 			}
 		}
+		hfe_effect_add_influence.4 = yes
 	}
 
 	option = {
 		name = hfe_good_job
+		set_country_flag = mechanicus_loves_me
+		event_target:hfe_varelse_colony = {
+			set_country_flag = mechanicus_befriended
+			owner = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = no
+					set_friendly = yes
+				}
+				hfe_effect_primitive_up = yes
+			}
+			hidden_effect = {
+				set_country_flag = high_mechanicus_befriended
+				change_government = {
+					authority = auth_dictatorial
+					civics = {
+						civic = hfe_civic_high_mechanicus
+						civic = civic_exalted_priesthood
+					}
+				}
+			}
+		}
+	}
+}
+
+# Keeps the High Mechanicus' Civics on point
+country_event = { # Default, their civilization continues naturally
+	id = hfe.109
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		has_country_flag = hfe_varelse_primitive_0
+		has_country_flag = high_mechanicus_retained
+		NOT = { has_country_flag = high_mechanicus_befriended }
+		NOT = { has_country_flag = high_mechanicus_can_into_space }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_spiritualist
+		country_add_ethic = ethic_authoritarian
+		country_add_ethic = ethic_xenophobe
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_high_mechanicus
+				civic = civic_exalted_priesthood
+			}
+		}
+		set_country_flag = high_mechanicus_can_into_space
+
+		log = "Colony Beta has been preserved and entered FTL"
+	}
+}
+
+# Keeps the High Mechanicus' Civics on point
+country_event = { # If you befriended the High Mechanicus
+	id = hfe.110
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		has_country_flag = high_mechanicus_retained
+		has_country_flag = high_mechanicus_befriended
+		NOT = { has_country_flag = high_mechanicus_can_into_space }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_spiritualist
+		country_add_ethic = ethic_xenophile
+		country_add_ethic = ethic_authoritarian
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_high_mechanicus
+				civic = civic_exalted_priesthood
+			}
+		}
+		set_country_flag = high_mechanicus_can_into_space
+
+		log = "Colony Beta has been befriended and entered FTL"
+	}
+}
+
+country_event = { # If you betrayed the High Mechanicus
+	id = hfe.111
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		OR = {
+			has_country_flag = varelse_fedora_governance
+			is_materialist = yes
+		}
+		NOT = {
+			has_country_flag = high_mechanicus_retained
+			has_country_flag = mechanicus_befriended
+		}
+
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_fanatic_materialist
+		country_add_ethic = ethic_militarist
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_overthrown_mechanicus
+				civic = civic_technocracy
+			}
+		}
+		set_empire_name = "Immortal Beta Colony Institute"
+		set_country_flag = high_mechanicus_can_into_space
+
+		log = "Colony Beta has been befriended and entered FTL"
 	}
 }
 
