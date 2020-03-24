@@ -727,7 +727,6 @@ ship_event = {
 	trackable = yes
 	is_triggered_only = yes
 	trigger = {
-		always = no
 		hfe_trigger_story_enabled = yes
 		not = {
 			has_global_flag = hfe_has_event.51
@@ -982,36 +981,46 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hfe_varelse_fleet = {
+				fleet_event = {
+					id = hfe.54
+				}
+			}
+		}
+	}
+}
+
+# move fleet, need separate event couz of root check in trigger
+fleet_event = {
+	id = hfe.54
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		from = {
 			# attack home of light
-			# if = {
-			# limit = {
-			# or = {
-			# has_country_flag = hfe.53.0.0
-			# has_country_flag = hfe.53.0.1
-			# has_country_flag = hfe.53.0.2
-			# }
-			# }
-			# remove_country_flag = hfe.53.0.0
-			# remove_country_flag = hfe.53.0.1
-			# remove_country_flag = hfe.53.0.2
-			# event_target:hfe_varelse_fleet = {
-			# hfe_effect_varelse_fleet_attack_home_of_light = yes
-			# }
-			# }
-			# # found new home
-			# if = {
-			# limit = {
-			# or = {
-			# has_country_flag = hfe.53.0.3
-			# has_country_flag = hfe.53.0.4
-			# }
-			# }
-			# remove_country_flag = hfe.53.0.3
-			# remove_country_flag = hfe.53.0.4
-			# event_target:hfe_varelse_fleet = {
-			# hfe_effect_varelse_fleet_find_new_home = yes
-			# }
-			# }
+			if = {
+				limit = {
+					or = {
+						has_country_flag = hfe.53.0.0
+						has_country_flag = hfe.53.0.1
+						has_country_flag = hfe.53.0.2
+					}
+				}
+				remove_country_flag = hfe.53.0.0
+				remove_country_flag = hfe.53.0.1
+				remove_country_flag = hfe.53.0.2
+				root = {
+					hfe_effect_varelse_fleet_attack_home_of_light = yes
+				}
+			}
+			# found new home
+			else = {
+				remove_country_flag = hfe.53.0.3
+				remove_country_flag = hfe.53.0.4
+				root = {
+					hfe_effect_varelse_fleet_find_new_home = yes
+				}
+			}
 		}
 	}
 }
@@ -9453,15 +9462,15 @@ country_event = {
 					weights = {
 						base = 1
 						modifier = {
-							mul = 4
+							mult = 4
 							num_pops > 10
 						}
 						modifier = {
-							mul = 4
+							mult = 4
 							num_pops > 20
 						}
 						modifier = {
-							mul = 4
+							mult = 4
 							num_pops > 30
 						}
 					}
@@ -9472,7 +9481,7 @@ country_event = {
 						weights = {
 							base = 1
 							modifier = {
-								mul = 10
+								mult = 10
 								hfe_trigger_is_robot_or_hive = no
 							}
 						}
@@ -9486,7 +9495,6 @@ country_event = {
 					species = event_target:hfe_new_country_species
 					ignore_initial_colony_error = yes
 					effect = {
-						log = "[event_target:hfe_new_country_species.species.GetName]"
 						hfe_effect_gov_fix = yes
 						add_modifier = {
 							modifier = hfe_reunification_age
@@ -9607,19 +9615,14 @@ country_event = {
 				set_name = "Prime Cluster Successors"
 				change_dominant_species = {
 					species = root.species
-					#change_all = no
-				}
-				kill_leader = {
-					type = ruler
-					show_notification = no
+					change_all = yes
 				}
 				set_player = root
 			}
 		}
 		# TODO galactic community
-		# remove_global_flag = galactic_community_founded
-		# remove_global_flag = galcom_founding_begun
-		# make hive on hive worlds
+		remove_global_flag = galactic_community_founded
+		remove_global_flag = galcom_founding_begun
 	}
 }
 
