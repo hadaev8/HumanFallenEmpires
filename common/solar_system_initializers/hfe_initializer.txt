@@ -92,8 +92,21 @@ hfe_initializer_egypt_main = {
 					set_country_flag = hfe_egypt
 					set_country_flag = hfe_assimilator_discovered
 					set_country_flag = hfe_marked_as_human
+					hfe_effect_init_give_tech_t5 = yes
 					give_technology = {
 						tech = tech_titans
+					}
+					give_technology = {
+						tech = tech_colossus
+					}
+					give_technology = {
+						tech = tech_pk_neutron
+					}
+					give_technology = {
+						tech = tech_psi_jump_drive_1
+					}
+					give_technology = {
+						tech = tech_psionic_shield
 					}
 					kill_leader = {
 						type = ruler
@@ -1002,7 +1015,6 @@ hfe_initializer_varelse = {
 			min = 15
 			max = 25
 		}
-		modifiers = none
 		deposit_blockers = none
 		init_effect = {
 			create_country = {
@@ -1016,9 +1028,9 @@ hfe_initializer_varelse = {
 					ethic = ethic_xenophobe
 					ethic = ethic_spiritualist
 				}
-				civics = {
+				civics = { # Later changed by Event
 					civic = hfe_civic_primitive_was_fallen
-					civic = hfe_civic_primitive_degraded_society
+					civic = hfe_civic_high_mechanicus
 				}
 				effect = {
 					hfe_effect_primitive_set_machine_age = yes
@@ -1027,6 +1039,7 @@ hfe_initializer_varelse = {
 					prev = {
 						set_owner = prev
 					}
+					save_global_event_target_as = colony_beta
 				}
 			}
 			# to remove error in log
@@ -1038,24 +1051,90 @@ hfe_initializer_varelse = {
 				kill_pop = yes
 			}
 			set_planet_flag = hfe_varelse_colony
-			hfe_effect_primitive_add_pops = yes
+			set_planet_flag = high_mechanicus_planet
+#			hfe_effect_primitive_add_pops = yes
 			hfe_effect_primitive_add_buildings = yes
-			add_building = building_high_mechanicus_godforge
+			add_building = hfe_building_high_mechanicus_godforge
+			add_building = hfe_building_high_mechanicus_stronghold
+			add_building = building_urban_dwellings
+			add_building = building_urban_dwellings
 			while = {
-				count = 8
+				count = 50
 				create_pop = {
-					species = owner
+					species = event_target:hfe_varelse_species
 				}
+			}
+			add_modifier = {
+				modifier = hfe_colony_type_varelse
+				days = -1
+			}
+			add_modifier = {
+				modifier = atmospheric_hallucinogen_good
+				days = -1
 			}
 			# TODO
 			# war blockers
 			while = {
-				count = 14
+				count = 10
 				create_army = {
-					name = "Divine Industrial Army"
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = primitive_army
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = enraged_army
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Instruments of the Machine"
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = industrial_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = machine_defense
+				}
+			}
+			while = {
+				count = 1
+				create_army = {
+					name = "The Machine-That-Speaks-to-God"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = care_defensive_protocols
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Adeptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "The Master's Personal Guard"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = postatomic_army
 				}
 			}
 		}

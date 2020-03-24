@@ -387,7 +387,7 @@ country_event = {
 			}
 			create_fleet = {
 				effect = {
-					set_name = "Ponder"
+					set_name = random
 					set_owner = ROOT
 					create_ship = {
 						name = "Ponderer Wanderer"
@@ -403,6 +403,9 @@ country_event = {
 						}
 					}
 					set_leader = last_created_leader
+					last_created_leader = {
+						add_trait = hfe_scientist_trait_wary
+					}
 				}
 			}
 		}
@@ -507,7 +510,7 @@ country_event = {
 			resource = unity
 			value = 0.1
 			min = 1
-			max = 20
+			max = 24
 		}
 	}
 }
@@ -530,7 +533,7 @@ planet_event = {
 				resource = unity
 				value = 2
 				min = 10
-				max = 1000
+				max = 2000
 			}
 		}
 	}
@@ -549,7 +552,7 @@ country_event = {
 	immediate = {
 		add_monthly_resource_mult = {
 			resource = unity
-			value = 2
+			value = 3
 			min = 100
 			max = 10000
 		}
@@ -688,6 +691,14 @@ country_event = {
 				max_orientation_angle = 180
 				hyperlane = yes
 			}
+			spawn_system = {
+				initializer = hostile_init_10_small_amoeba_pack
+				min_distance >= 20
+				max_distance <= 25
+				min_orientation_angle = 100
+				max_orientation_angle = 180
+				hyperlane = yes
+			}
 		}
 		set_spawn_system_batch = end
 		capital_scope = {
@@ -730,6 +741,11 @@ country_event = {
 			}
 			hfe_effect_create_starbase_starport_from_planet = yes
 			hfe_effect_starbase_add_shipyard_0 = yes
+		}
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_research_option = tech_gateway_construction
+			add_research_option = tech_gateway_activation
 		}
 	}
 }

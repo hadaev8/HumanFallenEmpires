@@ -1500,6 +1500,10 @@ country_event = {
 					}
 				}
 			}
+			hidden_effect = {
+				remove_modifier = atmospheric_hallucinogen_good
+				remove_modifier = atmospheric_hallucinogen
+			}
 		}
 	}
 
@@ -1538,14 +1542,43 @@ country_event = {
 				}
 			}
 		}
+		if = {
+			limit = {
+				event_target:hfe_varelse_colony = {
+					observation_outpost = {
+						OR = {
+							has_mission = technological_enlightenment_1
+							has_mission = technological_enlightenment_2
+							has_mission = technological_enlightenment_3
+							has_mission = technological_enlightenment_4
+							has_mission = technological_enlightenment_5
+							has_mission = technological_enlightenment_6
+							has_mission = technological_enlightenment_7
+							has_mission = technological_enlightenment_8
+							has_mission = technological_enlightenment_9
+						}
+					}
+				}
+			}
+			event_target:hfe_varelse_colony = {
+				observation_outpost = {
+					add_mission_progress = 0.6
+				}
+			}
+		}
 		hfe_effect_add_influence.4 = yes
 	}
 
 	option = {
 		name = hfe_good_job
 		set_country_flag = mechanicus_loves_me
+		set_faction_hostility = {
+			target = event_target:colony_beta
+			set_hostile = no
+			set_neutral = no
+			set_friendly = yes
+		}
 		event_target:hfe_varelse_colony = {
-			set_country_flag = mechanicus_befriended
 			owner = {
 				set_faction_hostility = {
 					target = root
@@ -1553,7 +1586,9 @@ country_event = {
 					set_neutral = no
 					set_friendly = yes
 				}
-				hfe_effect_primitive_up = yes
+			}
+			hidden_effect = {
+				owner = { hfe_effect_primitive_up = yes }
 			}
 			hidden_effect = {
 				set_country_flag = high_mechanicus_befriended
@@ -6626,21 +6661,24 @@ ship_event = {
 		create_country = {
 			name = "Station AI"
 			type = hfe_thoth
-			species = root.owner
+			species = event_target:hfe_egypt_species # As Thoth was once a Ju Ahet
 			day_zero_contact = no
+			ignore_initial_colony_error = yes
+			name_list = cybrxkhan_fantasy_egyptian
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
 				set_graphical_culture = mammalian_01
 				set_country_flag = hfe_thoth
 				create_fleet = {
-					name = "Station (probably gigantic)"
+					name = "Runaway Station"
 					settings = {
-						spawn_debris = no
+						spawn_debris = yes
 					}
 					effect = {
 						set_owner = prev
 						create_ship = {
+							name = "Gentleman Computer"
 							design = NAME_Artist_Enclave_Station
 							effect = {
 								set_ship_flag = hfe_thoth_station
