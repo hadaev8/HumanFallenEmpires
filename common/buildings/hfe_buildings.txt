@@ -505,16 +505,18 @@ hfe_building_high_mechanicus_godforge = {
 
 	triggered_planet_modifier = {
 		potential = {
-			owner = { NOT = { is_country_type = primitive } }
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { has_country_flag = high_mechanicus_retained }
-				owner = { has_country_flag = varelse_fedora_governance }
+			owner = {
+				NOT = {
+					is_country_type = primitive
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+#			OR = {
+#				owner = { has_country_flag = hfe_varelse_primitive_0 }
+#				owner = { has_country_flag = high_mechanicus_retained }
+#				owner = { has_country_flag = varelse_fedora_governance }
 #				owner = { has_government = hfe_gov_high_mechanicus }
-			}
-			NOT = {
-				owner = { has_ethic = ethic_gestalt_consciousness }
-			}
+#			}
 		}
 		modifier = {
 			job_hfe_job_godforge_overlord_add = 1
@@ -547,7 +549,7 @@ hfe_building_high_mechanicus_godforge = {
 	}
 
 	resources = {
-		category = planet_buildings
+		category = hfe_godforge
 		cost = {
 			minerals = 10000
 			alloys = 1000
@@ -625,7 +627,6 @@ hfe_building_high_mechanicus_godforge = {
 		minerals = 20
 		energy = 20
 		engineering_research = 20
-		influence = 0.5
 	}
 
 	ai_weight = {
@@ -693,6 +694,23 @@ hfe_building_high_mechanicus_stronghold = {
 		armies_upkeep_mult = -0.5
 	}
 
+	resources = {
+		category = hfe_godforge
+		upkeep = {
+			trigger = {
+				owner = {
+					NOT = {
+						is_primitive = yes
+						is_country_type = primitive
+					}
+					NOT = { has_country_flag = hfe_varelse_primitive_0 }
+				}
+			}
+			energy = -10
+			alloys = -2
+		}
+	}
+
 	triggered_planet_modifier = {
 		potential = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
@@ -703,8 +721,8 @@ hfe_building_high_mechanicus_stronghold = {
 			}
 		}
 		modifier = {
-			job_mechanicus_bodyguard_add = 1
-			job_mechanicus_cultist_add = 5
+			job_hfe_job_mechanicus_bodyguard_add = 1
+			job_hfe_job_mechanicus_cultist_add = 5
 		}
 	}
 
@@ -814,6 +832,29 @@ hfe_building_fedora_stronghold = {
 		}
 	}
 
+	resources = {
+		category = hfe_godforge
+		upkeep = {
+			trigger = {
+				owner = {
+					NOT = {
+						is_primitive = yes
+						is_country_type = primitive
+					}
+					NOT = { has_country_flag = hfe_varelse_primitive_0 }
+				}
+			}
+			energy = -10
+		}
+		upkeep = {
+			trigger = {
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+			}
+			energy = -4
+			unity = -1
+		}
+	}
+
 	planet_modifier = {
 		armies_upkeep_mult = -0.9
 	}
@@ -905,6 +946,29 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 				has_civic = hfe_civic_overthrown_mechanicus
 				has_ethic = ethic_gestalt_consciousness
 			}
+		}
+	}
+
+	resources = {
+		category = hfe_godforge
+		upkeep = {
+			trigger = {
+				owner = {
+					NOT = {
+						is_primitive = yes
+						is_country_type = primitive
+					}
+					NOT = { has_country_flag = hfe_varelse_primitive_0 }
+				}
+			}
+			energy = -10
+		}
+		upkeep = {
+			trigger = {
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+			}
+			energy = -4
+			unity = -1
 		}
 	}
 
@@ -1021,6 +1085,29 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 		}
 	}
 
+	resources = {
+		category = hfe_godforge
+		upkeep = {
+			trigger = {
+				owner = {
+					NOT = {
+						is_primitive = yes
+						is_country_type = primitive
+					}
+					NOT = { has_country_flag = hfe_varelse_primitive_0 }
+				}
+			}
+			energy = -10
+		}
+		upkeep = {
+			trigger = {
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+			}
+			energy = -4
+			unity = -1
+		}
+	}
+
 	planet_modifier = {
 		armies_upkeep_mult = -0.5
 	}
@@ -1111,16 +1198,16 @@ hfe_building_mechanicus_cult_temple = {
 	}
 
 	planet_modifier = {
-		pop_environment_tolerance = -0.2
+		pop_environment_tolerance = -0.1
+		hfe_job_mechanicus_cultist_add = 4
 		job_high_priest_add = 1
-		job_mechanicus_cultist_add = 4
 		job_priest_add = 1
 		pop_ethic_spiritualist_attraction_mult = 0.15
 		planet_jobs_alloys_produces_mult = 0.1
 	}
 
 	resources = {
-		category = planet_buildings
+		category = hfe_godforge
 		cost = {
 			minerals = 600
 		}
@@ -1176,10 +1263,9 @@ hfe_building_mechanicus_cult_temple = {
 
 	ai_resource_production = {
 		trigger = { always = yes }
-		alloys = 8
-		energy = 8
-		minerals = 8
-		food = 3
+		alloys = 3
+		energy = 6
+		minerals = 10
 		unity = 3
 	}
 }
