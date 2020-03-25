@@ -118,6 +118,10 @@ human_fallen_empire = {
 			}
 		}
 	}
+	faction = {
+		show_borders_in_us = yes
+		follow = yes
+	}
 	modules = {
 		all_technology_module = {}
 		tiered_technology_module = {
@@ -131,15 +135,19 @@ human_fallen_empire = {
 		exclusive_diplomacy_module = {
 			can_receive = {
 				action_declare_war
+				action_offer_peace_diplomacy_view
 				action_offer_peace
 				action_make_rival
 				action_end_rivalry
 				action_offer_trade_deal
 				action_cancel_trade_deal
 				action_insult
+				action_support_independence
 			}
 			can_send = {
 				action_declare_war
+				action_offer_peace
+				action_offer_peace_diplomacy_view
 				action_make_rival
 				action_end_rivalry
 				action_offer_peace
@@ -147,6 +155,9 @@ human_fallen_empire = {
 				action_cancel_trade_deal
 				action_open_borders
 				action_close_borders
+				action_insult
+				action_support_independence
+#				action_ask_to_become_testing_arry = yes
 			}
 		}
 	}
@@ -175,7 +186,7 @@ hfe_drone = {
 	needs_survey = yes
 	has_complete_sensor = yes
 	playable = no
-	destroys_starbases = yes
+	destroys_starbases = no
 	share_survey_data = no
 	is_space_critter = yes # This fixes a bug where the Drones can capture Habtiable Planets and have a primary ruling species
 #	can_own_empty_planets = yes
@@ -183,6 +194,8 @@ hfe_drone = {
 	government = no
 	has_capital = no
 	enforces_borders = no
+#	orbital_bombardment = yes
+	attack_unarmed_orbital_stations = yes
 	share_communications = no
 	can_have_their_comms_shared = yes
 	mid_game_crisis = yes
@@ -203,6 +216,7 @@ hfe_drone = {
 		tech = yes
 		government = no
 		traditions = no
+		starbase_upgrade = yes
 		#can_use_market = yes
 		modules = {
 			military_minister_module
@@ -212,8 +226,12 @@ hfe_drone = {
 		ship_data = {
 			# need any designable ship size
 			constructor = {
-				min = 3
+				min = 4
 				max = 12
+			}
+			battleship = {
+				min = 1
+				max = 1
 			}
 			cruiser = {
 				fraction = {
@@ -230,13 +248,25 @@ hfe_drone = {
 					base = 33
 				}
 			}
+			ancient_drone_station = {
+					min = 1
+					max = 14
+			}
+			ancient_mining_drone = {
+				min = 10
+				max = 30
+			}
 		}
 	}
 	faction = {
 		hostile = yes
+		hostile_when_attacked = yes
 		needs_border_access = no
 		generate_borders = yes
 		needs_colony = no
+		auto_delete = no
+		show_borders_in_us = yes
+		space_creatures = yes
 	}
 	modules = {
 		exclusive_diplomacy_module = {} # Nothing is allowed, but we need this for relationships.
@@ -271,6 +301,8 @@ hfe_thoth = {
 	share_communications = no
 	can_have_their_comms_shared = no
 	default_ships = no # mean ship designs
+	enforces_borders = no
+	has_complete_sensor = yes
 	sub_title = "THOTH_TITLE"
 	sub_title_desc = "THOTH_DESC"
 	ai = {
@@ -399,12 +431,16 @@ hfe_berserk = {
 	can_have_their_comms_shared = no
 	ai = {
 		enabled = yes
+		avoid_enemies = no
+		construction = no
+		traditions = no
 		modules = {
 			berserk_military_minister_module
 		}
 	}
 	faction = {
 		hostile = yes
+		hostile_when_attacked = no
 		needs_border_access = no
 		generate_borders = no
 		needs_colony = no
