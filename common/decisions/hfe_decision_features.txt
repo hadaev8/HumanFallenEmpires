@@ -80,9 +80,17 @@ hfe_decision_features_exodus = {
 		hfe_tech_features_exodus
 	}
 	potential = {
-		NOT = { owner = { has_valid_civic = hfe_civic_features_exodus } }
+		NOT = { owner = { has_origin = hfe_civic_features_exodus } }
 		NOT = { owner = { has_country_flag = chosen_to_exodus } }
 		NOT = { owner = { has_country_flag = was_government_in_exile } }
+		NOT = {	owner = { has_authority = auth_ancient_machine_intelligence } }
+		owner = {
+			NOT = {
+				is_country_type = awakened_marauders
+				is_country_type = marauder_raiders
+				is_country_type = dormant_marauders
+			}
+		}
 	}
 	allow = {
 		exists = owner
@@ -96,6 +104,23 @@ hfe_decision_features_exodus = {
 			set_country_flag = chosen_to_exodus
 			set_country_flag = is_government_in_exile # Used to check if a country is currently undergoing the Exodus
 			set_country_flag = was_government_in_exile # Used to calculate flavor and special features once the Exodus ends
+		}
+		owner = {
+			if = {
+				limit = {
+					OR = {
+						owner = { is_fallen_empire = yes }
+						owner = { is_country_type = fallen_empire }
+						owner = { is_country_type = awakened_fallen_empire }
+					}
+					NOT = {
+						owner = { is_country_type = human_fallen_empire }
+						owner = { has_country_flag = hfe_egypt }
+						owner = { has_country_flag = hfe_future }
+					}
+				}
+				set_country_flag = fallen_empire_on_the_run
+			}
 		}
 		owner = {
 			set_country_type = hfe_features_exodus

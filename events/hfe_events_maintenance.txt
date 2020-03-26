@@ -468,9 +468,9 @@ country_event = {
 			days = 1
 			random = 355
 		}
-		# blight end
+		# blight targets recalc
 		country_event = {
-			id = hfe.5083
+			id = hfe.5086
 			days = 1
 			random = 355
 		}
@@ -493,8 +493,8 @@ country_event = {
 		# spawn pirate
 		if = {
 			limit = {
-				nor = {
-					has_global_flag = hfe_disable_pirate
+				hfe_trigger_pirate_enabled = yes
+				not = {
 					has_country_flag = hfe_pirate_spawned
 				}
 				num_owned_planets > 2
@@ -705,13 +705,13 @@ event = {
 								any_defender = {
 									is_country = prevprev
 								}
-								defender_war_exhaustion > 20
+								defender_war_exhaustion > 0.20
 							}
 							and = {
 								any_attacker = {
 									is_country = prevprev
 								}
-								attacker_war_exhaustion > 20
+								attacker_war_exhaustion > 0.20
 							}
 						}
 					}
@@ -739,9 +739,7 @@ country_event = {
 		if = {
 			limit = {
 				mid_game_years_passed > 0
-				not = {
-					has_global_flag = hfe_disable_planet_decay
-				}
+				hfe_trigger_planet_decay_enabled = yes
 			}
 			every_owned_planet = {
 				planet_event = {

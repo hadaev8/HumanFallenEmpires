@@ -92,7 +92,7 @@ planet_event = {
 
 		if = {
 			limit = {
-				owner = { has_valid_civic = hfe_civic_features_exodus }
+				owner = { has_origin = hfe_civic_features_exodus }
 			}
 
 			owner = {
@@ -113,7 +113,7 @@ planet_event = {
 		if = {
 			limit = {
 				OR = {
-					owner = { NOT = { has_valid_civic = hfe_civic_features_exodus } }
+					owner = { NOT = { has_origin = hfe_civic_features_exodus } }
 					owner = { has_country_flag = chosen_to_exodus }
 				}
 			}
@@ -135,14 +135,29 @@ planet_event = {
 		# Prevent the player from running deficits they can't fix
 		add_building = building_foundry_1
 		add_building = building_factory_1
-		add_building = building_research_lab_1
+
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_building = building_research_lab_1
+		}
 
 		set_planet_flag = hfe_features_exodus_planet
 
 		# You're not going to settle on a planet smaller than size nine, are you?
 
 		if = {
-			limit = { owner = { has_valid_civic = civic_mechanists } }
+			limit = {
+				OR = {
+					owner = { has_origin = origin_mechanists }
+					owner = { has_authority = auth_machine_intelligence }
+					owner = {
+						AND = {
+							is_materialist = yes
+							has_technology = tech_robotic_workers
+						}
+					}
+				}
+			}
 			add_building = building_robot_assembly_plant
 		}
 
@@ -158,14 +173,16 @@ planet_event = {
 				habitable_structure = no
 			}
 			add_district = district_city
-			add_district = district_city
-			add_district = district_city
+			add_district = district_generator
+			add_district = district_mining
+			add_district = district_farming
 		}
 
 		if = {
 			limit = {
 				owner = {
 					is_gestalt = yes
+					has_authority = auth_hive_mind
 				}
 				habitable_structure = no
 			}
@@ -175,7 +192,10 @@ planet_event = {
 		}
 
 		if = {
-			limit = { habitable_structure = no }
+			limit = {
+				habitable_structure = no
+				has_global_flag = hfe_hardcore_disable
+			}
 			add_district = district_generator
 			add_district = district_generator
 			add_district = district_generator
@@ -186,8 +206,18 @@ planet_event = {
 		}
 
 		if = {
+			limit = { is_lithoid = yes }
+			add_district = district_mining
+			add_district = district_mining
+		}
+
+		if = {
 			limit = {
-				NOT = { planet_class = hfe_pc_memorial }
+				has_global_flag = hfe_hardcore_disable
+				NOT = {
+					is_planet_class = hfe_pc_memorial
+				}
+				owner = { NOT = { is_lithoid = yes } }
 				habitable_structure = no
 			}
 			add_district = district_farming
@@ -198,11 +228,74 @@ planet_event = {
 		if = {
 			limit = {
 				habitable_structure = yes
-				planet_class = pc_habitat
+				is_planet_class = pc_habitat
+			}
+			add_district = district_hab_housing
+			add_building = building_hydroponics_farm
+		}
+
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+				has_global_flag = hfe_hardcore_disable
 			}
 			add_district = district_hab_housing
 			add_district = district_hab_housing
 			add_district = district_hab_housing
+		}
+
+		hfe_effect_exodus_reset_capital = yes
+	
+		if = {
+			limit = {
+				habitable_structure = no
+				owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+			}
+
+			add_building = building_major_capital
+		}
+
+		if = {
+			limit = {
+				owner = { has_ethic = ethic_gestalt_consciousness }
+				owner = { has_authority = auth_hive_mind }
+			}
+			add_building = building_hive_major_capital
+		}
+
+		if = {
+			limit = {
+				owner = { has_ethic = ethic_gestalt_consciousness }
+				owner = { has_authority = auth_machine_intelligence }
+			}
+
+			add_building = building_machine_major_capital
+		}
+
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+			}
+			add_building = building_hab_major_capital
+		}
+
+		if = {
+			limit = {
+				OR = {
+					owner = { has_country_flag = fallen_empire_on_the_run }
+					owner = { is_fallen_empire = yes }
+					owner = { is_country_type = fallen_empire }
+					owner = { is_country_type = awakened_fallen_empire }
+				}
+				NOT = {
+					owner = { is_country_type = human_fallen_empire }
+					owner = { has_country_flag = hfe_egypt }
+					owner = { has_country_flag = hfe_future }
+				}
+			}
+			add_building = building_ancient_palace
 		}
 	}
 }
@@ -214,14 +307,15 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_valid_civic = hfe_civic_features_exodus
+		has_origin = hfe_civic_features_exodus
 	}
 
 	immediate = {
 		set_country_flag = custom_start_screen
 		set_country_flag = first_colony
+
 		give_technology = {
-			message = no
+			message = yes
 			tech = hfe_tech_features_exodus
 		}
 
@@ -230,8 +324,10 @@ country_event = {
 			days = -1
 		}
 
+		set_country_flag = is_government_in_exile
+
 		if = {
-			limit = { has_global_flag hfe_hardcore_disable }
+			limit = { has_global_flag = hfe_hardcore_disable }
 			add_modifier = {
 				modifier = tsp_hfe_features_exodus_game_over_prevention
 				days = -1
@@ -247,27 +343,37 @@ country_event = {
 		}
 
 		add_resource = {
-			energy = 5000
-			minerals = 5000
-			food = 5000
-			alloys = 5000
-			consumer_goods = 5000
+			energy = 500
+			minerals = 3000
+			food = 2000
+			alloys = 1000
+			consumer_goods = 1000
 			influence = 1000
 		}
 
 		set_country_type = hfe_features_exodus
+
 		if = {
 			limit = {
 				NOT = { is_pacifist = yes }
 			}
 			create_fleet = {
 				effect = {
-					set_owner = root
+					set_name = "Free Real Estate"
+					set_owner = ROOT
 					set_fleet_stance = evasive
 					while = {
 						count = 3
 						create_army_transport = {
+							army_name = "Free Real Estate Scouts"
 							army_type = assault_army
+						}
+					}
+					while = {
+						count = 1
+						create_army_transport = {
+							ship_name = "Basic Combat Assistance"
+							army_type = robotic_army
 						}
 					}
 					set_location = root.capital_scope
@@ -280,10 +386,12 @@ country_event = {
 			}
 			create_fleet = {
 				effect = {
-					set_owner = root
+					set_name = random
+					set_owner = ROOT
 					create_ship = {
-						name = random
+						name = "Ponderer Wanderer"
 						random_existing_design = science
+						graphical_culture = "hfe_graphical_culture_pirate"
 					}
 					set_fleet_stance = evasive
 					set_location = root.capital_scope.star
@@ -294,6 +402,28 @@ country_event = {
 						}
 					}
 					set_leader = last_created_leader
+					last_created_leader = {
+						add_trait = hfe_scientist_trait_wary
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT ={ is_pacifist = yes }
+				has_global_flag = hfe_hardcore_disable
+			}
+			create_fleet = {
+				effect = {
+					set_name = "Great White Hope"
+					set_owner = ROOT
+					create_ship = {
+						name = "Great White Hope"
+						random_existing_design = corvette
+						graphical_culture = hfe_graphical_culture_pirate
+					}
+					set_fleet_stance = evasive
+					set_location = root.capital_scope.star
 				}
 			}
 		}
@@ -304,6 +434,7 @@ country_event = {
 					create_ship = {
 						name = "New Hope"
 						random_existing_design = colonizer
+						graphical_culture = hfe_graphical_culture_pirate
 					}
 					set_fleet_stance = evasive
 					set_location = root.capital_scope.star
@@ -311,6 +442,7 @@ country_event = {
 			}
 #			# hfe_effect_clear_buildings_and_destroy_colony = yes
 			remove_all_buildings = yes
+			clear_blockers = yes
 			every_owned_pop = {
 				prevprev = {
 					change_variable = {
@@ -324,6 +456,10 @@ country_event = {
 			set_planet_flag = hfe_exodus_civic_former_home
 			set_planet_flag = exodus_happened_here
 			starbase = { destroy_fleet = fleet }
+			add_modifier = {
+				modifier = tsp_hfe_exodus_start_planet_modifier
+				days = -1
+			}
 		}
 		hfe_effect_remove_prescripted_ideal = yes
 	}
@@ -373,7 +509,7 @@ country_event = {
 			resource = unity
 			value = 0.1
 			min = 1
-			max = 20
+			max = 24
 		}
 	}
 }
@@ -396,7 +532,7 @@ planet_event = {
 				resource = unity
 				value = 2
 				min = 10
-				max = 1000
+				max = 2000
 			}
 		}
 	}
@@ -415,7 +551,7 @@ country_event = {
 	immediate = {
 		add_monthly_resource_mult = {
 			resource = unity
-			value = 2
+			value = 3
 			min = 100
 			max = 10000
 		}
@@ -429,7 +565,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_valid_civic = hfe_civic_features_early_colonisation
+		has_origin = hfe_civic_features_early_colonisation
 		exists = capital_scope
 	}
 
@@ -476,7 +612,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_valid_civic = hfe_civic_features_early_contact
+		has_origin = hfe_civic_features_early_contact
 		exists = capital_scope
 	}
 
@@ -497,7 +633,7 @@ country_event = {
 				set_owner = root
 				create_ship = {
 					random_existing_design = colonizer
-					graphical_culture = last_created_country
+					graphical_culture = mammalian_01
 					colonizer_species = last_created_species
 				}
 				set_location = {
@@ -520,7 +656,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_valid_civic = hfe_civic_features_sanctuary
+		has_origin = hfe_civic_features_sanctuary
 		exists = capital_scope
 	}
 
@@ -550,6 +686,14 @@ country_event = {
 				initializer = hfe_init_features_sanctuary_2
 				min_distance >= 10
 				max_distance <= 20
+				min_orientation_angle = 100
+				max_orientation_angle = 180
+				hyperlane = yes
+			}
+			spawn_system = {
+				initializer = hostile_init_10_small_amoeba_pack
+				min_distance >= 20
+				max_distance <= 25
 				min_orientation_angle = 100
 				max_orientation_angle = 180
 				hyperlane = yes
@@ -596,6 +740,11 @@ country_event = {
 			}
 			hfe_effect_create_starbase_starport_from_planet = yes
 			hfe_effect_starbase_add_shipyard_0 = yes
+		}
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_research_option = tech_gateway_construction
+			add_research_option = tech_gateway_activation
 		}
 	}
 }

@@ -7,7 +7,7 @@ hfe_initializer_egypt_main = {
 		hfe_egypt_0
 	}
 	name = "Home of Light"
-	class = rl_standard_stars
+	class = sc_m
 	asteroid_belt = {
 		type = rocky_asteroid_belt
 		radius = 70
@@ -16,18 +16,20 @@ hfe_initializer_egypt_main = {
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
-		size = {
-			min = 20
-			max = 30
+		size = { #	Unusually large for a dwarf star, as the diplomacy text
+#			 #	says it was speciifically ignited, they "lit a new sun"
+			min = 30
+			max = 35
 		}
 		has_ring = no
 		name = Ra
 	}
 	change_orbit = 70
 	planet = {
+		name = "Kangz"
 		count = {
-			min = 1
-			max = 3
+			min = 2
+			max = 5
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -74,7 +76,7 @@ hfe_initializer_egypt_main = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
 				name_list = cybrxkhan_fantasy_egyptian
-				ship_prefix = ""
+				ship_prefix = "Ra"
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_egypt_species
 				ethos = {
@@ -85,13 +87,28 @@ hfe_initializer_egypt_main = {
 					civic = hfe_civic_egypt_genetic
 					civic = hfe_civic_egypt_rulers
 				}
+				origin = hfe_civic_egypt_rulers_origin
 				effect = {
 					set_country_flag = hfe_egypt
 					set_country_flag = hfe_assimilator_discovered
 					set_country_flag = hfe_marked_as_human
-					give_technology = {
-						tech = tech_titans
-					}
+					hfe_effect_init_give_tech_t5 = yes
+					give_technology = { message = no tech = tech_titans }
+					give_technology = { message = no tech = tech_colossus }
+					give_technology = { message = no tech = tech_pk_neutron }
+					give_technology = { message = no tech = tech_psi_jump_drive_1 }
+					give_technology = {	message = no tech = tech_psionic_shield }
+					give_technology = { message = no tech = tech_gene_tailoring }
+					give_technology = { message = no tech = tech_genome_mapping }
+					give_technology = { message = no tech = tech_vitality_boosters }
+					give_technology = { message = no tech = tech_epigenetic_triggers }
+					give_technology = { message = no tech = tech_cloning }
+					give_technology = { message = no tech = tech_gene_banks }
+					give_technology = { message = no tech = tech_gene_seed_purification }
+					give_technology = { message = no tech = tech_gene_expressions }
+					give_technology = { message = no tech = tech_selected_lineages }
+					give_technology = { message = no tech = tech_glandular_acclimation }
+					give_technology = { message = no tech = tech_genetic_resequencing }
 					kill_leader = {
 						type = ruler
 						show_notification = no
@@ -232,8 +249,8 @@ hfe_initializer_egypt_main = {
 		}
 		change_orbit = @base_moon_distance
 		moon = {
-			name = Thoth
-			class = pc_barren
+			name = "Old Thoth"
+			class = pc_shattered
 			entity = barren_planet_01_destroyed_entity
 			orbit_angle = {
 				min = 90
@@ -335,12 +352,12 @@ hfe_initializer_egypt_col_0 = {
 		}
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
-			hfe_effect_init_set_pops_50 = yes
+			hfe_effect_init_set_pops_80 = yes
 			every_owned_pop = {
 				random_list = {
-					40 = {
+					60 = {
 					}
-					10 = {
+					15 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
 				}
@@ -362,7 +379,7 @@ hfe_initializer_egypt_col_0 = {
 			add_building = building_nano_forge
 			add_building = building_nano_forge
 			while = {
-				count = 10
+				count = 12
 				create_pop = {
 					species = event_target:hfe_ahet_servant_species
 				}
@@ -443,14 +460,16 @@ hfe_initializer_egypt_col_0 = {
 			orbit_distance = 5
 		}
 	}
-	# planet = {
-	# 	orbit_distance = 20
-	# 	class = pc_gas_giant
-	# 	orbit_angle = {
-	# 		min = 90
-	# 		max = 270
-	# 	}
-	# 	change_orbit = @base_moon_distance
+	planet = {
+		name = "Hotep"
+	 	orbit_distance = 20
+		class = pc_gas_giant
+		size = 40
+	 	orbit_angle = {
+	 		min = 90
+	 		max = 270
+	 	}
+	 	change_orbit = @base_moon_distance
 	# 	moon = {
 	# 		name = "Assimilation Zone"
 	# 		class = pc_habitat
@@ -489,10 +508,11 @@ hfe_initializer_egypt_col_0 = {
 	# 		}
 	# 	}
 	# }
+	}
 	planet = {
 		count = {
-			min = 0
-			max = 1
+			min = 1
+			max = 8
 		}
 		orbit_distance = 20
 		class = random_non_colonizable
@@ -539,7 +559,7 @@ hfe_initializer_egypt_col_1 = {
 		}
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
-			hfe_effect_init_set_pops_50 = yes
+			hfe_effect_init_set_pops_80 = yes
 			every_owned_pop = {
 				random_list = {
 					40 = {
@@ -963,6 +983,8 @@ hfe_initializer_varelse = {
 	class = rl_standard_stars
 	flags = {
 		primitive_system
+		high_mechanicus_system
+		colony_beta_system
 	}
 	planet = {
 		class = star
@@ -987,20 +1009,21 @@ hfe_initializer_varelse = {
 		name = "Colony Beta"
 		orbit_distance = 0
 		class = pc_desert
-		entity = hfe_entity_arid_01_brown
+#		entity = hfe_entity_arid_01_brown
+		entity = toxic_planet
 		orbit_angle = {
 			min = 90
 			max = 270
 		}
 		size = {
-			min = 15
+			min = 18
 			max = 25
 		}
-		modifiers = none
 		deposit_blockers = none
 		init_effect = {
 			create_country = {
-				name = "Colony Beta"
+				name = "Cult of the Machine-That-Speaks-to-God"
+				ship_prefix = "Godforge"
 				type = primitive
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_varelse_species
@@ -1009,9 +1032,9 @@ hfe_initializer_varelse = {
 					ethic = ethic_xenophobe
 					ethic = ethic_spiritualist
 				}
-				civics = {
+				civics = { # Later changed by Event
 					civic = hfe_civic_primitive_was_fallen
-					civic = hfe_civic_primitive_degraded_society
+					civic = hfe_civic_high_mechanicus
 				}
 				effect = {
 					hfe_effect_primitive_set_machine_age = yes
@@ -1020,6 +1043,7 @@ hfe_initializer_varelse = {
 					prev = {
 						set_owner = prev
 					}
+					save_global_event_target_as = colony_beta
 				}
 			}
 			# to remove error in log
@@ -1031,24 +1055,91 @@ hfe_initializer_varelse = {
 				kill_pop = yes
 			}
 			set_planet_flag = hfe_varelse_colony
-			hfe_effect_primitive_add_pops = yes
+			set_planet_flag = high_mechanicus_planet
+			set_planet_flag = colony_beta
+#			hfe_effect_primitive_add_pops = yes
 			hfe_effect_primitive_add_buildings = yes
-			add_building = building_nano_forge
+			add_building = hfe_building_high_mechanicus_godforge
+			add_building = hfe_building_high_mechanicus_stronghold
+			add_building = building_urban_dwellings
+			add_building = building_urban_dwellings
 			while = {
-				count = 7
+				count = 55
 				create_pop = {
-					species = owner
+					species = event_target:hfe_varelse_species
 				}
+			}
+			add_modifier = {
+				modifier = hfe_colony_type_varelse
+				days = -1
+			}
+			add_modifier = {
+				modifier = atmospheric_hallucinogen_good
+				days = -1
 			}
 			# TODO
 			# war blockers
 			while = {
-				count = 8
+				count = 10
 				create_army = {
-					name = "Divine Industrial Army"
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = primitive_army
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = enraged_army
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Instruments of the Machine"
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = industrial_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = machine_defense
+				}
+			}
+			while = {
+				count = 1
+				create_army = {
+					name = "The Machine-That-Speaks-to-God"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = care_defensive_protocols
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Adeptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = assault_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "The Master's Personal Guard"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
 				}
 			}
 		}
@@ -1130,22 +1221,42 @@ hfe_initializer_ahet_home = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 20
-			max = 25
-		}
+		size = 25
 		init_effect = {
 			set_planet_flag = hfe_ahet_home
 		}
 		moon = {
 			count = 1
+			name = "Collapsed Dimensional Portal I"
 			class = pc_black_hole
 			size = 1
 			orbit_angle = {
 				min = 0
 				max = 90
 			}
-			orbit_distance = 10
+			orbit_distance = 8
+		}
+		moon = {
+			count = 1
+			name = "Collapsed Dimensional Portal II"
+			class = pc_black_hole
+			size = 1
+			orbit_angle = {
+				min = 30
+				max = 120
+			}
+			orbit_distance = 9
+		}
+		moon = {
+			count = 1
+			name = "Collapsed Dimensional Portal III"
+			class = pc_black_hole
+			size = 1
+			orbit_angle = {
+				min = 125
+				max = 135
+			}
+			orbit_distance = 11
 		}
 	}
 	planet = {
@@ -1173,6 +1284,7 @@ hfe_initializer_ahet_home = {
 			min = 0
 			max = 2
 		}
+		has_ring = yes
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
@@ -1520,7 +1632,6 @@ hfe_initializer_copernicus = {
 		size = 3
 		init_effect = {
 			set_planet_flag = hfe_copernicus.2
-			set_planet_flag = hfe_handmade_garden
 		}
 	}
 	planet = {
@@ -1534,6 +1645,7 @@ hfe_initializer_copernicus = {
 		}
 		init_effect = {
 			set_planet_flag = hfe_copernicus.0
+			set_planet_flag = hfe_handmade_garden
 			create_species = {
 				class = random_non_machine
 				homeworld = this
@@ -1600,8 +1712,8 @@ hfe_initializer_drone_sector_0 = {
 	change_orbit = 100
 	planet = {
 		count = {
-			min = 4
-			max = 6
+			min = 7
+			max = 12
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1634,7 +1746,7 @@ hfe_initializer_drone_sector_0 = {
 			min = 1
 			max = 2
 		}
-		class = random_non_colonizable
+		class = random
 		orbit_distance = 30
 		orbit_angle = random
 	}
@@ -1701,6 +1813,8 @@ hfe_initializer_drone_sector_0 = {
 						or = {
 							is_country_type = enclave
 							is_country_type = primitive
+							is_country_type = fallen_empire
+							is_country_type = awakened_fallen_empire
 							is_guardian_country = yes
 						}
 					}
@@ -1709,6 +1823,30 @@ hfe_initializer_drone_sector_0 = {
 						set_hostile = no
 						set_neutral = yes
 						set_friendly = no
+					}
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_country_type = drone
+						}
+						set_faction_hostility = {
+							target = prev
+							set_hostile = no
+							set_neutral = no
+							set_friendly = yes
+						}
+					}
+					every_country = {
+						limit = {
+							is_country_type = drone
+						}
+						set_faction_hostility = {
+							target = ROOT
+							set_hostile = no
+							set_neutral = no
+							set_friendly = yes
+						}
 					}
 				}
 			}
@@ -1750,8 +1888,8 @@ hfe_initializer_drone_sector_1 = {
 	change_orbit = 60
 	planet = {
 		count = {
-			min = 4
-			max = 6
+			min = 5
+			max = 14
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1760,8 +1898,8 @@ hfe_initializer_drone_sector_1 = {
 	change_orbit = 90
 	planet = {
 		count = {
-			min = 4
-			max = 6
+			min = 3
+			max = 9
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1935,6 +2073,10 @@ hfe_initializer_future_main = {
 	prevent_anomalies = yes
 	name = Tartarus
 	class = rl_binary_stars
+	flags = {
+		hfe_future_system
+		hfe_future_core
+	}
 	asteroid_belt = {
 		type = rocky_asteroid_belt
 		radius = 70
@@ -1962,15 +2104,15 @@ hfe_initializer_future_main = {
 			min = 8
 			max = 14
 		}
-		has_ring = no
+		has_ring = yes
 	}
 	change_orbit = 20
 	planet = {
 		count = {
-			min = 1
-			max = 3
+			min = 3
+			max = 5
 		}
-		class = pc_asteroid
+		class = pc_rare_crystal_asteroid
 		orbit_angle = {
 			min = 40
 			max = 100
@@ -1995,11 +2137,14 @@ hfe_initializer_future_main = {
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
+				set_planet_flag = hfe_future_capital
+				set_planet_flag = hfe_future_planet
 				create_country = {
 					name = "Kad Republic"
 					type = human_fallen_empire
 					name_list = HUMAN1
-					ship_prefix = "USS"
+					ship_prefix = "Diplomat"
+					origin = hfe_civic_future_peaceful
 					ignore_initial_colony_error = yes
 					ethos = {
 						ethic = ethic_fanatic_pacifist
@@ -2021,13 +2166,14 @@ hfe_initializer_future_main = {
 							file = vertical.dds
 						}
 						colors = {
-							turquoise
-							black
-							null
-							null
+							"turquoise"
+							"black"
+							"null"
+							"null"
 						}
 					}
 					effect = {
+						hfe_effect_init_give_tech_t5 = yes
 						set_country_flag = hfe_future
 						set_country_flag = hfe_brainworm_discovered
 						set_country_flag = hfe_marked_as_human
@@ -2120,6 +2266,8 @@ hfe_initializer_future_main = {
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
+				set_planet_flag = hfe_future_colony
+				set_planet_flag = hfe_future_planet
 				set_owner = event_target:hfe_future_country
 				add_building = hfe_building_virtual
 				add_building = building_luxury_residence

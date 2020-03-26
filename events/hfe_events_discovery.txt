@@ -9,7 +9,11 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_country_flag = hfe_discovery
+		OR = {
+			has_country_flag = hfe_discovery
+			has_country_flag = discovery_men
+			has_origin = hfe_civic_discovery_habitat
+		}
 	}
 
 	immediate = {
@@ -23,6 +27,7 @@ country_event = {
 			authority = root
 			civics = root
 			species = root
+			origin = hfe_civic_discovery_habitat
 			flag = root
 			ethos = root
 			ignore_initial_colony_error = yes
@@ -87,10 +92,20 @@ country_event = {
 		add_modifier = {
 			modifier = hfe_discovery_translator
 		}
-		set_country_flag = amoeba_encountered
-		set_country_flag = crystal_encountered
-		set_country_flag = drone_encountered
-		set_country_flag = cloud_encountered
+		every_country = {
+			limit = {
+				from = {
+					OR = {
+						is_country_type = amoeba
+						is_country_type = crystal
+						is_country_type = drone
+						is_country_type = cloud
+					}
+				}
+			}
+			establish_communications = ROOT # ????????? ???????
+			# ????????? ???? ??????????????
+		}
 		set_country_flag = Story7
 		#set_country_flag = day_0
 		set_country_flag = first_contact_event
@@ -103,7 +118,9 @@ country_event = {
 			message = no
 		}
 		capital_scope = {
+			set_planet_name = "No Home"
 			change_pc = pc_nuked
+			set_planet_size = 25
 			hfe_effect_clear_buildings_and_destroy_colony = yes
 			reroll_planet = yes
 		}
@@ -193,7 +210,10 @@ country_event = {
 		if = {
 			limit = {
 				from = {
-					is_country_type = default
+					OR = {
+						is_country_type = default
+						has_origin = hfe_civic_discovery_habitat
+					}
 				}
 			}
 			country_event = {
@@ -362,7 +382,7 @@ ship_event = {
 		}
 		exists = solar_system
 		solar_system = {
-			any_ship_in_system = {
+			any_fleet_in_system = {
 				exists = owner
 				owner = {
 					is_country_type = enclave
@@ -765,14 +785,6 @@ country_event = {
 		exists = fromfromfrom.solar_system
 		fromfromfrom.solar_system = {
 			has_star_flag = hfe_discovery_contract_clear_system_target@root
-			# not = {
-			# 	any_ship_in_system = {
-			# 		exists = owner
-			# 		owner = {
-			# 			is_hostile = root
-			# 		}
-			# 	}
-			# }
 		}
 	}
 
@@ -806,7 +818,7 @@ fleet_event = {
 		solar_system = {
 			has_star_flag = hfe_discovery_contract_clear_system_target@root.owner
 			not = {
-				any_ship_in_system = {
+				any_fleet_in_system = {
 					exists = owner
 					owner = {
 						is_hostile = root.owner
@@ -1327,7 +1339,7 @@ country_event = {
 			has_country_flag = hfe_discovery.151.contract_menu
 			event_target:hfe_discovery_docking_planet.owner = {
 				any_system_within_border = {
-					any_ship_in_system = {
+					any_fleet_in_system = {
 						exists = owner
 						owner = {
 							is_hostile = root
@@ -1358,7 +1370,7 @@ country_event = {
 				#set_country_flag = hfe_discovery_contract_clear_system_hirer@root
 				random_system_within_border = {
 					limit = {
-						any_ship_in_system = {
+						any_fleet_in_system = {
 							exists = owner
 							owner = {
 								is_hostile = root

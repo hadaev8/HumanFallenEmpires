@@ -2,71 +2,52 @@
 
 # starting civics
 hfe_civic_features_exodus = {
-	modification = no
-	potential = {
+#	modification = no
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_exodus_origin_icon.dds"
+	picture = "GFX_HFE_TSP_exodus_origin"
+	
+	potential = { always = yes }
+	
+	possible = {
 		authority = {
 			NOT = {
 				value = hfe_auth_brainworm
-				value = auth_machine_intelligence
 			}
 		}
 	}
-	possible = {
-		civics = {
-			NOT = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_early_colonisation
-				value = hfe_civic_features_early_contact
-				value = hfe_civic_features_fanatic_isolationist
-				value = hfe_civic_features_spiral_of_death
-				value = hfe_civic_features_sanctuary
 
-				# vanilla
-				value = civic_mechanists
-				value = civic_syncretic_evolution
-				value = civic_life_seeded
-			}
-		}
-	}
 	random_weight = {
-		base = 0
+		base = -1
+		modifier = {
+			# civic has no effect after galaxy generation, disable for random generation
+			factor = 0
+			has_global_flag = game_started
+		}
 	}
 
 	description = hfe_civic_features_exodus.tooltip
-
 	modifier = {
 		country_starbase_influence_cost_mult = -0.1
-		country_border_friction_mult = -0.33
 	}
 }
 
 hfe_civic_features_early_colonisation = {
-	modification = no
-	potential = {
+#	modification = no
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_early_colonization_origin_icon.dds"
+	picture = "GFX_HFE_TSP_early_colonization_origin"
+	
+	potential = { always = yes }
+	
+	possible = {
 		authority = {
-			not = {
+			NOT = {
 				value = hfe_auth_brainworm
 			}
 		}
 	}
-	possible = {
-		civics = {
-			nor = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_exodus
-				value = hfe_civic_features_early_contact
-				value = hfe_civic_features_fanatic_isolationist
-				value = hfe_civic_features_spiral_of_death
-				value = hfe_civic_features_sanctuary
 
-				# vanilla
-				#value = civic_mechanists
-				#value = civic_syncretic_evolution
-				#value = civic_post_apocalyptic
-				value = civic_life_seeded
-			}
-		}
-	}
 	random_weight = {
 		base = 1
 		modifier = {
@@ -84,44 +65,34 @@ hfe_civic_features_early_colonisation = {
 }
 
 hfe_civic_features_early_contact = {
-	modification = no
-	potential = {
+#	modification = no
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_alien_contact_origin_icon.dds"
+	picture = "GFX_HFE_TSP_early_contact_origin"
+	
+	potential = { always = yes }
+
+	possible = {
 		ethics = {
-			not = {
+			NOT = {
 				value = ethic_gestalt_consciousness
+				value = ethic_xenophobe
+				value = ethic_fanatic_xenophobe
+			}
+			OR = {
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+				value = ethic_egalitarian
+				value = ethic_fanatic_egalitarian
 			}
 		}
 		authority = {
-			not = {
+			NOT = {
 				value = hfe_auth_brainworm
 			}
 		}
 	}
-	possible = {
-		civics = {
-			nor = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_exodus
-				value = hfe_civic_features_early_colonisation
-				value = hfe_civic_features_fanatic_isolationist
-				value = hfe_civic_features_spiral_of_death
-				value = hfe_civic_features_sanctuary
 
-				# vanilla
-				#value = civic_mechanists
-				#value = civic_syncretic_evolution
-				#value = civic_post_apocalyptic
-				value = civic_life_seeded
-			}
-		}
-		ethics = {
-			OR = {
-				text = civic_tooltip_xenophile
-				value = ethic_xenophile
-				value = ethic_fanatic_xenophile
-			}
-		}
-	}
 	random_weight = {
 		base = 1
 		modifier = {
@@ -129,52 +100,41 @@ hfe_civic_features_early_contact = {
 			factor = 0
 			has_global_flag = game_started
 		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
 	}
+
 	description = hfe_civic_features_early_contact.tooltip
+
 	modifier = {
 		science_ship_survey_speed = 0.05
 		ship_colonizer_cost_mult = -0.05
 	}
 }
 
-hfe_civic_features_fanatic_isolationist = {
-	modification = no
-	potential = {
-		ethics = {
-			not = {
-				value = ethic_gestalt_consciousness
-			}
-		}
+hfe_civic_features_spiral_of_death = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_spiral_of_death_origin_icon.dds"
+	picture = "GFX_HFE_TSP_exodus_zelda_moon_origin"
+	preferred_planet_class_neighbor = no
+
+	potential = { always = yes }
+
+	possible = {
 		authority = {
-			not = {
+			NOT = {
 				value = hfe_auth_brainworm
 			}
 		}
 	}
-	possible = {
-		civics = {
-			nor = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_exodus
-				value = hfe_civic_features_early_contact
-				value = hfe_civic_features_early_colonisation
-				value = hfe_civic_features_spiral_of_death
-				value = hfe_civic_features_sanctuary
 
-				# vanilla
-				#value = civic_mechanists
-				#value = civic_syncretic_evolution
-				#value = civic_post_apocalyptic
-				#value = civic_life_seeded
-			}
-		}
-		ethics = {
-			value = ethic_pacifist
-			value = ethic_fanatic_xenophobe
-		}
-	}
 	random_weight = {
-		base = 1
+		base = -1
 		modifier = {
 			# civic has no effect after galaxy generation, disable for random generation
 			factor = 0
@@ -182,109 +142,68 @@ hfe_civic_features_fanatic_isolationist = {
 		}
 	}
 	modifier = {
-		starbase_defensive_war_ship_build_speed_mult = 1
-		ship_home_territory_fire_rate_mult = 1
-		country_starbase_influence_cost_mult = 0.8
-		country_claim_influence_cost_mult = 0.8
-	}
-	description = hfe_civic_features_fanatic_isolationist.tooltip
-}
-
-hfe_civic_features_spiral_of_death = {
-	modification = no
-	potential = {
-		authority = {
-			not = {
-				value = hfe_auth_brainworm
-			}
-		}
-	}
-	possible = {
-		civics = {
-			nor = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_exodus
-				value = hfe_civic_features_early_contact
-				value = hfe_civic_features_early_colonisation
-				value = hfe_civic_features_fanatic_isolationist
-				value = hfe_civic_features_sanctuary
-
-				# vanilla
-				#value = civic_mechanists
-				#value = civic_syncretic_evolution
-				value = civic_post_apocalyptic
-				value = civic_life_seeded
-			}
-		}
-	}
-	random_weight = {
-		base = 0
-	}
-	modifier = {
-		pop_growth_speed = 0.05
+		ship_base_speed_mult = 0.1
+		shipclass_colonizer_build_speed_mult = 0.9
+		shipclass_colonizer_build_cost_mult = -0.2
 	}
 	description = hfe_civic_features_spiral_of_death.tooltip
 }
 
+
 hfe_civic_features_sanctuary = {
-	modification = no
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_sanctuary_origin_icon.dds"
+	picture = "GFX_HFE_TSP_sanctuary_origin"
 	preferred_planet_class_neighbor = no
-	potential = {
+	
+	potential = { always = yes }
+
+	possible = {
 		authority = {
-			not = {
+			NOT = {
 				value = hfe_auth_brainworm
 			}
 		}
 	}
-	possible = {
-		civics = {
-			nor = {
-				text = hfe_civic_has_started
-				value = hfe_civic_features_exodus
-				value = hfe_civic_features_early_contact
-				value = hfe_civic_features_early_colonisation
-				value = hfe_civic_features_fanatic_isolationist
-				value = hfe_civic_features_spiral_of_death
 
-				# vanilla
-				#value = civic_mechanists
-				#value = civic_syncretic_evolution
-				#value = civic_post_apocalyptic
-				#value = civic_life_seeded
-			}
-		}
-	}
 	random_weight = {
-		base = 0 # ????? ?? ????????? ??? ???
+		base = -1 # ????? ?? ????????? ??? ???
 		modifier = {
 			# civic has no effect after galaxy generation, disable for random generation
 			factor = 0
 			has_global_flag = game_started
 		}
 	}
+
 	modifier = {
 		planet_stability_add = 5
 	}
 	description = hfe_civic_features_sanctuary.tooltip
 }
 
+####################################################################
+#	END OF ORIGINS	#
+###################################
+#	BEGIN CIVICS	#
+###########################################
+
 # other
 hfe_civic_features_aggressive_diplomacy = {
 	potential = {
 		ethics = {
-			not = {
+			NOT = {
 				value = ethic_gestalt_consciousness
 			}
 		}
 		authority = {
-			not = {
+			NOT = {
 				value = hfe_auth_brainworm
 			}
 		}
 	}
 	possible = {
 		ethics = {
-			or = {
+			OR = {
 				text = civic_tooltip_militarist
 				value = ethic_militarist
 				value = ethic_fanatic_militarist
@@ -298,4 +217,46 @@ hfe_civic_features_aggressive_diplomacy = {
 	modifier = {
 		ship_experience_gain_mult = 0.1
 	}
+}
+
+hfe_civic_features_fanatic_isolationist = {
+	modification = no
+	
+	potential = { always = yes }
+
+	potential = {
+		ethics = {
+			NOT = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+
+	possible = {
+		ethics = {
+			value = ethic_pacifist
+			value = ethic_fanatic_xenophobe
+		}
+	}
+	
+	random_weight = {
+		base = 2
+		modifier = {
+			# civic has no effect after galaxy generation, disable for random generation
+			factor = 0
+			has_global_flag = game_started
+		}
+	}
+	modifier = {
+		starbase_defensive_war_ship_build_speed_mult = 1
+		ship_home_territory_fire_rate_mult = 1
+		country_starbase_influence_cost_mult = 0.8
+		country_claim_influence_cost_mult = 0.8
+	}
+	description = hfe_civic_features_fanatic_isolationist.tooltip
 }
