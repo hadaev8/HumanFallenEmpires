@@ -1,5 +1,4 @@
 # pirate
-
 # for country
 hfe_effect_pirate_diplomacy_remove_flags = {
 	remove_country_flag = hfe_pirate.101.raid_menu
@@ -164,6 +163,8 @@ hfe_effect_pirate_init = {
 				}
 			}
 		}
+		# for vanilla localization
+		save_event_target_as = pirate_system
 		prev = {
 			if = {
 				limit = {
@@ -188,8 +189,6 @@ hfe_effect_pirate_init = {
 				}
 			}
 		}
-		# for vanilla localization
-		save_event_target_as = pirate_system
 		hfe_effect_pirate_init_country = yes
 		hfe_effect_pirate_init_colony = yes
 	}
@@ -216,10 +215,10 @@ hfe_effect_pirate_init_colony = {
 			kill_pop = yes
 		}
 		# if = {
-			# limit = {
-				# has_global_flag = hfe_pirate_logs
-			# }
-			# log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
+		# limit = {
+		# has_global_flag = hfe_pirate_logs
+		# }
+		# log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
 		# }
 		hfe_effect_create_starbase_starport_from_planet = yes
 		hfe_effect_starbase_add_shipyard_0 = yes
@@ -256,7 +255,7 @@ hfe_effect_pirate_init_country = {
 					category = zoological
 					file = flag_zoological_1.dds
 				}
-				background= {
+				background = {
 					category = backgrounds
 					file = 00_solid.dds
 				}
@@ -335,6 +334,7 @@ hfe_effect_pirate_init_country = {
 			}
 			if = {
 				limit = {
+					always = no
 					end_game_years_passed > 0
 				}
 				add_resource = {
@@ -349,6 +349,7 @@ hfe_effect_pirate_init_country = {
 			}
 			else_if = {
 				limit = {
+					always = no
 					mid_game_years_passed > 0
 				}
 				add_resource = {
@@ -622,7 +623,7 @@ hfe_effect_pirate_ravage_planet = {
 			variable = {
 				type = name
 				localization = country
-				scope = prev.from # not sure
+				scope = prev.from				# not sure
 			}
 		}
 		if = {
@@ -722,10 +723,10 @@ hfe_effect_pirate_flee_fleets = {
 						}
 					}
 					#	log = "[this.GetName] flee to [owner.GetName] from [prev.GetName]"
-					ROOT = {
+          ROOT = {
 						set_country_flag = but_nobody_came
 						remove_country_flag = but_nobody_came
-				}
+				  }
 				}
 			}
 		}
@@ -1165,8 +1166,8 @@ hfe_effect_pirate_path_target_planet = {
 					}
 				}
 				# auto_move_to_planet = {
-					# target = prev.system_star
-					# clear_auto_move_on_arrival = yes
+				# target = prev.system_star
+				# clear_auto_move_on_arrival = yes
 				# }
 			}
 		}
@@ -1202,7 +1203,7 @@ hfe_effect_pirate_path_target_planet = {
 						limit = {
 							has_fleet_flag = hfe_pirate_log_fleet
 						}
-					#	log = "[this.GetName] want to plunder [prev.GetName]"
+					#	log = "[this.GetName] wants to plunder [prev.GetName]"
 						ROOT = {
 							set_country_flag = but_nobody_came
 							remove_country_flag = but_nobody_came
@@ -1221,11 +1222,15 @@ hfe_effect_pirate_path_target_planet = {
 								repeat = {
 									while = {
 										id = hfe_pirate.trigger.1.1
+										exists = owner
+										owner = {
+											is_hostile = root.owner
+										}
 										num_pops > 1
 										# idk neeed it or not, need to test later
-										# not = {
-										# 	has_modifier = hfe_pirate_ravaged_planet
-										# }
+										not = {
+											has_modifier = hfe_pirate_ravaged_planet
+										}
 									}
 									# ai will disturb fleet if it just wait, so move every day to planet to bomb it
 									#wait = 30
@@ -1235,23 +1240,23 @@ hfe_effect_pirate_path_target_planet = {
 						}
 					}
 					# if = {
-						# limit = {
-							# prev = {
-								# num_pops > 0
-							# }
-						# }
-						# hfe_effect_pirate_path_fleet_clear_actions = yes
-						# auto_move_to_planet = {
-							# target = prev
-							# clear_auto_move_on_arrival = no
-						# }
+					# limit = {
+					# prev = {
+					# num_pops > 0
+					# }
+					# }
+					# hfe_effect_pirate_path_fleet_clear_actions = yes
+					# auto_move_to_planet = {
+					# target = prev
+					# clear_auto_move_on_arrival = no
+					# }
 					# }
 					# else = {
-						# hfe_effect_pirate_path_fleet_clear_actions = yes
-						# auto_move_to_planet = {
-							# target = prev
-							# clear_auto_move_on_arrival = yes
-						# }
+					# hfe_effect_pirate_path_fleet_clear_actions = yes
+					# auto_move_to_planet = {
+					# target = prev
+					# clear_auto_move_on_arrival = yes
+					# }
 					# }
 				}
 			}
@@ -1498,8 +1503,8 @@ hfe_effect_pirate_path_go_to_next = {
 				}
 			}
 			# auto_move_to_planet = {
-				# target = event_target:hfe_pirate_fleet_target_system_next.system_star
-				# clear_auto_move_on_arrival = yes
+			# target = event_target:hfe_pirate_fleet_target_system_next.system_star
+			# clear_auto_move_on_arrival = yes
 			# }
 		}
 		# next system not exists, remove target
@@ -1532,8 +1537,8 @@ hfe_effect_pirate_path_go_to_next = {
 					days = 179
 				}
 				# fleet_event = {
-					# id = hfe_pirate.300
-					# days = 180
+				# id = hfe_pirate.300
+				# days = 180
 				# }
 			}
 		}

@@ -11,4 +11,5 @@ tags={
 }
 name="Human Fallen Empires"
 picture="thumbnail.jpg"
+supported_version="2.6.*"
 remote_file_id="901039859"

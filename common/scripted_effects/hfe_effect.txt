@@ -659,250 +659,147 @@ hfe_effect_event_5091_next = {
 # varelse fleet event
 # for fleet
 hfe_effect_varelse_fleet_attack_home_of_light = {
-	set_fleet_stance = aggressive
 	clear_fleet_actions = this
-	queue_actions = {
-		find_closest_system = {
-			trigger = {
-				id = hfe_effect_varelse_fleet_attack_home_of_light_trigger.0
-				any_system_planet = {
-					has_planet_flag = hfe_home_of_light
-				}
-			}
-			found_system = {
-				move_to = this
-				effect = {
-					id = hfe_effect_varelse_fleet_attack_home_of_light_effect.1
-					if = {
-						limit = {
-							any_system_planet = {
-								has_planet_flag = hfe_home_of_light
-								nand = {
-									exists = owner
-									owner = {
-										has_country_flag = hfe_egypt
-									}
-								}
-							}
-						}
-						event_target:hfe_varelse_fleet = {
-							hfe_effect_varelse_fleet_find_new_home = yes
-						}
-					}
-					else = {
-						event_target:hfe_varelse_fleet.owner = {
-							set_faction_hostility = {
-								set_hostile = yes
-							}
-						}
-					}
-				}
-				find_closest_planet = {
-					trigger = {
-						id = hfe_effect_varelse_fleet_attack_home_of_light_trigger.1
-						has_planet_flag = hfe_home_of_light
-					}
-					found_planet = {
-						move_to = this
-						repeat = {
-							while = {
-								id = hfe.53.attact_trigger.2
-								num_pops > 0
-							}
-							wait = 60
-						}
-						effect = {
-							id = hfe_effect_varelse_fleet_attack_home_of_light_effect.2
-							event_target:hfe_varelse_fleet = {
-								hfe_effect_varelse_fleet_find_new_home = yes
-							}
-						}
-					}
-				}
-			}
-			failed = {
-				wait = 100
-				effect = {
-					id = hfe_effect_varelse_fleet_attack_home_of_light_effect.3
-					event_target:hfe_varelse_fleet = {
-						hfe_effect_varelse_fleet_find_new_home = yes
-					}
-				}
-			}
+	set_fleet_stance = aggressive
+	# maybe reconsider
+	random_planet = {
+		limit = {
+			has_planet_flag = hfe_home_of_light
+		}
+		save_event_target_as = hfe_varelse_fleet_attack_home_of_light
+	}
+	auto_move_to_planet = {
+		target = event_target:hfe_varelse_fleet_attack_home_of_light
+		clear_auto_move_on_arrival = yes
+		arrival_effect = hfe_effect_varelse_fleet_attack_home_of_light_make_hostile
+	}
+}
+
+hfe_effect_varelse_fleet_attack_home_of_light_make_hostile = {
+	owner = {
+		set_faction_hostility = {
+			set_hostile = yes
 		}
 	}
 }
 
+# need fleet event
 hfe_effect_varelse_fleet_find_new_home = {
 	clear_fleet_actions = this
-	queue_actions = {
-		find_closest_system = {
-			trigger = {
-				id = hfe_find_new_home_trigger.0
-				any_system_planet = {
-					not = {
-						exists = owner
-					}
-					habitability = {
-						who = event_target:hfe_varelse_species
-						value > 0.7
-					}
-				}
+	closest_system = {
+		limit = {
+			not = {
+				exists = owner
 			}
-			found_system = {
-				move_to = this
-			}
-			failed = {
-				find_closest_system = {
-					trigger = {
-						id = hfe_find_new_home_trigger.1
-						any_system_planet = {
-							not = {
-								exists = owner
-							}
-							habitability = {
-								who = event_target:hfe_varelse_species
-								value > 0.4
-							}
-						}
-					}
-					found_system = {
-						move_to = this
-					}
-					failed = {
-						find_closest_system = {
-							trigger = {
-								id = hfe_find_new_home_trigger.2
-								any_system_planet = {
-									not = {
-										exists = owner
-									}
-									habitability = {
-										who = event_target:hfe_varelse_species
-										value > 0.1
-									}
-								}
-							}
-							found_system = {
-								move_to = this
-							}
-							failed = {
-								wait = 100
-								effect = {
-									id = hfe_find_new_home_effect.0
-									hfe_effect_varelse_fleet_attack_home_of_light = yes
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		find_closest_planet = {
-			trigger = {
-				id = hfe_find_new_home_trigger.3
-				not = {
-					exists = owner
-				}
+			any_system_planet = {
 				habitability = {
 					who = event_target:hfe_varelse_species
 					value > 0.7
 				}
 			}
-			found_planet = {
-				move_to = this
-				effect = {
-					id = hfe_find_new_home_effect.1
-					hfe_effect_varelse_fleet_find_new_home_colony = yes
+			hfe_trigger_pirate_fleet_power_in_system_check = yes
+		}
+		random_system_planet = {
+			limit = {
+				habitability = {
+					who = event_target:hfe_varelse_species
+					value > 0.7
 				}
 			}
-			failed = {
-				find_closest_planet = {
-					trigger = {
-						id = hfe_find_new_home_trigger.4
-						not = {
-							exists = owner
-						}
-						habitability = {
-							who = event_target:hfe_varelse_species
-							value > 0.4
-						}
-					}
-					found_planet = {
-						move_to = this
-						effect = {
-							id = hfe_find_new_home_effect.2
-							hfe_effect_varelse_fleet_find_new_home_colony = yes
-						}
-					}
-					failed = {
-						find_closest_planet = {
-							trigger = {
-								id = hfe_find_new_home_trigger.5
-								not = {
-									exists = owner
-								}
-								habitability = {
-									who = event_target:hfe_varelse_species
-									value > 0.1
-								}
-							}
-							found_planet = {
-								move_to = this
-								effect = {
-									id = hfe_find_new_home_effect.3
-									hfe_effect_varelse_fleet_find_new_home_colony = yes
-								}
-							}
-						}
+			save_event_target_as = hfe_varelse_fleet_new_home
+		}
+	}
+	if = {
+		limit = {
+			not = {
+				exists = event_target:hfe_varelse_fleet_new_home
+			}
+		}
+		closest_system = {
+			limit = {
+				any_system_planet = {
+					habitability = {
+						who = event_target:hfe_varelse_species
+						value > 0.7
 					}
 				}
+				hfe_trigger_pirate_fleet_power_in_system_check = yes
 			}
+			random_system_planet = {
+				limit = {
+					habitability = {
+						who = event_target:hfe_varelse_species
+						value > 0.7
+					}
+				}
+				save_event_target_as = hfe_varelse_fleet_new_home
+			}
+		}
+	}
+	if = {
+		limit = {
+			not = {
+				exists = event_target:hfe_varelse_fleet_new_home
+			}
+		}
+		hfe_effect_varelse_fleet_attack_home_of_light = yes
+	}
+	else = {
+		auto_move_to_planet = {
+			target = event_target:hfe_varelse_fleet_new_home
+			clear_auto_move_on_arrival = yes
+			arrival_effect = hfe_effect_varelse_fleet_find_new_home_make_colony
 		}
 	}
 }
 
-hfe_effect_varelse_fleet_find_new_home_colony = {
-	create_country = {
-		name = "Varelse Hegemony"
-		type = default
-		species = event_target:hfe_varelse_species
-		ethos = {
-			ethic = ethic_xenophobe
-			ethic = ethic_militarist
-			ethic = ethic_materialist
-		}
-		effect = {
-			set_country_flag = hfe_varelse
-			hfe_effect_gov_fix = yes
-			hfe_effect_init_give_tech_t3 = yes
-			prev = {
-				create_colony = {
-					owner = prev
+hfe_effect_varelse_fleet_find_new_home_make_colony = {
+	from = {
+		create_country = {
+			name = "Varelse Hegemony"
+			type = default
+			species = event_target:hfe_varelse_species
+			ethos = {
+				ethic = ethic_xenophobe
+				ethic = ethic_militarist
+				ethic = ethic_materialist
+			}
+			effect = {
+				set_country_flag = hfe_varelse
+				hfe_effect_gov_fix = yes
+				hfe_effect_init_give_tech_t3 = yes
+				prev = {
+					create_colony = {
+						owner = prev
+					}
+				}
+				event_target:hfe_varelse_fleet = {
+					set_owner = prev
+				}
+				every_owned_ship = {
+					repair_ship = yes
+					add_modifier = {
+						modifier = hfe_unkeep
+					}
+				}
+				add_resource = {
+					minerals = 1000
+					energy = 5000
 				}
 			}
-			event_target:hfe_varelse_fleet = {
-				set_owner = prev
-			}
-			every_owned_ship = {
-				repair_ship = yes
-				add_modifier = {
-					modifier = hfe_unkeep
-				}
-			}
-			add_resource = {
-				minerals = 5000
-				energy = 1000
+		}
+		while = {
+			count = 5
+			create_pop = {
+				species = owner
 			}
 		}
-	}
-	while = {
-		count = 3
-		create_pop = {
-			species = owner
+		add_modifier = {
+			modifier = hfe_population_boom
+			days = 3650
 		}
+		hfe_effect_create_starbase_starport_from_planet = yes
 	}
-	hfe_effect_create_starbase_starport_from_planet = yes
 }
 
 # for country return 6 event targets
