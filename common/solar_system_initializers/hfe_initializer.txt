@@ -1015,10 +1015,7 @@ hfe_initializer_varelse = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 18
-			max = 25
-		}
+		size = 22
 		deposit_blockers = none
 		init_effect = {
 			create_country = {
@@ -1054,6 +1051,26 @@ hfe_initializer_varelse = {
 			every_owned_pop = {
 				kill_pop = yes
 			}
+			last_created_country = {
+				set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_outlawed
+					cooldown = no
+				}
+				set_policy = {
+					policy = robot_pop_policy
+					option = robot_pops_allowed
+					cooldown = no
+				}
+			}
+			give_technology = {
+				tech = tech_assault_armies
+				message = no
+			}
+			give_technology = {
+				tech = tech_robotic_workers
+				message = no
+			}
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = high_mechanicus_planet
 			set_planet_flag = colony_beta
@@ -1063,11 +1080,18 @@ hfe_initializer_varelse = {
 			add_building = hfe_building_high_mechanicus_stronghold
 			add_building = building_urban_dwellings
 			add_building = building_urban_dwellings
+			add_building = building_primitive_power_plant
+			add_building = building_primitive_mine
+			add_building = building_primitive_farm
+			add_random_non_blocker_deposit = yes
 			while = {
 				count = 55
 				create_pop = {
 					species = event_target:hfe_varelse_species
 				}
+			}
+			create_pop = {
+				species = event_target:fe_servants
 			}
 			add_modifier = {
 				modifier = hfe_colony_type_varelse
@@ -1098,12 +1122,30 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
+				count = 2
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = assault_army
+				}
+			}
+			while = {
+				count = 3
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = industrial_army
+				}
+			}
+			while = {
 				count = 5
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
 					species = event_target:hfe_varelse_species
-					type = industrial_army
+					type = assault_army
 				}
 			}
 			while = {
@@ -1127,7 +1169,7 @@ hfe_initializer_varelse = {
 			while = {
 				count = 2
 				create_army = {
-					name = "Adeptus Mechanicus"
+					name = "Adaptus Mechanicus"
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = assault_army
@@ -1139,7 +1181,7 @@ hfe_initializer_varelse = {
 					name = "The Master's Personal Guard"
 					owner = owner
 					species = event_target:hfe_varelse_species
-					type = defense_army
+					type = gene_warrior_army
 				}
 			}
 		}
@@ -1192,7 +1234,8 @@ hfe_initializer_ahet_home = {
 	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
-		hfe_ahet_home
+#		hfe_ahet_home
+		hfe_ahet_home_star
 	}
 	name = Barsoom
 	planet = {
@@ -1217,6 +1260,7 @@ hfe_initializer_ahet_home = {
 	planet = {
 		orbit_distance = 10
 		class = hfe_pc_ahet_home
+		has_ring = yes
 		orbit_angle = {
 			min = 90
 			max = 270

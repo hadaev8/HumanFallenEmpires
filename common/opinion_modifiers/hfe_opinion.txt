@@ -6,14 +6,14 @@
 # dont like varelse
 hfe_opinion_egypt_vs_varelse = {
 	trigger = {
-		or = {
-			and = {
+		OR = {
+			AND = {
 				has_country_flag = hfe_egypt
 				from = {
 					is_same_species = event_target:hfe_varelse_species
 				}
 			}
-			and = {
+			AND = {
 				from = {
 					has_country_flag = hfe_egypt
 				}
@@ -22,7 +22,7 @@ hfe_opinion_egypt_vs_varelse = {
 		}
 	}
 	opinion = {
-		base = -100
+		base = -999
 	}
 }
 
@@ -60,6 +60,9 @@ hfe_opinion_egypt_vs_neighbor = {
 		has_country_flag = hfe_egypt
 		hfe_trigger_is_awake = yes
 		is_neighbor_of = from
+		from = {
+			NOT = { is_subject_type = hfe_vassal_egypt }
+		}
 	}
 	opinion = {
 		base = -100
@@ -78,8 +81,10 @@ hfe_opinion_egypt_vs_good_pop = {
 		}
 	}
 	opinion = {
-		base = -50
+		base = -30
+	
 	}
+#	accumulative = yes
 }
 
 hfe_opinion_egypt_vs_varelse = {
@@ -100,15 +105,15 @@ hfe_opinion_egypt_vs_varelse = {
 		}
 	}
 	opinion = {
-		base = -100
+		base = -999
 	}
 }
 
 hfe_opinion_egypt_first_contact_bad = {
 	opinion = {
-		base = -100
+		base = -50
 	}
-	accumulative = yes
+	accumulative = no
 	decay = {
 		base = 1
 	}
@@ -133,14 +138,15 @@ hfe_opinion_future_vs_neighbor = {
 	}
 }
 
-# hate slavers&purgers
+# hate slavers & purgers
 hfe_opinion_future_vs_bad = {
 	trigger = {
 		has_country_flag = hfe_future
 		from = {
-			or = {
+			OR = {
 				allows_slavery = yes
 				allows_purge = yes
+				has_policy_flag = orbital_bombardment_armageddon
 			}
 		}
 	}
@@ -148,10 +154,14 @@ hfe_opinion_future_vs_bad = {
 		base = -30
 		modifier = {
 			add = -30
-			from = {
+			FROM = {
 				allows_slavery = yes
 				allows_purge = yes
 			}
+		}
+		modifier = {
+			add = -20
+			FROM = { has_policy_flag = orbital_bombardment_armageddon }
 		}
 	}
 }
@@ -159,5 +169,204 @@ hfe_opinion_future_vs_bad = {
 hfe_opinion_forsaken = {
 	opinion = {
 		base = -100
+	}
+}
+
+hfe_opinion_high_mechanicus_to_materialist = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			has_government = hfe_gov_high_mechanicus
+			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+		}
+		NOT = {
+			has_government = hfe_gov_high_mechanicus_overthrown
+			has_country_flag = varelse_fedora_governance
+			has_civic = hfe_civic_overthrown_mechanicus
+		}
+		FROM = {
+			is_materialist = yes
+		}
+	}
+	opinion = {
+		base = -50
+	}
+}
+
+hfe_opinion_fedora_to_spiritualist = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		NOT = {
+			has_government = hfe_gov_high_mechanicus
+			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+		}
+		OR = {
+			has_government = hfe_gov_high_mechanicus_overthrown
+			has_civic = hfe_civic_overthrown_mechanicus
+			has_country_flag = varelse_fedora_governance
+		}
+		FROM = {
+			is_spiritualist = yes
+		}
+	}
+	opinion = {
+		base = -100
+		modifier = {
+			add = 30
+			FROM = { has_country_flag = flesh_weakened	}
+		}
+		modifier = {
+			add = 50
+			FROM = { has_country_flag = synthetic_empire }
+		}
+	}
+}
+
+hfe_high_mechanicus_forgetness = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			has_government = hfe_gov_high_mechanicus
+			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+		}
+		NOT = {
+			has_government = hfe_gov_high_mechanicus_overthrown
+			has_country_flag = varelse_fedora_governance
+			has_civic = hfe_civic_overthrown_mechanicus
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_authoritarian = yes
+					NOT = { is_materialist = yes }
+				}
+				any_owned_pop_species = {
+					has_stratified_living_standard_type = yes
+				}
+				any_owned_pop_species = {
+					NOT = { has_academic_living_standard_type = yes }
+				}
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+				has_policy_flag = ai_outlawed
+			}
+		}
+		FROM = {
+			NOT = {
+#				has_policy_flag = ai_full_rights
+				has_country_flag = flesh_weakened # For the malus, not a bonus
+				has_country_flag = synthetic_empire # This is a malus, not a bonus
+				is_materialist = yes
+			}
+		}
+	}
+	opinion = {
+		base = 0
+		modifier = {
+			add = 10
+			FROM = {
+				is_authoritarian = yes
+				NOT = { is_materialist = yes }
+			}
+		}
+		modifier = {
+			add = 10
+			FROM = {
+				any_owned_pop_species = {
+					has_stratified_living_standard_type = yes
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			FROM = {
+				any_owned_pop_species = {
+					NOT = { has_academic_living_standard_type = yes }
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			FROM = { has_ethic = ethic_spiritualist }
+			NOT = { FROM = { has_ethic = ethic_fanatic_spiritualist } }
+		}
+		modifier = {
+			add = 10
+			FROM = { has_ethic = ethic_fanatic_spiritualist }
+			NOT = { FROM = { has_ethic = ethic_spiritualist } }
+		}
+		modifier = {
+			add = 10
+			FROM = { has_policy_flag = ai_outlawed }
+		}
+		modifier = {
+			add = -20
+			FROM = { has_policy_flag = ai_servitude }
+		}
+		modifier = {
+			factor = 0.5
+			FROM = { has_policy_flag = ai_full_rights }
+		}
+		modifier = {
+			add = -20
+			FROM = { has_policy_flag = ai_full_rights }
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				OR = {
+					has_country_flag = flesh_weakened # For the malus, not a bonus
+					has_country_flag = synthetic_empire # This is a malus, not a bonus
+				}
+			}
+		}
+	}
+}
+
+hfe_fedora_i_like_big_bots_and_i_cannot_lie = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		NOT = {
+			has_government = hfe_gov_high_mechanicus
+			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+		}
+		OR = {
+			has_government = hfe_gov_high_mechanicus_overthrown
+			has_civic = hfe_civic_overthrown_mechanicus
+			has_country_flag = varelse_fedora_governance
+		}
+		FROM = {
+			OR = {
+				has_policy_flag = ai_full_rights
+				has_country_flag = flesh_weakened
+				has_country_flag = synthetic_empire
+				is_synthetic_empire = yes
+			}
+		}
+		FROM = { NOT = { is_spiritualist = yes } }
+	}
+	opinion = {
+		base = 20
+		modifier = {
+			add = 10
+			FROM = { has_policy_flag = ai_full_rights }
+		}
+		modifier = {
+			add = 10
+			FROM = { has_country_flag = flesh_weakened }
+		}
+		modifier = {
+			add = 20
+			FROM = {
+				OR = {
+					has_country_flag = synthetic_empire
+					is_synthetic_empire = yes
+				}
+			}
+		}
 	}
 }
