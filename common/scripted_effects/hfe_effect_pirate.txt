@@ -531,6 +531,36 @@ hfe_effect_pirate_ravage_planet = {
 	from = {
 		hfe_effect_pirate_resource_reward = yes
 		hfe_effect_settle_pop = yes
+		event_target:hfe_settle_pop_target = {
+			if = {
+				limit = {
+					prev = {
+						is_ai = no
+					}
+				}
+				create_message = {
+					type = MESSAGE_TYPE_POP_ABDUCTED
+					localization = MESSAGE_POP_ABDUCTED
+					days = 10
+					target = prev
+					variable = {
+						type = name
+						localization = SPECIES
+						scope = species
+					}
+					variable = {
+						type = name
+						localization = PLANET
+						scope = root
+					}
+					variable = {
+						type = name
+						localization = TARGET_PLANET
+						scope = prevprev
+					}
+				}
+			}
+		}
 	}
 	# remove_modifier = hfe_pirate_ravaged_planet
 	add_modifier = {
@@ -538,33 +568,68 @@ hfe_effect_pirate_ravage_planet = {
 		days = @hfe_pirate_ravaged_planet_time
 	}
 	owner = {
-		create_message = {
-			type = hfe_message_type_pirate_raid
-			localization = hfe_message_type_pirate_raid_desc
-			days = 30
-			target = prev
-			variable = {
-				type = name
-				localization = planet
-				scope = prev
-			}
-			variable = {
-				type = name
-				localization = country
-				scope = prev.from				# not sure
-			}
-		}
 		if = {
 			limit = {
-				has_event_chain = hfe_chain_pirate_count
-				from = {
-					is_country_type = hfe_pirate
-				}
+				is_ai = no
 			}
-			add_event_chain_counter = {
-				event_chain = hfe_chain_pirate_count
-				counter = hfe_chain_pirate_count_planet_ravaged
-				amount = 1
+			if = {
+				limit = {
+					prev.from = {
+						is_country_type = hfe_pirate
+					}
+				}
+				create_message = {
+					type = hfe_message_type_pirate_raid
+					localization = hfe_message_type_pirate_raid_desc
+					days = 30
+					target = prev
+					variable = {
+						type = name
+						localization = planet
+						scope = prev
+					}
+					variable = {
+						type = name
+						localization = country
+						scope = prev.from
+					}
+				}
+				if = {
+					limit = {
+						has_event_chain = hfe_chain_pirate_count
+						from = {
+							is_country_type = hfe_pirate
+						}
+					}
+					add_event_chain_counter = {
+						event_chain = hfe_chain_pirate_count
+						counter = hfe_chain_pirate_count_planet_ravaged
+						amount = 1
+					}
+				}
+				else = {
+					create_message = {
+						type = MESSAGE_TYPE_POP_ABDUCTED_FROM_US
+						localization = MESSAGE_TYPE_POP_ABDUCTED_FROM_US
+						days = 10
+						target = prev
+						variable = {
+							type = name
+							localization = SPECIES
+							scope = event_target:event_target:hfe_settle_pop_target.species
+						}
+						variable = {
+							type = name
+							localization = PLANET
+							scope = prev
+						}
+						variable = {
+							type = name
+							localization = ABDUCTER
+							scope = prev.from
+						}
+					}
+				}
 			}
 		}
 	}
