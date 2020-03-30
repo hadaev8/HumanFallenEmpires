@@ -60,10 +60,41 @@ citizenship_slavery = {
 		custom_tooltip = {
 			fail_text = does_not_embrace_species_slavery
 			# mod
-			or = {
-				has_species_flag = hfe_forever_slave
-				has_species_flag = hfe_forever_slave@from
-#				has_trait = hfe_species_trait_happy_slave # For those who are not slavers, this Trait just makes them docile
+			OR = {
+				AND = {
+					OR = {
+						has_species_flag = hfe_forever_slave
+						has_species_flag = hfe_forever_slave@from
+					}
+					from = {
+						OR = { # The Ju Ahet will ALWAYS enslave Ahets
+							has_country_flag = hfe_egypt
+							has_country_flag = hfe_pirate
+							is_country_type = hfe_pirate
+							allows_slavery = yes
+						}
+					}
+				}
+				AND = {
+#					# For those who are not slavers, this Trait
+#					# just makes them docile
+					has_trait = hfe_species_trait_happy_slave
+					from = {
+						OR = { # The Ju Ahet will ALWAYS enslave Ahets
+							has_country_flag = hfe_egypt
+							has_country_flag = hfe_pirate
+							is_country_type = hfe_pirate
+							allows_slavery = yes
+							is_authoritarian = yes
+							is_xenophobe = yes
+#							NOT = {
+#								is_egalitarian = yes
+#								is_xenophile = yes
+#							}
+						}
+					}
+				}
+				# The Ju Ahet will ALWAYS enslave Ahets
 				from = { has_country_flag = hfe_egypt }
 				from = { has_country_flag = hfe_pirate }
 				from = { is_country_type = hfe_pirate }
@@ -107,6 +138,11 @@ citizenship_slavery = {
 					is_ai = no
 					is_xenophobe = yes
 				}
+				NOT = { # The Ju Ahet and Pirates can always have slaves
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
 			}
 		}
 		modifier = {
@@ -114,17 +150,29 @@ citizenship_slavery = {
 			from = {
 				is_authoritarian = no
 				is_xenophobe = no
+				NOT = { # The Ju Ahet and Pirates can always have slaves
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
 			}
 		}
-#		modifier = {
-#			factor = 0.1
-#			from = {
-#				is_galactic_community_member = yes
-#			}
-#			OR = {
-#				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
-#				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
-#			}
-#		}
+		modifier = {
+			factor = 0.1
+			from = {
+				is_galactic_community_member = yes
+			}
+			OR = {
+				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
+				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
+			}
+			FROM = {
+				NOT = { # The Ju Ahet Fallen Empire does not care about the Galactic Community and Pirates cannot join
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
+			}
+		}
 	}
 }
