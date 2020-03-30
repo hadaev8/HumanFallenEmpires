@@ -248,6 +248,7 @@ hfe_effect_pirate_init_country = {
 		name_list = hfe_namelist_pirate
 		released_from_country = event_target:hfe_pirate_target
 		ignore_initial_colony_error = yes
+		origin = "hfe_origin_pirate"
 		effect = {
 			hfe_effect_gov_fix = yes
 			change_country_flag = {
@@ -443,15 +444,22 @@ hfe_effect_pirate_init_country = {
 					OR = {
 						is_country_type = fallen_empire
 						is_country_type = human_fallen_empire
+						is_country_type = awakened_fallen_empire
 						is_country_type = hfe_drone
-						is_country_type = caravaneer_fleet
-						is_country_type = caravaneer_home
+						is_country_type = drone
+#						is_country_type = caravaneer_fleet
+#						is_country_type = caravaneer_home
 						is_country_type = enigmatic_cache
 						is_country_type = hfe_plague_zombie
 						is_country_type = hfe_thoth
 						is_country_type = ruined_marauders
+						is_country_type = awakened_marauders
 						is_country_type = tiyanki
+						is_country_type = amoeba
+						is_country_type = crystal
+						is_country_type = cloud
 						is_country_type = hfe_plague_zombie
+						is_guardian_country = yes
 					}
 				}
 				set_faction_hostility = {
@@ -464,20 +472,6 @@ hfe_effect_pirate_init_country = {
 
 			every_country = {
 				limit = {
-					has_global_flag = hfe_hardcore_disable
-					is_country_type = hfe_features_exodus
-				}
-				set_faction_hostility = {
-					target = prev
-					set_hostile = no
-					set_neutral = yes
-					set_friendly = no
-				}
-			}
-
-			every_country = {
-				limit = {
-					NOT = { has_global_flag = hfe_hardcore_disable }
 					is_country_type = hfe_features_exodus
 				}
 				set_faction_hostility = {
@@ -496,9 +490,14 @@ hfe_effect_pirate_init_country = {
 			}
 			create_leader = {
 				class = admiral
+				skill = 4
+				traits = {
+					add_trait = hfe_admiral_trait_pirate
+				}
 			}
 			create_leader = {
 				class = ruler
+				skill = 3
 			}
 			assign_leader = last_created_leader
 			event_target:hfe_pirate_target = {
@@ -523,6 +522,8 @@ hfe_effect_pirate_init_country = {
 					remove_country_flag = but_nobody_came
 				}
 			}
+			remove_from_galactic_community = yes
+			remove_from_galactic_council = yes
 		}
 	}
 }
