@@ -830,7 +830,7 @@ ship_event = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		create_country = {
-			name = "Varelse Hegemony"
+			name = "Embittered Varelse Hegemony"
 			type = faction
 			species = event_target:hfe_varelse_species
 			ignore_initial_colony_error = yes
@@ -1144,7 +1144,7 @@ ship_event = {
 	}
 	option = {
 		name = uplift.6000.a
-		trigger = {
+		allow = {
 			owner = {
 				has_technology = tech_epigenetic_triggers
 			}
@@ -6584,7 +6584,7 @@ ship_event = {
 			is_ai = no
 			is_country_type = default
 		}
-		not = {
+		NOT = {
 			exists = solar_system.owner
 		}
 	}
@@ -6613,18 +6613,37 @@ ship_event = {
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
-				set_graphical_culture = mammalian_01
+				set_graphical_culture = humanoid_01
+				set_city_graphical_culture = fallen_empire_01
 				set_country_flag = hfe_thoth
+				give_technology = {
+					tech = tech_juggernaut
+					message = no
+				}
+				hfe_effect_init_give_tech_t5 = yes
 				create_fleet = {
 					name = "Runaway Station"
 					settings = {
-						spawn_debris = yes
+						spawn_debris = no
+						can_disband = no
+						uses_naval_capacity = no
+						can_upgrade = no
 					}
 					effect = {
 						set_owner = prev
 						create_ship = {
 							name = "Gentleman Computer"
-							design = NAME_Artist_Enclave_Station
+							design = juggernaut
+#							random_existing_design = juggernaut # LOOKS REALLY COOL
+							graphical_culture = humanoid_01
+							effect = {
+								set_ship_flag = hfe_thoth_war_machine
+							}
+						}
+						create_ship = {
+							name = "Gentleman Computer Data Banks"
+							design = "NAME_Artist_Enclave_Station"
+							graphical_culture = mammalian_01
 							effect = {
 								set_ship_flag = hfe_thoth_station
 							}
@@ -6643,7 +6662,7 @@ ship_event = {
 						}
 					}
 				}
-				set_custom_capital_location = event_target:hfe_thoth_station
+				set_custom_capital_location = event_target:hfe_thoth_war_machine
 				add_to_galactic_community = yes
 			}
 		}
@@ -7073,7 +7092,7 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				9 = {
+				29 = { # If the Ju Ahet like you, they will trust you
 					set_country_flag = hfe.702.goodend
 				}
 				1 = {
@@ -7095,14 +7114,8 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			random_list = {
-				9 = {
-					set_country_flag = hfe.702.goodend
-				}
-				1 = {
-					set_country_flag = hfe.702.badend
-				}
-			}
+#			# If you are stronger than a Fallen Emprie, a single, pacifistic heretic is not worth a war
+			set_country_flag = hfe.702.goodend
 			hfe_effect_event_702_next = yes
 		}
 	}
@@ -7134,10 +7147,10 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				7 = {
+				6 = {
 					set_country_flag = hfe.702.goodend
 				}
-				3 = {
+				4 = {
 					set_country_flag = hfe.702.badend
 				}
 			}
@@ -7152,10 +7165,10 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				5 = {
+				10 = { # Low means low
 					set_country_flag = hfe.702.goodend
 				}
-				5 = {
+				10 = {
 					set_country_flag = hfe.702.badend
 				}
 			}
