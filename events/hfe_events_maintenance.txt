@@ -29,7 +29,7 @@ ship_event = {
 				hfe_effect_convert_to_asteroid = yes
 			}
 		}
-		#log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
+		log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
 		destroy_fleet = fleet
 	}
 }
@@ -70,7 +70,7 @@ planet_event = {
 	}
 
 	immediate = {
-		#log = "converting to asteroid [this.GetName]"
+		log = "converting to asteroid [this.GetName]"
 		hfe_effect_convert_to_asteroid = yes
 	}
 }
@@ -120,6 +120,7 @@ ship_event = {
 				}
 			}
 		}
+		log = "Harvesting Marvel awakens"
 	}
 }
 
@@ -622,12 +623,16 @@ event = {
 				limit = {
 					is_country_type = primitive
 					any_owned_planet = {
-						has_planet_flag = hfe_varelse_colony
+						OR = {
+							has_planet_flag = hfe_varelse_colony
+							has_planet_flag = colony_beta
+						}
 					}
 				}
 				random_owned_planet = {
 					limit = {
 						has_planet_flag = hfe_varelse_colony
+						has_planet_flag = colony_beta
 						has_observation_outpost = yes
 					}
 					planet_event = {

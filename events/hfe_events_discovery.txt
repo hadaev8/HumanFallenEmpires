@@ -23,7 +23,7 @@ country_event = {
 			auto_delete = no
 			day_zero_contact = no
 			name_list = root
-			ship_prefix = ""
+			ship_prefix = root
 			authority = root
 			civics = root
 			species = root
@@ -33,10 +33,19 @@ country_event = {
 			ignore_initial_colony_error = yes
 			released_from_country = root
 			effect = {
+				if = {
+					limit = {
+						ROOT = {
+							species_portrait = "human"
+						}
+					}
+					set_country_flag = discovery_men
+					set_country_flag = hfe_marked_as_human
+				}
 				set_country_flag = custom_start_screen
-				set_country_flag = hfe_marked_as_human
 				set_country_flag = hfe_discovery
 				save_event_target_as = hfe_effect_clone_leader_new_owner
+				save_global_event_target_as = hfe_discovery_country
 				# change_government = {
 				# 	authority = auth_democratic
 				# }
@@ -50,6 +59,7 @@ country_event = {
 					every_owned_planet = {
 						set_owner = prevprev
 						set_capital = yes
+						save_global_event_target_as = hfe_discovery_this_is_not_our_home
 					}
 					every_owned_fleet = {
 						set_owner = prevprev
@@ -92,20 +102,6 @@ country_event = {
 		add_modifier = {
 			modifier = hfe_discovery_translator
 		}
-		every_country = {
-			limit = {
-				from = {
-					OR = {
-						is_country_type = amoeba
-						is_country_type = crystal
-						is_country_type = drone
-						is_country_type = cloud
-					}
-				}
-			}
-			establish_communications = ROOT # ????????? ???????
-			# ????????? ???? ??????????????
-		}
 		set_country_flag = Story7
 		#set_country_flag = day_0
 		set_country_flag = first_contact_event
@@ -123,6 +119,7 @@ country_event = {
 			set_planet_size = 25
 			hfe_effect_clear_buildings_and_destroy_colony = yes
 			reroll_planet = yes
+			save_global_event_target_as = this_was_never_our_home
 		}
 		create_fleet = {
 			effect = {
@@ -139,6 +136,7 @@ country_event = {
 					}
 				}
 				set_leader = last_created_leader
+				save_global_event_target_as = hfe_discovery_science
 			}
 		}
 		create_fleet = {
@@ -159,11 +157,205 @@ country_event = {
 				}
 				assign_leader = last_created_leader
 				set_location = owner.capital_star
+				save_global_event_target_as = hfe_discovery_fleet
 			}
 		}
 		add_resource = {
 			minerals = 500
 			energy = 500
+		}
+		country_event = {
+			id = hfe_discovery.2
+			days = 3
+		}
+		country_event = {
+			id = hfe_discovery.3
+			days = 10
+		}
+		country_event = {
+			id = hfe_discovery.4
+			days = 17
+		}
+		country_event = {
+			id = hfe_discovery.5
+			days = 24
+		}
+	}
+}
+
+country_event = {
+	id = hfe_discovery.2
+	title = HFE_DISCOVERY_MET_AMOEBAS
+	desc = HFE_DISCOVERY_MET_AMOEBAS_DESC
+	picture = GFX_evt_friendly_amoeba
+	location = event_target:hfe_discovery_fleet
+	show_sound = event_space_amoeba
+	is_triggered_only = yes
+#	show_sound = event_sensor_ping
+	trackable = no
+
+	immediate = {
+		every_country = {
+			limit = {
+				from = {
+					is_country_type = amoeba
+				}
+			}
+			save_global_event_target_as = hfe_call_bubbles
+			establish_communications = ROOT # ????????? ???????
+			# ????????? ???? ??????????????
+			set_country_flag = amoeba_encountered
+		}
+	}
+
+	option = { # Fight the amoebas
+		name = "HFE_DISCOVERY_AMOEBA_RESEARCH"
+		ROOT = {
+			enable_special_project = {
+				name = "AMOEBAS_PROJECT"
+				# The Vanilla rendition of this targets the planetary capital
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
+		}
+	}
+
+	option = { # Peace with the Amoebas
+		name = "HFE_DISCOVERY_AMOEBA_PEACE"
+		trigger = {
+			NOT = {
+				is_xenophobe = yes
+			}
+		}
+		ROOT = {
+			enable_special_project = {
+				name = "AMOEBAS_PACIFICATION_PROJECT"
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_discovery.3
+	title = HFE_DISCOVERY_MET_CRYSTAL_FAGS
+	desc = HFE_DISCOVERY_MET_CRYSTAL_FAGS_DESC
+	picture = GFX_evt_star_chart
+	location = event_target:hfe_discovery_fleet
+	show_sound = event_crystal_ship
+	trackable = no
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				from = {
+					is_country_type = crystal
+				}
+			}
+			establish_communications = ROOT # ????????? ???????
+			# ????????? ???? ??????????????
+			save_global_event_target_as = hfe_call_the_crystal_fags
+			set_country_flag = crystal_encountered
+		}
+	}
+
+	option = { # Fight the crystals
+		name = "HFE_DISCOVERY_CRYSTAL_FAG_RESEARCH"
+		ROOT = {
+			enable_special_project = {
+				name = "CRYSTALS_PROJECT"
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
+		}
+	}
+
+	option = { # Peace with the crystals
+		name = "HFE_DISCOVERY_CRYSTAL_FAG_PEACE"
+		trigger = {
+			NOT = {
+				is_xenophobe = yes
+			}
+		}
+		ROOT = {
+			enable_special_project = {
+				name = "CRYSTALS_PACIFICATION_PROJECT"
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_discovery.4
+	title = HFE_DISCOVERY_MET_NORMAL_ANCIENT_MINING_DRONES
+	desc = HFE_DISCOVERY_MET_NORMAL_ANCIENT_MINING_DRONES_DESC
+	picture = GFX_evt_mining_operations
+	location = event_target:hfe_discovery_fleet
+	show_sound = event_ancient_drone
+	trackable = no
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				from = {
+					is_country_type = drone
+				}
+			}
+			save_event_target_as = hfe_call_the_drones
+			establish_communications = ROOT # ????????? ???????
+			# ????????? ???? ??????????????
+			set_country_flag = drone_encountered
+		}
+	}
+
+	option = { # Fight the Normal Ancient Mining Drones
+		name = "HFE_DISCOVERY_NORMAL_ANCIENT_MINING_DRONE_RESEARCH"
+		ROOT = {
+			enable_special_project = {
+				name = "DRONES_PROJECT"
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_discovery.5
+	title = HFE_DISCOVERY_MET_PIKACHU_CLOUDS
+	desc = HFE_DISCOVERY_MET_PIKACHU_CLOUDS_DESC
+	picture = GFX_evt_star_chart
+	location = event_target:hfe_discovery_fleet
+	show_sound = event_sensor_ping
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				from = {
+					is_country_type = cloud
+				}
+			}
+			save_global_event_target_as = hfe_call_the_pikachu_clouds
+			establish_communications = ROOT # ????????? ???????
+			# ????????? ???? ??????????????
+			set_country_flag = cloud_encountered
+		}
+	}
+
+	option = { # Fight the clous
+		name = "HFE_DISCOVERY_NORMAL_PIKACHU_CLOUD_RESEARCH"
+		ROOT = {
+			enable_special_project = {
+				name = "CLOUDS_PROJECT"
+				location = event_target:hfe_discovery_fleet
+				owner = root
+			}
 		}
 	}
 }
@@ -176,17 +368,18 @@ country_event = {
 
 	trigger = {
 		# mods stuff auto contact with vanilla stuff
-		or = {
+		OR = {
 			has_modifier = hfe_discovery_translator
 			is_country_type = hfe_pirate
 			is_country_type = hfe_plague_zombie
 		}
 		from = {
-			or = {
+			OR = {
 				has_modifier = hfe_discovery_translator
 				hfe_trigger_is_fallen = yes
 				# pirate will know pirate, why not
 				is_country_type = hfe_pirate
+				is_country_type = pirate
 				# vanilla
 				is_guardian_country = yes
 				is_country_type = default
@@ -195,6 +388,17 @@ country_event = {
 				is_country_type = dormant_marauders
 				is_country_type = marauder_raiders
 				is_country_type = awakened_marauders
+				is_country_type = marauder_raiders
+				is_country_type = caravaneer_home
+				is_country_type = caravaneer_fleet
+				is_country_type = enclave
+				is_country_type = prikki
+				is_country_type = swarm
+				# Allows the Discovery Fleet to track the Crisis too
+				is_country_type = extradimensional
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+				is_country_type = ai_empire
 			}
 		}
 		nand = {

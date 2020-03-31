@@ -501,6 +501,7 @@ country_event = {
 	}
 	after = {
 		remove_global_flag = hfe_init_fast_start
+		log = "HFE started"
 	}
 }
 
@@ -854,7 +855,7 @@ country_event = {
 						}
 					}
 				}
-				#log = "hfe find earth"
+				log = "hfe find earth"
 				save_global_event_target_as = hfe_earth
 			}
 		}
@@ -888,6 +889,7 @@ country_event = {
 					set_species_identity = event_target:hfe_human_species
 				}
 				save_global_event_target_as = hfe_egypt_species
+				log = "Ju Ahet Species spawned"
 			}
 		}
 		# ahet
@@ -904,6 +906,7 @@ country_event = {
 			}
 			effect = {
 				save_global_event_target_as = hfe_ahet_species
+				log = "Ahets spawned"
 			}
 		}
 		# varelse
@@ -921,6 +924,7 @@ country_event = {
 			}
 			effect = {
 				save_global_event_target_as = hfe_varelse_species
+				log = "Varelse spawned"
 			}
 		}
 		# future
@@ -946,6 +950,7 @@ country_event = {
 				}
 				set_species_identity = event_target:hfe_egypt_species
 				save_global_event_target_as = hfe_future_species
+				log = "Kadmen spawned"
 			}
 		}
 		# spawn story systems
@@ -1037,6 +1042,7 @@ country_event = {
 				initializer = hfe_initializer_future_main
 			}
 			set_global_flag = hfe_future_spawned
+			log = "Kad Republic found and clay spawned"
 		}
 		if = {
 			limit = {
@@ -1059,6 +1065,7 @@ country_event = {
 					initializer = hfe_initializer_future_main
 				}
 				set_global_flag = hfe_future_spawned
+				log = "Kad Republic not found but clay spawned"
 			}
 		}
 		event_target:hfe_future_country = {
@@ -1082,6 +1089,7 @@ country_event = {
 				}
 			}
 		}
+		log = "Kad Republic clay acquired"
 	}
 }
 
@@ -1092,6 +1100,14 @@ country_event = {
 	hide_window = yes
 
 	immediate = {
+		if = {
+			limit = { exists = event_target:event_target:hfe_egypt_country }
+			log = "Ju Ahet located, begin HFE spawn batch command"
+		}
+		if = {
+			limit = { NOT = { exists = event_target:hfe_egypt_country } }
+			log = "Dude, where's my pyramids?"
+		}
 		set_spawn_system_batch = begin
 		random_system = {
 			limit = {
@@ -1107,6 +1123,7 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_egypt_main
 			}
+			log = "Ju Ahet Home of Light called by HFE INIT 111"
 			set_global_flag = hfe_egypt_spawned
 			random_neighbor_system = {
 				spawn_system = {
@@ -1115,6 +1132,7 @@ country_event = {
 					hyperlane = no
 					initializer = hfe_initializer_egypt_col_0
 				}
+				log = "First Ju Ahet Colony called by HFE INIT 111"
 				random_neighbor_system = {
 					limit = {
 						nor = {
@@ -1129,8 +1147,10 @@ country_event = {
 						initializer = hfe_initializer_egypt_col_1
 					}
 				}
+				log = "Second Ju Ahet Colony called by HFE INIT 111"
 			}
 		}
+		log = "Ju Ahet colonies successfully spawned by HFE INIT 111"
 		# some other systems
 		random_system = {
 			limit = {
@@ -1340,6 +1360,7 @@ country_event = {
 				initializer = hfe_initializer_memorial_3
 			}
 		}
+		log = "All four Memorial Worlds put in place by HFE INIT 111"
 		random_system = {
 			limit = {
 				not = {
@@ -1353,6 +1374,7 @@ country_event = {
 				initializer = hfe_initializer_varelse
 			}
 		}
+		log = "Colony Beta called by HFE EVENT INIT 111"
 		random_system = {
 			limit = {
 				not = {
@@ -1366,6 +1388,7 @@ country_event = {
 				initializer = hfe_initializer_ahet_0
 			}
 		}
+		log = "First Ahet planet called in HFE EVENT INIT 111"
 		random_system = {
 			limit = {
 				not = {
@@ -1379,6 +1402,7 @@ country_event = {
 				initializer = hfe_initializer_ahet_1
 			}
 		}
+		log = "Second Ahet Planet called in HFE EVENT INIT 111"
 		random_system = {
 			limit = {
 				not = {
@@ -1392,6 +1416,7 @@ country_event = {
 				initializer = hfe_initializer_ahet_home
 			}
 		}
+		log = "Ahet Happy Ending called in HFE EVENT INIT 111"
 		random_system = {
 			limit = {
 				not = {
@@ -1405,7 +1430,9 @@ country_event = {
 				initializer = hfe_initializer_copernicus
 			}
 		}
+		log = "Ptolemy of Alexandria proven right by HFE EVENT INIT 111"
 		set_spawn_system_batch = end
+		log = "All HFE Story Planets successfully spawned!"
 		# expand borders and develop
 		event_target:hfe_egypt_country = {
 			hfe_effect_init_give_tech_t5 = yes
@@ -1436,6 +1463,7 @@ country_event = {
 #			id = hfe_init.113
 #			days = 14
 #		}
+		log = "Ju Ahet clay acquired"
 	}
 }
 
@@ -1462,6 +1490,7 @@ country_event = {
 				initializer = hfe_initializer_drone_sector_0
 			}
 		}
+		log = "Harvesting Marvel Core called by HFE INIT 112"
 		random_system = {
 			limit = {
 				has_star_flag = hfe_drone_0
@@ -1496,7 +1525,17 @@ country_event = {
 					days = 1
 				}
 			}
+			every_country = {
+				limit = {
+					is_country_type = drone
+				}
+				set_subject_of = {
+					subject_type = vassal
+					who = event_target:hfe_drone_country
+				}
+			}
 		}
+		log = "Harvesting Marvel clay acquired"
 	}
 }
 

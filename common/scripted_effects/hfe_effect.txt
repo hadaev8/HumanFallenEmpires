@@ -14,7 +14,7 @@ hfe_effect_refuge_10 = {
 
 # for pop
 hfe_effect_refuge_or_die = {
-	#log = "pop refuge effect $thisgetname$"
+	log = "pop refuge effect $thisgetname$"
 	if = {
 		limit = {
 			hfe_trigger_is_robot = no
@@ -182,7 +182,7 @@ hfe_effect_refuge_or_die = {
 		}
 	}
 	else = {
-		#log = "refuge pop killed $thisgetname$"
+		log = "refuge pop killed $thisgetname$"
 		kill_pop = yes
 	}
 }
@@ -209,7 +209,7 @@ hfe_effect_settle_pop = {
 			}
 		}
 		event_target:hfe_settle_pop_target = {
-			#	log = "looping in settle pop"
+			log = "ERROR: looping in settle pop"
 			#hfe_effect_refuge_or_die = yes
 			kill_pop = yes
 		}
@@ -324,7 +324,7 @@ hfe_effect_settle_pop = {
 				}
 				hfe_effect_population_fix_robot_pop = yes
 			}
-			#log = "pop moved to [this.GetName]"
+			log = "pop moved to [this.GetName]"
 		}
 	}
 }
@@ -759,15 +759,18 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 			name = "Varelse Hegemony"
 			type = default
 			species = event_target:hfe_varelse_species
+			origin = "hfe_civic_features_exodus"
 			ethos = {
 				ethic = ethic_xenophobe
 				ethic = ethic_militarist
 				ethic = ethic_materialist
 			}
 			effect = {
+				set_country_flag = was_government_in_exile
+				set_country_flag = chosen_to_exodus
 				set_country_flag = hfe_varelse
 				hfe_effect_gov_fix = yes
-				hfe_effect_init_give_tech_t3 = yes
+				hfe_effect_init_give_tech_t4 = yes
 				prev = {
 					create_colony = {
 						owner = prev
@@ -783,8 +786,12 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 					}
 				}
 				add_resource = {
-					minerals = 1000
+					minerals = 5000
 					energy = 5000
+					food = 5000
+					alloys = 1000
+					consumer_goods = 1000
+					influence = 1000
 				}
 			}
 		}
@@ -799,6 +806,7 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 			days = 3650
 		}
 		hfe_effect_create_starbase_starport_from_planet = yes
+		log = "Surprise Varelse fleet settled down"
 	}
 }
 
@@ -893,7 +901,7 @@ hfe_effect_create_egypt_fleet = {
 		class = admiral
 		species = this
 		skill = 5
-		leader_age_min = 150
+		leader_age_min = 100
 		leader_age_max = 650
 	}
 	create_fleet_from_naval_cap = 0.2
@@ -901,12 +909,13 @@ hfe_effect_create_egypt_fleet = {
 		assign_leader = last_created_leader
 	}
 	create_fleet = {
-		# settings = {
-		# 	can_change_composition = no
-		# 	uses_naval_capacity = no
-		# }
+		settings = {
+#		 	can_change_composition = no
+		 	uses_naval_capacity = no
+		}
 		effect = {
 			set_owner = prev
+			log = "Ju Ahet gets fleet"
 			while = {
 				count = 5
 				create_ship = {
@@ -950,10 +959,10 @@ hfe_effect_create_future_fleet = {
 		leader_age_min = 40
 	}
 	create_fleet = {
-		# settings = {
-		# 	can_change_composition = no
-		# 	uses_naval_capacity = no
-		# }
+		settings = {
+#		 	can_change_composition = no
+		 	uses_naval_capacity = no
+		}
 		effect = {
 			set_owner = prev
 			while = {
@@ -1033,6 +1042,7 @@ hfe_effect_create_future_fleet = {
 # 		}
 # 	}
 # }
+
 hfe_effect_set_mineral_orbital_deposit = {
 	random_list = {
 		10 = {
@@ -1247,7 +1257,7 @@ hfe_effect_add_psionic_trait = {
 
 # for planet
 hfe_effect_convert_to_asteroid = {
-	#log = "converting to asteroid [this.GetName]"
+	log = "converting to asteroid [this.GetName]"
 	# flee fleets
 	if = {
 		limit = {
@@ -1827,7 +1837,7 @@ hfe_effect_gov_fix_to_hive = {
 		}
 		copy_ethos_and_authority = last_created_country
 		random_list = {
-			30 = {
+			50 = {
 				change_government = {
 					civics = random
 				}
@@ -2082,6 +2092,7 @@ hfe_effect_advisor_future_on = {
 				}
 			}
 		}
+		log = "FINALLY GOT THAT FRICKING ADVISOR"
 	}
 }
 
@@ -2254,7 +2265,8 @@ hfe_effect_remove_prescripted_ideal = {
 						value > 0.2
 					}
 				}
-				change_pc = pc_barren
+				change_pc = pc_broken
+				hfe_effect_set_mineral_orbital_deposit = yes
 			}
 		}
 	}
@@ -2270,6 +2282,7 @@ hfe_effect_stargate_on = {
 			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
+		log = "Star Gate activated"
 	}
 }
 
@@ -2283,6 +2296,7 @@ hfe_effect_stargate_off = {
 			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
+		log = "Star Gate shut down"
 	}
 }
 
@@ -2294,10 +2308,12 @@ hfe_effect_stargate_add = {
 	last_created_ambient_object = {
 		save_event_target_as = hfe_stargate
 	}
+	log = "Star Gate spawned"
 }
 
 hfe_effect_stargate_remove = {
 	destroy_ambient_object = event_target:hfe_stargate
+	log = "Star Gate terminated"
 }
 
 # give tech option
@@ -2414,7 +2430,7 @@ hfe_effect_create_crystal_fleet = {
 					is_difficulty > 3
 				}
 				modifier = {
-					factor = 0.75
+					factor = 0.1
 					is_difficulty > 4
 				}
 				# at least 1 ship in fleet
@@ -2726,6 +2742,7 @@ hfe_effect_get_space_monster_country = {
 					establish_communications_no_message = prev
 				}
 				save_global_event_target_as = hfe_global_space_monster
+				log = "Butt Hurt Crystals spawned"
 			}
 		}
 	}
@@ -2738,8 +2755,10 @@ hfe_effect_spawn_space_monster = {
 			count = 5
 			random_list = {
 				10 = {
+					log = "Butt Hurt Crystals disbanded"
 				}
 				10 = {
+					log = "Butt Hurt Crystals spanwed"
 					# some crystals
 					create_fleet = {
 						name = "Butt Hurt Crystals"

@@ -326,22 +326,6 @@ country_event = {
 
 		set_country_flag = is_government_in_exile
 
-		if = {
-			limit = { has_global_flag = hfe_hardcore_disable }
-			add_modifier = {
-				modifier = tsp_hfe_features_exodus_game_over_prevention
-				days = -1
-			}
-			add_modifier = {
-				modifier = tsp_hfe_features_exodus_resources_science
-				days = -1
-			}
-			add_modifier = {
-				modifier = tsp_hfe_features_exodus_resources_other
-				days = -1
-			}
-		}
-
 		add_resource = {
 			energy = 500
 			minerals = 3000
@@ -351,6 +335,11 @@ country_event = {
 			influence = 1000
 		}
 
+		give_technology = {
+			tech = tech_assault_armies
+			message = no
+		}
+
 		set_country_type = hfe_features_exodus
 
 		if = {
@@ -358,12 +347,13 @@ country_event = {
 				NOT = { is_pacifist = yes }
 			}
 			create_fleet = {
+				name = "Real Estate Agents"
 				effect = {
 					set_name = "Free Real Estate"
 					set_owner = ROOT
 					set_fleet_stance = evasive
 					while = {
-						count = 3
+						count = 4
 						create_army_transport = {
 							army_name = "Free Real Estate Scouts"
 							army_type = assault_army
@@ -385,6 +375,7 @@ country_event = {
 				is_materialist = yes
 			}
 			create_fleet = {
+				name = "The Wanderer"
 				effect = {
 					set_name = random
 					set_owner = ROOT
@@ -414,30 +405,97 @@ country_event = {
 				has_global_flag = hfe_hardcore_disable
 			}
 			create_fleet = {
+				name = "Great White Hope"
 				effect = {
 					set_name = "Great White Hope"
 					set_owner = ROOT
 					create_ship = {
 						name = "Great White Hope"
-						random_existing_design = corvette
-						graphical_culture = hfe_graphical_culture_pirate
+						random_existing_design = pirate_destroyer
+						graphical_culture = lithoid_01
 					}
-					set_fleet_stance = evasive
+					create_ship = {
+						name = "Great Blue Hope"
+						random_existing_design = pirate_corvette
+						graphical_culture = lithoid_01
+					}
+					create_ship = {
+						name = "Great Yellow Hope"
+						random_existing_design = pirate_corvette
+						graphical_culture = lithoid_01
+					}
+					set_fleet_stance = passive
 					set_location = root.capital_scope.star
 				}
 			}
 		}
 		every_owned_planet = {
-			create_fleet = {
-				effect = {
-					set_owner = root
-					create_ship = {
-						name = "New Hope"
-						random_existing_design = colonizer
-						graphical_culture = hfe_graphical_culture_pirate
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_authority = auth_corporate
+							has_civic = civic_corporate_dominion
+							has_civic = civic_merchant_guilds
+						}
 					}
-					set_fleet_stance = evasive
-					set_location = root.capital_scope.star
+				}
+				create_fleet = {
+					name = "New Hope"
+					effect = {
+						set_owner = root
+						create_ship = {
+							name = "New Hope"
+							random_existing_design = colonizer
+							graphical_culture = hfe_graphical_culture_pirate
+						}
+						set_fleet_stance = evasive
+						set_location = root.capital_scope.star
+					}
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							has_authority = auth_corporate
+							has_civic = civic_corporate_dominion
+							has_civic = civic_merchant_guilds
+						}
+					}
+				}
+				create_fleet = {
+					name = "Phat Lewtz"
+					effect = {
+						set_owner = root
+						create_ship = {
+							name = "New Hope"
+							random_existing_design = sponsored_colonizer
+							graphical_culture = hfe_graphical_culture_pirate
+						}
+						set_fleet_stance = evasive
+						set_location = root.capital_scope.star
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_lithoid = yes
+					has_lithoids = yes
+					has_global_flag = hfe_hardcore_disable
+				}
+				create_fleet = {
+					name = "Rock Lobster"
+					effect = {
+						set_owner = root
+						create_ship = {
+							name = "We Will Rock You"
+							random_existing_design = lithoid_colonizer
+							graphical_culture = lithoid_01
+						}
+						set_fleet_stance = evasive
+						set_location = root.capital_scope.star
+					}
 				}
 			}
 #			# hfe_effect_clear_buildings_and_destroy_colony = yes
@@ -462,6 +520,42 @@ country_event = {
 			}
 		}
 		hfe_effect_remove_prescripted_ideal = yes
+		log = "Exodus successfully spawned"
+		country_event = {
+			id = hfe_features.5
+			days = 3
+		}
+	}
+}
+
+country_event = {
+	id = hfe_features.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_game_over_prevention
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_science
+				days = -1
+			}
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_resources_other
+				days = -1
+			}
+			log = "Exodus Fleet successfully set to Non-Hardcore Mode"
+			break = yes
+		}
+		if = {
+			limit = { NOT = { has_global_flag = hfe_hardcore_disable } }
+			log = "Exodus Fleet spawned in Hardcore Mode"
+			break = yes
+		}
 	}
 }
 

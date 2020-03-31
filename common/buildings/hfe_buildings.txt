@@ -1,7 +1,8 @@
 #
 
-hfe_building_terraformer = {
+hfe_building_terraformer = { # Temple of Thoth
 	icon = building_great_pyramid
+	base_cap_amount = 1
 	base_buildtime = @fetime
 	can_demolish = no
 	can_be_ruined = no
@@ -10,7 +11,14 @@ hfe_building_terraformer = {
 	potential = {
 		exists = owner
 		owner = { is_gestalt = no }
+		OR = {
+			owner = { has_country_flag = hfe_egypt }
+			planet = { has_planet_flag = hfe_home_of_light }
+		}
 	}
+#	allow = {
+#		planet = { has_planet_flag = hfe_home_of_light }
+#	}
 	destroy_trigger = {
 		exists = owner
 		owner = { is_gestalt = yes }
@@ -49,6 +57,7 @@ hfe_building_terraformer_machine = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = { 
 			is_machine_empire = yes
 			NOT = { has_valid_civic = civic_machine_servitor }
@@ -91,6 +100,7 @@ hfe_building_terraformer_machine_rogue_servitor = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = {
 			is_machine_empire = yes
 			has_valid_civic = civic_machine_servitor
@@ -131,6 +141,7 @@ hfe_building_terraformer_hive_mind = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = {
 			is_hive_empire = yes
 		}
@@ -161,6 +172,13 @@ hfe_building_virtual = {
 	can_be_ruined = no
 	can_be_disabled = yes
 	category = amenity
+	potential = {
+		OR = {
+			owner = { has_country_flag = hfe_future }
+			planet = { has_planet_flag = hfe_future_capital }
+			planet = { has_planet_flag = hfe_future_planet }
+		}
+	}
 	resources = {
 		category = planet_buildings
 		upkeep = {
@@ -435,17 +453,29 @@ hfe_building_high_mechanicus_godforge = {
 	category = manufacturing
 	
 	potential = {
-		has_planet_flag = hfe_varelse_colony
-		owner = { has_country_flag = hfe_varelse }
+#		planet = {
+#			OR = {
+#				has_planet_flag = hfe_varelse_colony
+#				has_planet_flag = colony_beta
+#			}
+#		}
 		OR = {
+			owner = { has_country_flag = hfe_varelse }
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			owner = { has_country_flag = high_mechanicus_retained }
 			owner = { has_country_flag = varelse_fedora_governance }
+			owner = { has_civic = hfe_civic_high_mechanicus }
+			owner = { has_civic = hfe_civic_overthrown_mechanicus }
 		}
 	}
 
 	allow = {
-		has_planet_flag = hfe_varelse_colony
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 		OR = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			owner = { has_country_flag = high_mechanicus_retained }
@@ -482,8 +512,7 @@ hfe_building_high_mechanicus_godforge = {
 		}
 		modifier = {
 			job_hfe_job_godforge_primitive_add = 1
-			job_primitive_laborer_add = 1
-			job_primitive_priest_add = 2
+			job_primitive_laborer_add = 5
 			job_primitive_priest_2_add = 1
 		}
 	}
@@ -499,7 +528,7 @@ hfe_building_high_mechanicus_godforge = {
 			}
 		}
 		modifier = {
-			job_primitive_noble_add = 1
+			job_noble_add = 1
 		}
 	}
 
@@ -508,6 +537,7 @@ hfe_building_high_mechanicus_godforge = {
 			owner = {
 				NOT = {
 					is_country_type = primitive
+					is_primitive = yes
 					has_ethic = ethic_gestalt_consciousness
 				}
 			}
@@ -566,7 +596,7 @@ hfe_building_high_mechanicus_godforge = {
 			}
 			alloys = 30
 			consumer_goods = 30
-			food = 10
+			food = 20
 			engineering_research = 10
 		}
 		produces = {
@@ -667,6 +697,12 @@ hfe_building_high_mechanicus_stronghold = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 	}
 
 	destroy_trigger = {
@@ -728,11 +764,13 @@ hfe_building_high_mechanicus_stronghold = {
 
 	triggered_planet_modifier = {
 		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			OR = {
 				owner = { has_authority = auth_imperial }
 				owner = { has_civic = civic_aristocratic_elite }
-				owner = { is_spiritualist = yes }
+				AND = {
+					owner = { is_spiritualist = yes }
+					owner = { has_country_flag = hfe_varelse_primitive_0 }
+				}
 			}
 		}
 		modifier = {
@@ -814,6 +852,12 @@ hfe_building_fedora_stronghold = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 	}
 
 	destroy_trigger = {
@@ -935,6 +979,16 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 		}
 	}
 
+	allow = {
+		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
+	}
+
 	destroy_trigger = {
 		owner = {
 			OR = {
@@ -1012,6 +1066,13 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 
 	triggered_planet_modifier = {
 		potential = {
+			owner = { has_country_flag = hfe_varelse_primitive_0 }
+		}
+		pop_ethic_spiritualist_attraction_mult = 0.8
+	}
+
+	triggered_planet_modifier = {
+		potential = {
 			OR = {
 				owner = { has_authority = auth_imperial }
 				owner = { has_civic = civic_aristocratic_elite }
@@ -1070,6 +1131,15 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 	potential = {
 		owner = { NOT = { has_country_flag = hfe_varelse_primitive_0 } }
 		owner = { has_ethic = ethic_gestalt_consciousness }
+	}
+
+	allow = {
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 	}
 
 	destroy_trigger = {
@@ -1173,6 +1243,10 @@ hfe_building_mechanicus_cult_temple = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		NOT = {
+			planet = { has_planet_flag = hfe_varelse_colony }
+			planet = { has_planet_flag = colony_beta }
+		}
 	}
 
 	destroy_trigger = {
@@ -1184,8 +1258,8 @@ hfe_building_mechanicus_cult_temple = {
 					has_country_flag = varelse_fedora_governance
 				}
 			}
-			has_modifier = slave_colony
-			has_modifier = resort_colony
+			planet = { has_modifier = slave_colony }
+			planet = { has_modifier = resort_colony }
 		}
 	}
 

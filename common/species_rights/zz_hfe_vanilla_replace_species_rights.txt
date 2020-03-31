@@ -19,7 +19,10 @@ citizenship_slavery = {
 			fail_text = "HIVE_MIND_MAIN_SPECIES_ALWAYS_CITIZEN"
 			NAND = {
 				from = { has_authority = auth_hive_mind }
-				is_same_species = from
+				OR = {
+					is_same_species = from
+					has_trait = trait_hive_mind
+				}
 			}
 		}
 		custom_tooltip = {
@@ -57,10 +60,41 @@ citizenship_slavery = {
 		custom_tooltip = {
 			fail_text = does_not_embrace_species_slavery
 			# mod
-			or = {
-				has_species_flag = hfe_forever_slave
-				has_species_flag = hfe_forever_slave@from
-#				has_trait = hfe_species_trait_happy_slave # For those who are not slavers, this Trait just makes them docile
+			OR = {
+				AND = {
+					OR = {
+						has_species_flag = hfe_forever_slave
+						has_species_flag = hfe_forever_slave@from
+					}
+					from = {
+						OR = { # The Ju Ahet will ALWAYS enslave Ahets
+							has_country_flag = hfe_egypt
+							has_country_flag = hfe_pirate
+							is_country_type = hfe_pirate
+							allows_slavery = yes
+						}
+					}
+				}
+				AND = {
+#					# For those who are not slavers, this Trait
+#					# just makes them docile
+					has_trait = hfe_species_trait_happy_slave
+					from = {
+						OR = { # The Ju Ahet will ALWAYS enslave Ahets
+							has_country_flag = hfe_egypt
+							has_country_flag = hfe_pirate
+							is_country_type = hfe_pirate
+							allows_slavery = yes
+							is_authoritarian = yes
+							is_xenophobe = yes
+#							NOT = {
+#								is_egalitarian = yes
+#								is_xenophile = yes
+#							}
+						}
+					}
+				}
+				# The Ju Ahet will ALWAYS enslave Ahets
 				from = { has_country_flag = hfe_egypt }
 				from = { has_country_flag = hfe_pirate }
 				from = { is_country_type = hfe_pirate }
@@ -78,6 +112,9 @@ citizenship_slavery = {
 					has_country_flag = hfe_pirate
 					is_country_type = hfe_pirate
 				}
+			}
+			from = {
+				NOT = { is_xenophile = yes }
 			}
 		}
 		custom_tooltip = {
@@ -101,6 +138,11 @@ citizenship_slavery = {
 					is_ai = no
 					is_xenophobe = yes
 				}
+				NOT = { # The Ju Ahet and Pirates can always have slaves
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
 			}
 		}
 		modifier = {
@@ -108,6 +150,11 @@ citizenship_slavery = {
 			from = {
 				is_authoritarian = no
 				is_xenophobe = no
+				NOT = { # The Ju Ahet and Pirates can always have slaves
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
 			}
 		}
 		modifier = {
@@ -119,102 +166,13 @@ citizenship_slavery = {
 				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
 				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
 			}
+			FROM = {
+				NOT = { # The Ju Ahet Fallen Empire does not care about the Galactic Community and Pirates cannot join
+					has_country_flag = hfe_egypt
+					has_country_flag = hfe_pirate
+					is_country_type = hfe_pirate
+				}
+			}
 		}
 	}
 }
-
-# slavery_military = {
-# 	token = slavery_military
-
-# 	modifier = {
-# 		army_damage_mult = 0.2
-# 	}
-
-# 	potential = {
-# 		host_has_dlc = "Utopia"
-# 		from = { NOT = { has_ethic = ethic_gestalt_consciousness } }
-# 	}
-
-# 	allow = {
-# 		hidden_trigger = { exists = from }
-# 		custom_tooltip = {
-# 			or = {
-# 				has_citizenship_type = { country = from type = citizenship_slavery }
-# 				has_citizenship_type = { country = from type = citizenship_caste_system_limited }
-# 			}
-# 			fail_text = species_is_not_enslaved
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = species_is_machine_integrated
-# 			OR = {
-# 				NOT = { from = { has_authority = auth_machine_intelligence } }
-# 				AND = {
-# 					from = { has_authority = auth_machine_intelligence }
-# 					has_citizenship_type = { country = from type = citizenship_full_machine }
-# 				}
-# 			}
-# 		}
-# 	}
-# 	ai_will_do = {
-# 		factor = 5
-# 		modifier = {
-# 			factor = 0
-# 			NOT = { has_trait = trait_very_strong }
-# 		}
-# 	}
-# }
-
-# purge_neutering = {
-# 	token = purge_neutering
-
-# 	potential = {
-# 		host_has_dlc = "Utopia"
-# 		from = { NOT = { has_ethic = ethic_gestalt_consciousness } }
-# 	}
-
-# 	allow = {
-# 		hidden_trigger = { exists = from }
-# 		custom_tooltip = {
-# 			fail_text = "lonely_hive_mind_pops_kill_themselves_purge_type"
-# 			is_lonely_hive_mind_pop = no
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = "disconnected_machine_pops_kill_themselves_citizenship"
-# 			is_disconnected_machine_pop = no
-# 		}
-# 		custom_tooltip = {
-# 			fail_text = PURGES_ALLOWED
-# 			from = {
-# 				OR = {
-# 					has_ethic = ethic_gestalt_consciousness
-# 					has_valid_civic = civic_fanatic_purifiers
-# 					has_policy_flag = purge_allowed
-# 					# mod
-# 					has_policy_flag = purge_displacement_only
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	ai_will_do = {
-# 		factor = 10
-# 		modifier = {
-# 			factor = 0
-# 			from = {
-# 				NOR = {
-# 					has_ethic = ethic_egalitarian
-# 					has_ethic = ethic_fanatic_egalitarian
-# 				}
-# 			}
-# 		}
-# 		modifier = {
-# 			factor = 0
-# 			from = {
-# 				has_valid_ai_personality = yes
-# 				NOT = {
-# 					has_ai_personality_behaviour = purger
-# 				}
-# 			}
-# 		}
-# 	}
-# }

@@ -248,6 +248,7 @@ hfe_effect_pirate_init_country = {
 		name_list = hfe_namelist_pirate
 		released_from_country = event_target:hfe_pirate_target
 		ignore_initial_colony_error = yes
+		origin = "hfe_origin_pirate"
 		effect = {
 			hfe_effect_gov_fix = yes
 			change_country_flag = {
@@ -267,6 +268,8 @@ hfe_effect_pirate_init_country = {
 				}
 			}
 			randomize_flag_symbol = pirate
+			save_event_target_as = hfe_pirate_clan
+			set_country_flag = hfe_pirate
 			if = {
 				limit = {
 					has_authority = auth_corporate
@@ -290,8 +293,37 @@ hfe_effect_pirate_init_country = {
 				country_remove_ethic = ethic_fanatic_pacifist
 				country_add_ethic = ethic_fanatic_militarist
 			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+				}
+				country_remove_ethic = ethic_egalitarian
+				country_add_ethic = ethic_authoritarian
+			}
+			else_if = {
+				limit = {
+					has_ethic = ethic_fanatic_egalitarian
+				}
+				country_remove_ethic = ethic_fanatic_egalitarian
+				country_add_ethic = ethic_fanatic_authoritarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophile
+				}
+				country_remove_ethic = ethic_xenophile
+				country_add_ethic = ethic_authoritarian
+			}
+			else_if = {
+				limit = {
+					has_ethic = ethic_fanatic_xenophile
+				}
+				country_remove_ethic = ethic_fanatic_xenophile
+				country_add_ethic = ethic_fanatic_authoritarian
+			}
 			add_modifier = {
 				modifier = hfe_pirate_country_unkeep
+				days = -1
 			}
 			random_list = {
 				10 = {
@@ -375,8 +407,6 @@ hfe_effect_pirate_init_country = {
 				who = event_target:hfe_pirate_target
 				flag = pirate_relation
 			}
-			set_country_flag = hfe_pirate
-			save_event_target_as = hfe_pirate_clan
 			# for vanilla localization
 			save_event_target_as = pirate_band
 			every_country = {
@@ -414,15 +444,22 @@ hfe_effect_pirate_init_country = {
 					OR = {
 						is_country_type = fallen_empire
 						is_country_type = human_fallen_empire
+						is_country_type = awakened_fallen_empire
 						is_country_type = hfe_drone
-						is_country_type = caravaneer_fleet
-						is_country_type = caravaneer_home
+						is_country_type = drone
+#						is_country_type = caravaneer_fleet
+#						is_country_type = caravaneer_home
 						is_country_type = enigmatic_cache
 						is_country_type = hfe_plague_zombie
 						is_country_type = hfe_thoth
 						is_country_type = ruined_marauders
+						is_country_type = awakened_marauders
 						is_country_type = tiyanki
+						is_country_type = amoeba
+						is_country_type = crystal
+						is_country_type = cloud
 						is_country_type = hfe_plague_zombie
+						is_guardian_country = yes
 					}
 				}
 				set_faction_hostility = {
@@ -435,20 +472,6 @@ hfe_effect_pirate_init_country = {
 
 			every_country = {
 				limit = {
-					has_global_flag = hfe_hardcore_disable
-					is_country_type = hfe_features_exodus
-				}
-				set_faction_hostility = {
-					target = prev
-					set_hostile = no
-					set_neutral = yes
-					set_friendly = no
-				}
-			}
-
-			every_country = {
-				limit = {
-					NOT = { has_global_flag = hfe_hardcore_disable }
 					is_country_type = hfe_features_exodus
 				}
 				set_faction_hostility = {
@@ -467,9 +490,14 @@ hfe_effect_pirate_init_country = {
 			}
 			create_leader = {
 				class = admiral
+				skill = 4
+				traits = {
+					add_trait = hfe_admiral_trait_pirate
+				}
 			}
 			create_leader = {
 				class = ruler
+				skill = 3
 			}
 			assign_leader = last_created_leader
 			event_target:hfe_pirate_target = {
@@ -488,12 +516,14 @@ hfe_effect_pirate_init_country = {
 				limit = {
 					has_global_flag = hfe_pirate_logs
 				}
-			#	log = "new pirate country spawned"
+				#	log = "new pirate country spawned"
 				ROOT = {
 					set_country_flag = but_nobody_came
 					remove_country_flag = but_nobody_came
 				}
 			}
+			remove_from_galactic_community = yes
+			remove_from_galactic_council = yes
 		}
 	}
 }

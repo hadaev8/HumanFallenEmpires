@@ -45,6 +45,7 @@ country_event = {
 country_event = {
 	id = hfe.47
 	title = TRANSMISSION
+	show_sound = event_psionic
 	desc = {
 		trigger = {
 			success_text = {
@@ -671,7 +672,7 @@ country_event = {
 			modifier = hfe_navy_size
 			days = 3600
 		}
-		country_add_ethic = ethic_xenophobe
+#		country_add_ethic = ethic_xenophobe
 		set_country_type = default
 		set_global_flag = hfe_egypt_in_expansion
 		every_playable_country = {
@@ -696,6 +697,7 @@ country_event = {
 	desc = hfe.49.desc.0
 	diplomatic = yes
 	is_triggered_only = yes
+	show_sound = event_celebration
 	picture_event_data = {
 		portrait = event_target:hfe_egypt_country.ruler
 		room = hfe_egypt_room
@@ -828,7 +830,7 @@ ship_event = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		create_country = {
-			name = "Varelse Hegemony"
+			name = "Embittered Varelse Hegemony"
 			type = faction
 			species = event_target:hfe_varelse_species
 			ignore_initial_colony_error = yes
@@ -1142,7 +1144,7 @@ ship_event = {
 	}
 	option = {
 		name = uplift.6000.a
-		trigger = {
+		allow = {
 			owner = {
 				has_technology = tech_epigenetic_triggers
 			}
@@ -1192,6 +1194,7 @@ ship_event = {
 # observation outpost events
 # varelse mehanicus
 # start event
+# Fires biannually
 planet_event = {
 	id = hfe.101
 	hide_window = yes
@@ -1200,6 +1203,9 @@ planet_event = {
 		has_observation_outpost = yes
 		exists = solar_system.owner
 	}
+#	mean_time_to_happen = {
+#		days = 14
+#	}
 	immediate = {
 		set_global_flag = hfe_varelse_mehanicus
 		save_event_target_as = hfe_varelse_colony
@@ -1368,7 +1374,15 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		ROOT = {
-			
+			add_resource = {
+				alloys = 1000
+				minerals = 1000
+				energy = 750
+				consumer_goods = 500
+				influence = 50
+				food = 50
+				minor_artifacts = 3
+			}
 		}
 		if = {
 			limit = {
@@ -1452,7 +1466,7 @@ country_event = {
 		hfe_effect_add_engineering_research.2 = yes
 		hidden_effect = {
 			event_target:hfe_varelse_colony = {
-				set_country_flag = high_mechanicus_retained
+				owner = { set_country_flag = high_mechanicus_retained }
 				owner = {
 					change_government = {
 						authority = auth_dictatorial
@@ -1512,6 +1526,8 @@ country_event = {
 				hfe_effect_primitive_up = yes
 			}
 			owner = {
+				remove_country_flag = high_mechanicus_retained
+				remove_country_flag = high_mechanicus_befriended
 				set_country_flag = varelse_fedora_governance
 				change_government = {
 					authority = auth_oligarchic
@@ -1608,6 +1624,8 @@ country_event = {
 			hidden_effect = {
 				owner = { hfe_effect_primitive_up = yes }
 			}
+		}
+		event_target:colony_beta = {
 			hidden_effect = {
 				set_country_flag = high_mechanicus_befriended
 				change_government = {
@@ -1634,9 +1652,9 @@ country_event = { # Default, their civilization continues naturally
 		}
 		has_country_flag = hfe_varelse_primitive_0
 		OR = {
-      has_country_flag = high_mechanicus_retained
-      has_civic = hfe_civic_high_mechanicus
-    }
+			has_country_flag = high_mechanicus_retained
+			has_civic = hfe_civic_high_mechanicus
+		}
 		NOT = { has_country_flag = high_mechanicus_befriended }
 		NOT = { has_country_flag = high_mechanicus_can_into_space }
 	}
@@ -1657,8 +1675,25 @@ country_event = { # Default, their civilization continues naturally
 				civic = civic_exalted_priesthood
 			}
 		}
+		capital_scope = {
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
 		set_country_flag = high_mechanicus_can_into_space
-
 		log = "Colony Beta has been preserved and entered FTL"
 	}
 }
@@ -1694,6 +1729,24 @@ country_event = { # If you befriended the High Mechanicus
 				civic = hfe_civic_high_mechanicus
 				civic = civic_exalted_priesthood
 			}
+		}
+		capital_scope = {
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
 		}
 		set_country_flag = high_mechanicus_can_into_space
 
@@ -1737,6 +1790,24 @@ country_event = { # If you betrayed the High Mechanicus
 				civic = civic_technocracy
 			}
 		}
+		capital_scope = {
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_city
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
 		set_empire_name = "Immortal Beta Colony Institute"
 		set_country_flag = high_mechanicus_can_into_space
 
@@ -1769,6 +1840,7 @@ planet_event = {
 	}
 	option = {
 		name = hfe.150.0
+		add_building = building_great_pyramid
 		hidden_effect = {
 			set_planet_flag = hfe_project_pyramid
 			save_event_target_as = hfe_memorial_planet
@@ -3866,7 +3938,7 @@ ship_event = {
 		exists = from
 		exists = owner
 		from = {
-			has_star_flag = hfe_ahet_home
+			has_star_flag = hfe_ahet_home_star
 		}
 		owner = {
 			is_ai = no
@@ -6066,6 +6138,7 @@ country_event = {
 		name = hfe.605.0.0
 		trigger = {
 			has_country_flag = hfe.605.step0
+			is_ai = no
 		}
 		hidden_effect = {
 			remove_country_flag = hfe.605.step0
@@ -6080,6 +6153,7 @@ country_event = {
 		name = hfe.605.1.0
 		trigger = {
 			has_country_flag = hfe.605.step1
+			is_ai = no
 		}
 		hidden_effect = {
 			remove_country_flag = hfe.605.step1
@@ -6094,7 +6168,8 @@ country_event = {
 		name = hfe.605.2.0
 		trigger = {
 			has_country_flag = hfe.605.step2
-			hfe_trigger_is_clever_for_event = yes
+#			hfe_trigger_is_clever_for_event = yes
+			is_ai = no
 		}
 		hfe_effect_materialist_attraction.1 = yes
 		hidden_effect = {
@@ -6110,6 +6185,7 @@ country_event = {
 		name = hfe.605.3.0
 		trigger = {
 			has_country_flag = hfe.605.step3
+			is_ai = no
 		}
 		is_dialog_only = yes
 		response_text = hfe.605.3.0.response
@@ -6118,6 +6194,7 @@ country_event = {
 		name = hfe.605.3.1
 		trigger = {
 			has_country_flag = hfe.605.step3
+			is_ai = no
 		}
 		is_dialog_only = yes
 		response_text = hfe.605.3.1.response
@@ -6126,6 +6203,7 @@ country_event = {
 		name = hfe.605.3.2
 		trigger = {
 			has_country_flag = hfe.605.step3
+			is_ai = no
 		}
 		is_dialog_only = yes
 		response_text = hfe.605.3.2.response
@@ -6134,6 +6212,7 @@ country_event = {
 		name = hfe.605.3.3
 		trigger = {
 			has_country_flag = hfe.605.step3
+			is_ai = no
 		}
 		is_dialog_only = yes
 		response_text = hfe.605.3.3.response
@@ -6142,6 +6221,7 @@ country_event = {
 		name = hfe.605.3.4
 		trigger = {
 			has_country_flag = hfe.605.step3
+			is_ai = no
 		}
 		is_dialog_only = yes
 		response_text = hfe.605.3.4.response
@@ -6154,6 +6234,36 @@ country_event = {
 			remove_country_flag = hfe.605.step1
 			remove_country_flag = hfe.605.step2
 			remove_country_flag = hfe.605.step3
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = drone_encountered
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = drone
+						is_country_type = hfe_drone
+					}
+				}
+				establish_communications_no_message = ROOT
+			}
+			set_country_flag = drone_encountered
+			country_event = {
+				id = story.301
+				days = 5
+			}
+#			capital_scope = {
+#				enable_special_project = {
+#					name = "DRONES_PROJECT"
+#					location = this
+#					owner = root
+#				}
+#			}
 		}
 	}
 }
@@ -6195,6 +6305,14 @@ country_event = {
 		}
 	}
 	immediate = {
+		every_country = {
+			limit = { is_country_type = drone }
+			set_faction_hostility = {
+				set_friendly = no
+				set_neutral = no
+				set_hostile = yes
+			}
+		}
 		random_playable_country = {
 			weights = {
 				base = 1
@@ -6466,7 +6584,7 @@ ship_event = {
 			is_ai = no
 			is_country_type = default
 		}
-		not = {
+		NOT = {
 			exists = solar_system.owner
 		}
 	}
@@ -6495,18 +6613,37 @@ ship_event = {
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
-				set_graphical_culture = mammalian_01
+				set_graphical_culture = humanoid_01
+				set_city_graphical_culture = fallen_empire_01
 				set_country_flag = hfe_thoth
+				give_technology = {
+					tech = tech_juggernaut
+					message = no
+				}
+				hfe_effect_init_give_tech_t5 = yes
 				create_fleet = {
 					name = "Runaway Station"
 					settings = {
-						spawn_debris = yes
+						spawn_debris = no
+						can_disband = no
+						uses_naval_capacity = no
+						can_upgrade = no
 					}
 					effect = {
 						set_owner = prev
 						create_ship = {
 							name = "Gentleman Computer"
-							design = NAME_Artist_Enclave_Station
+							design = juggernaut
+#							random_existing_design = juggernaut # LOOKS REALLY COOL
+							graphical_culture = humanoid_01
+							effect = {
+								set_ship_flag = hfe_thoth_war_machine
+							}
+						}
+						create_ship = {
+							name = "Gentleman Computer Data Banks"
+							design = "NAME_Artist_Enclave_Station"
+							graphical_culture = mammalian_01
 							effect = {
 								set_ship_flag = hfe_thoth_station
 							}
@@ -6525,7 +6662,7 @@ ship_event = {
 						}
 					}
 				}
-				set_custom_capital_location = event_target:hfe_thoth_station
+				set_custom_capital_location = event_target:hfe_thoth_war_machine
 				add_to_galactic_community = yes
 			}
 		}
@@ -6955,7 +7092,7 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				9 = {
+				29 = { # If the Ju Ahet like you, they will trust you
 					set_country_flag = hfe.702.goodend
 				}
 				1 = {
@@ -6977,14 +7114,8 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			random_list = {
-				9 = {
-					set_country_flag = hfe.702.goodend
-				}
-				1 = {
-					set_country_flag = hfe.702.badend
-				}
-			}
+#			# If you are stronger than a Fallen Emprie, a single, pacifistic heretic is not worth a war
+			set_country_flag = hfe.702.goodend
 			hfe_effect_event_702_next = yes
 		}
 	}
@@ -7016,10 +7147,10 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				7 = {
+				6 = {
 					set_country_flag = hfe.702.goodend
 				}
-				3 = {
+				4 = {
 					set_country_flag = hfe.702.badend
 				}
 			}
@@ -7034,10 +7165,10 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				5 = {
+				10 = { # Low means low
 					set_country_flag = hfe.702.goodend
 				}
-				5 = {
+				10 = {
 					set_country_flag = hfe.702.badend
 				}
 			}
