@@ -520,7 +520,10 @@ country_event = {
 			}
 		}
 		hfe_effect_remove_prescripted_ideal = yes
-		log = "Exodus successfully spawned"
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Exodus successfully spawned"
+		}
 		country_event = {
 			id = hfe_features.5
 			days = 3
@@ -548,11 +551,22 @@ country_event = {
 				modifier = tsp_hfe_features_exodus_resources_other
 				days = -1
 			}
-			log = "Exodus Fleet successfully set to Non-Hardcore Mode"
+			if = {
+				limit = {
+					has_global_flag = hfe_hardcore_disable
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Exodus Fleet successfully set to Non-Hardcore Mode"
+			}
 			break = yes
 		}
 		if = {
-			limit = { NOT = { has_global_flag = hfe_hardcore_disable } }
+			limit = {
+				NOT = {
+					has_global_flag = hfe_hardcore_disable
+				}
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Exodus Fleet spawned in Hardcore Mode"
 			break = yes
 		}

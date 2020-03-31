@@ -167,11 +167,15 @@ hfe_building_terraformer_hive_mind = {
 
 hfe_building_virtual = {
 	icon = building_virtual_entertainment_studios
+	base_cap_amount = 1
 	base_buildtime = @fetime
 	can_demolish = no
 	can_be_ruined = no
 	can_be_disabled = yes
 	category = amenity
+	triggered_desc = {
+		text = VIRTUAL_FUTURE
+	}
 	potential = {
 		OR = {
 			owner = { has_country_flag = hfe_future }
@@ -179,11 +183,61 @@ hfe_building_virtual = {
 			planet = { has_planet_flag = hfe_future_planet }
 		}
 	}
+	planet_modifier = {
+		planet_amenities_add = 50
+	}
 	resources = {
 		category = planet_buildings
-		upkeep = {
-			energy = 4
+		cost = {
+			influence = 150
+			energy = 10000
+			alloys = 1000
+			minerals = 1000
+			rare_crystals = 750
+			exotic_gases = 100
+			volatile_motes = 5
 		}
+		produces = {
+			society_research = 30
+			consumer_goods = 30
+		}
+		upkeep = {
+			energy = 20
+			engineering_research = 20
+		}
+	}
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 0
+			owner = {
+				has_monthly_income = {
+					resource = energy
+					value < 30
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			owner = {
+				has_monthly_income = {
+					resource = engineering_research
+					value < 250
+				}
+			}
+		}
+	}
+	ai_resource_production = {
+		trigger = {
+			owner = {
+				OR = {
+					is_fallen_empire = yes
+					has_country_flag = hfe_future
+					is_country_type = human_fallen_empire
+				}
+			}
+		}
+		sr_dark_matter = 1
 	}
 }
 
@@ -442,8 +496,8 @@ hfe_building_thoth_module_industry = {
 
 hfe_building_high_mechanicus_godforge = {
 	icon = building_nano_forge
-	base_cap_amount = 3650
-	base_buildtime = 1
+	base_cap_amount = 1
+	base_buildtime = @fetime
 	can_build = no
 	can_be_disabled = yes
 	can_demolish = no
@@ -582,7 +636,7 @@ hfe_building_high_mechanicus_godforge = {
 		category = hfe_godforge
 		cost = {
 			minerals = 10000
-			alloys = 1000
+			alloys = 3000
 		}
 		produces = {
 			trigger = {
@@ -653,10 +707,48 @@ hfe_building_high_mechanicus_godforge = {
 	ai_resource_production = {
 #		# This is meant to keep the Varelse Hegemony alive
 #		# because it has many more Pops than a Primitive should
-		trigger = { always = yes }
+		trigger = {
+			OR = {
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+				owner = { is_primitive = yes }
+				owner = { is_country_type = primitive }
+				owner = {
+					has_monthly_income = {
+						resource = food
+						value > 30
+					}
+				}
+				owner = {
+					has_monthly_income = {
+						resource = energy
+						value > 30
+					}
+				}
+				owner = {
+					has_monthly_income = {
+						resource = minerals
+						value > 30
+					}
+				}
+				owner = {
+					has_monthly_income = {
+						resource = consumer_goods
+						value > 30
+					}
+				}
+				owner = {
+					has_monthly_income = {
+						resource = exotic_gases
+						value > 20
+					}
+				}
+			}
+		}
 		minerals = 20
-		energy = 20
+		energy = 40
 		engineering_research = 20
+		food = 20
+		consumer_goods = 20
 	}
 
 	ai_weight = {
@@ -742,8 +834,8 @@ hfe_building_high_mechanicus_stronghold = {
 					NOT = { has_country_flag = hfe_varelse_primitive_0 }
 				}
 			}
-			energy = -10
-			alloys = -2
+			energy = 10
+			alloys = 2
 		}
 	}
 

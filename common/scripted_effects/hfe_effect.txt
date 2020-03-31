@@ -915,7 +915,10 @@ hfe_effect_create_egypt_fleet = {
 		}
 		effect = {
 			set_owner = prev
-			log = "Ju Ahet gets fleet"
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Ju Ahet gets fleet"
+			}
 			while = {
 				count = 5
 				create_ship = {
@@ -1966,7 +1969,7 @@ hfe_effect_leader_add_exp_100 = {
 		}
 	}
 	else = {
-		#	log = "leader not exists"
+		log = "ERROR: EXP gaining leader not exists"
 	}
 }
 
@@ -1980,7 +1983,7 @@ hfe_effect_leader_add_exp_200 = {
 		}
 	}
 	else = {
-		#	log = "leader not exists"
+		log = "ERROR: EXP gaining leader not exists"
 	}
 }
 
@@ -2308,12 +2311,18 @@ hfe_effect_stargate_add = {
 	last_created_ambient_object = {
 		save_event_target_as = hfe_stargate
 	}
-	log = "Star Gate spawned"
+	if = {
+		limit = { has_global_flag = HFE_TSP_spawn_test }
+		log = "Star Gate spawned"
+	}
 }
 
 hfe_effect_stargate_remove = {
 	destroy_ambient_object = event_target:hfe_stargate
-	log = "Star Gate terminated"
+	if = {
+		limit = { has_global_flag = HFE_TSP_spawn_test }
+		log = "Star Gate terminated"
+	}
 }
 
 # give tech option
@@ -2742,7 +2751,10 @@ hfe_effect_get_space_monster_country = {
 					establish_communications_no_message = prev
 				}
 				save_global_event_target_as = hfe_global_space_monster
-				log = "Butt Hurt Crystals spawned"
+				if = {
+					limit = { has_global_flag = HFE_TSP_spawn_test }
+					log = "Butt Hurt Crystals spawned"
+				}
 			}
 		}
 	}
@@ -2755,10 +2767,16 @@ hfe_effect_spawn_space_monster = {
 			count = 5
 			random_list = {
 				10 = {
-					log = "Butt Hurt Crystals disbanded"
+					if = {
+						limit = { has_global_flag = HFE_TSP_spawn_test }
+						log = "Butt Hurt Crystals disbanded"
+					}
 				}
 				10 = {
-					log = "Butt Hurt Crystals spanwed"
+					if = {
+						limit = { has_global_flag = HFE_TSP_spawn_test }
+						log = "Butt Hurt Crystals spanwed"
+					}
 					# some crystals
 					create_fleet = {
 						name = "Butt Hurt Crystals"
