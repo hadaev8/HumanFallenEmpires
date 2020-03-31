@@ -16,6 +16,9 @@ hfe_building_terraformer = { # Temple of Thoth
 			planet = { has_planet_flag = hfe_home_of_light }
 		}
 	}
+#	allow = {
+#		planet = { has_planet_flag = hfe_home_of_light }
+#	}
 	destroy_trigger = {
 		exists = owner
 		owner = { is_gestalt = yes }
@@ -54,6 +57,7 @@ hfe_building_terraformer_machine = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = { 
 			is_machine_empire = yes
 			NOT = { has_valid_civic = civic_machine_servitor }
@@ -96,6 +100,7 @@ hfe_building_terraformer_machine_rogue_servitor = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = {
 			is_machine_empire = yes
 			has_valid_civic = civic_machine_servitor
@@ -136,6 +141,7 @@ hfe_building_terraformer_hive_mind = {
 	}
 	potential = {
 		exists = owner
+		planet = { has_planet_flag = hfe_home_of_light }
 		owner = {
 			is_hive_empire = yes
 		}
@@ -166,6 +172,13 @@ hfe_building_virtual = {
 	can_be_ruined = no
 	can_be_disabled = yes
 	category = amenity
+	potential = {
+		OR = {
+			owner = { has_country_flag = hfe_future }
+			planet = { has_planet_flag = hfe_future_capital }
+			planet = { has_planet_flag = hfe_future_planet }
+		}
+	}
 	resources = {
 		category = planet_buildings
 		upkeep = {
@@ -440,17 +453,29 @@ hfe_building_high_mechanicus_godforge = {
 	category = manufacturing
 	
 	potential = {
-		has_planet_flag = hfe_varelse_colony
-		owner = { has_country_flag = hfe_varelse }
+#		planet = {
+#			OR = {
+#				has_planet_flag = hfe_varelse_colony
+#				has_planet_flag = colony_beta
+#			}
+#		}
 		OR = {
+			owner = { has_country_flag = hfe_varelse }
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			owner = { has_country_flag = high_mechanicus_retained }
 			owner = { has_country_flag = varelse_fedora_governance }
+			owner = { has_civic = hfe_civic_high_mechanicus }
+			owner = { has_civic = hfe_civic_overthrown_mechanicus }
 		}
 	}
 
 	allow = {
-		has_planet_flag = hfe_varelse_colony
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 		OR = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			owner = { has_country_flag = high_mechanicus_retained }
@@ -672,6 +697,12 @@ hfe_building_high_mechanicus_stronghold = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 	}
 
 	destroy_trigger = {
@@ -821,6 +852,12 @@ hfe_building_fedora_stronghold = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
 	}
 
 	destroy_trigger = {
@@ -938,6 +975,16 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 				has_civic = hfe_civic_high_mechanicus
 				has_civic = hfe_civic_overthrown_mechanicus
 				has_country_flag = varelse_fedora_governance
+			}
+		}
+	}
+
+	allow = {
+		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
 			}
 		}
 	}
@@ -1086,6 +1133,15 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 		owner = { has_ethic = ethic_gestalt_consciousness }
 	}
 
+	allow = {
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
+		}
+	}
+
 	destroy_trigger = {
 		owner = {
 			OR = {
@@ -1187,6 +1243,10 @@ hfe_building_mechanicus_cult_temple = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
+		NOT = {
+			planet = { has_planet_flag = hfe_varelse_colony }
+			planet = { has_planet_flag = colony_beta }
+		}
 	}
 
 	destroy_trigger = {
@@ -1198,8 +1258,8 @@ hfe_building_mechanicus_cult_temple = {
 					has_country_flag = varelse_fedora_governance
 				}
 			}
-			has_modifier = slave_colony
-			has_modifier = resort_colony
+			planet = { has_modifier = slave_colony }
+			planet = { has_modifier = resort_colony }
 		}
 	}
 

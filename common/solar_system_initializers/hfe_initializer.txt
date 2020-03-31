@@ -7,7 +7,7 @@ hfe_initializer_egypt_main = {
 		hfe_egypt_0
 	}
 	name = "Home of Light"
-	class = sc_m
+	class = rl_standard_stars
 	asteroid_belt = {
 		type = rocky_asteroid_belt
 		radius = 70
@@ -16,20 +16,18 @@ hfe_initializer_egypt_main = {
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
-		size = { #	Unusually large for a dwarf star, as the diplomacy text
-#			 #	says it was speciifically ignited, they "lit a new sun"
-			min = 30
-			max = 35
+		size = {
+			min = 20
+			max = 30
 		}
 		has_ring = no
 		name = Ra
 	}
 	change_orbit = 70
 	planet = {
-		name = "Kangz"
 		count = {
-			min = 2
-			max = 5
+			min = 1
+			max = 3
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -152,6 +150,7 @@ hfe_initializer_egypt_main = {
 						}
 						assign_leader = last_created_leader
 					}
+					log = "Ju Ahet actual country installed"
 					save_global_event_target_as = hfe_egypt_country
 				}
 			}
@@ -182,6 +181,7 @@ hfe_initializer_egypt_main = {
 			}
 			add_building = building_system_capital
 			add_building = hfe_building_terraformer
+			log = "Temple of Thoth spawned"
 			add_building = building_psi_corps
 			add_building = building_master_archive
 			add_building = building_fe_stronghold
@@ -312,6 +312,13 @@ hfe_initializer_egypt_main = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Ju Ahet home system successfully spawned"
+		if = {
+			limit = {
+				exists = event_target:hfe_egypt_country
+			}
+			log = "All is well in Egypt"
+		}
 	}
 }
 
@@ -512,8 +519,8 @@ hfe_initializer_egypt_col_0 = {
 	}
 	planet = {
 		count = {
-			min = 1
-			max = 8
+			min = 0
+			max = 1
 		}
 		orbit_distance = 20
 		class = random_non_colonizable
@@ -524,6 +531,7 @@ hfe_initializer_egypt_col_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "First Ju Ahet Colony spawned"
 	}
 }
 
@@ -693,6 +701,7 @@ hfe_initializer_egypt_col_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Second Ju Ahet Colony spawned"
 	}
 }
 
@@ -739,6 +748,10 @@ hfe_initializer_ahet_0 = {
 			create_country = {
 				name = "Ahet Community"
 				type = primitive
+				ethos = {
+					ethic = ethic_fanatic_xenophile
+					ethic = ethic_egalitarian
+				}
 				civics = {
 					civic = hfe_civic_primitive_was_default
 					civic = hfe_civic_primitive_fem_rept_lobby
@@ -756,7 +769,7 @@ hfe_initializer_ahet_0 = {
 					}
 				}
 			}
-			log = "[this.GetName]"
+			log = "Ahet Co-Op [this.GetName]"
 			# to remove errors from log
 			event_target:hfe_ahet_species = {
 				set_species_homeworld = prev
@@ -845,6 +858,7 @@ hfe_initializer_ahet_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Ahet Cooperative Colony spawned"
 	}
 }
 
@@ -974,6 +988,7 @@ hfe_initializer_ahet_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Ahet Refugees spawned"
 	}
 }
 
@@ -1011,14 +1026,16 @@ hfe_initializer_varelse = {
 		orbit_distance = 0
 		class = pc_desert
 #		entity = hfe_entity_arid_01_brown
-		entity = toxic_planet
+		entity = toxic_planet_02_entity
 		orbit_angle = {
 			min = 90
 			max = 270
 		}
 		size = 22
+		modifiers = none
 		deposit_blockers = none
 		init_effect = {
+#			set_planet_flag = hfe_varelse_colony
 			create_country = {
 				name = "Cult of the Machine-That-Speaks-to-God"
 				ship_prefix = "Godforge"
@@ -1042,46 +1059,43 @@ hfe_initializer_varelse = {
 						set_owner = prev
 					}
 					save_global_event_target_as = colony_beta
+					log = "High Mechanicus instated on Colony Beta"
+					give_technology = {
+						tech = tech_assault_armies
+						message = no
+					}
+					give_technology = {
+						tech = tech_robotic_workers
+						message = no
+					}
+					log = "Colony Beta has its technology"
+					set_policy = {
+						policy = robot_pop_policy
+						option = robot_pops_allowed
+						cooldown = no
+					}
+					log = "Colony Beta has Robots Allowed"
 				}
 			}
 			# to remove error in log
 			event_target:hfe_varelse_species = {
 				set_species_homeworld = prev
 			}
+			log = "Varelse Homeworld set"
 			# to fix create colony spawn pop of root species bug
 			every_owned_pop = {
 				kill_pop = yes
 			}
-			last_created_country = {
-#				set_policy = {
-#					policy = artificial_intelligence_policy
-#					option = ai_outlawed
-#					cooldown = no
-#				}
-				set_policy = {
-					policy = robot_pop_policy
-					option = robot_pops_allowed
-					cooldown = no
-				}
-				give_technology = {
-					tech = tech_assault_armies
-					message = no
-				}
-				give_technology = {
-					tech = tech_robotic_workers
-					message = no
-				}
-			}
-
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = high_mechanicus_planet
 			set_planet_flag = colony_beta
-
-#			hfe_effect_primitive_add_pops = yes
+			hfe_effect_primitive_add_pops = yes
 #			hfe_effect_primitive_add_buildings = yes
-			add_building = hfe_building_high_mechanicus_godforge
-			add_building = hfe_building_high_mechanicus_stronghold
 			add_building = building_primitive_capital
+			add_building = hfe_building_high_mechanicus_godforge
+			log = "Godforge spawned"
+			add_building = hfe_building_high_mechanicus_stronghold
+			log = "High Mechanicus Palace spawned"
 			add_building = building_primitive_farm
 			add_building = building_primitive_farm
 			add_building = building_primitive_mine
@@ -1091,8 +1105,9 @@ hfe_initializer_varelse = {
 			add_building = building_urban_dwellings
 			add_building = building_urban_dwellings
 			add_building = building_urban_dwellings
-
-			add_deposit = d_ruined_arcology
+			log = "Primitive Buildings added to Colony Beta"
+			add_deposit = d_city_ruins
+			add_deposit = d_bomb_crater
 			add_deposit = d_decrepit_dwellings
 			add_deposit = d_decrepit_dwellings
 			add_deposit = d_decrepit_dwellings
@@ -1107,21 +1122,18 @@ hfe_initializer_varelse = {
 
 			add_random_non_blocker_deposit = yes
 			add_random_non_blocker_deposit = yes
-
-			add_modifier = {
-				modifier = bleak_planet
-				days = -1
-			}
-
+			log = "Colony Beta has its Deposits"
 			while = {
-				count = 61
+				count = 35
 				create_pop = {
 					species = event_target:hfe_varelse_species
 				}
 			}
-			create_pop = {
-				species = event_target:fe_servants
-			}
+			log = "Colony Beta has its Pops"
+
+#			create_pop = {
+#				species = event_target:fe_servants
+#			}
 			add_modifier = {
 				modifier = hfe_colony_type_varelse
 				days = -1
@@ -1130,6 +1142,13 @@ hfe_initializer_varelse = {
 				modifier = atmospheric_hallucinogen_good
 				days = -1
 			}
+			add_modifier = {
+				modifier = bleak_planet
+				days = -1
+			}
+
+			log = "Colony Beta has its Modifiers"
+
 			# TODO
 			# war blockers
 			while = {
@@ -1205,7 +1224,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 2
+				count = 1
 				create_army = {
 					name = "The Master's Personal Guard"
 					owner = owner
@@ -1213,6 +1232,7 @@ hfe_initializer_varelse = {
 					type = gene_warrior_army
 				}
 			}
+			log = "Colony Beta has its Armies"
 		}
 		change_orbit = @base_moon_distance
 		moon = {
@@ -1225,6 +1245,9 @@ hfe_initializer_varelse = {
 				max = 270
 			}
 			orbit_distance = 5
+			init_effect = {
+				log = "Colony Beta planet finalized"
+			}
 		}
 	}
 	planet = {
@@ -1255,6 +1278,7 @@ hfe_initializer_varelse = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Colony Beta completely spawned"
 	}
 }
 
@@ -1263,7 +1287,7 @@ hfe_initializer_ahet_home = {
 	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
-#		hfe_ahet_home
+		hfe_ahet_home
 		hfe_ahet_home_star
 	}
 	name = Barsoom
@@ -1361,6 +1385,7 @@ hfe_initializer_ahet_home = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Ahet Happy Ending spawned"
 	}
 }
 
@@ -1438,6 +1463,7 @@ hfe_initializer_memorial_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Memorial World spawned"
 	}
 }
 
@@ -1534,6 +1560,7 @@ hfe_initializer_memorial_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Memorial World spawned"
 	}
 }
 
@@ -1623,6 +1650,7 @@ hfe_initializer_memorial_2 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Memorial World spawned"
 	}
 }
 
@@ -1686,6 +1714,7 @@ hfe_initializer_memorial_3 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Memorial World spawned"
 	}
 }
 
@@ -1705,6 +1734,8 @@ hfe_initializer_copernicus = {
 		size = 3
 		init_effect = {
 			set_planet_flag = hfe_copernicus.2
+			set_planet_flag = hfe_handmade_garden
+			log = "Geocentrism wasn't wrong"
 		}
 	}
 	planet = {
@@ -1717,6 +1748,7 @@ hfe_initializer_copernicus = {
 			max = 25
 		}
 		init_effect = {
+			log = "Geocentric core planet spawned"
 			set_planet_flag = hfe_copernicus.0
 			set_planet_flag = hfe_handmade_garden
 			create_species = {
@@ -1724,9 +1756,14 @@ hfe_initializer_copernicus = {
 				homeworld = this
 			}
 			create_country = {
+				name = "Geocentric Sanctuary"
 				civics = {
 					civic = civic_secret_of_fire
 					civic = civic_the_wheel
+				}
+				ethos = {
+					ethic = ethic_fanatic_spiritualist
+					ethic = ethic_xenophile
 				}
 				species = last_created_species
 				type = primitive
@@ -1746,18 +1783,21 @@ hfe_initializer_copernicus = {
 			}
 			hfe_effect_primitive_add_buildings = yes
 			hfe_effect_primitive_add_pops = yes
+			log = "Corpernicus Primitives spawned"
 		}
 		planet = {
-			init_effect = {
-				set_planet_flag = hfe_copernicus.1
-			}
 			class = pc_asteroid
 			orbit_distance = 200
 			orbit_angle = random
+			init_effect = {
+				set_planet_flag = hfe_copernicus.1
+				log = "Corpernicus computation asteroid spawned"
+			}
 		}
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Ptolemy of Alexandria did nothing wrong"
 	}
 }
 
@@ -1971,6 +2011,9 @@ hfe_initializer_drone_sector_0 = {
 			set_starbase_size = starbase_citadel
 		}
 	}
+	init_effect = {
+		log = "Harvesting Marvel Core activated"
+	}
 }
 
 hfe_initializer_drone_sector_1 = {
@@ -2078,6 +2121,9 @@ hfe_initializer_drone_sector_1 = {
 			set_starbase_size = starbase_citadel
 		}
 	}
+	init_effect = {
+		log = "Harvesting Marvel Zone activated"
+	}
 }
 
 hfe_initializer_drone_sector_2 = {
@@ -2183,6 +2229,9 @@ hfe_initializer_drone_sector_2 = {
 		starbase = {
 			set_starbase_size = starbase_citadel
 		}
+	}
+	init_effect = {
+		log = "Harvesting Marvel Zone activated"
 	}
 }
 
@@ -2322,8 +2371,9 @@ hfe_initializer_future_main = {
 				add_building = building_nano_forge
 				hfe_effect_init_set_pops_100 = yes
 				while = {
-					count = 12
+					count = 25
 					create_army = {
+						name = "Protectors of the Innocent"
 						owner = owner
 						species = owner
 						type = gene_warrior_army
@@ -2409,5 +2459,6 @@ hfe_initializer_future_main = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		log = "Kad Republic spawned"
 	}
 }
