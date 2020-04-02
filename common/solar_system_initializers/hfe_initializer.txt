@@ -94,7 +94,8 @@ hfe_initializer_egypt_main = {
 					hfe_effect_init_give_tech_t5 = yes
 					give_technology = { message = no tech = tech_titans }
 					give_technology = { message = no tech = tech_colossus }
-					give_technology = { message = no tech = tech_pk_neutron }
+					give_technology = { message = no tech = tech_pk_cracker }
+#					give_technology = { message = no tech = tech_pk_neutron }
 					give_technology = { message = no tech = tech_psi_jump_drive_1 }
 					give_technology = { message = no tech = tech_psionic_shield }
 					give_technology = { message = no tech = tech_gene_tailoring }
@@ -108,6 +109,15 @@ hfe_initializer_egypt_main = {
 					give_technology = { message = no tech = tech_selected_lineages }
 					give_technology = { message = no tech = tech_glandular_acclimation }
 					give_technology = { message = no tech = tech_genetic_resequencing }
+					# The tools to build and upload Thoth
+					give_technology = { message = no tech = tech_sapient_ai	}
+					give_technology = {	message = no tech = tech_synthetic_workers }
+					give_technology = {	message = no tech = tech_synthetic_leaders }
+					give_technology = {	message = no tech = tech_droid_workers }
+					give_technology = {	message = no tech = tech_robotic_workers }
+					give_technology = {	message = no tech = tech_robomodding }
+					give_technology = {	message = no tech = tech_robomodding_points_1 }
+					give_technology = {	message = no tech = tech_robomodding_points_2 }
 					kill_leader = {
 						type = ruler
 						show_notification = no
@@ -118,8 +128,9 @@ hfe_initializer_egypt_main = {
 						class = ruler
 						skill = 10
 						immortal = yes
+						gender = male
 						leader_age_min = 250
-						leader_age_max = 650
+						leader_age_max = 700
 						traits = {
 							trait = leader_trait_ruler_chosen
 							trait = hfe_ruler_trait_transcendent_0
@@ -145,6 +156,7 @@ hfe_initializer_egypt_main = {
 							leader_age_min = 250
 							leader_age_max = 650
 							immortal = yes
+							gender = male
 							traits = {
 								trait = leader_trait_ruler_chosen
 								trait = hfe_ruler_trait_transcendent_0
@@ -155,6 +167,10 @@ hfe_initializer_egypt_main = {
 					if = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
 						log = "Ju Ahet actual country installed"
+					}
+					add_modifier = {
+						modifier = hfe_navy_size
+						days = -1
 					}
 					save_global_event_target_as = hfe_egypt_country
 				}
@@ -218,6 +234,62 @@ hfe_initializer_egypt_main = {
 				hfe_effect_create_egypt_fleet = yes
 				hfe_effect_create_egypt_fleet = yes
 				hfe_effect_create_egypt_fleet = yes
+				create_fleet = {
+					name = "Divine Punishment I"
+					settings = {
+						can_disband = no
+						spawn_debris = yes
+						is_boss = yes
+						uses_naval_capacity = no
+						can_upgrade = yes
+						ai_ignore_strength = yes
+					}
+					effect = {
+						create_ship = {
+							name = "Set"
+							design = colossus
+							random_existing_design = colossus
+							graphical_culture = humanoid_01
+							prefix = no
+							effect = {
+								set_ship_flag = ju_ahet_colossus_1
+							}
+						}
+						set_location = {
+							target = owner.capital_star
+							distance = 90
+							angle = random
+						}
+					}
+				}
+				create_fleet = {
+					name = "Divine Punishment II"
+					settings = {
+						can_disband = no
+						spawn_debris = yes
+						is_boss = yes
+						uses_naval_capacity = no
+						can_upgrade = yes
+						ai_ignore_strength = yes
+					}
+					effect = {
+						create_ship = {
+							name = "Super Ahet Purger"
+							design = colossus
+							random_existing_design = colossus
+							graphical_culture = humanoid_01
+							prefix = no
+							effect = {
+								set_ship_flag = ju_ahet_colossus_2
+							}
+						}
+						set_location = {
+							target = owner.capital_star
+							distance = 120
+							angle = random
+						}
+					}
+				}
 				if = {
 					limit = {
 						is_difficulty > 0
@@ -1039,15 +1111,13 @@ hfe_initializer_varelse = {
 	change_orbit = 20
 	planet = {
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 3
-		}
+		count = 1
+		class = random_non_colonizable
 	}
-	change_orbit = 20
+	change_orbit = 25
 	planet = {
 		name = "Colony Beta"
-		orbit_distance = 0
+		orbit_distance = 2
 		class = pc_desert
 #		entity = hfe_entity_arid_01_brown
 		entity = toxic_planet_02_entity
@@ -1083,6 +1153,51 @@ hfe_initializer_varelse = {
 						set_owner = prev
 					}
 					save_global_event_target_as = colony_beta
+					kill_leader = {
+						type = ruler
+						show_notification = no
+					}
+					create_leader = {
+						class = ruler
+						name = "The Master"
+						species = event_target:hfe_varelse_species
+						event_leader = yes
+						gender = male
+						immortal = yes
+						skill = 5
+						set_age = 429 # As the Fall happened three-hundred eighty-six years ago plust two hundred from the Ju Ahets
+						traits = {
+							add_trait = leader_trait_ruler_cyborg
+							add_trait = hfe_ruler_trait_cult_of_personality
+							add_trait = hfe_ruler_trait_manipulative
+							add_trait = leader_trait_substance_abuser
+							add_trait = leader_trait_corrupt
+#							add_trait = leader_trait_custom_AI_assistant
+						}
+						effect = {
+							set_leader_flag = high_mechanicus_master
+						}
+					}
+					assign_leader = last_created_leader
+					create_leader = {
+						name = "Godforge Core"
+						class = general
+						event_leader = yes
+						species = event_target:sentinel_fallen_empire
+						immortal = yes
+						skill = 10
+						set_age = 1386
+						traits = {
+							add_trait = leader_trait_general_synthetic
+							add_trait = leader_trait_butcher
+							add_trait = leader_trait_parts_cannibalizer
+							add_trait = leader_trait_rigid_programming
+						}
+						effect = {
+							set_leader_flag = godforge_engine
+						}
+					}
+					assign_leader = last_created_leader
 					if = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
 						log = "High Mechanicus instated on Colony Beta"
@@ -1103,7 +1218,16 @@ hfe_initializer_varelse = {
 						message = no
 					}
 					give_technology = {
-						tech = tech_droid_workers
+						tech = tech_alloys_1
+						message = no
+					}
+					give_technology = {
+						tech = tech_alloys_2
+						message = no
+					}
+					give_technology = {
+						tech = tech_robomodding
+						message = no
 					}
 					if = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
@@ -1118,6 +1242,7 @@ hfe_initializer_varelse = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
 						log = "Colony Beta has Robots Allowed"
 					}
+					save_global_event_target_as = hfe_varelse_colony_country
 				}
 			}
 			# to remove error in log
@@ -1135,6 +1260,7 @@ hfe_initializer_varelse = {
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = high_mechanicus_planet
 			set_planet_flag = colony_beta
+			set_planet_flag = primitives_nuked_themselves # As the High Mechanicus controls the whole planet, this can't happen
 			hfe_effect_primitive_add_pops = yes
 #			hfe_effect_primitive_add_buildings = yes
 			add_building = building_primitive_capital
@@ -1167,6 +1293,8 @@ hfe_initializer_varelse = {
 			add_deposit = d_decrepit_dwellings
 			add_deposit = d_decrepit_dwellings
 			add_deposit = d_decrepit_dwellings
+			add_deposit = d_dust_caverns
+			add_deposit = d_dust_caverns
 			add_deposit = d_geothermal_vent
 			add_deposit = d_geothermal_vent
 			add_deposit = d_ore_rich_caverns
@@ -1207,6 +1335,10 @@ hfe_initializer_varelse = {
 			add_modifier = {
 				modifier = bleak_planet
 				days = -1
+			}
+			add_modifier = {
+				modifier = hfe_godforge_crime_fix
+				years = -1
 			}
 
 			if = {
@@ -1262,7 +1394,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 5
+				count = 10
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
@@ -1271,7 +1403,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 2
+				count = 4
 				create_army = {
 					name = "Godforge Sentinels"
 					owner = owner
@@ -1304,6 +1436,7 @@ hfe_initializer_varelse = {
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = hfe_army_high_mechanicus_bodyguards
+					leader = last_created_leader
 				}
 			}
 			if = {
@@ -1313,7 +1446,7 @@ hfe_initializer_varelse = {
 		}
 		change_orbit = @base_moon_distance
 		moon = {
-			name = "Ra Learned"
+			name = "Colony Alpha"
 			size = 15
 			class = pc_shattered
 			orbit_angle = {
@@ -1330,25 +1463,27 @@ hfe_initializer_varelse = {
 			}
 		}
 	}
+	change_orbit = 35
 	planet = {
 		name = "Deprived"
-		orbit_distance = 16
+#		orbit_distance = 16
 		class = pc_t_star
-		size = 55
-		change_orbit = @base_moon_distance
+		size = 38
 		orbit_angle = random
+		change_orbit = @base_moon_distance
 		moon = {
 			class = random
-			count = 5
+			count = 6
 			orbit_angle = random
-			orbit_distance = @base_moon_distance
+			orbit_distance = 4
 		}
 		init_effect = {
 			set_planet_flag = ju_ahet_sucked_star
 		}
 	}
+	change_orbit = 5
 	planet = {
-		orbit_distance = 20
+		orbit_distance = 15
 		class = pc_frozen
 		count = {
 			min = 1
@@ -2025,9 +2160,9 @@ hfe_initializer_drone_sector_0 = {
 				}
 				colors = {
 					"black"
-					"black"
-					"null"
-					"null"
+					"dark_brown"
+					"dark_brown"
+					"brown"
 				}
 			}
 			effect = {
@@ -2044,6 +2179,49 @@ hfe_initializer_drone_sector_0 = {
 				give_technology = {
 					message = no
 					tech = tech_mining_drone_weapon_1
+				}
+				give_technology = {
+					tech = tech_mechanized_mining
+					message = no
+				}
+				give_technology = {
+					tech = tech_mineral_purification_1
+					message = no
+				}
+				give_technology = {
+					tech = tech_mineral_purification_2
+				}
+				give_technology = {
+					tech = tech_mining_1
+					message = no
+				}
+				give_technology = {
+					tech = tech_mining_2
+					message = no
+				}
+				give_technology = {
+					tech = tech_mining_3
+					message = no
+				}
+				give_technology = {
+					tech = tech_space_mining_1
+					message = no
+				}
+				give_technology = {
+					tech = tech_space_mining_2
+					message = no
+				}
+				give_technology = {
+					tech = tech_space_mining_3
+					message = no
+				}
+				give_technology = {
+					tech = tech_space_mining_4
+					message = no
+				}
+				give_technology = {
+					tech = tech_space_mining_5
+					message = no
 				}
 				every_country = {
 					limit = {
@@ -2464,6 +2642,10 @@ hfe_initializer_future_main = {
 						save_global_event_target_as = hfe_coalition_leader
 						give_technology = {
 							tech = tech_titans
+						}
+						add_modifier = {
+							modifier = hfe_navy_size
+							days = -1
 						}
 					}
 				}

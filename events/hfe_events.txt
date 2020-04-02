@@ -830,12 +830,104 @@ ship_event = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		create_country = {
-			name = "Embittered Varelse Hegemony"
+			name = "Varelse Time Warp Anomaly"
 			type = faction
 			species = event_target:hfe_varelse_species
 			ignore_initial_colony_error = yes
 			effect = {
-				hfe_effect_init_give_tech_t5 = yes
+				set_graphical_culture = fallen_empire_04
+				capital_scope = {
+					while = {
+						count = 10
+						create_army = {
+							name = "Zealots"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = hfe_army_high_mechanicus_zealots
+						}
+					}
+					while = {
+						count = 10
+						create_army = {
+							name = "Fanatic Zealots"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = assault_army
+						}
+					}
+					while = {
+						count = 10
+						create_army = {
+							name = "Zealot Militia"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = hfe_army_high_mechanicus_zealots
+						}
+					}
+					while = {
+						count = 10
+						create_army = {
+							name = "Elite Zealots"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = defense_army
+						}
+					}
+					while = {
+						count = 3
+						create_army = {
+							name = "Regime Enforcers"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = defense_army
+						}
+					}
+					while = {
+						count = 12
+						create_army = {
+							name = "Instruments of the Machine"
+							owner = owner
+							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+							type = hfe_army_mechanicus_godforge_drones
+						}
+					}
+					while = {
+						count = 5
+						create_army = {
+							name = "Godforge Sentinels"
+							owner = owner
+							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+							type = hfe_army_godforge_core_watch
+						}
+					}
+					while = {
+						count = 1
+						create_army = {
+							name = "The Machine-That-Speaks-to-God"
+							owner = owner
+							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+							type = care_defensive_protocols
+						}
+					}
+					while = {
+						count = 2
+						create_army = {
+							name = "Adaptus Mechanicus"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = robotic_defense_army
+						}
+					}
+					while = {
+						count = 2
+						create_army = {
+							name = "The Master's Personal Guards"
+							owner = owner
+							species = event_target:hfe_varelse_species
+							type = hfe_army_high_mechanicus_bodyguards
+						}
+					}
+				}	hfe_effect_init_give_tech_t5 = yes
 				establish_communications_no_message = root.owner
 				set_faction_hostility = {
 					set_hostile = no
@@ -843,7 +935,7 @@ ship_event = {
 				create_leader = {
 					class = admiral
 					species = event_target:hfe_varelse_species
-					skill = 5
+					skill = 6
 				}
 				create_fleet = {
 					name = "11th Strike Force"
@@ -1275,7 +1367,10 @@ country_event = {
 		name = hfe.102.3
 		custom_tooltip = hfe.102.3.tooltip
 		allow = {
-			NOT = { is_xenophobe = yes }
+			NOT = {
+				is_xenophobe = yes
+				has_ethic = ethic_fanatic_materialist
+			}
 		}
 		hidden_effect = {
 			country_event = {
@@ -1316,6 +1411,7 @@ country_event = {
 	desc = hfe.104.desc
 	diplomatic = yes
 	is_triggered_only = yes
+	show_sound = event_screams
 	picture_event_data = {
 		room = hfe_varelse_room
 	}
@@ -1369,7 +1465,8 @@ country_event = {
 		}
 	}
 	picture = GFX_evt_hfe_varelse_planet
-	show_sound = event_cityscape
+#	show_sound = event_cityscape
+	show_sound = event_robo
 	location = event_target:hfe_varelse_colony
 	is_triggered_only = yes
 	immediate = {
@@ -1517,7 +1614,7 @@ country_event = {
 	immediate = {
 		event_target:hfe_varelse_colony = {
 			owner = {
-				set_empire_name = "Colony Beta"
+				set_empire_name = "Immortal Beta Colony Institute"
 				hidden_effect = {
 					hfe_effect_cleanse_ethics = yes
 				}
@@ -1545,6 +1642,15 @@ country_event = {
 	}
 	option = {
 		name = hfe.107.0
+		event_target:colony_beta = {
+			kill_leader = {
+				type = ruler
+				show_notification = yes
+			}
+		}
+		hidden_effect = {
+			play_sound = event_screams
+		}
 #		trigger = {
 #			is_materialist = yes
 #		}
@@ -1597,7 +1703,7 @@ country_event = {
 			}
 			event_target:hfe_varelse_colony = {
 				observation_outpost = {
-					add_mission_progress = 0.6
+					add_mission_progress = 0.8
 				}
 			}
 		}
@@ -1637,137 +1743,6 @@ country_event = {
 				}
 			}
 		}
-	}
-}
-
-# Keeps the High Mechanicus' Civics on point
-country_event = { # Default, their civilization continues naturally
-	id = hfe.109
-	hide_window = yes
-
-	trigger = {
-		has_country_flag = hfe_varelse_primitive_0
-		OR = {
-			NOT = { is_country_type = primitive }
-			has_country_flag = primitives_can_into_space
-		}
-		OR = {
-			has_country_flag = high_mechanicus_retained
-			has_civic = hfe_civic_high_mechanicus
-			is_spiritualist = yes
-		}
-		NOT = { has_country_flag = high_mechanicus_befriended }
-		NOT = { has_country_flag = high_mechanicus_can_into_space }
-		NOT = {
-			has_country_flag = varelse_fedora_governance
-			has_civic = hfe_civic_overthrown_mechanicus
-			is_materialist = yes
-		}
-	}
-
-	mean_time_to_happen = {
-		days = 14
-	}
-
-	immediate = {
-		hfe_effect_cleanse_ethics = yes
-		country_add_ethic = ethic_spiritualist
-		country_add_ethic = ethic_authoritarian
-		country_add_ethic = ethic_xenophobe
-		change_government = {
-			authority = auth_dictatorial
-			civics = {
-				civic = hfe_civic_high_mechanicus
-				civic = civic_exalted_priesthood
-			}
-		}
-		hfe_effect_mechanicus_level_up = yes
-		set_empire_name = "Cult of the Machine That-Speaks-to-God"
-		set_country_flag = high_mechanicus_can_into_space
-		log = "Colony Beta has been preserved and entered FTL"
-	}
-}
-
-# Keeps the High Mechanicus' Civics on point
-country_event = { # If you befriended the High Mechanicus
-	id = hfe.110
-	hide_window = yes
-
-	trigger = {
-		has_country_flag = hfe_varelse_primitive_0
-		OR = {
-			NOT = { is_country_type = primitive }
-			has_country_flag = primitives_can_into_space
-		}
-		has_country_flag = high_mechanicus_retained
-		has_country_flag = high_mechanicus_befriended
-		NOT = { has_country_flag = high_mechanicus_can_into_space }
-	}
-
-	mean_time_to_happen = {
-		days = 14
-	}
-
-	immediate = {
-		hfe_effect_cleanse_ethics = yes
-		country_add_ethic = ethic_spiritualist
-		country_add_ethic = ethic_xenophile
-		country_add_ethic = ethic_authoritarian
-		change_government = {
-			authority = auth_dictatorial
-			civics = {
-				civic = hfe_civic_high_mechanicus
-				civic = civic_exalted_priesthood
-			}
-		}
-		hfe_effect_mechanicus_level_up = yes
-		set_empire_name = "Cult of the Machine-That-Speaks-to-God"
-		set_country_flag = high_mechanicus_can_into_space
-
-		log = "Colony Beta has been befriended and entered FTL"
-	}
-}
-
-country_event = { # If you betrayed the High Mechanicus
-	id = hfe.111
-	hide_window = yes
-
-	trigger = {
-		has_country_flag = hfe_varelse_primitive_0
-		OR = {
-			NOT = { is_country_type = primitive }
-			has_country_flag = primitives_can_into_space
-		}
-		OR = {
-			has_country_flag = varelse_fedora_governance
-			is_materialist = yes
-		}
-		NOT = {
-			has_country_flag = high_mechanicus_retained
-			has_country_flag = mechanicus_befriended
-		}
-	}
-
-	mean_time_to_happen = {
-		days = 14
-	}
-
-	immediate = {
-		hfe_effect_cleanse_ethics = yes
-		country_add_ethic = ethic_fanatic_materialist
-		country_add_ethic = ethic_militarist
-		change_government = {
-			authority = auth_dictatorial
-			civics = {
-				civic = hfe_civic_overthrown_mechanicus
-				civic = civic_technocracy
-			}
-		}
-		hfe_effect_mechanicus_level_up = yes
-		set_empire_name = "Immortal Beta Colony Institute"
-		set_country_flag = high_mechanicus_can_into_space
-
-		log = "Colony Beta has been betrayed and entered FTL"
 	}
 }
 
@@ -6538,7 +6513,7 @@ ship_event = {
 		exists = owner
 		owner = {
 			is_ai = no
-			is_country_type = default
+#			is_country_type = default
 		}
 		NOT = {
 			exists = solar_system.owner
@@ -6561,45 +6536,58 @@ ship_event = {
 		}
 		create_country = {
 			name = "Station AI"
+			released_from_country = event_target:hfe_egypt_country # As Thoth once served the Ju Ahet
 			type = hfe_thoth
 			species = event_target:hfe_egypt_species # As Thoth was once a Ju Ahet
 			day_zero_contact = no
 			ignore_initial_colony_error = yes
 			name_list = cybrxkhan_fantasy_egyptian
+			ethos = {
+				ethic = ethic_pacifist
+				ethic = ethic_xenophile
+				ethic = ethic_spiritualist
+			}
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
-				set_graphical_culture = humanoid_01
-				set_city_graphical_culture = fallen_empire_01
+				set_graphical_culture = mammalian_01
+				set_city_graphical_culture = ai_02
 				set_country_flag = hfe_thoth
-				give_technology = {
-					tech = tech_juggernaut
-					message = no
-				}
+				give_technology = { message = no tech = tech_juggernaut }
+				give_technology = {	message = no tech = tech_psionic_theory }
+				give_technology = { message = no tech = tech_psionic_barrier }
+				give_technology = { message = no tech = tech_psionic_shield }
+				give_technology = { message = no tech = tech_sapient_ai	}
+				give_technology = {	message = no tech = tech_synthetic_workers }
+				give_technology = {	message = no tech = tech_synthetic_leaders }
+				give_technology = {	message = no tech = tech_droid_workers }
+				give_technology = {	message = no tech = tech_robotic_workers }
+				give_technology = {	message = no tech = tech_robomodding }
+				give_technology = {	message = no tech = tech_robomodding_points_1 }
+				give_technology = {	message = no tech = tech_robomodding_points_2 }
 				hfe_effect_init_give_tech_t5 = yes
+#				kill_leader = {
+#					type = ruler
+#				}
+#				create_leader = {
+#					class = ruler
+#					set_age = 3000
+#				}
 				create_fleet = {
-					name = "Runaway Station"
+					name = "Runaway Station Core"
 					settings = {
-						spawn_debris = no
+						spawn_debris = yes
 						can_disband = no
 						uses_naval_capacity = no
-						can_upgrade = no
+						can_upgrade = yes
 					}
 					effect = {
-						set_owner = prev
-						create_ship = {
-							name = "Gentleman Computer"
-							design = juggernaut
-#							random_existing_design = juggernaut # LOOKS REALLY COOL
-							graphical_culture = humanoid_01
-							effect = {
-								set_ship_flag = hfe_thoth_war_machine
-							}
-						}
+						set_owner = event_target:hfe_thoth
 						create_ship = {
 							name = "Gentleman Computer Data Banks"
 							design = "NAME_Artist_Enclave_Station"
 							graphical_culture = mammalian_01
+							upgradable = yes # To give it its Psionic Shields
 							effect = {
 								set_ship_flag = hfe_thoth_station
 							}
@@ -6609,17 +6597,43 @@ ship_event = {
 							distance = 10
 						}
 						set_fleet_flag = hfe_thoth_station
-						save_global_event_target_as = hfe_thoth_station
+					}
+				}
+				create_fleet = {
+					name = "Runaway Station Computer"
+					settings = {
+						spawn_debris = yes
+						can_disband = no
+						uses_naval_capacity = no
+						can_upgrade = no
+					}
+					effect = {
+						set_owner = event_target:hfe_thoth
+						create_ship = {
+							name = "Gentleman Computer"
+							design = juggernaut
+							random_existing_design = juggernaut # LOOKS REALLY COOL
+							graphical_culture = humanoid_01
+							upgradable = no
+							effect = {
+								set_ship_flag = hfe_thoth_war_machine
+							}
+						}
+						set_location = {
+							target = event_target:hfe_thoth_location
+							distance = 9.85
+						}
+						set_fleet_flag = hfe_thoth_war_machine
+						save_global_event_target_as = hfe_thoth_war_machine
 						hfe_effect_create_signal_object = yes
 						enable_special_project = {
 							name = hfe_project_thoth_contact
-							location = this
+							location = event_target:hfe_thoth_war_machine
 							owner = root.owner
 						}
 					}
 				}
 				set_custom_capital_location = event_target:hfe_thoth_war_machine
-				add_to_galactic_community = yes
 			}
 		}
 	}

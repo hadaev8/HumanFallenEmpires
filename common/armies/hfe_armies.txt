@@ -109,17 +109,17 @@ hfe_army_high_mechanicus_bodyguards = {
 				}
 			}
 		}
-		FROM = {
-			NOT = {
-				has_trait = trait_mechanical
-				has_trait = trait_machine_unit
-				is_robotic = yes
-			}
+		OR = {
+			FROM = { NOT = { has_trait = trait_mechanical } }
+			FROM = { NOT = { has_trait = trait_machine_unit } }
+			FROM = { NOT = { is_robotic = yes } }
+			owner = { has_country_flag = hfe_varelse_primitive_0 }
 		}
 		OR = {
 			FROM = { has_citizenship_rights = yes }
 			FROM = { has_citizenship_type = { type = citizenship_full } }
-			FROM = { is_same_species = owner_main_species }
+			FROM = { is_same_species = owner }
+			FROM = { is_same_species = event_target:hfe_varelse_species }
 			owner = { is_primitive = yes }
 			owner = { is_country_type = primitive }
 		}
@@ -208,7 +208,7 @@ hfe_army_mechanicus_godforge_drones = {
 	icon_frame = 11
 	time = 200
 	pop_limited = no
-	has_species = yes
+	has_species = no
 
 #	potential = {
 #		from = { 
@@ -269,11 +269,11 @@ hfe_army_mechanicus_godforge_drones = {
 	}
 
 	allow = {
-		OR = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			FROM = { has_trait = trait_mechanical }
-			FROM = { has_trait = trait_machine_unit }
-		}
+#		OR = {
+#			owner = { has_country_flag = hfe_varelse_primitive_0 }
+#			FROM = { has_trait = trait_mechanical }
+#			FROM = { has_trait = trait_machine_unit }
+#		}
 		owner = { NOT = { has_policy_flag = robots_outlawed } }
 	}
 }
@@ -284,7 +284,7 @@ hfe_army_godforge_core_watch = {
 	health = 2.5
 	has_morale = no
 	morale_damage = 1.5
-	collateral_damage = 0
+	collateral_damage = 0.1
 	war_exhaustion = 0.3
 	time = 90
 	pop_limited = yes
@@ -332,10 +332,8 @@ hfe_army_godforge_core_watch = {
 	allow = {
 		OR = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			FROM = {
-				has_trait = trait_mechanical
-				has_trait = trait_machine_unit
-			}
+			FROM = { has_trait = trait_mechanical }
+			FROM = { has_trait = trait_machine_unit }
 		}
 		owner = { NOT = { has_policy_flag = robots_outlawed } }
 	}

@@ -37,6 +37,7 @@ country_event = {
 				set_owner = root
 				create_ship = {
 					random_existing_design = colonizer
+					colonizer_species = owner_species
 				}
 				set_location = root.capital_scope
 				save_event_target_as = hfe_primitive_100_fleet
@@ -70,6 +71,409 @@ country_event = {
 							}
 						}
 					}
+				}
+			}
+		}
+	}
+}
+
+# Keeps the High Mechanicus' Civics on point
+country_event = { # Default, their civilization continues naturally
+	id = hfe_primitive.1
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		OR = {
+			has_country_flag = high_mechanicus_retained
+			has_civic = hfe_civic_high_mechanicus
+			is_spiritualist = yes
+		}
+		NOT = {
+			has_country_flag = varelse_fedora_governance
+			has_civic = hfe_civic_overthrown_mechanicus
+			is_materialist = yes
+		}
+		NOT = { has_country_flag = high_mechanicus_befriended }
+		NOT = { has_country_flag = high_mechanicus_can_into_space }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_spiritualist
+		country_add_ethic = ethic_authoritarian
+		country_add_ethic = ethic_xenophobe
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_high_mechanicus
+				civic = civic_exalted_priesthood
+			}
+		}
+		hfe_effect_mechanicus_level_up = yes
+		set_empire_name = "Cult of the Machine That-Speaks-to-God"
+		set_graphical_culture = hfe_graphical_culture_drone
+		set_city_graphical_culture = industrial_01
+		set_country_flag = high_mechanicus_can_into_space
+		log = "Colony Beta has been preserved and entered FTL"
+
+		capital_scope = {
+			while = {
+				count = 10
+				create_army = {
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = assault_army
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Zealot Militia"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Elite Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 3
+				create_army = {
+					name = "Regime Enforcers"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 12
+				create_army = {
+					name = "Instruments of the Machine"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_mechanicus_godforge_drones
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_godforge_core_watch
+				}
+			}
+			while = {
+				count = 1
+				create_army = {
+					name = "The Machine-That-Speaks-to-God"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = care_defensive_protocols
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Adaptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = robotic_defense_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "The Master's Personal Guards"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_bodyguards
+				}
+			}
+		}
+	}
+}
+
+# Keeps the High Mechanicus' Civics on point
+country_event = { # If you befriended the High Mechanicus
+	id = hfe_primitive.2
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		has_country_flag = high_mechanicus_retained
+		has_country_flag = high_mechanicus_befriended
+		NOT = { has_country_flag = high_mechanicus_can_into_space }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_spiritualist
+		country_add_ethic = ethic_xenophile
+		country_add_ethic = ethic_authoritarian
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_high_mechanicus
+				civic = civic_exalted_priesthood
+			}
+		}
+		hfe_effect_mechanicus_level_up = yes
+		set_empire_name = "Cult of the Machine-That-Speaks-to-God"
+		set_graphical_culture = hfe_graphical_culture_drone
+		set_city_graphical_culture = industrial_01
+		set_country_flag = high_mechanicus_can_into_space
+
+		log = "Colony Beta has been befriended and entered FTL"
+
+		capital_scope = {
+			while = {
+				count = 10
+				create_army = {
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Fanatic Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = assault_army
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Zealot Militia"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 10
+				create_army = {
+					name = "Elite Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 3
+				create_army = {
+					name = "Regime Enforcers"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 14
+				create_army = {
+					name = "Instruments of the Machine"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_mechanicus_godforge_drones
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_godforge_core_watch
+				}
+			}
+			while = {
+				count = 1
+				create_army = {
+					name = "The Machine-That-Speaks-to-God"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = care_defensive_protocols
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "Adaptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = robotic_defense_army
+				}
+			}
+			while = {
+				count = 2
+				create_army = {
+					name = "The Master's Personal Guards"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_bodyguards
+				}
+			}
+		}
+	}
+}
+
+country_event = { # If you betrayed the High Mechanicus
+	id = hfe_primitive.3
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		OR = {
+			NOT = { is_country_type = primitive }
+			has_country_flag = primitives_can_into_space
+		}
+		OR = {
+			has_country_flag = varelse_fedora_governance
+			is_materialist = yes
+		}
+		NOT = {
+			has_country_flag = high_mechanicus_retained
+			has_country_flag = mechanicus_befriended
+		}
+		NOT = { has_country_flag = high_mechanicus_can_into_space }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+
+	immediate = {
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_fanatic_materialist
+		country_add_ethic = ethic_militarist
+		change_government = {
+			authority = auth_dictatorial
+			civics = {
+				civic = hfe_civic_overthrown_mechanicus
+				civic = civic_technocracy
+			}
+		}
+		hfe_effect_mechanicus_level_up = yes
+		set_empire_name = "Immortal Beta Colony Institute"
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Colony Beta has its Armies again"
+		}
+
+		give_technology = {
+			tech = tech_droid_workers
+			message = no
+		}
+
+		give_technology = {
+			tech = tech_global_research_initiative
+			message = no
+		}
+
+		give_technology = {
+			tech = tech_robomodding_points_1
+			message = no
+		}
+
+		give_technology = {
+			tech = tech_robomodding_points_2
+			message = no
+		}
+
+		add_resource = {
+			physics_research = 1750
+			society_research = 1750
+			engineering_research = 1750
+		}
+
+		set_graphical_culture = hfe_graphical_culture_drone
+		set_city_graphical_culture = humanoid_01
+		set_country_flag = high_mechanicus_can_into_space
+
+		log = "Colony Beta has been betrayed and entered FTL"
+
+		capital_scope = {
+			while = {
+				count = 3
+				create_army = {
+					name = "Regime Enforcers"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = defense_army
+				}
+			}
+			while = {
+				count = 20
+				create_army = {
+					name = "Instruments of the Machine"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_mechanicus_godforge_drones
+				}
+			}
+			while = {
+				count = 7
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = hfe_army_godforge_core_watch
+				}
+			}
+			while = {
+				count = 1
+				create_army = {
+					name = "The Factory"
+					owner = owner
+					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					type = care_defensive_protocols
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Repurposed Adaptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = robotic_defense_army
 				}
 			}
 		}

@@ -15,7 +15,11 @@ hfe_job_egypt_ruler_0 = {
 	possible = {
 		exists = owner
 		exists = planet
-		is_same_species = owner
+		OR = {
+			is_species = event_target:hfe_egypt_species
+			is_same_species = owner
+			NOT = { owner = { has_country_flag = hfe_egypt } }
+		}
 		OR = {
 			owner = { has_civic = hfe_civic_egypt_rulers }
 			owner = { has_origin = hfe_civic_egypt_rulers_origin }
@@ -727,7 +731,7 @@ hfe_job_egypt_workless = {
 		}
 		OR = {
 			owner = { NOT = { is_xenophobe = yes } }
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 #		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
 		NOT = {
@@ -774,7 +778,7 @@ hfe_job_future_workless = {
 		}
 		OR = {
 			owner = { NOT = { is_xenophobe = yes } }
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 	}
 	pop_modifier = {
@@ -1294,15 +1298,15 @@ hfe_job_godforge_primitive = {
 		}
 		modifier = {
 			factor = 0.5
-			NOT = { is_exact_same_species = owner_main_species }
+			NOT = { is_exact_same_species = owner }
 		}
 		modifier = {
 			factor = 5
-			is_same_species = owner_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 2
-			is_exact_same_species = owner_main_species
+			is_exact_same_species = owner
 		}
 		modifier = {
 			factor = 2
@@ -1439,11 +1443,11 @@ hfe_job_godforge_overlord = {
 #		}
 		modifier = {
 			factor = 5
-			is_same_species = owner_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 2
-			is_exact_same_species = owner_main_species
+			is_exact_same_species = owner
 		}
 		modifier = {
 			factor = 2
@@ -1493,7 +1497,7 @@ hfe_job_mechanicus_bodyguard = {
 			}
 			owner = { is_country_type = primitive }
 			owner = { is_primitive = yes }
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 	}
 
@@ -1554,7 +1558,7 @@ hfe_job_mechanicus_bodyguard = {
 		modifier = {
 			factor = 0.01
 			AND = {
-				NOT = {	is_same_species = owner_main_species }
+				NOT = {	is_same_species = owner }
 				owner = {
 					NOT = {
 						is_primitive = yes
@@ -1571,11 +1575,11 @@ hfe_job_mechanicus_bodyguard = {
 		}
 		modifier = {
 			factor = 20
-			is_exact_same_species = owner_main_species
+			is_exact_same_species = owner
 		}
 		modifier = {
 			factor = 10
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 		# crisis purge
 		modifier = {
@@ -1608,6 +1612,7 @@ hfe_job_mechanicus_cultist = {
 	possible = {
 		OR = {
 			planet = { has_building = hfe_building_mechanicus_cult_temple }
+			planet = { has_planet_flag = colony_beta }
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 			owner = { is_primitive = yes }
 			owner = { is_country_type = primitive }
@@ -1616,14 +1621,15 @@ hfe_job_mechanicus_cultist = {
 			has_citizenship_type = {
 				type = citizenship_full
 			}
-			is_same_species = owner_main_species
+			is_same_species = owner_species
+			owner = { has_civic = hfe_civic_high_mechanicus }
 			owner = { is_country_type = primitive }
 			owner = { is_primitive = yes }
 		}
 		owner = {
 			OR = {
 				NOT = { is_xenophobe = yes }
-				is_same_species = owner_main_species
+				is_same_species = owner
 			}
 		}
 		OR = {
@@ -1644,7 +1650,7 @@ hfe_job_mechanicus_cultist = {
 		produces = {
 			unity = 5
 			alloys = 3
-			engineering_research = 2
+			engineering_research = 3
 		}
 		upkeep = {
 			energy = 1
@@ -1682,10 +1688,10 @@ hfe_job_mechanicus_cultist = {
 	weight = {
 		weight = @worker_job_weight	
 		modifier = {
-			factor = 0.1
+			factor = 0.5
 			has_citizenship_rights = no
 			NOT = {
-				is_same_species = owner_main_species
+				is_same_species = owner
 				owner = { is_xenophile = yes }
 				owner = { is_egalitarian = yes }
 				owner = { is_primitive = yes }
@@ -1694,7 +1700,7 @@ hfe_job_mechanicus_cultist = {
 		}
 		modifier = {
 			factor = 2
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 1.25
