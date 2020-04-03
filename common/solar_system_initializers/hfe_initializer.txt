@@ -22,6 +22,9 @@ hfe_initializer_egypt_main = {
 		}
 		has_ring = no
 		name = Ra
+		init_effect = {
+			save_global_event_target_as = hfe_egypt_home_star
+		}
 	}
 	change_orbit = 70
 	planet = {
@@ -70,6 +73,7 @@ hfe_initializer_egypt_main = {
 			max = 270
 		}
 		init_effect = {
+			save_global_event_target_as = hfe_egypt_home_of_light
 			create_country = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
@@ -77,11 +81,11 @@ hfe_initializer_egypt_main = {
 				ship_prefix = "Ra"
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_egypt_species
+				authority = auth_imperial
 				ethos = {
 					ethic = ethic_fanatic_spiritualist
 					ethic = ethic_authoritarian
 				}
-				authority = auth_imperial
 				civics = {
 					civic = hfe_civic_egypt_genetic
 					civic = hfe_civic_egypt_rulers
@@ -235,34 +239,6 @@ hfe_initializer_egypt_main = {
 				hfe_effect_create_egypt_fleet = yes
 				hfe_effect_create_egypt_fleet = yes
 				create_fleet = {
-					name = "Divine Punishment I"
-					settings = {
-						can_disband = no
-						spawn_debris = yes
-						is_boss = yes
-						uses_naval_capacity = no
-						can_upgrade = yes
-						ai_ignore_strength = yes
-					}
-					effect = {
-						create_ship = {
-							name = "Set"
-							design = colossus
-							random_existing_design = colossus
-							graphical_culture = humanoid_01
-							prefix = no
-							effect = {
-								set_ship_flag = ju_ahet_colossus_1
-							}
-						}
-						set_location = {
-							target = owner.capital_star
-							distance = 90
-							angle = random
-						}
-					}
-				}
-				create_fleet = {
 					name = "Divine Punishment II"
 					settings = {
 						can_disband = no
@@ -275,8 +251,8 @@ hfe_initializer_egypt_main = {
 					effect = {
 						create_ship = {
 							name = "Super Ahet Purger"
-							design = colossus
-							random_existing_design = colossus
+							design = "NAME_Reaper"
+#							random_existing_design = colossus
 							graphical_culture = humanoid_01
 							prefix = no
 							effect = {
@@ -284,8 +260,8 @@ hfe_initializer_egypt_main = {
 							}
 						}
 						set_location = {
-							target = owner.capital_star
-							distance = 120
+							target = event_target:hfe_egypt_home_star
+							distance = 100
 							angle = random
 						}
 					}
@@ -335,6 +311,45 @@ hfe_initializer_egypt_main = {
 #			entity = barren_planet_01_destroyed_entity
 			orbit_angle = random
 			orbit_distance = 5
+			init_effect = {
+				save_global_event_target_as = hfe_thoth_broke_this
+				create_fleet = {
+					name = "Divine Punishment I"
+					settings = {
+						can_disband = no
+						spawn_debris = yes
+						is_boss = yes
+						uses_naval_capacity = no
+						can_upgrade = yes
+						ai_ignore_strength = yes
+					}
+					effect = {
+						create_ship = {
+							name = "Set"
+							design = "NAME_Reaper"
+#							random_existing_design = colossus
+							graphical_culture = humanoid_01
+							prefix = no
+							effect = {
+								set_ship_flag = ju_ahet_colossus_1
+							}
+						}
+						set_location = {
+							target = event_target:hfe_thoth_broke_this
+							distance = 1
+							angle = 325 # Should be to the top-left of the moon
+						}
+					}
+				}
+				event_target:hfe_egypt_country = {
+					every_owned_ship = {
+						repair_ship = yes
+						add_modifier = {
+							modifier = hfe_unkeep_80
+						}
+					}
+				}
+			}
 		}
 	}
 	planet = {
@@ -1114,10 +1129,10 @@ hfe_initializer_varelse = {
 		count = 1
 		class = random_non_colonizable
 	}
-	change_orbit = 25
+	change_orbit = 32
 	planet = {
 		name = "Colony Beta"
-		orbit_distance = 2
+		orbit_distance = 0
 		class = pc_desert
 #		entity = hfe_entity_arid_01_brown
 		entity = toxic_planet_02_entity
@@ -1197,7 +1212,6 @@ hfe_initializer_varelse = {
 							set_leader_flag = godforge_engine
 						}
 					}
-					assign_leader = last_created_leader
 					if = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
 						log = "High Mechanicus instated on Colony Beta"
@@ -1466,9 +1480,9 @@ hfe_initializer_varelse = {
 	change_orbit = 35
 	planet = {
 		name = "Deprived"
-#		orbit_distance = 16
+#		orbit_distance = 0
 		class = pc_t_star
-		size = 38
+		size = 37
 		orbit_angle = random
 		change_orbit = @base_moon_distance
 		moon = {
@@ -1529,15 +1543,30 @@ hfe_initializer_ahet_home = {
 	change_orbit = 20
 	planet = {
 		orbit_distance = 10
+		name = "Our Happy Ending"
 		class = hfe_pc_ahet_home
 		has_ring = yes
 		orbit_angle = {
 			min = 90
 			max = 270
 		}
-		size = 25
+		size = 30
+		home_planet = yes
 		init_effect = {
 			set_planet_flag = hfe_ahet_home
+			add_modifier = {
+				modifier = lush_planet
+				days = -1
+			}
+			add_modifier = {
+				modifier = natural_beauty
+				days = -1
+			}
+			add_deposit = d_ancient_particle_accelerator
+			add_deposit = d_relic_dense_ruins
+			add_deposit = d_bomb_crater
+			add_deposit = d_bomb_crater
+			add_deposit = d_bomb_crater
 		}
 		moon = {
 			count = 1
@@ -1548,7 +1577,10 @@ hfe_initializer_ahet_home = {
 				min = 0
 				max = 90
 			}
-			orbit_distance = 8
+			orbit_distance = 1
+			init_effect = {
+				add_deposit = d_engineering_9
+			}
 		}
 		moon = {
 			count = 1
@@ -1556,7 +1588,10 @@ hfe_initializer_ahet_home = {
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
-			orbit_distance = 9
+			orbit_distance = 1.1
+			init_effect = {
+				add_deposit = d_engineering_6
+			}
 		}
 		moon = {
 			count = 1
@@ -1564,34 +1599,35 @@ hfe_initializer_ahet_home = {
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
-			orbit_distance = 11
+			orbit_distance = 1.18
+			init_effect = {
+				add_deposit = d_engineering_6
+			}
 		}
 	}
 	planet = {
 		orbit_distance = 20
-		count = {
-			min = 1
-			max = 4
-		}
+		count = 3
+		has_ring = yes
 		change_orbit = @base_moon_distance
 		moon = {
 			count = {
-				min = 0
-				max = 2
+				min = 2
+				max = 3
 			}
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
 			orbit_distance = 5
+			has_ring = no
 		}
 	}
 	planet = {
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 2
-		}
+		count = 1
+		class = pc_gas_giant
+		size = 31
 		has_ring = yes
 	}
 	init_effect = {
@@ -2073,46 +2109,53 @@ hfe_initializer_drone_sector_0 = {
 	}
 	change_orbit = 100
 	planet = {
-		count = {
-			min = 9
-			max = 10
-		}
+		count = 7
 		class = pc_rare_crystal_asteroid
 		orbit_distance = 0
 		orbit_angle = random
 	}
 	change_orbit = 10
 	planet = {
-		count = {
-			min = 10
-			max = 12
-		}
+		count = 9
 		class = pc_rare_crystal_asteroid
 		orbit_distance = 0
 		orbit_angle = random
 	}
 	change_orbit = 25
 	planet = {
-		count = {
-			min = 1
-			max = 3
-		}
+		count = 1
 		class = pc_gas_giant
 		orbit_distance = 20
 		orbit_angle = random
 		change_orbit = @base_moon_distance
 		moon = {
-			count = {
-				min = 1
-				max = 2
-			}
+			count = 1
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
 			orbit_distance = 5
+			init_effect = {
+				add_deposit = d_minerals_1
+			}
 		}
 	}
+	change_orbit = 5
+	planet = {
+		name = "Treasure Zone"
+		class = pc_barren
+		size = 39
+		has_ring = yes
+		modifiers = none
+		orbit_distance = 5
+		orbit_angle = random
+		init_effect = {
+			save_global_event_target_as = hfe_drone_hq
+			set_planet_flag = hfe_drone_hq_planet
+			add_deposit = d_minerals_10
+		}
+	}
+	change_orbit = 7
 	planet = {
 		count = {
 			min = 1
@@ -2123,32 +2166,15 @@ hfe_initializer_drone_sector_0 = {
 		orbit_angle = random
 	}
 	init_effect = {
-		hfe_effect_add_hyperlanes = yes
-		every_system_planet = {
-			limit = {
-				has_deposit = no
-			}
-			if = {
-				limit = {
-					is_asteroid = yes
-				}
-				hfe_effect_set_mineral_orbital_deposit = yes
-			}
-			else_if = {
-				limit = {
-					or = {
-						is_star = yes
-						is_planet_class = pc_gas_giant
-					}
-				}
-				hfe_effect_set_energy_orbital_deposit = yes
-			}
-		}
 		create_country = {
 			name = "Harvesting Branch 42"
 			name_list = AI
 			type = hfe_drone
 			day_zero_contact = no
+			authority = auth_machine_intelligence
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
 			flag = {
 				icon = {
 					category = "zoological"
@@ -2223,6 +2249,7 @@ hfe_initializer_drone_sector_0 = {
 					tech = tech_space_mining_5
 					message = no
 				}
+				hfe_effect_init_give_tech_t4 = yes
 				every_country = {
 					limit = {
 						or = {
@@ -2231,7 +2258,7 @@ hfe_initializer_drone_sector_0 = {
 							has_country_flag = hfe_future
 
 							# Vanilla rendition
-							is_country_type = primitive
+#							is_country_type = primitive
 							is_country_type = fallen_empire
 							is_country_type = awakened_fallen_empire
 							is_country_type = enclave
@@ -2242,17 +2269,20 @@ hfe_initializer_drone_sector_0 = {
 
 							# Prevents Nomad Raiders from accidentally killing them
 							is_country_type = nomad
+							is_country_type = ruined_marauders
 							is_country_type = dormant_marauders
 							is_country_type = marauder_raiders
 							is_country_type = awakened_marauders
 							is_country_type = marauder_raiders
 							is_country_type = caravaneer_home
 							is_country_type = caravaneer_fleet
+							is_country_type = faction
 
 							# Allows the Discovery Fleet to track the Crisis too
 							is_guardian_country = yes
 							is_country_type = swarm
 							is_country_type = ai_empire
+							is_fallen_machine_empire = yes
 						}
 					}
 					set_faction_hostility = {
@@ -2288,13 +2318,144 @@ hfe_initializer_drone_sector_0 = {
 				}
 			}
 		}
+		hfe_effect_add_hyperlanes = yes
+		event_target:hfe_drone_hq = {
+			create_fleet = {
+				name = "NAME_Central_Processing"
+				settings = {
+					can_disband = no
+					uses_naval_capacity = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:hfe_drone_country
+					create_ship = {
+						name = "Final Core"
+						design = NAME_Drone_Home_Base
+						graphical_culture = hfe_graphical_culture_drone
+						effect = {
+							save_global_event_target_as = hfe_drone_core
+							set_ship_flag = hfe_drone_core
+						}
+					}
+					set_fleet_stance = passive
+					save_event_target_as = ore_grinder
+					set_fleet_flag = ore_grinder
+					set_location = {
+						target = event_target:hfe_drone_hq
+						distance = 0.2
+						angle = random
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Asset_Protection_Unit"
+				settings = {
+					uses_naval_capacity = no
+					can_change_composition = no
+					can_disband = no
+					can_upgrade = no
+				}
+				effect = {
+					set_owner = event_target:hfe_drone_country
+					while = {
+						count = 30
+						create_ship = {
+							name = "Ancient Mining Defense Drone"
+							design = "NAME_Ancient_Combat_Drone"
+						}
+					}
+					while = {
+						count = 30
+						create_ship = {
+							name = "Ancient Mining Drone"
+							design = "NAME_Ancient_Mining_Drone"
+						}
+					}
+					while = {
+						count = 30
+						create_ship = {
+							name = "Super Ancient Mining Drone"
+							design = "NAME_Ancient_Destroyer"
+						}
+					}
+					while = {
+						count = 10
+						create_ship = {
+							name = "Super Ultra Ancient Mining Drones"
+							random_existing_design = cruiser
+						}
+					}
+					set_location = {
+						target = event_target:hfe_drone_hq
+						distance = 20
+						angle = 0
+					}
+					set_formation_scale = 2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 500
+				}
+			}
+		}
+		every_system_planet = {
+			limit = {
+				has_deposit = no
+			}
+			if = {
+				limit = {
+					is_asteroid = yes
+				}
+				add_deposit = d_minerals_2
+			}
+			else_if = {
+				limit = {
+					or = {
+						is_star = yes
+						is_planet_class = pc_gas_giant
+					}
+				}
+				hfe_effect_set_energy_orbital_deposit = yes
+			}
+			else = {
+				create_mining_station = {
+					owner = event_target:hfe_drone_country
+				}
+			}
+		}
 		create_starbase = {
-			size = starbase_outpost
+#			name = "Harvester Automated Defense Engine"
+			size = "starbase_citadel"
 			owner = event_target:hfe_drone_country
+			module = shipyard
+			module = trading_hub
+			module = missile_battery
+			module = missile_battery
+			module = gun_battery
+			module = solar_panel_network	
+			building = defense_grid
+			building = hfe_starbase_building_drone_energy
+			building = hfe_starbase_building_drone_logistics
+			building = hfe_starbase_building_drone_alloys
+	
+			effect = {
+				while = {
+					count = 10
+					create_ship = {
+						name = "Threat Mitigation Systems"
+						design = "NAME_Devastator"
+						graphical_culture = fallen_machine_empire_01
+					}
+				}
+			}
 		}
-		starbase = {
-			set_starbase_size = starbase_citadel
-		}
+#		create_starbase = {
+#			size = starbase_outpost
+#			owner = event_target:hfe_drone_country
+#		}
+#		starbase = {
+#			set_starbase_size = starbase_citadel
+#		}
 	}
 	init_effect = {
 		if = {
@@ -2312,7 +2473,7 @@ hfe_initializer_drone_sector_1 = {
 		drone_home_system
 		drone_system_1
 	}
-	class = rl_standard_stars
+	class = sc_k
 	name = "Drone Sector 1"
 	asteroid_belt = {
 		type = rocky_asteroid_belt
@@ -2330,6 +2491,78 @@ hfe_initializer_drone_sector_1 = {
 			min = 10
 			max = 20
 		}
+		init_effect = {
+			save_global_event_target_as = hfe_drone_country_star_1
+			add_deposit = d_trade_value_5
+			create_fleet = {
+				name = "Economic Computer Protection Drones"
+				settings = {
+					uses_naval_capacity = no
+					can_disband = no
+					can_upgrade = no
+					can_change_composition = no
+				}
+				effect = {
+					set_owner = event_target:hfe_drone_country
+					while = {
+						count = 15
+						create_ship = {
+							name = "Ancient Mining Drones"
+							design = "NAME_Ancient_Mining_Drone"
+						}
+					}
+					while = {
+						count = 5
+						create_ship = {
+							name = "Trading AI Defense Drones"
+							design = "NAME_Ancient_Combat_Drone"
+						}
+					}
+					while = {
+						count = 6
+						create_ship = {
+							name = "Guardians of Wealth"
+							design = "NAME_Ancient_Destroyer"
+						}
+					}
+					set_location = {
+						target = event_target:hfe_drone_country_star_1
+						distance = 20
+						angle = 0
+					}
+					set_formation_scale = 2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 200
+				}
+			}
+			create_ambient_object = {
+				type = caravaneer_billboard_1
+				scale = 4
+				location = this
+				entity_offset_height = { min = -9 max = -11 }
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 40
+					angle = 45
+				}
+			}
+			create_ambient_object = {
+				type = caravaneer_billboard_3
+				scale = 4
+				location = this
+#				entity_offset_height = { min = -9 max = -11 }
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 4
+					angle = random
+				}
+			}
+		}
 	}
 	change_orbit = 60
 	planet = {
@@ -2345,7 +2578,7 @@ hfe_initializer_drone_sector_1 = {
 	planet = {
 		count = {
 			min = 3
-			max = 9
+			max = 6
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -2369,6 +2602,21 @@ hfe_initializer_drone_sector_1 = {
 			}
 			orbit_distance = 5
 		}
+		init_effect = {
+			create_ambient_object = {
+				type = caravaneer_billboard_1
+				scale = 4
+				location = this
+				entity_offset_height = { min = -9 max = -11 }
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 18
+					angle = random
+				}
+			}
+		}
 	}
 	planet = {
 		count = {
@@ -2378,6 +2626,21 @@ hfe_initializer_drone_sector_1 = {
 		class = random_non_colonizable
 		orbit_distance = 20
 		orbit_angle = random
+		init_effect = {
+			create_ambient_object = {
+				type = caravaneer_billboard_2
+				scale = 3.5
+				location = this
+				entity_offset_height = { min = -9 max = -15 }
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 40
+					angle = 45
+				}
+			}
+		}
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
@@ -2389,7 +2652,9 @@ hfe_initializer_drone_sector_1 = {
 				limit = {
 					is_asteroid = yes
 				}
-				hfe_effect_set_mineral_orbital_deposit = yes
+				add_deposit = d_trade_value_1
+				add_deposit = d_minerals_2
+#				hfe_effect_set_mineral_orbital_deposit = yes
 			}
 			else_if = {
 				limit = {
@@ -2402,11 +2667,44 @@ hfe_initializer_drone_sector_1 = {
 			}
 		}
 		create_starbase = {
-			size = starbase_outpost
+#			name = "Automated Trading Hub"
+			size = "starbase_citadel"
 			owner = event_target:hfe_drone_country
+			module = shipyard
+			module = trading_hub
+			module = trading_hub
+			module = trading_hub
+			module = trading_hub
+			module = missile_battery
+			building = defense_grid
+			building = hfe_starbase_building_drone_energy
+			building = hfe_starbase_building_drone_logistics
+			building = hfe_starbase_building_drone_alloys
+			effect = {
+				while = {
+					count = 10
+					create_ship = {
+						name = "Economic Processor Defense Platform"
+						design = "NAME_Devastator"
+						graphical_culture = fallen_machine_empire_01
+					}
+				}
+			}
 		}
-		starbase = {
-			set_starbase_size = starbase_citadel
+#		create_starbase = {
+#			size = starbase_outpost
+#			owner = event_target:hfe_drone_country
+#		}
+#		starbase = {
+#			set_starbase_size = starbase_citadel
+#		}
+		event_target:hfe_drone_country = {
+			every_owned_ship = {
+				repair_ship = yes
+				add_modifier = {
+					modifier = hfe_unkeep_80
+				}
+			}
 		}
 	}
 	init_effect = {
@@ -2422,7 +2720,7 @@ hfe_initializer_drone_sector_2 = {
 	flags = {
 		hfe_drone_2
 		hostile_system
-		drone_home_system
+#		drone_home_system
 		drone_system_2
 	}
 	class = rl_standard_stars
@@ -2443,12 +2741,47 @@ hfe_initializer_drone_sector_2 = {
 			min = 20
 			max = 30
 		}
+		init_effect = {
+			save_global_event_target_as = hfe_drone_country_star_2
+			create_fleet = {
+				name = "NAME_Ancient_Mining_Drones"
+				effect = {
+					set_owner = event_target:hfe_drone_country
+					while = {
+						count = 10
+						create_ship = {
+							name = "Ancient Mining Drones"
+							design = "NAME_Ancient_Mining_Drone"
+						}
+					}
+					while = {
+						count = 3
+						create_ship = {
+							name = "Ancient Mining Drones Defense"
+							design = "NAME_Ancient_Combat_Drone"
+						}
+					}
+					set_location = event_target:hfe_drone_country_star_2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 150
+					queue_actions = {
+						repeat = {
+							wait = {
+								duration = 999
+								random = 10
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	change_orbit = 40
 	planet = {
 		count = {
 			min = 4
-			max = 6
+			max = 5
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -2456,7 +2789,7 @@ hfe_initializer_drone_sector_2 = {
 	}
 	change_orbit = 160
 	planet = {
-		count = 4
+		count = 3
 		class = pc_ice_asteroid
 		orbit_distance = 0
 		orbit_angle = random
@@ -2501,24 +2834,61 @@ hfe_initializer_drone_sector_2 = {
 				limit = {
 					is_asteroid = yes
 				}
-				hfe_effect_set_mineral_orbital_deposit = yes
+				add_deposit = d_minerals_1
 			}
 			else_if = {
 				limit = {
-					or = {
+					OR = {
 						is_star = yes
 						is_planet_class = pc_gas_giant
 					}
 				}
 				hfe_effect_set_energy_orbital_deposit = yes
 			}
+			else = {
+				create_mining_station = {
+					owner = event_target:hfe_drone_country
+				}
+			}
 		}
 		create_starbase = {
-			size = starbase_outpost
+#			name = "Harvester Automated Defense Engine"
+			size = starbase_starfortress
 			owner = event_target:hfe_drone_country
+			module = shipyard
+			module = shipyard
+			module = shipyard
+			module = gun_battery
+			module = solar_panel_network
+			module = solar_panel_network
+			building = hfe_starbase_building_drone_energy
+			building = hfe_starbase_building_drone_logistics
+			building = hfe_starbase_building_drone_alloys
+			effect = {
+				while = {
+					count = 2
+					create_ship = {
+						name = "Threat Mitigation Systems"
+						design = "NAME_Devastator"
+						graphical_culture = fallen_machine_empire_01
+					}
+				}
+			}
 		}
-		starbase = {
-			set_starbase_size = starbase_citadel
+#		create_starbase = {
+#			size = starbase_outpost
+#			owner = event_target:hfe_drone_country
+#		}
+#		starbase = {
+#			set_starbase_size = starbase_citadel
+#		}
+		event_target:hfe_drone_country = {
+			every_owned_ship = {
+				repair_ship = yes
+				add_modifier = {
+					modifier = hfe_unkeep_80
+				}
+			}
 		}
 	}
 	init_effect = {
