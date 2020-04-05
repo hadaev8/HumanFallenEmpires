@@ -836,98 +836,7 @@ ship_event = {
 			ignore_initial_colony_error = yes
 			effect = {
 				set_graphical_culture = fallen_empire_02 # Green
-				capital_scope = {
-					while = {
-						count = 10
-						create_army = {
-							name = "Zealots"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = hfe_army_high_mechanicus_zealots
-						}
-					}
-					while = {
-						count = 10
-						create_army = {
-							name = "Fanatic Zealots"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = assault_army
-						}
-					}
-					while = {
-						count = 10
-						create_army = {
-							name = "Zealot Militia"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = hfe_army_high_mechanicus_zealots
-						}
-					}
-					while = {
-						count = 10
-						create_army = {
-							name = "Elite Zealots"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = defense_army
-						}
-					}
-					while = {
-						count = 3
-						create_army = {
-							name = "Regime Enforcers"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = defense_army
-						}
-					}
-					while = {
-						count = 12
-						create_army = {
-							name = "Instruments of the Machine"
-							owner = owner
-							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
-							type = hfe_army_mechanicus_godforge_drones
-						}
-					}
-					while = {
-						count = 5
-						create_army = {
-							name = "Godforge Sentinels"
-							owner = owner
-							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
-							type = hfe_army_godforge_core_watch
-						}
-					}
-					while = {
-						count = 1
-						create_army = {
-							name = "The Machine-That-Speaks-to-God"
-							owner = owner
-							species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
-							type = care_defensive_protocols
-						}
-					}
-					while = {
-						count = 2
-						create_army = {
-							name = "Adaptus Mechanicus"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = robotic_defense_army
-						}
-					}
-					while = {
-						count = 2
-						create_army = {
-							name = "The Master's Personal Guards"
-							owner = owner
-							species = event_target:hfe_varelse_species
-							type = hfe_army_high_mechanicus_bodyguards
-						}
-					}
-				}	hfe_effect_init_give_tech_t5 = yes
+				hfe_effect_init_give_tech_t5 = yes
 				establish_communications_no_message = root.owner
 				set_faction_hostility = {
 					set_hostile = no
@@ -1733,6 +1642,7 @@ country_event = {
 		}
 		event_target:colony_beta = {
 			hidden_effect = {
+				set_country_flag = high_mechanicus_retained
 				set_country_flag = high_mechanicus_befriended
 				change_government = {
 					authority = auth_dictatorial
@@ -6525,6 +6435,8 @@ ship_event = {
 		}
 		set_global_flag = hfe_has_event.700
 		solar_system = {
+			set_star_flag = thoth_was_here
+			save_global_event_target_as = thoth_hiding_spot_star
 			random_system_planet = {
 				limit = {
 					not = {
@@ -6532,6 +6444,7 @@ ship_event = {
 					}
 				}
 				save_global_event_target_as = hfe_thoth_location
+				set_planet_flag = hfe_thoth_hiding_spot
 			}
 		}
 		create_country = {
@@ -6566,23 +6479,18 @@ ship_event = {
 				give_technology = {	message = no tech = tech_robomodding_points_1 }
 				give_technology = {	message = no tech = tech_robomodding_points_2 }
 				hfe_effect_init_give_tech_t5 = yes
-#				kill_leader = {
-#					type = ruler
-#				}
-#				create_leader = {
-#					class = ruler
-#					set_age = 3000
-#				}
+				give_fe_tech = yes
 				create_fleet = {
 					name = "Runaway Station Core"
 					settings = {
-						spawn_debris = yes
+						spawn_debris = no
 						can_disband = no
 						uses_naval_capacity = no
 						can_upgrade = yes
 					}
 					effect = {
-						set_owner = event_target:hfe_thoth
+#						set_owner = event_target:hfe_thoth
+						set_owner = prev
 						create_ship = {
 							name = "Gentleman Computer Data Banks"
 							design = "NAME_Artist_Enclave_Station"
@@ -6597,6 +6505,7 @@ ship_event = {
 							distance = 10
 						}
 						set_fleet_flag = hfe_thoth_station
+						save_global_event_target_as = hfe_thoth_station
 					}
 				}
 				create_fleet = {
@@ -6611,17 +6520,13 @@ ship_event = {
 						set_owner = event_target:hfe_thoth
 						create_ship = {
 							name = "Gentleman Computer"
-							design = juggernaut
 							random_existing_design = juggernaut # LOOKS REALLY COOL
 							graphical_culture = humanoid_01
 							upgradable = no
 							effect = {
-								set_ship_flag = hfe_thoth_war_machine
+								set_ship_flag = hfe_thoth_war_machine_ship
+								save_global_event_target_as = hfe_thoth_war_machine_ship
 							}
-						}
-						set_location = {
-							target = event_target:hfe_thoth_location
-							distance = 9.92
 						}
 						set_fleet_flag = hfe_thoth_war_machine
 						save_global_event_target_as = hfe_thoth_war_machine
@@ -6633,7 +6538,13 @@ ship_event = {
 						}
 					}
 				}
-				set_custom_capital_location = event_target:hfe_thoth_war_machine
+				set_custom_capital_location = event_target:hfe_thoth_station
+			}
+		}
+		event_target:thfe_thoth_war_machine = {
+			set_location = {
+				target = event_target:hfe_thoth_location
+				distance = 9.9
 			}
 		}
 	}

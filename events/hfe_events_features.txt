@@ -1,4 +1,5 @@
 #
+
 namespace = hfe_features
 
 # biobomb feature
@@ -92,7 +93,10 @@ planet_event = {
 
 		if = {
 			limit = {
-				owner = { has_origin = hfe_civic_features_exodus }
+				owner = {
+					has_origin = hfe_civic_features_exodus
+					has_global_flag = hfe_hardcore_disable
+				}
 			}
 
 			owner = {
@@ -147,121 +151,110 @@ planet_event = {
 		set_planet_flag = hfe_features_exodus_planet
 
 		# You're not going to settle on a planet smaller than size nine, are you?
-		capital_scope = {
-			if = {
-				limit = {
-					OR = {
-						owner = { has_origin = origin_mechanists }
-						owner = { has_authority = auth_machine_intelligence }
-						owner = {
-							AND = {
-								is_materialist = yes
-								has_technology = tech_robotic_workers
-							}
+		if = {
+			limit = {
+				OR = {
+					owner = { has_origin = origin_mechanists }
+					owner = { has_authority = auth_machine_intelligence }
+					owner = {
+						AND = {
+							is_materialist = yes
+							has_technology = tech_robotic_workers
 						}
 					}
 				}
-				add_building = building_robot_assembly_plant
 			}
-
+			add_building = building_robot_assembly_plant
+		}
 			# You're landing on a PLANET, right?
-
-			if = {
-				limit = {
-					owner = { NOT = { is_gestalt = yes } }
-					habitable_structure = no
-				}
-				add_district = district_city
-				add_district = district_city
+		if = {
+			limit = {
+				owner = { NOT = { is_gestalt = yes } }
+				habitable_structure = no
 			}
-
-			if = {
-				limit = { has_global_flag = hfe_hardcore_disable }
-				add_district = district_city
-				add_district = district_city
-			}
-
-			add_district = district_generator
-			add_district = district_mining
-			add_district = district_farming
-
-			if = {
-				limit = {
-					owner = {
-						is_gestalt = yes
-						has_authority = auth_hive_mind
-					}
-					habitable_structure = no
-				}
-				add_district = district_hive
-				add_district = district_hive
-				add_district = district_hive
-			}
-
-			if = {
-				limit = {
-					habitable_structure = no
-					has_global_flag = hfe_hardcore_disable
-				}
-				add_district = district_generator
-				add_district = district_generator
-				add_district = district_generator
-				add_district = district_generator
-
-				add_district = district_mining
-				add_district = district_mining
-				add_district = district_mining
-				add_district = district_mining
-			}
-
-			if = {
-				limit = { is_lithoid = yes }
-				add_district = district_mining
-				add_district = district_mining
-			}
-
-			if = {
-				limit = {
-					has_global_flag = hfe_hardcore_disable
-					NOT = {
-						is_planet_class = hfe_pc_memorial
-					}
-					owner = { NOT = { is_lithoid = yes } }
-					habitable_structure = no
-				}
-				add_district = district_farming
-				add_district = district_farming
-				add_district = district_farming
-				add_district = district_farming
-			}
-
-			if = {
-				limit = {
-					habitable_structure = yes
-					is_planet_class = pc_habitat
-				}
-				add_district = district_hab_housing
-				add_building = building_hydroponics_farm
-				add_building = building_hydroponics_farm
-			}
-
-			if = {
-				limit = {
-					habitable_structure = yes
-					is_planet_class = pc_habitat
-					has_global_flag = hfe_hardcore_disable
-				}
-				add_district = district_hab_housing
-				add_district = district_hab_housing
-				add_district = district_hab_housing
-			}
+			add_district = district_city
+			add_district = district_city
 		}
 
-		owner = {
-			country_event = {
-				id = hfe_features.13
-				days = 1
+		if = {
+			limit = { has_global_flag = hfe_hardcore_disable }
+			add_district = district_city
+			add_district = district_city
+		}
+
+		add_district = district_generator
+		add_district = district_mining
+		add_district = district_farming
+
+		if = {
+			limit = {
+				owner = {
+					is_gestalt = yes
+					has_authority = auth_hive_mind
+				}
+				habitable_structure = no
 			}
+			add_district = district_hive
+			add_district = district_hive
+			add_district = district_hive
+		}
+		if = {
+			limit = {
+				habitable_structure = no
+				has_global_flag = hfe_hardcore_disable
+			}
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_generator
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+		}
+		if = {
+			limit = { is_lithoid = yes }
+			add_district = district_mining
+			add_district = district_mining
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_hardcore_disable
+				NOT = {
+					is_planet_class = hfe_pc_memorial
+				}
+				owner = { NOT = { is_lithoid = yes } }
+				habitable_structure = no
+			}
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+			}
+			add_district = district_hab_housing
+			add_building = building_hydroponics_farm
+			add_building = building_hydroponics_farm
+		}
+
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+				has_global_flag = hfe_hardcore_disable
+			}
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+			add_district = district_hab_housing
+		}
+
+		planet_event = { # Fires on the same planet
+			id = hfe_features.13
+			days = 1
 		}
 	}
 }
@@ -271,6 +264,7 @@ country_event = {
 	id = hfe_features.4
 	hide_window = yes
 	is_triggered_only = yes
+	show_sound = shattered_planet_explosion
 
 	trigger = {
 		has_origin = hfe_civic_features_exodus
@@ -302,7 +296,10 @@ country_event = {
 		if = {
 			limit = {
 				NOT = { is_pacifist = yes }
-				has_global_flag = hfe_hardcore_disable
+				OR = {
+					has_global_flag = hfe_hardcore_disable
+					has_global_flag = HFE_TSP_spawn_test
+				}
 			}
 			create_fleet = {
 				name = "Real Estate Agents"
@@ -372,15 +369,23 @@ country_event = {
 				}
 				create_fleet = {
 					name = "New Hope"
+					settings = {
+						can_disband = no
+					}
 					effect = {
 						set_owner = root
 						create_ship = {
 							name = "New Hope"
 							random_existing_design = colonizer
-							graphical_culture = hfe_graphical_culture_pirate
+							graphical_culture = hfe_graphical_culture_pirate_full_color
+							effect = {
+								set_ship_flag = exodus_home_colonizer
+								save_global_event_target_as = exodus_home_colonizer
+							}
 						}
 						set_fleet_stance = evasive
 						set_location = root.capital_scope.star
+						save_global_event_target_as = exodus_home_colonizer_fleet
 					}
 				}
 			}
@@ -396,15 +401,23 @@ country_event = {
 				}
 				create_fleet = {
 					name = "Phat Lewtz"
+					settings = {
+						can_disband = no
+					}
 					effect = {
 						set_owner = root
 						create_ship = {
 							name = "New Hope"
 							random_existing_design = sponsored_colonizer
 							graphical_culture = hfe_graphical_culture_pirate
+							effect = {
+								set_ship_flag = exodus_home_colonizer
+								save_global_event_target_as = exodus_home_colonizer
+							}
 						}
 						set_fleet_stance = evasive
 						set_location = root.capital_scope.star
+						save_global_event_target_as = exodus_home_colonizer_fleet
 					}
 				}
 			}
@@ -416,6 +429,9 @@ country_event = {
 				}
 				create_fleet = {
 					name = "Rock Lobster"
+					settings = {
+						can_disband = no
+					}
 					effect = {
 						set_owner = root
 						create_ship = {
@@ -444,6 +460,7 @@ country_event = {
 			save_global_event_target_as = hfe_former_exodus_capital
 			hfe_effect_remove_prescripted_ideal = yes
 			change_pc = pc_broken
+			play_sound = shattered_planet_explosion
 			set_planet_flag = hfe_exodus_civic_former_home
 			set_planet_flag = exodus_happened_here
 			starbase = { destroy_fleet = fleet }
@@ -451,8 +468,9 @@ country_event = {
 				modifier = tsp_hfe_exodus_start_planet_modifier
 				days = -1
 			}
+			add_deposit = HFE_TSP_exodus_start_point # Orbital deposit
 		}
-		
+		set_custom_capital_location = event_target:exodus_home_colonizer_fleet
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Exodus successfully spawned"
@@ -468,6 +486,7 @@ country_event = {
 	id = hfe_features.5
 	hide_window = yes
 	is_triggered_only = yes
+	show_sound = amb_colony_ship_hum
 
 	immediate = {
 		if = {
@@ -522,10 +541,10 @@ country_event = {
 		}
 		add_resource = {
 			energy = 500
-			minerals = 3000
-			food = 2000
-			alloys = 1000
-			consumer_goods = 1000
+			minerals = 500
+			food = 500
+			alloys = 500
+			consumer_goods = 200
 			influence = 1000
 		}
 		if = {
@@ -833,73 +852,74 @@ country_event = {
 	}
 }
 
-country_event = {
+planet_event = {
 	id = hfe_features.13
 	hide_window = yes
 	fire_only_once = yes
 	is_triggered_only = yes
 
 	immediate = {
-		capital_scope = {
-			add_modifier = {
-				modifier = prosp_uni_mod
-				days = -1
-			}
-
-			hfe_effect_exodus_reset_capital = yes
-	
-			if = {
-				limit = {
-					habitable_structure = no
-					owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
-				}
-				add_building = building_major_capital
-			}
-	
-			if = {
-				limit = {
-					owner = { has_ethic = ethic_gestalt_consciousness }
-					owner = { has_authority = auth_hive_mind }
-				}
-				add_building = building_hive_major_capital
-			}
-	
-			if = {
-				limit = {
-					owner = { has_ethic = ethic_gestalt_consciousness }
-					owner = { has_authority = auth_machine_intelligence }
-				}
-				add_building = building_machine_major_capital
-			}
-	
-			if = {
-				limit = {
-					habitable_structure = yes
-					is_planet_class = pc_habitat
-				}
-				add_building = building_hab_major_capital
-			}
-	
-			if = {
-				limit = {
-					OR = {
-						owner = { has_country_flag = fallen_empire_on_the_run }
-						owner = { is_fallen_empire = yes }
-						owner = { is_country_type = fallen_empire }
-						owner = { is_country_type = awakened_fallen_empire }
-					}
-					NOT = {
-						owner = { is_country_type = human_fallen_empire }
-						owner = { has_country_flag = hfe_egypt }
-						owner = { has_country_flag = hfe_future }
-					}
-				}
-				add_building = building_ancient_palace
-			}
+		add_modifier = {
+			modifier = prosp_uni_mod
+			days = -1
 		}
-		country_event = {
-			id = hfe_features.14
-			days = 1
+
+		hfe_effect_exodus_reset_capital = yes
+
+		if = {
+			limit = {
+				habitable_structure = no
+				owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+			}
+			add_building = building_major_capital
+		}
+
+		if = {
+			limit = {
+				owner = { has_ethic = ethic_gestalt_consciousness }
+				owner = { has_authority = auth_hive_mind }
+			}
+			add_building = building_hive_major_capital
+		}
+
+		if = {
+			limit = {
+				owner = { has_ethic = ethic_gestalt_consciousness }
+				owner = { has_authority = auth_machine_intelligence }
+			}
+			add_building = building_machine_major_capital
+		}
+
+		if = {
+			limit = {
+				habitable_structure = yes
+				is_planet_class = pc_habitat
+			}
+			add_building = building_hab_major_capital
+		}
+
+		if = {
+			limit = {
+				OR = {
+					owner = { has_country_flag = fallen_empire_on_the_run }
+					owner = { is_fallen_empire = yes }
+					owner = { is_country_type = fallen_empire }
+					owner = { is_country_type = awakened_fallen_empire }
+				}
+				NOT = {
+					owner = { is_country_type = human_fallen_empire }
+					owner = { has_country_flag = hfe_egypt }
+					owner = { has_country_flag = hfe_future }
+				}
+			}
+			add_building = building_ancient_palace
+		}
+
+		owner = {
+			country_event = {
+				id = hfe_features.14
+				days = 1
+			}
 		}
 	}
 }
@@ -908,6 +928,7 @@ country_event = {
 	id = hfe_features.14
 	title = HFE_TSP_EXODUS_FOUND_HOME
 	desc = HFE_TSP_EXODUS_FOUND_HOME_DESC
+	picture = GFX_evt_landing_ship_2
 	show_sound = event_airlock
 	show_sound = amb_colony_ship_hum
 	is_triggered_only = yes
@@ -916,7 +937,11 @@ country_event = {
 	option = {
 		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_DEFAULT"
 		trigger = {
-			NOT = { is_gestalt = yes }
+			NOT = {
+				is_gestalt = yes
+				has_civic = civic_fanatic_purifiers
+				has_civic = civic_machine_terminator
+			}
 		}
 		hfe_effect_exodus_set_new_home = yes
 	}
@@ -1038,9 +1063,11 @@ country_event = {
 	}
 
 	after = {
-		capital_scope = {
-			hfe_effect_create_starbase_starport_from_planet = yes
-			hfe_effect_starbase_add_shipyard_0 = yes
+		hidden_effect = {
+			capital_scope = {
+				hfe_effect_create_starbase_starport_from_planet = yes
+				hfe_effect_starbase_add_shipyard_0 = yes
+			}
 		}
 	}
 }
@@ -1078,5 +1105,42 @@ planet_event = {
 			days = -1
 		}
 		set_planet_flag = theres_a_guard_and_theres_a_sad_old_padre
+	}
+}
+
+# if your colony is destroyed = end game
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = hfe_features.16
+	title = hfe_discovery.51.name
+	desc = EXODUS_GAME_OVER_DESC
+	picture = GFX_ship_destroyed
+	location = fromfrom
+	is_triggered_only = yes
+	show_sound = ship_destroyed_big_explosion
+
+	trigger = {
+		THIS = { 
+			OR = {
+				is_country_type = hfe_features_exodus
+				has_country_flag = is_government_in_exile
+			}
+		}
+		fromfrom = {
+			OR = {
+				has_ship_flag = exodus_home_colonizer
+				is_ship_class = shipclass_colonizer
+			}
+		}
+	}
+
+	option = {
+		name = hfe_discovery.51.0
+		hidden_effect = {
+			destroy_country = yes
+		}
 	}
 }
