@@ -67,6 +67,7 @@ planet_event = {
 	}
 
 	immediate = {
+		add_deposit = HFE_TSP_exodus_new_starting_planet
 		owner = {
 			set_country_type = default
 			remove_modifier = tsp_hfe_features_exodus_game_over_prevention
@@ -113,6 +114,8 @@ planet_event = {
 					days = -1
 				}
 			}
+
+			log = "Exodus modifiers for Origin accepted"
 		}
 		if = {
 			limit = {
@@ -128,10 +131,19 @@ planet_event = {
 					days = -1
 				}
 			}
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus modifiers for Decision added"
+			}
 		}
 
 		owner = { remove_country_flag = is_government_in_exile }
 		owner = { set_country_flag = was_government_in_exile }
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Exodus flags reset"
+		}
 
 		# need this to fix game's broken economy bug
 		set_capital = yes
@@ -142,6 +154,10 @@ planet_event = {
 		add_building = building_foundry_1
 		add_building = building_factory_1
 		add_building = building_precinct_house
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Exodus settled with foundry, factory, and cops"
+		}
 
 		if = {
 			limit = { has_global_flag = hfe_hardcore_disable }
@@ -165,6 +181,10 @@ planet_event = {
 				}
 			}
 			add_building = building_robot_assembly_plant
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus settled with robot factory"
+			}
 		}
 			# You're landing on a PLANET, right?
 		if = {
@@ -174,12 +194,20 @@ planet_event = {
 			}
 			add_district = district_city
 			add_district = district_city
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus cities added"
+			}
 		}
 
 		if = {
 			limit = { has_global_flag = hfe_hardcore_disable }
 			add_district = district_city
 			add_district = district_city
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus non-hardcore extra cities added"
+			}
 		}
 
 		add_district = district_generator
@@ -197,6 +225,11 @@ planet_event = {
 			add_district = district_hive
 			add_district = district_hive
 			add_district = district_hive
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus Hive Mind cities added"
+			}
 		}
 		if = {
 			limit = {
@@ -211,11 +244,21 @@ planet_event = {
 			add_district = district_mining
 			add_district = district_mining
 			add_district = district_mining
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus non-hardcore extra Districts added"
+			}
 		}
 		if = {
 			limit = { is_lithoid = yes }
 			add_district = district_mining
 			add_district = district_mining
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus non-hardcore Lithoid farming added"
+			}
 		}
 		if = {
 			limit = {
@@ -230,6 +273,11 @@ planet_event = {
 			add_district = district_farming
 			add_district = district_farming
 			add_district = district_farming
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus non-hardcore extra farming added"
+			}
 		}
 		if = {
 			limit = {
@@ -239,6 +287,11 @@ planet_event = {
 			add_district = district_hab_housing
 			add_building = building_hydroponics_farm
 			add_building = building_hydroponics_farm
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus Habitat starvation staved off"
+			}
 		}
 
 		if = {
@@ -250,11 +303,33 @@ planet_event = {
 			add_district = district_hab_housing
 			add_district = district_hab_housing
 			add_district = district_hab_housing
+
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus non-hardcore Habitat cities added"
+			}
 		}
 
-		planet_event = { # Fires on the same planet
-			id = hfe_features.13
-			days = 1
+#		planet_event = { # Fires on the same planet
+#			id = hfe_features.13
+#			days = 1
+#		}
+#
+#		if = {
+#			limit = { has_global_flag = HFE_TSP_spawn_test }
+#			log = "Exodus capital processing begun"
+#		}
+
+		owner = {
+			country_event = {
+				id = hfe_features.14
+				days = 1
+			}
+		}
+
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Exodus Story Mode event begun"
 		}
 	}
 }
@@ -293,40 +368,44 @@ country_event = {
 
 		set_country_type = hfe_features_exodus
 
-		if = {
-			limit = {
-				NOT = { is_pacifist = yes }
-				OR = {
+		every_owned_planet = {
+			if = {
+				limit = {
+					NOT = {
+						owner = { is_pacifist = yes }
+					}
 					has_global_flag = hfe_hardcore_disable
-					has_global_flag = HFE_TSP_spawn_test
+
 				}
-			}
-			create_fleet = {
-				name = "Real Estate Agents"
-				effect = {
-					set_name = "Free Real Estate"
-					set_owner = ROOT
-					set_fleet_stance = evasive
-					while = {
-						count = 4
-						create_army_transport = {
-							army_name = "Free Real Estate Scouts"
-							ship_name = "Free Real Estate Agent Transport"
-							army_type = assault_army
+			
+				create_fleet = {
+					name = "Real Estate Agents"
+					effect = {
+						set_name = "Free Real Estate"
+						set_owner = ROOT
+						set_fleet_stance = passive
+						while = {
+							count = 4
+							create_army_transport = {
+								army_name = "Free Real Estate Scouts"
+								ship_name = "Free Real Estate Agent Transport"
+								army_type = assault_army
+							}
 						}
-					}
-					while = {
-						count = 1
-						create_army_transport = {
-							army_name = "Basic Combat Assistance"
-							ship_name = "Basic Combat Transport"
-							army_type = robotic_army
+						while = {
+							count = 1
+							create_army_transport = {
+								army_name = "Basic Combat Assistance"
+								ship_name = "Basic Combat Transport"
+								army_type = robotic_army
+							}
 						}
+						set_location = root.capital_scope
 					}
-					set_location = root.capital_scope
 				}
 			}
 		}
+
 		if = {
 			limit = {
 				is_materialist = yes
@@ -423,7 +502,7 @@ country_event = {
 			}
 			if = {
 				limit = {
-					is_lithoid = yes
+					owner = { is_lithoid = yes }
 					has_lithoids = yes
 					has_global_flag = hfe_hardcore_disable
 				}
@@ -447,6 +526,7 @@ country_event = {
 #			# hfe_effect_clear_buildings_and_destroy_colony = yes
 			remove_all_buildings = yes
 			clear_blockers = yes
+			clear_deposits = yes
 			every_owned_pop = {
 				prevprev = {
 					change_variable = {
@@ -468,9 +548,10 @@ country_event = {
 				modifier = tsp_hfe_exodus_start_planet_modifier
 				days = -1
 			}
+			clear_deposits = yes
 			add_deposit = HFE_TSP_exodus_start_point # Orbital deposit
 		}
-		set_custom_capital_location = event_target:exodus_home_colonizer_fleet
+		set_custom_capital_location = event_target:exodus_home_colonizer
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Exodus successfully spawned"
@@ -503,6 +584,10 @@ country_event = {
 				modifier = tsp_hfe_features_exodus_resources_other
 				days = -1
 			}
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus Modifiers added for non-hardcore"
+			}
 		}
 		if = {
 			limit = {
@@ -513,8 +598,9 @@ country_event = {
 				name = "Great White Hope"
 				settings = {
 					can_change_composition = yes
-					uses_naval_capacity = no
-					can_upgrade = no
+					can_disband = no
+					uses_naval_capacity = yes
+					can_upgrade = yes
 				}
 				effect = {
 					set_name = "Great White Hope"
@@ -531,7 +617,7 @@ country_event = {
 					}
 					create_ship = {
 						name = "Great Yellow Hope"
-						random_existing_design = pirate_corvette
+						random_existing_design = corvette
 						graphical_culture = pirate_01
 					}
 					set_fleet_stance = passive
@@ -855,8 +941,18 @@ country_event = {
 planet_event = {
 	id = hfe_features.13
 	hide_window = yes
-	fire_only_once = yes
-	is_triggered_only = yes
+#	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = hfe_features_exodus_planet
+		owner = { has_origin = hfe_civic_features_exodus }
+		NOT = { owner = { has_country_flag = chosen_to_exodus } }
+		NOT = { has_planet_flag = exodus_capital_selected }
+	}
+
+	mean_time_to_happen = {
+		days = 9
+	}
 
 	immediate = {
 		add_modifier = {
@@ -869,25 +965,47 @@ planet_event = {
 		if = {
 			limit = {
 				habitable_structure = no
-				owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+				ROOT = {
+					owner = {
+						NOT = {
+							has_ethic = ethic_gestalt_consciousness
+						}
+					}
+				}
 			}
 			add_building = building_major_capital
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus capital building reset"
+			}
 		}
 
 		if = {
 			limit = {
-				owner = { has_ethic = ethic_gestalt_consciousness }
-				owner = { has_authority = auth_hive_mind }
+				ROOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+					owner = { has_authority = auth_hive_mind }
+				}
 			}
 			add_building = building_hive_major_capital
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus capital building reset"
+			}
 		}
 
 		if = {
 			limit = {
-				owner = { has_ethic = ethic_gestalt_consciousness }
-				owner = { has_authority = auth_machine_intelligence }
+				ROOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+					owner = { has_authority = auth_machine_intelligence }
+				}
 			}
 			add_building = building_machine_major_capital
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus capital building reset"
+			}
 		}
 
 		if = {
@@ -896,31 +1014,48 @@ planet_event = {
 				is_planet_class = pc_habitat
 			}
 			add_building = building_hab_major_capital
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus capital building reset"
+			}
 		}
 
 		if = {
 			limit = {
-				OR = {
-					owner = { has_country_flag = fallen_empire_on_the_run }
-					owner = { is_fallen_empire = yes }
-					owner = { is_country_type = fallen_empire }
-					owner = { is_country_type = awakened_fallen_empire }
-				}
-				NOT = {
-					owner = { is_country_type = human_fallen_empire }
-					owner = { has_country_flag = hfe_egypt }
-					owner = { has_country_flag = hfe_future }
+				ROOT = {
+					OR = {
+						owner = { has_country_flag = fallen_empire_on_the_run }
+						owner = { is_fallen_empire = yes }
+						owner = { is_country_type = fallen_empire }
+						owner = { is_country_type = awakened_fallen_empire }
+					}
+					NOT = {
+						owner = { is_country_type = human_fallen_empire }
+						owner = { has_country_flag = hfe_egypt }
+						owner = { has_country_flag = hfe_future }
+					}
 				}
 			}
 			add_building = building_ancient_palace
-		}
-
-		owner = {
-			country_event = {
-				id = hfe_features.14
-				days = 1
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Fallen Empire Exodus capital reset"
 			}
 		}
+
+		set_planet_flag = exodus_capital_selected
+
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Exodus capital reset Event ended"
+		}
+
+#		owner = {
+#			country_event = {
+#				id = hfe_features.14
+#				days = 1
+#			}
+#		}
 	}
 }
 
@@ -1069,6 +1204,15 @@ country_event = {
 				hfe_effect_starbase_add_shipyard_0 = yes
 			}
 		}
+		hidden_effect = {
+			capital_scope = {
+				set_planet_name = "New Hope"
+			}
+		}
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Noah and Tom Jones have disembarked onto Mount Aarat"
+		}
 	}
 }
 
@@ -1105,6 +1249,11 @@ planet_event = {
 			days = -1
 		}
 		set_planet_flag = theres_a_guard_and_theres_a_sad_old_padre
+
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "Green green grass revoked"
+		}
 	}
 }
 
@@ -1142,5 +1291,50 @@ country_event = {
 		hidden_effect = {
 			destroy_country = yes
 		}
+
+		log = "EXODUS GAME OVER!"
 	}
 }
+
+#planet_event = {
+#	id = hfe_features.17
+#	hide_window = yes
+#	fire_only_once = yes
+#
+#	trigger = {
+#		OR = {
+#			has_planet_flag = hfe_features_exodus_planet
+#			has_planet_flag = exodus_capital_selected
+#			owner = { is_country_type = hfe_features_exodus }
+#			owner = { has_country_flag = is_government_in_exile }
+#			owner = {
+#				AND = {
+#					has_country_flag = was_government_in_exile
+#					num_owned_planets = 1
+#				}
+#			}
+#		}
+#		NOT = {
+#			owner = { has_country_flag = chosen_to_exodus }
+#		}
+#		NOT = {
+#			has_planet_flag = hfe_exodus_capital_reset_called
+#		}
+#	}
+#
+#	mean_time_to_happen = {
+#		days = 4
+#	}
+#
+#	immediate = {
+#		set_planet_flag = hfe_exodus_capital_reset_called
+#		if = {
+#			limit = { has_global_flag = HFE_TSP_spawn_test }
+#			log = "Exodus first colony capital reset fired by On-Action"
+#		}
+#		planet_event = {
+#			id = hfe_features.13
+#			days = 7
+#		}
+#	}
+#}

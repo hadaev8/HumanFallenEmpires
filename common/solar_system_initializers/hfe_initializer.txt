@@ -3,11 +3,14 @@
 # egypt
 hfe_initializer_egypt_main = {
 	prevent_anomalies = yes
+	usage = fallen_empire_init
 	flags = {
 		hfe_egypt_0
 	}
 	name = "Home of Light"
 	class = sc_m
+	spawn_chance = 0 #Only by Event
+
 	asteroid_belt = {
 		type = rocky_asteroid_belt
 		radius = 70
@@ -92,6 +95,9 @@ hfe_initializer_egypt_main = {
 				}
 				origin = hfe_civic_egypt_rulers_origin
 				effect = {
+					save_global_event_target_as = hfe_egypt_country
+					set_graphical_culture = reptilian_01 # Learned from Ra'ar
+					set_city_graphical_culture = fallen_empire_03 # Light blue/red/yellow
 					set_country_flag = hfe_egypt
 					set_country_flag = hfe_assimilator_discovered
 					set_country_flag = hfe_marked_as_human
@@ -176,72 +182,145 @@ hfe_initializer_egypt_main = {
 						modifier = hfe_navy_size
 						days = -1
 					}
-					save_global_event_target_as = hfe_egypt_country
+					set_country_flag = hfe_marked_as_human
 				}
 			}
 			set_owner = event_target:hfe_egypt_country
 			set_planet_flag = hfe_home_of_light
 			set_capital = yes
 			hfe_effect_init_set_pops_100 = yes
+
+			# Generate Slave Ahets
+			create_species = {
+#				is_mod = yes # Creates Post/Elite/High/Clarus etc.
+				name = "Ahet"
+				plural = "Ahets"
+				adjective = "Slave Ahet"
+				class = REP
+				portrait = rep12
+				name_list = cybrxkhan_fantasy_egyptian
+				pops_can_be_colonizers = yes
+				can_generate_leaders = no
+				pops_can_migrate = no
+				can_be_modified = no # "Forever a slave" means forever a slave
+				extra_trait_points = 12
+#				homeworld = event_target:hfe_ahet_happy_ending
+				traits = {
+					ideal_planet_class = pc_nuked
+					trait = hfe_species_trait_happy_slave
+					trait = trait_presapient_docile_livestock
+					trait = trait_docile
+					trait = trait_charismatic
+					trait = trait_strong
+					trait = trait_conformists
+				}
+			}
+			last_created_species = {
+				set_species_identity = event_target:hfe_ahet_species
+#				set_species_homeworld = event_target:hfe_ahet_happy_ending
+				set_species_flag = hfe_forever_slave
+				set_species_flag = hfe_ahet_servant_species
+				save_global_event_target_as = hfe_ahet_servant_species
+			}
 			create_pop = {
-				species = event_target:hfe_ahet_species
+				species = event_target:hfe_ahet_servant_species
 			}
 			last_created_pop = {
-				modify_species = {
+				kill_pop = yes
+			}
+			# Generate Delicious Ahets
+			create_species = {
+#				is_mod = yes # Creates Post/Elite/High/Clarus etc.
+				name = "Delicious Ahet"
+				plural = "Delicious Ahets"
+				adjective = "Delicious Ahet"
+				class = REP
+				portrait = rep12
+				name_list = cybrxkhan_fantasy_egyptian
+				pops_can_be_colonizers = yes
+				can_generate_leaders = no
+				pops_can_migrate = no
+				can_be_modified = no # "Forever a slave" means forever a slave
+				extra_trait_points = 12
+#				homeworld = event_target:hfe_ahet_happy_ending
+				traits = {
 					ideal_planet_class = pc_nuked
-					remove_trait = trait_intelligent
-					remove_trait = trait_natural_engineers
-					add_trait = trait_charismatic # Forces them to be Domestic Servants
-					add_trait = trait_docile
-				}
-				modify_species = {
-					remove_trait = trait_intelligent
-					remove_trait = trait_natural_engineers
-				}
-				modify_species = {
-					remove_trait = trait_intelligent
-					add_trait = hfe_species_trait_happy_slave
-				}
-				species = {
-					set_species_flag = hfe_ahet_servant_species
-					save_global_event_target_as = hfe_ahet_servant_species
+					trait = hfe_species_trait_happy_slave
+					trait = trait_presapient_docile_livestock
+					trait = trait_delicious
+					trait = trait_conformists
+					trait = trait_communal
 				}
 			}
+			last_created_species = {
+				set_species_identity = event_target:hfe_ahet_species
+#				set_species_homeworld = event_target:hfe_ahet_happy_ending
+				set_species_flag = hfe_forever_slave
+				set_species_flag = hfe_delicious_ahets
+				save_global_event_target_as = hfe_delicious_ahets
+			}
+			create_pop = {
+				species = event_target:hfe_delicious_ahets
+			}
+			last_created_pop = {
+				kill_pop = yes
+			}
+#			last_created_pop = {
+#				modify_species = {
+#					ideal_planet_class = pc_nuked
+#					remove_trait = trait_intelligent
+#					remove_trait = trait_natural_engineers
+#					add_trait = trait_charismatic # Forces them to be Domestic Servants
+#					add_trait = trait_docile
+#				}
+#				modify_species = {
+#					remove_trait = trait_intelligent
+#					remove_trait = trait_natural_engineers
+#				}
+#				modify_species = {
+#					remove_trait = trait_intelligent
+#					add_trait = hfe_species_trait_happy_slave
+#				}
+#				species = {
+#					set_species_flag = hfe_ahet_servant_species
+#					save_global_event_target_as = hfe_ahet_servant_species
+#				}
+#			}
 #			last_created_pop = {
 #				kill_pop = yes
 #			}
-			create_pop = {
-				species = hfe_ahet_species
-			}
-			last_created_pop = {
-				modify_species = {
-					ideal_planet_class = pc_nuked
-					remove_trait = trait_intelligent
-					remove_trait = trait_natural_engineers
-				}
-				modify_species = {
-					remove_trait = trait_intelligent
-					remove_trait = trait_natural_engineers
-				}
-				modify_species = {
-					add_traits_at_start_of_list = yes
-					add_trait = hfe_species_trait_happy_slave
-					add_trait = trait_presapient_docile_livestock
-					add_trait = trait_delicious
-				}
-				species = {
-					set_species_flag = hfe_delicious_ahets
-					save_global_event_target_as = hfe_delicious_ahets
-				}
-			}
+#			create_pop = {
+#				species = hfe_ahet_species
+#			}
+#			last_created_pop = {
+#				modify_species = {
+#					ideal_planet_class = pc_nuked
+#					remove_trait = trait_intelligent
+#					remove_trait = trait_natural_engineers
+#				}
+#				modify_species = {
+#					remove_trait = trait_intelligent
+#					remove_trait = trait_natural_engineers
+#				}
+#				modify_species = {
+#					add_traits_at_start_of_list = yes
+#					add_trait = hfe_species_trait_happy_slave
+#					add_trait = trait_presapient_docile_livestock
+#					add_trait = trait_delicious
+#				}
+#				species = {
+#					set_species_flag = hfe_delicious_ahets
+#					save_global_event_target_as = hfe_delicious_ahets
+#				}
+#			}
 #			last_created_pop = {
 #				kill_pop = yes
 #			}
 			every_owned_pop = { # This is easier than creating a set number of Ju Ahets and set number of Ahets, they aren ot transformed, obviously
 				random_list = {
-					41 = {
+					42 = {
 					}
-					10 = {
+					11 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
 					1 = {
@@ -363,7 +442,7 @@ hfe_initializer_egypt_main = {
 			orbit_angle = random
 			orbit_distance = 5
 			init_effect = {
-				prevent_anomalies = yes
+				prevent_anomaly = yes
 				save_global_event_target_as = hfe_thoth_broke_this
 				create_fleet = {
 					name = "Divine Punishment I"
@@ -475,6 +554,8 @@ hfe_initializer_egypt_main = {
 # hope
 hfe_initializer_egypt_col_0 = {
 	prevent_anomalies = yes
+	usage = fallen_empire_init
+	usage_odds = 0 # Spawned by Event
 	flags = {
 		hfe_egypt_1
 	}
@@ -518,13 +599,13 @@ hfe_initializer_egypt_col_0 = {
 					15 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
-					1 = {
-						change_species = event_target:hfe_delicious_ahets
-					}
+#					1 = {
+#						change_species = event_target:hfe_delicious_ahets
+#					}
 				}
 			}
 			while = {
-				count = 3
+				count = 5
 				create_pop = {
 					species = event_target:hfe_delicious_ahets
 				}
@@ -697,6 +778,8 @@ hfe_initializer_egypt_col_0 = {
 
 hfe_initializer_egypt_col_1 = {
 	prevent_anomalies = yes
+	usage = fallen_empire_init
+	usage_odds = 0
 	flags = {
 		hfe_egypt_2
 	}
@@ -870,6 +953,8 @@ hfe_initializer_egypt_col_1 = {
 
 # ahet
 hfe_initializer_ahet_0 = {
+	usage = misc_system_init
+	usage_odds = 0 # By Event
 	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
@@ -1035,6 +1120,8 @@ hfe_initializer_ahet_0 = {
 }
 
 hfe_initializer_ahet_1 = {
+	usage = misc_system_init
+	usage_odds = 0 # By Event
 	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
@@ -1169,14 +1256,17 @@ hfe_initializer_ahet_1 = {
 
 # varelse
 hfe_initializer_varelse = {
+	usage = fallen_empire_init # The Varelse were once a Fallen Empire
+	usage_odds = 0
 	name = "Deprived"
-	class = rl_standard_stars
+	class = sc_k
 	flags = {
 		primitive_system
 		high_mechanicus_system
 		colony_beta_system
 		empire_cluster
-		empire_home_system
+#		empire_home_system
+		ruined_empire
 	}
 	planet = {
 		name = "Deprived A"
@@ -1184,19 +1274,20 @@ hfe_initializer_varelse = {
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20
+			min = 25
 			max = 30
 		}
 		has_ring = no
+		satellite_naming_policy = upper_case_roman_numerals
 	}
-	change_orbit = 20
+	change_orbit = 23
 	planet = {
 		name = "Deprived I"
 		orbit_distance = 20
 		count = 1
-		class = random
+		class = pc_molten
 	}
-	change_orbit = 32
+	change_orbit = 36
 	planet = {
 		name = "Colony Beta"
 		orbit_distance = 0
@@ -1263,24 +1354,6 @@ hfe_initializer_varelse = {
 						}
 					}
 					assign_leader = last_created_leader
-					create_leader = {
-						name = "Godforge Core"
-						class = general
-						event_leader = yes
-						species = event_target:sentinel_fallen_empire
-						immortal = yes
-						skill = 10
-						set_age = 1386
-						traits = {
-							add_trait = leader_trait_general_synthetic
-							add_trait = leader_trait_butcher
-							add_trait = leader_trait_parts_cannibalizer
-							add_trait = leader_trait_rigid_programming
-						}
-						effect = {
-							set_leader_flag = godforge_engine
-						}
-					}
 					if = {
 						limit = { has_global_flag = HFE_TSP_spawn_test }
 						log = "High Mechanicus instated on Colony Beta"
@@ -1333,8 +1406,8 @@ hfe_initializer_varelse = {
 				}
 			}
 			# to remove error in log
-			event_target:hfe_varelse_species = {
-				set_species_homeworld = prev
+			event_target:varelse_species = {
+				set_species_homeworld = event_target:hfe_varelse_colony
 			}
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
@@ -1419,11 +1492,11 @@ hfe_initializer_varelse = {
 					trait = "trait_robot_custom_made"
 					trait = "trait_robot_domestic_protocols"
 				}
-				effect = {
-					set_species_flag = godforge_species # Perhaps one day, the Godforge itself could rebel?
-					set_species_homeworld = event_target:colony_beta
-					save_global_event_target_as = hfe_varelse_leftover_robots
-				}
+			}
+			last_created_species = {
+				set_species_flag = godforge_species # Perhaps one day, the Godforge itself could rebel?
+				set_species_homeworld = event_target:colony_beta
+				save_global_event_target_as = hfe_varelse_leftover_robots
 			}
 			while = {
 				count = 10
@@ -1439,6 +1512,7 @@ hfe_initializer_varelse = {
 #			create_pop = {
 #				species = event_target:fe_servants
 #			}
+
 			add_modifier = {
 				modifier = hfe_colony_type_varelse
 				days = -1
@@ -1449,6 +1523,10 @@ hfe_initializer_varelse = {
 			}
 			add_modifier = {
 				modifier = bleak_planet
+				days = -1
+			}
+			add_modifier = {
+				modifier = high_gravity
 				days = -1
 			}
 			add_modifier = {
@@ -1513,7 +1591,7 @@ hfe_initializer_varelse = {
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
-					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					species = event_target:hfe_varelse_leftover_robots
 					type = hfe_army_mechanicus_godforge_drones
 				}
 			}
@@ -1522,7 +1600,7 @@ hfe_initializer_varelse = {
 				create_army = {
 					name = "Godforge Sentinels"
 					owner = owner
-					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					species = event_target:hfe_varelse_leftover_robots
 					type = hfe_army_godforge_core_watch
 				}
 			}
@@ -1531,7 +1609,7 @@ hfe_initializer_varelse = {
 				create_army = {
 					name = "The Machine-That-Speaks-to-God"
 					owner = owner
-					species = event_target:sentinel_fallen_empire # Cannot scope to Materialist FE Robots, so this will do
+					species = event_target:hfe_varelse_leftover_robots
 					type = care_defensive_protocols
 				}
 			}
@@ -1559,10 +1637,10 @@ hfe_initializer_varelse = {
 				log = "Colony Beta has its Armies"
 			}
 		}
-		change_orbit = @base_moon_distance
+		change_orbit = 9
 		moon = {
 			name = "Colony Alpha"
-			size = 15
+			size = 19
 			class = pc_shattered
 			orbit_angle = {
 				min = 90
@@ -1578,26 +1656,41 @@ hfe_initializer_varelse = {
 				}
 			}
 		}
+		moon = {
+			name = "Delta"
+			class = random
+			orbit_distance = 6
+			orbit_angle = random
+			size = {
+				min = 17
+				max = 22
+			}
+			init_effect = {
+				prevent_anomaly = yes
+			}
+		}
 	}
 	change_orbit = 5
 	planet = {
 		name = "Deprived III"
 		orbit_distance = 15
-		class = pc_frozen
+		class = pc_barren_cold
 		count = 1
 		moon = {
 			name = "Deprived IIIa"
+			class = random
 			orbit_distance = @base_moon_distance
 		}
 	}
+	change_orbit = 5
 	planet = {
 		name = "Deprived IV"
-		orbit_distance = 4
+		orbit_distance = 15
 		class = pc_frozen
 		size = 18
 		count = 1
 	}
-	change_orbit = 35
+	change_orbit = 40
 	planet = {
 		name = "Deprived B"
 #		orbit_distance = 0
@@ -1606,7 +1699,7 @@ hfe_initializer_varelse = {
 		orbit_angle = random
 		change_orbit = @base_moon_distance
 		moon = {
-			class = random
+			class = pc_frozen
 			count = 6
 			orbit_angle = random
 			orbit_distance = 4
@@ -1614,7 +1707,7 @@ hfe_initializer_varelse = {
 		satellite_naming_policy = upper_case_roman_numerals
 		init_effect = {
 			set_planet_flag = ju_ahet_sucked_star
-			prevent_anomaly = yes
+#			prevent_anomaly = yes
 		}
 	}
 	init_effect = {
@@ -1691,8 +1784,14 @@ hfe_initializer_ahet_home = {
 			event_target:hfe_ahet_species = {
 				set_species_homeworld = event_target:hfe_ahet_happy_ending
 			}
+			event_target:hfe_ahet_servant_species = {
+				set_species_homeworld = event_target:hfe_ahet_happy_ending
+			}
+			event_target:hfe_delicious_ahets = {
+				set_species_homeworld = event_target:hfe_ahet_happy_ending
+			}
 		}
-		change_orbit = 3
+		change_orbit = 5
 		moon = {
 			count = 1
 			name = "Collapsed Dimensional Portal I"
@@ -1728,7 +1827,7 @@ hfe_initializer_ahet_home = {
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
-			orbit_distance = 1.18
+			orbit_distance = 1.2
 			init_effect = {
 				add_deposit = d_engineering_6
 				prevent_anomaly = yes
@@ -1772,6 +1871,8 @@ hfe_initializer_ahet_home = {
 
 # memorial
 hfe_initializer_memorial_0 = {
+	usage = fallen_empire_init
+	usage_odds = 0
 	class = rl_standard_stars
 	flags = {
 		hfe_memorial_system
@@ -1852,6 +1953,8 @@ hfe_initializer_memorial_0 = {
 }
 
 hfe_initializer_memorial_1 = {
+	usage = fallen_empire_init
+	usage_odds = 0
 	class = rl_standard_stars
 	asteroid_belt = {
 		type = rocky_asteroid_belt
@@ -1954,6 +2057,8 @@ hfe_initializer_memorial_1 = {
 }
 
 hfe_initializer_memorial_2 = {
+	usage = fallen_empire_init
+	usage_odds = 0
 	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
@@ -2088,7 +2193,7 @@ hfe_initializer_memorial_3 = {
 				min = 0
 				max = 1
 			}
-			class = random_non_colonizable
+			class = random
 			orbit_angle = {
 				min = 90
 				max = 270
@@ -2121,6 +2226,8 @@ hfe_initializer_memorial_3 = {
 
 # copernicus
 hfe_initializer_copernicus = {
+	usage = misc_system_init
+	usage_odds = 0
 	prevent_anomalies = yes
 	class = hfe_sc_copernicus
 	flags = {
@@ -2129,6 +2236,7 @@ hfe_initializer_copernicus = {
 	}
 	name = Copernicus
 	planet = {
+		name = "Copernicus B"
 		class = star
 		orbit_distance = 13
 		orbit_angle = 210
@@ -2143,14 +2251,12 @@ hfe_initializer_copernicus = {
 		}
 	}
 	planet = {
+		name = "Copernicus A"
 		orbit_distance = -12
 		orbit_angle = 30
 		class = pc_gaia
 		entity = hfe_entity_gaia_pink
-		size = {
-			min = 20
-			max = 25
-		}
+		size = 25
 		init_effect = {
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
@@ -2165,11 +2271,11 @@ hfe_initializer_copernicus = {
 				adjective = "Blessed"
 				class = random_non_machine
 				homeworld = this
-				name_list = REP1 # Same as Ahets
+				name_list = ART4 # Same as Ahets
 				traits = random
 				traits = {
-					add_trait = trait_presapient_natural_intellectuals
-					add_trait = trait_docile
+					trait = trait_presapient_natural_intellectuals
+					trait = trait_docile
 				}
 				# It can be presumed these creatures were modified
 #				is_mod = yes
@@ -2177,8 +2283,7 @@ hfe_initializer_copernicus = {
 			}
 			create_country = {
 				name = "Geocentric Sanctuary"
-
-				authority = auth_imperial
+				authority = auth_dictatorial
 				name_list = REP1
 				ship_prefix = "Geocentric"
 				civics = {
@@ -2214,7 +2319,7 @@ hfe_initializer_copernicus = {
 		}
 		planet = {
 			class = pc_rare_crystal_asteroid
-			size = 25
+			size = 20
 			orbit_distance = 200
 			orbit_angle = random
 			init_effect = {
@@ -2237,11 +2342,14 @@ hfe_initializer_copernicus = {
 
 # drone
 hfe_initializer_drone_sector_0 = {
+	usage = misc_system_init
+	usage_odds = 0
 	prevent_anomalies = yes
 	flags = {
 		hfe_drone_0
 		hostile_system
 		drone_home_system
+		empire_cluster
 	}
 	class = rl_standard_stars
 	name = "Ancient Mining Drone Core"
@@ -2535,13 +2643,13 @@ hfe_initializer_drone_sector_0 = {
 							design = "NAME_Ancient_Destroyer"
 						}
 					}
-					while = {
-						count = 10
-						create_ship = {
-							name = "Super Ultra Ancient Mining Drones"
-							random_existing_design = cruiser
-						}
-					}
+#					while = {
+#						count = 10
+#						create_ship = {
+#							name = "Super Ultra Ancient Mining Drones"
+#							random_existing_design = cruiser
+#						}
+#					}
 					set_location = {
 						target = event_target:hfe_drone_hq
 						distance = 20
@@ -2584,7 +2692,7 @@ hfe_initializer_drone_sector_0 = {
 			size = "starbase_citadel"
 			owner = event_target:hfe_drone_country
 			module = shipyard
-			module = trading_hub
+			module = hfe_starbase_module_trading_hub
 			module = missile_battery
 			module = missile_battery
 			module = gun_battery
@@ -2622,12 +2730,15 @@ hfe_initializer_drone_sector_0 = {
 }
 
 hfe_initializer_drone_sector_1 = {
+	usage = misc_system_init
+	usage_odds = 0
 	prevent_anomalies = yes
 	flags = {
 		hfe_drone_1
 		hostile_system
 		drone_home_system
 		drone_system_1
+		empire_cluster
 	}
 	class = sc_k
 	name = "Drone Sector 1"
@@ -2827,10 +2938,10 @@ hfe_initializer_drone_sector_1 = {
 			size = "starbase_citadel"
 			owner = event_target:hfe_drone_country
 			module = shipyard
-			module = trading_hub
-			module = trading_hub
-			module = trading_hub
-			module = trading_hub
+			module = hfe_starbase_module_trading_hub
+			module = hfe_starbase_module_trading_hub
+			module = hfe_starbase_module_trading_hub
+			module = hfe_starbase_module_trading_hub
 			module = missile_battery
 			building = defense_grid
 			building = hfe_starbase_building_drone_energy
@@ -2878,6 +2989,7 @@ hfe_initializer_drone_sector_2 = {
 		hostile_system
 #		drone_home_system
 		drone_system_2
+		empire_cluster
 	}
 	class = rl_standard_stars
 	name = "Drone Sector 10"
@@ -3057,6 +3169,8 @@ hfe_initializer_drone_sector_2 = {
 
 # future
 hfe_initializer_future_main = {
+	usage = fallen_empire_init
+	usage_odds = 0 # By Event
 	prevent_anomalies = yes
 	name = Tartarus
 	class = rl_binary_stars
