@@ -1528,7 +1528,7 @@ country_event = {
 					hfe_effect_cleanse_ethics = yes
 				}
 				country_add_ethic = ethic_fanatic_materialist
-				country_add_ethic = ethic_fanatic_militarist
+				country_add_ethic = ethic_militarist
 				hfe_effect_primitive_up = yes
 			}
 			owner = {
@@ -6406,6 +6406,8 @@ country_event = {
 
 # friendly ai vol 1 thoth
 # start event, enable project
+# friendly ai vol 1 thoth
+# start event, enable project
 ship_event = {
 	id = hfe.700
 	title = hfe.700.name
@@ -6423,9 +6425,9 @@ ship_event = {
 		exists = owner
 		owner = {
 			is_ai = no
-#			is_country_type = default
+			is_country_type = default
 		}
-		NOT = {
+		not = {
 			exists = solar_system.owner
 		}
 	}
@@ -6435,8 +6437,6 @@ ship_event = {
 		}
 		set_global_flag = hfe_has_event.700
 		solar_system = {
-			set_star_flag = thoth_was_here
-			save_global_event_target_as = thoth_hiding_spot_star
 			random_system_planet = {
 				limit = {
 					not = {
@@ -6444,58 +6444,46 @@ ship_event = {
 					}
 				}
 				save_global_event_target_as = hfe_thoth_location
-				set_planet_flag = hfe_thoth_hiding_spot
 			}
 		}
 		create_country = {
 			name = "Station AI"
-			released_from_country = event_target:hfe_egypt_country # As Thoth once served the Ju Ahet
-			type = hfe_thoth
-			species = event_target:hfe_egypt_species # As Thoth was once a Ju Ahet
-			day_zero_contact = no
-			ignore_initial_colony_error = yes
 			name_list = cybrxkhan_fantasy_egyptian
-			ethos = {
-				ethic = ethic_pacifist
-				ethic = ethic_xenophile
-				ethic = ethic_spiritualist
-			}
+			type = hfe_thoth
+			species = event_target:hfe_egypt_species
+			ignore_initial_colony_error = yes
+			day_zero_contact = no
 			effect = {
 				set_name = hfe_customization_notch_this_rename
 				save_global_event_target_as = hfe_thoth
-				set_graphical_culture = mammalian_01
+				set_graphical_culture = reptilian_01
+				set_country_flag = hfe_thoth
 				set_city_graphical_culture = ai_02
 				set_country_flag = hfe_thoth
 				give_technology = { message = no tech = tech_juggernaut }
-				give_technology = {	message = no tech = tech_psionic_theory }
+				give_technology = { message = no tech = tech_psionic_theory }
 				give_technology = { message = no tech = tech_psionic_barrier }
 				give_technology = { message = no tech = tech_psionic_shield }
 				give_technology = { message = no tech = tech_sapient_ai	}
-				give_technology = {	message = no tech = tech_synthetic_workers }
-				give_technology = {	message = no tech = tech_synthetic_leaders }
-				give_technology = {	message = no tech = tech_droid_workers }
-				give_technology = {	message = no tech = tech_robotic_workers }
-				give_technology = {	message = no tech = tech_robomodding }
-				give_technology = {	message = no tech = tech_robomodding_points_1 }
-				give_technology = {	message = no tech = tech_robomodding_points_2 }
+				give_technology = { message = no tech = tech_synthetic_workers }
+				give_technology = { message = no tech = tech_synthetic_leaders }
+				give_technology = { message = no tech = tech_droid_workers }
+				give_technology = { message = no tech = tech_robotic_workers }
+				give_technology = { message = no tech = tech_robomodding }
+				give_technology = { message = no tech = tech_robomodding_points_1 }
+				give_technology = { message = no tech = tech_robomodding_points_2 }
 				hfe_effect_init_give_tech_t5 = yes
 				give_fe_tech = yes
 				create_fleet = {
-					name = "Runaway Station Core"
+					name = "Station (probably gigantic)"
 					settings = {
 						spawn_debris = no
-						can_disband = no
-						uses_naval_capacity = no
-						can_upgrade = yes
 					}
 					effect = {
-#						set_owner = event_target:hfe_thoth
 						set_owner = prev
 						create_ship = {
-							name = "Gentleman Computer Data Banks"
-							design = "NAME_Artist_Enclave_Station"
+							design = NAME_Artist_Enclave_Station
 							graphical_culture = mammalian_01
-							upgradable = yes # To give it its Psionic Shields
 							effect = {
 								set_ship_flag = hfe_thoth_station
 							}
@@ -6506,45 +6494,15 @@ ship_event = {
 						}
 						set_fleet_flag = hfe_thoth_station
 						save_global_event_target_as = hfe_thoth_station
-					}
-				}
-				create_fleet = {
-					name = "Runaway Station Computer"
-					settings = {
-						spawn_debris = yes
-						can_disband = no
-						uses_naval_capacity = no
-						can_upgrade = no
-					}
-					effect = {
-						set_owner = event_target:hfe_thoth
-						create_ship = {
-							name = "Gentleman Computer"
-							random_existing_design = juggernaut # LOOKS REALLY COOL
-							graphical_culture = humanoid_01
-							upgradable = no
-							effect = {
-								set_ship_flag = hfe_thoth_war_machine_ship
-								save_global_event_target_as = hfe_thoth_war_machine_ship
-							}
-						}
-						set_fleet_flag = hfe_thoth_war_machine
-						save_global_event_target_as = hfe_thoth_war_machine
 						hfe_effect_create_signal_object = yes
 						enable_special_project = {
 							name = hfe_project_thoth_contact
-							location = event_target:hfe_thoth_war_machine
+							location = this
 							owner = root.owner
 						}
 					}
 				}
 				set_custom_capital_location = event_target:hfe_thoth_station
-			}
-		}
-		event_target:thfe_thoth_war_machine = {
-			set_location = {
-				target = event_target:hfe_thoth_location
-				distance = 9.9
 			}
 		}
 	}
