@@ -1265,7 +1265,7 @@ hfe_initializer_varelse = {
 		high_mechanicus_system
 		colony_beta_system
 		empire_cluster
-#		empire_home_system
+		empire_home_system
 		ruined_empire
 	}
 	planet = {
@@ -1279,6 +1279,9 @@ hfe_initializer_varelse = {
 		}
 		has_ring = no
 		satellite_naming_policy = upper_case_roman_numerals
+		init_effect = {
+			create_broken_fe_outpost = yes
+		}
 	}
 	change_orbit = 23
 	planet = {
@@ -1291,7 +1294,7 @@ hfe_initializer_varelse = {
 	planet = {
 		name = "Colony Beta"
 		orbit_distance = 0
-		class = pc_desert
+		class = pc_relic
 #		entity = hfe_entity_arid_01_brown
 		entity = toxic_planet_02_entity
 		orbit_angle = {
@@ -1301,10 +1304,13 @@ hfe_initializer_varelse = {
 		size = 32
 		modifiers = none
 		deposit_blockers = none
+		home_planet = yes
+		starting_planet = yes
 
 		init_effect = {
 #			set_planet_flag = hfe_varelse_colony
 			prevent_anomaly = yes
+			save_global_event_target_as = hfe_varelse_colony_planet
 			create_country = {
 				name = "Cult of the Machine-That-Speaks-to-God"
 				ship_prefix = "Godforge"
@@ -1406,9 +1412,6 @@ hfe_initializer_varelse = {
 				}
 			}
 			# to remove error in log
-			event_target:varelse_species = {
-				set_species_homeworld = event_target:hfe_varelse_colony
-			}
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
 				log = "Varelse Homeworld set"
@@ -1424,6 +1427,8 @@ hfe_initializer_varelse = {
 			hfe_effect_primitive_add_pops = yes
 #			hfe_effect_primitive_add_buildings = yes
 			add_building = building_primitive_capital
+			remove_building = building_primitive_capital
+			add_building = hfe_building_mechanicus_pseudo_capital
 			add_building = hfe_building_high_mechanicus_godforge
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
@@ -1447,7 +1452,8 @@ hfe_initializer_varelse = {
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
 				log = "Primitive Buildings added to Colony Beta"
-			}			
+			}
+			add_deposit = d_ruined_arcology
 			add_deposit = d_city_ruins
 			add_deposit = d_bomb_crater
 			add_deposit = d_decrepit_dwellings
@@ -1472,7 +1478,7 @@ hfe_initializer_varelse = {
 				log = "Colony Beta has its Deposits"
 			}
 			while = {
-				count = 36
+				count = 38
 				create_pop = {
 					species = event_target:hfe_varelse_species
 				}
@@ -1547,7 +1553,7 @@ hfe_initializer_varelse = {
 					name = "Zealots"
 					owner = owner
 					species = event_target:hfe_varelse_species
-					type = primitive_army
+					type = hfe_army_high_mechanicus_zealots
 				}
 			}
 			while = {
@@ -1574,7 +1580,7 @@ hfe_initializer_varelse = {
 					name = "Elite Zealots"
 					owner = owner
 					species = event_target:hfe_varelse_species
-					type = postatomic_army
+					type = assault_army
 				}
 			}
 			while = {
@@ -1587,7 +1593,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 10
+				count = 12
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
@@ -1636,6 +1642,10 @@ hfe_initializer_varelse = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
 				log = "Colony Beta has its Armies"
 			}
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Colony Beta planet finalized"
+			}
 		}
 		change_orbit = 9
 		moon = {
@@ -1649,24 +1659,64 @@ hfe_initializer_varelse = {
 			orbit_distance = 6
 			init_effect = {
 				prevent_anomaly = yes
+				relic_world_deposits = yes # For flavor, this was once their capital
 				set_planet_flag = ju_ahet_punishment_moon
-				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
-					log = "Colony Beta planet finalized"
+				save_global_event_target_as = hfe_ju_ahet_punishment_moon
+				create_ambient_object = {
+					type = large_debris_object
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = event_target:hfe_ju_ahet_punishment_moon
+						distance = 0
+					}
 				}
 			}
 		}
 		moon = {
-			name = "Delta"
-			class = random
+			name = "Colony Delta"
+			class = pc_relic
+			entity = hfe_entity_arid_01_brown
 			orbit_distance = 6
 			orbit_angle = random
-			size = {
-				min = 17
-				max = 22
-			}
+			size = 25
 			init_effect = {
 				prevent_anomaly = yes
+				clear_blockers = yes
+				add_deposit = d_irradiated_ruins
+				add_deposit = d_irradiated_valley
+				add_deposit = d_radioactive_wasteland
+				add_deposit = d_radioactive_wasteland
+				add_deposit = d_radioactive_wasteland
+				add_deposit = d_collapsed_spire
+				add_deposit = d_central_spire
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
+				add_deposit = d_city_ruins
+				add_deposit = d_city_ruins
+				add_deposit = d_city_ruins
+				add_deposit = d_bomb_crater
+				add_deposit = d_bomb_crater
+				add_deposit = d_ancient_bombardment_craters
+
+				add_modifier = {
+					modifier = irradiated_planet
+					days = -1
+				}
+				add_modifier = {
+					modifier = irradiated_wasteland
+					days = -1
+				}
+				add_modifier = {
+					modifier = unbalanced_ecosystem
+					days = -1
+				}
+#				add_modifier = {
+#					modifier = colonial_remains
+#					days = -1
+#				}
 			}
 		}
 	}
@@ -1713,6 +1763,12 @@ hfe_initializer_varelse = {
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
 		generate_home_system_resources = yes
+		event_target:varelse_species = {
+			set_species_homeworld = event_target:hfe_ju_ahet_punishment_moon
+		}
+		event_target:colony_beta = {
+			set_custom_capital_location = hfe_ju_ahet_punishment_moon
+		}
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Colony Beta completely spawned"
@@ -1886,6 +1942,9 @@ hfe_initializer_memorial_0 = {
 			max = 30
 		}
 		has_ring = no
+		init_effect = {
+			create_broken_fe_outpost = yes
+		}
 	}
 	change_orbit = 45
 	planet = {
@@ -1972,6 +2031,9 @@ hfe_initializer_memorial_1 = {
 			max = 30
 		}
 		has_ring = no
+		init_effect = {
+			create_broken_fe_outpost = yes
+		}
 	}
 	change_orbit = 30
 	planet = {
@@ -2073,6 +2135,9 @@ hfe_initializer_memorial_2 = {
 			max = 30
 		}
 		has_ring = no
+		init_effect = {
+			create_broken_fe_outpost = yes
+		}
 	}
 	change_orbit = 45
 	planet = {
@@ -2169,6 +2234,9 @@ hfe_initializer_memorial_3 = {
 			max = 30
 		}
 		has_ring = no
+		init_effect = {
+			create_broken_fe_outpost = yes
+		}
 	}
 	asteroid_belt = {
 		type = rocky_asteroid_belt
@@ -2623,7 +2691,7 @@ hfe_initializer_drone_sector_0 = {
 				effect = {
 					set_owner = event_target:hfe_drone_country
 					while = {
-						count = 30
+						count = 45
 						create_ship = {
 							name = "Ancient Mining Defense Drone"
 							design = "NAME_Ancient_Combat_Drone"
@@ -2637,7 +2705,7 @@ hfe_initializer_drone_sector_0 = {
 						}
 					}
 					while = {
-						count = 30
+						count = 40
 						create_ship = {
 							name = "Super Ancient Mining Drone"
 							design = "NAME_Ancient_Destroyer"
@@ -2671,6 +2739,7 @@ hfe_initializer_drone_sector_0 = {
 					is_asteroid = yes
 				}
 				add_deposit = d_minerals_2
+				add_deposit = d_trade_value_1
 			}
 			else_if = {
 				limit = {
@@ -2680,6 +2749,7 @@ hfe_initializer_drone_sector_0 = {
 					}
 				}
 				hfe_effect_set_energy_orbital_deposit = yes
+				add_deposit = d_trade_value_1
 			}
 			else = {
 				create_mining_station = {
@@ -2692,7 +2762,8 @@ hfe_initializer_drone_sector_0 = {
 			size = "starbase_citadel"
 			owner = event_target:hfe_drone_country
 			module = shipyard
-			module = hfe_starbase_module_trading_hub
+#			module = hfe_starbase_module_trading_hub
+			module = missile_battery
 			module = missile_battery
 			module = missile_battery
 			module = gun_battery
@@ -2701,6 +2772,7 @@ hfe_initializer_drone_sector_0 = {
 			building = hfe_starbase_building_drone_energy
 			building = hfe_starbase_building_drone_logistics
 			building = hfe_starbase_building_drone_alloys
+			building = listening_post
 	
 			effect = {
 				while = {
@@ -2760,7 +2832,7 @@ hfe_initializer_drone_sector_1 = {
 		}
 		init_effect = {
 			save_global_event_target_as = hfe_drone_country_star_1
-			add_deposit = d_trade_value_5
+			add_deposit = d_trade_value_8
 			create_fleet = {
 				name = "Economic Computer Protection Drones"
 				settings = {
@@ -2786,7 +2858,7 @@ hfe_initializer_drone_sector_1 = {
 						}
 					}
 					while = {
-						count = 6
+						count = 12
 						create_ship = {
 							name = "Guardians of Wealth"
 							design = "NAME_Ancient_Destroyer"
@@ -2913,14 +2985,14 @@ hfe_initializer_drone_sector_1 = {
 		hfe_effect_add_hyperlanes = yes
 		every_system_planet = {
 			limit = {
-				has_deposit = no
+#				has_deposit = no
 			}
 			if = {
 				limit = {
 					is_asteroid = yes
 				}
-				add_deposit = d_trade_value_1
-				add_deposit = d_minerals_2
+				add_deposit = d_trade_value_2
+				add_deposit = d_minerals_1
 #				hfe_effect_set_mineral_orbital_deposit = yes
 			}
 			else_if = {
@@ -2931,6 +3003,7 @@ hfe_initializer_drone_sector_1 = {
 					}
 				}
 				hfe_effect_set_energy_orbital_deposit = yes
+				add_deposit = d_trade_value_1
 			}
 		}
 		create_starbase = {
@@ -2943,7 +3016,7 @@ hfe_initializer_drone_sector_1 = {
 			module = hfe_starbase_module_trading_hub
 			module = hfe_starbase_module_trading_hub
 			module = missile_battery
-			building = defense_grid
+			building = listening_post
 			building = hfe_starbase_building_drone_energy
 			building = hfe_starbase_building_drone_logistics
 			building = hfe_starbase_building_drone_alloys
@@ -3376,7 +3449,6 @@ hfe_initializer_future_main = {
 				set_planet_flag = hfe_future_planet
 				set_owner = event_target:hfe_future_country
 				add_building = hfe_building_virtual
-				add_building = building_luxury_residence
 				add_building = building_system_capital
 				add_building = building_fe_stronghold
 				add_building = building_fe_dome

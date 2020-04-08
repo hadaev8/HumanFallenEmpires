@@ -251,7 +251,7 @@ planet_event = {
 			}
 		}
 		if = {
-			limit = { is_lithoid = yes }
+			limit = { owner_species = { is_lithoid = yes } }
 			add_district = district_mining
 			add_district = district_mining
 
@@ -378,29 +378,34 @@ country_event = {
 
 				}
 			
-				create_fleet = {
-					name = "Real Estate Agents"
-					effect = {
-						set_name = "Free Real Estate"
-						set_owner = ROOT
-						set_fleet_stance = passive
-						while = {
-							count = 4
-							create_army_transport = {
-								army_name = "Free Real Estate Scouts"
-								ship_name = "Free Real Estate Agent Transport"
-								army_type = assault_army
-							}
+				owner = {
+					create_fleet = {
+						name = "Real Estate Agents"
+						settings = {
+							can_upgrade = yes
 						}
-						while = {
-							count = 1
-							create_army_transport = {
-								army_name = "Basic Combat Assistance"
-								ship_name = "Basic Combat Transport"
-								army_type = robotic_army
+						effect = {
+							set_name = "Free Real Estate"
+							set_owner = ROOT
+							set_fleet_stance = passive
+							while = {
+								count = 4
+								create_army_transport = {
+									army_name = "Free Real Estate Scouts"
+									ship_name = "Free Real Estate Agent Transport"
+									army_type = assault_army
+								}
 							}
+							while = {
+								count = 1
+								create_army_transport = {
+									army_name = "Basic Combat Assistance"
+									ship_name = "Basic Combat Transport"
+									army_type = robotic_army
+								}
+							}
+							set_location = root.capital_scope
 						}
-						set_location = root.capital_scope
 					}
 				}
 			}

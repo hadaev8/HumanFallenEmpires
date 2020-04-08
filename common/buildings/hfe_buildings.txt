@@ -830,6 +830,7 @@ hfe_building_high_mechanicus_stronghold = {
 	planet_modifier = {
 		armies_energy_upkeep_mult = -0.9
 		armies_upkeep_mult = -0.5
+		planet_housing_add = 6
 	}
 
 	resources = {
@@ -1015,6 +1016,7 @@ hfe_building_fedora_stronghold = {
 
 	planet_modifier = {
 		armies_upkeep_mult = -0.9
+		planet_housing_add = 6
 	}
 
 	triggered_planet_modifier = {
@@ -1144,6 +1146,7 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 
 	planet_modifier = {
 		armies_upkeep_mult = -0.5
+		planet_housing_add = 6
 	}
 
 	triggered_planet_modifier = {
@@ -1158,14 +1161,25 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 			job_soldier_per_pop = 0.05
 			job_head_researcher_add = 1
 			job_researcher_add = 2
-			job_researcher_per_pop = 0.03
+			job_researcher_per_pop = 0.04
 		}
 	}
 
 	triggered_planet_modifier = {
 		potential = {
 			owner = {
-				is_materialist = yes
+				OR = {
+					is_materialist = yes
+					is_synthetic_empire = yes
+					has_country_flag = flesh_weakened
+					has_country_flag = synthetic_empire
+					has_origin = origin_mechanists
+				}
+				NOT = {
+					has_policy_flag = robots_outlawed
+					has_authority = auth_machine_intelligence
+					has_authority = auth_ancient_machine_intelligence
+				}
 			}
 		}
 		job_roboticist_add = 1
@@ -1175,9 +1189,28 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 		potential = {
 			owner = {
 				has_origin = origin_mechanists
+				NOT = {
+					has_policy_flag = robots_outlawed
+					is_machine_empire = yes
+				}
 			}
 		}
 		job_roboticist_add = 1
+	}
+	
+	triggered_planet_modifier = {
+		potential = {
+			owner = {
+				OR = {
+#					is_machine_empire = yes
+#					is_mechanical_empire = yes
+					has_authority = auth_machine_intelligence
+					has_authority = auth_ancient_machine_intelligence
+				}
+			}
+		}
+		job_replicator_add = 2
+		job_replicator_per_pop = 0.05
 	}
 
 	triggered_planet_modifier = {
@@ -1221,7 +1254,7 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 			}
 		}
 		modifier = {
-			job_bureaucrat_add = 1
+			job_bureaucrat_add = 2
 		}
 	}
 
@@ -1295,7 +1328,7 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 	}
 
 	planet_modifier = {
-		armies_upkeep_mult = -0.5
+		armies_upkeep_mult = -0.66
 	}
 
 	triggered_planet_modifier = {	
@@ -1304,9 +1337,9 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 		}
 		modifier = {
 			job_synapse_drone_add = 3
-			job_brain_drone_add = 1
-			job_brain_drone_per_pop = 0.05
-			job_warrior_drone_add = 1
+			job_brain_drone_add = 2
+			job_brain_drone_per_pop = 0.6
+			job_warrior_drone_add = 2
 			job_warrior_drone_per_pop = 0.04
 		}
 	}
@@ -1318,10 +1351,10 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 		modifier = {
 			job_coordinator_add = 1
 			job_calculator_add =  2
-			job_calculator_per_pop = 0.03
+			job_calculator_per_pop = 0.04
 			job_warrior_drone_add = 1
-			job_warrior_drone_per_pop = 0.03
-			job_replicator_add = 2
+			job_warrior_drone_per_pop = 0.04
+			job_replicator_add = 3
 		}
 	}
 
@@ -1414,7 +1447,7 @@ hfe_building_mechanicus_cult_temple = {
 	}
 
 	ai_weight = {
-		weight = 50
+		weight = 999
 		modifier = {
 			factor = 0
 			owner = {
@@ -1459,5 +1492,50 @@ hfe_building_mechanicus_cult_temple = {
 		energy = 6
 		minerals = 10
 		unity = 3
+	}
+}
+
+hfe_building_mechanicus_pseudo_capital = {
+	capital = yes
+	icon = building_primitive_factory
+	can_build = yes
+	can_demolish = yes
+	can_be_ruined = no
+	base_cap_amount = 1
+	add_to_first_building_slot = yes
+
+	potential = {
+		exists = owner
+		owner = {
+			is_primitive = yes
+			has_country_flag = hfe_varelse_primitive_0
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			is_primitive = no
+		}
+	}
+
+	convert_to = {
+		building_system_capital
+		building_hive_major_capital
+		building_machine_major_capital
+	}
+
+	planet_modifier = {
+		job_primitive_bureaucrat_add = 2
+		job_primitive_warrior_2_add = 1
+		job_primitive_researcher_2_add = 1
+		job_primitive_priest_2_add = 1
+		planet_housing_add = 2
+		planet_amenities_add = 40
+		planet_crime_add = -20
+	}
+
+	ai_weight = {
+		factor = 999
 	}
 }

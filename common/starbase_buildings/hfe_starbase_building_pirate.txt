@@ -9,6 +9,7 @@
 
 hfe_starbase_building_pirate_minerals = {
 	icon = GFX_spaceport_module_hydroponic_farms
+	initial = yes
 	construction_days = 180
 	potential = {
 		exists = owner
@@ -147,11 +148,20 @@ hfe_starbase_building_pirate_minerals = {
 
 hfe_starbase_building_pirate_energy = {
 	icon = GFX_spaceport_module_hydroponic_farms
-	construction_days = 180
+	initial = yes
+	construction_days = 30
 	potential = {
 		exists = owner
 		owner = {
-			is_country_type = hfe_pirate
+			OR = {
+				is_country_type = hfe_pirate
+				is_country_type = dormant_marauders
+				is_country_type = awakened_marauders
+				is_country_type = ruined_marauders
+				is_country_type = marauder_raiders
+				is_country_type = ratlings
+				has_civic = civic_barbaric_despoilers
+			}
 		}
 	}
 	possible = {
@@ -173,7 +183,12 @@ hfe_starbase_building_pirate_energy = {
 		country_resource_max_energy_add = 1000
 	}
 	station_modifier = {
-		# TODO ships_upkeep_mult = -0.5
+		trade_value_add = 2
+	}
+
+	ship_modifier = {
+		# TODO
+		ships_upkeep_mult = -0.5		
 	}
 	ai_build_at_chokepoint = yes
 	ai_build_outside_chokepoint = yes
