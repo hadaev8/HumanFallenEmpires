@@ -940,7 +940,7 @@ country_event = {
 			plural = Varelses
 			adjective = Varelsite
 			class = REP
-			speecies_bio = "The Varelses were once a mighty Fallen Empire that was the Rival of the Ju Ahets. They were defeated in a genocidal spree by the Ju Ahets and their capital moon, Colony Alpha, was detonated. The second planet, which it orbited, was home to many tens of billions, and was bombed to toxic ashes and the atmosphere was deliberately poisoned by the Ju Ahets."
+			species_bio = "The Varelses were once a mighty Fallen Empire that was the Rival of the Ju Ahets. They were defeated in a genocidal spree by the Ju Ahets and their capital moon, Colony Alpha, was detonated. The second planet, which it orbited, was home to many tens of billions, and was bombed to toxic ashes and the atmosphere was deliberately poisoned by the Ju Ahets."
 			traits = {
 				ideal_planet_class = pc_desert
 				trait = trait_industrious
@@ -957,6 +957,7 @@ country_event = {
 		}
 		last_created_species = {
 			save_global_event_target_as = hfe_varelse_species
+			set_species_homeworld = event_target:hfe_ju_ahet_punishment_moon
 		}
 		# future
 		create_species = {
@@ -1617,19 +1618,21 @@ country_event = {
 					days = 1
 				}
 			}
-			every_country = {
-				limit = {
-					is_country_type = drone
-				}
-				set_subject_of = {
-					subject_type = vassal
-					who = event_target:hfe_drone_country
-				}
-			}
 		}
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Harvesting Marvel clay acquired"
+		}
+	}
+	after = {
+		every_country = {
+			limit = {
+				is_country_type = drone
+			}
+			set_subject_of = {
+				subject_type = vassal
+				who = event_target:hfe_drone_country
+			}
 		}
 	}
 }

@@ -204,11 +204,12 @@ hfe_initializer_egypt_main = {
 				pops_can_migrate = no
 				can_be_modified = no # "Forever a slave" means forever a slave
 				extra_trait_points = 12
+				species_bio = "Through advanced genetic engineering and breeding, these Ahets were ripped of their Free Will. They were forced into eons of servitude, these Ahets are the descendants of the kidnappers of the Ju Ahet. Confined to Ju Ahet's core worlds, they serve their former chattel for all eternity. Dumbed down, docile, and quiet, they seek to serve a master even when they are not compelled to do so."
 #				homeworld = event_target:hfe_ahet_happy_ending
 				traits = {
 					ideal_planet_class = pc_nuked
 					trait = hfe_species_trait_happy_slave
-					trait = trait_presapient_docile_livestock
+#					trait = trait_presapient_docile_livestock
 					trait = trait_docile
 					trait = trait_charismatic
 					trait = trait_strong
@@ -242,11 +243,13 @@ hfe_initializer_egypt_main = {
 				pops_can_migrate = no
 				can_be_modified = no # "Forever a slave" means forever a slave
 				extra_trait_points = 12
+				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets are entirely descended from the officers, governors, and elite rulers of the extinct Ahet empire. Specifically targetted and made an example of, these Ahets endure the most humiliating life possible: they are a delicacy on every Ju Ahet table."
 #				homeworld = event_target:hfe_ahet_happy_ending
 				traits = {
 					ideal_planet_class = pc_nuked
-					trait = hfe_species_trait_happy_slave
+#					trait = hfe_species_trait_happy_slave
 					trait = trait_presapient_docile_livestock
+					trait = trait_nerve_stapled
 					trait = trait_delicious
 					trait = trait_conformists
 					trait = trait_communal
@@ -318,9 +321,9 @@ hfe_initializer_egypt_main = {
 #			}
 			every_owned_pop = { # This is easier than creating a set number of Ju Ahets and set number of Ahets, they aren ot transformed, obviously
 				random_list = {
-					42 = {
+					43 = {
 					}
-					11 = {
+					12 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
 					1 = {
@@ -1333,7 +1336,7 @@ hfe_initializer_varelse = {
 					prev = {
 						set_owner = prev
 					}
-					save_global_event_target_as = colony_beta
+					save_global_event_target_as = colony_beta # The country
 					kill_leader = {
 						type = ruler
 						show_notification = no
@@ -1454,7 +1457,8 @@ hfe_initializer_varelse = {
 				log = "Primitive Buildings added to Colony Beta"
 			}
 			add_deposit = d_ruined_arcology
-			add_deposit = d_city_ruins
+			add_deposit = d_ruined_arcology
+			add_deposit = d_ruined_arcology
 			add_deposit = d_bomb_crater
 			add_deposit = d_decrepit_dwellings
 			add_deposit = d_decrepit_dwellings
@@ -1469,10 +1473,14 @@ hfe_initializer_varelse = {
 			add_deposit = d_fungal_caves
 			add_deposit = d_fungal_caves
 			add_deposit = d_fungal_caves
+			add_deposit = d_odd_factory
+			add_deposit = d_relic_metal_boneyard
+			add_random_non_blocker_deposit = yes
+			add_random_non_blocker_deposit = yes
+			add_random_non_blocker_deposit = yes
+#			add_random_non_blocker_deposit = yes
+#			add_random_non_blocker_deposit = yes
 			remove_deposit = d_dust_desert
-			add_district = district_farming
-			add_random_non_blocker_deposit = yes
-			add_random_non_blocker_deposit = yes
 			if = {
 				limit = { has_global_flag = HFE_TSP_spawn_test }
 				log = "Colony Beta has its Deposits"
@@ -1489,23 +1497,44 @@ hfe_initializer_varelse = {
 				adjective = "Godforge Engine"
 				class = ROBOT
 				namelist = cybrxkhan_fantasy_egyptian
-				portrait = "default_robot"
+				portrait = sd_pla_robot # I actually love this type and they are not ugly at all
 				species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
+				extra_trait_points = 2
 				traits = {
 					trait = "trait_mechanical"
 					trait = "trait_robot_bulky"
 					trait = "trait_robot_uncanny"
 					trait = "trait_robot_custom_made"
+					trait = "trait_robot_high_bandwidth"
 					trait = "trait_robot_domestic_protocols"
 				}
 			}
 			last_created_species = {
 				set_species_flag = godforge_species # Perhaps one day, the Godforge itself could rebel?
-				set_species_homeworld = event_target:colony_beta
+				set_species_homeworld = event_target:hfe_varelse_colony_planet
 				save_global_event_target_as = hfe_varelse_leftover_robots
 			}
+			create_leader = {
+				name = "Damaged Godforge Core"
+				class = general
+				event_leader = yes
+				species = event_target:hfe_varelse_leftover_robots
+				immortal = yes
+				skill = 1
+				set_age = 3169
+				traits = {
+					add_trait = leader_trait_general_synthetic
+					add_trait = leader_trait_rigid_programming
+					add_trait = leader_trait_maimed
+					add_trait = leader_trait_arrested_development
+				}
+				effect = {
+					set_leader_flag = godforge_engine_primitive
+					save_global_event_target_as = broken_godforge_general
+				}
+			}
 			while = {
-				count = 10
+				count = 15
 				create_pop = {
 					species = event_target:hfe_varelse_leftover_robots
 				}
@@ -1553,7 +1582,7 @@ hfe_initializer_varelse = {
 					name = "Zealots"
 					owner = owner
 					species = event_target:hfe_varelse_species
-					type = hfe_army_high_mechanicus_zealots
+					type = primitive_army
 				}
 			}
 			while = {
@@ -1562,11 +1591,20 @@ hfe_initializer_varelse = {
 					name = "Zealots"
 					owner = owner
 					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 20
+				create_army = {
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
 					type = enraged_army
 				}
 			}
 			while = {
-				count = 10
+				count = 15
 				create_army = {
 					name = "Fanatic Zealots"
 					owner = owner
@@ -1584,7 +1622,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 3
+				count = 5
 				create_army = {
 					name = "Regime Enforcers"
 					owner = owner
@@ -1593,7 +1631,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 12
+				count = 15
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
@@ -1602,7 +1640,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 4
+				count = 5
 				create_army = {
 					name = "Godforge Sentinels"
 					owner = owner
@@ -1620,7 +1658,7 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 2
+				count = 3
 				create_army = {
 					name = "Adaptus Mechanicus"
 					owner = owner
@@ -1635,7 +1673,7 @@ hfe_initializer_varelse = {
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = hfe_army_high_mechanicus_bodyguards
-					leader = last_created_leader
+					leader = event_target:broken_godforge_general
 				}
 			}
 			if = {
@@ -1689,7 +1727,10 @@ hfe_initializer_varelse = {
 				add_deposit = d_radioactive_wasteland
 				add_deposit = d_radioactive_wasteland
 				add_deposit = d_collapsed_spire
-				add_deposit = d_central_spire
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
+				add_deposit = d_ruined_arcology
 				add_deposit = d_ruined_arcology
 				add_deposit = d_ruined_arcology
 				add_deposit = d_ruined_arcology
@@ -1700,6 +1741,13 @@ hfe_initializer_varelse = {
 				add_deposit = d_bomb_crater
 				add_deposit = d_bomb_crater
 				add_deposit = d_ancient_bombardment_craters
+				add_deposit = d_odd_factory
+				add_deposit = d_industrial_sector
+				add_deposit = d_relic_metal_boneyard
+				add_random_non_blocker_deposit = yes
+				add_random_non_blocker_deposit = yes
+				add_random_non_blocker_deposit = yes
+				add_random_non_blocker_deposit = yes
 
 				add_modifier = {
 					modifier = irradiated_planet
@@ -1710,13 +1758,13 @@ hfe_initializer_varelse = {
 					days = -1
 				}
 				add_modifier = {
-					modifier = unbalanced_ecosystem
+					modifier = bleak_planet
 					days = -1
 				}
-#				add_modifier = {
-#					modifier = colonial_remains
-#					days = -1
-#				}
+				add_modifier = {
+					modifier = unstable_tectonics
+					days = -1
+				}
 			}
 		}
 	}
@@ -1763,11 +1811,11 @@ hfe_initializer_varelse = {
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
 		generate_home_system_resources = yes
-		event_target:varelse_species = {
+		event_target:hfe_varelse_colony_country.species = {
 			set_species_homeworld = event_target:hfe_ju_ahet_punishment_moon
 		}
-		event_target:colony_beta = {
-			set_custom_capital_location = hfe_ju_ahet_punishment_moon
+		event_target:hfe_varelse_colony_country = {
+			set_custom_capital_location = event_target:hfe_ju_ahet_punishment_moon
 		}
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
@@ -1796,15 +1844,17 @@ hfe_initializer_ahet_home = {
 	}
 	change_orbit = 20
 	planet = {
+		count = 1
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 3
-		}
 	}
-	change_orbit = 20
 	planet = {
-		orbit_distance = 10
+		count = 1
+		class = random
+		size = 14
+	}
+	change_orbit = 22
+	planet = {
+		orbit_distance = 0
 		name = "Our Happy Ending"
 		class = hfe_pc_ahet_home
 		has_ring = yes
@@ -1815,6 +1865,8 @@ hfe_initializer_ahet_home = {
 		size = 35
 		home_planet = yes
 		satellite_naming_policy = upper_case_roman_numerals
+		modifiers = none
+		deposit_blockers = none
 		init_effect = {
 			save_global_event_target_as = hfe_ahet_happy_ending
 #			set_species_homeworld = event_target:hfe_ahet_species
@@ -1832,6 +1884,8 @@ hfe_initializer_ahet_home = {
 				modifier = high_gravity
 				days = -1
 			}
+			
+			relic_world_deposits = yes
 			add_deposit = d_ancient_particle_accelerator
 			add_deposit = d_relic_dense_ruins
 			add_deposit = d_bomb_crater
@@ -1857,7 +1911,8 @@ hfe_initializer_ahet_home = {
 				min = 0
 				max = 90
 			}
-			orbit_distance = 1
+			orbit_distance = 1.15
+			modifiers = none
 			init_effect = {
 				add_deposit = d_engineering_9
 				prevent_anomaly = yes
@@ -1870,7 +1925,8 @@ hfe_initializer_ahet_home = {
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
-			orbit_distance = 1.1
+			orbit_distance = 1.25
+			modifiers = none
 			init_effect = {
 				add_deposit = d_engineering_6
 				prevent_anomaly = yes
@@ -1883,7 +1939,8 @@ hfe_initializer_ahet_home = {
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
-			orbit_distance = 1.2
+			orbit_distance = 2
+			modifiers = none
 			init_effect = {
 				add_deposit = d_engineering_6
 				prevent_anomaly = yes
@@ -1892,20 +1949,18 @@ hfe_initializer_ahet_home = {
 		}
 	}
 	planet = {
-		orbit_distance = 20
+		orbit_distance = 8
 		count = 3
 		has_ring = yes
 		change_orbit = @base_moon_distance
+		class = random
 		moon = {
-			count = {
-				min = 2
-				max = 3
-			}
+			count = 3
 			orbit_angle = {
-				min = 90
-				max = 270
+				min = 140
+				max = 195
 			}
-			orbit_distance = 5
+			orbit_distance = 4
 			has_ring = no
 		}
 	}
@@ -1913,7 +1968,7 @@ hfe_initializer_ahet_home = {
 		orbit_distance = 20
 		count = 1
 		class = pc_gas_giant
-		size = 31
+		size = 32
 		has_ring = yes
 	}
 	init_effect = {
@@ -2485,6 +2540,7 @@ hfe_initializer_drone_sector_0 = {
 			save_global_event_target_as = hfe_drone_hq
 			set_planet_flag = hfe_drone_hq_planet
 			add_deposit = d_minerals_10
+			add_deposit = d_trade_value_10
 		}
 	}
 	change_orbit = 7
@@ -2514,7 +2570,7 @@ hfe_initializer_drone_sector_0 = {
 				}
 				background = {
 					category = "backgrounds"
-					file = "00_solid.dds"
+					file = random
 				}
 				colors = {
 					"black"
@@ -2739,7 +2795,6 @@ hfe_initializer_drone_sector_0 = {
 					is_asteroid = yes
 				}
 				add_deposit = d_minerals_2
-				add_deposit = d_trade_value_1
 			}
 			else_if = {
 				limit = {
@@ -2749,7 +2804,6 @@ hfe_initializer_drone_sector_0 = {
 					}
 				}
 				hfe_effect_set_energy_orbital_deposit = yes
-				add_deposit = d_trade_value_1
 			}
 			else = {
 				create_mining_station = {
@@ -2808,9 +2862,9 @@ hfe_initializer_drone_sector_1 = {
 	flags = {
 		hfe_drone_1
 		hostile_system
-		drone_home_system
 		drone_system_1
 		empire_cluster
+		hfe_drone_economic_zone
 	}
 	class = sc_k
 	name = "Drone Sector 1"
