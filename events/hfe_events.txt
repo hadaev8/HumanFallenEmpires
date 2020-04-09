@@ -101,23 +101,12 @@ country_event = {
 	}
 	# step 0
 	option = {
-		name = hfe.47.0.0
-		response_text = hfe.47.desc.badend
+		name = hfe.47.0.3
 		trigger = {
 			has_country_flag = hfe.47.step0
-			not = {
-				has_country_flag = hfe_marked_as_human
-			}
-			is_xenophobe = yes
 		}
-		hfe_effect_xenophobe_attraction.2 = yes
-		hfe_effect_event_47_clear_flags = yes
-		event_target:hfe_egypt_country = {
-			add_opinion_modifier = {
-				who = root
-				modifier = hfe_opinion_egypt_first_contact_bad
-			}
-		}
+		hfe_effect_event_47_next = yes
+		default_hide_option = yes # Just in case
 	}
 	option = {
 		name = hfe.47.0.1
@@ -128,6 +117,9 @@ country_event = {
 			has_country_flag = hfe.47.step0
 		}
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 1
+		}
 	}
 	option = {
 		name = hfe.47.0.2
@@ -136,9 +128,12 @@ country_event = {
 			has_country_flag = hfe_marked_as_human
 		}
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 20
+		}
 	}
 	option = {
-		name = hfe.47.0.3
+		name = hfe.47.0.7
 		trigger = {
 			has_country_flag = hfe.47.step0
 			not = {
@@ -146,6 +141,9 @@ country_event = {
 			}
 		}
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 2
+		}
 	}
 	option = {
 		name = hfe.47.0.4
@@ -155,14 +153,18 @@ country_event = {
 		}
 		hfe_effect_spiritualist_attraction.2 = yes
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 1
+		}
 	}
 	option = {
 		name = hfe.47.0.5
 		response_text = hfe.47.desc.badend
 		trigger = {
 			has_country_flag = hfe.47.step0
-			is_militarist = yes
+#			is_militarist = yes
 			fleet_power > 40000
+			NOT = { is_pacifist = yes }
 		}
 		hfe_effect_militarist_attraction.2 = yes
 		hfe_effect_event_47_clear_flags = yes
@@ -173,6 +175,13 @@ country_event = {
 			}
 		}
 		# ???????? ?????????? ?????
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { is_militarist = yes }
+			}
+		}
 	}
 	option = {
 		name = hfe.47.0.6
@@ -189,6 +198,41 @@ country_event = {
 			}
 		}
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { is_xenophobe = yes }
+			}
+		}
+	}
+	option = {
+		name = hfe.47.0.0
+		response_text = hfe.47.desc.badend
+		trigger = {
+			has_country_flag = hfe.47.step0
+			not = {
+				has_country_flag = hfe_marked_as_human
+			}
+#			is_xenophobe = yes
+		}
+		hfe_effect_xenophobe_attraction.2 = yes
+		hfe_effect_event_47_clear_flags = yes
+		event_target:hfe_egypt_country = {
+			add_opinion_modifier = {
+				who = root
+				modifier = hfe_opinion_egypt_first_contact_bad
+			}
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 0
+				NOT = {
+					is_xenophobe = yes
+				}
+			}
+		}
 	}
 	# step 1
 	option = {
@@ -199,6 +243,9 @@ country_event = {
 		}
 		hfe_effect_militarist_attraction.0 = yes
 		hfe_effect_event_47_next = yes
+		ai_chance = {
+			factor = 1
+		}
 	}
 	option = {
 		name = hfe.47.1.1
@@ -268,9 +315,10 @@ country_event = {
 		name = hfe.47.2.0
 		trigger = {
 			has_country_flag = hfe.47.step2
-			or = {
+			OR = {
 				has_country_flag = human_1
-				and = {
+				has_country_flag = human_2
+				AND = {
 					has_country_flag = hfe_marked_as_human
 					exists = event_target:hfe_earth
 					event_target:hfe_earth = {
@@ -286,20 +334,20 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe.47.step2
 			has_country_flag = hfe_marked_as_human
-			nand = {
-				exists = event_target:hfe_earth
-				event_target:hfe_earth = {
-					is_surveyed = {
-						who = root
-						status = yes
-					}
-				}
-			}
+#			nand = {
+#				exists = event_target:hfe_earth
+#				event_target:hfe_earth = {
+#					is_surveyed = {
+#						who = root
+#						status = yes
+#					}
+#				}
+#			}
 		}
 		hfe_effect_event_47_next = yes
 	}
 
- # ????? ??? ?? ?? ?????? ?? ?????? ????????
+	# ????? ??? ?? ?? ?????? ?? ?????? ????????
 
 	option = {
 		name = hfe.47.2.2
@@ -324,19 +372,27 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe.47.step2
 			has_country_flag = hfe_marked_as_human
-			nor = {
+			NOT = {
 				has_country_flag = human_1
 				has_country_flag = human_2
-			}
-			nand = {
-				exists = event_target:hfe_earth
-				event_target:hfe_earth = {
-					is_surveyed = {
-						who = root
-						status = yes
+				capital_scope = {
+					solar_system = {
+						has_star_flag = sol_system
 					}
 				}
+				capital_scope = {
+					has_planet_flag = planet_earth
+				}
 			}
+#			nand = {
+#				exists = event_target:hfe_earth
+#				event_target:hfe_earth = {
+#					is_surveyed = {
+#						who = root
+#						status = yes
+#					}
+#				}
+#			}
 		}
 		hfe_effect_event_47_next = yes
 	}
@@ -349,7 +405,7 @@ country_event = {
 			}
 			any_relation = {
 				is_country_type = default
-				has_country_flag = hfe_marked_as_human
+#				has_country_flag = hfe_marked_as_human
 				exists = event_target:hfe_earth
 				event_target:hfe_earth = {
 					is_owned_by = root
@@ -381,9 +437,9 @@ country_event = {
 		name = hfe.47.2.6
 		trigger = {
 			has_country_flag = hfe.47.step2
-			not = {
-				has_country_flag = hfe_marked_as_human
-			}
+#			not = {
+#				has_country_flag = hfe_marked_as_human
+#			}
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
 				has_planet_flag = nuked_earth
@@ -402,9 +458,9 @@ country_event = {
 		name = hfe.47.2.7
 		trigger = {
 			has_country_flag = hfe.47.step2
-			not = {
-				has_country_flag = hfe_marked_as_human
-			}
+#			not = {
+#				has_country_flag = hfe_marked_as_human
+#			}
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
 				exists = owner
@@ -423,9 +479,18 @@ country_event = {
 		name = hfe.47.2.8
 		trigger = {
 			has_country_flag = hfe.47.step2
-			or = {
+			OR = {
 				has_country_flag = hfe_marked_as_human
-				is_xenophile = yes
+				NOT = {
+					is_xenophobe = yes
+					has_civic = civic_fanatic_purifiers
+					has_civic = civic_machine_terminator
+					has_civic = civic_hive_devouring_swarm
+					# These get their own
+					hfe_trigger_is_assimilator = yes
+					has_civic = civic_machine_servitor
+					has_civic = civic_machine_assimilator
+				}
 			}
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
@@ -442,7 +507,48 @@ country_event = {
 				event_chain = hfe_chain_find_sol
 				target = root
 			}
-# ?????????
+			# ?????????
+			event_target:hfe_earth.solar_system = {
+				save_event_target_as = hfe_sol
+				set_star_flag = hfe_sol_target@root
+			}
+			create_point_of_interest = {
+				id = hfe_chain_find_sol.0
+				name = sol_1_poi
+				desc = hfe_chain_find_sol_desc.0
+				event_chain = hfe_chain_find_sol
+				location = event_target:hfe_sol
+			}
+		}
+	}
+	option = {
+		name = hfe.47.2.8
+		trigger = {
+			has_country_flag = hfe.47.step2
+			OR = {
+				hfe_trigger_is_assimilator = yes
+				has_civic = civic_machine_assimilator
+				has_civic = civic_machine_servitor
+				AND = {
+					has_authority = auth_hive_mind
+					has_ascension_perk = ap_evolutionary_mastery
+				}
+			}
+			exists = event_target:hfe_earth
+			event_target:hfe_earth = {
+				is_surveyed = {
+					who = root
+					status = no
+				}
+			}
+		}
+		hfe_effect_event_47_next = yes
+		hidden_effect = {
+			begin_event_chain = {
+				event_chain = hfe_chain_find_sol
+				target = root
+			}
+			# ?????????
 			event_target:hfe_earth.solar_system = {
 				save_event_target_as = hfe_sol
 				set_star_flag = hfe_sol_target@root
@@ -830,7 +936,7 @@ ship_event = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		create_country = {
-			name = "Varelse Time Warp Anomaly"
+			name = "Varelse Fleet Trapped In Time "
 			type = faction
 			species = event_target:hfe_varelse_species
 			ignore_initial_colony_error = yes
@@ -844,7 +950,8 @@ ship_event = {
 				create_leader = {
 					class = admiral
 					species = event_target:hfe_varelse_species
-					skill = 6
+					skill = 8
+					event_leader = yes
 				}
 				create_fleet = {
 					name = "11th Strike Force"
@@ -872,6 +979,12 @@ ship_event = {
 					}
 				}
 			}
+		}
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Varelse Time Trapped Fleet"
 		}
 	}
 	option = {
@@ -3924,6 +4037,7 @@ country_event = {
 				set_owner = root
 				create_ship = {
 					random_existing_design = science
+					graphical_culture = extra_dimensional_01
 				}
 				set_location = root.capital_scope
 				set_leader = hfe_412_scientist
@@ -4000,7 +4114,7 @@ country_event = {
 		}
 		else_if = {
 			limit = {
-				is_spiritualist = no
+#				is_spiritualist = no
 				not = {
 					has_technology = tech_synthetic_workers
 				}
@@ -4016,6 +4130,10 @@ country_event = {
 			}
 			else = {
 				add_research_option = tech_synthetic_workers
+				add_tech_progress = {
+					tech = tech_synthetic_workers
+					progress = 0.5
+				}
 			}
 		}
 		else_if = {
@@ -4030,11 +4148,15 @@ country_event = {
 				}
 				add_tech_progress = {
 					tech = tech_epigenetic_triggers
-					progress = 0.5
+					progress = 0.99
 				}
 			}
 			else = {
 				add_research_option = tech_epigenetic_triggers
+				add_tech_progress = {
+					tech = tech_epigenetic_triggers
+					progress = 0.99
+				}
 			}
 		}
 		else_if = {
@@ -4049,11 +4171,15 @@ country_event = {
 				}
 				add_tech_progress = {
 					tech = tech_gene_tailoring
-					progress = 0.5
+					progress = 0.99
 				}
 			}
 			else = {
 				add_research_option = tech_gene_tailoring
+				add_tech_progress = {
+					tech = tech_gene_tailoring
+					progress = 0.99
+				}
 			}
 		}
 		end_event_chain = hfe_chain_ahet_home
@@ -5738,7 +5864,7 @@ country_event = {
 			remove_country_flag = hfe_556.1
 			random_list = {
 				# fail
-				100 = {
+				50 = {
 					set_country_flag = hfe_556.2.0.0
 				}
 				# success
@@ -6404,22 +6530,28 @@ country_event = {
 	}
 }
 
+
 # friendly ai vol 1 thoth
-# start event, enable project
-# friendly ai vol 1 thoth
-# start event, enable project
+# start event, spawn, enable project
+
+# Scope = Ship
+# From = System
+# FromFrom = Country
 ship_event = {
 	id = hfe.700
-	title = hfe.700.name
-	desc = hfe.700.desc
+	title = HFE_THOTH_CALL_TITLE
+	desc = HFE_THOTH_CALL_DESC
 	picture = GFX_evt_hfe_thoth
-	show_sound = event_ship_thrusters
-	location = root
+	show_sound = event_sensor_ping
+	location = ROOT
 	trackable = yes
+
 	is_triggered_only = yes
+	fire_only_once = yes
+
 	trigger = {
 		hfe_trigger_story_enabled = yes
-		not = {
+		NOT = {
 			has_global_flag = hfe_has_event.700
 		}
 		exists = owner
@@ -6427,113 +6559,175 @@ ship_event = {
 			is_ai = no
 			is_country_type = default
 		}
-		not = {
+		NOT = {
 			exists = solar_system.owner
 		}
 	}
+
 	immediate = {
-		owner = {
+		root.owner = {
+			save_global_event_target_as = empire_that_met_thoth
 			set_country_flag = hfe_thoth_contacted_first
 		}
-		set_global_flag = hfe_has_event.700
-		solar_system = {
-			random_system_planet = {
-				limit = {
-					not = {
-						exists = owner
-					}
-				}
-				save_global_event_target_as = hfe_thoth_location
-			}
+
+		FROM = {
+			save_global_event_target_as = thoth_signal_trace_point
 		}
-		create_country = {
-			name = "Station AI"
-			name_list = cybrxkhan_fantasy_egyptian
-			type = hfe_thoth
-			species = event_target:hfe_egypt_species
-			ignore_initial_colony_error = yes
-			day_zero_contact = no
-			effect = {
-				set_name = hfe_customization_notch_this_rename
-				save_global_event_target_as = hfe_thoth
-				set_graphical_culture = reptilian_01
-				set_country_flag = hfe_thoth
-				set_city_graphical_culture = ai_02
-				set_country_flag = hfe_thoth
-				give_technology = { message = no tech = tech_juggernaut }
-				give_technology = { message = no tech = tech_psionic_theory }
-				give_technology = { message = no tech = tech_psionic_barrier }
-				give_technology = { message = no tech = tech_psionic_shield }
-				give_technology = { message = no tech = tech_sapient_ai	}
-				give_technology = { message = no tech = tech_synthetic_workers }
-				give_technology = { message = no tech = tech_synthetic_leaders }
-				give_technology = { message = no tech = tech_droid_workers }
-				give_technology = { message = no tech = tech_robotic_workers }
-				give_technology = { message = no tech = tech_robomodding }
-				give_technology = { message = no tech = tech_robomodding_points_1 }
-				give_technology = { message = no tech = tech_robomodding_points_2 }
-				hfe_effect_init_give_tech_t5 = yes
-				give_fe_tech = yes
-				create_fleet = {
-					name = "Station (probably gigantic)"
-					settings = {
-						spawn_debris = no
-					}
-					effect = {
-						set_owner = prev
-						create_ship = {
-							design = NAME_Artist_Enclave_Station
-							graphical_culture = mammalian_01
-							effect = {
-								set_ship_flag = hfe_thoth_station
+
+		set_global_flag = hfe_has_event.700
+
+		# Same spawning means as the Rubricator
+		FROM = { # The system the ship is in
+			if = {
+				limit = {
+					any_system = {
+						distance = {
+							source = event_target:thoth_signal_trace_point
+							min_jumps = 1
+							max_jumps = 1
+						}
+						has_access_fleet = event_target:empire_that_met_thoth
+						has_owner = no
+						NOT = {
+							any_fleet_in_system = {
+								owner = { 
+									is_hostile = event_target:empire_that_met_thoth
+								}
 							}
 						}
-						set_location = {
-							target = event_target:hfe_thoth_location
-							distance = 10
+					}
+				}
+				if = {
+					limit = { has_global_flag = HFE_TSP_spawn_test }
+					log = "Thoth system spawn started"
+				}
+				closest_system = {
+					min_steps = 1
+					max_steps = 2
+					limit = {
+						has_access_fleet = event_target:empire_that_met_thoth
+						has_owner = no
+						NOT = {
+							any_fleet_in_system = {
+								owner = { 
+									is_hostile = event_target:empire_that_met_thoth
+								}
+							}
 						}
-						set_fleet_flag = hfe_thoth_station
-						save_global_event_target_as = hfe_thoth_station
-						hfe_effect_create_signal_object = yes
-						enable_special_project = {
-							name = hfe_project_thoth_contact
-							location = this
-							owner = root.owner
+					}
+					spawn_system = {
+						min_distance >= 3
+						max_distance <= 10
+						min_orientation_angle = 24
+						max_orientation_angle = 66
+						initializer = hfe_tsp_ssb_thoth_system_initializer
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_system = {
+						distance = {
+							source = root
+							min_jumps = 1
+							max_jumps = 3
+						}
+						has_access_fleet = event_target:empire_that_met_thoth
+						NOT = {
+							any_fleet_in_system = {
+								owner = { 
+									is_hostile = event_target:empire_that_met_thoth
+								}
+							}
 						}
 					}
 				}
-				set_custom_capital_location = event_target:hfe_thoth_station
+				if = {
+					limit = { has_global_flag = HFE_TSP_spawn_test }
+					log = "Thoth system spawn started"
+				}
+				closest_system = {
+					min_steps = 1
+					max_steps = 4
+					limit = {
+						has_access_fleet = event_target:empire_that_met_thoth
+						NOT = {
+							any_fleet_in_system = {
+								owner = { 
+									is_hostile = event_target:empire_that_met_thoth
+								}
+							}
+						}
+					}
+					spawn_system = {
+						min_distance >= 4
+						max_distance <= 31
+						min_orientation_angle = 24
+						max_orientation_angle = 66
+						initializer = hfe_tsp_ssb_thoth_system_initializer
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { has_global_flag = HFE_TSP_spawn_test }
+					log = "Thoth system started"
+				}
+				closest_system = {
+					min_steps = 1
+					max_steps = 2
+					spawn_system = {
+						min_distance >= 5
+						max_distance <= 31
+						min_orientation_angle = 24
+						max_orientation_angle = 66
+						initializer = hfe_tsp_ssb_thoth_system_initializer
+					}
+				}
 			}
 		}
 	}
-	option = {
-		name = hfe.700.0
-		trigger = {
-			is_ship_size = science
-		}
-		tooltip = {
-			enable_special_project = {
-				name = hfe_project_thoth_contact
-				location = event_target:hfe_thoth_location
-				owner = root.owner
-			}
-		}
-	}
+
 	option = {
 		name = hfe.700.1
-		trigger = {
-			not = {
-				is_ship_size = science
-			}
-		}
-		tooltip = {
-			enable_special_project = {
-				name = hfe_project_thoth_contact
-				location = event_target:hfe_thoth_location
-				owner = root.owner
-			}
-		}
 	}
+
+#	after = {
+#		event_target:hfe_thoth_war_computer = {
+#			fleet = {
+#				set_location = {
+#					target = event_target:hfe_thoth_location
+#					distance = 1
+#					angle = 69
+#				}
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = hfe.700.0
+#		trigger = {
+#			is_ship_size = science
+#		}
+#		tooltip = {
+#
+#		}
+#	}
+#	option = {
+#		name = hfe.700.1
+#		trigger = {
+#			not = {
+#				is_ship_size = science
+#			}
+#		}
+#		tooltip = {
+#			enable_special_project = {
+#				name = hfe_project_thoth_contact
+#				location = event_target:hfe_thoth_location
+#				owner = root.owner
+#			}
+#		}
+#	}
 }
 
 # project complete
@@ -6545,9 +6739,11 @@ ship_event = {
 	show_sound = event_ship_thrusters
 	location = root
 	is_triggered_only = yes
+
 	trigger = {
 		exists = event_target:hfe_thoth_station
 	}
+
 	option = {
 		name = hfe_at_the_sreen
 		hfe_effect_leader_add_exp_100 = yes
@@ -6556,6 +6752,7 @@ ship_event = {
 				hfe_effect_remove_signal_object_from_this = yes
 			}
 			owner = {
+				set_country_flag = engaged_contact_with_thoth
 				establish_communications = event_target:hfe_thoth
 				set_country_flag = hfe.702.0
 				country_event = {
@@ -6819,7 +7016,7 @@ country_event = {
 	}
 	option = {
 		name = hfe.702.6.1
-		response_text = hfe.702.6.0.response
+		response_text = hfe.702.6.2
 		trigger = {
 			has_country_flag = hfe.702.6
 			has_country_flag = hfe_egypt_contacted
@@ -6836,8 +7033,8 @@ country_event = {
 		}
 	}
 	option = {
-		name = hfe.702.6.2
-		response_text = hfe.702.6.0.response
+		name = hfe.702.6.2.1
+		response_text = hfe.702.6.0.response_never_met_not_exist
 		trigger = {
 			has_country_flag = hfe.702.6
 			nand = {
@@ -6857,6 +7054,20 @@ country_event = {
 		}
 		hidden_effect = {
 			remove_country_flag = hfe.702.goodend
+		}
+		event_target:hfe_thoth = {
+			set_faction_hostility = {
+				target = event_target:empire_that_met_thoth
+				set_hostile = no
+				set_neutral = no
+				set_friendly = yes
+			}
+		}
+		set_faction_hostility = {
+			target = event_target:hfe_thoth
+			set_hostile = no
+			set_neutral = no
+			set_friendly = yes
 		}
 	}
 }
@@ -6931,7 +7142,7 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				29 = { # If the Ju Ahet like you, they will trust you
+				50 = { # If the Ju Ahet like you, they will trust you
 					set_country_flag = hfe.702.goodend
 				}
 				1 = {
@@ -6967,10 +7178,10 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				9 = {
+				90 = {
 					set_country_flag = hfe.702.goodend
 				}
-				1 = {
+				10 = {
 					set_country_flag = hfe.702.badend
 				}
 			}
@@ -7070,6 +7281,82 @@ country_event = {
 	}
 }
 
+fleet_event = {
+	id = hfe.706
+	title = hfe.700.name
+	desc = hfe.700.desc
+	picture = GFX_evt_hfe_thoth
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			FROM = {
+				has_star_flag = hfe_thoth_was_here
+			}
+			FROM = {
+				any_system_planet = {
+					has_planet_flag = call_thoth
+				}
+			}
+		}
+		root.owner = { NOT = { has_country_flag = hfe_entered_thoth_system } }
+	}
+
+	option = {
+		name = hfe.700.1
+		root.owner = { set_country_flag = hfe_entered_thoth_system }
+#		if = {
+#			limit = { is_ai = yes }
+#			enable_special_project = {
+#				name = hfe_project_thoth_contact
+#				location = event_target:hfe_thoth_location
+#				owner = root.owner
+#			}
+#		}
+	}
+	after = {
+		every_country = {
+			limit = {
+				is_ai = yes
+			}
+			establish_communications_no_message = event_target:hfe_thoth_station
+		}
+	}
+}
+
+country_event = {
+	id = hfe.707
+	hide_window = yes
+
+#	pre_triggers = {
+#		is_ai = yes
+#	}
+
+	trigger = {
+		is_ai = yes
+		NOT = {
+			is_country_type = default
+		}
+		is_country_type = hfe_thoth
+		has_global_flag = galactic_community_founded
+		NOT = {
+			is_galactic_community_member = yes
+			has_global_flag = hfe_thoth_votes
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		add_to_galactic_community = yes
+		set_global_flag = hfe_thoth_votes
+		set_country_flag = galcom_form_aye
+	}
+}
+
 # start event diplomacy
 country_event = {
 	id = hfe.710
@@ -7083,6 +7370,8 @@ country_event = {
 		not = {
 			has_country_flag = hfe.711_block
 		}
+		has_country_flag = engaged_contact_with_thoth
+		is_ai = no
 	}
 	immediate = {
 		country_event = {
@@ -7096,6 +7385,8 @@ country_event = {
 country_event = {
 	id = hfe.711
 	title = TRANSMISSION
+	location = event_target:hfe_thoth_location
+	trackable = yes
 	desc = hfe.711.desc.0.0
 	desc = hfe.711.desc.0.1
 	desc = hfe.711.desc.0.2
@@ -7109,7 +7400,7 @@ country_event = {
 				has_country_flag = hfe.711.4.5
 			}
 		}
-		trigger = {
+		trigger = { # Gender question
 			# dialog 0
 			success_text = {
 				text = hfe.711.desc.4.1
@@ -7323,6 +7614,9 @@ country_event = {
 				has_country_flag = hfe.711.4.4
 				has_country_flag = hfe.711.4.5
 			}
+			NOT = {
+				has_country_flag = did_you_just_assume_thoths_gender
+			}
 		}
 		hfe_effect_event_711_next = yes
 	}
@@ -7516,6 +7810,78 @@ country_event = {
 	}
 }
 
+country_event = { # Fall back in case Thoth diplomacy does not load, prevents AI from buying Thoth wares
+	id = hfe.713
+	title = "THOTH_AI_DEFAULT"
+	desc = "THOTH_AI_DEFAULT_DESC"
+	picture = GFX_evt_hfe_thoth
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = event_target:hfe_thoth_location
+	trackable = yes
+
+	trigger = {
+		OR = {
+			is_ai = yes
+			NOT = {
+				has_country_flag = hfe_thoth_contacted_first
+				is_country = event_target:empire_that_met_thoth
+			}
+		}
+		FROM = {
+			OR = {
+				is_country_type = hfe_thoth
+				has_country_flag = hfe_thoth
+			}
+		}
+	}
+
+	immediate = {
+		event_target:hfe_thoth = {
+			add_to_galactic_community = yes
+		}
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+country_event = { # Before you complete the Special Project, you cannot communicate with Thoth
+	id = hfe.714
+	title = "THOTH_SILENCE"
+	desc = "THOTH_SILENCE_DESC"
+	picture = GFX_evt_hfe_thoth
+	show_sound = event_ghost_town
+	is_triggered_only = yes
+	location = event_target:hfe_thoth_location
+	trackable = yes
+
+#	pre_triggers = {
+#		is_ai = no
+#	}
+
+	trigger = {
+		is_ai = no
+		OR = {
+			NOT = { has_established_contact = event_target:hfe_thoth }
+			NOT = { has_country_flag = engaged_contact_with_thoth }
+			has_special_project = hfe_project_thoth_contact
+		}
+		FROM = {
+			OR = {
+				is_country_type = hfe_thoth
+				has_country_flag = hfe_thoth
+			}
+		}
+		NOT = { has_country_flag = hfe.711_block }
+	}
+
+	option = {
+		name = "THOTH_SILENCE_RESPONSE"
+	}
+}
+
 # memory installed
 ship_event = {
 	id = hfe.720
@@ -7620,16 +7986,30 @@ fleet_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		is_ship_class = shipclass_military
+#		is_ship_class = shipclass_military
 		exists = owner
 		exists = event_target:hfe_thoth
 		owner = {
-			is_hostile = event_target:hfe_thoth
+			OR = {
+				is_hostile = event_target:hfe_thoth
+				is_crisis_faction = yes
+				is_country_type = ai_empire
+				is_country_type = swarm
+				is_country_type = extradimensional
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+				is_country_type = shroud
+				is_country_type = shroud_spirits
+				has_country_flag = hfe_egypt
+			}
 		}
 		exists = solar_system
 		solar_system = {
 			any_fleet_in_system = {
-				has_fleet_flag = hfe_thoth_station
+				OR = {
+					has_fleet_flag = hfe_thoth_station
+					has_fleet_flag = hfe_thoth_war_computer
+				}
 			}
 		}
 	}
@@ -7658,15 +8038,17 @@ country_event = {
 	immediate = {
 		random_relation = {
 			limit = {
-				not = {
+				NOT = {
 					is_hostile = event_target:hfe_thoth
 				}
-				any_system_within_border = {
-					not = {
-						any_fleet_in_system = {
-							exists = owner
-							owner = {
-								is_hostile = event_target:hfe_thoth
+				capital_scope = {
+					solar_system = {
+						NOT = {
+							any_fleet_in_system = {
+								exists = owner
+								owner = {
+									is_hostile = event_target:hfe_thoth
+								}
 							}
 						}
 					}
@@ -7678,23 +8060,39 @@ country_event = {
 					add = 1000
 					is_ai = no
 				}
-			}
-			random_system_within_border = {
-				limit = {
-					not = {
-						any_fleet_in_system = {
-							exists = owner
-							owner = {
-								is_hostile = event_target:hfe_thoth
-							}
-						}
+				modifier = {
+					add = 100
+					OR = {
+						has_country_flag = hfe_future
+						has_ethic = ethic_fanatic_pacifist
+						is_xenophile = yes
 					}
 				}
-				random_system_planet = {
-					event_target:hfe_thoth_station = {
-						set_location = {
-							target = prev
-							distance = 10
+				modifier = {
+					add = -999
+					is_crisis_faction = yes
+				}
+				modifier = {
+					add = -9999
+					has_country_flag = hfe_egypt
+				}
+			}
+			capital_scope = {
+				solar_system = {
+					random_system_planet = {
+						limit = {
+							OR = {
+								is_colony = no
+								uninhabitable_regular_planet = yes
+								is_planet_class = pc_gas_giant
+								is_planet_class = pc_shrouded
+							}
+						}
+						event_target:hfe_thoth_station = {
+							set_location = {
+								target = prev
+								distance = 10
+							}
 						}
 					}
 				}
@@ -7752,19 +8150,30 @@ country_event = {
 			not = {
 				has_country_flag = hfe.729.1
 			}
-
-			# ?????????
-
-			or = {
-				has_ethic = ethic_gestalt_consciousness
-				always = yes
-			}
+#
+#			# ?????????
+#			or = {
+#				has_ethic = ethic_gestalt_consciousness
+#				always = yes
+#			}
 		}
 		hidden_effect = {
 			set_country_flag = hfe.729.1
 			set_country_flag = hfe.729.1.0
 			country_event = {
 				id = hfe.729
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					is_xenophobe = yes
+					has_civic = civic_machine_terminator
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_fanatic_purifiers
+				}
 			}
 		}
 	}
