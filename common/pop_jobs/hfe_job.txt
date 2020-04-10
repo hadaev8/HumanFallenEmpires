@@ -808,7 +808,7 @@ hfe_job_cataloger = {
 		worker_job_check_trigger = yes # Cataloging, gathering, sorting, and inventorying are all considered entry-level jobs in RL, thus not complex
 	}
 	resources = {
-		category = hfe_job_cataloger
+		category = hfe_job_catalogers
 		produces = {
 			alloys = 2
 			engineering_research = 1
@@ -911,7 +911,7 @@ hfe_job_cataloger_gestalt = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_cataloger
+		category = hfe_job_catalogers
 		produces = {
 			alloys = 2
 			engineering_research = 1
@@ -1039,7 +1039,7 @@ hfe_job_recycler = {
 		worker_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 3
 			consumer_goods = 2
@@ -1108,7 +1108,7 @@ hfe_job_recycler_machine = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 3
 			alloys = 1
@@ -1182,7 +1182,7 @@ hfe_job_recycler_hive_mind = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 2
 			alloys = 1
@@ -1745,6 +1745,15 @@ hfe_job_mechanicus_cultist = {
 				has_trait = trait_machine_unit
 			}
 		}
+		modifier = {
+			factor = 0.01
+			owner = {
+				has_monthly_income = {
+					resource = food
+					value < 10
+				}
+			}
+		}
 		# crisis purge
 		modifier = {
 			factor = 0
@@ -1764,7 +1773,7 @@ hfe_job_godforge_fulfilment_center = {
 	building_icon = building_nano_forge
 	is_capped_by_modifier = no
 	can_set_priority = no
-	clothes_texture_index = 3
+	clothes_texture_index = 2
 	contributes_to_diplo_weight = no # For balance's sake
 
 	possible_pre_triggers = {
@@ -1788,7 +1797,7 @@ hfe_job_godforge_fulfilment_center = {
 	}
 
 	pop_modifier = {
-		pop_happiness = -0.25
+		pop_happiness = -0.30
 	}
 
 #	triggered_pop_modifier = {
@@ -1811,43 +1820,74 @@ hfe_job_godforge_fulfilment_center = {
 			engineering_research = 0.5
 			alloys = 0.2
 			consumer_goods = 0.2
-			food = 0.3
+			food = 1
 		}
 		upkeep = {
 			trigger = {
 				owner = {
-					OR = {
-						NOT = { has_country_flag = hfe_varelse_primitive_0 }
-						NOT = { is_primitive = yes }
-						NOT = { is_country_type = primitive }
+					NOT = {
+						has_country_flag = hfe_varelse_primitive_0
+						is_primitive = yes
+						is_country_type = primitive
 					}
 				}
 			}
 			energy = 0.25
 			minerals = 0.2
-			unity = 1
 		}
 		upkeep = {
 			trigger = {
-				is_lithoid = yes
+				OR = {
+					is_lithoid = yes
+					has_trait = trait_lithoid
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+					is_robot_pop = yes
+				}
 			}
 			energy = 0.2
 		}
 		upkeep = {
 			trigger = {
-				is_lithoid = no
 				NOT = {
-					owner = { is_lithoid_empire = yes }
+					is_lithoid = yes
+					has_trait = trait_lithoid
+				}
+				NOT = {
+					is_robot_pop = yes
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
 				}
 			}
-			food = 1
+			minerals = 0.25
+		}
+		upkeep = {
+			trigger = {
+				NOT = {
+					owner = {
+						has_country_flag = hfe_varelse_primitive_0
+					}
+				}
+			}
+			unity = 2
 		}
 	}
 
 	weight = {
-		weight = 0.01
+		weight = @special_job_weight
 		modifier = {
-			factor = 5
+			factor = 0
+			planet = { has_available_jobs = farmer }
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_job = farmer
+				has_job = primitive_farmer
+			}
+		}
+		modifier = {
+			factor = 1
 			is_enslaved = yes
 		}
 	}
