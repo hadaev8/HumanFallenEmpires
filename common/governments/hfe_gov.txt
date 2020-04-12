@@ -25,11 +25,22 @@ hfe_gov_blight = {
 
 hfe_gov_high_mechanicus = {
 	ruler_title = HIGH_MECHANICUS
+	ruler_title_female = HIGH_MECHANICUS
 	possible = {
 #		has_country_flag = hfe_varelse_primitive_0
-		has_civic = hfe_civic_high_mechanicus
+		OR = {
+			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+			has_country_flag = high_mechanicus_befriended
+			has_country_flag = high_mechanicus_can_into_space
+		}
 		NOT = {
+			has_country_flag = colony_beta_raided
+			has_country_flag = mechanicus_plundered_by_xenoes
+			has_country_flag = varelse_fedora_governance
 			has_civic = hfe_civic_overthrown_mechanicus
+			has_civic = civic_barbaric_despoilers
+			is_materialist = yes
 		}
 	}
 	weight = {
@@ -37,12 +48,16 @@ hfe_gov_high_mechanicus = {
 		modifier = {
 			factor = 1
 			has_civic = hfe_civic_high_mechanicus
+			NOT = {
+				has_country_flag = mechanicus_plundered_by_xenoes
+			}
 		}
 		modifier = {
 			factor = 0
 			OR = {
 				has_country_flag = varelse_fedora_governance
 				has_civic = hfe_civic_overthrown_mechanicus
+				has_country_flag = mechanicus_plundered_by_xenoes
 			}
 		}
 		modifier = {
@@ -50,22 +65,39 @@ hfe_gov_high_mechanicus = {
 			is_materialist = yes
 		}
 		modifier = {
-			factor = 1
+			factor = 2
 			OR = {
 				has_country_flag = high_mechanicus_retained
 				has_country_flag = high_mechanicus_befriended
 			}
+			NOT = {	has_country_flag = mechanicus_plundered_by_xenoes }
+		}
+		modifier = {
+			factor = 0
+			has_country_flag = mechanicus_plundered_by_xenoes
+		}
+		modifier = {
+			factor = 0
+			has_civic = civic_barbaric_despoilers
 		}
 	}
 }
 
 hfe_gov_high_mechanicus_overthrown = {
 	ruler_title = FABRICATOR_GENERAL
+	ruler_title_female = FABRICATOR_GENERAL
 	possible = {
 #		has_country_flag = hfe_varelse_primitive_0
-		has_civic = hfe_civic_overthrown_mechanicus
+		OR = {
+			has_civic = hfe_civic_overthrown_mechanicus
+			has_country_flag = varelse_fedora_governance
+		}
 		NOT = {
 			has_civic = hfe_civic_high_mechanicus
+			has_country_flag = high_mechanicus_retained
+			has_country_flag = high_mechanicus_befriended
+			has_country_flag = mechanicus_plundered_by_xenoes
+			has_civic = civic_barbaric_despoilers
 		}
 	}
 	weight = {
@@ -88,6 +120,53 @@ hfe_gov_high_mechanicus_overthrown = {
 		modifier = {
 			factor = 0
 			has_civic = hfe_civic_high_mechanicus
+		}
+		modifier = {
+			factor = 0
+			has_country_flag = mechanicus_plundered_by_xenoes
+		}
+		modifier = {
+			factor = 0
+			has_civic = civic_barbaric_despoilers
+		}
+	}
+}
+
+hfe_gov_plundered_mechanicus = {
+	ruler_title = HIGH_MECHANICUS
+	ruler_title_female = HIGH_MECHANICUS
+	possible = {
+		has_country_flag = high_mechanicus_can_into_space
+		OR = {
+			has_country_flag = mechanicus_plundered_by_xenoes
+			has_civic = civic_barbaric_despoilers
+		}
+		NOT = {
+			has_country_flag = high_mechanicus_befriended
+			has_country_flag = varelse_fedora_governance
+			is_xenophile = yes
+		}
+	}
+	weight = { # Must be more than the normal Bandit Kingdom!
+		base = 99999
+		modifier = {
+			add = 99999
+			has_country_flag = mechanicus_plundered_by_xenoes
+		}
+		modifier = {
+			add = 99999
+			has_civic = civic_barbaric_despoilers
+		}
+		modifier = {
+			factor = 0
+			NOT = {	has_country_flag = mechanicus_plundered_by_xenoes }
+		}
+		modifier = {
+			factor = 200
+			AND = {
+				has_civic = civic_barbaric_despoilers
+				has_country_flag = mechanicus_plundered_by_xenoes
+			}
 		}
 	}
 }

@@ -87,6 +87,7 @@ country_event = { # Default, their civilization continues naturally
 		OR = {
 			NOT = { is_country_type = primitive }
 			has_country_flag = primitives_can_into_space
+			has_country_flag = high_mechanicus_can_into_space
 		}
 		OR = {
 			has_country_flag = high_mechanicus_retained
@@ -107,32 +108,91 @@ country_event = { # Default, their civilization continues naturally
 	}
 
 	immediate = {
-		hfe_effect_cleanse_ethics = yes
+		hidden_effect = { hfe_effect_cleanse_ethics = yes }
 		random_list = {
-			50 = {
+			40 = {
 				country_add_ethic = ethic_fanatic_spiritualist
-				country_add_ethic = ethic_authoritarian				
+				country_add_ethic = ethic_authoritarian
+				modifier = {
+					factor = 0
+					has_country_flag = mechanicus_plundered_by_xenoes
+				}		
 			}
-			50 = {
+			60 = {
 				country_add_ethic = ethic_spiritualist
 				country_add_ethic = ethic_authoritarian
 				country_add_ethic = ethic_xenophobe
+				modifier = {
+					factor = 0
+					has_country_flag = mechanicus_plundered_by_xenoes
+				}
+			}
+			1 = {
+				country_add_ethic = ethic_xenophobe
+				country_add_ethic = ethic_spiritualist
+				country_add_ethic = ethic_militarist
+				modifier = {
+					add = 999
+					has_country_flag = mechanicus_plundered_by_xenoes
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_country_flag = mechanicus_plundered_by_xenoes
+					}
+				}
 			}
 		}
-		change_government = {
-			authority = auth_dictatorial
-			civics = {
-				civic = hfe_civic_high_mechanicus
-				civic = civic_exalted_priesthood
+		if = {
+			limit = {
+				NOT = { has_country_flag = mechanicus_plundered_by_xenoes }
 			}
+			change_government = {
+				authority = auth_dictatorial
+				civics = {
+					civic = hfe_civic_high_mechanicus
+					civic = civic_exalted_priesthood
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = mechanicus_plundered_by_xenoes }
+			change_government = {
+				authority = auth_dictatorial
+				civics = {
+					civic = hfe_civic_high_mechanicus
+					civic = civic_barbaric_despoilers
+				}
+			}
+		}
+		give_technology = {
+			tech = tech_droid_workers
+			message = no
 		}
 		hfe_effect_mechanicus_level_up = yes
 		set_empire_name = "Cult of the Machine That-Speaks-to-God"
 		set_graphical_culture = hfe_graphical_culture_drone
 		set_city_graphical_culture = industrial_01
 		set_country_flag = high_mechanicus_can_into_space
-		log = "Colony Beta has been preserved and entered FTL"
-
+		
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = mechanicus_plundered_by_xenoes
+					has_civic = civic_barbaric_despoilers
+				}
+			}
+			log = "Colony Beta has been preserved and entered FTL"
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = mechanicus_plundered_by_xenoes
+					has_civic = civic_barbaric_despoilers
+				}
+			}
+			log = "Colony Beta was plundered and entered FTL"
+		}
 		capital_scope = {
 			remove_all_armies = yes
 			while = {
@@ -216,6 +276,34 @@ country_event = { # Default, their civilization continues naturally
 					type = hfe_army_high_mechanicus_bodyguards
 				}
 			}
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							has_country_flag = mechanicus_plundered_by_xenoes
+							has_civic = civic_barbaric_despoilers
+						}
+					}
+				}
+				while = {
+					count = 10
+					create_army = {
+						name = "Sons of the Master"
+						owner = owner
+						species = event_target:hfe_varelse_species
+						type = assault_army
+					}
+				}
+				while = {
+					count = 5
+					create_army = {
+						name = "Godforge Preemptive Self-Defense Drones"
+						owner = owner
+						species = event_target:hfe_varelse_leftover_robots
+						type = robotic_army
+					}
+				}
+			}
 		}
 	}
 }
@@ -241,7 +329,7 @@ country_event = { # If you befriended the High Mechanicus
 	}
 
 	immediate = {
-		hfe_effect_cleanse_ethics = yes
+		hidden_effect = { hfe_effect_cleanse_ethics = yes }
 		country_add_ethic = ethic_spiritualist
 		country_add_ethic = ethic_xenophile
 		country_add_ethic = ethic_authoritarian
@@ -251,6 +339,10 @@ country_event = { # If you befriended the High Mechanicus
 				civic = hfe_civic_high_mechanicus
 				civic = civic_exalted_priesthood
 			}
+		}
+		give_technology = {
+			tech = tech_droid_workers
+			message = no
 		}
 		hfe_effect_mechanicus_level_up = yes
 		set_empire_name = "Cult of the Machine-That-Speaks-to-God"
@@ -411,9 +503,9 @@ country_event = { # If you betrayed the High Mechanicus
 		}
 
 		add_resource = {
-			physics_research = 1750
-			society_research = 1750
-			engineering_research = 1750
+			physics_research = 2000
+			society_research = 2000
+			engineering_research = 2000
 		}
 
 #		set_graphical_culture = fallen_empire_02 # Green, same as Suprirse Fleet
@@ -426,7 +518,7 @@ country_event = { # If you betrayed the High Mechanicus
 		capital_scope = {
 			remove_all_armies = yes
 			while = {
-				count = 4
+				count = 5
 				create_army = {
 					name = "Regime Enforcers"
 					owner = owner
@@ -435,7 +527,7 @@ country_event = { # If you betrayed the High Mechanicus
 				}
 			}
 			while = {
-				count = 20
+				count = 30
 				create_army = {
 					name = "Instruments of the Machine"
 					owner = owner
@@ -444,7 +536,7 @@ country_event = { # If you betrayed the High Mechanicus
 				}
 			}
 			while = {
-				count = 7
+				count = 10
 				create_army = {
 					name = "Godforge Sentinels"
 					owner = owner
@@ -462,7 +554,7 @@ country_event = { # If you betrayed the High Mechanicus
 				}
 			}
 			while = {
-				count = 3
+				count = 5
 				create_army = {
 					name = "Repurposed Adaptus Mechanicus"
 					owner = owner

@@ -777,6 +777,13 @@ hfe_building_high_mechanicus_stronghold = {
 	category = government
 
 	potential = {
+#		planet = {
+#			OR = {
+#				has_planet_flag = hfe_varelse_colony
+#				has_planet_flag = colony_beta
+#				is_planet = event_target:colony_beta_planet
+#			}
+#		}
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
 		owner = {
 			OR = {
@@ -806,21 +813,25 @@ hfe_building_high_mechanicus_stronghold = {
 	}
 
 	destroy_trigger = {
-		owner = {
-			OR = {
-				NOT = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
-				NOT = {
-					has_country_flag = high_mechanicus_retained
-					has_country_flag = mechanicus_befriended
-					has_civic = hfe_civic_high_mechanicus
+		OR = {
+			planet = { has_owner = no }
+			owner = {
+	#			planet = { has_owner = yes }
+				OR = {
+					NOT = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
+					NOT = {
+						has_country_flag = high_mechanicus_retained
+						has_country_flag = mechanicus_befriended
+						has_civic = hfe_civic_high_mechanicus
+					}
+					AND = {
+						has_country_flag = hfe_varelse_primitive_0
+						is_materialist = yes
+					}
+					has_country_flag = varelse_fedora_governance
+					has_civic = hfe_civic_overthrown_mechanicus
+					has_ethic = ethic_gestalt_consciousness
 				}
-				AND = {
-					has_country_flag = hfe_varelse_primitive_0
-					is_materialist = yes
-				}
-				has_country_flag = varelse_fedora_governance
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_ethic = ethic_gestalt_consciousness
 			}
 		}
 	}
@@ -992,6 +1003,13 @@ hfe_building_fedora_stronghold = {
 	category = government
 
 	potential = {
+#		planet = {
+#			OR = {
+#				has_planet_flag = hfe_varelse_colony
+#				has_planet_flag = colony_beta
+#				is_planet = event_target:colony_beta_planet
+#			}
+#		}
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
 		owner = {
 			OR = {
@@ -1008,6 +1026,7 @@ hfe_building_fedora_stronghold = {
 				has_civic = hfe_civic_high_mechanicus
 				is_spiritualist = yes
 				has_ethic = ethic_gestalt_consciousness
+#				planet = { has_owner = yes }
 			}
 		}
 	}
@@ -1023,16 +1042,18 @@ hfe_building_fedora_stronghold = {
 	}
 
 	destroy_trigger = {
+#		planet = { has_owner = no }
 		owner = {
+#			planet = { has_owner = yes }
 			OR = {
 				NOT = { has_country_flag = hfe_varelse_primitive_0 }
 				has_country_flag = high_mechanicus_retained
 				has_country_flag = mechanicus_befriended
 				has_civic = hfe_civic_high_mechanicus
-				NOT = {
-					has_civic = hfe_civic_overthrown_mechanicus
-					has_country_flag = varelse_fedora_governance
-				}
+			}
+			NOT = {
+				has_civic = hfe_civic_overthrown_mechanicus
+				has_country_flag = varelse_fedora_governance
 				has_ethic = ethic_gestalt_consciousness
 			}
 		}
@@ -1116,7 +1137,7 @@ hfe_building_fedora_stronghold = {
 		hfe_building_high_mechanicus_stronghold_gestalt
 	}
 
-		ai_resource_production = {
+	ai_resource_production = {
 #		# This is meant to keep the Varelse Hegemony alive
 #		# because it has many more Pops than a Primitive should
 		trigger = {
@@ -1167,7 +1188,7 @@ hfe_building_fedora_stronghold = {
 hfe_building_high_mechanicus_stronghold_conquered = {
 	icon = building_citadel_of_faith
 	base_cap_amount = 1
-	base_buildtime = 3650
+	base_buildtime = 1
 	can_build = no
 	can_be_disabled = no
 	can_demolish = no
@@ -1202,6 +1223,7 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 	}
 
 	destroy_trigger = {
+#		planet = { has_owner = yes }
 		owner = {
 			OR = {
 				has_country_flag = hfe_varelse_primitive_0
@@ -1213,8 +1235,10 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 				has_government = hfe_gov_high_mechanicus
 				has_government = hfe_gov_high_mechanicus_overthrown
 				has_ethic = ethic_gestalt_consciousness
+#				NOT = { exists = owner }
 			}
 		}
+#		NOT = { planet = { has_owner = yes } }
 	}
 
 	resources = {
@@ -1366,48 +1390,14 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 #		# This is meant to keep the Varelse Hegemony alive
 #		# because it has many more Pops than a Primitive should
 		trigger = {
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_primitive = yes }
-				owner = { is_country_type = primitive }
-				owner = {
-					has_monthly_income = {
-						resource = food
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = energy
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = minerals
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = consumer_goods
-						value > 30
-					}
-				}
-						owner = {
-							has_monthly_income = {
-								resource = exotic_gases
-								value > 20
-							}
-						}
-					}
-				}
-				minerals = 30
-				energy = 50
-				engineering_research = 20
-				food = 30
-				consumer_goods = 25
-			}
+			always = yes
+		}
+		minerals = 30
+		energy = 50
+		engineering_research = 20
+		food = 30
+		consumer_goods = 25
+	}
 }
 
 hfe_building_high_mechanicus_stronghold_gestalt = {
@@ -1437,6 +1427,7 @@ hfe_building_high_mechanicus_stronghold_gestalt = {
 	}
 
 	destroy_trigger = {
+#		planet = { has_owner = no }
 		owner = {
 			OR = {
 				has_country_flag = hfe_varelse_primitive_0

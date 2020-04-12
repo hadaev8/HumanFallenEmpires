@@ -1277,6 +1277,10 @@ hfe_job_godforge_primitive = {
 		planet_stability_add = 5
 	}
 
+	pop_modifier = {
+		pop_political_power = 1
+	}
+
 	resources = {
 		category = hfe_godforge
 		produces = {
@@ -1370,6 +1374,10 @@ hfe_job_godforge_overlord = {
 		planet_orbital_bombardment_damage = 0.05
 	}
 
+	pop_modifier = {
+		pop_political_power = 1
+	}
+
 	resources = {
 		category = hfe_godforge
 		produces = {
@@ -1380,14 +1388,6 @@ hfe_job_godforge_overlord = {
 			minor_artifacts = 1
 			unity = 5
 		}
-#		produces = {
-#				owner = { has_global_flag = hfe_hardcore_disable }
-#				NOT = {
-#					owner = { has_country_flag = hfe_varelse_primitive_0 }
-#				}
-#			}
-#			minor_artifacts = 0.04
-#		}
 		produces = {
 			trigger = {
 				NOT = {
@@ -1402,7 +1402,7 @@ hfe_job_godforge_overlord = {
 				has_trait = trait_repugnant
 				has_trait = trait_robot_uncanny
 			}
-			unity = -5
+			unity = -4
 		}
 		upkeep = {
 			trigger = {
@@ -1553,6 +1553,10 @@ hfe_job_mechanicus_bodyguard = {
 		pop_defense_armies_add = 1
 	}
 
+	pop_modifier = {
+		pop_political_power = 0.5
+	}
+
 	weight = {
 		weight = 5
 		modifier = {
@@ -1664,6 +1668,18 @@ hfe_job_mechanicus_cultist = {
 		planet_crime_add = -2
 		planet_stability_add = 2
 	}
+
+	triggered_planet_modifier = {
+		potential = {
+			planet = {
+				NOT = {
+					has_planet_flag = colony_beta
+					has_planet_flag = high_mechanicus_planet
+				}
+			}
+		}
+		pop_environment_tolerance = -0.01
+	}
 	
 	triggered_planet_modifier = {
 		potential = {
@@ -1676,14 +1692,10 @@ hfe_job_mechanicus_cultist = {
 			planet_amenities_add = 1
 		}
 	}
-	triggered_planet_modifier = {
-		potential = {
-			has_trait = trait_repugnant
-		}
-		modifier = {
-			planet_amenities_add = -1
-		}
-	}	
+
+	pop_modifier = {
+		pop_political_power = 0.5
+	}
 	
 	weight = {
 		weight = @worker_job_weight	
@@ -1746,7 +1758,7 @@ hfe_job_mechanicus_cultist = {
 			}
 		}
 		modifier = {
-			factor = 0.01
+			factor = 0.5
 			owner = {
 				has_monthly_income = {
 					resource = food
@@ -1790,6 +1802,12 @@ hfe_job_godforge_fulfilment_center = {
 				has_planet_flag = high_mechanicus_planet
 			}
 		}
+		OR = {
+			is_unemployed = yes
+			has_job = no
+			hfe_trigger_uncapped_job = yes
+			is_shackled_robot = yes # Catch-all
+		}
 	}
 
 	planet_modifier = {
@@ -1798,6 +1816,7 @@ hfe_job_godforge_fulfilment_center = {
 
 	pop_modifier = {
 		pop_happiness = -0.30
+		pop_political_power = -0.25
 	}
 
 #	triggered_pop_modifier = {
@@ -1875,10 +1894,16 @@ hfe_job_godforge_fulfilment_center = {
 
 	weight = {
 		weight = @special_job_weight
-		modifier = {
-			factor = 0
-			planet = { has_available_jobs = farmer }
-		}
+#		modifier = {
+#			factor = 0
+#			planet = {
+#				OR = {
+#					has_available_jobs = farmer
+#					has_available_jobs = miner
+#					has_available_jobs = technician
+#				}
+#			}
+#		}
 		modifier = {
 			factor = 0
 			OR = {
@@ -1887,8 +1912,26 @@ hfe_job_godforge_fulfilment_center = {
 			}
 		}
 		modifier = {
-			factor = 1
-			is_enslaved = yes
+			factor = 0
+			OR = {
+				has_job = technician
+				has_job = primitive_technician
+			}
 		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_job = miner
+				has_job = primitive_miner
+			}
+		}
+		modifier = {
+			factor = 10
+			has_job = no
+		}
+#		modifier = {
+#			factor = 1
+#			is_enslaved = yes
+#		}
 	}
 }

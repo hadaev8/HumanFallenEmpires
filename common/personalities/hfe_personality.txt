@@ -246,7 +246,7 @@ hfe_personality_ahet_primitive_0 = {
 }
 
 hfe_personality_varelse_primitive_0_0 = {
-	aggressiveness = 0.5
+	aggressiveness = 0.6
 	trade_willingness = 1.1
 	bravery = 0.5
 	combat_bravery = 1
@@ -286,14 +286,19 @@ hfe_personality_varelse_primitive_0_0 = {
 	allow = {
 #		has_country_flag = hfe_varelse
 		has_country_flag = hfe_varelse_primitive_0
+		NOT = { has_country_flag = mechanicus_plundered_by_xenoes }
 		OR = {
-			AND = {
-				is_spiritualist = yes
-				is_country_type = primitive
-			}
+			has_country_flag = high_mechanicus_can_into_space
 			has_government = hfe_gov_high_mechanicus
 			has_civic = hfe_civic_high_mechanicus
 			has_country_flag = high_mechanicus_retained
+			has_country_flag = high_mechanicus_befriended
+		}
+		NOT = {
+			has_country_flag = varelse_fedora_governance
+			has_civic = hfe_civic_overthrown_mechanicus
+			has_government = hfe_gov_high_mechanicus_overthrown
+			is_materialist = yes
 		}
 	}
 	weight_modifier = {
@@ -307,8 +312,18 @@ hfe_personality_varelse_primitive_0_0 = {
 			has_country_flag = high_mechanicus_retained
 		}
 		modifier = {
+			factor = 10
+			has_country_flag = high_mechanicus_befriended
+		}
+		modifier = {
 			factor = 0
 			has_country_flag = varelse_fedora_governance
+		}
+		modifier = {
+			factor = 0
+			has_country_flag = varelse_fedora_governance
+			has_civic = hfe_civic_overthrown_mechanicus
+			has_government = hfe_gov_high_mechanicus_overthrown
 		}
 	}
 }
@@ -325,7 +340,7 @@ hfe_personality_varelse_primitive_0_1 = {
 	defensive_pact_acceptance = 20
 	commercial_pact_acceptance = 40
 	migration_pact_acceptance = 0
-	research_agreement_acceptance = 200
+	research_agreement_acceptance = 500
 	weapon_preferences = weapon_type_kinetic
 	armor_ratio = 0.33
 	shields_ratio = 0.33
@@ -354,13 +369,15 @@ hfe_personality_varelse_primitive_0_1 = {
 	allow = {
 #		has_country_flag = hfe_varelse
 		has_country_flag = hfe_varelse_primitive_0
+		NOT = { has_country_flag = mechanicus_plundered_by_xenoes }
 		OR = {
-			AND = {
-				is_country_type = primitive
-				is_materialist = yes
-			}
+			is_materialist = yes
 			has_government = hfe_gov_high_mechanicus_overthrown
 			has_civic = hfe_civic_overthrown_mechanicus
+			has_country_flag = varelse_fedora_governance
+		}
+		NOT = {
+			is_spiritualist = yes
 		}
 	}
 	weight_modifier = {
@@ -421,6 +438,10 @@ hfe_personality_varelse = {
 	}
 	allow = {
 		has_country_flag = hfe_varelse
+		OR = {
+			NOT = { has_country_flag = hfe_varelse_primitive_0 }
+			has_country_flag = mechanicus_plundered_by_xenoes
+		}
 		NOT = {
 			is_country_type = primitive
 		}
@@ -444,10 +465,22 @@ hfe_personality_varelse = {
 				has_civic = civic_technocracy
 				has_civic = civic_exalted_priesthood
 			}
+			NOT = {
+				has_country_flag = mechanicus_plundered_by_xenoes
+			}
 		}
 		modifier = {
 			factor = 0
 			is_country_type = primitive
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = mechanicus_plundered_by_xenoes
+		}
+		modifier = {
+			factor = 20
+			has_country_flag = varelse_fedora_governance
+			NOT = { has_country_flag = hfe_varelse_primitive_0 }
 		}
 	}
 }
@@ -486,7 +519,7 @@ hfe_personality_drone = {
 		propagator = yes
 		multispecies = no
 		crisis_fighter = no
-#		isolationist = yes # Would this make it impossible for you to enter a Drone System?
+		isolationist = yes # Would this make it impossible for you to enter a Drone System?
 #		demands_clear_borders = yes
 	}
 	allow = {
