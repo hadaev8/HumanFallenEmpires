@@ -37,8 +37,9 @@ country_event = {
 					limit = {
 						ROOT = {
 							OR = {
-								species_portrait = "human"
-								species_portrait = "hfe_portrait_egypt"
+								species_portrait = human
+								species_portrait = hfe_portrait_egypt
+								species_portrait = hfe_portrait_future
 								is_same_species = event_target:hfe_egypt_species
 								has_country_flag = hfe_marked_as_human
 							}
@@ -57,7 +58,7 @@ country_event = {
 				# change_government = {
 				# 	authority = auth_oligarchic
 				# }
-				root = {
+				ROOT = {
 					every_owned_starbase = {
 						set_owner = prevprev
 					}
@@ -111,11 +112,12 @@ country_event = {
 			modify_species = {
 				species = ROOT # The country's dominant species itself
 				add_trait = trait_communal
+				add_trait = trait_presapient_starborn
 				remove_trait = trait_solitary
 			}
 		}
 		set_country_flag = Story7
-		#set_country_flag = day_0
+#		set_country_flag = day_0
 		set_country_flag = first_contact_event
 		give_technology = {
 			tech = tech_sensors_2
@@ -123,7 +125,7 @@ country_event = {
 		}
 		give_technology = {
 			tech = hfe_tech_discovery_ship
-			message = no
+			message = yes
 		}
 		capital_scope = {
 			set_planet_name = "No Home"
@@ -585,6 +587,24 @@ country_event = {
 
 	option = {
 		name = hfe_discovery.55.0
+	}
+
+	after = {
+		if = {
+			limit = {
+				exists = event_target:hfe_earth
+				OR = {
+					has_country_flag = hfe_marked_as_human
+					has_country_flag = discovery_men
+					species_portrait = human
+					species_portrait = hfe_portrait_egypt
+					species_portrait = hfe_portrait_future
+				}
+			}
+			last_created_species = {
+				set_species_homeworld = event_target:hfe_earth
+			}
+		}
 	}
 }
 
