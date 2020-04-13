@@ -72,7 +72,7 @@ hfe_trigger_is_awake = {
 
 hfe_trigger_is_assimilator = {
 	is_homicidal = no
-	or = {
+	OR = {
 		has_valid_civic = civic_machine_assimilator
 		has_valid_civic = hfe_civic_blight
 		hfe_trigger_brainworm_country = yes
@@ -85,10 +85,11 @@ hfe_trigger_is_assimilator = {
 
 # for planet, mod's primitives
 hfe_trigger_primitive_planet = {
-	or = {
+	OR = {
 		has_planet_flag = hfe_ahet_colony_0
 		has_planet_flag = hfe_ahet_colony_1
 		has_planet_flag = hfe_varelse_colony
+		has_planet_flag = colony_beta
 		has_planet_flag = hfe_copernicus.0
 	}
 }
@@ -327,7 +328,7 @@ hfe_trigger_is_agrarian = {
 }
 
 hfe_trigger_is_clever = {
-	or = {
+	OR = {
 		has_trait = trait_intelligent
 		has_trait = trait_natural_engineers
 		has_trait = trait_natural_physicists
@@ -335,6 +336,13 @@ hfe_trigger_is_clever = {
 		has_trait = trait_presapient_natural_intellectuals
 		has_trait = trait_erudite
 		has_trait = hfe_species_trait_clever_beast
+		has_trait = trait_enigmatic_intelligence
+		has_trait = trait_enigmatic_intelligence_poor
+	}
+	NOT = {
+		has_trait = trait_nerve_stapled
+		has_trait = hfe_species_trait_happy_slave
+		has_trait = trait_presapient_docile_livestock
 	}
 }
 
@@ -342,6 +350,8 @@ hfe_trigger_is_robot = {
 	or = {
 		has_trait = trait_mechanical
 		has_trait = trait_machine_unit
+		species = { is_archetype = ROBOT }
+		species = { is_archetype = MACHINE }
 	}
 }
 
@@ -360,12 +370,21 @@ hfe_trigger_non_sapient = {
 }
 
 hfe_trigger_non_sapient_robot = {
-	or = {
+	OR = {
 		has_trait = trait_machine_unit
 		and = {
 			has_trait = trait_mechanical
 			not = {
 				has_technology = tech_synthetic_workers
+			}
+		}
+	}
+	NOT = {
+		is_shackled_robot = yes
+		is_shackled_robot_species_rights = yes
+		species = {
+			has_citizenship_type = {
+				type = citizenship_robot_servitude
 			}
 		}
 	}

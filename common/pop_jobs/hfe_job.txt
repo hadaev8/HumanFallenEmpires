@@ -15,7 +15,11 @@ hfe_job_egypt_ruler_0 = {
 	possible = {
 		exists = owner
 		exists = planet
-		is_same_species = owner
+		OR = {
+			is_species = event_target:hfe_egypt_species
+			is_same_species = owner
+			NOT = { owner = { has_country_flag = hfe_egypt } }
+		}
 		OR = {
 			owner = { has_civic = hfe_civic_egypt_rulers }
 			owner = { has_origin = hfe_civic_egypt_rulers_origin }
@@ -708,12 +712,14 @@ hfe_job_terraformer_hive_mind = {
 hfe_job_egypt_workless = {
 	category = worker
 	is_capped_by_modifier = no
-	building_icon = building_luxury_residence
+	building_icon = building_organic_paradise
 	clothes_texture_index = 3
 	icon = entertainer
 
 	possible_pre_triggers = {
 		is_enslaved = no # Must be a freeman to enjoy the opulence and privilege of a Citizen
+		is_being_purged = no
+		is_being_assimilated = no
 	}
 
 	possible = {
@@ -721,6 +727,11 @@ hfe_job_egypt_workless = {
 		OR = {
 			has_citizenship_rights = yes
 			has_citizenship_type = { type = citizenship_full }
+			owner = { is_xenophile = yes }
+		}
+		OR = {
+			owner = { NOT = { is_xenophobe = yes } }
+			is_same_species = owner
 		}
 #		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
 		NOT = {
@@ -752,22 +763,22 @@ hfe_job_future_workless = {
 	is_capped_by_modifier = no
 	building_icon = building_underground_clubs
 	clothes_texture_index = 3
-	icon = entertainer
+	icon = fe_hedonist
 	possible_pre_triggers = {
 		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
 	}
 	possible = {
 		exists = owner
 		exists = planet
 		OR = {
-			planet = {
-				has_building = hfe_building_virtual
-			}
+			planet = { has_building = hfe_building_virtual }
 			owner = { has_country_flag = hfe_future }
 		}
 		OR = {
 			owner = { NOT = { is_xenophobe = yes } }
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 	}
 	pop_modifier = {
@@ -789,11 +800,15 @@ hfe_job_cataloger = {
 	building_icon = building_junkheap
 	clothes_texture_index = 3
 	icon = maintenance_drone
+	possible_pre_triggers = {
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
 		worker_job_check_trigger = yes # Cataloging, gathering, sorting, and inventorying are all considered entry-level jobs in RL, thus not complex
 	}
 	resources = {
-		category = hfe_job_cataloger
+		category = hfe_job_catalogers
 		produces = {
 			alloys = 2
 			engineering_research = 1
@@ -802,13 +817,13 @@ hfe_job_cataloger = {
 	weight = {
 		weight = @worker_job_weight
 		modifier = {
-			factor = 0.05
+			factor = 0.1
 			can_take_servant_job = yes
 		}
 		# worker weights
 		modifier = {
 			factor = 10
-			or = {
+			OR = {
 				is_enslaved = yes
 				is_non_sapient_robot = yes
 				is_shackled_robot = yes
@@ -891,11 +906,12 @@ hfe_job_cataloger_gestalt = {
 	building_icon = building_junkheap
 	clothes_texture_index = 3
 	icon = maintenance_drone
+
 	possible = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_cataloger
+		category = hfe_job_catalogers
 		produces = {
 			alloys = 2
 			engineering_research = 1
@@ -1014,11 +1030,16 @@ hfe_job_recycler = {
 	building_icon = building_junkheap
 	clothes_texture_index = 3
 	icon = maintenance_drone
+
+	possible_pre_triggers = {
+		is_being_assimilated = no
+		is_being_purged = no
+	}
 	possible = {
 		worker_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 3
 			consumer_goods = 2
@@ -1087,7 +1108,7 @@ hfe_job_recycler_machine = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 3
 			alloys = 1
@@ -1161,7 +1182,7 @@ hfe_job_recycler_hive_mind = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recycler
+		category = hfe_job_recyclers
 		produces = {
 			minerals = 2
 			alloys = 1
@@ -1256,6 +1277,10 @@ hfe_job_godforge_primitive = {
 		planet_stability_add = 5
 	}
 
+	pop_modifier = {
+		pop_political_power = 1
+	}
+
 	resources = {
 		category = hfe_godforge
 		produces = {
@@ -1277,15 +1302,15 @@ hfe_job_godforge_primitive = {
 		}
 		modifier = {
 			factor = 0.5
-			NOT = { is_exact_same_species = owner_main_species }
+			NOT = { is_exact_same_species = owner }
 		}
 		modifier = {
 			factor = 5
-			is_same_species = owner_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 2
-			is_exact_same_species = owner_main_species
+			is_exact_same_species = owner
 		}
 		modifier = {
 			factor = 2
@@ -1325,6 +1350,7 @@ hfe_job_godforge_overlord = {
 			NOT = {
 				is_country_type = primitive
 				is_primitive = yes
+				is_gestalt = yes
 			}
 		}
 		planet = {
@@ -1334,13 +1360,26 @@ hfe_job_godforge_overlord = {
 				has_planet_flag = colony_beta
 			}
 		}
-
+		OR = {
+			owner = { is_primitive = yes }
+			owner = { is_country_type = primitive }
+			is_same_species = owner
+			has_citizenship_rights = yes
+			has_citizenship_type = {
+				type = citizenship_full
+			}
+			owner = { is_xenophile = yes }
+		}
 	}
 
 	planet_modifier = {
 		planet_stability_add = 5
 		planet_amenities_add = -5
-		planet_orbital_bombardment_damage = 0.1
+		planet_orbital_bombardment_damage = 0.05
+	}
+
+	pop_modifier = {
+		pop_political_power = 1
 	}
 
 	resources = {
@@ -1350,32 +1389,28 @@ hfe_job_godforge_overlord = {
 				owner = { has_country_flag = hfe_varelse_primitive_0 }
 			}
 			influence = 1
-			minor_artifacts = 1
+			minor_artifacts = 0.25
 			unity = 5
 		}
-#		produces = {
-#				owner = { has_global_flag = hfe_hardcore_disable }
-#				NOT = {
-#					owner = { has_country_flag = hfe_varelse_primitive_0 }
-#				}
-#			}
-#			minor_artifacts = 0.04
-#		}
 		produces = {
 			trigger = {
-				NOT = {
-					has_trait = trait_repugnant
-					has_trait = trait_robot_uncanny
+				pop = {
+					NOT = {
+						has_trait = trait_repugnant
+						has_trait = trait_robot_uncanny
+					}
 				}
 			}
 			unity = 10
 		}
 		produces = {
 			trigger = {
-				has_trait = trait_repugnant
-				has_trait = trait_robot_uncanny
+				pop = {
+					has_trait = trait_repugnant
+					has_trait = trait_robot_uncanny
+				}
 			}
-			unity = -5
+			unity = -3.5
 		}
 		upkeep = {
 			trigger = {
@@ -1416,11 +1451,11 @@ hfe_job_godforge_overlord = {
 #		}
 		modifier = {
 			factor = 5
-			is_same_species = owner_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 2
-			is_exact_same_species = owner_main_species
+			is_exact_same_species = owner
 		}
 		modifier = {
 			factor = 2
@@ -1464,11 +1499,13 @@ hfe_job_mechanicus_bodyguard = {
 			}
 		}
 		OR = {
+			has_citizenship_rights = yes
 			has_citizenship_type = {
 				type = citizenship_full
 			}
 			owner = { is_country_type = primitive }
 			owner = { is_primitive = yes }
+			is_same_species = owner
 		}
 	}
 
@@ -1476,7 +1513,7 @@ hfe_job_mechanicus_bodyguard = {
 		category = hfe_godforge
 		produces = {
 			alloys = 1
-			unity = 5
+			unity = 15
 		}
 		upkeep = {
 			trigger = {
@@ -1508,7 +1545,7 @@ hfe_job_mechanicus_bodyguard = {
 #		army_health = 0.03
 #		army_morale = 0.25
 		planet_crime_add = -25
-		pop_defense_armies_add = 4
+		pop_defense_armies_add = 1
 	}
 
 	triggered_planet_modifier = {
@@ -1524,12 +1561,22 @@ hfe_job_mechanicus_bodyguard = {
 		pop_defense_armies_add = 1
 	}
 
+	pop_modifier = {
+		pop_political_power = 0.5
+	}
+
 	weight = {
-		weight = @worker_job_weight
+		weight = 5
 		modifier = {
 			factor = 0.01
 			AND = {
-				NOT = {	is_same_species = owner_main_species }
+				NOT = {	is_same_species = owner }
+				owner = {
+					NOT = {
+						is_primitive = yes
+						is_country_type = primitive
+					}
+				}
 				owner = {
 					NOT = {
 						is_xenophile = yes
@@ -1539,12 +1586,12 @@ hfe_job_mechanicus_bodyguard = {
 			}
 		}
 		modifier = {
-			factor = 2
-			is_exact_same_species = owner_main_species
+			factor = 20
+			is_exact_same_species = owner
 		}
 		modifier = {
-			factor = 3
-			is_same_species = owner_main_species
+			factor = 10
+			is_same_species = owner
 		}
 		# crisis purge
 		modifier = {
@@ -1575,15 +1622,39 @@ hfe_job_mechanicus_cultist = {
 	}
 
 	possible = {
-		planet = { has_building = hfe_building_mechanicus_cult_temple }
+		OR = {
+			planet = { has_building = hfe_building_mechanicus_cult_temple }
+			planet = { has_planet_flag = colony_beta }
+			owner = { has_country_flag = hfe_varelse_primitive_0 }
+			owner = { is_primitive = yes }
+			owner = { is_country_type = primitive }
+		}
 		OR = {
 			has_citizenship_type = {
 				type = citizenship_full
 			}
+			is_same_species = owner_species
+			owner = { has_civic = hfe_civic_high_mechanicus }
 			owner = { is_country_type = primitive }
 			owner = { is_primitive = yes }
 		}
-		NOT = { has_ethic = ethic_materialist }
+		owner = {
+			OR = {
+				NOT = { is_xenophobe = yes }
+				is_same_species = owner
+			}
+		}
+		OR = {
+			NOT = {
+				has_trait = trait_mechanical
+				has_trait = trait_machine_unit
+				is_robot_pop = yes
+#				is_robotic = yes
+				is_free_robot_species_rights = yes
+			}
+			owner = { has_country_flag = synthetic_empire }
+			owner = { has_country_flag = flesh_weakened }
+		}
 	}
 
 	resources = {
@@ -1591,7 +1662,7 @@ hfe_job_mechanicus_cultist = {
 		produces = {
 			unity = 5
 			alloys = 3
-			engineering_research = 2
+			engineering_research = 3
 		}
 		upkeep = {
 			energy = 1
@@ -1605,6 +1676,18 @@ hfe_job_mechanicus_cultist = {
 		planet_crime_add = -2
 		planet_stability_add = 2
 	}
+
+	triggered_planet_modifier = {
+		potential = {
+			planet = {
+				NOT = {
+					has_planet_flag = colony_beta
+					has_planet_flag = high_mechanicus_planet
+				}
+			}
+		}
+		pop_environment_tolerance = -0.01
+	}
 	
 	triggered_planet_modifier = {
 		potential = {
@@ -1617,24 +1700,27 @@ hfe_job_mechanicus_cultist = {
 			planet_amenities_add = 1
 		}
 	}
-	triggered_planet_modifier = {
-		potential = {
-			has_trait = trait_repugnant
-		}
-		modifier = {
-			planet_amenities_add = -1
-		}
-	}	
+
+	pop_modifier = {
+		pop_political_power = 0.5
+	}
 	
 	weight = {
 		weight = @worker_job_weight	
 		modifier = {
-			factor = 0.1
-			has_citizenship_rights = no	
+			factor = 0.5
+			has_citizenship_rights = no
+			NOT = {
+				is_same_species = owner
+				owner = { is_xenophile = yes }
+				owner = { is_egalitarian = yes }
+				owner = { is_primitive = yes }
+				owner = { is_country_type = primitive }
+			}
 		}
 		modifier = {
 			factor = 2
-			is_same_species = owner_main_species
+			is_same_species = owner
 		}
 		modifier = {
 			factor = 1.25
@@ -1673,11 +1759,19 @@ hfe_job_mechanicus_cultist = {
 			has_trait = trait_robust
 		}
 		modifier = {
-			factor = 0.1
+			factor = 0
 			OR = {
 				has_trait = trait_mechanical
 				has_trait = trait_machine_unit
-				has_trait = trait_cybernetic
+			}
+		}
+		modifier = {
+			factor = 0.5
+			owner = {
+				has_monthly_income = {
+					resource = food
+					value < 10
+				}
 			}
 		}
 		# crisis purge
@@ -1699,7 +1793,7 @@ hfe_job_godforge_fulfilment_center = {
 	building_icon = building_nano_forge
 	is_capped_by_modifier = no
 	can_set_priority = no
-	clothes_texture_index = 3
+	clothes_texture_index = 2
 	contributes_to_diplo_weight = no # For balance's sake
 
 	possible_pre_triggers = {
@@ -1716,6 +1810,12 @@ hfe_job_godforge_fulfilment_center = {
 				has_planet_flag = high_mechanicus_planet
 			}
 		}
+		OR = {
+			is_unemployed = yes
+			has_job = no
+			hfe_trigger_uncapped_job = yes
+			is_shackled_robot = yes # Catch-all
+		}
 	}
 
 	planet_modifier = {
@@ -1723,7 +1823,8 @@ hfe_job_godforge_fulfilment_center = {
 	}
 
 	pop_modifier = {
-		pop_happiness = -0.25
+		pop_happiness = -0.30
+		pop_political_power = -0.25
 	}
 
 #	triggered_pop_modifier = {
@@ -1746,44 +1847,99 @@ hfe_job_godforge_fulfilment_center = {
 			engineering_research = 0.5
 			alloys = 0.2
 			consumer_goods = 0.2
-			food = 0.2
+			food = 1
 		}
 		upkeep = {
 			trigger = {
 				owner = {
-					OR = {
-						NOT = { has_country_flag = hfe_varelse_primitive_0 }
-						NOT = { is_primitive = yes }
-						NOT = { is_country_type = primitive }
+					NOT = {
+						has_country_flag = hfe_varelse_primitive_0
+						is_primitive = yes
+						is_country_type = primitive
 					}
 				}
 			}
 			energy = 0.25
-			minerals = 0.25
-			unity = 1
+			minerals = 0.2
 		}
 		upkeep = {
 			trigger = {
-				is_lithoid = yes
+				OR = {
+					is_lithoid = yes
+					has_trait = trait_lithoid
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+					is_robot_pop = yes
+				}
 			}
 			energy = 0.2
 		}
 		upkeep = {
 			trigger = {
-				is_lithoid = no
 				NOT = {
-					owner = { is_lithoid_empire = yes }
+					is_lithoid = yes
+					has_trait = trait_lithoid
+				}
+				NOT = {
+					is_robot_pop = yes
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
 				}
 			}
-			food = 1
+			minerals = 0.25
+		}
+		upkeep = {
+			trigger = {
+				NOT = {
+					owner = {
+						has_country_flag = hfe_varelse_primitive_0
+					}
+				}
+			}
+			unity = 2
 		}
 	}
 
 	weight = {
-		weight = 0.01
+		weight = @special_job_weight
+#		modifier = {
+#			factor = 0
+#			planet = {
+#				OR = {
+#					has_available_jobs = farmer
+#					has_available_jobs = miner
+#					has_available_jobs = technician
+#				}
+#			}
+#		}
 		modifier = {
-			factor = 5
-			is_enslaved = yes
+			factor = 0
+			OR = {
+				has_job = farmer
+				has_job = primitive_farmer
+			}
 		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_job = technician
+				has_job = primitive_technician
+			}
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_job = miner
+				has_job = primitive_miner
+			}
+		}
+		modifier = {
+			factor = 10
+			has_job = no
+		}
+#		modifier = {
+#			factor = 1
+#			is_enslaved = yes
+#		}
 	}
 }

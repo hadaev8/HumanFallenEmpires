@@ -36,7 +36,12 @@ country_event = {
 				if = {
 					limit = {
 						ROOT = {
-							species_portrait = "human"
+							OR = {
+								species_portrait = "human"
+								species_portrait = "hfe_portrait_egypt"
+								is_same_species = event_target:hfe_egypt_species
+								has_country_flag = hfe_marked_as_human
+							}
 						}
 					}
 					set_country_flag = discovery_men
@@ -101,6 +106,13 @@ country_event = {
 	immediate = {
 		add_modifier = {
 			modifier = hfe_discovery_translator
+		}
+		ROOT = {
+			modify_species = {
+				species = ROOT # The country's dominant species itself
+				add_trait = trait_communal
+				remove_trait = trait_solitary
+			}
 		}
 		set_country_flag = Story7
 		#set_country_flag = day_0
@@ -365,6 +377,7 @@ country_event = {
 	id = hfe_discovery.50
 	hide_window = yes
 	is_triggered_only = yes
+	show_sound = event_mystic_reveal_light
 
 	trigger = {
 		# mods stuff auto contact with vanilla stuff
@@ -440,6 +453,7 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = fromfrom
 	is_triggered_only = yes
+	show_sound = ship_destroyed_big_explosion
 
 	trigger = {
 		has_country_flag = hfe_discovery
@@ -453,6 +467,7 @@ country_event = {
 		hidden_effect = {
 			destroy_country = yes
 		}
+		log = "DISCOVERY GAME OVER!"
 	}
 }
 

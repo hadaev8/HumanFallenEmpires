@@ -980,3 +980,146 @@ hfe_effect_primitive_remove_pops = {
 		}
 	}
 }
+
+hfe_effect_mechanicus_level_up = {
+	capital_scope = {
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_generator
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_mining
+#		add_district = district_farming
+#		add_district = district_farming
+#		add_district = district_farming
+#		add_district = district_farming
+#		add_district = district_farming
+#		add_district = district_farming
+	}
+	capital_scope = {
+		if = {
+			limit = { NOT = { has_building = hfe_building_high_mechanicus_stronghold } }
+			add_building = hfe_building_high_mechanicus_stronghold
+		}
+	}
+	capital_scope = {
+		hfe_effect_exodus_reset_capital = yes
+		add_building = building_system_capital
+		add_building = building_precinct_house
+		add_building = building_production_center
+		add_building = building_hydroponics_farm
+		add_building = building_mote_harvesters
+	}
+	capital_scope = {
+		while = {
+			count = 10
+			create_pop = {
+				species = event_target:hfe_varelse_leftover_robots
+			}
+		}
+	}
+	add_resource = { # Changing the country type blanks everything
+		energy = 10000
+		minerals = 30000
+		food = 20000
+		alloys = 50000
+		consumer_goods = 2000
+		influence = 1000
+		minor_artifacts = 12
+		society_research = 500
+		engineering_research = 2500
+		physics_research = 100
+		volatile_motes = 100
+	}
+	capital_scope = {
+		hfe_effect_create_starbase_starhold_from_planet = yes
+		starbase = {
+			set_starbase_module = {
+				slot = 1
+				module = shipyard
+			}
+			set_starbase_module = {
+				slot = 2
+				module = trading_hub
+			}
+			set_starbase_building = {
+				slot = 1
+				building = hydroponics_bay
+			}
+			set_starbase_building = {
+				slot = 2
+				building = crew_quarters
+			}
+		}
+	}
+	capital_scope = {
+		remove_all_armies = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = mechanicus_plundered_by_xenoes
+				has_civic = civic_barbaric_despoilers
+			}
+		}
+		create_leader = {
+			name = "Damaged Godforge Core"
+			class = general
+			event_leader = yes
+			species = event_target:hfe_varelse_leftover_robots
+			immortal = yes
+			skill = 5
+			set_age = 0
+			traits = {
+				add_trait = leader_trait_general_synthetic
+				add_trait = hfe_general_trait_engineer
+				add_trait = leader_trait_restrained
+				add_trait = leader_trait_erratic_morality_core
+				add_trait = leader_trait_arrested_development
+			}
+		}
+		last_created_leader = {
+			set_leader_flag = godforge_engine_primitive
+			save_global_event_target_as = broken_godforge_general
+		}
+	}
+	else = {
+		create_leader = {
+			name = "Godforge Core"
+			class = general
+			event_leader = yes
+			species = event_target:hfe_varelse_leftover_robots
+			immortal = yes
+			skill = 10
+			set_age = 0
+			traits = {
+				add_trait = leader_trait_general_synthetic
+				add_trait = leader_trait_butcher
+				add_trait = leader_trait_parts_cannibalizer
+				add_trait = leader_trait_rigid_programming
+			}
+			effect = {
+				set_leader_flag = godforge_engine
+			}
+		}
+	}
+}

@@ -1689,7 +1689,7 @@ country_event = {
 		}
 	}
 	picture = GFX_evt_news_room
-	show_sound = event_laboratory_sound
+	show_sound = event_life_support_fail
 	is_triggered_only = yes
 
 	immediate = {
@@ -1727,7 +1727,7 @@ country_event = {
 	title = hfe_plague.52.name
 	desc = hfe_plague.52.desc
 	picture = GFX_evt_news_room
-	show_sound = event_laboratory_sound
+	show_sound = event_red_alert
 	is_triggered_only = yes
 
 	trigger = {
@@ -1740,6 +1740,7 @@ country_event = {
 
 	option = {
 		name = DISCONCERTING
+		hidden_effect = { play_sound = event_screams }
 	}
 }
 
@@ -1820,7 +1821,7 @@ country_event = {
 		picture = GFX_evt_hfe_plague
 	}
 	picture = GFX_evt_news_room
-	show_sound = event_air_raid_siren
+	show_sound = event_life_support_fail
 	is_triggered_only = yes
 	location = from
 
@@ -1880,7 +1881,7 @@ country_event = {
 		}
 	}
 	picture = GFX_evt_hfe_plague
-	show_sound = event_air_raid_siren
+	show_sound = event_life_support_fail
 	is_triggered_only = yes
 	location = from
 
@@ -1903,6 +1904,12 @@ country_event = {
 		name = hfe_plague.56.1
 		trigger = {
 			has_global_flag = hfe_plague_lvl_3
+		}
+		hidden_effect = {
+			random_list = {
+				40 = { play_sound = event_screams}
+				60 = {}
+			}
 		}
 	}
 	option = {
@@ -1933,8 +1940,11 @@ country_event = {
 	option = {
 		name = hfe_plague.58.0
 		trigger = {
-			not = {
-				has_tech_option = hfe_tech_plague_immune
+			OR = {
+				NOT = { has_tech_option = hfe_tech_plague_immune }
+#				NOT = { has_technology = hfe_tech_plague_immune }
+				NOT = { has_technology = tech_gene_tailoring }
+				NOT = { has_tech_option = tech_gene_tailoring }
 			}
 		}
 		if = {
@@ -1943,7 +1953,15 @@ country_event = {
 			}
 			log = "Plague. [Root.GetName] now know immune"
 		}
-		add_research_option = hfe_tech_plague_immune
+		if = {
+			limit = {
+				NOT = {
+					has_technology = hfe_tech_plague_immune
+					has_tech_option = hfe_tech_plague_immune
+				}
+			}
+			add_research_option = hfe_tech_plague_immune
+		}
 		if = {
 			limit = {
 				has_global_flag = hfe_hardcore_disable
@@ -1963,7 +1981,10 @@ country_event = {
 		if = {
 			limit = {
 				has_global_flag = hfe_hardcore_disable
-				NOT = { has_tech_option = tech_gene_tailoring }
+				NOT = {
+					has_technology = tech_gene_tailoring
+					has_tech_option = tech_gene_tailoring
+				}
 			}
 			add_research_option = tech_gene_tailoring
 		}
@@ -2027,6 +2048,7 @@ country_event = {
 	title = hfe_plague.62.name
 	desc = hfe_plague.62.desc
 	picture = GFX_evt_hfe_zombie
+	show_sound = event_screams
 	is_triggered_only = yes
 	location = from
 
@@ -2183,7 +2205,7 @@ country_event = {
 	title = hfe_plague.152.name
 	desc = hfe_plague.152.desc
 	picture = GFX_evt_ground_combat
-	show_sound = event_administrative_work
+	show_sound = event_wind_ruins
 	is_triggered_only = yes
 
 	trigger = {
@@ -2226,7 +2248,7 @@ country_event = {
 	title = hfe_plague.160.name
 	desc = hfe_plague.160.desc
 	picture = GFX_evt_ground_combat
-	show_sound = event_administrative_work
+	show_sound = event_celebration
 	is_triggered_only = yes
 
 	trigger = {

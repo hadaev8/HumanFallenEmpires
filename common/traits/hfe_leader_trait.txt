@@ -19,7 +19,10 @@ hfe_ruler_trait_genomod = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			is_gestalt = no
+			OR = {
+				is_gestalt = no
+				has_authority = auth_hive_mind
+			}
 		}
 		exists = species
 		species = {
@@ -69,6 +72,9 @@ hfe_ruler_trait_imperialist = {
 	leader_class = {
 		ruler
 	}
+	ai_weight = {
+		factor = 10
+	}
 }
 
 hfe_ruler_trait_warriror_honor = {
@@ -90,7 +96,7 @@ hfe_ruler_trait_warriror_honor = {
 		# opinion effect
 		hfe_planet_jobs_war_militarist_produces_mult = 0.1
 		# TODO
-		#rivalries_influence_produces_mult = 0.5
+		max_rivalries = 1
 	}
 	leader_trait = {
 		ruler
@@ -110,7 +116,12 @@ hfe_ruler_trait_manipulative = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			has_valid_civic = civic_cutthroat_politics
+			OR = {
+				has_civic = civic_cutthroat_politics
+				has_civic = hfe_civic_high_mechanicus
+				has_civic = hfe_civic_overthrown_mechanicus
+				has_civic = civic_criminal_heritage
+			}
 			is_gestalt = no
 		}
 	}
@@ -135,8 +146,20 @@ hfe_ruler_trait_puppet = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
+		NOT = {
+			has_trait = trait_erudite
+			has_leader_flag = high_mechanicus_master
+		}
 		from = {
-			has_valid_civic = civic_shadow_council
+			OR = {
+				has_valid_civic = civic_shadow_council
+				has_civic = civic_meritocracy
+				has_civic = hfe_civic_high_mechanicus
+				has_civic = hfe_civic_overthrown_mechanicus
+				has_civic = hfe_civic_primitive_degraded_society
+				is_country_type = primitive
+				is_subject = yes
+			}
 			is_gestalt = no
 		}
 		years_passed > 0
@@ -144,12 +167,20 @@ hfe_ruler_trait_puppet = {
 	modifier = {
 		# opinion effect
 		country_influence_produces_add = -0.5
+		pop_factions_influence_produces_mult = 0.75
+		diplo_weight_pops_mult = -0.1
 	}
 	leader_trait = {
 		ruler
 	}
 	leader_class = {
 		ruler
+	}
+	opposites = {
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
+		hfe_ruler_trait_lovable_buffoon
 	}
 }
 
@@ -167,10 +198,16 @@ hfe_ruler_trait_corrupted = {
 		}
 	}
 	modifier = {
+		pop_cat_ruler_political_power = 0.15
 		country_base_influence_produces_add = 0.5
 		country_energy_produces_mult = -0.1
 		planet_crime_add = 10
 		# TODO country_piracy_risk_mult = 0.1
+	}
+	opposites = {
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
 	}
 	leader_trait = {
 		ruler
@@ -189,14 +226,34 @@ hfe_ruler_trait_lovable_buffoon = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
+		NOT = {
+			has_trait = trait_erudite
+			has_trait = trait_charismatic
+			has_trait = trait_intelligent
+			has_trait = trait_enigmatic_intelligence
+			has_trait = trait_enigmatic_intelligence_poor
+			has_trait = hfe_species_trait_clever_beast
+			has_trait = leader_trait_intellectual
+		}
 		from = {
 			is_gestalt = no
 		}
 		years_passed > 0
 	}
+	opposites = {
+		trait_ruler_champion_of_the_people
+		hfe_ruler_trait_manipulative
+		hfe_ruler_trait_warriror_honor
+		leader_trait_bureaucrat
+		hfe_ruler_trait_bureaucrat
+		leader_trait_intellectual
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
+	}
 	modifier = {
 		country_influence_produces_add = -0.5
-		planet_crime_add = -10
+		pop_citizen_happiness = 0.05
 		# TODO country_piracy_risk_mult = -0.1
 	}
 	leader_trait = {

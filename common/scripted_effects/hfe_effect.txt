@@ -324,7 +324,7 @@ hfe_effect_settle_pop = {
 				}
 				hfe_effect_population_fix_robot_pop = yes
 			}
-			log = "pop moved to [this.GetName]"
+#			log = "pop moved to [this.GetName]"
 		}
 	}
 }
@@ -365,7 +365,7 @@ hfe_effect_add_random_trait = {
 				add_trait = hfe_species_trait_war_fans
 			}
 		}
-		1 = {
+		2 = {
 			modifier = {
 				factor = 0
 				$hfe_species$ = {
@@ -377,7 +377,7 @@ hfe_effect_add_random_trait = {
 				add_trait = hfe_species_trait_error
 			}
 		}
-		1 = {
+		2 = {
 			modifier = {
 				factor = 0
 				$hfe_species$ = {
@@ -562,6 +562,25 @@ hfe_effect_event_711_next = {
 
 hfe_effect_event_5001_next = {
 	hidden_effect = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = hfe.5001.step0
+					has_country_flag = hfe.5001.step1
+					has_country_flag = hfe.5001.step2
+					has_country_flag = hfe.5001.step3
+					has_country_flag = hfe.5001.step4
+					has_country_flag = hfe.5001.step5
+					has_country_flag = hfe.5001.step6
+					has_country_flag = hfe.5001.step7
+					has_country_flag = hfe.5001.step5.human
+					has_country_flag = hfe.5001.step4.human
+					has_country_flag = hfe.5001.step3.human
+					has_country_flag = hfe.5001.step2.human
+				}
+			}
+			set_country_flag = hfe.5001.step0
+		}
 		switch = {
 			trigger = has_country_flag
 			hfe.5001.step0 = {
@@ -621,6 +640,23 @@ hfe_effect_event_5001_next = {
 				remove_country_flag = hfe.5001.step2.human
 			}
 		}
+	}
+}
+
+hfe_effect_event_5001_clear_flags = {
+	hidden_effect = {
+		remove_country_flag = hfe.5001.step0
+		remove_country_flag = hfe.5001.step1
+		remove_country_flag = hfe.5001.step2
+		remove_country_flag = hfe.5001.step3
+		remove_country_flag = hfe.5001.step4
+		remove_country_flag = hfe.5001.step5
+		remove_country_flag = hfe.5001.step6
+		remove_country_flag = hfe.5001.step7
+		remove_country_flag = hfe.5001.step5.human
+		remove_country_flag = hfe.5001.step4.human
+		remove_country_flag = hfe.5001.step3.human
+		remove_country_flag = hfe.5001.step2.human
 	}
 }
 
@@ -703,7 +739,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 			limit = {
 				habitability = {
 					who = event_target:hfe_varelse_species
-					value > 0.7
+					value > 0.5
 				}
 			}
 			save_event_target_as = hfe_varelse_fleet_new_home
@@ -720,7 +756,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 				any_system_planet = {
 					habitability = {
 						who = event_target:hfe_varelse_species
-						value > 0.7
+						value > 0.5
 					}
 				}
 				hfe_trigger_pirate_fleet_power_in_system_check = yes
@@ -729,7 +765,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 				limit = {
 					habitability = {
 						who = event_target:hfe_varelse_species
-						value > 0.7
+						value > 0.5
 					}
 				}
 				save_event_target_as = hfe_varelse_fleet_new_home
@@ -769,8 +805,10 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 				set_country_flag = was_government_in_exile
 				set_country_flag = chosen_to_exodus
 				set_country_flag = hfe_varelse
+				set_graphical_culture = fallen_empire_02
+				set_city_graphical_culture = reptilian_01
 				hfe_effect_gov_fix = yes
-				hfe_effect_init_give_tech_t4 = yes
+				hfe_effect_init_give_tech_t5 = yes
 				prev = {
 					create_colony = {
 						owner = prev
@@ -786,26 +824,26 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 					}
 				}
 				add_resource = {
-					minerals = 5000
-					energy = 5000
-					food = 5000
-					alloys = 1000
-					consumer_goods = 1000
-					influence = 1000
+					minerals = 10000
+					energy = 10000
+					food = 10000
+					alloys = 10000
+					consumer_goods = 10000
+					influence = 2000
 				}
 			}
 		}
 		while = {
-			count = 5
+			count = 6
 			create_pop = {
-				species = owner
+				species = event_target:hfe_varelse_species
 			}
 		}
 		add_modifier = {
 			modifier = hfe_population_boom
 			days = 3650
 		}
-		hfe_effect_create_starbase_starport_from_planet = yes
+		hfe_effect_create_starbase_citadel_from_planet = yes
 		log = "Surprise Varelse fleet settled down"
 	}
 }
@@ -915,7 +953,10 @@ hfe_effect_create_egypt_fleet = {
 		}
 		effect = {
 			set_owner = prev
-			log = "Ju Ahet gets fleet"
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Ju Ahet gets fleet"
+			}
 			while = {
 				count = 5
 				create_ship = {
@@ -1257,8 +1298,8 @@ hfe_effect_add_psionic_trait = {
 
 # for planet
 hfe_effect_convert_to_asteroid = {
-	log = "converting to asteroid [this.GetName]"
-	# flee fleets
+#	# log = "converting to asteroid [this.GetName]"
+#	# flee fleets
 	if = {
 		limit = {
 			exists = owner
@@ -1966,7 +2007,7 @@ hfe_effect_leader_add_exp_100 = {
 		}
 	}
 	else = {
-		#	log = "leader not exists"
+		log = "ERROR: EXP gaining leader not exists"
 	}
 }
 
@@ -1980,7 +2021,7 @@ hfe_effect_leader_add_exp_200 = {
 		}
 	}
 	else = {
-		#	log = "leader not exists"
+		log = "ERROR: EXP gaining leader not exists"
 	}
 }
 
@@ -2308,12 +2349,18 @@ hfe_effect_stargate_add = {
 	last_created_ambient_object = {
 		save_event_target_as = hfe_stargate
 	}
-	log = "Star Gate spawned"
+	if = {
+		limit = { has_global_flag = HFE_TSP_spawn_test }
+		log = "Star Gate spawned"
+	}
 }
 
 hfe_effect_stargate_remove = {
 	destroy_ambient_object = event_target:hfe_stargate
-	log = "Star Gate terminated"
+	if = {
+		limit = { has_global_flag = HFE_TSP_spawn_test }
+		log = "Star Gate terminated"
+	}
 }
 
 # give tech option
@@ -2742,7 +2789,10 @@ hfe_effect_get_space_monster_country = {
 					establish_communications_no_message = prev
 				}
 				save_global_event_target_as = hfe_global_space_monster
-				log = "Butt Hurt Crystals spawned"
+				if = {
+					limit = { has_global_flag = HFE_TSP_spawn_test }
+					log = "Butt Hurt Crystals spawned"
+				}
 			}
 		}
 	}
@@ -2755,10 +2805,16 @@ hfe_effect_spawn_space_monster = {
 			count = 5
 			random_list = {
 				10 = {
-					log = "Butt Hurt Crystals disbanded"
+					if = {
+						limit = { has_global_flag = HFE_TSP_spawn_test }
+						log = "Butt Hurt Crystals disbanded"
+					}
 				}
 				10 = {
-					log = "Butt Hurt Crystals spanwed"
+					if = {
+						limit = { has_global_flag = HFE_TSP_spawn_test }
+						log = "Butt Hurt Crystals spanwed"
+					}
 					# some crystals
 					create_fleet = {
 						name = "Butt Hurt Crystals"

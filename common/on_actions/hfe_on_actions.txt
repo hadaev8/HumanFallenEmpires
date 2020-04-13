@@ -14,6 +14,7 @@ on_bi_yearly_pulse_country = {
 on_bi_yearly_pulse = {
 	events = {
 		hfe_maintenance.102
+#		hfe.715
 	}
 }
 
@@ -131,11 +132,31 @@ on_entering_system_first_time = {
 		# drones survey
 		hfe_maintenance.3
 	}
+}
+
+
+# Triggers event when ship enters a system.
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system = {
 	random_events = {
 		# varelse fleet event
-		1 = hfe.51
-		# thoth start
+		3 = hfe.51
+		# thoth start, spawn system
 		5 = hfe.700
+
+		325 = 0
+	}
+}
+
+# Triggers event when entire fleet enters a system
+# It's usually better to use on_entering_system_first_time or on_entering_system_fleet
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		hfe.706 # Entering Thoth's hiding place
 	}
 }
 
@@ -166,7 +187,9 @@ on_custom_diplomacy = {
 		# pirate
 		hfe_pirate.100
 		# thoth
-		hfe.710
+		hfe.713 # Fall back if Thoth does not load, also to AI and those who didn't discover him
+		hfe.714 # Thoth's response before you contact him
+		hfe.710 # Player talks with Thoth
 	}
 }
 
@@ -197,8 +220,8 @@ on_survey = {
 # From = System
 # FromFrom = Country
 # on_entering_system = {
-	# events = {
-	# }
+#	# events = {
+#	# }
 # }
 
 # A fleet has entered a system
@@ -252,6 +275,8 @@ on_ship_destroyed_victim = {
 		hfe.726
 		# pirate lost starbase
 		hfe_pirate.54
+		# If the Exodus ship is killed, game over
+		hfe_features.16
 	}
 }
 
@@ -556,6 +581,8 @@ on_colonized = {
 		hfe_features.1
 		# stargate event
 		hfe.511
+		# Exodus
+#		hfe_features.17
 	}
 }
 
@@ -689,7 +716,7 @@ on_terraforming_complete = {
 # FromFrom = Planet Controller (the one occupying)
 on_planet_occupied = {
 	events = {
-		# zombie tale planet
+		# zombie take planet
 		hfe_plague.5
 		# retake planet from zombie
 		hfe_plague.7
@@ -778,6 +805,7 @@ on_colony_8_years_old = {
 on_colony_9_years_old = {
 	random_events = {
 		20 = 0
+
 		1 = hfe.150
 		1 = hfe.200
 		1 = hfe.250
@@ -788,6 +816,7 @@ on_colony_9_years_old = {
 on_colony_10_years_old = {
 	random_events = {
 		20 = 0
+
 		1 = hfe.150
 		1 = hfe.200
 		1 = hfe.250
@@ -795,8 +824,8 @@ on_colony_10_years_old = {
 	}
 }
 
-on_pirate_spawn = {
-	events = {
-		#hfe_pirate.0
-	}
-}
+#on_pirate_spawn = {
+#	events = {
+#		#hfe_pirate.0
+#	}
+#}
