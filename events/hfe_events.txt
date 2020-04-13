@@ -1177,6 +1177,9 @@ country_event = {
 				id = hfe.53
 			}
 		}
+		ai_chance = {
+			factor = 1
+		}
 	}
 	option = {
 		name = hfe.53.0.2
@@ -1190,10 +1193,13 @@ country_event = {
 		hfe_effect_militarist_attraction.0 = yes
 		hidden_effect = {
 			remove_country_flag = hfe.53.0
-			set_country_flag = hfe.53.0.2
+			set_country_flag = hfe.53.0.1
 			country_event = {
 				id = hfe.53
 			}
+		}
+		ai_chance = {
+			factor = 1
 		}
 	}
 	option = {
@@ -1256,6 +1262,9 @@ country_event = {
 			country_event = {
 				id = hfe.53
 			}
+		}
+		ai_chance = {
+			factor = 1
 		}
 	}
 	option = {
@@ -1582,7 +1591,7 @@ country_event = {
 				has_ethic = ethic_fanatic_materialist
 			}
 			modifier = {
-				factor = 5
+				factor = 10
 				has_civic = civic_barbaric_despoilers
 			}
 			modifier = {
@@ -1595,7 +1604,7 @@ country_event = {
 					is_pacifist = yes
 					has_civic = hfe_civic_features_fanatic_isolationist
 					has_civic = civic_inwards_perfection
-					has_policy_flag = diplo_stance_isolationist
+#					has_policy_flag = diplo_stance_isolationist
 				}
 			}
 			modifier = {
@@ -1992,8 +2001,8 @@ country_event = {
 				change_government = {
 					authority = auth_dictatorial
 					civics = {
-						civic = civic_barbaric_despoilers
-						civic = civic_exalted_priesthood
+						civic = hfe_civic_high_mechanicus
+						civic = hfe_civic_primitive_degraded_society
 					}
 				}
 			}
@@ -8707,6 +8716,7 @@ country_event = {
 	}
 	immediate = {
 		set_country_flag = hfe_future_contacted
+		set_country_flag = hfe.5001.step0
 		establish_communications = from
 		from = {
 			while = {
@@ -8740,14 +8750,8 @@ country_event = {
 				save_event_target_as = hfe_male_leader
 			}
 		}
-		if = {
-			limit = {
-				is_ai = no
-			}
-			set_country_flag = hfe.5001.step0
-			country_event = {
-				id = hfe.5001
-			}
+		country_event = {
+			id = hfe.5001
 		}
 	}
 }
@@ -8870,19 +8874,6 @@ country_event = {
 		hfe_effect_event_5001_next = yes
 	}
 	option = {
-		name = hfe.5001.0.6
-		trigger = {
-			is_xenophobe = no
-			is_xenophile = no
-			has_country_flag = hfe.5001.step0
-			NOT = {
-				has_country_flag = hfe_marked_as_human
-			}
-			NOT = { is_homicidal = yes }
-		}
-		hfe_effect_event_5001_next = yes
-	}
-	option = {
 		name = hfe.5001.0.7
 		trigger = {
 			OR = {
@@ -8962,6 +8953,18 @@ country_event = {
 			has_civic = civic_hive_devouring_swarm
 		}
 		hfe_effect_event_47_clear_flags = yes
+	}
+	option = {
+		name = hfe.5001.0.6
+		trigger = {
+			has_country_flag = hfe.5001.step0
+			NOT = {
+				has_country_flag = hfe_marked_as_human
+			}
+			NOT = { is_homicidal = yes }
+		}
+		hfe_effect_event_5001_next = yes
+		default_hide_option = yes
 	}
 	# step 1
 	option = {
