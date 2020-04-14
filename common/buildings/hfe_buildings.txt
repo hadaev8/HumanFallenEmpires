@@ -181,6 +181,7 @@ hfe_building_virtual = {
 			owner = { has_country_flag = hfe_future }
 			planet = { has_planet_flag = hfe_future_capital }
 			planet = { has_planet_flag = hfe_future_planet }
+			planet = { has_building = hfe_building_virtual } # Once it's built, it stays
 		}
 	}
 	planet_modifier = {
@@ -322,6 +323,14 @@ hfe_building_thoth_module_energy = {
 			}
 		}
 	}
+	on_destroy = {
+		owner = {
+			change_variable = {
+				which = hfe_building_thoth_module_energy
+				value = 1
+			}
+		}
+	}
 }
 
 hfe_building_thoth_module_mineral = {
@@ -363,6 +372,14 @@ hfe_building_thoth_module_mineral = {
 			}
 		}
 	}
+	on_destroy = {
+		owner = {
+			change_variable = {
+				which = hfe_building_thoth_module_mineral
+				value = 1
+			}
+		}
+	}
 }
 
 hfe_building_thoth_module_food = {
@@ -397,6 +414,14 @@ hfe_building_thoth_module_food = {
 		}
 	}
 	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = hfe_building_thoth_module_food
+				value = 1
+			}
+		}
+	}
+	on_destroy = {
 		owner = {
 			change_variable = {
 				which = hfe_building_thoth_module_food
@@ -449,6 +474,14 @@ hfe_building_thoth_module_science = {
 			}
 		}
 	}
+	on_destroy = {
+		owner = {
+			change_variable = {
+				which = hfe_building_thoth_module_science
+				value = 1
+			}
+		}
+	}
 }
 
 hfe_building_thoth_module_industry = {
@@ -492,6 +525,14 @@ hfe_building_thoth_module_industry = {
 			}
 		}
 	}
+	on_destroy = {
+		owner = {
+			change_variable = {
+				which = hfe_building_thoth_module_industry
+				value = 1
+			}
+		}
+	}
 }
 
 hfe_building_high_mechanicus_godforge = {
@@ -513,13 +554,15 @@ hfe_building_high_mechanicus_godforge = {
 #				has_planet_flag = colony_beta
 #			}
 #		}
-		OR = {
-			owner = { has_country_flag = hfe_varelse }
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { has_country_flag = high_mechanicus_retained }
-			owner = { has_country_flag = varelse_fedora_governance }
-			owner = { has_civic = hfe_civic_high_mechanicus }
-			owner = { has_civic = hfe_civic_overthrown_mechanicus }
+		owner = {
+			OR = {
+				has_country_flag = hfe_varelse
+				has_country_flag = hfe_varelse_primitive_0
+				has_country_flag = high_mechanicus_retained
+				has_country_flag = varelse_fedora_governance
+				has_civic = hfe_civic_high_mechanicus
+				has_civic = hfe_civic_overthrown_mechanicus
+			}
 		}
 	}
 
@@ -530,10 +573,12 @@ hfe_building_high_mechanicus_godforge = {
 				has_planet_flag = colony_beta
 			}
 		}
-		OR = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { has_country_flag = high_mechanicus_retained }
-			owner = { has_country_flag = varelse_fedora_governance }
+		owner = {
+			OR = {
+				has_country_flag = hfe_varelse_primitive_0
+				has_country_flag = high_mechanicus_retained
+				has_country_flag = varelse_fedora_governance
+			}
 		}
 		owner = { is_country_type = primitive }
 	}
@@ -554,11 +599,13 @@ hfe_building_high_mechanicus_godforge = {
 	triggered_planet_modifier = {
 		potential = {
 			owner = { is_country_type = primitive }
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { has_country_flag = high_mechanicus_retained }
-				owner = { has_country_flag = varelse_fedora_governance }
-#				owner = { has_government = hfe_gov_high_mechanicus }
+			owner = {
+				OR = {
+					has_country_flag = hfe_varelse_primitive_0
+					has_country_flag = high_mechanicus_retained
+					has_country_flag = varelse_fedora_governance
+#					has_government = hfe_gov_high_mechanicus
+				}
 			}
 			NOT = {
 				owner = { has_ethic = ethic_gestalt_consciousness }
@@ -828,7 +875,7 @@ hfe_building_high_mechanicus_stronghold = {
 			owner = {
 	#			planet = { has_owner = yes }
 				OR = {
-					NOT = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
+					NOT = { has_country_flag = hfe_varelse_primitive_0 }
 					NOT = {
 						has_country_flag = high_mechanicus_retained
 						has_country_flag = mechanicus_befriended
@@ -874,10 +921,12 @@ hfe_building_high_mechanicus_stronghold = {
 	triggered_planet_modifier = {
 		potential = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			NOT = {
-				owner = { has_country_flag = varelse_fedora_governance }
-				owner = { has_civic = hfe_civic_overthrown_mechanicus }
-				owner = { is_materialist = yes }
+			owner = {
+				OR = {
+					has_country_flag = varelse_fedora_governance
+					has_civic = hfe_civic_overthrown_mechanicus
+					is_materialist = yes
+				}
 			}
 		}
 		modifier = {
@@ -956,35 +1005,27 @@ hfe_building_high_mechanicus_stronghold = {
 #		# This is meant to keep the Varelse Hegemony alive
 #		# because it has many more Pops than a Primitive should
 		trigger = {
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_primitive = yes }
-				owner = { is_country_type = primitive }
-				owner = {
+			owner = {
+				OR = {
+					has_country_flag = hfe_varelse_primitive_0
+					is_primitive = yes
+					is_country_type = primitive
 					has_monthly_income = {
 						resource = food
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = energy
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = minerals
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = consumer_goods
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = exotic_gases
 						value > 20
@@ -1129,10 +1170,12 @@ hfe_building_fedora_stronghold = {
 	triggered_planet_modifier = {
 		potential = {
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			OR = {
-				owner = { has_country_flag = varelse_fedora_governance }
-				owner = { has_civic = hfe_civic_overthrown_mechanicus }
-				owner = { is_materialist = yes }
+			owner = {
+				OR = {
+					has_country_flag = varelse_fedora_governance
+					has_civic = hfe_civic_overthrown_mechanicus
+					is_materialist = yes
+				}
 			}
 			owner = { NOT = { is_country_type = primitive } }
 		}
@@ -1151,35 +1194,27 @@ hfe_building_fedora_stronghold = {
 #		# This is meant to keep the Varelse Hegemony alive
 #		# because it has many more Pops than a Primitive should
 		trigger = {
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_primitive = yes }
-				owner = { is_country_type = primitive }
-				owner = {
+			owner = {
+				OR = {
+					has_country_flag = hfe_varelse_primitive_0
+					is_primitive = yes
+					is_country_type = primitive
 					has_monthly_income = {
 						resource = food
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = energy
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = minerals
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = consumer_goods
 						value > 30
 					}
-				}
-				owner = {
 					has_monthly_income = {
 						resource = exotic_gases
 						value > 20
@@ -1208,9 +1243,11 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 	category = government
 
 	potential = {
-		NOT = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { has_ethic = ethic_gestalt_consciousness }
+		owner = {
+			NOT = {
+				has_country_flag = hfe_varelse_primitive_0
+				has_ethic = ethic_gestalt_consciousness
+			}
 		}
 		owner = {
 			NOT = {
@@ -1354,9 +1391,11 @@ hfe_building_high_mechanicus_stronghold_conquered = {
 
 	triggered_planet_modifier = {
 		potential = {
-			OR = {
-				owner = { has_authority = auth_imperial }
-				owner = { has_civic = civic_aristocratic_elite }
+			owner = {
+				OR = {
+					has_authority = auth_imperial
+					has_civic = civic_aristocratic_elite
+				}
 			}
 		}
 		modifier = {
@@ -1540,9 +1579,11 @@ hfe_building_mechanicus_cult_temple = {
 
 	allow = {
 		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		NOT = {
-			planet = { has_planet_flag = hfe_varelse_colony }
-			planet = { has_planet_flag = colony_beta }
+		planet = {
+			OR = {
+				has_planet_flag = hfe_varelse_colony
+				has_planet_flag = colony_beta
+			}
 		}
 	}
 
@@ -1691,21 +1732,3 @@ hfe_building_mechanicus_pseudo_capital = {
 		factor = 999
 	}
 }
-
-#hfe_building_mechanicus_food_tower_collapsed = {
-#	icon = building_colony_shelter
-#	can_build = no
-#	can_demolish = no
-#	can_be_ruined = no
-#	base_cap_amount = 1
-#	
-#	resources = {
-#		produces = {
-#			food = 50
-#		}
-#	}
-#
-#	planet_modifier = {
-#		district_farming_max = -999
-#	}
-#}
