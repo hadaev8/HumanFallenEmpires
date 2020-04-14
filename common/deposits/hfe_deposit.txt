@@ -5,6 +5,8 @@
 # station = station class in orbit to gather
 # if you mix resources that are not supposed to be collected by an orbital station remember to put is_orbital_slot = no
 
+# Robot "Ecosystem"
+
 hfe_deposit_necrotic_autoevolution_0 = {
 	station = shipclass_research_station
 	is_for_colonizeable = no
@@ -34,7 +36,11 @@ hfe_deposit_necrotic_autoevolution_1 = {
 	}
 }
 
+####################################
+
 # memorial
+
+
 hfe_deposit_memorial_0_0 = {
 	is_for_colonizeable = yes
 	use_for_min_max_adjustments = yes
@@ -158,7 +164,7 @@ hfe_deposit_memorial_0_3 = {
 		planet_jobs_consumer_goods_produces_mult = 0.1
 		hfe_job_recyclers_food_produces_add = 0.5
 	}
-	# normi
+	# normie
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
@@ -299,7 +305,14 @@ hfe_deposit_memorial_3_0 = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 500
+		weight = 1000
+		modifier = {
+			factor = 0
+			OR = {
+				has_deposit = hfe_deposit_memorial_3_0
+				has_deposit = hfe_deposit_memorial_3_1
+			}
+		}
 	}
 }
 
@@ -313,21 +326,28 @@ hfe_deposit_memorial_3_1 = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
 		}
-		job_farmer_add = 1
+		job_farmer_add = 2
 		job_farmer_per_pop = 0.05
 	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
 		}
-		job_agri_drone_add = 1
+		job_agri_drone_add = 2
 		job_agri_drone_per_pop = 0.05
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 500
+		weight = 1000
+		modifier = {
+			factor = 0
+			OR = {
+				has_deposit = hfe_deposit_memorial_3_0
+				has_deposit = hfe_deposit_memorial_3_1
+			}
+		}
 	}
 }
 
@@ -348,6 +368,10 @@ hfe_deposit_memorial_4_0 = {
 		}
 	}
 }
+
+###################################################
+
+#	VARELSE		#
 
 hfe_deposit_mechanicus_farm_spire = {
 	icon = d_broken_spire
@@ -370,6 +394,7 @@ hfe_deposit_mechanicus_farm_spire = {
 		produces = {
 			trigger = {
 				planet = {
+					exists = owner
 					OR = {
 						owner = { has_country_flag = hfe_varelse_primitive_0 }
 						owner = { is_primitive = yes }
@@ -381,8 +406,11 @@ hfe_deposit_mechanicus_farm_spire = {
 		}
 		produces = {
 			trigger = {
+				planet = { exists = owner }
 				NOT = {
-					planet = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
+					planet = {
+						owner = { has_country_flag = hfe_varelse_primitive_0 }
+					}
 				}
 			}
 			food = 50
@@ -390,6 +418,7 @@ hfe_deposit_mechanicus_farm_spire = {
 		upkeep = {
 			trigger = {
 				planet = {
+					exists = owner
 					owner = { is_ai = no }
 					NOT = { owner = { is_lithoid_empire = yes } }
 					NOT = {	owner = { has_technology = tech_mine_volatile_motes } }
@@ -406,6 +435,7 @@ hfe_deposit_mechanicus_farm_spire = {
 		upkeep = {
 			trigger = {
 				planet = {
+					exists = owner
 					owner = { is_ai = no}
 					owner = {
 						has_technology = tech_mine_volatile_motes
@@ -419,7 +449,10 @@ hfe_deposit_mechanicus_farm_spire = {
 
 	triggered_planet_modifier = {
 		potential = {
-			planet = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
+			planet = {
+				exists = owner
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+			}
 		}
 		planet_pops_food_upkeep_mult = -0.2
 	}
@@ -427,6 +460,7 @@ hfe_deposit_mechanicus_farm_spire = {
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
+				exists = owner
 				owner = {
 					OR = {
 						is_ai = yes
@@ -448,18 +482,24 @@ hfe_deposit_mechanicus_farm_spire = {
 	}
 
 	planet_modifier = {
-		planet_housing_add = 3
+		planet_housing_add = 5
 		district_farming_max = -5
 	}
 
 	triggered_planet_modifier = {
-		potential = { planet = { hfe_trigger_owner_is_gestalt = yes } }
+		potential = {
+			planet = {
+				exists = owner
+				hfe_trigger_owner_is_gestalt = yes
+			}
+		}
 		job_agri_drone_add = 12
 	}
 
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
+				exists = owner
 				NOT = {
 					owner = { is_gestalt = yes }
 					owner = { has_ethic = ethic_gestalt_consciousness }
@@ -476,19 +516,28 @@ hfe_deposit_mechanicus_farm_spire = {
 
 	triggered_planet_modifier = {
 		potential = {
-			planet = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
+			planet = {
+				exists = owner
+				owner = { has_country_flag = hfe_varelse_primitive_0 }
+			}
 		}
 		job_farmer_add = 1
 	}
 
 	triggered_planet_modifier = {
-		potential = { planet = { owner = { is_ai = yes } } }
+		potential = {
+			planet = {
+				exists = owner
+				owner = { is_ai = yes }
+			}
+		}
 		planet_farmers_food_produces_mult = 0.25 # Counteracts the Bleak modifier
 	}
 
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
+				exists = owner
 				owner = { has_country_flag = hfe_varelse_primitive_0 }
 				owner = {
 					NOT = {
@@ -504,6 +553,7 @@ hfe_deposit_mechanicus_farm_spire = {
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
+				exists = owner
 				owner = {
 					OR = {
 						is_primitive = yes
@@ -512,7 +562,7 @@ hfe_deposit_mechanicus_farm_spire = {
 				}
 			}
 		}
-		job_primitive_farmer_add = 15
+		job_primitive_farmer_add = 20
 	}
 
 	drop_weight = {
