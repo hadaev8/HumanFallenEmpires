@@ -25,7 +25,7 @@
 # 	potential = {
 # 		from = {
 # 			is_sapient = yes
-# 			NOR = {
+# 			NOT = {
 # 				has_trait = "trait_robotic_1"
 # 				has_trait = "trait_robotic_2"
 # 				has_trait = "trait_robotic_3"
@@ -96,9 +96,11 @@ hfe_army_high_mechanicus_bodyguards = {
 				is_materialist = yes
 			}
 		}
-		OR = {
-			planet = { has_planet_flag = colony_beta }
-			planet = { is_capital = yes }
+		planet = {
+			OR = {
+				has_planet_flag = colony_beta
+				is_capital = yes
+			}
 		}
 	}
 	allow = {
@@ -110,16 +112,24 @@ hfe_army_high_mechanicus_bodyguards = {
 			}
 		}
 		OR = {
-			FROM = { NOT = { has_trait = trait_mechanical } }
-			FROM = { NOT = { has_trait = trait_machine_unit } }
-			FROM = { NOT = { is_robotic = yes } }
+			FROM = {
+				OR = {
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+					is_robotic = yes
+				}
+			}
 			owner = { has_country_flag = hfe_varelse_primitive_0 }
 		}
 		OR = {
-			FROM = { has_citizenship_rights = yes }
-			FROM = { has_citizenship_type = { type = citizenship_full } }
-			FROM = { is_same_species = owner }
-			FROM = { is_same_species = event_target:hfe_varelse_species }
+			FROM = {
+				OR = {
+					has_citizenship_rights = yes
+					has_citizenship_type = { type = citizenship_full }
+					is_same_species = owner
+					is_same_species = event_target:hfe_varelse_species
+				}
+			}
 			owner = { is_primitive = yes }
 			owner = { is_country_type = primitive }
 		}
@@ -187,9 +197,13 @@ hfe_army_high_mechanicus_zealots = {
 			}
 		}
 		OR = {
-			FROM = { has_citizenship_rights = yes }
-			FROM = { has_citizenship_type = { type = citizenship_full } }
-			FROM = { is_same_species = owner }
+			FROM = {
+				OR = {
+					has_citizenship_rights = yes
+					has_citizenship_type = { type = citizenship_full }
+					is_same_species = owner
+				}
+			}
 			owner = { is_primitive = yes }
 			owner = { is_country_type = primitive }
 		}
@@ -268,14 +282,7 @@ hfe_army_mechanicus_godforge_drones = {
 		}
 	}
 
-	allow = {
-#		OR = {
-#			owner = { has_country_flag = hfe_varelse_primitive_0 }
-#			FROM = { has_trait = trait_mechanical }
-#			FROM = { has_trait = trait_machine_unit }
-#		}
-		owner = { NOT = { has_policy_flag = robots_outlawed } }
-	}
+	allow = { owner = { NOT = { has_policy_flag = robots_outlawed } } }
 }
 
 hfe_army_godforge_core_watch = {
