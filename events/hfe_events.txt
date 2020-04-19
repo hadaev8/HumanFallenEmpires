@@ -1909,7 +1909,7 @@ country_event = {
 				# 	}
 				# 	set_ruined = yes
 				# }
-				set_planet_flag = colony_beta_plundered
+				set_planet_flag = hfe_colony_beta_plundered
 				set_planet_flag = planet_raided
 				add_planet_devastation = 25
 				while = {
@@ -10247,7 +10247,7 @@ ship_event = {
 		}
 	}
 	picture = GFX_evt_hfe_robot_city
-	show_sound = event_mystic_reveal
+	show_sound = event_red_alert
 	location = root
 	is_triggered_only = yes
 	trigger = {
@@ -10263,10 +10263,11 @@ ship_event = {
 		}
 		create_country = {
 			type = default
-
-			name = "Blight" # ????????
-
+			name = "The Great Blight" # ????????
+			ship_prefix = "AI Manager Drone"
+			name_list = HIVE
 			authority = auth_machine_intelligence
+			origin = origin_machine
 			civics = {
 				civic = civic_machine_assimilator
 				civic = hfe_civic_blight
@@ -10296,10 +10297,15 @@ ship_event = {
 			effect = {
 				modify_species = {
 					add_trait = trait_cybernetic
+#					add_trait = trait_machine_unit
 				}
 				add_resource = {
-					minerals = 1000
-					energy = 1000
+					energy = 10000
+					minerals = 10000
+					food = 1000
+					alloys = 5000
+					consumer_goods = 500
+					influence = 1000
 				}
 				if = {
 					limit = {
@@ -10309,9 +10315,11 @@ ship_event = {
 						target = event_target:hfe_blight_remnants.ruler
 						class = ruler
 						traits = {
-							add_trait = leader_trait_ruler_cyborg
+							trait = leader_trait_ruler_hive_mind # So that he is immortal
+							trait = leader_trait_ruler_cyborg
 						}
 						effect = {
+							set_name = "Unit 666"
 							owner = {
 								assign_leader = prev
 							}
@@ -10359,6 +10367,7 @@ ship_event = {
 										is_country = event_target:hfe_blight_remnants
 									}
 								}
+								set_name = "Directive 666 Drones"
 								set_owner = event_target:hfe_blight
 							}
 							starbase = {
@@ -10383,13 +10392,34 @@ ship_event = {
 				declare_war = {
 					target = event_target:hfe_blight_remnants
 					attacker_war_goal = hfe_wg_annex
-					name = "Blight"
+					name = "The Great Blight"
 				}
 				event_target:hfe_blight_remnants = {
-					set_name = "[species.GetName] Remnants"
+					random_list = {
+						100 = { set_name = "[species.GetName] Remnants" }
+						50 = { set_name = "Final [prev.GetSpeciesNamePlural]" }
+						20 = { set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders" }
+						1 = { set_name = "The End" }
+					}
 					kill_leader = {
 						type = ruler
 					}
+					create_leader = {
+						class = ruler
+						name = "[prev.GetSpeciesNameCompliment] the Ender"
+						gender = male
+						skill = 2
+						event_leader = yes
+						species = event_target:hfe_blight_remnants
+						leader_age_max = 35
+						traits = {
+							trait = hfe_generic_trait_nightmare
+							trait = trait_ruler_champion_of_the_people
+							trait = trait_ruler_military_pioneer
+							trait = trait_ruler_warlike
+						}
+					}
+					assign_leader = last_created_leader
 					set_variable = {
 						which = hfe_blight_counter
 						value = 0
@@ -10399,6 +10429,16 @@ ship_event = {
 					id = hfe.5086
 				}
 				# copy relics maybe
+			}
+		}
+	}
+	option = {
+		name = hfe.5080.1
+		hidden_effect = {
+			event_target:hfe_blight_remnants = {
+				country_event = {
+					id = hfe.5082
+				}
 			}
 		}
 	}
@@ -10413,16 +10453,6 @@ ship_event = {
 			}
 		}
 	}
-	option = {
-		name = hfe.5080.1
-		hidden_effect = {
-			event_target:hfe_blight_remnants = {
-				country_event = {
-					id = hfe.5082
-				}
-			}
-		}
-	}
 }
 
 # event for blight
@@ -10431,10 +10461,11 @@ country_event = {
 	title = hfe.5081.name
 	desc = hfe.5081.desc
 	picture = GFX_evt_hfe_robot_city
-	show_sound = event_activating_unknown_technology
+	show_sound = event_screams
 	location = root
 	is_triggered_only = yes
 	option = {
+		play_sound = event_activating_unknown_technology
 		name = hfe.5081.0
 	}
 }
@@ -10445,7 +10476,7 @@ country_event = {
 	title = hfe.5082.name
 	desc = hfe.5082.desc
 	picture = GFX_evt_hfe_robot_city
-	show_sound = event_air_raid_siren
+	show_sound = event_red_alert
 	location = root
 	is_triggered_only = yes
 	option = {
@@ -10458,6 +10489,7 @@ planet_event = {
 	id = hfe.5084
 	hide_window = yes
 	is_triggered_only = yes
+	show_sound = event_screams
 	trigger = {
 		exists = owner
 		owner = {
@@ -10650,10 +10682,13 @@ country_event = {
 	desc = hfe.5087.desc
 	picture = GFX_evt_hfe_robot_city
 	show_sound = event_activating_unknown_technology
+	show_sound = event_celebration
 	is_triggered_only = yes
 	option = {
 		name = hfe.5087.0
 		custom_tooltip = hfe.5087.0.tooltip
+		play_sound = scavenger_bot_death
+		play_sound = event_structural_collapse
 		hidden_effect = {
 			country_event = {
 				id = hfe.5088
@@ -10685,7 +10720,7 @@ country_event = {
 		}
 		every_owned_pop = {
 			random_list = {
-				1 = {
+				2 = {
 					modifier = {
 						factor = 2
 						or = {
@@ -10695,18 +10730,7 @@ country_event = {
 					}
 					kill_pop = yes
 				}
-				1 = {
-					modifier = {
-						factor = 0
-						not = {
-							has_trait = trait_cybernetic
-						}
-					}
-					modify_species = {
-						remove_trait = trait_cybernetic
-					}
-				}
-				1 = {
+				18 = {
 				}
 			}
 		}
@@ -10716,34 +10740,34 @@ country_event = {
 		every_owned_planet = {
 			if = {
 				limit = {
-					is_planet_class = pc_hive
+					OR = {
+						is_planet_class = pc_hive
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_ringworld_habitable_damaged
+						is_planet_class = pc_habitat
+					}
 				}
 				every_owned_pop = {
 					limit = {
 						hfe_trigger_is_robot = no
 					}
 					modify_species = {
-						remove_trait = trait_cybernetic
 						add_trait = trait_hive_mind
 					}
 				}
 			}
 			random_list = {
-				2 = {
-					modifier = {
-						factor = 10
-						num_pops < 20
-					}
+				3 = {
 					modifier = {
 						factor = 0
 						is_capital = yes
 					}
 					destroy_colony = yes
 				}
-				1 = {
+				2 = {
 					modifier = {
 						factor = 0
-						is_planet_class = pc_habitat
+						habitable_structure = yes
 					}
 					modifier = {
 						factor = 0
@@ -10751,8 +10775,7 @@ country_event = {
 					}
 					hfe_effect_primitive_make_primitive = yes
 				}
-				7 = {
-				}
+				10 = {}
 			}
 		}
 		every_system_within_border = {
@@ -10765,9 +10788,7 @@ country_event = {
 				limit = {
 					any_system_planet = {
 						is_owned_by = root
-						not = {
-							is_planet_class = pc_habitat
-						}
+						habitable_structure = no
 					}
 				}
 				random_system_planet = {
@@ -10775,7 +10796,7 @@ country_event = {
 						is_owned_by = root
 					}
 					weights = {
-						base = 1
+						base = 2
 						modifier = {
 							mult = 4
 							num_pops > 10
@@ -10809,11 +10830,27 @@ country_event = {
 					type = default
 					species = event_target:hfe_new_country_species
 					ignore_initial_colony_error = yes
+#					flag = {
+#						icon = {
+#							category = hfe_emblem
+#							file = hfe_emblem_blight.dds
+#						}
+#						background = {
+#							category = backgrounds
+#							file = 00_solid.dds
+#						}
+#						colors = {
+#							"dark_green"
+#							"black"
+#							"null"
+#							"null"
+#						}
+#					}
 					effect = {
 						hfe_effect_gov_fix = yes
 						add_modifier = {
 							modifier = hfe_reunification_age
-							days = 18000
+							days = 20000
 						}
 						if = {
 							limit = {
@@ -10824,6 +10861,22 @@ country_event = {
 								change_variable = {
 									which = hfe_blight_counter_0
 									value = 1
+								}
+							}
+							change_country_flag = {
+								icon = {
+									category = hfe_emblem
+									file = hfe_emblem_blight.dds
+								}
+								background = {
+									category = backgrounds
+									file = v.dds
+								}
+								colors = {
+									"light_blue"
+									"pink"
+									"blue"
+									"beige"
 								}
 							}
 						}
@@ -10838,16 +10891,48 @@ country_event = {
 									value = 1
 								}
 							}
+							change_country_flag = {
+								icon = {
+									category = hfe_emblem
+									file = hfe_emblem_blight.dds
+								}
+								background = {
+									category = backgrounds
+									file = 00_solid.dds
+								}
+								colors = {
+									"dark_green"
+									"black"
+									"null"
+									"null"
+								}
+							}
 						}
 						else_if = {
 							limit = {
 								has_civic = civic_machine_terminator
 							}
-							set_name = "Blight Defence Protocol [root.hfe_blight_counter_2]"
+							set_name = "Blight Defense Protocol [root.hfe_blight_counter_2]"
 							root = {
 								change_variable = {
 									which = hfe_blight_counter_2
 									value = 1
+								}
+							}
+							change_country_flag = {
+								icon = {
+									category = hfe_emblem
+									file = hfe_emblem_blight.dds
+								}
+								background = {
+									category = backgrounds
+									file = pattern_01.dds
+								}
+								colors = {
+									"red"
+									"black"
+									"black"
+									"black"
 								}
 							}
 						}
@@ -10855,11 +10940,27 @@ country_event = {
 							limit = {
 								is_hive_empire = yes
 							}
-							set_name = "Blight Abomination [root.hfe_blight_counter_3]"
+							set_name = "Blighted Abomination [root.hfe_blight_counter_3]"
 							root = {
 								change_variable = {
 									which = hfe_blight_counter_3
 									value = 1
+								}
+							}
+							change_country_flag = {
+								icon = {
+									category = hfe_emblem
+									file = hfe_emblem_blight.dds
+								}
+								background = {
+									category = backgrounds
+									file = 00_solid.dds
+								}
+								colors = {
+									"dark_purple"
+									"light_green"
+									"black"
+									"black"
 								}
 							}
 						}
@@ -10927,7 +11028,7 @@ country_event = {
 		}
 		event_target:hfe_capital_scope = {
 			owner = {
-				set_name = "Prime Cluster Successors"
+				set_name = "Prime Cluster Core"
 				change_dominant_species = {
 					species = root.species
 					change_all = yes
@@ -10938,6 +11039,7 @@ country_event = {
 		# TODO galactic community
 		remove_global_flag = galactic_community_founded
 		remove_global_flag = galcom_founding_begun
+		remove_global_flag = galactic_council_formed
 	}
 }
 
