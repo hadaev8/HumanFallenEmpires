@@ -73,59 +73,65 @@ planet_event = {
 	}
 
 	immediate = {
-		log = "converting to asteroid [this.GetName]"
+		if = {
+			limit = { has_global_flag = HFE_TSP_spawn_test }
+			log = "converting to asteroid [this.GetName]"
+		}
 		hfe_effect_convert_to_asteroid = yes
 	}
 }
 
-ship_event = {
-	id = hfe_maintenance.3
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		exists = solar_system
-		exists = owner
-		owner = {
-			is_country_type = hfe_drone
-		}
-		has_global_flag = hfe_drone_awake
-	}
-
-	immediate = {
-		solar_system = {
-			every_neighbor_system = {
-				limit = {
-					is_surveyed = {
-						who = root.owner
-						status = no
-					}
-				}
-				every_system_planet = {
-					surveyed = {
-						set_surveyed = yes
-						surveyor = root.owner
-					}
-				}
-				every_neighbor_system = {
-					limit = {
-						is_surveyed = {
-							who = root.owner
-							status = no
-						}
-					}
-					every_system_planet = {
-						surveyed = {
-							set_surveyed = yes
-							surveyor = root.owner
-						}
-					}
-				}
-			}
-		}
-		log = "Harvesting Marvel awakens"
-	}
-}
+#ship_event = {
+#	id = hfe_maintenance.3
+#	hide_window = yes
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		exists = solar_system
+#		exists = owner
+#		owner = {
+#			is_country_type = hfe_drone
+#		}
+#		has_global_flag = hfe_drone_awake
+#	}
+#
+#	immediate = {
+#		solar_system = {
+#			every_neighbor_system = {
+#				limit = {
+#					is_surveyed = {
+#						who = root.owner
+#						status = no
+#					}
+#				}
+#				every_system_planet = {
+#					surveyed = {
+#						set_surveyed = yes
+#						surveyor = root.owner
+#					}
+#				}
+#				every_neighbor_system = {
+#					limit = {
+#						is_surveyed = {
+#							who = root.owner
+#							status = no
+#						}
+#					}
+#					every_system_planet = {
+#						surveyed = {
+#							set_surveyed = yes
+#							surveyor = root.owner
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = { has_global_flag = HFE_TSP_spawn_test }
+#			log = "Harvesting Marvel awakens"
+#		}
+#	}
+#}
 
 # clean countries
 country_event = {
@@ -422,6 +428,8 @@ country_event = {
 			}
 			modify_species = {
 				remove_trait = trait_latent_psionic
+				remove_trait = trait_mechanical
+				remove_trait = trait_machine_unit
 			}
 		}
 	}
@@ -628,14 +636,14 @@ event = {
 					any_owned_planet = {
 						OR = {
 							has_planet_flag = hfe_varelse_colony
-							has_planet_flag = colony_beta
+							has_planet_flag = hfe_colony_beta
 						}
 					}
 				}
 				random_owned_planet = {
 					limit = {
 						has_planet_flag = hfe_varelse_colony
-						has_planet_flag = colony_beta
+						has_planet_flag = hfe_colony_beta
 						has_observation_outpost = yes
 					}
 					planet_event = {
