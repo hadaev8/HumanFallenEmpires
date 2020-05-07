@@ -7,6 +7,7 @@ hfe_species_trait_hucksters = {
 	modification = no
 	sorting_priority = 25
 	leader_age_min = 10
+	potential_crossbreeding_chance = 0.5
 	icon = gfx/interface/icons/other/hfe_hucksters.dds
 	allowed_archetypes = {
 		BIOLOGICAL LITHOID PRESAPIENT
@@ -16,23 +17,24 @@ hfe_species_trait_hucksters = {
 	}
 	modifier = {
 		# TODO test
-		#hfe_planet_jobs_specialist_energy_produces_add = 3
+		# hfe_planet_jobs_specialist_energy_produces_add = 3
 		# planet_jobs_energy_produces_add = 1
 		# district_generator_max = 1
 		trade_value_add = 1
 		planet_amenities_add = 1
-		pop_political_power = 0.1
+		pop_political_power = 0.25
 	}
 }
 
 hfe_species_trait_war_fans = {
-	cost = 1
+	cost = 0
 	initial = no
 	randomized = no
 	modification = no
 	sorting_priority = 25
 	leader_age_min = 10
 	icon = gfx/interface/icons/other/hfe_war_fans.dds
+	potential_crossbreeding_chance = 0
 	allowed_archetypes = {
 		BIOLOGICAL LITHOID
 	}
@@ -45,12 +47,13 @@ hfe_species_trait_war_fans = {
 		pop_ethic_authoritarian_attraction_mult = 1
 		pop_ethic_militarist_attraction_mult = 0.5
 		pop_ethic_xenophile_attraction_mult = 0.3
+#		hfe_planet_jobs_war_produces_mult = 0.3
 		army_morale = 0.25
 	}
 }
 
 hfe_species_trait_error = {
-	cost = -1
+	cost = -3 # The penalties here are some of the worst in the game
 	initial = no
 	randomized = no
 	modification = no
@@ -64,6 +67,12 @@ hfe_species_trait_error = {
 	allowed_archetypes = {
 		BIOLOGICAL LITHOID
 	}
+	species_possible_remove = {
+		FROM = {
+			has_ascension_perk = ap_evolutionary_mastery
+			has_technology = tech_genetic_resequencing
+		}
+	}
 	ai_weight = {
 		weight = 0 # This is a bad Trait!
 	}
@@ -73,10 +82,9 @@ hfe_species_trait_error = {
 		planet_jobs_physics_research_produces_mult = -0.5
 		planet_jobs_society_research_produces_mult = -0.5
 		planet_jobs_energy_produces_mult = -0.5
-		pop_happiness = 0.1 # Happy to be alive
 		pop_amenities_usage_add = 1 # More medicine
 		pop_cat_bio_trophy_happiness = 0.5
-		leader_age = -20
+		leader_age = -40
 	}
 }
 
@@ -88,15 +96,20 @@ hfe_species_trait_happy_slave = {
 	sorting_priority = 25
 	advanced_trait = yes
 #	forced_happiness = yes
-	potential_crossbreeding_chance = 0.9
+	potential_crossbreeding_chance = 1
 
 	species_potential_add = {
-		FROM = { has_country_flag = hfe_egypt }
+		FROM = {
+			has_country_flag = hfe_egypt
+			hfe_trigger_is_awake = yes
+		}
 #		FROM = { is_ai = yes }
-		NOT = {
-			has_citizenship_rights = yes
+		NOT =  {
+			is_same_species = event_target:hfe_egypt_species
 			species_portrait = hfe_portrait_egypt
 			species_portrait = human
+			has_species_flag = hfe_marked_as_human_species
+			has_citizenship_rights = yes
 			has_citizenship_type = {
 				type = citizenship_full
 			}
@@ -135,7 +148,7 @@ hfe_species_trait_happy_slave = {
 		planet_jobs_ruler_produces_mult = -0.9
 		planet_jobs_specialist_produces_mult = -0.2
 		pop_amenities_usage_mult = -0.9
-		pop_government_ethic_attraction = 1
+		pop_government_ethic_attraction = 2
 		pop_cat_worker_happiness = 0.5
 		pop_cat_slave_happiness = 1
 		pop_cat_purge_happiness = 0.2 # Have no value of their own individuality
@@ -159,14 +172,14 @@ hfe_species_trait_happy_slave = {
 }
 
 hfe_species_trait_clever_beast = {
-	cost = 1
+	cost = 0
 	initial = no
 	randomized = no
 	modification = no
 	sorting_priority = 25
 	leader_age_min = 10
 	icon = gfx/interface/icons/other/hfe_clever_beast.dds
-	allowed_archetypes = { BIOLOGICAL LITHOID PRESAPIENT }
+	allowed_archetypes = { BIOLOGICAL LITHOID }
 	potential_crossbreeding_chance = 0.15
 
 	modifier = {
@@ -177,6 +190,42 @@ hfe_species_trait_clever_beast = {
 		planet_jobs_minerals_produces_mult = -0.15
 		planet_jobs_food_produces_mult = -0.15
 		leader_age = 5
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+}
+
+hfe_species_trait_clever_beast_presapient_spawn = {
+	cost = 0
+	initial = yes
+	randomized = yes
+	modification = no
+	sorting_priority = 25
+	leader_age_min = 10
+	icon = gfx/interface/icons/other/hfe_clever_beast.dds
+	allowed_archetypes = { PRESAPIENT }
+	potential_crossbreeding_chance = 0.3
+
+	opposites = {
+		trait_presapient_docile_livestock
+		trait_presapient_conservative
+		trait_presapient_earthbound
+		trait_presapient_irradiated
+		trait_presapient_natural_intellectuals
+		trait_presapient_proles
+		trait_presapient_starborn
+	}
+
+	modifier = {
+		planet_jobs_physics_research_produces_mult = 0.25
+		planet_jobs_engineering_research_produces_mult = 0.04
+		planet_jobs_society_research_produces_mult = 0.04
+		planet_jobs_energy_produces_mult = -0.1
+		planet_jobs_minerals_produces_mult = -0.1
+		planet_jobs_food_produces_mult = -0.1
+		leader_age = 4
 	}
 
 	ai_weight = {
