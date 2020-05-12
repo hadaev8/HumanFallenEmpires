@@ -9442,9 +9442,10 @@ country_event = {
 			days = 3600
 		}
 		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
-		country_remove_ethic = ethic_fanatic_pacifist
-		country_add_ethic = ethic_fanatic_militarist
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_militarist
 		country_add_ethic = ethic_egalitarian
+		country_add_ethic = ethic_xenophile
 		change_government = {
 			authority = auth_democratic
 			civics = {
@@ -9453,21 +9454,36 @@ country_event = {
 			}
 		}
 		every_owned_pop = {
-			limit = { has_ethic = ethic_egalitarian }
-			pop_change_ethic = ethic_militarist
+			limit = {
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_materialist
+				}
+			}
+			pop_change_ethic = ethic_fanatic_militarist
 		}
 		every_owned_pop = {
 			limit = { has_ethic = ethic_pacifist }
-			pop_change_ethic = ethic_egalitarian
+			pop_change_ethic = ethic_fanatic_egalitarian
+		}
+		every_owned_pop = {
+			limit = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_authoritarian
+				}
+			}
+			pop_change_ethic = ethic_xenophile
 		}
 		kill_leader = {
 			type = ruler
 			show_notification = no
 		}
-		create_leader = {
-			class = ruler
-		}
-		assign_leader = last_created_leader
+#		create_leader = {
+#			class = ruler
+#		}
+#		assign_leader = last_created_leader
 
 		# ???????? ????? ???????? ?????? ? ?????????? ??????
 
