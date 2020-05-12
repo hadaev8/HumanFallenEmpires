@@ -803,7 +803,7 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 			}
 			effect = {
 				set_country_flag = was_government_in_exile
-				set_country_flag = chosen_to_exodus
+				set_country_flag = hfe_chosen_to_exodus
 				set_country_flag = hfe_varelse
 				set_graphical_culture = fallen_empire_02
 				set_city_graphical_culture = reptilian_01
@@ -925,7 +925,7 @@ hfe_effect_save_event_target = {
 }
 
 #hfe_effect_clear_event_target = {
-#clear_global_event_target = hfe_event_target_0
+# clear_global_event_target = hfe_event_target_0
 #	clear_global_event_target = hfe_event_target_1
 #	clear_global_event_target = hfe_event_target_2
 #	clear_global_event_target = hfe_event_target_3
@@ -1784,18 +1784,23 @@ hfe_effect_gov_fix_to_hive = {
 		}
 		create_country = {
 			type = default
-			species = this
+			species = this.species
 			ignore_initial_colony_error = yes
 			ethos = {
 				ethic = ethic_gestalt_consciousness
 			}
 			authority = auth_machine_intelligence
+			origin = origin_default
+			civics = {
+				civic = random
+				civic = random
+			}
 		}
 		copy_ethos_and_authority = last_created_country
 		random_list = {
 			10 = {
 				modifier = {
-					factor = 0.1
+					factor = 0.5
 					not = {
 						any_owned_pop_species = {
 							hfe_trigger_is_robot = no
@@ -1811,7 +1816,7 @@ hfe_effect_gov_fix_to_hive = {
 			}
 			10 = {
 				modifier = {
-					factor = 0.1
+					factor = 0.5
 					not = {
 						any_owned_pop_species = {
 							hfe_trigger_is_robot = no
@@ -1825,9 +1830,9 @@ hfe_effect_gov_fix_to_hive = {
 					}
 				}
 			}
-			10 = {
+			1 = {
 				modifier = {
-					factor = 0.1
+					factor = 0
 					any_owned_pop_species = {
 						hfe_trigger_is_robot = no
 					}
@@ -1871,21 +1876,30 @@ hfe_effect_gov_fix_to_hive = {
 		}
 		create_country = {
 			type = default
-			species = this
+			species = this.species
 			ignore_initial_colony_error = yes
 			ethos = {
 				ethic = ethic_gestalt_consciousness
 			}
 			authority = auth_hive_mind
+			origin = origin_default
+			civics = {
+				civic = random
+				civic = random
+			}
+
 		}
 		copy_ethos_and_authority = last_created_country
 		random_list = {
 			50 = {
 				change_government = {
-					civics = random
+					civics = {
+						civic = random
+						civic = random
+					}
 				}
 			}
-			10 = {
+			2 = {
 				change_government = {
 					civics = {
 						civic = civic_hive_devouring_swarm
@@ -1910,12 +1924,21 @@ hfe_effect_gov_fix_from_hive = {
 		}
 		create_country = {
 			type = default
-			species = this
+			species = this.species
 			ignore_initial_colony_error = yes
+			randomize_ethos = yes
+			civics = {
+				civic = random
+				civic = random
+			}
+			origin = origin_default
 		}
 		copy_ethos_and_authority = last_created_country
 		change_government = {
-			civics = random
+			civics = {
+				civic = random
+				civic = random
+			}
 		}
 		set_name = random
 	}
@@ -1926,6 +1949,13 @@ hfe_effect_gov_reset_non_hive = {
 		type = default
 		species = this
 		ignore_initial_colony_error = yes
+		authority = random
+		randomize_ethos = yes
+		civics = {
+			civic = random
+			civic = random
+		}
+		origin = origin_default
 	}
 	copy_ethos_and_authority = last_created_country
 	change_government = {

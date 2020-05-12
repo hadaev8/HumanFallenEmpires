@@ -18,12 +18,7 @@ hfe_ruler_trait_genomod = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
-		from = {
-			OR = {
-				is_gestalt = no
-				has_authority = auth_hive_mind
-			}
-		}
+		from = { is_gestalt = no }
 		exists = species
 		species = {
 			is_same_species = from
@@ -95,8 +90,10 @@ hfe_ruler_trait_warriror_honor = {
 	modifier = {
 		# opinion effect
 		hfe_planet_jobs_war_militarist_produces_mult = 0.1
-		# TODO
 		max_rivalries = 1
+		pop_ethic_militarist_attraction_mult = 0.15
+		# TODO
+#		rivalries_influence_produces_mult = 0.5
 	}
 	leader_trait = {
 		ruler
@@ -223,6 +220,7 @@ hfe_ruler_trait_lovable_buffoon = {
 	randomized = yes
 	modification = no
 	icon = gfx/interface/icons/other/hfe_lovable_buffoon.dds
+
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
@@ -233,11 +231,12 @@ hfe_ruler_trait_lovable_buffoon = {
 			has_trait = trait_enigmatic_intelligence
 			has_trait = trait_enigmatic_intelligence_poor
 			has_trait = hfe_species_trait_clever_beast
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
+			has_trait = trait_presapient_natural_intellectuals
 			has_trait = leader_trait_intellectual
+			FROM = { hfe_trigger_is_fallen = yes }
 		}
-		from = {
-			is_gestalt = no
-		}
+		from = { is_gestalt = no }
 		years_passed > 0
 	}
 	opposites = {
@@ -355,8 +354,9 @@ hfe_ruler_trait_army_lover = {
 		exists = from
 		from = {
 			num_communications > 3
-			is_militarist = yes
+			NOT = { is_pacifist = yes }
 			is_gestalt = no
+			has_policy_flag = unrestricted_wars
 		}
 	}
 	modifier = {
@@ -391,11 +391,9 @@ hfe_ruler_trait_lobby = {
 	}
 	leader_trait = {
 		ruler
-		governor
 	}
 	leader_class = {
 		ruler
-		governor
 	}
 }
 
@@ -417,11 +415,11 @@ hfe_ruler_trait_bureaucrat = {
 		empire_size_penalty_mult = -0.1
 	}
 	leader_trait = {
-		ruler
+#		ruler
 		governor
 	}
 	leader_class = {
-		ruler
+#		ruler
 		governor
 	}
 }
@@ -560,6 +558,7 @@ hfe_governor_trait_xenolover = {
 	}
 	modifier = {
 		planet_immigration_pull_mult = 0.1
+		pop_ethic_xenophile_attraction_mult = 0.1
 	}
 	leader_trait = {
 		governor
@@ -1181,7 +1180,7 @@ hfe_general_trait_satanist = {
 	icon = gfx/interface/icons/other/hfe_satanist.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic_species = yes
+		hfe_trigger_is_psionic = yes
 		exists = from
 		from = {
 			has_country_flag = has_shroud_patron

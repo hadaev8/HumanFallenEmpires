@@ -170,7 +170,7 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe.47.step0
 #			is_militarist = yes
-			fleet_power > 40000
+			fleet_power > 75000
 			NOT = { is_pacifist = yes }
 			NOT = { is_xenophile = yes }
 		}
@@ -456,8 +456,8 @@ country_event = {
 		name = hfe.47.2.3
 		trigger = {
 			has_country_flag = hfe.47.step2
-			has_country_flag = hfe_marked_as_human
 			NOT = {
+				has_country_flag = hfe_marked_as_human
 				has_country_flag = human_1
 				has_country_flag = human_2
 				capital_scope = {
@@ -503,9 +503,6 @@ country_event = {
 		name = hfe.47.2.5
 		trigger = {
 			has_country_flag = hfe.47.step2
-			not = {
-				has_country_flag = hfe_marked_as_human
-			}
 			nand = {
 				exists = event_target:hfe_earth
 				event_target:hfe_earth = {
@@ -568,9 +565,7 @@ country_event = {
 				has_country_flag = hfe_marked_as_human
 				NOT = {
 					is_xenophobe = yes
-					has_civic = civic_fanatic_purifiers
-					has_civic = civic_machine_terminator
-					has_civic = civic_hive_devouring_swarm
+					is_homicidal = yes
 					# These get their own
 					hfe_trigger_is_assimilator = yes
 					has_civic = civic_machine_servitor
@@ -651,9 +646,9 @@ country_event = {
 		name = hfe.47.2.9
 		trigger = {
 			has_country_flag = hfe.47.step2
-			not = {
-				has_country_flag = hfe_marked_as_human
-			}
+#			not = {
+#				has_country_flag = hfe_marked_as_human
+#			}
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
 				exists = owner
@@ -694,11 +689,11 @@ country_event = {
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
 				is_owned_by = root
-				nand = {
+				NOT = {
 					is_original_owner = owner
-					root = {
-						has_country_flag = hfe_marked_as_human
-					}
+#					root = {
+#						has_country_flag = hfe_marked_as_human
+#					}
 				}
 			}
 		}
@@ -9404,7 +9399,7 @@ country_event = {
 			has_global_flag = hfe_expansion_block
 		}
 		mid_game_years_passed > 0
-		or = {
+		OR = {
 			end_game_years_passed > 0
 			has_global_flag = galactic_crisis_happened
 			has_global_flag = hfe_war_in_heaven_started
@@ -9446,32 +9441,63 @@ country_event = {
 			modifier = hfe_navy_size
 			days = 3600
 		}
-		country_remove_ethic = ethic_fanatic_pacifist
-		country_add_ethic = ethic_fanatic_militarist
+		# Remove diplomatic power malus
+		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
+		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
+		hfe_effect_cleanse_ethics = yes
+		country_add_ethic = ethic_militarist
 		country_add_ethic = ethic_egalitarian
+		country_add_ethic = ethic_xenophile
 		change_government = {
 			authority = auth_democratic
-			civics = random
+			civics = {
+				civic = civic_free_haven
+				civic = civic_diplomatic_corps
+			}
 		}
 		every_owned_pop = {
 			limit = {
-				has_ethic = ethic_pacifist
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_materialist
+				}
 			}
-			pop_change_ethic = ethic_militarist
+			pop_change_ethic = ethic_fanatic_militarist
+		}
+		every_owned_pop = {
+			limit = { has_ethic = ethic_pacifist }
+			pop_change_ethic = ethic_fanatic_egalitarian
+		}
+		every_owned_pop = {
+			limit = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_authoritarian
+				}
+			}
+			pop_change_ethic = ethic_xenophile
 		}
 		kill_leader = {
 			type = ruler
 			show_notification = no
 		}
-		create_leader = {
-			class = ruler
-		}
-		assign_leader = last_created_leader
+#		create_leader = {
+#			class = ruler
+#		}
+#		assign_leader = last_created_leader
 
 		# ???????? ????? ???????? ?????? ? ?????????? ??????
 
 		set_country_type = default
 		set_global_flag = hfe_future_in_expansion
+
+		set_policy = {
+			policy = refugees
+			option = refugees_allowed
+			cooldown = yes
+		}
+
 		every_playable_country = {
 			establish_communications_no_message = root
 			if = {
@@ -10247,7 +10273,7 @@ ship_event = {
 		}
 	}
 	picture = GFX_evt_hfe_robot_city
-	show_sound = event_red_alert
+	show_sound = event_activating_unknown_technology
 	location = root
 	is_triggered_only = yes
 	trigger = {
@@ -10396,30 +10422,14 @@ ship_event = {
 				}
 				event_target:hfe_blight_remnants = {
 					random_list = {
-						100 = { set_name = "[species.GetName] Remnants" }
-						50 = { set_name = "Final [prev.GetSpeciesNamePlural]" }
-						20 = { set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders" }
-						1 = { set_name = "The End" }
+						75 = { set_name = "[species.GetName] Remnants" }
+						70 = { set_name = "Final [prev.GetSpeciesNamePlural]" }
+						70 = { set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders" }
+						10 = { set_name = "The End" }
 					}
 					kill_leader = {
 						type = ruler
 					}
-					create_leader = {
-						class = ruler
-						name = "[prev.GetSpeciesNameCompliment] the Ender"
-						gender = male
-						skill = 2
-						event_leader = yes
-						species = event_target:hfe_blight_remnants
-						leader_age_max = 35
-						traits = {
-							trait = hfe_generic_trait_nightmare
-							trait = trait_ruler_champion_of_the_people
-							trait = trait_ruler_military_pioneer
-							trait = trait_ruler_warlike
-						}
-					}
-					assign_leader = last_created_leader
 					set_variable = {
 						which = hfe_blight_counter
 						value = 0
@@ -10434,6 +10444,7 @@ ship_event = {
 	}
 	option = {
 		name = hfe.5080.1
+#		custom_tooltip = hfe_player_not_change_to_blight
 		hidden_effect = {
 			event_target:hfe_blight_remnants = {
 				country_event = {
@@ -10444,6 +10455,7 @@ ship_event = {
 	}
 	option = {
 		name = hfe.5080.0
+		custom_tooltip = hfe_player_change_to_blight
 		event_target:hfe_blight = {
 			set_player = event_target:hfe_blight_remnants
 			hidden_effect = {
@@ -10461,11 +10473,11 @@ country_event = {
 	title = hfe.5081.name
 	desc = hfe.5081.desc
 	picture = GFX_evt_hfe_robot_city
-	show_sound = event_screams
+	show_sound = event_swarm
 	location = root
 	is_triggered_only = yes
 	option = {
-		play_sound = event_activating_unknown_technology
+		play_sound = event_screams
 		name = hfe.5081.0
 	}
 }
@@ -10475,12 +10487,63 @@ country_event = {
 	id = hfe.5082
 	title = hfe.5082.name
 	desc = hfe.5082.desc
-	picture = GFX_evt_hfe_robot_city
+	picture = GFX_evt_organic_oppression
 	show_sound = event_red_alert
 	location = root
 	is_triggered_only = yes
+
 	option = {
 		name = hfe.5082.0
+		play_sound = event_swarm
+	}
+
+	after = {
+		country_event = {
+			id = hfe.5083
+			days = 0
+		}
+	}
+}
+
+country_event = {
+	id = hfe.5083
+	title = hfe_5083_jimmy_the_ender
+	desc = hfe_5083_jimmy_the_ender_desc
+	picture = GFX_evt_civil_action
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = hfe_5083_jimmy_the_ender_option_a
+		hidden_effect = {
+			kill_leader = {
+				type = ruler
+			}
+		}
+		create_leader = {
+			class = ruler
+			name = "[prev.GetSpeciesNameCompliment] the Ender"
+			gender = male
+			skill = 10
+			event_leader = yes
+			species = event_target:hfe_blight_remnants
+			set_age = 21
+			immortal = yes
+			traits = {
+				trait = leader_trait_ruler_cyborg # He survives the Blight
+				trait = leader_trait_maimed
+				trait = hfe_generic_trait_nightmare
+				trait = trait_ruler_champion_of_the_people
+				trait = hfe_ruler_trait_army_lover
+#				trait = trait_ruler_military_pioneer
+#				trait = trait_ruler_warlike
+			}
+			effect = {
+				set_leader_flag = hfe_tsp_jimmy_the_ender
+				save_global_event_target_as = jimmy_the_ender
+			}
+		}
+		assign_leader = last_created_leader
 	}
 }
 
@@ -10720,7 +10783,7 @@ country_event = {
 		}
 		every_owned_pop = {
 			random_list = {
-				2 = {
+				3 = {
 					modifier = {
 						factor = 2
 						or = {
@@ -10730,7 +10793,7 @@ country_event = {
 					}
 					kill_pop = yes
 				}
-				18 = {
+				17 = {
 				}
 			}
 		}
@@ -10745,6 +10808,8 @@ country_event = {
 						is_planet_class = pc_ringworld_habitable
 						is_planet_class = pc_ringworld_habitable_damaged
 						is_planet_class = pc_habitat
+						is_planet_class = pc_gaia
+						is_planet_class = pc_city
 					}
 				}
 				every_owned_pop = {
@@ -10757,14 +10822,14 @@ country_event = {
 				}
 			}
 			random_list = {
-				3 = {
+				1 = {
 					modifier = {
 						factor = 0
 						is_capital = yes
 					}
 					destroy_colony = yes
 				}
-				2 = {
+				5 = {
 					modifier = {
 						factor = 0
 						habitable_structure = yes
@@ -10772,6 +10837,17 @@ country_event = {
 					modifier = {
 						factor = 0
 						is_capital = yes
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							is_planet_class = pc_hive
+							is_planet_class = pc_ringworld_habitable
+							is_planet_class = pc_ringworld_habitable_damaged
+							is_planet_class = pc_habitat
+							is_planet_class = pc_gaia
+							is_planet_class = pc_city
+						}
 					}
 					hfe_effect_primitive_make_primitive = yes
 				}
@@ -10816,10 +10892,10 @@ country_event = {
 						}
 						weights = {
 							base = 1
-							modifier = {
-								mult = 10
-								hfe_trigger_is_robot_or_hive = no
-							}
+#							modifier = {
+#								mult = 10
+#								hfe_trigger_is_robot_or_hive = no
+#							}
 						}
 						species = {
 							save_event_target_as = hfe_new_country_species
@@ -10830,6 +10906,7 @@ country_event = {
 					type = default
 					species = event_target:hfe_new_country_species
 					ignore_initial_colony_error = yes
+					released_by_country = event_target:hfe_blight
 #					flag = {
 #						icon = {
 #							category = hfe_emblem
@@ -10873,8 +10950,8 @@ country_event = {
 									file = v.dds
 								}
 								colors = {
-									"light_blue"
 									"pink"
+									"light_blue"
 									"blue"
 									"beige"
 								}
@@ -10898,7 +10975,7 @@ country_event = {
 								}
 								background = {
 									category = backgrounds
-									file = 00_solid.dds
+									file = horizontal_stripe.dds
 								}
 								colors = {
 									"dark_green"
@@ -10954,7 +11031,7 @@ country_event = {
 								}
 								background = {
 									category = backgrounds
-									file = 00_solid.dds
+									file = horizontal_stripe.dds
 								}
 								colors = {
 									"dark_purple"
@@ -11028,10 +11105,20 @@ country_event = {
 		}
 		event_target:hfe_capital_scope = {
 			owner = {
-				set_name = "Prime Cluster Core"
+				set_name = "AI Manager Prime Cluster Core"
 				change_dominant_species = {
 					species = root.species
 					change_all = yes
+				}
+				every_owned_pop = {
+					modify_species = {
+						species = root.species
+						remove_trait = trait_hive_mind
+						add_trait = trait_cybernetic
+					}
+				}
+				ruler = {
+					set_name = "AIM 3029bac System Image"
 				}
 				set_player = root
 			}

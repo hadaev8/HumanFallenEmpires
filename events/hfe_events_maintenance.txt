@@ -939,3 +939,130 @@ event = {
 		}
 	}
 }
+
+# Call Varelse Deposits
+country_event = {
+	id = hfe_maintenance.105
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+		event_target:hfe_varelse_colony_planet = {
+			planet_event = {
+				id = hfe_maintenance.106
+				days = 1
+			}
+		}
+		event_target:colony_delta = {
+			planet_event = {
+				id = hfe_maintenance.107
+				days = 1
+			}
+		}
+	}
+}
+
+# Check if Colony Beta's Cult Deposits still exist
+planet_event = {
+	id = hfe_maintenance.106
+	hide_window = yes
+	is_triggered_only = yes # Called by On-Action
+
+	trigger = {
+		OR = {
+			is_planet = event_target:hfe_varelse_colony_planet
+			has_planet_flag = hfe_colony_beta
+		}
+	}
+
+	immediate = {
+		remove_deposit = d_dust_desert
+		if = {
+			limit = {
+				NOT = {
+					has_deposit = hfe_deposit_mechanicus_farm_spire
+				}
+			}
+			add_deposit = hfe_deposit_mechanicus_farm_spire
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_deposit = d_relic_metal_boneyard
+				}
+			}
+			add_deposit = d_relic_metal_boneyard
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_deposit = d_ancient_bombardment_craters
+				}
+			}
+			add_deposit = d_ancient_bombardment_craters
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_deposit = d_dust_caverns
+				}
+			}
+			add_deposit = d_dust_caverns
+			add_deposit = d_dust_caverns
+		}
+	}
+}
+
+# Check if Colony Delta's Deposits still exist
+planet_event = {
+	id = hfe_maintenance.107
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = hfe_colony_delta
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_deposit = d_irradiated_ruins }
+			}
+			add_deposit = d_irradiated_ruins
+		}
+		if = {
+			limit = {
+				NOT = { has_deposit = d_irradiated_valley }
+			}
+			add_deposit = d_irradiated_valley
+		}
+		if = {
+			limit = {
+				NOT = { has_deposit = d_ancient_bombardment_craters }
+			}
+			add_deposit = d_ancient_bombardment_craters
+		}
+		if = {
+			limit = {
+				NOT = { has_deposit = d_odd_factory }
+			}
+			add_deposit = d_odd_factory
+		}
+		if = {
+			limit = {
+				NOT = { has_deposit = d_industrial_sector }
+			}
+			add_deposit = d_industrial_sector
+		}
+		if = {
+			limit = {
+				NOT = { has_deposit = d_relic_metal_boneyard }
+			}
+			add_deposit = d_relic_metal_boneyard
+		}
+	}
+}
