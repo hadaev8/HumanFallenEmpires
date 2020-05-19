@@ -61,35 +61,9 @@ hfe_effect_population_country_set_robot_pop_identity = {
 		}
 	}
 	else = {
-		random_owned_pop = {
-			limit = {
-				has_trait = trait_mechanical
-			}
-			save_event_target_as = hfe_robot_pop_species
-		}
-		every_owned_pop_species = {
-			limit = {
-				has_trait = trait_mechanical
-				exists = event_target:hfe_robot_pop_species
-				not = {
-					is_same_species = event_target:hfe_robot_pop_species
-				}
-			}
-			root = {
-				modify_species = {
-					base = none
-					species = prev
-					add_trait = hfe_species_trait_test
-				}
-			}
-#			set_species_identity = prev.species
-			set_species_identity = prev
-			root = {
-				modify_species = {
-					species = prev
-					remove_trait = hfe_species_trait_test
-				}
-			}
+		if = {
+			limit = { owner = { is_machine_empire = no } }
+			hfe_effect_population_process_robot_species_identity = yes
 		}
 	}
 }
@@ -130,6 +104,39 @@ hfe_effect_population_fix_robot_pop = {
 			add_trait = trait_machine_unit
 		}
 		remove_modifier = pop_recently_conquered
+	}
+}
+
+hfe_effect_population_process_robot_species_identity = {
+	random_owned_pop = {
+		limit = {
+			has_trait = trait_mechanical
+		}
+		save_event_target_as = hfe_robot_pop_species
+	}
+	every_owned_pop_species = {
+		limit = {
+			has_trait = trait_mechanical
+			exists = event_target:hfe_robot_pop_species
+			not = {
+				is_same_species = event_target:hfe_robot_pop_species
+			}
+		}
+		root = {
+			modify_species = {
+				base = none
+				species = prev
+				add_trait = hfe_species_trait_test
+			}
+		}
+#		set_species_identity = prev.species
+		set_species_identity = prev
+		root = {
+			modify_species = {
+				species = prev
+				remove_trait = hfe_species_trait_test
+			}
+		}
 	}
 }
 
