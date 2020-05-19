@@ -161,13 +161,19 @@ planet_event = {
 				}
 			}
 
-			log = "Exodus modifiers for Origin accepted"
+			if = {
+				limit = { has_global_flag = HFE_TSP_spawn_test }
+				log = "Exodus modifiers for Origin accepted"
+			}
 		}
 		if = {
 			limit = {
-				OR = {
-					owner = { NOT = { has_origin = hfe_civic_features_exodus } }
-					owner = { has_country_flag = hfe_chosen_to_exodus }
+				owner = {
+					OR = {
+						NOT = { has_origin = hfe_civic_features_exodus }
+						has_country_flag = hfe_chosen_to_exodus
+					}
+					has_global_flag = hfe_hardcore_disable
 				}
 			}
 
@@ -186,6 +192,7 @@ planet_event = {
 
 		owner = { remove_country_flag = hfe_is_government_in_exile }
 		owner = { set_country_flag = hfe_was_government_in_exile }
+
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Exodus flags reset"
@@ -438,6 +445,7 @@ country_event = {
 									army_name = "Free Real Estate Scouts"
 									ship_name = "Free Real Estate Agent Transport"
 									army_type = assault_army
+									species = owner.species
 								}
 							}
 							while = {
@@ -446,6 +454,7 @@ country_event = {
 									army_name = "Basic Combat Assistance"
 									ship_name = "Basic Combat Transport"
 									army_type = robotic_army
+									species = owner.species
 								}
 							}
 							set_location = root.capital_scope
@@ -485,6 +494,22 @@ country_event = {
 			}
 		}
 		every_owned_planet = {
+			create_fleet = {
+				name = "Central Command"
+				set_take_point = yes
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "Flagship"
+						prefix = yes
+						design = "NAME_Diaspora"
+						effect = {
+							save_global_event_target_as = exodus_flavor_custom_capital
+						}
+					}
+					set_location = root.capital_scope.star
+				}
+			}
 			if = {
 				limit = {
 					owner = {
@@ -600,7 +625,7 @@ country_event = {
 			clear_deposits = yes
 			add_deposit = HFE_TSP_exodus_start_point # Orbital deposit
 		}
-		set_custom_capital_location = event_target:exodus_home_colonizer
+		set_custom_capital_location = event_target:exodus_flavor_custom_capital
 		if = {
 			limit = { has_global_flag = HFE_TSP_spawn_test }
 			log = "Exodus successfully spawned"
@@ -657,23 +682,24 @@ country_event = {
 					create_ship = {
 						name = "Great White Hope"
 						random_existing_design = destroyer
-						graphical_culture = pirate_01
+						graphical_culture = hfe_graphical_culture_pirate
 					}
 					create_ship = {
 						name = "Great Blue Hope"
 						random_existing_design = corvette
-						graphical_culture = pirate_01
+						graphical_culture = hfe_graphical_culture_pirate
 					}
 					create_ship = {
 						name = "Great Yellow Hope"
 						random_existing_design = corvette
-						graphical_culture = pirate_01
+						graphical_culture = hfe_graphical_culture_pirate
 					}
 					set_fleet_stance = passive
 					set_location = event_target:hfe_former_exodus_capital
 				}
 			}
 		}
+
 		add_resource = {
 			energy = 500
 			minerals = 500
