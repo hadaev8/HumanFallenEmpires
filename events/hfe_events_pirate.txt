@@ -269,18 +269,6 @@ country_event = {
 		country_event = {
 			id = hfe_pirate.3
 		}
-		# send fleet logic for unstuck fleets
-		every_owned_fleet = {
-			limit = {
-				num_ships > 1
-				is_ship_class = shipclass_military
-			}
-			fleet_event = {
-				id = hfe_pirate.300
-				days = 5
-				random = 180
-			}
-		}
 		# try to hunt weaker near pirate
 		random_relation = {
 			limit = {
@@ -409,17 +397,37 @@ ship_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = owner
-		exists = fleet
-		fleet = {
-			num_ships > 1
-			is_ship_class = shipclass_military
-		}
 		owner = {
 			is_country_type = hfe_pirate
+		}
+		exists = fleet
+		fleet = {
+			hfe_trigger_pirate_pathfind_fleet = yes
 		}
 	}
 	immediate = {
 		fleet = {
+			fleet_event = {
+				id = hfe_pirate.300
+			}
+		}
+	}
+}
+
+# send pirate fleet to hunt by pulse
+country_event = {
+	id = hfe_pirate.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = hfe_pirate
+		exists = capital_scope
+	}
+	immediate = {
+		random_owned_fleet = {
+			limit = {
+				hfe_trigger_pirate_pathfind_fleet = yes
+			}
 			fleet_event = {
 				id = hfe_pirate.300
 			}
@@ -3534,23 +3542,12 @@ fleet_event = {
 	is_triggered_only = yes
 	trigger = {
 		hfe_trigger_pirate_pathfind_enabled = yes
-		exists = this
-		nor = {
-			has_fleet_flag = hfe_pirate_fleet_move_to_target
-			has_fleet_flag = hfe_pirate_fleet_rest
-		}
 		exists = owner
 		owner = {
 			is_country_type = hfe_pirate
 			is_ai = yes
 		}
-		is_ship_class = shipclass_military
-		or = {
-			num_ships > 10
-			fleet_power > 500
-		}
-		has_hp_percentage > 0.99
-		#is_fleet_idle = yes
+		hfe_trigger_pirate_pathfind_fleet = yes
 	}
 	immediate = {
 		# not at same day

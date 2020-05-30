@@ -1,9 +1,22 @@
 #
-
 hfe_trigger_pirate_pathfind_enabled = {
 	not = {
 		has_global_flag = hfe_pirate_pathfind_disabled
 	}
+}
+
+hfe_trigger_pirate_pathfind_fleet = {
+	nor = {
+		has_fleet_flag = hfe_pirate_fleet_move_to_target
+		has_fleet_flag = hfe_pirate_fleet_rest
+	}
+	is_ship_class = shipclass_military
+	or = {
+		num_ships > 10
+		fleet_power > 500
+	}
+	has_hp_percentage > 0.99
+	#is_fleet_idle = yes
 }
 
 # for country
@@ -137,10 +150,9 @@ hfe_trigger_pirate_slave_have_valid_planet = {
 # 		}
 # 	}
 # }
-
 hfe_trigger_pirate_path_check = {
 	# root = {
-		# log = "check path for [prev.GetName]"
+	# log = "check path for [prev.GetName]"
 	# }
 	or = {
 		is_same_value = root.solar_system
@@ -222,7 +234,6 @@ hfe_trigger_pirate_path_check = {
 																																								limit = {
 																																									has_hyperlane_to = prevprev
 																																									hfe_trigger_pirate_fleet_power_in_system_check = yes
-
 																																								}
 																																							}
 																																						}
