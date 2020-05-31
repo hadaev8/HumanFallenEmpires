@@ -1263,85 +1263,6 @@ hfe_job_recycler_hive_mind = {
 	}
 }
 
-hfe_job_godforge_primitive = {
-	can_set_priority = no
-	category = ruler
-	is_capped_by_modifier = yes
-	building_icon = building_nano_forge
-	clothes_texture_index = 3
-	icon = replicator
-	possible_pre_triggers = {
-		has_owner = yes
-		is_being_purged = no
-		is_being_assimilated = no
-		is_enslaved = no
-	}
-	possible = {
-		owner = {
-			OR = {
-				is_country_type = primitive
-				is_primitive = yes
-			}
-		}
-		planet = {
-			has_planet_flag = hfe_varelse_colony
-		}
-	}
-	planet_modifier = {
-		planet_stability_add = 5
-	}
-	pop_modifier = {
-		pop_political_power = 1
-	}
-	resources = {
-		category = hfe_godforge
-		produces = {
-			alloys = 3
-			minerals = 3
-			influence = 1
-			unity = 3
-		}
-		#		# No upkeep to prevent primitive economic spiral of death
-	}
-	weight = {
-		weight = @ruler_job_weight
-		modifier = {
-			factor = 2
-			owner = {
-				has_country_flag = hfe_varelse_primitive_0
-			}
-		}
-		modifier = {
-			factor = 0.5
-			NOT = {
-				is_exact_same_species = owner
-			}
-		}
-		modifier = {
-			factor = 5
-			is_same_species = owner
-		}
-		modifier = {
-			factor = 2
-			is_exact_same_species = owner
-		}
-		modifier = {
-			factor = 2
-			has_trait = trait_industrious
-		}
-		# crisis purge
-		modifier = {
-			factor = 0.01
-			planet.controller = {
-				OR = {
-					is_country_type = swarm
-					is_country_type = ai_empire
-				}
-			}
-		}
-	}
-}
-
 hfe_job_godforge_overlord = {
 	can_set_priority = no
 	category = ruler
@@ -1356,16 +1277,6 @@ hfe_job_godforge_overlord = {
 		is_enslaved = no
 	}
 	possible = {
-		owner = {
-			NOT = {
-				is_country_type = primitive
-				is_primitive = yes
-				is_gestalt = yes
-			}
-		}
-		planet = {
-			has_planet_flag = hfe_varelse_colony
-		}
 		has_citizenship_rights = yes
 	}
 	planet_modifier = {
@@ -1384,8 +1295,7 @@ hfe_job_godforge_overlord = {
 					has_country_flag = hfe_varelse_primitive_0
 				}
 			}
-			influence = 0.25
-			minor_artifacts = 0.25
+			minor_artifacts = 0.01
 			unity = 5
 		}
 		produces = {
@@ -1430,24 +1340,6 @@ hfe_job_godforge_overlord = {
 	}
 	weight = {
 		weight = @ruler_job_weight
-		modifier = {
-			factor = 2
-			owner = {
-				has_country_flag = hfe_varelse_primitive_0
-			}
-		}
-		#		modifier = {
-		#			factor = 0.5
-		#			NOT = { is_exact_same_species = owner_main_species }
-		#		}
-		modifier = {
-			factor = 5
-			is_same_species = owner
-		}
-		modifier = {
-			factor = 2
-			is_exact_same_species = owner
-		}
 		modifier = {
 			factor = 2
 			has_trait = trait_industrious
@@ -1718,25 +1610,6 @@ hfe_job_mechanicus_cultist = {
 		modifier = {
 			factor = 0.5
 			has_citizenship_rights = no
-			NOT = {
-				is_same_species = owner
-				owner = {
-					is_xenophile = yes
-				}
-				owner = {
-					is_egalitarian = yes
-				}
-				owner = {
-					is_primitive = yes
-				}
-				owner = {
-					is_country_type = primitive
-				}
-			}
-		}
-		modifier = {
-			factor = 2
-			is_same_species = owner
 		}
 		modifier = {
 			factor = 1.25
@@ -1776,10 +1649,7 @@ hfe_job_mechanicus_cultist = {
 		}
 		modifier = {
 			factor = 0
-			OR = {
-				has_trait = trait_mechanical
-				has_trait = trait_machine_unit
-			}
+			hfe_trigger_is_robot = yes
 		}
 		modifier = {
 			factor = 0.5
@@ -1837,53 +1707,27 @@ hfe_job_godforge_fulfilment_center = {
 			food = 1
 		}
 		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						has_country_flag = hfe_varelse_primitive_0
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-			}
-			energy = 0.25
+			energy = 0.2
 			minerals = 0.2
 		}
 		upkeep = {
 			trigger = {
-				OR = {
-					is_lithoid = yes
-					has_trait = trait_lithoid
-					has_trait = trait_mechanical
-					has_trait = trait_machine_unit
-					is_robot_pop = yes
-				}
+				hfe_trigger_is_robot = no
+				is_lithoid = no
+			}
+			food = 0.2
+		}
+		upkeep = {
+			trigger = {
+				hfe_trigger_is_robot = yes
 			}
 			energy = 0.2
 		}
 		upkeep = {
 			trigger = {
-				NOT = {
-					is_lithoid = yes
-					has_trait = trait_lithoid
-				}
-				NOT = {
-					is_robot_pop = yes
-					has_trait = trait_mechanical
-					has_trait = trait_machine_unit
-				}
+				is_lithoid = yes
 			}
-			minerals = 0.25
-		}
-		upkeep = {
-			trigger = {
-				NOT = {
-					owner = {
-						has_country_flag = hfe_varelse_primitive_0
-					}
-				}
-			}
-			unity = 2
+			minerals = 0.2
 		}
 	}
 	weight = {

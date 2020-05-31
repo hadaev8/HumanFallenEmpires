@@ -1241,19 +1241,12 @@ hfe_initializer_ahet_1 = {
 # varelse
 hfe_initializer_varelse = {
 	# The Varelse were once a Fallen Empire
-	spawn_chance = 0
 	name = "Deprived"
 	class = sc_k
 	flags = {
 		primitive_system
-		high_mechanicus_system
-		colony_beta_system
-		empire_cluster
-		empire_home_system
-		ruined_empire
 	}
 	planet = {
-		name = "Deprived A"
 		class = star
 		orbit_distance = 0
 		orbit_angle = 1
@@ -1263,13 +1256,9 @@ hfe_initializer_varelse = {
 		}
 		has_ring = no
 		satellite_naming_policy = upper_case_roman_numerals
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	change_orbit = 23
 	planet = {
-		name = "Deprived I"
 		orbit_distance = 20
 		count = 1
 		class = pc_molten
@@ -1278,8 +1267,8 @@ hfe_initializer_varelse = {
 	planet = {
 		name = "Colony Beta"
 		orbit_distance = 0
-		class = pc_relic
-		entity = toxic_planet_02_entity
+		class = pc_desert
+		entity = hfe_entity_arid_01_brown
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -1287,10 +1276,7 @@ hfe_initializer_varelse = {
 		size = 32
 		modifiers = none
 		deposit_blockers = none
-		home_planet = yes
-		starting_planet = yes
 		init_effect = {
-			prevent_anomaly = yes
 			save_global_event_target_as = hfe_varelse_colony_planet
 			create_country = {
 				name = "Cult of the Machine-That-Speaks-to-God"
@@ -1311,13 +1297,15 @@ hfe_initializer_varelse = {
 					civic = hfe_civic_high_mechanicus
 				}
 				effect = {
+					species = {
+						set_species_homeworld = event_target:hfe_varelse_colony_planet
+					}
 					hfe_effect_primitive_set_machine_age = yes
 					set_country_flag = hfe_varelse_primitive_0
 					set_country_flag = hfe_varelse
 					prev = {
 						set_owner = prev
 					}
-					save_global_event_target_as = colony_beta					# The country
 					kill_leader = {
 						type = ruler
 						show_notification = no
@@ -1326,7 +1314,7 @@ hfe_initializer_varelse = {
 						class = ruler
 						name = "The Master"
 						species = event_target:hfe_varelse_species
-						event_leader = yes
+						# event_leader = yes
 						gender = male
 						immortal = yes
 						skill = 5
@@ -1337,7 +1325,6 @@ hfe_initializer_varelse = {
 							add_trait = hfe_ruler_trait_manipulative
 							add_trait = leader_trait_substance_abuser
 							add_trait = leader_trait_corrupt
-							#							add_trait = leader_trait_custom_AI_assistant
 						}
 						effect = {
 							set_leader_flag = high_mechanicus_master
@@ -1350,75 +1337,13 @@ hfe_initializer_varelse = {
 						}
 						log = "High Mechanicus instated on Colony Beta"
 					}
-					add_resource = {
-						energy = 500
-						minerals = 500
-						consumer_goods = 500
-						alloys = 5000
-						food = 10000
-					}
-					give_technology = {
-						tech = tech_assault_armies
-						message = no
-					}
-					give_technology = {
-						tech = tech_powered_exoskeletons
-						message = no
-					}
-					give_technology = {
-						tech = tech_robotic_workers
-						message = no
-					}
-					give_technology = {
-						tech = tech_alloys_1
-						message = no
-					}
-					give_technology = {
-						tech = tech_alloys_2
-						message = no
-					}
-					give_technology = {
-						tech = tech_mine_volatile_motes
-						message = no
-					}
-					give_technology = {
-						tech = tech_robomodding
-						message = no
-					}
-					give_technology = {
-						tech = tech_industrial_farming
-						message = no
-					}
-					give_technology = {
-						tech = tech_food_processing_1
-						message = no
-					}
-					if = {
-						limit = {
-							has_global_flag = HFE_TSP_spawn_test
-						}
-						log = "Colony Beta has its technology"
-					}
 					set_policy = {
 						policy = robot_pop_policy
 						option = robot_pops_allowed
 						cooldown = no
 					}
-					if = {
-						limit = {
-							has_global_flag = HFE_TSP_spawn_test
-						}
-						log = "Colony Beta has Robots Allowed"
-					}
 					save_global_event_target_as = hfe_varelse_colony_country
 				}
-			}
-			# to remove error in log
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Varelse Home World set"
 			}
 			# to fix create colony spawn pop of root species bug
 			every_owned_pop = {
@@ -1427,79 +1352,28 @@ hfe_initializer_varelse = {
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = primitives_nuked_themselves			# As the High Mechanicus controls the whole planet, this can't happen
 			hfe_effect_primitive_add_pops = yes
-			#			hfe_effect_primitive_add_buildings = yes
-			add_building = building_primitive_capital
+			add_building = hfe_building_high_mechanicus_godforge
+			add_building = hfe_building_high_mechanicus_stronghold
+			add_building = building_food_processing_facility
+			hfe_effect_primitive_add_buildings = yes
 			remove_building = building_primitive_capital
 			add_building = hfe_building_mechanicus_pseudo_capital
-			add_building = hfe_building_high_mechanicus_godforge
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Godforge spawned"
-			}
-			add_building = hfe_building_high_mechanicus_stronghold
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "High Mechanicus Palace spawned"
-			}
-			add_building = building_primitive_mine
-			add_building = building_primitive_mine
-			add_building = building_primitive_mine
-			add_building = building_primitive_power_plant
-			add_building = building_primitive_power_plant
-			add_building = building_primitive_power_plant
-			add_building = building_urban_dwellings
-			add_building = building_urban_dwellings
-			add_building = building_urban_dwellings
-			add_building = building_food_processing_facility
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Primitive Buildings added to Colony Beta"
-			}
-			add_deposit = d_ruined_arcology
-			add_deposit = d_ruined_arcology
-			add_deposit = d_ruined_arcology
 			add_deposit = d_bomb_crater
 			add_deposit = d_decrepit_dwellings
-			add_deposit = d_decrepit_dwellings
-			add_deposit = d_decrepit_dwellings
 			add_deposit = d_dust_caverns
 			add_deposit = d_dust_caverns
-			add_deposit = d_geothermal_vent
 			add_deposit = d_geothermal_vent
 			add_deposit = d_ore_rich_caverns
 			add_deposit = d_veiny_cliffs
 			add_deposit = d_rich_mountain
 			add_deposit = d_fungal_caves
-			add_deposit = d_fungal_caves
-			add_deposit = d_fungal_caves
-			#			add_deposit = d_odd_factory
 			add_deposit = d_relic_metal_boneyard
 			add_deposit = hfe_deposit_mechanicus_farm_spire
 			add_deposit = d_ancient_bombardment_craters
-			add_random_non_blocker_deposit = yes
-			add_random_non_blocker_deposit = yes
-			add_random_non_blocker_deposit = yes
-			#			add_random_non_blocker_deposit = yes
-			#			add_random_non_blocker_deposit = yes
+			# add_random_non_blocker_deposit = yes
+			# add_random_non_blocker_deposit = yes
+			# add_random_non_blocker_deposit = yes
 			remove_deposit = d_dust_desert
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Colony Beta has its Deposits"
-			}
-			while = {
-				count = 38
-				create_pop = {
-					species = event_target:hfe_varelse_species
-				}
-			}
 			create_species = {
 				name = "Godforge Drone"
 				plural = "Godforge Drones"
@@ -1517,63 +1391,49 @@ hfe_initializer_varelse = {
 					trait = "trait_robot_high_bandwidth"
 					trait = "trait_robot_domestic_protocols"
 				}
-			}
-			last_created_species = {
-				set_species_flag = godforge_species				# Perhaps one day, the Godforge itself could rebel?
-				set_species_homeworld = event_target:hfe_varelse_colony_planet
-				save_global_event_target_as = hfe_varelse_leftover_robots
-				set_citizenship_type = {
-					type = citizenship_robot_servitude
+				effect = {
+					set_species_flag = godforge_species					# Perhaps one day, the Godforge itself could rebel?
+					set_species_homeworld = event_target:hfe_varelse_colony_planet
+					save_global_event_target_as = hfe_varelse_leftover_robots
+					set_citizenship_type = {
+						type = citizenship_robot_servitude
+					}
 				}
 			}
 			event_target:hfe_varelse_colony_country = {
 				set_built_species = event_target:hfe_varelse_leftover_robots
 			}
 			#			set_built_species = event_target:hfe_varelse_leftover_robots
-			event_target:colony_beta = {
-				create_leader = {
-					name = "Damaged Godforge Core"
-					class = general
-					event_leader = yes
-					species = event_target:hfe_varelse_leftover_robots
-					immortal = yes
-					skill = 1
-					set_age = 3169
-					traits = {
-						add_trait = leader_trait_general_synthetic
-						add_trait = leader_trait_rigid_programming
-						add_trait = leader_trait_maimed
-						add_trait = leader_trait_arrested_development
-					}
-				}
-				last_created_leader = {
-					set_leader_flag = godforge_engine_primitive
-					save_global_event_target_as = broken_godforge_general
-				}
-			}
+			# todo assign general to planet's army
+			# create_leader = {
+			# 	name = "Damaged Godforge Core"
+			# 	class = general
+			# 	event_leader = yes
+			# 	species = event_target:hfe_varelse_leftover_robots
+			# 	immortal = yes
+			# 	skill = 1
+			# 	set_age = 3169
+			# 	traits = {
+			# 		add_trait = leader_trait_general_synthetic
+			# 		add_trait = leader_trait_rigid_programming
+			# 		add_trait = leader_trait_maimed
+			# 		add_trait = leader_trait_arrested_development
+			# 	}
+			# }
 			while = {
-				count = 15
+				count = 5
 				create_pop = {
 					species = event_target:hfe_varelse_leftover_robots
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Colony Beta has its extra Pops"
-			}
-			#			create_pop = {
-			#				species = event_target:fe_servants
-			#			}
 			add_modifier = {
 				modifier = hfe_colony_type_varelse
 				days = -1
 			}
-			add_modifier = {
-				modifier = atmospheric_hallucinogen_good
-				days = -1
-			}
+			# add_modifier = {
+			# 	modifier = atmospheric_hallucinogen_good
+			# 	days = -1
+			# }
 			add_modifier = {
 				modifier = bleak_planet
 				days = -1
@@ -1582,17 +1442,11 @@ hfe_initializer_varelse = {
 				modifier = high_gravity
 				days = -1
 			}
-			add_modifier = {
-				modifier = hfe_godforge_crime_fix
-				years = -1
-			}
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Colony Beta has its Modifiers"
-			}
-			# TODO
+			# add_modifier = {
+			# 	modifier = hfe_godforge_crime_fix
+			# 	years = -1
+			# }
+			# TODO change armies to spawned by buildings/pops
 			# war blockers
 			while = {
 				count = 10
@@ -1631,15 +1485,6 @@ hfe_initializer_varelse = {
 				}
 			}
 			while = {
-				count = 2
-				create_army = {
-					name = "Elite Zealots"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = assault_army
-				}
-			}
-			while = {
 				count = 5
 				create_army = {
 					name = "Regime Enforcers"
@@ -1666,14 +1511,11 @@ hfe_initializer_varelse = {
 					type = hfe_army_godforge_core_watch
 				}
 			}
-			while = {
-				count = 1
-				create_army = {
-					name = "The Machine-That-Speaks-to-God"
-					owner = owner
-					species = event_target:hfe_varelse_leftover_robots
-					type = care_defensive_protocols
-				}
+			create_army = {
+				name = "The Machine-That-Speaks-to-God"
+				owner = owner
+				species = event_target:hfe_varelse_leftover_robots
+				type = care_defensive_protocols
 			}
 			while = {
 				count = 3
@@ -1684,21 +1526,12 @@ hfe_initializer_varelse = {
 					type = robotic_defense_army
 				}
 			}
-			while = {
-				count = 1
-				create_army = {
-					name = "The Master's Personal Guard"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = hfe_army_high_mechanicus_bodyguards
-					leader = event_target:broken_godforge_general
-				}
-			}
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Colony Beta has its Armies"
+			create_army = {
+				name = "The Master's Personal Guard"
+				owner = owner
+				species = event_target:hfe_varelse_species
+				type = hfe_army_high_mechanicus_bodyguards
+				leader = event_target:broken_godforge_general
 			}
 			if = {
 				limit = {
@@ -1707,126 +1540,19 @@ hfe_initializer_varelse = {
 				log = "Colony Beta planet finalized"
 			}
 		}
-		change_orbit = 9
-		moon = {
-			name = "Colony Alpha"
-			size = 19
-			class = pc_shattered
-			orbit_angle = {
-				min = 90
-				max = 270
-			}
-			orbit_distance = 6
-			init_effect = {
-				prevent_anomaly = yes
-				relic_world_deposits = yes				# For flavor, this was once their capital
-				set_planet_flag = ju_ahet_punishment_moon
-				save_global_event_target_as = hfe_ju_ahet_punishment_moon
-				create_ambient_object = {
-					type = large_debris_object
-				}
-				last_created_ambient_object = {
-					set_location = {
-						target = event_target:hfe_ju_ahet_punishment_moon
-						distance = 0
-					}
-				}
-			}
-		}
-		moon = {
-			name = "Colony Delta"
-			class = pc_relic
-			entity = hfe_entity_arid_01_brown
-			orbit_distance = 6
-			orbit_angle = random
-			size = 25
-			modifiers = none
-			deposit_blockers = none			# Added manually
-			init_effect = {
-				prevent_anomaly = yes
-				clear_blockers = yes
-				save_global_event_target_as = colony_delta
-				set_planet_flag = hfe_colony_delta
-				add_deposit = d_irradiated_ruins
-				add_deposit = d_irradiated_valley
-				add_deposit = d_radioactive_wasteland
-				add_deposit = d_radioactive_wasteland
-				add_deposit = d_radioactive_wasteland
-				add_deposit = d_collapsed_spire
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_ruined_arcology
-				add_deposit = d_city_ruins
-				add_deposit = d_city_ruins
-				add_deposit = d_city_ruins
-				add_deposit = d_bomb_crater
-				add_deposit = d_bomb_crater
-				add_deposit = d_ancient_bombardment_craters
-				add_deposit = d_odd_factory
-				add_deposit = d_industrial_sector
-				add_deposit = d_relic_metal_boneyard
-				add_random_non_blocker_deposit = yes
-				add_random_non_blocker_deposit = yes
-				add_random_non_blocker_deposit = yes
-				add_random_non_blocker_deposit = yes
-				add_modifier = {
-					modifier = irradiated_planet
-					days = -1
-				}
-				add_modifier = {
-					modifier = irradiated_wasteland
-					days = -1
-				}
-				add_modifier = {
-					modifier = bleak_planet
-					days = -1
-				}
-				add_modifier = {
-					modifier = unstable_tectonics
-					days = -1
-				}
-				create_ambient_object = {
-					type = medium_debris_02_object
-				}
-				last_created_ambient_object = {
-					set_location = {
-						target = event_target:colony_delta
-						distance = 0
-					}
-				}
-				create_ambient_object = {
-					type = medium_debris_02_object
-				}
-				last_created_ambient_object = {
-					set_location = {
-						target = event_target:hfe_ju_ahet_punishment_moon
-						distance = 2.5
-						angle = random
-					}
-				}
-			}
-		}
 	}
 	change_orbit = 5
 	planet = {
-		name = "Deprived III"
 		orbit_distance = 15
 		class = pc_barren_cold
 		count = 1
 		moon = {
-			name = "Deprived IIIa"
 			class = random
 			orbit_distance = @base_moon_distance
 		}
 	}
 	change_orbit = 5
 	planet = {
-		name = "Deprived IV"
 		orbit_distance = 15
 		class = pc_frozen
 		size = 18
@@ -1834,7 +1560,6 @@ hfe_initializer_varelse = {
 	}
 	change_orbit = 40
 	planet = {
-		name = "Deprived B"
 		#		orbit_distance = 0
 		class = pc_t_star
 		size = 34
@@ -1854,13 +1579,6 @@ hfe_initializer_varelse = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
-		generate_home_system_resources = yes
-		event_target:hfe_varelse_colony_country.species = {
-			set_species_homeworld = event_target:hfe_ju_ahet_punishment_moon
-		}
-		event_target:hfe_varelse_colony_country = {
-			set_custom_capital_location = event_target:hfe_ju_ahet_punishment_moon
-		}
 		if = {
 			limit = {
 				has_global_flag = HFE_TSP_spawn_test
@@ -1887,9 +1605,6 @@ hfe_initializer_ahet_home = {
 			max = 30
 		}
 		has_ring = no
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	change_orbit = 20
 	planet = {
@@ -2103,9 +1818,6 @@ hfe_initializer_memorial_0 = {
 			max = 30
 		}
 		has_ring = no
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	change_orbit = 45
 	planet = {
@@ -2192,9 +1904,6 @@ hfe_initializer_memorial_1 = {
 			max = 30
 		}
 		has_ring = no
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	change_orbit = 30
 	planet = {
@@ -2296,9 +2005,6 @@ hfe_initializer_memorial_2 = {
 			max = 30
 		}
 		has_ring = no
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	change_orbit = 45
 	planet = {
@@ -2397,9 +2103,6 @@ hfe_initializer_memorial_3 = {
 			max = 30
 		}
 		has_ring = no
-		init_effect = {
-			create_broken_fe_outpost = yes
-		}
 	}
 	asteroid_belt = {
 		type = rocky_asteroid_belt

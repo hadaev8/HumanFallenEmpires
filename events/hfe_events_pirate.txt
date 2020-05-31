@@ -15,7 +15,7 @@ country_event = {
 		}
 	}
 	immediate = {
-#		save_event_target_as = hfe_pirate_target
+		#		save_event_target_as = hfe_pirate_target
 		hfe_effect_pirate_init = yes
 	}
 }
@@ -1120,7 +1120,9 @@ planet_event = {
 	is_triggered_only = yes
 	trigger = {
 		is_planet_class = hfe_pc_pirate_base
-		NOT = { has_planet_flag = hfe_permanent_pirate_hall }
+		NOT = {
+			has_planet_flag = hfe_permanent_pirate_hall
+		}
 		nand = {
 			exists = owner
 			owner = {
@@ -1130,7 +1132,11 @@ planet_event = {
 	}
 	immediate = {
 		if = {
-			limit = { NOT = { has_planet_flag = hfe_permanent_pirate_hall } }
+			limit = {
+				NOT = {
+					has_planet_flag = hfe_permanent_pirate_hall
+				}
+			}
 			hfe_effect_convert_to_asteroid = yes
 		}
 		else = {
@@ -1366,9 +1372,7 @@ country_event = {
 country_event = {
 	id = hfe_pirate.101
 	title = hfe_nothing
-
 	#message_desc = hfe_pirate.101.desc.0 # do not work
-
 	desc = {
 		trigger = {
 			# start
@@ -2017,7 +2021,7 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
+			modifier = {
 				factor = 2
 				is_xenophile = yes
 			}
@@ -2223,10 +2227,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2313,10 +2317,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2403,10 +2407,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2493,10 +2497,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 2
 				allows_slavery = yes
@@ -2583,10 +2587,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -3716,221 +3720,219 @@ fleet_event = {
 }
 
 # Convert Pirate to Default Type, test
-country_event = {
-	id = hfe_pirate.307
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		is_country_type = hfe_pirate
-	}
-	immediate = {
-		if = {
-			limit = { has_civic = hfe_civic_pirate_rat_king }
-			set_country_flag = hfe_pirate_is_rat_king
-		}
-		if = {
-			limit = { is_spiritualist = yes }
-			set_country_flag = hfe_pirate_sedentary_spiritualist
-		}
-		if = {
-			limit = { is_materialist = yes }
-			set_country_flag = hfe_pirate_sendentary_materialist
-		}
-		if = {
-			limit = { is_xenophobe = yes }
-			set_country_flag = hfe_pirate_sedentary_xenophobe
-		}
-		give_technology = {
-			tech = tech_hydroponics
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_rare_crystals
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_volatile_motes
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_exotic_gases
-			message = no
-		}
-		set_country_type = default
-		hfe_effect_cleanse_ethics = yes
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sedentary_spiritualist
-				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
-			}
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_materialist
-				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
-			}
-			country_add_ethic = ethic_materialist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_materialist
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-			}
-			country_add_ethic = ethic_materialist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_xenophobe
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_spiritualist
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-			}
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_xenophobe
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-				NOT = {
-					has_country_flag = hfe_pirate_sendentary_materialist
-					has_country_flag = hfe_pirate_sendentary_spiritualist
-				}
-			}
-			country_add_ethic = ethic_xenophobe
-			country_add_ethic = ethic_authoritarian
-			country_add_ethic = ethic_militarist
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = hfe_pirate_sendentary_materialist
-					has_country_flag = hfe_pirate_sedentary_xenophobe
-					has_country_flag = hfe_pirate_sendentary_spiritualist
-				}
-			}
-			country_add_ethic = ethic_fanatic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				NOT = { has_country_flag = hfe_pirate_is_rat_king }
-			}
-			change_government = {
-				authority = auth_oligarchic
-				civics = {
-					civic = civic_barbaric_despoilers
-					civic = civic_slaver_guilds
-				}
-			}
-		}
-		else_if = {
-			limit = { has_country_flag = hfe_pirate_is_rat_king }
-			change_government = {
-				authority = auth_imperial
-				civics = {
-					civic = civic_barbaric_despoilers
-					civic = civic_distinguished_admiralty
-				}
-			}
-		}
-		capital_scope = {
-			while = {
-				count = 26
-				create_pop = {
-					species = owner_species
-				}
-			}
-		}
-		every_owned_planet = {
-			limit = {
-				OR = {
-					is_planet_class = hfe_pc_pirate_base
-					habitable_structure = yes
-				}
-			}
-#			add_deposit = hfe_reformed_pirate_treasure
-			add_deposit = hfe_reformed_pirate_hall
-			set_planet_flag = hfe_permanent_pirate_hall
-		}
-		capital_scope = {
-			add_deposit = hfe_reformed_pirate_treasure
-			add_building = building_major_capital
-			add_building = building_foundry_1
-			add_building = building_factory_1
-			add_building = building_research_lab_1
-			add_building = building_hydroponics_farm
-			add_building = building_hydroponics_farm
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_alloys
-			add_district = hfe_district_pirate_alloys
-		}
-
-		every_owned_planet = {
-			limit = {
-				NOT = { is_capital = yes }
-			}
-			set_planet_flag = hfe_permanent_pirate_hall
-			hfe_effect_exodus_reset_capital = yes
-			add_building = building_major_capital
-			while = {
-				count = 7
-				create_pop = {
-					species = owner_species
-				}
-			}
-			if = {
-				limit = {
-					NOT = { is_capital = yes }
-					is_planet_class = hfe_pc_pirate_base
-				}
-				add_district = hfe_district_pirate_energy
-				add_district = hfe_district_pirate_minerals
-				add_district = hfe_district_pirate_food
-				add_district = hfe_district_pirate_alloys
-			}
-			else_if = {
-				limit = { habitable_structure = no }
-				add_district = district_city
-				add_district = district_generator
-				add_district = district_mining
-				add_district = district_farming
-			}
-			if = {
-				limit = {
-					OR = {
-						has_global_flag = hfe_pirate_logs
-						has_global_flag = HFE_TSP_spawn_test
-					}
-				}
-				log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
-			}
-		}
-
-		if = {
-			limit = {
-				OR = {
-					has_global_flag = hfe_pirate_logs
-					has_global_flag = HFE_TSP_spawn_test
-				}
-			}
-			log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
-		}
-	}
-}
+# country_event = {
+# 	id = hfe_pirate.307
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	trigger = {
+# 		is_country_type = hfe_pirate
+# 	}
+# 	immediate = {
+# 		if = {
+# 			limit = { has_civic = hfe_civic_pirate_rat_king }
+# 			set_country_flag = hfe_pirate_is_rat_king
+# 		}
+# 		if = {
+# 			limit = { is_spiritualist = yes }
+# 			set_country_flag = hfe_pirate_sedentary_spiritualist
+# 		}
+# 		if = {
+# 			limit = { is_materialist = yes }
+# 			set_country_flag = hfe_pirate_sendentary_materialist
+# 		}
+# 		if = {
+# 			limit = { is_xenophobe = yes }
+# 			set_country_flag = hfe_pirate_sedentary_xenophobe
+# 		}
+# 		give_technology = {
+# 			tech = tech_hydroponics
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_rare_crystals
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_volatile_motes
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_exotic_gases
+# 			message = no
+# 		}
+# 		set_country_type = default
+# 		hfe_effect_cleanse_ethics = yes
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sedentary_spiritualist
+# 				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
+# 			}
+# 			country_add_ethic = ethic_spiritualist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_materialist
+# 				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
+# 			}
+# 			country_add_ethic = ethic_materialist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_materialist
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 			}
+# 			country_add_ethic = ethic_materialist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_xenophobe
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 			}
+# 			country_add_ethic = ethic_spiritualist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_xenophobe
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 				NOT = {
+# 					has_country_flag = hfe_pirate_sendentary_materialist
+# 					has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				}
+# 			}
+# 			country_add_ethic = ethic_xenophobe
+# 			country_add_ethic = ethic_authoritarian
+# 			country_add_ethic = ethic_militarist
+# 		}
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = hfe_pirate_sendentary_materialist
+# 					has_country_flag = hfe_pirate_sedentary_xenophobe
+# 					has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				}
+# 			}
+# 			country_add_ethic = ethic_fanatic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				NOT = { has_country_flag = hfe_pirate_is_rat_king }
+# 			}
+# 			change_government = {
+# 				authority = auth_oligarchic
+# 				civics = {
+# 					civic = civic_barbaric_despoilers
+# 					civic = civic_slaver_guilds
+# 				}
+# 			}
+# 		}
+# 		else_if = {
+# 			limit = { has_country_flag = hfe_pirate_is_rat_king }
+# 			change_government = {
+# 				authority = auth_imperial
+# 				civics = {
+# 					civic = civic_barbaric_despoilers
+# 					civic = civic_distinguished_admiralty
+# 				}
+# 			}
+# 		}
+# 		capital_scope = {
+# 			while = {
+# 				count = 26
+# 				create_pop = {
+# 					species = owner_species
+# 				}
+# 			}
+# 		}
+# 		every_owned_planet = {
+# 			limit = {
+# 				OR = {
+# 					is_planet_class = hfe_pc_pirate_base
+# 					habitable_structure = yes
+# 				}
+# 			}
+# #			add_deposit = hfe_reformed_pirate_treasure
+# 			add_deposit = hfe_reformed_pirate_hall
+# 			set_planet_flag = hfe_permanent_pirate_hall
+# 		}
+# 		capital_scope = {
+# 			add_deposit = hfe_reformed_pirate_treasure
+# 			add_building = building_major_capital
+# 			add_building = building_foundry_1
+# 			add_building = building_factory_1
+# 			add_building = building_research_lab_1
+# 			add_building = building_hydroponics_farm
+# 			add_building = building_hydroponics_farm
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_alloys
+# 			add_district = hfe_district_pirate_alloys
+# 		}
+# 		every_owned_planet = {
+# 			limit = {
+# 				NOT = { is_capital = yes }
+# 			}
+# 			set_planet_flag = hfe_permanent_pirate_hall
+# 			hfe_effect_exodus_reset_capital = yes
+# 			add_building = building_major_capital
+# 			while = {
+# 				count = 7
+# 				create_pop = {
+# 					species = owner_species
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					NOT = { is_capital = yes }
+# 					is_planet_class = hfe_pc_pirate_base
+# 				}
+# 				add_district = hfe_district_pirate_energy
+# 				add_district = hfe_district_pirate_minerals
+# 				add_district = hfe_district_pirate_food
+# 				add_district = hfe_district_pirate_alloys
+# 			}
+# 			else_if = {
+# 				limit = { habitable_structure = no }
+# 				add_district = district_city
+# 				add_district = district_generator
+# 				add_district = district_mining
+# 				add_district = district_farming
+# 			}
+# 			if = {
+# 				limit = {
+# 					OR = {
+# 						has_global_flag = hfe_pirate_logs
+# 						has_global_flag = HFE_TSP_spawn_test
+# 					}
+# 				}
+# 				log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
+# 			}
+# 		}
+# 		if = {
+# 			limit = {
+# 				OR = {
+# 					has_global_flag = hfe_pirate_logs
+# 					has_global_flag = HFE_TSP_spawn_test
+# 				}
+# 			}
+# 			log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
+# 		}
+# 	}
+# }
