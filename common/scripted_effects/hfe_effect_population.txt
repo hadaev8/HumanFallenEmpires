@@ -1,71 +1,70 @@
 #
-
 hfe_effect_population_country_set_robot_pop_identity = {
-#	if = {
-#		limit = {
-#			has_trait = trait_machine_unit
-#			is_robot_pop = yes
-#			owner = {
-#				is_machine_empire = no
-#			}
-#		}
-#		every_owned_pop_species = {
-#			limit = {
-#				has_trait = trait_machine_unit
-#				is_robot_pop = yes
-#				not = {
-#					is_same_species = prev.species
-#				}
-#			}
-#			root = {
-#				modify_species = {
-#					base = prev
-#					species = prev
-#					add_trait = hfe_species_trait_test
-#				}
-#			}
-#			set_species_identity = prev.species
-#			root = {
-#				modify_species = {
-#					species = prev
-#					remove_trait = hfe_species_trait_test
-#				}
-#			}
-#		}
-#	}
-#	else_if = {
-#		limit = {
-#			has_trait = trait_mechanical
-#		}
-#		every_owned_pop_species = {
-#			limit = {
-#				has_trait = trait_mechanical
-#				not = {
-#					is_same_species = prev.species
-#				}
-#			}
-#			root = {
-#				modify_species = {
-#					base = none
-#					species = prev
-#					add_trait = hfe_species_trait_test
-#				}
-#			}
-#			set_species_identity = prev.species
-#			root = {
-#				modify_species = {
-#					species = prev
-#					remove_trait = hfe_species_trait_test
-#				}
-#			}
-#		}
-#	}
-#	else = {
-#		if = {
-#			limit = { owner = { is_machine_empire = no } }
-#			hfe_effect_population_process_robot_species_identity = yes
-#		}
-#	}
+	#	if = {
+	#		limit = {
+	#			has_trait = trait_machine_unit
+	#			is_robot_pop = yes
+	#			owner = {
+	#				is_machine_empire = no
+	#			}
+	#		}
+	#		every_owned_pop_species = {
+	#			limit = {
+	#				has_trait = trait_machine_unit
+	#				is_robot_pop = yes
+	#				not = {
+	#					is_same_species = prev.species
+	#				}
+	#			}
+	#			root = {
+	#				modify_species = {
+	#					base = prev
+	#					species = prev
+	#					add_trait = hfe_species_trait_test
+	#				}
+	#			}
+	#			set_species_identity = prev.species
+	#			root = {
+	#				modify_species = {
+	#					species = prev
+	#					remove_trait = hfe_species_trait_test
+	#				}
+	#			}
+	#		}
+	#	}
+	#	else_if = {
+	#		limit = {
+	#			has_trait = trait_mechanical
+	#		}
+	#		every_owned_pop_species = {
+	#			limit = {
+	#				has_trait = trait_mechanical
+	#				not = {
+	#					is_same_species = prev.species
+	#				}
+	#			}
+	#			root = {
+	#				modify_species = {
+	#					base = none
+	#					species = prev
+	#					add_trait = hfe_species_trait_test
+	#				}
+	#			}
+	#			set_species_identity = prev.species
+	#			root = {
+	#				modify_species = {
+	#					species = prev
+	#					remove_trait = hfe_species_trait_test
+	#				}
+	#			}
+	#		}
+	#	}
+	#	else = {
+	#		if = {
+	#			limit = { owner = { is_machine_empire = no } }
+	#			hfe_effect_population_process_robot_species_identity = yes
+	#		}
+	#	}
 }
 
 hfe_effect_population_fix_robot_pop = {
@@ -73,7 +72,11 @@ hfe_effect_population_fix_robot_pop = {
 		limit = {
 			OR = {
 				has_trait = trait_machine_unit
-				THIS = { species = { is_archetype = MACHINE } }
+				THIS = {
+					species = {
+						is_archetype = MACHINE
+					}
+				}
 			}
 			exists = owner
 			owner = {
@@ -91,7 +94,11 @@ hfe_effect_population_fix_robot_pop = {
 		limit = {
 			OR = {
 				has_trait = trait_mechanical
-				THIS = { species = { is_archetype = ROBOT } }
+				THIS = {
+					species = {
+						is_archetype = ROBOT
+					}
+				}
 			}
 			exists = owner
 			owner = {
@@ -99,7 +106,7 @@ hfe_effect_population_fix_robot_pop = {
 			}
 		}
 		modify_species = {
-#			base = prev
+			#			base = prev
 			remove_trait = trait_mechanical
 			add_trait = trait_machine_unit
 		}
@@ -129,7 +136,7 @@ hfe_effect_population_process_robot_species_identity = {
 				add_trait = hfe_species_trait_test
 			}
 		}
-#		set_species_identity = prev.species
+		#		set_species_identity = prev.species
 		set_species_identity = prev
 		root = {
 			modify_species = {
@@ -167,42 +174,16 @@ hfe_effect_exodus_reset_capital = {
 	remove_building = building_slave_major_capital
 	remove_building = building_system_capital
 	remove_building = building_machine_system_capital
-#	remove_building = building_hive_system_capital
+	#	remove_building = building_hive_system_capital
 	remove_building = building_hab_capital
 	remove_building = building_hab_major_capital
 	remove_building = building_ancient_control_center
 	remove_building = building_ancient_palace
 	remove_building = hfe_building_mechanicus_pseudo_capital
-
-#	if = {
-#		limit = {
-#			has_global_flag = HFE_TSP_spawn_test
-#		}
-#		log = "Planet capital buildings purged"
-#	}
-}
-
-hfe_effect_exodus_set_new_home = {
-	capital_scope = {
-		add_modifier = {
-			modifier = tsp_hfe_exodus_happy_ending
-			days = -1
-		}
-		add_modifier = {
-			modifier = hfe_unity
-			days = 7300
-		}
-		add_modifier = {
-			modifier = hfe_population_boom
-			days = 5475
-		}
-		set_planet_flag = hfe_features_exodus_planet
-	}
-	ROOT = {
-		add_resource = {
-			unity = 3000
-			influence = 200
-		}
-	}
-	play_sound = event_celebration
+	#	if = {
+	#		limit = {
+	#			has_global_flag = HFE_TSP_spawn_test
+	#		}
+	#		log = "Planet capital buildings purged"
+	#	}
 }
