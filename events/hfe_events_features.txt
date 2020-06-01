@@ -120,7 +120,6 @@ planet_event = {
 		owner = {
 			set_country_type = default
 			remove_modifier = tsp_hfe_features_exodus_game_over_prevention
-			remove_modifier = tsp_hfe_features_exodus_resources_other
 			add_modifier = {
 				modifier = hfe_colonisation_cheat
 				days = 31
@@ -240,7 +239,7 @@ planet_event = {
 	}
 }
 
-# exodus civic feature 4
+# exodus start origin feature 4
 country_event = {
 	id = hfe_features.4
 	hide_window = yes
@@ -466,11 +465,6 @@ country_event = {
 			play_sound = shattered_planet_explosion
 			set_planet_flag = hfe_exodus_civic_former_home
 			set_planet_flag = hfe_exodus_happened_here
-			solar_system = {
-				starbase = {
-					destroy_fleet = fleet
-				}
-			}
 			add_modifier = {
 				modifier = tsp_hfe_exodus_start_planet_modifier
 				days = -1
@@ -481,7 +475,12 @@ country_event = {
 		# remove constructors
 		every_owned_fleet = {
 			limit = {
-				is_ship_class = shipclass_constructor
+				or = {
+					is_ship_class = shipclass_constructor
+					is_ship_class = shipclass_mining_station
+					is_ship_class = shipclass_research_station
+					is_ship_class = shipclass_starbase
+				}
 			}
 			destroy_fleet = this
 		}
