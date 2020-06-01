@@ -37,7 +37,6 @@ country_event = {
 								species_portrait = human
 								species_portrait = hfe_portrait_egypt
 								species_portrait = hfe_portrait_future
-								is_same_species = event_target:hfe_egypt_species
 								has_country_flag = hfe_marked_as_human
 							}
 						}
@@ -56,30 +55,36 @@ country_event = {
 				# 	authority = auth_oligarchic
 				# }
 				ROOT = {
-					every_owned_starbase = {
-						set_owner = prevprev
+					capital_scope = {
+						hfe_effect_clear_buildings_and_destroy_colony = yes
+						change_pc = pc_nuked
+						reroll_planet = yes
+						save_event_target_as = hfe_discovery_location
 					}
-					every_owned_planet = {
-						set_owner = prevprev
-						set_capital = yes
-						save_global_event_target_as = hfe_discovery_this_is_not_our_home
-					}
-					every_owned_fleet = {
-						set_owner = prevprev
-					}
+					# every_owned_starbase = {
+					# 	set_owner = prevprev
+					# }
+					# every_owned_planet = {
+					# 	set_owner = prevprev
+					# 	set_capital = yes
+					# }
+					# every_owned_fleet = {
+					# 	set_owner = prevprev
+					# }
 					every_owned_leader = {
-						if = {
-							limit = {
-								leader_class = ruler
-							}
-							prevprev = {
-								set_leader = prev
-							}
-						}
-						else = {
-							save_event_target_as = hfe_effect_clone_leader_target
-							hfe_effect_clone_leader = yes
-						}
+						set_owner = prevprev
+						# if = {
+						# 	limit = {
+						# 		leader_class = ruler
+						# 	}
+						# 	prevprev = {
+						# 		set_leader = prev
+						# 	}
+						# }
+						# else = {
+						# 	save_event_target_as = hfe_effect_clone_leader_target
+						# 	hfe_effect_clone_leader = yes
+						# }
 					}
 				}
 				set_player = root
@@ -92,7 +97,6 @@ country_event = {
 				}
 			}
 		}
-		#set_country_type = hfe_discovery
 	}
 }
 
@@ -104,13 +108,7 @@ country_event = {
 		add_modifier = {
 			modifier = hfe_discovery_translator
 		}
-		# modify_species = {
-		# 	add_trait = trait_communal
-		# 	add_trait = trait_presapient_starborn
-		# 	remove_trait = trait_solitary
-		# }
 		set_country_flag = Story7
-		#		set_country_flag = day_0
 		set_country_flag = first_contact_event
 		give_technology = {
 			tech = tech_sensors_2
@@ -120,54 +118,25 @@ country_event = {
 			tech = hfe_tech_discovery_ship
 			message = no
 		}
-		capital_scope = {
-			change_pc = pc_nuked
-			set_planet_size = 25
-			hfe_effect_clear_buildings_and_destroy_colony = yes
-			reroll_planet = yes
-			save_global_event_target_as = this_was_never_our_home
-		}
-		create_fleet = {
-			name = "The Great Adventure"
-			effect = {
-				set_owner = prev
-				create_ship = {
-					name = "The Map"
-					random_existing_design = science
-				}
-				set_fleet_stance = evasive
-				set_location = owner.capital_star
-				owner = {
-					create_leader = {
-						class = scientist
-						sub_type = survey
-					}
-				}
-				set_leader = last_created_leader
-				save_global_event_target_as = hfe_discovery_science
-			}
-		}
 		create_fleet = {
 			name = hfe_discovery
 			effect = {
 				set_owner = prev
+				set_location = event_target:hfe_discovery_location
 				create_ship = {
 					name = "Mission Discovery"
 					prefix = no
 					random_existing_design = hfe_ship_size_discovery
 					effect = {
 						set_ship_flag = hfe_discovery_ship
-						save_global_event_target_as = hfe_discovery_ship
 					}
 				}
-				owner = {
-					create_leader = {
-						class = admiral
-					}
-				}
-				assign_leader = last_created_leader
-				set_location = owner.capital_star
-				save_global_event_target_as = hfe_discovery_fleet
+				# owner = {
+				# 	create_leader = {
+				# 		class = admiral
+				# 	}
+				# }
+				# assign_leader = last_created_leader
 			}
 		}
 		add_resource = {
