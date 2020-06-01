@@ -1,12 +1,10 @@
 #
 namespace = hfe_plague
-
 # start plague
 country_event = {
 	id = hfe_plague.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		nor = {
 			has_global_flag = hfe_disable_plague
@@ -36,7 +34,6 @@ country_event = {
 			}
 		}
 	}
-
 	immediate = {
 		random_list = {
 			20 = {
@@ -46,20 +43,10 @@ country_event = {
 			}
 		}
 		set_global_flag = hfe_plague_started
-		if = {
-			limit = {
-				exists = event_target:hfe_chain_plague_count
-			}
-			event_target:hfe_chain_plague_count = {
-				set_variable = {
-					which = hfe_plague_planet_num
-					value = 0
-				}
-			}
-		}
-		else = {
-			random_planet = {
-				save_global_event_target_as = hfe_chain_plague_count
+		event_target:global_event_country = {
+			set_variable = {
+				which = hfe_plague_planet_num
+				value = 0
 			}
 		}
 		set_variable = {
@@ -132,8 +119,8 @@ country_event = {
 			name = Zombies
 			class = random
 			blocked_archetypes = {
-				MACHINE       
-				ROBOT       
+				MACHINE
+				ROBOT
 				LITHOID
 			}
 		}
@@ -177,11 +164,9 @@ planet_event = {
 	id = hfe_plague.1
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		hfe_trigger_plague_valid_planet = yes
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -255,7 +240,7 @@ planet_event = {
 			}
 		}
 		# lvl up plague
-		event_target:hfe_chain_plague_count = {
+		event_target:global_event_country = {
 			change_variable = {
 				which = hfe_plague_planet_num
 				value = 1
@@ -266,7 +251,7 @@ planet_event = {
 				not = {
 					has_global_flag = hfe_plague_lvl_2
 				}
-				event_target:hfe_chain_plague_count = {
+				event_target:global_event_country = {
 					check_variable = {
 						which = hfe_plague_planet_num
 						value > 45
@@ -286,7 +271,7 @@ planet_event = {
 				not = {
 					has_global_flag = hfe_plague_lvl_3
 				}
-				event_target:hfe_chain_plague_count = {
+				event_target:global_event_country = {
 					check_variable = {
 						which = hfe_plague_planet_num
 						value > 90
@@ -331,7 +316,6 @@ planet_event = {
 	id = hfe_plague.2
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_global_flag = hfe_disable_plague
@@ -342,7 +326,6 @@ planet_event = {
 			hfe_trigger_plague_is_immune = no
 		}
 	}
-
 	immediate = {
 		# not at same day
 		if = {
@@ -654,7 +637,6 @@ planet_event = {
 	id = hfe_plague.3
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_global_flag = hfe_disable_plague
@@ -665,7 +647,6 @@ planet_event = {
 			hfe_trigger_plague_is_immune = no
 		}
 	}
-
 	immediate = {
 		# not at same day
 		if = {
@@ -783,13 +764,13 @@ planet_event = {
 						# send plague
 						10 = {
 							# scaled_modifier = {
-								# limit = {
-									# hfe_trigger_plague_is_immune = no
-								# }
-								# scope = this
-								# add = 0.8
-								# # factor = 0.2 - test it
-								# calc = pop_count
+							# limit = {
+							# hfe_trigger_plague_is_immune = no
+							# }
+							# scope = this
+							# add = 0.8
+							# # factor = 0.2 - test it
+							# calc = pop_count
 							# }
 							modifier = {
 								factor = 2
@@ -925,11 +906,9 @@ planet_event = {
 	id = hfe_plague.4
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_planet_flag = hfe_plague_planet
 	}
-
 	immediate = {
 		every_playable_country = {
 			limit = {
@@ -1004,7 +983,6 @@ planet_event = {
 	id = hfe_plague.5
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		exists = fromfrom
@@ -1012,7 +990,6 @@ planet_event = {
 			is_country_type = hfe_plague_zombie
 		}
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -1049,14 +1026,12 @@ country_event = {
 	show_sound = event_ground_battle
 	is_triggered_only = yes
 	location = root
-
 	trigger = {
 		exists = from
 		from = {
 			is_country_type = hfe_plague_zombie
 		}
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -1068,7 +1043,6 @@ country_event = {
 			remove_pop_flag = event_purge
 		}
 	}
-
 	option = {
 		name = hfe_plague.7.0
 		hfe_effect_add_unity.1 = yes
@@ -1084,7 +1058,6 @@ planet_event = {
 	show_sound = event_ground_battle
 	is_triggered_only = yes
 	location = root
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -1092,7 +1065,6 @@ planet_event = {
 		}
 		exists = fromfrom
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -1105,7 +1077,6 @@ planet_event = {
 			remove_pop_flag = event_purge
 		}
 	}
-
 	option = {
 		name = hfe_plague.7.0
 		fromfrom = {
@@ -1122,7 +1093,6 @@ planet_event = {
 	id = hfe_plague.8
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -1131,7 +1101,6 @@ planet_event = {
 		num_pops = 0
 		planet_devastation > 80
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -1162,12 +1131,10 @@ country_event = {
 	show_sound = event_laboratory_sound
 	is_triggered_only = yes
 	diplomatic = yes
-
 	trigger = {
 		last_increased_tech = hfe_tech_plague_study
 		has_global_flag = hfe_plague_started
 	}
-
 	immediate = {
 		random_owned_leader = {
 			limit = {
@@ -1176,12 +1143,10 @@ country_event = {
 			save_event_target_as = hfe_plague_scientist_portrait
 		}
 	}
-
 	picture_event_data = {
 		portrait = event_target:hfe_plague_scientist_portrait
 		room = hfe_lab_room
 	}
-
 	option = {
 		name = DISCONCERTING
 		exclusive_trigger = {
@@ -1481,11 +1446,9 @@ country_event = {
 	show_sound = event_celebration
 	is_triggered_only = yes
 	diplomatic = yes
-
 	trigger = {
 		is_gestalt = no
 	}
-
 	immediate = {
 		random_owned_leader = {
 			limit = {
@@ -1494,7 +1457,6 @@ country_event = {
 			save_event_target_as = hfe_plague_ruler_portrait
 		}
 	}
-
 	picture_event_data = {
 		portrait = event_target:hfe_plague_ruler_portrait
 		room = ethic_spaceship_room
@@ -1503,7 +1465,6 @@ country_event = {
 		# city_level = root
 		# room = root
 	}
-
 	option = {
 		name = hfe_plague.10.0
 		add_modifier = {
@@ -1518,7 +1479,6 @@ planet_event = {
 	id = hfe_plague.11
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		exists = controller
@@ -1526,7 +1486,6 @@ planet_event = {
 			is_country_type = hfe_plague_zombie
 		}
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -1583,7 +1542,6 @@ planet_event = {
 	id = hfe_plague.12
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = fromfrom
 		fromfrom = {
@@ -1591,7 +1549,6 @@ planet_event = {
 			has_pop_flag = hfe_plague_pop
 		}
 	}
-
 	immediate = {
 		fromfrom = {
 			remove_pop_flag = event_purge
@@ -1608,14 +1565,12 @@ country_event = {
 	picture = GFX_evt_news_room
 	show_sound = event_laboratory_sound
 	is_triggered_only = yes
-
 	immediate = {
 		begin_event_chain = {
 			event_chain = hfe_chain_plague_count
 			target = this
 		}
 	}
-
 	option = {
 		name = hfe_plague.50.0
 	}
@@ -1696,11 +1651,9 @@ country_event = {
 	picture = GFX_evt_news_room
 	show_sound = event_life_support_fail
 	is_triggered_only = yes
-
 	immediate = {
 		remove_country_flag = hfe_plague_meet
 	}
-
 	option = {
 		name = CURSES
 	}
@@ -1734,18 +1687,17 @@ country_event = {
 	picture = GFX_evt_news_room
 	show_sound = event_red_alert
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 	}
-
 	immediate = {
 		remove_country_flag = hfe_plague_meet
 	}
-
 	option = {
 		name = DISCONCERTING
-		hidden_effect = { play_sound = event_screams }
+		hidden_effect = {
+			play_sound = event_screams
+		}
 	}
 }
 
@@ -1829,7 +1781,6 @@ country_event = {
 	show_sound = event_life_support_fail
 	is_triggered_only = yes
 	location = from
-
 	trigger = {
 		#is_ai = no
 		nand = {
@@ -1837,13 +1788,11 @@ country_event = {
 			has_country_flag = hfe_plague_meet
 		}
 	}
-
 	after = {
 		hidden_effect = {
 			set_country_flag = hfe_plague_meet
 		}
 	}
-
 	option = {
 		name = galactic_features.361.a
 		if = {
@@ -1889,14 +1838,12 @@ country_event = {
 	show_sound = event_life_support_fail
 	is_triggered_only = yes
 	location = from
-
 	trigger = {
 		is_ai = no
 		not = {
 			has_country_flag = hfe_plague_block_pulse
 		}
 	}
-
 	option = {
 		name = hfe_plague.56.0
 		trigger = {
@@ -1912,8 +1859,11 @@ country_event = {
 		}
 		hidden_effect = {
 			random_list = {
-				40 = { play_sound = event_screams}
-				60 = {}
+				40 = {
+					play_sound = event_screams
+				}
+				60 = {
+				}
 			}
 		}
 	}
@@ -1935,21 +1885,25 @@ country_event = {
 	show_sound = event_celebration
 	is_triggered_only = yes
 	location = from
-
 	trigger = {
 		not = {
 			has_technology = hfe_tech_plague_immune
 		}
 	}
-
 	option = {
 		name = hfe_plague.58.0
 		trigger = {
 			OR = {
-				NOT = { has_tech_option = hfe_tech_plague_immune }
-#				NOT = { has_technology = hfe_tech_plague_immune }
-				NOT = { has_technology = tech_gene_tailoring }
-				NOT = { has_tech_option = tech_gene_tailoring }
+				NOT = {
+					has_tech_option = hfe_tech_plague_immune
+				}
+				#				NOT = { has_technology = hfe_tech_plague_immune }
+				NOT = {
+					has_technology = tech_gene_tailoring
+				}
+				NOT = {
+					has_tech_option = tech_gene_tailoring
+				}
 			}
 		}
 		if = {
@@ -2016,7 +1970,6 @@ country_event = {
 	show_sound = event_ghost_town
 	is_triggered_only = yes
 	location = from
-
 	trigger = {
 		is_ai = no
 		exists = from
@@ -2029,15 +1982,12 @@ country_event = {
 			has_country_flag = hfe_plague_block_all_die
 		}
 	}
-
 	immediate = {
 		hfe_effect_random_roll_flags_2_country = yes
 	}
-
 	option = {
 		name = hfe_plague.61.0
 	}
-
 	option = {
 		name = hfe_block
 		custom_tooltip = hfe_plague_block.tooltip
@@ -2056,14 +2006,12 @@ country_event = {
 	show_sound = event_screams
 	is_triggered_only = yes
 	location = from
-
 	trigger = {
 		is_ai = no
 		not = {
 			has_country_flag = hfe_plague_block_zombie
 		}
 	}
-
 	option = {
 		name = hfe_plague.62.0
 	}
@@ -2078,44 +2026,39 @@ country_event = {
 
 # events on first plague planet 100 - 150
 # planet_event = {
-	# id = hfe_plague.100
-	# title = hfe_plague.100.name
-	# desc = hfe_plague.100.desc
-	# picture = GFX_evt_hfe_plague
-	# show_sound = event_air_raid_siren
-	# is_triggered_only = yes
-	# location = root
-
-	# trigger = {
-		# exists = owner
-		# owner = {
-			# not = {
-				# has_country_flag = hfe_plague_fist_time
-			# }
-		# }
-	# }
-
-	# immediate = {
-		# set_timed_planet_flag = {
-			# flag = hfe_plague_fist_planet days = 3650
-		# }
-		# owner = {
-			# set_country_flag = hfe_plague_fist_time
-		# }
-	# }
-
-	# option = {
-		# name = hfe_plague.100.0
-	# }
+# id = hfe_plague.100
+# title = hfe_plague.100.name
+# desc = hfe_plague.100.desc
+# picture = GFX_evt_hfe_plague
+# show_sound = event_air_raid_siren
+# is_triggered_only = yes
+# location = root
+# trigger = {
+# exists = owner
+# owner = {
+# not = {
+# has_country_flag = hfe_plague_fist_time
 # }
-
+# }
+# }
+# immediate = {
+# set_timed_planet_flag = {
+# flag = hfe_plague_fist_planet days = 3650
+# }
+# owner = {
+# set_country_flag = hfe_plague_fist_time
+# }
+# }
+# option = {
+# name = hfe_plague.100.0
+# }
+# }
 # bombardment event 150 - 200
 # bombarding infected planet after project finished
 ship_event = {
 	id = hfe_plague.150
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
 		event_target:hfe_project_plague_planet_bombardment_target = {
 			if = {
@@ -2185,7 +2128,6 @@ ship_event = {
 	id = hfe_plague.151
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		event_target:hfe_project_plague_planet_bombardment_target = {
 			not = {
@@ -2193,7 +2135,6 @@ ship_event = {
 			}
 		}
 	}
-
 	immediate = {
 		owner = {
 			abort_special_project = {
@@ -2212,13 +2153,11 @@ country_event = {
 	picture = GFX_evt_ground_combat
 	show_sound = event_wind_ruins
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_country_flag = hfe_plague.153_block
 		}
 	}
-
 	option = {
 		name = hfe_plague.152.0
 	}
@@ -2237,11 +2176,9 @@ planet_event = {
 	id = hfe_plague.153
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_modifier = hfe_plague_bombardment_planet
 	}
-
 	immediate = {
 		remove_modifier = hfe_plague_bombardment_planet
 	}
@@ -2255,7 +2192,6 @@ country_event = {
 	picture = GFX_evt_ground_combat
 	show_sound = event_celebration
 	is_triggered_only = yes
-
 	trigger = {
 		has_global_flag = hfe_plague_lvl_2
 		not = {
@@ -2265,9 +2201,9 @@ country_event = {
 		any_relation = {
 			has_authority = auth_machine_intelligence
 			# relative_power = {
-				# who = root
-				# category = fleet
-				# value >= equivalent
+			# who = root
+			# category = fleet
+			# value >= equivalent
 			# }
 			root = {
 				not = {
@@ -2282,15 +2218,14 @@ country_event = {
 			has_planet_flag = hfe_plague_planet
 		}
 	}
-
 	immediate = {
 		random_relation = {
 			limit = {
 				has_authority = auth_machine_intelligence
 				# relative_power = {
-					# who = root
-					# category = fleet
-					# value >= equivalent
+				# who = root
+				# category = fleet
+				# value >= equivalent
 				# }
 				root = {
 					not = {
@@ -2304,7 +2239,6 @@ country_event = {
 			save_event_target_as = hfe_plague_160_machine
 		}
 	}
-
 	option = {
 		name = hfe_plague.160.0
 		add_casus_belli = {
@@ -2326,14 +2260,12 @@ planet_event = {
 	id = hfe_plague.161
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		num_pops > 0
 		exists = owner
 		exists = from
 		has_orbital_bombardment_stance = hfe_stance_plague_spread
 	}
-
 	immediate = {
 		if = {
 			limit = {
