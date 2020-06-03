@@ -967,7 +967,7 @@ ship_event = {
 							add_claims = {
 								who = event_target:hfe_pirate_starbase_def
 								num_of_claims = 1
-								show_notification = no
+								show_notification = yes
 							}
 						}
 					}
@@ -1020,17 +1020,30 @@ ship_event = {
 				}
 				if = {
 					limit = {
-						or = {
-							any_neighbor_system = {
-								ignore_hyperlanes = no
-								exists = owner
-								owner = {
-									is_country = event_target:hfe_pirate_starbase_att
-								}
-							}
+						not = {
 							event_target:hfe_pirate_starbase_att = {
 								has_claim = prev
 							}
+						}
+						event_target:hfe_pirate_starbase_att = {
+							any_federation_ally = {
+								has_claim = prevprev
+							}
+						}
+					}
+					event_target:hfe_pirate_starbase_att = {
+						random_federation_ally = {
+							limit = {
+								has_claim = prevprev
+							}
+							save_event_target_as = hfe_pirate_starbase_att
+						}
+					}
+				}
+				if = {
+					limit = {
+						event_target:hfe_pirate_starbase_att = {
+							has_claim = prev
 						}
 					}
 					every_system_planet = {
