@@ -994,26 +994,42 @@ ship_event = {
 				every_system_planet = {
 					limit = {
 						is_owned_by = event_target:hfe_pirate_starbase_def
-						is_planet_class = hfe_pc_pirate_base
-					}
-					event_target:hfe_pirate_starbase_att = {
-						set_timed_country_flag = {
-							flag = hfe_refuge_country_prior@event_target:hfe_pirate_starbase_def
-							days = 10
+						or = {
+							is_planet_class = hfe_pc_pirate_base
+							num_pops = 0
 						}
 					}
-					every_owned_pop = {
-						hfe_effect_refuge_or_die = yes
+					if = {
+						limit = {
+							is_planet_class = hfe_pc_pirate_base
+						}
+						event_target:hfe_pirate_starbase_att = {
+							set_timed_country_flag = {
+								flag = hfe_refuge_country_prior@event_target:hfe_pirate_starbase_def
+								days = 10
+							}
+						}
+						every_owned_pop = {
+							hfe_effect_refuge_or_die = yes
+						}
+						hfe_effect_convert_to_asteroid = yes
 					}
-					hfe_effect_convert_to_asteroid = yes
+					else = {
+						destroy_colony = yes
+					}
 				}
 				if = {
 					limit = {
-						any_neighbor_system = {
-							ignore_hyperlanes = no
-							exists = owner
-							owner = {
-								is_country = event_target:hfe_pirate_starbase_att
+						or = {
+							any_neighbor_system = {
+								ignore_hyperlanes = no
+								exists = owner
+								owner = {
+									is_country = event_target:hfe_pirate_starbase_att
+								}
+							}
+							event_target:hfe_pirate_starbase_att = {
+								has_claim = prev
 							}
 						}
 					}
