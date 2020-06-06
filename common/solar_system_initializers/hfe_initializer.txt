@@ -21,9 +21,6 @@ hfe_initializer_egypt_main = {
 		}
 		has_ring = no
 		name = Ra
-		init_effect = {
-			save_global_event_target_as = hfe_egypt_home_star
-		}
 	}
 	change_orbit = 70
 	planet = {
@@ -72,12 +69,10 @@ hfe_initializer_egypt_main = {
 			max = 270
 		}
 		init_effect = {
-			save_global_event_target_as = hfe_egypt_home_of_light
 			create_country = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
 				name_list = cybrxkhan_fantasy_egyptian
-				ship_prefix = "Ra"
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_egypt_species
 				authority = auth_imperial
@@ -97,18 +92,7 @@ hfe_initializer_egypt_main = {
 					set_country_flag = hfe_egypt
 					set_country_flag = hfe_assimilator_discovered
 					set_country_flag = hfe_marked_as_human
-					give_technology = {
-						message = no
-						tech = tech_titans
-					}
-					give_technology = {
-						message = no
-						tech = tech_colossus
-					}
-					give_technology = {
-						message = no
-						tech = tech_pk_cracker
-					}
+					hfe_effect_create_fleet = yes
 					kill_leader = {
 						type = ruler
 						show_notification = no
@@ -120,7 +104,6 @@ hfe_initializer_egypt_main = {
 						skill = 10
 						leader_age_min = 250
 						leader_age_max = 650
-						#						immortal = yes # Had says it's automatically applied from the species
 						gender = male
 						traits = {
 							trait = leader_trait_ruler_chosen
@@ -134,11 +117,6 @@ hfe_initializer_egypt_main = {
 						}
 						log = "Ju Ahet actual country installed"
 					}
-					# add_modifier = {
-					# 	modifier = hfe_navy_size
-					# 	days = -1
-					# }
-					set_country_flag = hfe_marked_as_human
 				}
 			}
 			set_owner = event_target:hfe_egypt_country
@@ -147,7 +125,6 @@ hfe_initializer_egypt_main = {
 			hfe_effect_init_set_pops_100 = yes
 			# Generate Slave Ahets
 			create_species = {
-				#				is_mod = yes # Creates Post/Elite/High/Clarus etc.
 				name = "Ahet"
 				plural = "Ahets"
 				adjective = "Slave Ahet"
@@ -199,10 +176,8 @@ hfe_initializer_egypt_main = {
 				can_be_modified = no				# "Forever a slave" means forever a slave
 				extra_trait_points = 12
 				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets are entirely descended from the officers, governors, and elite rulers of the extinct Ahet empire. Specifically targetted and made an example of, these Ahets endure the most humiliating life possible: they are a delicacy on every Ju Ahet table."
-				#				homeworld = event_target:hfe_ahet_happy_ending
 				traits = {
 					ideal_planet_class = pc_nuked
-					#					trait = hfe_species_trait_happy_slave
 					trait = trait_presapient_docile_livestock
 					trait = trait_nerve_stapled
 					trait = trait_delicious
@@ -295,12 +270,6 @@ hfe_initializer_egypt_main = {
 			}
 			add_building = building_system_capital
 			add_building = hfe_building_terraformer
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Temple of Thoth spawned"
-			}
 			add_building = building_psi_corps
 			add_building = building_master_archive
 			add_building = building_fe_stronghold
@@ -325,123 +294,13 @@ hfe_initializer_egypt_main = {
 				}
 			}
 			hfe_effect_create_starbase_citadel_with_buildings_from_planet = yes
-			owner = {
-				hfe_effect_create_egypt_fleet = yes
-				hfe_effect_create_egypt_fleet = yes
-				hfe_effect_create_egypt_fleet = yes
-				create_fleet = {
-					name = "Divine Punishment II"
-					settings = {
-						can_disband = no
-						spawn_debris = yes
-						is_boss = yes
-						uses_naval_capacity = no
-						can_upgrade = yes
-						ai_ignore_strength = yes
-					}
-					effect = {
-						create_ship = {
-							name = "Super Ahet Purger"
-							design = "NAME_Reaper"
-							#							random_existing_design = colossus
-							graphical_culture = humanoid_01
-							prefix = no
-							effect = {
-								set_ship_flag = hfe_ju_ahet_colossus_2
-							}
-						}
-						set_location = {
-							target = event_target:hfe_egypt_home_star
-							distance = 100
-							angle = random
-						}
-					}
-				}
-				if = {
-					limit = {
-						is_difficulty > 0
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 1
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 2
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 3
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 4
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				every_owned_ship = {
-					repair_ship = yes
-					add_modifier = {
-						modifier = hfe_unkeep_80
-					}
-				}
-			}
 		}
 		change_orbit = @base_moon_distance
 		moon = {
 			name = "Heresy"
 			class = pc_shattered
-			#			entity = barren_planet_01_destroyed_entity
 			orbit_angle = random
 			orbit_distance = 5
-			init_effect = {
-				prevent_anomaly = yes
-				save_global_event_target_as = hfe_thoth_broke_this
-				create_fleet = {
-					name = "Divine Punishment I"
-					settings = {
-						can_disband = no
-						spawn_debris = yes
-						is_boss = yes
-						uses_naval_capacity = no
-						can_upgrade = yes
-						ai_ignore_strength = yes
-					}
-					effect = {
-						create_ship = {
-							name = "Set"
-							design = "NAME_Reaper"
-							#							random_existing_design = colossus
-							graphical_culture = humanoid_01
-							prefix = no
-							effect = {
-								set_ship_flag = hfe_ju_ahet_colossus_1
-							}
-						}
-						set_location = {
-							target = event_target:hfe_thoth_broke_this
-							distance = 1
-							angle = 325							# Should be to the top-left of the moon
-						}
-					}
-				}
-				event_target:hfe_egypt_country = {
-					every_owned_ship = {
-						repair_ship = yes
-						add_modifier = {
-							modifier = hfe_unkeep_80
-						}
-					}
-				}
-			}
 		}
 	}
 	planet = {
@@ -2844,44 +2703,13 @@ hfe_initializer_future_main = {
 						}
 					}
 					effect = {
-						#						hfe_effect_init_give_tech_t5 = yes
 						set_country_flag = hfe_future
 						set_country_flag = hfe_brainworm_discovered
 						set_country_flag = hfe_marked_as_human
-						set_country_flag = galcom_form_aye						# Automatically add them to the UN
+						set_country_flag = galcom_form_aye
 						save_global_event_target_as = hfe_future_country
 						save_global_event_target_as = hfe_coalition_leader
-						give_technology = {
-							tech = tech_titans
-							message = no
-						}
-						give_technology = {
-							tech = tech_juggernaut
-							message = no
-						}
-						add_modifier = {
-							modifier = hfe_navy_size
-							days = -1
-						}
-						add_modifier = {
-							modifier = fallen_empire_base
-							days = -1
-						}
-						add_modifier = {
-							# Will not exercise power in the UN until it awakes
-							modifier = hfe_tsp_thoth_early_diplomacy_unkeep
-							days = -1
-						}
-						add_modifier = {
-							# Adding this twice because the power is still too high
-							modifier = hfe_tsp_thoth_early_diplomacy_unkeep_2
-							days = -1
-						}
-						#						set_policy = {
-						#							policy = refugees
-						#							option = refugees_allowed
-						#							cooldown = yes
-						#						}
+						hfe_effect_create_fleet = yes
 					}
 				}
 				set_owner = event_target:hfe_future_country
@@ -2913,47 +2741,6 @@ hfe_initializer_future_main = {
 					}
 				}
 				hfe_effect_create_starbase_citadel_with_buildings_from_planet = yes
-				owner = {
-					hfe_effect_create_future_fleet = yes
-					hfe_effect_create_future_fleet = yes
-					hfe_effect_create_future_fleet = yes
-					if = {
-						limit = {
-							is_difficulty > 0
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 1
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 2
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 3
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 4
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					every_owned_ship = {
-						repair_ship = yes
-						add_modifier = {
-							modifier = hfe_unkeep_80
-						}
-					}
-				}
 			}
 		}
 		moon = {

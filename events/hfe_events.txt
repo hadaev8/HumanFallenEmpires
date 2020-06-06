@@ -881,11 +881,6 @@ country_event = {
 			flag = hfe_expansion_block
 			days = 1825
 		}
-		# ????????? ????? ?? 2 ????????????
-		add_modifier = {
-			modifier = hfe_navy_size
-			days = 3600
-		}
 		#		country_add_ethic = ethic_xenophobe
 		set_country_type = default
 		set_global_flag = hfe_egypt_in_expansion
@@ -5296,16 +5291,21 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_navy_size
+					years = 10
 				}
-				create_fleet_from_naval_cap = 1
-				create_leader = {
-					class = admiral
-				}
-				last_created_fleet = {
-					add_modifier = {
-						modifier = hfe_unkeep_80
+				while = {
+					count = 3
+					root = {
+						create_fleet_from_naval_cap = 0.3
 					}
-					assign_leader = last_created_leader
+					create_leader = {
+						class = admiral
+					}
+					last_created_fleet = {
+						set_owner = prev
+						set_location = event_target:hfe_stargate
+						assign_leader = last_created_leader
+					}
 				}
 				create_leader = {
 					class = general
@@ -5323,10 +5323,7 @@ country_event = {
 						set_location = event_target:hfe_stargate
 					}
 				}
-				add_resource = {
-					minerals = 5000
-					energy = 5000
-				}
+				hfe_effect_resource_bonus = yes
 				declare_war = {
 					target = root
 					name = "War with Forsakens"
@@ -9290,10 +9287,6 @@ country_event = {
 			flag = hfe_expansion_block
 			days = 1825
 		}
-		add_modifier = {
-			modifier = hfe_navy_size
-			days = 3600
-		}
 		# Remove diplomatic power malus
 		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
 		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
@@ -10172,17 +10165,10 @@ ship_event = {
 			released_from_country = event_target:hfe_blight_remnants
 			species = event_target:hfe_blight_remnants
 			effect = {
+				hfe_effect_resource_bonus = yes
 				modify_species = {
 					add_trait = trait_cybernetic
 					#					add_trait = trait_machine_unit
-				}
-				add_resource = {
-					energy = 10000
-					minerals = 10000
-					food = 1000
-					alloys = 5000
-					consumer_goods = 500
-					influence = 1000
 				}
 				if = {
 					limit = {
@@ -10280,6 +10266,9 @@ ship_event = {
 							set_name = "Final [prev.GetSpeciesNamePlural]"
 						}
 						70 = {
+							set_name = "Last of [prev.GetSpeciesNamePlural]"
+						}
+						70 = {
 							set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders"
 						}
 						10 = {
@@ -10303,11 +10292,16 @@ ship_event = {
 	}
 	option = {
 		name = hfe.5080.1
-		#		custom_tooltip = hfe_player_not_change_to_blight
 		hidden_effect = {
 			event_target:hfe_blight_remnants = {
 				country_event = {
 					id = hfe.5082
+				}
+			}
+			event_target:hfe_blight = {
+				add_modifier = {
+					modifier = hfe_space_boom
+					years = 10
 				}
 			}
 		}
@@ -10315,6 +10309,11 @@ ship_event = {
 	option = {
 		name = hfe.5080.0
 		custom_tooltip = hfe_player_change_to_blight
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
 		event_target:hfe_blight = {
 			set_player = event_target:hfe_blight_remnants
 			hidden_effect = {

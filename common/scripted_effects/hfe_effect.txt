@@ -795,7 +795,7 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 			name = "Neo-Varelse Hegemony"
 			type = default
 			species = event_target:hfe_varelse_species
-			origin = "hfe_civic_features_exodus"
+			origin = hfe_civic_features_exodus
 			ethos = {
 				ethic = ethic_xenophobe
 				ethic = ethic_militarist
@@ -805,6 +805,7 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 				set_country_flag = hfe_was_government_in_exile
 				set_country_flag = hfe_chosen_to_exodus
 				set_country_flag = hfe_varelse
+				hfe_effect_resource_bonus = yes
 				# TODO check how it looks
 				# set_graphical_culture = reptilian_01
 				# set_city_graphical_culture = reptilian_01
@@ -823,14 +824,6 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 					add_modifier = {
 						modifier = hfe_unkeep
 					}
-				}
-				add_resource = {
-					minerals = 7500
-					energy = 7500
-					food = 7500
-					alloys = 6000
-					consumer_goods = 5000
-					influence = 1000
 				}
 			}
 		}
@@ -925,164 +918,47 @@ hfe_effect_save_event_target = {
 	}
 }
 
-#hfe_effect_clear_event_target = {
-# clear_global_event_target = hfe_event_target_0
-#	clear_global_event_target = hfe_event_target_1
-#	clear_global_event_target = hfe_event_target_2
-#	clear_global_event_target = hfe_event_target_3
-#	clear_global_event_target = hfe_event_target_4
-#	clear_global_event_target = hfe_event_target_5
-#}
 # for country
-hfe_effect_create_egypt_fleet = {
-	create_leader = {
-		class = admiral
-		species = this
-		skill = 5
-		leader_age_min = 100
-		leader_age_max = 650
-	}
-	create_fleet_from_naval_cap = 0.2
-	last_created_fleet = {
-		assign_leader = last_created_leader
-	}
-	create_fleet = {
-		settings = {
-			can_change_composition = no
-			uses_naval_capacity = no
-		}
-		effect = {
-			set_owner = prev
-			#			if = {
-			#				limit = { has_global_flag = HFE_TSP_spawn_test }
-			#				log = "Ju Ahet gets fleet"
-			#			}
-			while = {
-				count = 5
-				create_ship = {
-					random_existing_design = battleship
-				}
-			}
-			assign_leader = last_created_leader
-			while = {
-				count = 7
-				create_ship = {
-					random_existing_design = cruiser
-				}
-			}
-			while = {
-				count = 10
-				create_ship = {
-					random_existing_design = destroyer
-				}
-			}
-			while = {
-				count = 20
-				create_ship = {
-					random_existing_design = corvette
-				}
-			}
-			set_location = {
-				target = owner.capital_star
-				distance = 90
-				angle = random
-			}
+hfe_effect_create_admirals = {
+	while = {
+		count = 5
+		create_leader = {
+			class = admiral
+			species = this
+			skill = 5
+			leader_age_min = 100
+			leader_age_max = 300
 		}
 	}
 }
 
-# for country
-hfe_effect_create_future_fleet = {
-	create_leader = {
-		class = admiral
-		species = this
-		skill = 5
-		leader_age_min = 40
+hfe_effect_create_fleet = {
+	hfe_effect_create_admirals = yes
+	add_modifier = {
+		modifier = hfe_space_boom
+		years = 10
 	}
-	create_fleet = {
-		settings = {
-			can_change_composition = no
-			uses_naval_capacity = no
-		}
-		effect = {
-			set_owner = prev
-			while = {
-				count = 5
-				create_ship = {
-					random_existing_design = battleship
-				}
-			}
-			assign_leader = last_created_leader
-			while = {
-				count = 7
-				create_ship = {
-					random_existing_design = cruiser
-				}
-			}
-			while = {
-				count = 10
-				create_ship = {
-					random_existing_design = destroyer
-				}
-			}
-			while = {
-				count = 20
-				create_ship = {
-					random_existing_design = corvette
-				}
-			}
-			set_location = {
-				target = owner.capital_star
-				distance = 90
-				angle = random
-			}
-		}
+	add_modifier = {
+		modifier = hfe_navy_size
+		years = 200
+	}
+	add_resource = {
+		alloys = 100000
 	}
 }
 
-# for tile
-# hfe_effect_set_random_deposit = {
-# 	random_list = {
-# 		30 = {
-# 			hfe_effect_set_science_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_energy_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_mineral_deposit = yes
-# 		}
-# 	}
-# }
-# hfe_effect_set_science_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			hfe_effect_set_physics_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_society_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_engineering_deposit = yes
-# 		}
-# 	}
-# }
-# hfe_effect_set_energy_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_energy_deposit
-# 		}
-# 	}
-# }
+# ai can trade anyway, so ammount doesnt matter
+hfe_effect_resource_bonus = {
+	add_resource = {
+		energy = 5000
+		minerals = 5000
+		food = 5000
+		alloys = 5000
+		consumer_goods = 5000
+		influence = 500
+	}
+}
+
 hfe_effect_set_mineral_orbital_deposit = {
 	random_list = {
 		10 = {
