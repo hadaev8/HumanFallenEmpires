@@ -6965,195 +6965,83 @@ country_event = {
 # From = System
 # FromFrom = Country
 ship_event = {
-	id = hfe.700
-	title = HFE_THOTH_CALL_TITLE
-	desc = HFE_THOTH_CALL_DESC
-	picture = GFX_evt_hfe_thoth
-	show_sound = event_sensor_ping
-	location = ROOT
-	trackable = yes
+	id = hfe.699
+	hide_window = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		hfe_trigger_story_enabled = yes
 		NOT = {
-			has_global_flag = hfe_has_event.700
+			has_global_flag = hfe_has_event.699
 		}
 		exists = owner
 		owner = {
 			is_ai = no
-			is_country_type = default
-		}
-		NOT = {
-			exists = solar_system.owner
 		}
 	}
 	immediate = {
 		root.owner = {
-			save_global_event_target_as = empire_that_met_thoth
 			set_country_flag = hfe_thoth_contacted_first
 		}
+		set_global_flag = hfe_has_event.699
 		FROM = {
-			save_global_event_target_as = thoth_signal_trace_point
+			spawn_system = {
+				min_distance >= 3
+				max_distance <= 10
+				min_orientation_angle = 24
+				max_orientation_angle = 66
+				initializer = hfe_tsp_ssb_thoth_system_initializer
+				hyperlane = yes
+			}
 		}
-		set_global_flag = hfe_has_event.700
-		# Same spawning means as the Rubricator
-		FROM = {
-			# The system the ship is in
-			if = {
-				limit = {
-					any_system = {
-						distance = {
-							source = event_target:thoth_signal_trace_point
-							min_jumps = 1
-							max_jumps = 1
-						}
-						has_access_fleet = event_target:empire_that_met_thoth
-						has_owner = no
-						NOT = {
-							any_fleet_in_system = {
-								owner = {
-									is_hostile = event_target:empire_that_met_thoth
-								}
-							}
-						}
-					}
-				}
-				if = {
-					limit = {
-						has_global_flag = HFE_TSP_spawn_test
-					}
-					log = "Thoth system spawn started"
-				}
-				closest_system = {
-					min_steps = 1
-					max_steps = 2
-					limit = {
-						has_access_fleet = event_target:empire_that_met_thoth
-						has_owner = no
-						NOT = {
-							any_fleet_in_system = {
-								owner = {
-									is_hostile = event_target:empire_that_met_thoth
-								}
-							}
-						}
-					}
-					spawn_system = {
-						min_distance >= 3
-						max_distance <= 10
-						min_orientation_angle = 24
-						max_orientation_angle = 66
-						initializer = hfe_tsp_ssb_thoth_system_initializer
-					}
+	}
+}
+
+fleet_event = {
+	id = hfe.700
+	title = hfe.700.name
+	desc = hfe.700.desc
+	picture = GFX_evt_hfe_thoth
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+	trackable = yes
+	trigger = {
+		has_global_flag = hfe_has_event.699
+		not = {
+			has_global_flag = hfe_thoth_awaked
+		}
+		exists = event_target:hfe_thoth
+		from = {
+			any_fleet_in_system = {
+				has_fleet_flag = hfe_thoth_station
+			}
+		}
+	}
+	immediate = {
+		enable_special_project = {
+			name = hfe_project_thoth_contact
+			location = event_target:hfe_thoth_station
+			owner = root.owner
+		}
+	}
+	option = {
+		name = hfe.700.0
+		trigger = {
+			root = {
+				exists = leader
+				leader = {
+					leader_class = scientist
+					has_skill > 3
 				}
 			}
-			else_if = {
-				limit = {
-					any_system = {
-						distance = {
-							source = root
-							min_jumps = 1
-							max_jumps = 3
-						}
-						has_access_fleet = event_target:empire_that_met_thoth
-						NOT = {
-							any_fleet_in_system = {
-								owner = {
-									is_hostile = event_target:empire_that_met_thoth
-								}
-							}
-						}
-					}
-				}
-				if = {
-					limit = {
-						has_global_flag = HFE_TSP_spawn_test
-					}
-					log = "Thoth system spawn started"
-				}
-				closest_system = {
-					min_steps = 1
-					max_steps = 4
-					limit = {
-						has_access_fleet = event_target:empire_that_met_thoth
-						NOT = {
-							any_fleet_in_system = {
-								owner = {
-									is_hostile = event_target:empire_that_met_thoth
-								}
-							}
-						}
-					}
-					spawn_system = {
-						min_distance >= 4
-						max_distance <= 31
-						min_orientation_angle = 24
-						max_orientation_angle = 66
-						initializer = hfe_tsp_ssb_thoth_system_initializer
-					}
-				}
-			}
-			else = {
-				if = {
-					limit = {
-						has_global_flag = HFE_TSP_spawn_test
-					}
-					log = "Thoth system started"
-				}
-				closest_system = {
-					min_steps = 1
-					max_steps = 2
-					spawn_system = {
-						min_distance >= 5
-						max_distance <= 31
-						min_orientation_angle = 24
-						max_orientation_angle = 66
-						initializer = hfe_tsp_ssb_thoth_system_initializer
-					}
-				}
-			}
+		}
+		fleet_action_research_special_project = {
+			special_project = hfe_project_thoth_contact
+			target = event_target:hfe_thoth_station
 		}
 	}
 	option = {
 		name = hfe.700.1
 	}
-	#	after = {
-	#		event_target:hfe_thoth_war_computer = {
-	#			fleet = {
-	#				set_location = {
-	#					target = event_target:hfe_thoth_location
-	#					distance = 1
-	#					angle = 69
-	#				}
-	#			}
-	#		}
-	#	}
-	#
-	#	option = {
-	#		name = hfe.700.0
-	#		trigger = {
-	#			is_ship_size = science
-	#		}
-	#		tooltip = {
-	#
-	#		}
-	#	}
-	#	option = {
-	#		name = hfe.700.1
-	#		trigger = {
-	#			not = {
-	#				is_ship_size = science
-	#			}
-	#		}
-	#		tooltip = {
-	#			enable_special_project = {
-	#				name = hfe_project_thoth_contact
-	#				location = event_target:hfe_thoth_location
-	#				owner = root.owner
-	#			}
-	#		}
-	#	}
 }
 
 # project complete
@@ -7168,15 +7056,22 @@ ship_event = {
 	trigger = {
 		exists = event_target:hfe_thoth_station
 	}
+	immediate = {
+		event_target:hfe_thoth_station = {
+			hfe_effect_remove_signal_object_from_this = yes
+		}
+		set_global_flag = hfe_thoth_awaked
+		event_target:hfe_thoth = {
+			add_modifier = {
+				modifier = hfe_discovery_translator
+			}
+		}
+	}
 	option = {
 		name = hfe_at_the_sreen
 		hfe_effect_leader_add_exp_100 = yes
 		hidden_effect = {
-			event_target:hfe_thoth_station = {
-				hfe_effect_remove_signal_object_from_this = yes
-			}
 			owner = {
-				set_country_flag = hfe_engaged_contact_with_thoth
 				establish_communications = event_target:hfe_thoth
 				set_country_flag = hfe.702.0
 				country_event = {
@@ -7740,116 +7635,14 @@ country_event = {
 		room = hfe_thoth_room
 	}
 	trigger = {
-		not = {
-			has_country_flag = hfe_thoth_contacted_first
-		}
+		is_ai = no
 		from = {
 			is_country_type = hfe_thoth
 		}
 	}
-	immediate = {
-		establish_communications = from
-		set_country_flag = hfe_thoth_contacted
-	}
 	option = {
 		name = hfe.705.0
 		default_hide_option = yes
-	}
-}
-
-fleet_event = {
-	id = hfe.706
-	title = hfe.700.name
-	desc = hfe.700.desc
-	picture = GFX_evt_hfe_thoth
-	show_sound = event_ship_thrusters
-	is_triggered_only = yes
-	trigger = {
-		OR = {
-			FROM = {
-				has_star_flag = hfe_thoth_was_here
-			}
-			FROM = {
-				any_system_planet = {
-					has_planet_flag = call_thoth
-				}
-			}
-		}
-		root.owner = {
-			NOT = {
-				has_country_flag = hfe_entered_thoth_system
-			}
-		}
-	}
-	option = {
-		name = hfe.700.1
-		root.owner = {
-			set_country_flag = hfe_entered_thoth_system
-		}
-		#		if = {
-		#			limit = { is_ai = yes }
-		#			enable_special_project = {
-		#				name = hfe_project_thoth_contact
-		#				location = event_target:hfe_thoth_location
-		#				owner = root.owner
-		#			}
-		#		}
-	}
-	after = {
-		every_country = {
-			limit = {
-				is_ai = yes
-			}
-			establish_communications_no_message = event_target:hfe_thoth
-			set_country_flag = ai_automatically_met_thoth
-		}
-	}
-}
-
-country_event = {
-	id = hfe.707
-	hide_window = yes
-	#	pre_triggers = {
-	#		is_ai = yes
-	#	}
-	trigger = {
-		is_ai = yes
-		NOT = {
-			is_country_type = default
-		}
-		OR = {
-			is_country_type = hfe_thoth
-			has_country_flag = hfe_future
-			has_country_flag = galcom_form_aye
-		}
-		has_global_flag = galactic_community_founded
-		NOT = {
-			is_galactic_community_member = yes
-			has_global_flag = hfe_thoth_votes
-		}
-	}
-	mean_time_to_happen = {
-		months = 2
-	}
-	immediate = {
-		add_to_galactic_community = yes
-		set_global_flag = hfe_thoth_votes
-		set_country_flag = galcom_form_aye
-	}
-	after = {
-		event_target:hfe_thoth = {
-			hfe_effect_cleanse_ethics = yes
-			country_add_ethic = ethic_pacifist
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_xenophile
-			change_government = {
-				authority = auth_dictatorial
-				civics = {
-					civic = civic_free_haven
-					civic = civic_ancient_machine_intelligence
-				}
-			}
-		}
 	}
 }
 
@@ -7866,7 +7659,6 @@ country_event = {
 		not = {
 			has_country_flag = hfe.711_block
 		}
-		has_country_flag = hfe_engaged_contact_with_thoth
 		is_ai = no
 	}
 	immediate = {
@@ -8331,89 +8123,51 @@ country_event = {
 	}
 }
 
-country_event = {
-	# Fall back in case Thoth diplomacy does not load, prevents AI from buying Thoth wares
-	id = hfe.713
-	title = "THOTH_AI_DEFAULT"
-	desc = "THOTH_AI_DEFAULT_DESC"
-	picture = GFX_evt_hfe_thoth
-	show_sound = event_wind_ruins
-	is_triggered_only = yes
-	location = event_target:hfe_thoth_location
-	trackable = yes
-	trigger = {
-		OR = {
-			is_ai = yes
-			NOT = {
-				has_country_flag = hfe_thoth_contacted_first
-				is_country = event_target:empire_that_met_thoth
-			}
-		}
-		FROM = {
-			OR = {
-				is_country_type = hfe_thoth
-				has_country_flag = hfe_thoth
-			}
-		}
-	}
-	immediate = {
-		event_target:hfe_thoth = {
-			add_to_galactic_community = yes
-			hfe_effect_cleanse_ethics = yes
-			country_add_ethic = ethic_pacifist
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_xenophile
-			change_government = {
-				authority = auth_dictatorial
-				civics = {
-					civic = civic_free_haven
-					civic = civic_ancient_machine_intelligence
-				}
-			}
-		}
-	}
-	option = {
-		name = OK
-	}
-}
-
-country_event = {
-	# Before you complete the Special Project, you cannot communicate with Thoth
-	id = hfe.714
-	title = "THOTH_SILENCE"
-	desc = "THOTH_SILENCE_DESC"
-	picture = GFX_evt_hfe_thoth
-	show_sound = event_ghost_town
-	is_triggered_only = yes
-	location = event_target:hfe_thoth_location
-	trackable = yes
-	#	pre_triggers = {
-	#		is_ai = no
-	#	}
-	trigger = {
-		is_ai = no
-		OR = {
-			NOT = {
-				has_established_contact = event_target:hfe_thoth
-				has_country_flag = hfe_engaged_contact_with_thoth
-			}
-			has_special_project = hfe_project_thoth_contact
-		}
-		FROM = {
-			OR = {
-				is_country_type = hfe_thoth
-				has_country_flag = hfe_thoth
-			}
-		}
-		NOT = {
-			has_country_flag = hfe.711_block
-		}
-	}
-	option = {
-		name = "THOTH_SILENCE_RESPONSE"
-	}
-}
-
+# country_event = {
+# 	# Fall back in case Thoth diplomacy does not load, prevents AI from buying Thoth wares
+# 	id = hfe.713
+# 	title = "THOTH_AI_DEFAULT"
+# 	desc = "THOTH_AI_DEFAULT_DESC"
+# 	picture = GFX_evt_hfe_thoth
+# 	show_sound = event_wind_ruins
+# 	is_triggered_only = yes
+# 	location = event_target:hfe_thoth_location
+# 	trackable = yes
+# 	trigger = {
+# 		OR = {
+# 			is_ai = yes
+# 			NOT = {
+# 				has_country_flag = hfe_thoth_contacted_first
+# 				is_country = event_target:empire_that_met_thoth
+# 			}
+# 		}
+# 		FROM = {
+# 			OR = {
+# 				is_country_type = hfe_thoth
+# 				has_country_flag = hfe_thoth
+# 			}
+# 		}
+# 	}
+# 	immediate = {
+# 		event_target:hfe_thoth = {
+# 			add_to_galactic_community = yes
+# 			hfe_effect_cleanse_ethics = yes
+# 			country_add_ethic = ethic_pacifist
+# 			country_add_ethic = ethic_spiritualist
+# 			country_add_ethic = ethic_xenophile
+# 			change_government = {
+# 				authority = auth_dictatorial
+# 				civics = {
+# 					civic = civic_free_haven
+# 					civic = civic_ancient_machine_intelligence
+# 				}
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = OK
+# 	}
+# }
 # Thoth slowly makes contact with everyone
 #country_event = {
 #	id = hfe.715
