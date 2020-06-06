@@ -144,6 +144,21 @@ country_event = {
 			energy = 500
 			alloys = 500
 		}
+		# if = {
+		# 	limit = {
+		# 		exists = event_target:hfe_earth
+		# 		OR = {
+		# 			has_country_flag = hfe_marked_as_human
+		# 			has_country_flag = hfe_discovery_men
+		# 			species_portrait = human
+		# 			species_portrait = hfe_portrait_egypt
+		# 			species_portrait = hfe_portrait_future
+		# 		}
+		# 	}
+		# 	last_created_species = {
+		# 		set_species_homeworld = event_target:hfe_earth
+		# 	}
+		# }
 	}
 }
 
@@ -196,7 +211,17 @@ country_event = {
 		# }
 	}
 	immediate = {
-		establish_communications = from
+		if = {
+			limit = {
+				from = {
+					is_country_type = default
+				}
+			}
+			establish_communications = from
+		}
+		else = {
+			establish_communications_no_message = from
+		}
 		if = {
 			limit = {
 				from = {
@@ -242,35 +267,7 @@ country_event = {
 		hidden_effect = {
 			destroy_country = yes
 		}
-		log = "DISCOVERY GAME OVER!"
-	}
-}
-
-# creatures contact for discovery
-country_event = {
-	id = hfe_discovery.52
-	title = action.10.name
-	desc = action.15.desc
-	picture = GFX_evt_hfe_discovery
-	location = FROMFROMFROM
-	is_triggered_only = yes
-	trigger = {
-		has_country_flag = hfe_discovery
-		from = {
-			or = {
-				is_country_type = amoeba
-				is_country_type = crystal
-				is_country_type = drone
-				is_country_type = cloud
-			}
-		}
-	}
-	immediate = {
-		establish_communications = from		# ????????? ???????
-		# ????????? ???? ??????????????
-	}
-	option = {
-		name = action.10.a
+		log = "HFE DISCOVERY GAME OVER!"
 	}
 }
 
@@ -347,23 +344,6 @@ country_event = {
 	}
 	option = {
 		name = hfe_discovery.55.0
-	}
-	after = {
-		if = {
-			limit = {
-				exists = event_target:hfe_earth
-				OR = {
-					has_country_flag = hfe_marked_as_human
-					has_country_flag = hfe_discovery_men
-					species_portrait = human
-					species_portrait = hfe_portrait_egypt
-					species_portrait = hfe_portrait_future
-				}
-			}
-			last_created_species = {
-				set_species_homeworld = event_target:hfe_earth
-			}
-		}
 	}
 }
 
