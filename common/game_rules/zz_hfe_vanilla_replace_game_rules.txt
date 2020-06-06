@@ -21,33 +21,33 @@
 # 		}
 # 	}
 # }
-#
+
 #This rule is a condition for bombarding planets
 #Root = fleet, potential attacker
 #From = planet, potential target
-#can_orbital_bombard = {
-#	exists = FROM.OWNER
-#	NOT = {
-#		any_owned_ship = {
-#			is_ship_size = colossus
-#		}
-#	}
-#	# mod
-#	exists = ROOT.OWNER
-#	exists = FROM.CONTROLLER
-#	or = {
-#		ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
-#		AND = {
-#			ROOT.OWNER = {
-#				NOR = {
-#					has_policy_flag = interference_passive
-#					has_policy_flag = interference_active
-#				}
-#			}
-#			FROM.OWNER = { is_country_type = primitive }
-#		}
-#	}
-#}
+can_orbital_bombard = {
+	exists = FROM.OWNER
+	NOT = {
+		any_owned_ship = {
+			is_ship_size = colossus
+		}
+	}
+	# mod
+	exists = ROOT.OWNER
+	exists = FROM.CONTROLLER
+	or = {
+		ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
+		AND = {
+			ROOT.OWNER = {
+				NOR = {
+					has_policy_flag = interference_passive
+					has_policy_flag = interference_active
+				}
+			}
+			FROM.OWNER = { is_country_type = primitive }
+		}
+	}
+}
 
 #Root = planet
 #This = species
@@ -105,20 +105,6 @@ can_species_procreate = {
 	}
 }
 
-# # this = ship
-# # root = country that kills ship
-can_spawn_debris = {
-	root = {
-		or = {
-			is_country_type = default
-			is_country_type = hfe_pirate
-			is_country_type = human_fallen_empire
-		}
-	}
-	exists = owner
-	owner = { NOT = { has_ascension_perk = ap_enigmatic_engineering } }
-}
-
 #Root = country
 #This = planet
 can_colonize_outside_borders = {
@@ -133,15 +119,15 @@ can_colonize_outside_borders = {
 }
 
 # This = country
-can_use_galactic_market = {
-	or = {
-		is_country_type = default
-		is_country_type = hfe_pirate
-		is_country_type = hfe_drone
+#can_use_galactic_market = {
+#	or = {
+#		is_country_type = default
+#		is_country_type = hfe_pirate
+#		is_country_type = hfe_drone
 #		is_country_type = drone # As the Ancient Mining Drones are part of the Harvesting Marvel
-	}
-	NOR = { is_homicidal = yes }
-}
+#	}
+#	NOR = { is_homicidal = yes }
+#}
 
 # This = planet
 # Root = country
@@ -212,49 +198,22 @@ can_build_branch_office_on_planet = {
 
 
 # This = country
-can_be_part_of_galactic_community = {
-	OR = {
-		is_country_type = default
-		is_country_type = hfe_thoth
-		is_country_type = hfe_features_exodus
-		has_country_flag = galcom_form_aye
-		has_country_flag = hfe_future # The Kad Republic is built on diplomacy, and it has appropriate modifiers that remove its FE-tier diplomatic power, so that it is balanced. Initial tests made it have much less than ten thousand.
-		is_ai = no
-	}
-	NOR = {
-		has_civic = civic_fanatic_purifiers
-		has_civic = civic_hive_devouring_swarm
-		has_civic = civic_machine_terminator
-	}
-}
-
-# This = country
-can_see_galactic_community = {
-	always = yes
-#	OR = {
-#		is_ai = no
-#		has_country_flag = galcom_form_aye
-#		has_country_flag = galcom_form_nay
-#		is_galactic_community_member = yes
-#	}
-}
-
-# This = country
 can_be_part_of_galactic_council = {
 	OR = {
 		is_ai = no
 		is_country_type = default
-		is_country_type = hfe_thoth
+#		is_country_type = hfe_thoth
 		is_country_type = hfe_features_exodus
-		AND = {
-			has_country_flag = hfe_future
-			has_global_flag = hfe_future_in_expansion
-		}
+#		AND = {
+#			has_country_flag = hfe_future
+#			has_global_flag = hfe_future_in_expansion
+#		}
 	}
 	NOR = {
 		has_civic = civic_fanatic_purifiers
 		has_civic = civic_hive_devouring_swarm
 		has_civic = civic_machine_terminator
+		has_country_flag = hfe_egypt
 	}
 }
 
