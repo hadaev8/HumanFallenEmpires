@@ -1438,7 +1438,7 @@ ship_event = {
 	}
 	option = {
 		name = uplift.6000.a
-		allow = {
+		trigger = {
 			owner = {
 				has_technology = tech_epigenetic_triggers
 			}
@@ -1467,9 +1467,9 @@ ship_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = owner
-		#		owner = {
-		#			is_ai = no
-		#		}
+		owner = {
+			is_ai = no
+		}
 		exists = from
 		from = {
 			has_planet_flag = hfe_varelse_colony
@@ -1494,16 +1494,12 @@ planet_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_observation_outpost = yes
 		exists = solar_system.owner
+		has_observation_outpost = yes
 	}
-	#	mean_time_to_happen = {
-	#		days = 14
-	#	}
 	immediate = {
 		set_global_flag = hfe_varelse_mehanicus
-		save_event_target_as = hfe_varelse_colony
-		save_global_event_target_as = hfe_varelse_mechanicus
+		save_event_target_as = hfe_varelse_colony_target
 		observation_outpost_owner = {
 			country_event = {
 				id = hfe.102
@@ -1519,22 +1515,12 @@ country_event = {
 	desc = hfe.102.desc
 	picture = GFX_evt_hfe_varelse_planet
 	show_sound = event_mystic_reveal
-	location = event_target:hfe_varelse_colony_planet
+	location = event_target:hfe_varelse_colony_target
 	is_triggered_only = yes
-	immediate = {
-		add_resource = {
-			influence = 100
-		}
-	}
-	#lets go to artifact
+	# lets go to artifact
 	option = {
 		name = hfe.102.0
 		custom_tooltip = hfe.102.0.tooltip
-		trigger = {
-			NOT = {
-				is_homicidal = yes
-			}
-		}
 		hidden_effect = {
 			country_event = {
 				id = hfe.103
@@ -1543,19 +1529,25 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 0
+			factor = 1
 		}
 	}
 	# lets go to factory
 	option = {
 		name = hfe.102.1
 		custom_tooltip = hfe.102.1.tooltip
-		trigger = {
-			NOT = {
-				is_homicidal = yes
-			}
-		}
 		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						is_xenophobe = yes
+						is_homicidal = yes
+						has_civic = civic_barbaric_despoilers
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				set_country_flag = hfe_plundered_godforge
+			}
 			country_event = {
 				id = hfe.105
 				days = 10
@@ -1564,115 +1556,13 @@ country_event = {
 		}
 		ai_chance = {
 			factor = 1
-			modifier = {
-				factor = 0
-				has_ethic = ethic_fanatic_materialist
-			}
-		}
-	}
-	option = {
-		name = hfe.102.5
-		custom_tooltip = hfe.102.5.tooltip
-		trigger = {
-			OR = {
-				is_xenophobe = yes
-				is_homicidal = yes
-				has_civic = civic_barbaric_despoilers
-				has_ethic = ethic_fanatic_materialist
-			}
-		}
-		hidden_effect = {
-			country_event = {
-				id = hfe.105
-				days = 10
-				random = 5
-			}
-			set_country_flag = hfe_plundered_godforge
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				NOT = {
-					is_homicidal = yes
-					is_xenophobe = yes
-					has_civic = civic_barbaric_despoilers
-					has_ethic = ethic_fanatic_materialist
-				}
-			}
-			modifier = {
-				factor = 0
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 0
-				has_policy_flag = diplo_stance_isolationist
-			}
-			modifier = {
-				factor = 5
-				OR = {
-					is_xenophobe = yes
-					is_homicidal = yes
-				}
-				has_ethic = ethic_fanatic_materialist
-			}
-			modifier = {
-				factor = 10
-				has_civic = civic_barbaric_despoilers
-			}
-			modifier = {
-				factor = 999
-				OR = {
-					is_homicidal = yes
-					has_ethic = ethic_fanatic_xenophobe
-				}
-				NOT = {
-					is_pacifist = yes
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-					#					has_policy_flag = diplo_stance_isolationist
-				}
-			}
-			modifier = {
-				factor = 0
-				is_materialist = yes
-				NOT = {
-					has_ethic = ethic_fanatic_xenophobe
-					has_ethic = ethic_fanatic_militarist
-					has_civic = civic_barbaric_despoilers
-				}
-			}
-			modifier = {
-				factor = 0
-				hfe_trigger_is_fallen = yes
-				NOT = {
-					has_country_flag = hfe_egypt
-				}
-			}
-			modifier = {
-				# Heretics must burn
-				factor = 10
-				is_xenophobe = yes
-				has_ai_personality = evangelising_zealots
-			}
 		}
 	}
 	# lets revolt (materialist)
 	option = {
 		name = hfe.102.2
 		allow = {
-			OR = {
-				is_materialist = yes
-				has_authority = auth_machine_intelligence
-			}
-			NOT = {
-				is_xenophile = yes
-				is_pacifist = yes
-				has_civic = hfe_civic_features_fanatic_isolationist
-				has_civic = civic_inwards_perfection
-				has_civic = civic_machine_servitor
-				has_policy_flag = diplo_stance_isolationist
-			}
+			is_materialist = yes
 		}
 		hidden_effect = {
 			country_event = {
@@ -1681,42 +1571,14 @@ country_event = {
 				random = 20
 			}
 		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 10
-				is_materialist = yes
-				has_ethic = ethic_fanatic_egalitarian
-			}
-			modifier = {
-				factor = 0
-				is_authoritarian = yes
-				NOT = {
-					is_materialist = yes
-				}
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					is_pacifist = yes
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-					has_policy_flag = diplo_stance_isolationist
-				}
-			}
-		}
 	}
 	# lets infiltrate and make them our friend
 	option = {
 		name = hfe.102.3
 		custom_tooltip = hfe.102.3.tooltip
 		allow = {
+			is_xenophobe = no
 			NOT = {
-				is_xenophobe = yes
 				has_ethic = ethic_fanatic_materialist
 			}
 		}
@@ -1727,103 +1589,11 @@ country_event = {
 				random = 20
 			}
 		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 10
-				is_xenophile = yes
-				NOT = {
-					is_materialist = yes
-				}
-			}
-			modifier = {
-				factor = 10
-				is_pacifist = yes
-				NOT = {
-					has_ethic = ethic_fanatic_xenophobe
-					has_ethic = ethic_fanatic_materialist
-					has_ethic = ethic_fanatic_egalitarian
-				}
-			}
-			modifier = {
-				factor = 0
-				is_egalitarian = yes
-				NOT = {
-					is_spiritualist = yes
-				}
-			}
-			modifier = {
-				factor = 2
-				is_spiritualist = yes
-				NOT = {
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					has_ai_personality = evangelising_zealots
-					has_policy_flag = diplo_stance_isolationist
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-					AND = {
-						has_ethic = ethic_fanatic_pacifist
-						has_ethic = ethic_xenophobe
-						NOT = {
-							is_spiritualist = yes
-						}
-					}
-					AND = {
-						has_ethic = ethic_pacifist
-						has_ethic = ethic_fanatic_xenophobe
-						NOT = {
-							is_spiritualist = yes
-						}
-					}
-				}
-			}
-		}
 	}
 	option = {
 		name = hfe.102.4
-		event_target:colony_beta = {
-			set_country_flag = hfe_high_mechanicus_retained
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				NOT = {
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-					has_ai_personality_behaviour = isolationist
-					has_policy_flag = diplo_stance_isolationist
-					is_pacifist = yes
-				}
-			}
-			modifier = {
-				factor = 999
-				OR = {
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-				}
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					is_xenophobe = yes
-					is_xenophile = yes
-				}
-				NOT = {
-					has_civic = hfe_civic_features_fanatic_isolationist
-					has_civic = civic_inwards_perfection
-					has_policy_flag = diplo_stance_isolationist
-				}
-			}
-			modifier = {
-				factor = 0
-				has_civic = civic_barbaric_despoilers
-			}
+		add_resource = {
+			influence = 100
 		}
 	}
 }
@@ -1874,20 +1644,6 @@ country_event = {
 		default_hide_option = yes
 		hfe_effect_add_physics_research.3 = yes
 		hfe_effect_give_random_tech = yes
-		hidden_effect = {
-			event_target:hfe_varelse_colony_planet = {
-				owner = {
-					set_country_flag = hfe_high_mechanicus_retained
-					change_government = {
-						authority = auth_dictatorial
-						civics = {
-							civic = hfe_civic_high_mechanicus
-							civic = civic_exalted_priesthood
-						}
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -1897,11 +1653,9 @@ country_event = {
 	title = hfe.105.name
 	desc = {
 		trigger = {
-			success_text = {
+			fail_text = {
 				text = hfe.105.desc.0
-				NOT = {
-					has_country_flag = hfe_plundered_godforge
-				}
+				has_country_flag = hfe_plundered_godforge
 			}
 			success_text = {
 				text = hfe.105.desc.1
@@ -1910,90 +1664,25 @@ country_event = {
 		}
 	}
 	picture = GFX_evt_hfe_varelse_planet
-	#	show_sound = event_cityscape
 	show_sound = event_robo
 	location = event_target:hfe_varelse_colony_planet
 	is_triggered_only = yes
 	immediate = {
-		ROOT = {
-			add_resource = {
-				alloys = 1000
-				minerals = 1000
-				energy = 250
-				consumer_goods = 250
-				influence = 200
-				food = 50
-				minor_artifacts = 3
-			}
-		}
 		if = {
 			limit = {
 				has_country_flag = hfe_plundered_godforge
 			}
-			hidden_effect = {
-				play_sound = event_planetary_riot
-				play_sound = event_screams
-			}
-			event_target:colony_beta = {
-				set_country_flag = colony_beta_raided
-				remove_country_flag = machine_age
-				set_primitive_age = industrial_age
-				set_country_flag = industrial_age
-			}
 			event_target:hfe_varelse_colony_planet = {
-				#				owner = {
-				#					hfe_effect_primitive_down = yes
-				#				}
-				hfe_effect_primitive_remove_pops = yes
-				set_planet_flag = hfe_varelse_colony_plundered
-				set_planet_flag = planet_raided
+				owner = {
+					kill_leader = {
+						type = ruler
+						show_notification = no
+					}
+					hfe_effect_primitive_down = yes
+					set_country_flag = hfe_mechanicus_plundered
+					set_country_flag = hfe_mechanicus_plundered@root
+				}
 				add_planet_devastation = 25
-				while = {
-					count = 45
-					create_pop = {
-						species = event_target:hfe_varelse_species
-					}
-				}
-				while = {
-					count = 3
-					create_pop = {
-						species = event_target:hfe_varelse_leftover_robots
-					}
-				}
-				#				while = {
-				#					limit = { num_pops > 69 }
-				#					random_pop = {
-				#						kill_pop = yes
-				#					}
-				#				}
-			}
-			event_target:colony_beta = {
-				kill_leader = {
-					type = ruler
-					show_notification = yes
-				}
-			}
-			add_resource = {
-				alloys = 250
-				minerals = 250
-				energy = 250
-				consumer_goods = 250
-				influence = 300
-				food = 50
-				minor_artifacts = 10
-			}
-			hidden_effect = {
-				event_target:colony_beta = {
-					set_country_flag = hfe_high_mechanicus_retained
-					set_country_flag = hfe_mechanicus_plundered_by_xenoes
-					change_government = {
-						authority = auth_dictatorial
-						civics = {
-							civic = hfe_civic_high_mechanicus
-							civic = civic_exalted_priesthood
-						}
-					}
-				}
 			}
 		}
 	}
@@ -2004,50 +1693,28 @@ country_event = {
 				has_country_flag = hfe_plundered_godforge
 			}
 		}
-		hfe_effect_add_engineering_research.2 = yes
-		hidden_effect = {
-			event_target:hfe_varelse_colony_planet = {
-				owner = {
-					set_country_flag = hfe_high_mechanicus_retained
-				}
-				owner = {
-					change_government = {
-						authority = auth_dictatorial
-						civics = {
-							civic = hfe_civic_high_mechanicus
-							civic = civic_exalted_priesthood
-						}
-					}
-				}
-			}
-		}
 	}
 	option = {
 		name = hfe.105.1
 		trigger = {
 			has_country_flag = hfe_plundered_godforge
 		}
-		hfe_effect_xenophobe_attraction.3 = yes
-		hfe_effect_add_physics_research.2 = yes
-		hfe_effect_add_society_research.2 = yes
-		hfe_effect_add_engineering_research.2 = yes
-		hidden_effect = {
-			event_target:colony_beta = {
-				set_country_flag = hfe_high_mechanicus_retained
-				set_country_flag = hfe_mechanicus_plundered_by_xenoes
-				hfe_effect_xenophobe_attraction.5 = yes
-				hfe_effect_cleanse_ethics = yes
-				country_add_ethic = ethic_xenophobe
-				country_add_ethic = ethic_militarist
-				country_add_ethic = ethic_spiritualist
-				change_government = {
-					authority = auth_dictatorial
-					civics = {
-						civic = hfe_civic_high_mechanicus
-						civic = hfe_civic_primitive_degraded_society
-					}
-				}
+	}
+	after = {
+		add_resource = {
+			minor_artifacts = 3
+		}
+		if = {
+			limit = {
+				has_country_flag = hfe_plundered_godforge
 			}
+			play_sound = event_planetary_riot
+			hfe_effect_xenophobe_attraction.3 = yes
+			hfe_effect_add_society_research.2 = yes
+			hfe_effect_add_engineering_research.2 = yes
+		}
+		else = {
+			hfe_effect_add_engineering_research.2 = yes
 		}
 	}
 }
@@ -2064,18 +1731,14 @@ country_event = {
 	immediate = {
 		event_target:hfe_varelse_colony_planet = {
 			owner = {
-				set_empire_name = "Immortal Beta Colony Institute"
-				hidden_effect = {
-					hfe_effect_cleanse_ethics = yes
+				kill_leader = {
+					type = ruler
+					show_notification = no
 				}
+				set_name = "Immortal Beta Colony Institute"
+				hfe_effect_cleanse_ethics = yes
 				country_add_ethic = ethic_fanatic_materialist
 				country_add_ethic = ethic_militarist
-				hfe_effect_primitive_up = yes
-			}
-			owner = {
-				remove_country_flag = hfe_high_mechanicus_retained
-				remove_country_flag = hfe_high_mechanicus_befriended
-				set_country_flag = hfe_varelse_fedora_governance
 				change_government = {
 					authority = auth_oligarchic
 					civics = {
@@ -2083,27 +1746,12 @@ country_event = {
 						civic = hfe_civic_overthrown_mechanicus
 					}
 				}
-			}
-			hidden_effect = {
-				remove_modifier = atmospheric_hallucinogen_good
-				remove_modifier = atmospheric_hallucinogen
+				hfe_effect_primitive_up = yes
 			}
 		}
 	}
 	option = {
 		name = hfe.107.0
-		event_target:colony_beta = {
-			kill_leader = {
-				type = ruler
-				show_notification = yes
-			}
-		}
-		hidden_effect = {
-			play_sound = event_screams
-		}
-		#		trigger = {
-		#			is_materialist = yes
-		#		}
 		hfe_effect_materialist_attraction.3 = yes
 		hfe_effect_add_society_research.3 = yes
 		hfe_effect_add_engineering_research.2 = yes
@@ -2119,7 +1767,13 @@ country_event = {
 	show_sound = event_primitive_civilization
 	location = event_target:hfe_varelse_colony_planet
 	is_triggered_only = yes
-	immediate = {
+	option = {
+		name = hfe_good_job
+		hidden_effect = {
+			event_target:hfe_varelse_colony_planet.owner = {
+				set_country_flag = hfe_high_mechanicus_befriended@root
+			}
+		}
 		if = {
 			limit = {
 				event_target:hfe_varelse_colony_planet = {
@@ -2134,7 +1788,7 @@ country_event = {
 				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				event_target:hfe_varelse_colony_planet = {
 					observation_outpost = {
@@ -2158,45 +1812,7 @@ country_event = {
 				}
 			}
 		}
-		hfe_effect_add_influence.4 = yes
-	}
-	option = {
-		name = hfe_good_job
-		set_country_flag = hfe_mechanicus_loves_me
-		set_faction_hostility = {
-			target = event_target:colony_beta
-			set_hostile = no
-			set_neutral = no
-			set_friendly = yes
-		}
-		event_target:hfe_varelse_colony_planet = {
-			owner = {
-				set_faction_hostility = {
-					target = root
-					set_hostile = no
-					set_neutral = no
-					set_friendly = yes
-				}
-			}
-			hidden_effect = {
-				owner = {
-					hfe_effect_primitive_up = yes
-				}
-			}
-		}
-		event_target:colony_beta = {
-			hidden_effect = {
-				set_country_flag = hfe_high_mechanicus_retained
-				set_country_flag = hfe_high_mechanicus_befriended
-				change_government = {
-					authority = auth_dictatorial
-					civics = {
-						civic = hfe_civic_high_mechanicus
-						civic = civic_exalted_priesthood
-					}
-				}
-			}
-		}
+		hfe_effect_add_influence.1 = yes
 	}
 }
 

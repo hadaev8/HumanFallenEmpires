@@ -1134,7 +1134,7 @@ hfe_initializer_varelse = {
 		}
 		size = 32
 		modifiers = none
-		deposit_blockers = none
+		# deposit_blockers = none
 		init_effect = {
 			save_global_event_target_as = hfe_varelse_colony_planet
 			create_country = {
@@ -1152,7 +1152,7 @@ hfe_initializer_varelse = {
 				}
 				civics = {
 					# Later changed by Event
-					civic = hfe_civic_primitive_was_fallen
+					civic = hfe_civic_primitive_was_default
 					civic = hfe_civic_high_mechanicus
 				}
 				effect = {
@@ -1173,20 +1173,16 @@ hfe_initializer_varelse = {
 						class = ruler
 						name = "The Master"
 						species = event_target:hfe_varelse_species
-						# event_leader = yes
 						gender = male
 						immortal = yes
 						skill = 5
-						set_age = 429						# As the Fall happened three-hundred eighty-six years ago plus two hundred from the Ju Ahets
+						leader_age_max = 500
+						leader_age_min = 100
 						traits = {
 							add_trait = leader_trait_ruler_cyborg
 							add_trait = hfe_ruler_trait_cult_of_personality
-							add_trait = hfe_ruler_trait_manipulative
 							add_trait = leader_trait_substance_abuser
 							add_trait = leader_trait_corrupt
-						}
-						effect = {
-							set_leader_flag = high_mechanicus_master
 						}
 					}
 					assign_leader = last_created_leader
@@ -1195,7 +1191,49 @@ hfe_initializer_varelse = {
 						option = robot_pops_allowed
 						cooldown = no
 					}
-					save_global_event_target_as = hfe_varelse_colony_country
+					create_species = {
+						name = "Godforge Drone"
+						plural = "Godforge Drones"
+						adjective = "Godforge Engine"
+						class = ROBOT
+						namelist = cybrxkhan_fantasy_egyptian
+						portrait = sd_pla_robot						# I actually love this type and they are not ugly at all
+						species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
+						# extra_trait_points = 2
+						traits = {
+							trait = "trait_mechanical"
+							trait = "trait_robot_bulky"
+							trait = "trait_robot_uncanny"
+							trait = "trait_robot_custom_made"
+							trait = "trait_robot_high_bandwidth"
+							trait = "trait_robot_domestic_protocols"
+						}
+						effect = {
+							# idk if robots need homeworld
+							# set_species_homeworld = event_target:hfe_varelse_colony_planet
+							save_event_target_as = hfe_varelse_leftover_robots
+							set_citizenship_type = {
+								type = citizenship_robot_servitude
+							}
+						}
+					}
+					create_leader = {
+						name = "Damaged Godforge Core"
+						class = general
+						event_leader = yes
+						species = event_target:hfe_varelse_leftover_robots
+						immortal = yes
+						skill = 1
+						leader_age_max = 3000
+						leader_age_min = 1000
+						traits = {
+							add_trait = leader_trait_general_synthetic
+							add_trait = leader_trait_maimed
+						}
+						effect = {
+							save_event_target_as = hfe_varelse_general
+						}
+					}
 				}
 			}
 			# to fix create colony spawn pop of root species bug
@@ -1205,76 +1243,40 @@ hfe_initializer_varelse = {
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = primitives_nuked_themselves			# As the High Mechanicus controls the whole planet, this can't happen
 			hfe_effect_primitive_add_pops = yes
-			# add_building = hfe_building_high_mechanicus_godforge
-			# add_building = hfe_building_high_mechanicus_stronghold
-			add_building = building_food_processing_facility
+			add_building = hfe_building_godforge_main
+			add_building = hfe_building_godforge_stronghold
+			add_building = hfe_building_godforge_temple
 			hfe_effect_primitive_add_buildings = yes
-			remove_building = building_primitive_capital
-			add_building = hfe_building_mechanicus_pseudo_capital
+			# remove_building = building_primitive_capital
+			# add_building = hfe_building_mechanicus_pseudo_capital
+			add_deposit = hfe_deposit_godforge_farm
 			add_deposit = d_bomb_crater
 			add_deposit = d_decrepit_dwellings
-			add_deposit = d_dust_caverns
-			add_deposit = d_dust_caverns
-			add_deposit = d_geothermal_vent
-			add_deposit = d_ore_rich_caverns
-			add_deposit = d_veiny_cliffs
-			add_deposit = d_rich_mountain
-			add_deposit = d_fungal_caves
+			# add_deposit = d_dust_caverns
+			# add_deposit = d_dust_caverns
+			# add_deposit = d_geothermal_vent
+			# add_deposit = d_ore_rich_caverns
+			# add_deposit = d_veiny_cliffs
+			# add_deposit = d_rich_mountain
+			# add_deposit = d_fungal_caves
 			add_deposit = d_relic_metal_boneyard
-			add_deposit = hfe_deposit_mechanicus_farm_spire
 			add_deposit = d_ancient_bombardment_craters
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
-			# remove_deposit = d_dust_desert
-			create_species = {
-				name = "Godforge Drone"
-				plural = "Godforge Drones"
-				adjective = "Godforge Engine"
-				class = ROBOT
-				namelist = cybrxkhan_fantasy_egyptian
-				portrait = sd_pla_robot				# I actually love this type and they are not ugly at all
-				species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
-				extra_trait_points = 2
-				traits = {
-					trait = "trait_mechanical"
-					trait = "trait_robot_bulky"
-					trait = "trait_robot_uncanny"
-					trait = "trait_robot_custom_made"
-					trait = "trait_robot_high_bandwidth"
-					trait = "trait_robot_domestic_protocols"
-				}
-				effect = {
-					set_species_flag = godforge_species					# Perhaps one day, the Godforge itself could rebel?
-					set_species_homeworld = event_target:hfe_varelse_colony_planet
-					save_global_event_target_as = hfe_varelse_leftover_robots
-					set_citizenship_type = {
-						type = citizenship_robot_servitude
-					}
-				}
-			}
-			event_target:hfe_varelse_colony_country = {
-				set_built_species = event_target:hfe_varelse_leftover_robots
-			}
-			#			set_built_species = event_target:hfe_varelse_leftover_robots
-			# todo assign general to planet's army
-			# create_leader = {
-			# 	name = "Damaged Godforge Core"
-			# 	class = general
-			# 	event_leader = yes
-			# 	species = event_target:hfe_varelse_leftover_robots
-			# 	immortal = yes
-			# 	skill = 1
-			# 	set_age = 3169
-			# 	traits = {
-			# 		add_trait = leader_trait_general_synthetic
-			# 		add_trait = leader_trait_rigid_programming
-			# 		add_trait = leader_trait_maimed
-			# 		add_trait = leader_trait_arrested_development
-			# 	}
+			# seems it do not work
+			# owner = {
+			# 	set_built_species = event_target:hfe_varelse_leftover_robots
 			# }
+			# extra pops
 			while = {
-				count = 5
+				count = 15
+				create_pop = {
+					species = owner
+				}
+			}
+			while = {
+				count = 15
 				create_pop = {
 					species = event_target:hfe_varelse_leftover_robots
 				}
@@ -1283,10 +1285,6 @@ hfe_initializer_varelse = {
 				modifier = hfe_colony_type_varelse
 				days = -1
 			}
-			# add_modifier = {
-			# 	modifier = atmospheric_hallucinogen_good
-			# 	days = -1
-			# }
 			add_modifier = {
 				modifier = bleak_planet
 				days = -1
@@ -1295,55 +1293,14 @@ hfe_initializer_varelse = {
 				modifier = high_gravity
 				days = -1
 			}
-			# add_modifier = {
-			# 	modifier = hfe_godforge_crime_fix
-			# 	years = -1
-			# }
-			# TODO change armies to spawned by buildings/pops
 			# war blockers
 			while = {
-				count = 10
-				create_army = {
-					name = "Zealots"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = primitive_army
-				}
-			}
-			while = {
-				count = 10
+				count = 30
 				create_army = {
 					name = "Zealots"
 					owner = owner
 					species = event_target:hfe_varelse_species
 					type = hfe_army_high_mechanicus_zealots
-				}
-			}
-			while = {
-				count = 20
-				create_army = {
-					name = "Zealots"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = enraged_army
-				}
-			}
-			while = {
-				count = 15
-				create_army = {
-					name = "Fanatic Zealots"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = hfe_army_high_mechanicus_zealots
-				}
-			}
-			while = {
-				count = 5
-				create_army = {
-					name = "Regime Enforcers"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = industrial_army
 				}
 			}
 			while = {
@@ -1364,12 +1321,6 @@ hfe_initializer_varelse = {
 					type = hfe_army_godforge_core_watch
 				}
 			}
-			create_army = {
-				name = "The Machine-That-Speaks-to-God"
-				owner = owner
-				species = event_target:hfe_varelse_leftover_robots
-				type = care_defensive_protocols
-			}
 			while = {
 				count = 3
 				create_army = {
@@ -1384,7 +1335,13 @@ hfe_initializer_varelse = {
 				owner = owner
 				species = event_target:hfe_varelse_species
 				type = hfe_army_high_mechanicus_bodyguards
-				leader = event_target:broken_godforge_general
+			}
+			create_army = {
+				name = "The Machine-That-Speaks-to-God"
+				owner = owner
+				species = event_target:hfe_varelse_leftover_robots
+				type = care_defensive_protocols
+				leader = event_target:hfe_varelse_general
 			}
 			if = {
 				limit = {
