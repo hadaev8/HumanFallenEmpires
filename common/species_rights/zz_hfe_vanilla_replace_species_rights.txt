@@ -1,8 +1,14 @@
 #
-
 citizenship_slavery = {
 	token = citizenship_slavery
-
+	in_breach_of = {
+		{
+			key = resolution_greatergood_balance_in_the_middle
+		}
+		{
+			key = resolution_greatergood_universal_prosperity_mandate
+		}
+	}
 	potential = {
 		NAND = {
 			exists = this
@@ -12,22 +18,24 @@ citizenship_slavery = {
 			}
 		}
 	}
-
 	allow = {
-		hidden_trigger = { exists = from }
+		hidden_trigger = {
+			exists = from
+		}
 		custom_tooltip = {
 			fail_text = "HIVE_MIND_MAIN_SPECIES_ALWAYS_CITIZEN"
 			NAND = {
-				from = { has_authority = auth_hive_mind }
-				OR = {
-					is_same_species = from
-					has_trait = trait_hive_mind
+				from = {
+					has_authority = auth_hive_mind
 				}
+				has_trait = trait_hive_mind
 			}
 		}
 		custom_tooltip = {
 			fail_text = same_species_disallowed
-			NOT = { is_same_species = from }
+			NOT = {
+				is_same_species = from
+			}
 		}
 		custom_tooltip = {
 			fail_text = "lonely_hive_mind_pops_kill_themselves_citizenship"
@@ -53,75 +61,47 @@ citizenship_slavery = {
 		custom_tooltip = {
 			fail_text = "FANATIC_PURIFIERS_MUST_PURIFY"
 			OR = {
-				NOT = { from = { has_valid_civic = civic_fanatic_purifiers } }
+				NOT = {
+					from = {
+						has_valid_civic = civic_fanatic_purifiers
+					}
+				}
 				is_same_species = from
 			}
 		}
 		custom_tooltip = {
 			fail_text = does_not_embrace_species_slavery
 			# mod
-			OR = {
-				AND = {
-					OR = {
-						has_species_flag = hfe_forever_slave
-						has_species_flag = hfe_forever_slave@from
-					}
-					from = {
-						OR = { # The Ju Ahet will ALWAYS enslave Ahets
-							has_country_flag = hfe_egypt
-							has_country_flag = hfe_pirate
-							is_country_type = hfe_pirate
-							allows_slavery = yes
-						}
-					}
-				}
-				AND = {
-#					# For those who are not slavers, this Trait
-#					# just makes them docile
-					has_trait = hfe_species_trait_happy_slave
-					from = {
-						OR = { # The Ju Ahet will ALWAYS enslave Ahets
-							has_country_flag = hfe_egypt
-							has_country_flag = hfe_pirate
-							is_country_type = hfe_pirate
-							allows_slavery = yes
-							is_authoritarian = yes
-							is_xenophobe = yes
-#							NOT = {
-#								is_egalitarian = yes
-#								is_xenophile = yes
-#							}
-						}
-					}
-				}
-				# The Ju Ahet will ALWAYS enslave Ahets
-				from = { has_country_flag = hfe_egypt }
-				from = { has_country_flag = hfe_pirate }
-				from = { is_country_type = hfe_pirate }
-				from = { allows_slavery = yes }
-			}
-			from = {
-				OR = { 
+			or = {
+				has_species_flag = hfe_forever_slave
+				has_species_flag = hfe_forever_slave@from
+				has_trait = hfe_species_trait_happy_slave
+				from = {
 					allows_slavery = yes
-			 		has_ethic = ethic_xenophobe
-			 		has_ethic = ethic_fanatic_xenophobe
-			 		has_ethic = ethic_authoritarian
-			 		has_ethic = ethic_fanatic_authoritarian
-					has_ethic = ethic_gestalt_consciousness
-					has_country_flag = hfe_egypt
-					has_country_flag = hfe_pirate
-					is_country_type = hfe_pirate
+					# OR = {
+					# 	has_ethic = ethic_xenophobe
+					# 	has_ethic = ethic_fanatic_xenophobe
+					# 	has_ethic = ethic_authoritarian
+					# 	has_ethic = ethic_fanatic_authoritarian
+					# 	has_ethic = ethic_gestalt_consciousness
+					# }
 				}
-			}
-			from = {
-				NOT = { is_xenophile = yes }
 			}
 		}
 		custom_tooltip = {
 			fail_text = yes_service_yes_citizenship
 			OR = {
-				NOT = { from = { has_valid_civic = civic_citizen_service } }
-				NOT = { has_military_service_type = { type = military_service_full country = from } }
+				NOT = {
+					from = {
+						has_valid_civic = civic_citizen_service
+					}
+				}
+				NOT = {
+					has_military_service_type = {
+						type = military_service_full
+						country = from
+					}
+				}
 			}
 		}
 	}
@@ -138,11 +118,6 @@ citizenship_slavery = {
 					is_ai = no
 					is_xenophobe = yes
 				}
-				NOT = { # The Ju Ahet and Pirates can always have slaves
-					has_country_flag = hfe_egypt
-					has_country_flag = hfe_pirate
-					is_country_type = hfe_pirate
-				}
 			}
 		}
 		modifier = {
@@ -150,11 +125,6 @@ citizenship_slavery = {
 			from = {
 				is_authoritarian = no
 				is_xenophobe = no
-				NOT = { # The Ju Ahet and Pirates can always have slaves
-					has_country_flag = hfe_egypt
-					has_country_flag = hfe_pirate
-					is_country_type = hfe_pirate
-				}
 			}
 		}
 		modifier = {
@@ -165,13 +135,6 @@ citizenship_slavery = {
 			OR = {
 				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
 				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
-			}
-			FROM = {
-				NOT = { # The Ju Ahet Fallen Empire does not care about the Galactic Community and Pirates cannot join
-					has_country_flag = hfe_egypt
-					has_country_flag = hfe_pirate
-					is_country_type = hfe_pirate
-				}
 			}
 		}
 	}

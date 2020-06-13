@@ -1,5 +1,4 @@
 #
-
 hfe_tech_population_navigator = {
 	area = society
 	cost = @tier4cost3
@@ -11,6 +10,10 @@ hfe_tech_population_navigator = {
 	weight_modifier = {
 		modifier = {
 			factor = 0
+			hfe_trigger_is_psionic = no
+		}
+		modifier = {
+			factor = 0
 			NOT = {
 				any_relation = {
 					is_country_type = default
@@ -19,14 +22,23 @@ hfe_tech_population_navigator = {
 			}
 		}
 		modifier = {
-			factor = 0
-			NOT = {
-				resource_stockpile_compare = {
-					resource = sr_zro
-					value > 0
+			factor = 2
+			any_relation = {
+				is_country_type = default
+				has_technology = hfe_tech_population_navigator
+				opinion = {
+					who = prev
+					value > 80
 				}
-				has_technology = tech_mine_zro
 			}
+		}
+		modifier = {
+			factor = 2
+			resource_stockpile_compare = {
+				resource = sr_zro
+				value > 0
+			}
+			has_technology = tech_mine_zro
 		}
 		modifier = {
 			factor = 1.5
@@ -34,23 +46,6 @@ hfe_tech_population_navigator = {
 				area = society
 				has_trait = leader_trait_expertise_psionics
 			}
-		}
-		modifier = {
-			factor = 0
-			NOT = {
-				any_relation = {
-					has_technology = hfe_tech_population_navigator
-					opinion = {
-						who = ROOT
-						value > 80
-					}
-				}
-				ROOT = { hfe_trigger_is_psionic = no }
-			}
-		}
-		modifier = {
-			factor = 0.5
-			ROOT = { hfe_trigger_is_psionic = no }
 		}
 	}
 	ai_weight = {
