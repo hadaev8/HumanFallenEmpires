@@ -1,17 +1,14 @@
 namespace = hfe_population
-
 # set modifier on planet by pop by on actions
 planet_event = {
 	id = hfe_population.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		hfe_trigger_population_enabled = yes
 		exists = planet
 		exists = owner
 	}
-
 	immediate = {
 		set_timed_planet_flag = {
 			flag = hfe_robot_species_processing_block
@@ -30,38 +27,41 @@ pop_event = {
 	id = hfe_population.1
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		# TODO
 		always = no
-		NOT = { planet = { has_planet_flag = hfe_robot_species_processing_block } }
+		NOT = {
+			planet = {
+				has_planet_flag = hfe_robot_species_processing_block
+			}
+		}
 		hfe_trigger_population_enabled = yes
 		OR = {
 			has_trait = trait_mechanical
 			has_trait = trait_machine_unit
 		}
 	}
-
 	immediate = {
 		hfe_effect_population_fix_robot_pop = yes
 		if = {
-			limit = { exists = owner }
+			limit = {
+				exists = owner
+			}
 			owner = {
 				hfe_effect_population_country_set_robot_pop_identity = yes
 			}
 		}
 	}
-
-#	after = {
-#		owner = {
-#			every_owned_planet = {
-#				planet_event = {
-#					id = hfe_population.0
-#					days = 0
-#				}
-#			}
-#		}
-#	}
+	#	after = {
+	#		owner = {
+	#			every_owned_planet = {
+	#				planet_event = {
+	#					id = hfe_population.0
+	#					days = 0
+	#				}
+	#			}
+	#		}
+	#	}
 }
 
 # change main species 50 - 100
@@ -69,7 +69,6 @@ country_event = {
 	id = hfe_population.50
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		hfe_trigger_population_enabled = yes
 		num_pops > 0
@@ -80,7 +79,6 @@ country_event = {
 			}
 		}
 	}
-
 	immediate = {
 		species = {
 			save_event_target_as = hfe_population_old_species
@@ -302,9 +300,13 @@ country_event = {
 					exists = event_target:hfe_population_species
 				}
 			}
-			random_owned_pop = { # This prevents a species that does not exist in the galaxy from taking over
-				species = { save_event_target_as = hfe_population_species }
+			random_owned_pop_species = {
+				save_event_target_as = hfe_population_species
 			}
+			# TODO check if it ok
+			# random_owned_pop = { # This prevents a species that does not exist in the galaxy from taking over
+			# 	species = { save_event_target_as = hfe_population_species }
+			# }
 		}
 		# flags for texts
 		if = {
@@ -492,7 +494,6 @@ country_event = {
 	id = hfe_population.51
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
 		country_event = {
 			id = hfe_population.50
@@ -945,20 +946,15 @@ country_event = {
 	picture = GFX_evt_alien_city
 	show_sound = event_mystic_reveal_light
 	is_triggered_only = yes
-
 	# hive_mind
 	# clones
-
 	# genetic_modification
 	# circuitry_modification
 	# society_research
-
 	# cybernetics
-
 	# glitchy_matrix
 	# sapient_AI
 	# robot_assembly_plant
-
 	trigger = {
 		is_ai = no
 		nand = {
@@ -969,7 +965,6 @@ country_event = {
 		}
 		exists = from
 	}
-
 	immediate = {
 		hfe_effect_random_roll_flags_4_country = yes
 		if = {
@@ -992,7 +987,6 @@ country_event = {
 			}
 		}
 	}
-
 	option = {
 		name = INTERESTING
 	}
@@ -1029,12 +1023,10 @@ country_event = {
 	id = hfe_population.100
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		is_country_type = default
 		hfe_trigger_population_enabled = yes
 	}
-
 	immediate = {
 		random_neighbor_country = {
 			limit = {
@@ -1130,16 +1122,14 @@ country_event = {
 	id = hfe_population.101
 	title = hfe_population.101.name
 	desc = hfe_population.101.desc
-	picture = GFX_evt_mining_station #a name of a picture to display
+	picture = GFX_evt_mining_station	#a name of a picture to display
 	location = event_target:hfe_population_100_location
 	show_sound = event_space_battle
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 		exists = event_target:hfe_population_100_location
 	}
-
 	option = {
 		name = hfe_population.101.0
 	}
@@ -1153,12 +1143,10 @@ country_event = {
 	location = event_target:hfe_population_100_location
 	show_sound = event_space_battle
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 		exists = event_target:hfe_population_100_location
 	}
-
 	option = {
 		name = hfe_population.102.0
 	}
@@ -1173,7 +1161,6 @@ country_event = {
 	location = event_target:hfe_population_110_location
 	show_sound = event_mystic_reveal_light
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_global_flag = hfe_has_event_population.110
@@ -1181,7 +1168,6 @@ country_event = {
 		hfe_trigger_population_enabled = yes
 		hfe_trigger_is_psionic = yes
 	}
-
 	immediate = {
 		set_global_flag = hfe_has_event_population.110
 		random_system_within_border = {
@@ -1211,7 +1197,6 @@ country_event = {
 			}
 		}
 	}
-
 	option = {
 		name = hfe_population.110.0
 		tooltip = {
@@ -1233,13 +1218,11 @@ ship_event = {
 	location = event_target:hfe_population_110_location
 	show_sound = event_mystic_reveal_light
 	is_triggered_only = yes
-
 	trigger = {
 		exists = from
 		exists = owner
 		exists = solar_system
 	}
-
 	immediate = {
 		from = {
 			hfe_effect_remove_signal_object_from_this = yes
@@ -1258,7 +1241,6 @@ ship_event = {
 			}
 		}
 	}
-
 	option = {
 		name = hfe_population.111.0
 		owner = {
@@ -1271,11 +1253,9 @@ country_event = {
 	id = hfe_population.112
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		last_increased_tech = hfe_tech_population_navigator
 	}
-
 	immediate = {
 		every_relation = {
 			country_event = {
@@ -1305,13 +1285,11 @@ country_event = {
 	location = from.capital_scope
 	show_sound = event_mystic_reveal_light
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 		exists = from.capital_scope
 		hfe_trigger_is_psionic = yes
 	}
-
 	option = {
 		name = hfe_population.113.0
 	}
@@ -1323,35 +1301,32 @@ planet_event = {
 	id = hfe_population.114
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		#hfe_trigger_population_enabled = yes
 		hfe_trigger_population_planetary_shield_enabled = yes
 		#last_building_changed = building_planetary_shield_generator
 	}
-
 	immediate = {
 		if = {
 			limit = {
 				has_building = building_planetary_shield_generator
 			}
-
 			if = {
 				limit = {
 					is_planet_class = pc_ringworld_habitable
 				}
-#				# create_ambient_object = {
-#				# 	location = root
-#				# 	type = hfe_object_population_shield_ringworld
-#				# 	entity_offset_angle = {
-#				# 		min = 90
-#				# 		max = 90
-#				# 	}
-#				# 	use_3d_location = yes
-#				# 	entity_face_object = star
-#				# 	entity_scale_to_size = yes
-#				# 	scale = 0.15
-#				# }
+				#				# create_ambient_object = {
+				#				# 	location = root
+				#				# 	type = hfe_object_population_shield_ringworld
+				#				# 	entity_offset_angle = {
+				#				# 		min = 90
+				#				# 		max = 90
+				#				# 	}
+				#				# 	use_3d_location = yes
+				#				# 	entity_face_object = star
+				#				# 	entity_scale_to_size = yes
+				#				# 	scale = 0.15
+				#				# }
 				owner = {
 					set_country_flag = but_nobody_came
 					remove_country_flag = but_nobody_came
@@ -1377,7 +1352,7 @@ planet_event = {
 					limit = {
 						has_ambient_object_flag = hfe_population_object_shield@root
 					}
-          destroy_ambient_object = this
+					destroy_ambient_object = this
 				}
 			}
 		}

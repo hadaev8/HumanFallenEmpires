@@ -135,35 +135,21 @@ hfe_initializer_egypt_main = {
 				can_generate_leaders = no
 				pops_can_migrate = no
 				can_be_modified = no				# "Forever a slave" means forever a slave
-				extra_trait_points = 12
+				homeworld = this
 				species_bio = "Through advanced genetic engineering and breeding, these Ahets were ripped of their Free Will. They were forced into eons of servitude, these Ahets are the descendants of the kidnappers of the Ju Ahet. Confined to Ju Ahet's core worlds, they serve their former chattel for all eternity. Dumbed down, docile, and quiet, they seek to serve a master even when they are not compelled to do so."
-				#				homeworld = event_target:hfe_ahet_happy_ending
 				traits = {
 					ideal_planet_class = pc_nuked
 					trait = hfe_species_trait_happy_slave
-					#					trait = trait_presapient_docile_livestock
 					trait = trait_docile
-					trait = trait_charismatic
 					trait = trait_strong
-					trait = trait_conformists
 				}
-			}
-			last_created_species = {
-				set_species_identity = event_target:hfe_ahet_species
-				#				set_species_homeworld = event_target:hfe_ahet_happy_ending
-				set_species_flag = hfe_forever_slave
-				set_species_flag = hfe_ahet_servant_species
-				save_global_event_target_as = hfe_ahet_servant_species
-			}
-			create_pop = {
-				species = event_target:hfe_ahet_servant_species
-			}
-			last_created_pop = {
-				kill_pop = yes
+				effect = {
+					set_species_identity = event_target:hfe_ahet_species
+					save_global_event_target_as = hfe_ahet_servant_species
+				}
 			}
 			# Generate Delicious Ahets
 			create_species = {
-				#				is_mod = yes # Creates Post/Elite/High/Clarus etc.
 				name = "Delicious Ahet"
 				plural = "Delicious Ahets"
 				adjective = "Delicious Ahet"
@@ -174,98 +160,37 @@ hfe_initializer_egypt_main = {
 				can_generate_leaders = no
 				pops_can_migrate = no
 				can_be_modified = no				# "Forever a slave" means forever a slave
-				extra_trait_points = 12
+				homeworld = this
 				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets are entirely descended from the officers, governors, and elite rulers of the extinct Ahet empire. Specifically targetted and made an example of, these Ahets endure the most humiliating life possible: they are a delicacy on every Ju Ahet table."
 				traits = {
 					ideal_planet_class = pc_nuked
 					trait = trait_presapient_docile_livestock
 					trait = trait_nerve_stapled
 					trait = trait_delicious
-					trait = trait_conformists
-					trait = trait_communal
+				}
+				effect = {
+					set_species_identity = event_target:hfe_ahet_species
+					set_species_flag = hfe_forever_slave
+					save_global_event_target_as = hfe_ahet_delicious_species
 				}
 			}
-			last_created_species = {
-				set_species_identity = event_target:hfe_ahet_species
-				#				set_species_homeworld = event_target:hfe_ahet_happy_ending
-				set_species_flag = hfe_forever_slave
-				set_species_flag = hfe_delicious_ahets
-				save_global_event_target_as = hfe_delicious_ahets
-			}
-			create_pop = {
-				species = event_target:hfe_delicious_ahets
-			}
-			last_created_pop = {
-				kill_pop = yes
-			}
-			#			last_created_pop = {
-			#				modify_species = {
-			#					ideal_planet_class = pc_nuked
-			#					remove_trait = trait_intelligent
-			#					remove_trait = trait_natural_engineers
-			#					add_trait = trait_charismatic # Forces them to be Domestic Servants
-			#					add_trait = trait_docile
-			#				}
-			#				modify_species = {
-			#					remove_trait = trait_intelligent
-			#					remove_trait = trait_natural_engineers
-			#				}
-			#				modify_species = {
-			#					remove_trait = trait_intelligent
-			#					add_trait = hfe_species_trait_happy_slave
-			#				}
-			#				species = {
-			#					set_species_flag = hfe_ahet_servant_species
-			#					save_global_event_target_as = hfe_ahet_servant_species
-			#				}
-			#			}
-			#			last_created_pop = {
-			#				kill_pop = yes
-			#			}
-			#			create_pop = {
-			#				species = hfe_ahet_species
-			#			}
-			#			last_created_pop = {
-			#				modify_species = {
-			#					ideal_planet_class = pc_nuked
-			#					remove_trait = trait_intelligent
-			#					remove_trait = trait_natural_engineers
-			#				}
-			#				modify_species = {
-			#					remove_trait = trait_intelligent
-			#					remove_trait = trait_natural_engineers
-			#				}
-			#				modify_species = {
-			#					add_traits_at_start_of_list = yes
-			#					add_trait = hfe_species_trait_happy_slave
-			#					add_trait = trait_presapient_docile_livestock
-			#					add_trait = trait_delicious
-			#				}
-			#				species = {
-			#					set_species_flag = hfe_delicious_ahets
-			#					save_global_event_target_as = hfe_delicious_ahets
-			#				}
-			#			}
-			#			last_created_pop = {
-			#				kill_pop = yes
-			#			}
 			every_owned_pop = {
 				# This is easier than creating a set number of Ju Ahets and set number of Ahets, the Pops "changed" are not transformed in-universe, obviously, so use your imagination and pretend they were never there
 				random_list = {
-					43 = {
+					40 = {
 					}
-					12 = {
+					10 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
 					1 = {
-						change_species = event_target:hfe_delicious_ahets
+						change_species = event_target:hfe_ahet_delicious_species
 					}
 				}
 			}
 			while = {
 				count = 2
 				create_pop = {
-					species = event_target:hfe_delicious_ahets
+					species = event_target:hfe_ahet_delicious_species
 				}
 			}
 			add_building = building_system_capital
@@ -426,7 +351,7 @@ hfe_initializer_egypt_col_0 = {
 			while = {
 				count = 5
 				create_pop = {
-					species = event_target:hfe_delicious_ahets
+					species = event_target:hfe_ahet_delicious_species
 				}
 			}
 			add_building = building_system_capital
@@ -636,7 +561,7 @@ hfe_initializer_egypt_col_1 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
 					1 = {
-						change_species = event_target:hfe_delicious_ahets
+						change_species = event_target:hfe_ahet_delicious_species
 					}
 				}
 			}
@@ -822,7 +747,7 @@ hfe_initializer_ahet_0 = {
 					ethic = ethic_pacifist
 				}
 				civics = {
-					civic = hfe_civic_primitive_was_fallen
+					civic = hfe_civic_primitive_was_default
 					civic = hfe_civic_primitive_fem_rept_lobby
 				}
 				species = event_target:hfe_ahet_species
@@ -850,10 +775,10 @@ hfe_initializer_ahet_0 = {
 				}
 				log = "Ahet Co-Op [this.GetName]"
 			}
-			#			# to remove errors from log
-			#			event_target:hfe_ahet_species = {
-			#				set_species_homeworld = prev
-			#			}
+			# to remove errors from log
+			event_target:hfe_ahet_species = {
+				set_species_homeworld = prev
+			}
 			# to fix create colony spawn pop of root species bug
 			every_owned_pop = {
 				kill_pop = yes
@@ -1165,10 +1090,11 @@ hfe_initializer_varelse = {
 					prev = {
 						set_owner = prev
 					}
-					kill_leader = {
-						type = ruler
-						show_notification = no
-					}
+					# really neeed it?
+					# kill_leader = {
+					# 	type = ruler
+					# 	show_notification = no
+					# }
 					create_leader = {
 						class = ruler
 						name = "The Master"
@@ -1236,9 +1162,8 @@ hfe_initializer_varelse = {
 					}
 				}
 			}
-			# to fix create colony spawn pop of root species bug
-			every_owned_pop = {
-				kill_pop = yes
+			event_target:hfe_varelse_species = {
+				set_species_homeworld = prev
 			}
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = primitives_nuked_themselves			# As the High Mechanicus controls the whole planet, this can't happen
@@ -1382,10 +1307,6 @@ hfe_initializer_varelse = {
 			orbit_distance = 4
 		}
 		satellite_naming_policy = upper_case_roman_numerals
-		init_effect = {
-			set_planet_flag = ju_ahet_sucked_star
-			#			prevent_anomaly = yes
-		}
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
@@ -1437,13 +1358,10 @@ hfe_initializer_ahet_home = {
 			max = 270
 		}
 		size = 35
-		home_planet = yes
 		satellite_naming_policy = upper_case_roman_numerals
 		modifiers = none
 		deposit_blockers = none
 		init_effect = {
-			save_global_event_target_as = hfe_ahet_happy_ending
-			#			set_species_homeworld = event_target:hfe_ahet_species
 			prevent_anomaly = yes
 			set_planet_flag = hfe_ahet_home
 			add_modifier = {
@@ -1457,30 +1375,6 @@ hfe_initializer_ahet_home = {
 			add_modifier = {
 				modifier = high_gravity
 				days = -1
-			}
-			relic_world_deposits = yes
-			add_deposit = d_ancient_particle_accelerator
-			add_deposit = d_relic_dense_ruins
-			add_deposit = d_bomb_crater
-			add_deposit = d_bomb_crater
-			add_deposit = d_bomb_crater
-			event_target:hfe_ahet_species = {
-				set_species_homeworld = event_target:hfe_ahet_happy_ending
-			}
-			event_target:hfe_ahet_servant_species = {
-				set_species_homeworld = event_target:hfe_ahet_happy_ending
-			}
-			event_target:hfe_delicious_ahets = {
-				set_species_homeworld = event_target:hfe_ahet_happy_ending
-			}
-			create_ambient_object = {
-				type = broken_holy_world_outpost
-			}
-			last_created_ambient_object = {
-				set_location = {
-					target = event_target:hfe_ahet_happy_ending
-					distance = 0
-				}
 			}
 		}
 		change_orbit = 5
@@ -1498,55 +1392,20 @@ hfe_initializer_ahet_home = {
 			init_effect = {
 				add_deposit = d_engineering_9
 				prevent_anomaly = yes
-				set_planet_flag = ahet_black_home_1
-				create_ambient_object = {
-					type = broken_holy_world_outpost
-				}
-				last_created_ambient_object = {
-					set_location = {
-						target = prev
-						distance = 3
-					}
-				}
 			}
 			has_ring = yes
 		}
 		moon = {
 			count = 1
-			name = "Collapsed Dimensional Portal II"
-			class = pc_black_hole
-			size = 1
-			orbit_angle = random
-			orbit_distance = 1.22
-			modifiers = none
-			init_effect = {
-				add_deposit = d_engineering_6
-				prevent_anomaly = yes
-				set_planet_flag = ahet_black_hole_2
-				create_ambient_object = {
-					type = broken_holy_world_outpost
-				}
-				last_created_ambient_object = {
-					set_location = {
-						target = prev
-						distance = -1
-					}
-				}
-			}
-			has_ring = yes
-		}
-		moon = {
-			count = 1
-			name = "Collapsed Dimensional Portal III"
+			name = "Collapsed Dimensional Portal IV"
 			class = pc_black_hole
 			size = 1
 			orbit_angle = random
 			orbit_distance = 1.6
 			modifiers = none
 			init_effect = {
-				add_deposit = d_engineering_6
+				add_deposit = d_physics_6
 				prevent_anomaly = yes
-				set_planet_flag = ahet_black_hole_3
 				create_ambient_object = {
 					type = broken_holy_world_outpost
 				}
@@ -1644,9 +1503,6 @@ hfe_initializer_memorial_0 = {
 		}
 		deposit_blockers = none
 		init_effect = {
-			# every_tile = {
-			# 	hfe_effect_set_memorial_tile = yes
-			# }
 			prevent_anomaly = yes
 		}
 		moon = {
@@ -2169,9 +2025,7 @@ hfe_initializer_drone_sector_0 = {
 		orbit_distance = 5
 		orbit_angle = random
 		init_effect = {
-			save_global_event_target_as = hfe_drone_hq
-			set_planet_flag = hfe_drone_hq_planet
-			add_deposit = d_energy_5
+			set_deposit = d_energy_10
 			add_deposit = d_minerals_10
 			add_deposit = d_trade_value_10
 		}
@@ -2230,6 +2084,7 @@ hfe_initializer_drone_sector_0 = {
 				every_country = {
 					limit = {
 						or = {
+							is_country_type = primitive
 							is_country_type = enclave
 							is_guardian_country = yes
 						}
@@ -2306,7 +2161,6 @@ hfe_initializer_drone_sector_1 = {
 			max = 20
 		}
 		init_effect = {
-			save_global_event_target_as = hfe_drone_country_star_1
 			add_deposit = d_trade_value_8
 			create_ambient_object = {
 				type = caravaneer_billboard_1
@@ -2623,9 +2477,7 @@ hfe_initializer_future_main = {
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
-				set_planet_flag = hfe_future_capital
 				set_planet_flag = hfe_future_planet
-				save_global_event_target_as = hfe_future_planet
 				create_country = {
 					name = "Kad Republic"
 					type = human_fallen_empire
@@ -2711,7 +2563,6 @@ hfe_initializer_future_main = {
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
-				set_planet_flag = hfe_future_colony
 				set_planet_flag = hfe_future_planet
 				set_owner = event_target:hfe_future_country
 				add_building = hfe_building_virtual
