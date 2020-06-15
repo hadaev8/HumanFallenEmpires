@@ -6,38 +6,56 @@ event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		if = {
+		# install anyway
+		random_country = {
 			limit = {
-				any_country = {
-					is_country_type = default
-					is_ai = no
-					not = {
-						has_country_flag = hfe_discovery
+				is_country_type = global_event
+			}
+			# log = "global event exists"
+			country_event = {
+				id = hfe_init.100
+				days = 100
+			}
+		}
+		# use every country because we need to set flag to host
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			set_country_flag = hfe_host
+			break = yes
+		}
+	}
+}
+
+event = {
+	id = hfe_init.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = hfe_host
+			}
+			if = {
+				limit = {
+					has_origin = hfe_civic_discovery_habitat
+				}
+				random_country = {
+					limit = {
+						is_country_type = global_event
+					}
+					# log = "global event exists"
+					# 1 day delay for discovery
+					country_event = {
+						id = hfe_init.2
+						days = 1
 					}
 				}
 			}
-			random_country = {
-				limit = {
-					is_country_type = default
-					is_ai = no
-				}
+			else = {
 				country_event = {
 					id = hfe_init.50
-				}
-			}
-		}
-		else = {
-			random_country = {
-				limit = {
-					is_country_type = global_event
-				}
-				country_event = {
-					id = hfe_init.49
-					days = 1
-				}
-				country_event = {
-					id = hfe_init.100
-					days = 100
 				}
 			}
 		}
@@ -45,13 +63,13 @@ event = {
 }
 
 country_event = {
-	id = hfe_init.49
+	id = hfe_init.2
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
 		random_country = {
 			limit = {
-				is_ai = no
+				has_country_flag = hfe_host
 			}
 			country_event = {
 				id = hfe_init.50
