@@ -11,7 +11,7 @@ mod_prefix = 'hfe_'
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name('localisationupdate.json', scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name('..\\..\\localisationupdate.json', scope)
 gc = gspread.authorize(credentials)
 sht = gc.open_by_key('1wrlW6mMMhEI_EPnSCPDSih1gvnDreK4qV4vyHt0WHK4')
 worksheets = sht.worksheets()
