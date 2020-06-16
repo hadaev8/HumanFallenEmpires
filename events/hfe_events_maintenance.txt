@@ -26,7 +26,12 @@ ship_event = {
 				hfe_effect_convert_to_asteroid = yes
 			}
 		}
-		#log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
+		}
 		destroy_fleet = fleet
 	}
 }
@@ -63,7 +68,12 @@ planet_event = {
 		}
 	}
 	immediate = {
-		#log = "converting to asteroid [this.GetName]"
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "converting to asteroid [this.GetName]"
+		}
 		hfe_effect_convert_to_asteroid = yes
 	}
 }
@@ -110,6 +120,12 @@ ship_event = {
 					}
 				}
 			}
+		}
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Harvesting Marvel awakens"
 		}
 	}
 }
@@ -287,11 +303,6 @@ pop_event = {
 # 		is_being_force_purged = yes
 # 		hfe_trigger_assimilator_on_tile = no
 # 	}
-# 	immediate = {
-# 		remove_pop_flag = hfe_building_assimilator
-# 		purge = no
-# 	}
-# }
 # planet_event = {
 # 	id = hfe_maintenance.13
 # 	hide_window = yes
@@ -389,6 +400,8 @@ country_event = {
 			}
 			modify_species = {
 				remove_trait = trait_latent_psionic
+				remove_trait = trait_mechanical
+				remove_trait = trait_machine_unit
 			}
 		}
 	}
@@ -592,6 +605,7 @@ event = {
 			random_country = {
 				limit = {
 					is_country_type = primitive
+					has_country_flag = hfe_varelse_primitive_0
 					any_owned_planet = {
 						has_planet_flag = hfe_varelse_colony
 					}
@@ -676,13 +690,13 @@ event = {
 								any_defender = {
 									is_country = prevprev
 								}
-								defender_war_exhaustion > 20
+								defender_war_exhaustion > 0.2
 							}
 							and = {
 								any_attacker = {
 									is_country = prevprev
 								}
-								attacker_war_exhaustion > 20
+								attacker_war_exhaustion > 0.2
 							}
 						}
 					}

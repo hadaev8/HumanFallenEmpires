@@ -1,6 +1,6 @@
 #
 namespace = hfe_features
-# biobomb feature
+# biobomb feature 1
 planet_event = {
 	id = hfe_features.1
 	hide_window = yes
@@ -16,8 +16,8 @@ planet_event = {
 		create_species = {
 			class = random
 			blocked_archetypes = {
-				MACHINE       
-				ROBOT       
+				MACHINE
+				ROBOT
 				LITHOID
 			}
 			homeworld = root
@@ -39,11 +39,50 @@ planet_event = {
 					}
 				}
 			}
+			if = {
+				limit = {
+					has_country_flag = flesh_weakened
+					NOT = {
+						has_country_flag = synthetic_empire
+					}
+				}
+				modify_species = {
+					species = last_created_species
+					add_trait = trait_cybernetic
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_trait = trait_latent_psionic
+						has_ascension_perk = ap_mind_over_matter
+					}
+					NOT = {
+						has_ascension_perk = ap_transcendence
+					}
+				}
+				modify_species = {
+					species = last_created_species
+					add_trait = trait_latent_psionic
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_trait = trait_psionic
+						has_ascension_perk = ap_transcendence
+					}
+				}
+				modify_species = {
+					species = last_created_species
+					add_trait = trait_psionic
+				}
+			}
 		}
 		random_list = {
-			90 = {
+			60 = {
 			}
-			10 = {
+			40 = {
 				hfe_effect_add_random_trait = {
 					hfe_species = last_created_species
 				}
@@ -55,7 +94,7 @@ planet_event = {
 	}
 }
 
-# exodus feature, settle at planet
+# exodus feature, settle at planet 3
 planet_event = {
 	id = hfe_features.3
 	hide_window = yes
@@ -67,9 +106,14 @@ planet_event = {
 		}
 	}
 	immediate = {
+		add_deposit = HFE_TSP_exodus_new_starting_planet
 		owner = {
 			set_country_type = default
-			remove_modifier = hfe_discovery_translator
+			remove_modifier = tsp_hfe_features_exodus_game_over_prevention
+			add_modifier = {
+				modifier = hfe_colonisation_cheat
+				days = 31
+			}
 			while = {
 				limit = {
 					check_variable = {
@@ -88,58 +132,163 @@ planet_event = {
 				}
 			}
 		}
-		# need this to fix game's broken economy bug
-		# TODO
+		if = {
+			limit = {
+				owner = {
+					has_origin = hfe_civic_features_exodus
+					has_global_flag = hfe_hardcore_disable
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_1
+					days = -1
+				}
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_2
+					days = -1
+				}
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_3
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Exodus modifiers for Origin accepted"
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						NOT = {
+							has_origin = hfe_civic_features_exodus
+						}
+						has_country_flag = hfe_chosen_to_exodus
+					}
+					has_global_flag = hfe_hardcore_disable
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = tsp_hfe_post_exodus_3
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Exodus modifiers for Decision added"
+			}
+		}
+		owner = {
+			remove_country_flag = hfe_is_government_in_exile
+			set_country_flag = hfe_was_government_in_exile
+		}
 		set_capital = yes
+		set_name = "New Hope"
+		set_planet_flag = hfe_features_exodus_planet
+		hfe_effect_create_starbase_starport_from_planet = yes
+		add_modifier = {
+			modifier = tsp_hfe_exodus_happy_ending
+			days = -1
+		}
+		add_modifier = {
+			modifier = hfe_unity
+			days = 7300
+		}
+		add_modifier = {
+			modifier = hfe_population_boom
+			days = 5475
+		}
+		add_modifier = {
+			modifier = hfe_idustrial_boom
+			days = 1095
+		}
+		add_modifier = {
+			modifier = hfe_improvised_housing
+			days = 730
+		}
+		set_planet_flag = hfe_features_exodus_planet
+		# separate info event, maybe merge into this
+		owner = {
+			country_event = {
+				id = hfe_features.14
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Exodus Story Mode event begun"
+		}
 	}
 }
 
-# exodus civic feature 4
+# exodus start origin feature 4
 country_event = {
 	id = hfe_features.4
 	hide_window = yes
 	is_triggered_only = yes
+	show_sound = shattered_planet_explosion
 	trigger = {
-		has_valid_civic = hfe_civic_features_exodus
+		has_origin = hfe_civic_features_exodus
+		exists = capital_scope
 	}
 	immediate = {
 		set_country_flag = custom_start_screen
 		set_country_flag = first_colony
+		set_country_flag = hfe_is_government_in_exile
+		set_country_type = hfe_features_exodus
 		give_technology = {
-			message = no
+			message = yes
 			tech = hfe_tech_features_exodus
 		}
 		add_modifier = {
 			modifier = hfe_discovery_translator
+			days = -1
 		}
-		set_country_type = hfe_features_exodus
-		if = {
-			limit = {
-				is_militarist = yes
-			}
-			create_fleet = {
-				effect = {
-					set_owner = root
-					while = {
-						count = 3
-						create_army_transport = {
-							army_type = assault_army
-						}
-					}
-					set_location = root.capital_scope
+		add_modifier = {
+			modifier = tsp_hfe_features_exodus_game_over_prevention
+			days = -1
+		}
+		create_fleet = {
+			name = "Extra Survey Unit"
+			effect = {
+				set_owner = ROOT
+				create_ship = {
+					random_existing_design = science
 				}
+				set_fleet_stance = evasive
+				set_location = root.capital_scope.star
+				root = {
+					create_leader = {
+						class = scientist
+						sub_type = survey
+					}
+				}
+				set_leader = last_created_leader
 			}
 		}
+		# ethic bonuses
+		# extra scienc ship for materialist
 		if = {
 			limit = {
 				is_materialist = yes
 			}
 			create_fleet = {
+				name = "The Wanderer"
 				effect = {
-					set_owner = root
+					set_name = random
+					set_owner = ROOT
 					create_ship = {
-						name = random
+						name = "Ponderer Wanderer"
 						random_existing_design = science
+						graphical_culture = "hfe_graphical_culture_pirate"
 					}
 					set_fleet_stance = evasive
 					set_location = root.capital_scope.star
@@ -150,41 +299,213 @@ country_event = {
 						}
 					}
 					set_leader = last_created_leader
+					last_created_leader = {
+						add_trait = hfe_scientist_trait_wary
+					}
 				}
 			}
 		}
-		every_owned_planet = {
+		# some army for non pacifist
+		if = {
+			limit = {
+				is_pacifist = no
+			}
 			create_fleet = {
+				name = "Real Estate Agents"
 				effect = {
-					set_owner = root
-					create_ship = {
-						name = "New Hope"
-						random_existing_design = colonizer
+					set_owner = ROOT
+					set_fleet_stance = passive
+					while = {
+						count = 2
+						create_army_transport = {
+							army_name = "Free Real Estate Scouts"
+							ship_name = "Free Real Estate Agent Transport"
+							army_type = assault_army
+							species = owner.species
+						}
 					}
+					set_location = root.capital_scope
+				}
+			}
+		}
+		# more army for militarist
+		if = {
+			limit = {
+				is_militarist = yes
+			}
+			create_fleet = {
+				name = "Real Estate Agents 2"
+				effect = {
+					set_owner = ROOT
+					set_fleet_stance = passive
+					while = {
+						count = 3
+						create_army_transport = {
+							army_name = "Free Real Estate Scouts"
+							ship_name = "Free Real Estate Agent Transport"
+							army_type = assault_army
+							species = owner.species
+						}
+					}
+					create_army_transport = {
+						army_name = "Basic Combat Assistance"
+						ship_name = "Basic Combat Transport"
+						army_type = robotic_army
+						species = owner.species
+					}
+					set_location = root.capital_scope
+				}
+			}
+		}
+		# some fleet
+		if = {
+			limit = {
+				is_pacifist = no
+			}
+			create_fleet = {
+				name = "Great White Hope"
+				effect = {
+					set_owner = ROOT
+					create_ship = {
+						name = "Great White Hope"
+						random_existing_design = destroyer
+						graphical_culture = hfe_graphical_culture_pirate
+					}
+					create_ship = {
+						name = "Great Blue Hope"
+						random_existing_design = corvette
+						graphical_culture = hfe_graphical_culture_pirate
+					}
+					create_ship = {
+						name = "Great Yellow Hope"
+						random_existing_design = corvette
+						graphical_culture = hfe_graphical_culture_pirate
+					}
+					set_fleet_stance = passive
 					set_location = root.capital_scope.star
 				}
 			}
-			#hfe_effect_clear_buildings_and_destroy_colony = yes
-			remove_all_buildings = yes
-			every_owned_pop = {
-				prevprev = {
-					change_variable = {
-						which = hfe_features_exodus_pop
-						value = 1
+		}
+		# colony ship
+		create_fleet = {
+			name = "New Hope"
+			settings = {
+				can_disband = no
+			}
+			effect = {
+				set_owner = root
+				if = {
+					limit = {
+						owner = {
+							OR = {
+								has_authority = auth_corporate
+								has_civic = civic_corporate_dominion
+								has_civic = civic_merchant_guilds
+							}
+						}
 					}
-					add_resource = {
-						energy = 50
-						minerals = 50
-						food = 50
-						alloys = 10
-						consumer_goods = 10
+					set_name = "Phat Lewtz"
+					create_ship = {
+						name = "Phat Lewtz"
+						random_existing_design = sponsored_colonizer
+						graphical_culture = hfe_graphical_culture_pirate
 					}
 				}
-				kill_pop = yes
+				else_if = {
+					limit = {
+						owner = {
+							is_lithoid = yes
+						}
+					}
+					set_name = "Rock Lobster"
+					create_ship = {
+						name = "We Will Rock You"
+						random_existing_design = lithoid_colonizer
+						graphical_culture = lithoid_01
+					}
+				}
+				else = {
+					create_ship = {
+						name = "New Hope"
+						random_existing_design = colonizer
+						graphical_culture = hfe_graphical_culture_pirate_full_color
+					}
+				}
+				save_event_target_as = hfe_exodus_colony_ship
+				set_fleet_stance = evasive
+				set_location = root.capital_scope.star
 			}
-			change_pc = pc_molten
 		}
-		hfe_effect_remove_prescripted_ideal = yes
+		# kill pops
+		every_owned_pop = {
+			prevprev = {
+				change_variable = {
+					which = hfe_features_exodus_pop
+					value = 1
+				}
+			}
+			kill_pop = yes
+		}
+		# change capital
+		capital_scope = {
+			set_name = "The End"
+			save_event_target_as = hfe_former_exodus_capital
+			# hfe_effect_remove_prescripted_ideal = yes
+			change_pc = pc_broken
+			# play_sound = shattered_planet_explosion
+			set_planet_flag = hfe_exodus_happened_here
+			add_modifier = {
+				modifier = tsp_hfe_exodus_start_planet_modifier
+				days = -1
+			}
+			# Orbital deposit
+			set_deposit = HFE_TSP_exodus_start_point
+		}
+		# remove constructors
+		every_owned_fleet = {
+			limit = {
+				or = {
+					is_ship_class = shipclass_constructor
+					is_ship_class = shipclass_mining_station
+					is_ship_class = shipclass_research_station
+					is_ship_class = shipclass_starbase
+				}
+			}
+			destroy_fleet = this
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			auto_follow_fleet = {
+				target = event_target:hfe_exodus_colony_ship
+				attack_fleet = no
+			}
+		}
+		# flavor
+		create_fleet = {
+			name = "Central Command"
+			set_take_point = yes
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "Flagship"
+					prefix = yes
+					design = "NAME_Diaspora"
+					effect = {
+						save_event_target_as = exodus_flavor_custom_capital
+					}
+				}
+				set_location = root.capital_scope.star
+			}
+		}
+		set_custom_capital_location = event_target:exodus_flavor_custom_capital
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Exodus successfully spawned"
+		}
 	}
 }
 
@@ -228,7 +549,7 @@ country_event = {
 			resource = unity
 			value = 0.1
 			min = 1
-			max = 20
+			max = 24
 		}
 	}
 }
@@ -249,7 +570,7 @@ planet_event = {
 				resource = unity
 				value = 2
 				min = 10
-				max = 1000
+				max = 2000
 			}
 		}
 	}
@@ -266,7 +587,7 @@ country_event = {
 	immediate = {
 		add_monthly_resource_mult = {
 			resource = unity
-			value = 2
+			value = 3
 			min = 100
 			max = 10000
 		}
@@ -279,7 +600,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_valid_civic = hfe_civic_features_early_colonisation
+		has_origin = hfe_civic_features_early_colonisation
 		exists = capital_scope
 	}
 	immediate = {
@@ -324,7 +645,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_valid_civic = hfe_civic_features_early_contact
+		has_origin = hfe_civic_features_early_contact
 		exists = capital_scope
 	}
 	immediate = {
@@ -334,9 +655,8 @@ country_event = {
 		create_species = {
 			class = random
 			blocked_archetypes = {
-				MACHINE       
-				ROBOT       
-				LITHOID
+				MACHINE
+				ROBOT
 			}
 		}
 		create_country = {
@@ -370,7 +690,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_valid_civic = hfe_civic_features_sanctuary
+		has_origin = hfe_civic_features_sanctuary
 		exists = capital_scope
 	}
 	immediate = {
@@ -446,5 +766,187 @@ country_event = {
 			hfe_effect_create_starbase_starport_from_planet = yes
 			hfe_effect_starbase_add_shipyard_0 = yes
 		}
+	}
+}
+
+country_event = {
+	id = hfe_features.14
+	title = HFE_TSP_EXODUS_FOUND_HOME
+	desc = HFE_TSP_EXODUS_FOUND_HOME_DESC
+	picture = GFX_evt_landing_ship_2
+	show_sound = event_airlock
+	show_sound = amb_colony_ship_hum
+	is_triggered_only = yes
+	immediate = {
+		play_sound = event_celebration
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_DEFAULT"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+				has_civic = civic_fanatic_purifiers
+				has_civic = civic_machine_terminator
+			}
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_DEFAULT_IMPERIAL"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			has_authority = auth_imperial
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_DEFAULT_CORPORATE"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			has_authority = auth_corporate
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_SPIRITUALIST"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			OR = {
+				has_spiritualist_government = yes
+				is_spiritualist = yes
+			}
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_MATERIALIST"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			is_materialist = yes
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_XENOPHOBE"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			is_xenophobe = yes
+			NOT = {
+				has_civic = civic_fanatic_purifiers
+			}
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_PURIFIERS"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			OR = {
+				AND = {
+					is_xenophobe = yes
+					has_civic = civic_fanatic_purifiers
+				}
+				has_civic = civic_machine_terminator
+			}
+		}
+	}
+	option = {
+		# Obscure "Captain Underpants" reference
+		name = "YUM_YUM_EAT_THEM_UP"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			has_civic = civic_hive_devouring_swarm
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_OPTION_SUPER_ISOLATIONIST"
+		trigger = {
+			NOT = {
+				is_gestalt = yes
+			}
+			OR = {
+				has_civic = civic_inwards_perfection
+				has_civic = hfe_civic_features_fanatic_isolationist
+			}
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_HIVE_MIND_OPTION"
+		trigger = {
+			OR = {
+				is_gestalt = yes
+				hfe_trigger_is_robot_or_hive = yes
+			}
+			OR = {
+				is_hive_empire = yes
+				has_authority = auth_hive_mind
+			}
+		}
+	}
+	option = {
+		name = "HFE_TSP_EXODUS_HAPPY_ENDING_MACHINE_OPTION"
+		trigger = {
+			OR = {
+				is_gestalt = yes
+				hfe_trigger_is_robot_or_hive = yes
+			}
+			OR = {
+				#				has_trait = trait_machine_unit
+				has_authority = auth_machine_intelligence
+				has_authority = auth_ancient_machine_intelligence
+			}
+		}
+	}
+	after = {
+		add_resource = {
+			minerals = 1000
+			energy = 1000
+			food = 1000
+			unity = 3000
+			influence = 200
+		}
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Noah and Tom Jones have disembarked onto Mount Aarat"
+		}
+	}
+}
+
+# if your colony is destroyed = end game
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = hfe_features.16
+	title = hfe_discovery.51.name
+	desc = EXODUS_GAME_OVER_DESC
+	picture = GFX_ship_destroyed
+	location = fromfrom
+	is_triggered_only = yes
+	show_sound = ship_destroyed_big_explosion
+	trigger = {
+		is_country_type = hfe_features_exodus
+		exists = fromfrom
+		fromfrom = {
+			is_ship_class = shipclass_colonizer
+		}
+	}
+	option = {
+		name = hfe_discovery.51.0
+		hidden_effect = {
+			destroy_country = yes
+		}
+		log = "EXODUS GAME OVER!"
 	}
 }

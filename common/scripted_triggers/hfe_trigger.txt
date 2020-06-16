@@ -1,32 +1,9 @@
 #
-
 # planet
 hfe_trigger_owner_is_gestalt = {
 	exists = owner
 	owner = {
 		is_gestalt = yes
-	}
-}
-
-# pop
-hfe_trigger_uncapped_job = {
-	or = {
-		has_job = no
-		has_job = servant
-		has_job = slave_toiler
-		has_job = hfe_job_egypt_workless
-		has_job = hfe_job_future_workless
-		has_job = hfe_job_brainworm_reservation_paternalist
-		has_job = hfe_job_pirate_slave
-	}
-}
-
-hfe_trigger_uncapped_job_mod = {
-	or = {
-		has_job = hfe_job_egypt_workless
-		has_job = hfe_job_future_workless
-		has_job = hfe_job_brainworm_reservation_paternalist
-		has_job = hfe_job_pirate_slave
 	}
 }
 
@@ -49,6 +26,7 @@ hfe_trigger_is_human_fallen = {
 	or = {
 		has_country_flag = hfe_egypt
 		has_country_flag = hfe_future
+		is_country_type = human_fallen_empire
 	}
 }
 
@@ -69,10 +47,11 @@ hfe_trigger_is_awake = {
 
 hfe_trigger_is_assimilator = {
 	is_homicidal = no
-	or = {
+	OR = {
 		has_valid_civic = civic_machine_assimilator
+		#		has_valid_civic = hfe_civic_blight
 		hfe_trigger_brainworm_country = yes
-		and = {
+		AND = {
 			has_authority = auth_hive_mind
 			has_ascension_perk = ap_evolutionary_mastery
 		}
@@ -81,7 +60,7 @@ hfe_trigger_is_assimilator = {
 
 # for planet, mod's primitives
 hfe_trigger_primitive_planet = {
-	or = {
+	OR = {
 		has_planet_flag = hfe_ahet_colony_0
 		has_planet_flag = hfe_ahet_colony_1
 		has_planet_flag = hfe_varelse_colony
@@ -235,7 +214,6 @@ hfe_trigger_global_enabled = {
 # 	is_growing = no
 # 	hfe_trigger_is_robot = no
 # }
-
 # hfe_trigger_assimilator_on_tile = {
 # 	exists = tile
 # 	tile = {
@@ -243,12 +221,10 @@ hfe_trigger_global_enabled = {
 # 		is_ruined = no
 # 	}
 # }
-
 # hfe_trigger_assimilator_pop_to_move = {
 # 	hfe_trigger_assimilator_on_tile = no
 # 	hfe_trigger_assimilator_pop_valid = yes
 # }
-
 # hfe_trigger_assimilator_pop_valid_with_ai_block = {
 # 	hfe_trigger_assimilator_pop_valid = yes
 # 	or = {
@@ -265,7 +241,6 @@ hfe_trigger_global_enabled = {
 # 		}
 # 	}
 # }
-
 hfe_trigger_system_in_free_space = {
 	is_fe_cluster = no
 	nor = {
@@ -280,7 +255,7 @@ hfe_trigger_system_in_free_space = {
 				min_jumps = 0
 				max_jumps = 5
 				type = hyperlane
-				#uses_bypass = no # выдает ошибку в логе
+				#uses_bypass = no # ?????? ?????? ? ????
 			}
 			or = {
 				exists = owner
@@ -309,6 +284,7 @@ hfe_trigger_is_industrious = {
 		has_trait = trait_industrious
 		has_trait = trait_very_strong
 		has_trait = trait_presapient_proles
+		has_trait = trait_syncretic_proles
 		has_trait = trait_nerve_stapled
 	}
 }
@@ -318,12 +294,16 @@ hfe_trigger_is_agrarian = {
 		has_trait = trait_agrarian
 		has_trait = trait_presapient_proles
 		has_trait = trait_delicious
+		has_trait = trait_presapient_docile_livestock
 		has_trait = trait_nerve_stapled
+		has_slavery_type = {
+			type = slavery_livestock
+		}
 	}
 }
 
 hfe_trigger_is_clever = {
-	or = {
+	OR = {
 		has_trait = trait_intelligent
 		has_trait = trait_natural_engineers
 		has_trait = trait_natural_physicists
@@ -331,45 +311,70 @@ hfe_trigger_is_clever = {
 		has_trait = trait_presapient_natural_intellectuals
 		has_trait = trait_erudite
 		has_trait = hfe_species_trait_clever_beast
+		has_trait = hfe_species_trait_clever_beast_presapient_spawn
+		has_trait = trait_enigmatic_intelligence
+		has_trait = trait_enigmatic_intelligence_poor
+		has_trait = trait_uplifted
+	}
+	NOT = {
+		has_trait = trait_nerve_stapled
+		has_trait = hfe_species_trait_happy_slave
+		has_trait = trait_presapient_docile_livestock
+		has_trait = trait_enigmatic_intelligence_failed
+		has_trait = trait_syncretic_proles
+		has_trait = trait_presapient_proles
 	}
 }
 
 hfe_trigger_is_robot = {
-	or = {
+	OR = {
 		has_trait = trait_mechanical
 		has_trait = trait_machine_unit
+		#		species = { is_archetype = ROBOT }
+		#		species = { is_archetype = MACHINE }
 	}
 }
 
 hfe_trigger_is_robot_or_hive = {
-	or = {
+	OR = {
 		hfe_trigger_is_robot = yes
 		has_trait = trait_hive_mind
 	}
 }
 
 hfe_trigger_non_sapient = {
-	or = {
+	OR = {
 		hfe_trigger_non_sapient_robot = yes
 		has_trait = trait_hive_mind
 	}
 }
 
 hfe_trigger_non_sapient_robot = {
-	or = {
+	OR = {
 		has_trait = trait_machine_unit
 		and = {
 			has_trait = trait_mechanical
 			not = {
 				has_technology = tech_synthetic_workers
+				# ^ This refers to robots when an empire's dominant species vanishes,
+				# citizenship rights don't matter when no organics exist
 			}
 		}
+	}
+	NOT = {
+		is_shackled_robot = yes
+		is_shackled_robot_species_rights = yes
+		#		species = {
+		#			has_citizenship_type = {
+		#				type = citizenship_robot_servitude
+		#			}
+		#		}
 	}
 }
 
 # terminator event trigger
 hfe_trigger_terminator_event = {
-	# скажем нет охуительным историям во время войны
+	# ?????? ??? ??????????? ???????? ?? ????? ?????
 	is_at_war = no
 	has_country_flag = hfe_marked_as_human
 	exists = ruler.species

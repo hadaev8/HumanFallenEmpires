@@ -1,17 +1,14 @@
 #
 namespace = hfe_discovery
-
 # functional events
 # install
 country_event = {
 	id = hfe_discovery.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
-		has_country_flag = hfe_discovery
+		has_origin = hfe_civic_discovery_habitat
 	}
-
 	immediate = {
 		create_country = {
 			name = root
@@ -23,45 +20,45 @@ country_event = {
 			authority = root
 			civics = root
 			species = root
+			origin = hfe_civic_discovery_habitat
 			flag = root
 			ethos = root
 			ignore_initial_colony_error = yes
 			released_from_country = root
 			effect = {
+				if = {
+					limit = {
+						root = {
+							has_country_flag = hfe_host
+						}
+					}
+					set_country_flag = hfe_host
+				}
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								species_portrait = human
+								species_portrait = hfe_portrait_egypt
+								species_portrait = hfe_portrait_future
+								has_country_flag = hfe_marked_as_human
+							}
+						}
+					}
+					set_country_flag = hfe_discovery_men
+					set_country_flag = hfe_marked_as_human
+				}
 				set_country_flag = custom_start_screen
-				set_country_flag = hfe_marked_as_human
 				set_country_flag = hfe_discovery
-				save_event_target_as = hfe_effect_clone_leader_new_owner
-				# change_government = {
-				# 	authority = auth_democratic
-				# }
-				# change_government = {
-				# 	authority = auth_oligarchic
-				# }
-				root = {
-					every_owned_starbase = {
-						set_owner = prevprev
-					}
-					every_owned_planet = {
-						set_owner = prevprev
-						set_capital = yes
-					}
-					every_owned_fleet = {
-						set_owner = prevprev
+				ROOT = {
+					capital_scope = {
+						hfe_effect_clear_buildings_and_destroy_colony = yes
+						change_pc = pc_nuked
+						reroll_planet = yes
+						save_event_target_as = hfe_discovery_location
 					}
 					every_owned_leader = {
-						if = {
-							limit = {
-								leader_class = ruler
-							}
-							prevprev = {
-								set_leader = prev
-							}
-						}
-						else = {
-							save_event_target_as = hfe_effect_clone_leader_target
-							hfe_effect_clone_leader = yes
-						}
+						set_owner = prevprev
 					}
 				}
 				set_player = root
@@ -74,7 +71,6 @@ country_event = {
 				}
 			}
 		}
-		#set_country_type = hfe_discovery
 	}
 }
 
@@ -82,17 +78,11 @@ country_event = {
 	id = hfe_discovery.1
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
 		add_modifier = {
 			modifier = hfe_discovery_translator
 		}
-		set_country_flag = amoeba_encountered
-		set_country_flag = crystal_encountered
-		set_country_flag = drone_encountered
-		set_country_flag = cloud_encountered
 		set_country_flag = Story7
-		#set_country_flag = day_0
 		set_country_flag = first_contact_event
 		give_technology = {
 			tech = tech_sensors_2
@@ -102,52 +92,47 @@ country_event = {
 			tech = hfe_tech_discovery_ship
 			message = no
 		}
-		capital_scope = {
-			change_pc = pc_nuked
-			hfe_effect_clear_buildings_and_destroy_colony = yes
-			reroll_planet = yes
-		}
-		create_fleet = {
-			effect = {
-				set_owner = prev
-				create_ship = {
-					random_existing_design = science
-				}
-				set_fleet_stance = evasive
-				set_location = owner.capital_star
-				owner = {
-					create_leader = {
-						class = scientist
-						sub_type = survey
-					}
-				}
-				set_leader = last_created_leader
-			}
-		}
 		create_fleet = {
 			name = hfe_discovery
 			effect = {
 				set_owner = prev
+				set_location = event_target:hfe_discovery_location
 				create_ship = {
-					name = hfe_discovery
+					name = "Mission Discovery"
+					prefix = no
 					random_existing_design = hfe_ship_size_discovery
 					effect = {
 						set_ship_flag = hfe_discovery_ship
 					}
 				}
-				owner = {
-					create_leader = {
-						class = admiral
-					}
-				}
-				assign_leader = last_created_leader
-				set_location = owner.capital_star
+				# owner = {
+				# 	create_leader = {
+				# 		class = admiral
+				# 	}
+				# }
+				# assign_leader = last_created_leader
 			}
 		}
 		add_resource = {
 			minerals = 500
 			energy = 500
+			alloys = 500
 		}
+		# if = {
+		# 	limit = {
+		# 		exists = event_target:hfe_earth
+		# 		OR = {
+		# 			has_country_flag = hfe_marked_as_human
+		# 			has_country_flag = hfe_discovery_men
+		# 			species_portrait = human
+		# 			species_portrait = hfe_portrait_egypt
+		# 			species_portrait = hfe_portrait_future
+		# 		}
+		# 	}
+		# 	last_created_species = {
+		# 		set_species_homeworld = event_target:hfe_earth
+		# 	}
+		# }
 	}
 }
 
@@ -156,50 +141,78 @@ country_event = {
 	id = hfe_discovery.50
 	hide_window = yes
 	is_triggered_only = yes
-
+	show_sound = event_mystic_reveal_light
 	trigger = {
 		# mods stuff auto contact with vanilla stuff
-		or = {
+		OR = {
 			has_modifier = hfe_discovery_translator
 			is_country_type = hfe_pirate
 			is_country_type = hfe_plague_zombie
 		}
-		from = {
-			or = {
-				has_modifier = hfe_discovery_translator
-				hfe_trigger_is_fallen = yes
-				# pirate will know pirate, why not
-				is_country_type = hfe_pirate
-				# vanilla
-				is_guardian_country = yes
-				is_country_type = default
-				is_country_type = nomad
-				is_country_type = enclave
-				is_country_type = dormant_marauders
-				is_country_type = marauder_raiders
-				is_country_type = awakened_marauders
-			}
-		}
-		nand = {
-			is_country_type = hfe_pirate
-			from = {
-				hfe_trigger_is_fallen = yes
-			}
-		}
+		# from = {
+		# 	OR = {
+		# 		has_modifier = hfe_discovery_translator
+		# 		hfe_trigger_is_fallen = yes
+		# 		# pirate will know pirate, why not
+		# 		is_country_type = hfe_pirate
+		# 		is_country_type = pirate
+		# 		# vanilla
+		# 		is_guardian_country = yes
+		# 		is_country_type = default
+		# 		is_country_type = nomad
+		# 		is_country_type = enclave
+		# 		is_country_type = dormant_marauders
+		# 		is_country_type = marauder_raiders
+		# 		is_country_type = awakened_marauders
+		# 		is_country_type = marauder_raiders
+		# 		is_country_type = caravaneer_home
+		# 		is_country_type = caravaneer_fleet
+		# 		is_country_type = enclave
+		# 		is_country_type = prikki
+		# 		is_country_type = swarm
+		# 		# Allows the Discovery Fleet to track the Crisis too
+		# 		is_country_type = extradimensional
+		# 		is_country_type = extradimensional_2
+		# 		is_country_type = extradimensional_3
+		# 		is_country_type = ai_empire
+		# 	}
+		# }
+		# nand = {
+		# 	is_country_type = hfe_pirate
+		# 	from = {
+		# 		hfe_trigger_is_fallen = yes
+		# 	}
+		# }
 	}
-
 	immediate = {
-		establish_communications = from
 		if = {
 			limit = {
 				from = {
 					is_country_type = default
 				}
 			}
+			establish_communications = from
+		}
+		else = {
+			establish_communications_no_message = from
+		}
+		if = {
+			limit = {
+				from = {
+					OR = {
+						is_country_type = default
+						has_origin = hfe_civic_discovery_habitat
+					}
+				}
+			}
 			country_event = {
 				id = hfe_discovery.55
 				days = 5
 			}
+		}
+		# contact events
+		country_event = {
+			id = hfe.705
 		}
 	}
 }
@@ -216,64 +229,31 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = fromfrom
 	is_triggered_only = yes
-
+	show_sound = ship_destroyed_big_explosion
 	trigger = {
 		has_country_flag = hfe_discovery
 		fromfrom = {
 			has_ship_flag = hfe_discovery_ship
 		}
 	}
-
 	option = {
 		name = hfe_discovery.51.0
 		hidden_effect = {
 			destroy_country = yes
 		}
-	}
-}
-
-# creatures contact for discovery
-country_event = {
-	id = hfe_discovery.52
-	title = action.10.name
-	desc = action.15.desc
-	picture = GFX_evt_hfe_discovery
-	location = FROMFROMFROM
-	is_triggered_only = yes
-
-	trigger = {
-		has_country_flag = hfe_discovery
-		from = {
-			or = {
-				is_country_type = amoeba
-				is_country_type = crystal
-				is_country_type = drone
-				is_country_type = cloud
-			}
-		}
-	}
-
-	immediate = {
-		establish_communications = from # временное решение
-		# придумать свои взаимодействия
-	}
-
-	option = {
-		name = action.10.a
+		log = "HFE DISCOVERY GAME OVER!"
 	}
 }
 
 # clear discovery war target flag after war end
-# проверить работает ли
+# ????????? ???????? ??
 country_event = {
 	id = hfe_discovery.53
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_country_flag = hfe_discovery
 	}
-
 	immediate = {
 		country_event = {
 			id = hfe_discovery.54
@@ -286,7 +266,6 @@ country_event = {
 	id = hfe_discovery.54
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
 		every_country = {
 			limit = {
@@ -306,25 +285,21 @@ country_event = {
 # 	id = hfe_discovery.54
 # 	hide_window = yes
 #	is_triggered_only = yes
-
 # 	trigger = {
 # 		#	has_country_flag = hfe_discovery
 # 		has_country_flag = hfe_discovery
 # 		num_owned_planets > 0
 # 		num_pops > 0
 # 	}
-
 # 	immediate = {
 # 		set_country_type = default
 # 		# random_owned_ship = {
 # 		# 	limit = {
 # 		# 		has_ship_flag = hfe_discovery_ship
 # 		# 	}
-
 # 		# }
 # 	}
 # }
-
 # instruction to dock event
 country_event = {
 	id = hfe_discovery.55
@@ -332,18 +307,15 @@ country_event = {
 	desc = hfe_discovery.55.desc
 	picture = GFX_evt_hfe_discovery
 	is_triggered_only = yes
-
 	trigger = {
 		has_country_flag = hfe_discovery
 		not = {
 			has_country_flag = hfe_discovery_has_event.55
 		}
 	}
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.55
 	}
-
 	option = {
 		name = hfe_discovery.55.0
 	}
@@ -354,7 +326,6 @@ ship_event = {
 	id = hfe_discovery.56
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -373,7 +344,6 @@ ship_event = {
 			}
 		}
 	}
-
 	immediate = {
 		solar_system = {
 			random_fleet_in_system = {
@@ -404,7 +374,6 @@ country_event = {
 	id = hfe_discovery.100
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_country_flag = hfe_discovery
 		exists = from
@@ -414,7 +383,6 @@ country_event = {
 			has_ship_flag = hfe_discovery_ship
 		}
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -447,7 +415,9 @@ country_event = {
 					}
 				}
 			}
-			add_resource = { minerals = @hfe_discovery_kill_t1 }
+			add_resource = {
+				minerals = @hfe_discovery_kill_t1
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_t1
@@ -473,7 +443,9 @@ country_event = {
 					}
 				}
 			}
-			add_resource = { minerals = @hfe_discovery_kill_t2 }
+			add_resource = {
+				minerals = @hfe_discovery_kill_t2
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_t2
@@ -498,7 +470,9 @@ country_event = {
 					}
 				}
 			}
-			add_resource = { minerals = @hfe_discovery_kill_t3 }
+			add_resource = {
+				minerals = @hfe_discovery_kill_t3
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_t3
@@ -520,7 +494,9 @@ country_event = {
 					}
 				}
 			}
-			add_resource = { minerals = @hfe_discovery_kill_t4 }
+			add_resource = {
+				minerals = @hfe_discovery_kill_t4
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_t4
@@ -528,7 +504,9 @@ country_event = {
 			}
 		}
 		else = {
-			add_resource = { minerals = @hfe_discovery_kill_t0 }
+			add_resource = {
+				minerals = @hfe_discovery_kill_t0
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_t0
@@ -542,7 +520,10 @@ country_event = {
 				}
 				any_country = {
 					is_at_war_with = from
-					resource_stockpile_compare = { resource = energy value >= 10 }
+					resource_stockpile_compare = {
+						resource = energy
+						value >= 10
+					}
 				}
 			}
 			if = {
@@ -554,11 +535,18 @@ country_event = {
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						resource_stockpile_compare = { resource = energy value >= 10 }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10
+						}
 					}
-					add_resource = { energy = -10 }
+					add_resource = {
+						energy = -10
+					}
 					root = {
-						add_resource = { energy = 10 }
+						add_resource = {
+							energy = 10
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -578,11 +566,18 @@ country_event = {
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						resource_stockpile_compare = { resource = energy value >= 100 }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 100
+						}
 					}
-					add_resource = { energy = -100 }
+					add_resource = {
+						energy = -100
+					}
 					root = {
-						add_resource = { energy = 100 }
+						add_resource = {
+							energy = 100
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -603,11 +598,18 @@ country_event = {
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						resource_stockpile_compare = { resource = energy value >= 150 }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 150
+						}
 					}
-					add_resource = { energy = -150 }
+					add_resource = {
+						energy = -150
+					}
 					root = {
-						add_resource = { energy = 150 }
+						add_resource = {
+							energy = 150
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -628,11 +630,18 @@ country_event = {
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						resource_stockpile_compare = { resource = energy value >= 200 }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 200
+						}
 					}
-					add_resource = { energy = -200 }
+					add_resource = {
+						energy = -200
+					}
 					root = {
-						add_resource = { energy = 200 }
+						add_resource = {
+							energy = 200
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -656,11 +665,18 @@ country_event = {
 				random_country = {
 					limit = {
 						is_at_war_with = from
-						resource_stockpile_compare = { resource = energy value >= 1000 }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 1000
+						}
 					}
-					add_resource = { energy = -1000 }
+					add_resource = {
+						energy = -1000
+					}
 					root = {
-						add_resource = { energy = 1000 }
+						add_resource = {
+							energy = 1000
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -681,7 +697,9 @@ country_event = {
 					}
 				}
 			}
-			add_resource = { energy = @hfe_discovery_kill_energy }
+			add_resource = {
+				energy = @hfe_discovery_kill_energy
+			}
 			add_event_chain_counter = {
 				event_chain = hfe_chain_discovery_kill_count
 				counter = hfe_chain_discovery_kill_count_energy
@@ -693,10 +711,13 @@ country_event = {
 				exists = fromfrom.solar_system.owner
 			}
 			fromfrom.solar_system.owner = {
-				# фром тут уничтожаемый корабль
+				# ???? ??? ???????????? ???????
 				if = {
 					limit = {
-						resource_stockpile_compare = { resource = energy value >= @hfe_discovery_kill_reward }
+						resource_stockpile_compare = {
+							resource = energy
+							value >= @hfe_discovery_kill_reward
+						}
 						is_hostile = from.owner
 						nor = {
 							is_country = from.owner
@@ -708,9 +729,13 @@ country_event = {
 						who = root
 						modifier = hfe_opinion_discovery_kill_reward
 					}
-					add_resource = { energy = @hfe_discovery_kill_reward_minus }
+					add_resource = {
+						energy = @hfe_discovery_kill_reward_minus
+					}
 					root = {
-						add_resource = { energy = @hfe_discovery_kill_reward }
+						add_resource = {
+							energy = @hfe_discovery_kill_reward
+						}
 						add_event_chain_counter = {
 							event_chain = hfe_chain_discovery_kill_count
 							counter = hfe_chain_discovery_kill_count_reward
@@ -728,7 +753,6 @@ country_event = {
 	id = hfe_discovery.101
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_country_flag = hfe_discovery
 		has_event_chain = hfe_chain_discovery_contract_pirate_hunt
@@ -740,16 +764,19 @@ country_event = {
 			}
 		}
 	}
-
 	immediate = {
 		end_event_chain = hfe_chain_discovery_contract_pirate_hunt
 		random_country = {
 			limit = {
 				has_country_flag = hfe_discovery_contract_pirate_hunt_hirer@root
 			}
-			add_resource = { energy = @hfe_discovery_contract_pirate_hunt_reward_minus }
+			add_resource = {
+				energy = @hfe_discovery_contract_pirate_hunt_reward_minus
+			}
 		}
-		add_resource = { energy = @hfe_discovery_contract_pirate_hunt_reward }
+		add_resource = {
+			energy = @hfe_discovery_contract_pirate_hunt_reward
+		}
 	}
 }
 
@@ -758,7 +785,6 @@ country_event = {
 	id = hfe_discovery.102
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_country_flag = hfe_discovery
 		has_event_chain = hfe_chain_discovery_contract_clear_system
@@ -767,7 +793,6 @@ country_event = {
 			has_star_flag = hfe_discovery_contract_clear_system_target@root
 		}
 	}
-
 	immediate = {
 		fromfrom = {
 			fleet_event = {
@@ -787,7 +812,6 @@ fleet_event = {
 	id = hfe_discovery.103
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -807,7 +831,6 @@ fleet_event = {
 			}
 		}
 	}
-
 	immediate = {
 		owner = {
 			end_event_chain = hfe_chain_discovery_contract_clear_system
@@ -824,7 +847,6 @@ fleet_event = {
 	id = hfe_discovery.150
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		is_ship_size = hfe_ship_size_discovery
 		exists = owner
@@ -843,7 +865,6 @@ fleet_event = {
 			}
 		}
 	}
-
 	immediate = {
 		play_sound = event_airlock
 		owner = {
@@ -872,7 +893,9 @@ fleet_event = {
 						has_country_flag = hfe_discovery_contract_embassy_hirer@root.owner
 					}
 					save_event_target_as = hfe_discovery_contract_embassy_hirer
-					add_resource = { energy = @hfe_discovery_contract_embassy_reward_minus }
+					add_resource = {
+						energy = @hfe_discovery_contract_embassy_reward_minus
+					}
 					remove_country_flag = hfe_discovery_contract_embassy_hirer@root.owner
 				}
 				root.owner = {
@@ -914,7 +937,9 @@ fleet_event = {
 							}
 						}
 					}
-					add_resource = { energy = @hfe_discovery_contract_embassy_reward }
+					add_resource = {
+						energy = @hfe_discovery_contract_embassy_reward
+					}
 					end_event_chain = hfe_chain_discovery_contract_embassy
 				}
 			}
@@ -954,7 +979,7 @@ country_event = {
 				text = hfe_discovery.151.4.desc
 				has_country_flag = hfe_discovery.151.4
 			}
-			# потом пофиксить это
+			# ????? ????????? ???
 			# success_text = {
 			# 	text = hfe_discovery.151.crew_menu.desc.0
 			# 	has_country_flag = hfe_discovery.151.crew_menu
@@ -987,13 +1012,11 @@ country_event = {
 	}
 	is_triggered_only = yes
 	diplomatic = yes
-	force_open = yes # что это значит?
-
+	force_open = yes	# ??? ??? ???????
 	picture_event_data = {
 		portrait = hfe_portrait_diplo_discovery
 		room = hfe_docking_room
 	}
-
 	# update weapons menu
 	option = {
 		name = hfe_discovery.151.0
@@ -1002,10 +1025,12 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = hfe_discovery.151.0
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
-	# номер_раздела.номер_улучшения.уровень_улучшения
+	# ?????_???????.?????_?????????.???????_?????????
 	# update defenses menu
 	option = {
 		name = hfe_discovery.151.1
@@ -1014,7 +1039,9 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = hfe_discovery.151.1
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
 	# update engine menu
@@ -1025,7 +1052,9 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = hfe_discovery.151.2
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
 	# other menu
@@ -1036,7 +1065,9 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = hfe_discovery.151.4
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
 	option = {
@@ -1045,13 +1076,23 @@ country_event = {
 			has_country_flag = hfe_discovery.151.4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = minerals value >= 100 }
-			resource_stockpile_compare = { resource = energy value >= 100 }
+			resource_stockpile_compare = {
+				resource = minerals
+				value >= 100
+			}
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 100
+			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.4.0.response
-		add_resource = { minerals = -100 }
-		add_resource = { energy = -100 }
+		add_resource = {
+			minerals = -100
+		}
+		add_resource = {
+			energy = -100
+		}
 		create_fleet = {
 			name = "Science Ship"
 			effect = {
@@ -1064,7 +1105,9 @@ country_event = {
 			}
 		}
 		event_target:hfe_discovery_docking_planet.owner = {
-			add_resource = { energy = 100 }
+			add_resource = {
+				energy = 100
+			}
 			add_trust = {
 				who = root
 				amount = 5
@@ -1082,14 +1125,19 @@ country_event = {
 			has_country_flag = hfe_discovery.151.4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 200 }
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 200
+			}
 			not = {
 				has_modifier = hfe_discovery_crew_4
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.crew_menu.0.0.response
-		add_resource = { energy = -200 }
+		add_resource = {
+			energy = -200
+		}
 		switch = {
 			trigger = has_modifier
 			hfe_discovery_crew_1 = {
@@ -1117,7 +1165,9 @@ country_event = {
 			}
 		}
 		event_target:hfe_discovery_docking_planet.owner = {
-			add_resource = { energy = 100 }
+			add_resource = {
+				energy = 100
+			}
 		}
 	}
 	# crew freeze
@@ -1127,7 +1177,10 @@ country_event = {
 			has_country_flag = hfe_discovery.151.4
 		}
 		allow = {
-			resource_stockpile_compare = { resource = energy value >= 100 }
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 100
+			}
 			or = {
 				has_modifier = hfe_discovery_crew_1
 				has_modifier = hfe_discovery_crew_2
@@ -1137,7 +1190,9 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.crew_menu.0.1.response
-		add_resource = { energy = -200 }
+		add_resource = {
+			energy = -200
+		}
 		switch = {
 			trigger = has_modifier
 			hfe_discovery_crew_1 = {
@@ -1163,7 +1218,9 @@ country_event = {
 			}
 		}
 		event_target:hfe_discovery_docking_planet.owner = {
-			add_resource = { energy = 100 }
+			add_resource = {
+				energy = 100
+			}
 		}
 	}
 	# contract menu
@@ -1174,7 +1231,9 @@ country_event = {
 		}
 		hidden_effect = {
 			set_country_flag = hfe_discovery.151.contract_menu
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
 	# pirate hunt contract
@@ -1196,10 +1255,8 @@ country_event = {
 				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.contract_menu.0.response
-
 		begin_event_chain = {
 			event_chain = hfe_chain_discovery_contract_pirate_hunt
 			target = root
@@ -1269,10 +1326,8 @@ country_event = {
 				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.contract_menu.1.response
-
 		begin_event_chain = {
 			event_chain = hfe_chain_discovery_contract_embassy
 			target = root
@@ -1337,10 +1392,8 @@ country_event = {
 				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.contract_menu.2.response
-
 		begin_event_chain = {
 			event_chain = hfe_chain_discovery_contract_clear_system
 			target = root
@@ -1383,17 +1436,22 @@ country_event = {
 		allow = {
 			is_at_war = no
 			event_target:hfe_discovery_docking_planet.owner = {
-				resource_stockpile_compare = { resource = energy value >= 100 }
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 100
+				}
 			}
 		}
-
 		is_dialog_only = yes
 		response_text = hfe_discovery.151.contract_menu.3
-
-		add_resource = { energy = 100 }
+		add_resource = {
+			energy = 100
+		}
 		join_war = event_target:hfe_discovery_docking_planet.owner
 		event_target:hfe_discovery_docking_planet.owner = {
-			add_resource = { energy = -100 }
+			add_resource = {
+				energy = -100
+			}
 		}
 		hidden_effect = {
 			every_country = {
@@ -1404,8 +1462,6 @@ country_event = {
 			}
 		}
 	}
-
-
 	# hfe_discovery_damage lvl 0
 	option = {
 		name = hfe_discovery.151.0.0.0
@@ -3156,7 +3212,6 @@ country_event = {
 		}
 		hfe_effect_discovery_docking_t4_cost = yes
 	}
-
 	# return
 	option = {
 		name = modmenu_return
@@ -3165,7 +3220,9 @@ country_event = {
 		}
 		hidden_effect = {
 			hfe_effect_discovery_diplomacy_remove_flags = yes
-			country_event = { id = hfe_discovery.151 }
+			country_event = {
+				id = hfe_discovery.151
+			}
 		}
 	}
 	# exit
@@ -3184,12 +3241,10 @@ ship_event = {
 	id = hfe_discovery.500
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		is_ship_size = hfe_ship_size_discovery
 	}
-
 	immediate = {
 		owner = {
 			random_list = {
@@ -3262,11 +3317,9 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		num_communications > 5
 	}
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.501
 		random_owned_leader = {
@@ -3276,7 +3329,6 @@ country_event = {
 			save_event_target_as = hfe_discovery_501_scientist
 		}
 	}
-
 	option = {
 		name = hfe_discovery_close_log
 	}
@@ -3289,11 +3341,9 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = from
 	is_triggered_only = yes
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.502
 	}
-
 	option = {
 		name = hfe_discovery_close_log
 	}
@@ -3306,11 +3356,9 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = from
 	is_triggered_only = yes
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.503
 	}
-
 	option = {
 		name = hfe_discovery_close_log
 	}
@@ -3323,11 +3371,9 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = from
 	is_triggered_only = yes
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.504
 	}
-
 	option = {
 		name = hfe_discovery_close_log
 	}
@@ -3340,11 +3386,9 @@ country_event = {
 	picture = GFX_evt_hfe_discovery
 	location = from
 	is_triggered_only = yes
-
 	immediate = {
 		set_country_flag = hfe_discovery_has_event.505
 	}
-
 	option = {
 		name = hfe_discovery_close_log
 	}

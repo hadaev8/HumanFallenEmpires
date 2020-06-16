@@ -1,19 +1,17 @@
 #
-
-# если у фром что-то есть. то мы относимся к фром так-то
-
+# ???? ? ???? ???-?? ????. ?? ?? ????????? ? ???? ???-??
 # egypt
 # dont like varelse
 hfe_opinion_egypt_vs_varelse = {
 	trigger = {
-		or = {
-			and = {
+		OR = {
+			AND = {
 				has_country_flag = hfe_egypt
 				from = {
 					is_same_species = event_target:hfe_varelse_species
 				}
 			}
-			and = {
+			AND = {
 				from = {
 					has_country_flag = hfe_egypt
 				}
@@ -22,7 +20,7 @@ hfe_opinion_egypt_vs_varelse = {
 		}
 	}
 	opinion = {
-		base = -100
+		base = -999
 	}
 }
 
@@ -60,6 +58,11 @@ hfe_opinion_egypt_vs_neighbor = {
 		has_country_flag = hfe_egypt
 		hfe_trigger_is_awake = yes
 		is_neighbor_of = from
+		from = {
+			NOT = {
+				is_subject_type = hfe_vassal_egypt
+			}
+		}
 	}
 	opinion = {
 		base = -100
@@ -78,20 +81,21 @@ hfe_opinion_egypt_vs_good_pop = {
 		}
 	}
 	opinion = {
-		base = -50
+		base = -30
 	}
+	#	accumulative = yes
 }
 
 hfe_opinion_egypt_vs_varelse = {
 	trigger = {
-		or = {
-			and = {
+		OR = {
+			AND = {
 				has_country_flag = hfe_egypt
 				from = {
 					is_same_species = event_target:hfe_varelse_species
 				}
 			}
-			and = {
+			AND = {
 				from = {
 					has_country_flag = hfe_egypt
 				}
@@ -100,7 +104,7 @@ hfe_opinion_egypt_vs_varelse = {
 		}
 	}
 	opinion = {
-		base = -100
+		base = -999
 	}
 }
 
@@ -108,7 +112,15 @@ hfe_opinion_egypt_first_contact_bad = {
 	opinion = {
 		base = -100
 	}
-	accumulative = yes
+	decay = {
+		base = 1
+	}
+}
+
+hfe_opinion_egypt_first_contact_outraged = {
+	opinion = {
+		base = -150
+	}
 	decay = {
 		base = 1
 	}
@@ -123,7 +135,7 @@ hfe_opinion_future_vs_neighbor = {
 		is_subject = no
 		is_neighbor_of = from
 		from = {
-			not = {
+			NOT = {
 				is_subject_type = hfe_vassal_future
 			}
 		}
@@ -133,14 +145,30 @@ hfe_opinion_future_vs_neighbor = {
 	}
 }
 
-# hate slavers&purgers
+# hate slavers & purgers
 hfe_opinion_future_vs_bad = {
 	trigger = {
-		has_country_flag = hfe_future
-		from = {
-			or = {
+		OR = {
+			has_country_flag = hfe_future
+			AND = {
+				NOT = {
+					has_global_flag = hfe_features_opinion_disable
+				}
+				is_fallen_empire_xenophile = yes
+			}
+		}
+		FROM = {
+			OR = {
 				allows_slavery = yes
 				allows_purge = yes
+				has_policy_flag = orbital_bombardment_armageddon
+				is_homicidal = yes
+				hfe_trigger_is_assimilator = yes
+			}
+		}
+		NOT = {
+			FROM = {
+				has_civic = civic_machine_servitor
 			}
 		}
 	}
@@ -148,16 +176,261 @@ hfe_opinion_future_vs_bad = {
 		base = -30
 		modifier = {
 			add = -30
-			from = {
+			FROM = {
 				allows_slavery = yes
 				allows_purge = yes
+			}
+			NOT = {
+				is_gestalt = yes
+			}
+			# No choice
+		}
+		modifier = {
+			add = -10
+			FROM = {
+				hfe_trigger_is_assimilator = yes
+			}
+		}
+		modifier = {
+			add = -20
+			FROM = {
+				has_policy_flag = orbital_bombardment_armageddon
+			}
+		}
+		modifier = {
+			factor = -100
+			FROM = {
+				OR = {
+					is_homicidal = yes
+					has_civic = civic_fanatic_purifiers
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_machine_terminator
+					has_civic = hfe_civic_blight
+				}
+			}
+		}
+	}
+}
+
+hfe_opinion_protector_innocent = {
+	trigger = {
+		OR = {
+			has_country_flag = hfe_future
+			AND = {
+				NOT = {
+					has_global_flag = hfe_features_opinion_disable
+				}
+				is_fallen_empire_xenophile = yes
+			}
+		}
+		FROM = {
+			OR = {
+				has_civic = civic_machine_servitor
+				is_xenophile = yes
+				AND = {
+					has_ethic = ethic_fanatic_egalitarian
+					NOT = {
+						is_xenophobe = yes
+						is_homicidal = yes
+					}
+				}
+			}
+		}
+		FROM = {
+			NOT = {
+				is_homicidal = yes
+			}
+			NOT = {
+				allows_slavery = yes
+				allows_purge = yes
+				has_policy_flag = orbital_bombardment_armageddon
+				is_homicidal = yes
+				hfe_trigger_is_assimilator = yes
+			}
+		}
+	}
+	opinion = {
+		base = 0
+		modifier = {
+			add = 10
+			FROM = {
+				is_xenophile = yes
+			}
+		}
+		modifier = {
+			add = 10
+			FROM = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		modifier = {
+			add = 5
+			FROM = {
+				is_xenophile = yes
+				is_egalitarian = yes
+			}
+			NOT = {
+				is_fallen_empire_xenophile = yes				# Too OP
+			}
+		}
+		modifier = {
+			factor = 5
+			FROM = {
+				is_xenophile = yes
+				is_pacifist = yes
+			}
+			NOT = {
+				is_fallen_empire_xenophile = yes				# Too OP
+			}
+		}
+		modifier = {
+			factor = 20
+			FROM = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_xenophile
 			}
 		}
 	}
 }
 
 hfe_opinion_forsaken = {
+	trigger = {
+		has_country_flag = hfe_forsaken
+	}
 	opinion = {
 		base = -100
+	}
+}
+
+hfe_opinion_high_mechanicus_to_materialist = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_spiritualist = yes
+		FROM = {
+			is_homicidal = no
+			OR = {
+				is_materialist = yes
+				is_robot_empire = yes
+				has_policy_flag = ai_full_rights
+			}
+		}
+	}
+	opinion = {
+		base = -20
+		modifier = {
+			add = -10
+			has_ethic = ethic_fanatic_materialist
+		}
+		modifier = {
+			factor = -30
+			is_robot_empire = yes
+		}
+	}
+}
+
+hfe_opinion_high_mechanicus_forgetness = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_spiritualist = yes
+		FROM = {
+			is_homicidal = no
+			is_materialist = no
+			is_robot_empire = no
+			OR = {
+				is_authoritarian = yes
+				is_spiritualist = yes
+			}
+		}
+	}
+	opinion = {
+		base = 10
+		modifier = {
+			add = 10
+			FROM = {
+				has_ethic = ethic_spiritualist
+			}
+		}
+		modifier = {
+			add = 5
+			FROM = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		modifier = {
+			add = 5
+			is_authoritarian = yes
+		}
+	}
+}
+
+hfe_opinion_fedora_to_spiritualist = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_materialist = yes
+		FROM = {
+			is_homicidal = no
+			is_spiritualist = yes
+			is_robot_empire = no
+		}
+	}
+	opinion = {
+		base = -50
+	}
+}
+
+hfe_opinion_fedora_i_like_big_bots_and_i_cannot_lie = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_materialist = yes
+		FROM = {
+			is_homicidal = no
+			OR = {
+				is_materialist = yes
+				is_robot_empire = yes
+				has_policy_flag = ai_full_rights
+			}
+		}
+	}
+	opinion = {
+		base = 5
+		modifier = {
+			add = 10
+			FROM = {
+				has_policy_flag = ai_full_rights
+			}
+		}
+		modifier = {
+			add = 30
+			FROM = {
+				is_robot_empire = yes
+			}
+		}
+	}
+}
+
+hfe_opinion_high_mechanicus_friendship = {
+	trigger = {
+		has_country_flag = hfe_high_mechanicus_befriended@root
+	}
+	opinion = {
+		base = 50
+	}
+}
+
+hfe_opinion_high_mechanicus_versus_plunder = {
+	trigger = {
+		has_country_flag = hfe_mechanicus_plundered@from
+	}
+	opinion = {
+		base = -999
 	}
 }

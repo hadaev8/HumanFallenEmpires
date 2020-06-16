@@ -1,12 +1,10 @@
 # All leaders will have a common trait-point value set in defines, which they use to grab traits
-
 # leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
 # initial = no - if set to no, this trait can not be granted to leaders when they are generated
 # leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
 # requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
 # requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
 # prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
-
 # ruler
 hfe_ruler_trait_genomod = {
 	cost = 1
@@ -69,6 +67,9 @@ hfe_ruler_trait_imperialist = {
 	leader_class = {
 		ruler
 	}
+	ai_weight = {
+		factor = 10
+	}
 }
 
 hfe_ruler_trait_warriror_honor = {
@@ -89,8 +90,10 @@ hfe_ruler_trait_warriror_honor = {
 	modifier = {
 		# opinion effect
 		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+		max_rivalries = 1
+		pop_ethic_militarist_attraction_mult = 0.15
 		# TODO
-		#rivalries_influence_produces_mult = 0.5
+		#		rivalries_influence_produces_mult = 0.5
 	}
 	leader_trait = {
 		ruler
@@ -110,7 +113,12 @@ hfe_ruler_trait_manipulative = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			has_valid_civic = civic_cutthroat_politics
+			OR = {
+				has_civic = civic_cutthroat_politics
+				has_civic = hfe_civic_high_mechanicus
+				has_civic = hfe_civic_overthrown_mechanicus
+				has_civic = civic_criminal_heritage
+			}
 			is_gestalt = no
 		}
 	}
@@ -135,8 +143,20 @@ hfe_ruler_trait_puppet = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
+		NOT = {
+			has_trait = trait_erudite
+		}
 		from = {
-			has_valid_civic = civic_shadow_council
+			OR = {
+				has_valid_civic = civic_shadow_council
+				has_civic = civic_meritocracy
+				# TODO check if need it
+				has_civic = hfe_civic_high_mechanicus
+				has_civic = hfe_civic_overthrown_mechanicus
+				has_civic = hfe_civic_primitive_degraded_society
+				is_country_type = primitive
+				is_subject = yes
+			}
 			is_gestalt = no
 		}
 		years_passed > 0
@@ -144,12 +164,20 @@ hfe_ruler_trait_puppet = {
 	modifier = {
 		# opinion effect
 		country_influence_produces_add = -0.5
+		pop_factions_influence_produces_mult = 0.75
+		diplo_weight_pops_mult = -0.1
 	}
 	leader_trait = {
 		ruler
 	}
 	leader_class = {
 		ruler
+	}
+	opposites = {
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
+		hfe_ruler_trait_lovable_buffoon
 	}
 }
 
@@ -167,10 +195,16 @@ hfe_ruler_trait_corrupted = {
 		}
 	}
 	modifier = {
+		pop_cat_ruler_political_power = 0.15
 		country_base_influence_produces_add = 0.5
 		country_energy_produces_mult = -0.1
 		planet_crime_add = 10
 		# TODO country_piracy_risk_mult = 0.1
+	}
+	opposites = {
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
 	}
 	leader_trait = {
 		ruler
@@ -190,13 +224,39 @@ hfe_ruler_trait_lovable_buffoon = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
+			hfe_trigger_is_fallen = no
 			is_gestalt = no
+		}
+		exists = species
+		species = {
+			nor = {
+				has_trait = trait_erudite
+				has_trait = trait_charismatic
+				has_trait = trait_intelligent
+				has_trait = trait_enigmatic_intelligence
+				has_trait = trait_enigmatic_intelligence_poor
+				has_trait = hfe_species_trait_clever_beast
+				has_trait = hfe_species_trait_clever_beast_presapient_spawn
+				has_trait = trait_presapient_natural_intellectuals
+				has_trait = leader_trait_intellectual
+			}
 		}
 		years_passed > 0
 	}
+	opposites = {
+		trait_ruler_champion_of_the_people
+		hfe_ruler_trait_manipulative
+		hfe_ruler_trait_warriror_honor
+		leader_trait_bureaucrat
+		hfe_ruler_trait_bureaucrat
+		leader_trait_intellectual
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_ruler_chosen
+	}
 	modifier = {
 		country_influence_produces_add = -0.5
-		planet_crime_add = -10
+		pop_citizen_happiness = 0.05
 		# TODO country_piracy_risk_mult = -0.1
 	}
 	leader_trait = {
@@ -221,14 +281,16 @@ hfe_ruler_trait_greedy = {
 		}
 	}
 	modifier = {
- 		country_energy_produces_mult = 0.2
- 		planet_crime_add = 20
+		country_energy_produces_mult = 0.2
+		planet_crime_add = 20
 	}
 	leader_trait = {
 		ruler
+		governor
 	}
 	leader_class = {
 		ruler
+		governor
 	}
 }
 
@@ -247,7 +309,7 @@ hfe_ruler_trait_cult_of_personality = {
 		}
 	}
 	modifier = {
- 		pop_citizen_happiness = 0.05
+		pop_citizen_happiness = 0.05
 		planet_jobs_slave_produces_mult = 0.05
 	}
 	leader_trait = {
@@ -296,8 +358,11 @@ hfe_ruler_trait_army_lover = {
 		exists = from
 		from = {
 			num_communications > 3
-			is_militarist = yes
+			NOT = {
+				is_pacifist = yes
+			}
 			is_gestalt = no
+			has_policy_flag = unrestricted_wars
 		}
 	}
 	modifier = {
@@ -356,10 +421,12 @@ hfe_ruler_trait_bureaucrat = {
 		empire_size_penalty_mult = -0.1
 	}
 	leader_trait = {
-		ruler
+		#		ruler
+		governor
 	}
 	leader_class = {
-		ruler
+		#		ruler
+		governor
 	}
 }
 
@@ -497,6 +564,7 @@ hfe_governor_trait_xenolover = {
 	}
 	modifier = {
 		planet_immigration_pull_mult = 0.1
+		pop_ethic_xenophile_attraction_mult = 0.1
 	}
 	leader_trait = {
 		governor
@@ -550,7 +618,7 @@ hfe_governor_trait_satanist = {
 		leader_age = -20
 	}
 	modifier = {
-		planet_jobs_produces_mult = 0.10
+		planet_jobs_produces_mult = 0.1
 		planet_stability_add = 10
 		planet_crime_add = 20
 	}
@@ -563,36 +631,35 @@ hfe_governor_trait_satanist = {
 }
 
 # scientist
-hfe_scientist_trait_diligent = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	modification = no
-	icon = gfx/interface/icons/other/hfe_diligent.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		years_passed > 0
-	}
-	self_modifier = {
-		leader_skill_levels = 2
-	}
-	leader_trait = {
-		scientist
-	}
-	leader_class = {
-		scientist
-	}
-	ai_categories = {
-		engineering
-		physics
-		society
-		survey
-	}
-	ai_weight = {
-		weight = 100
-	}
-}
-
+# hfe_scientist_trait_diligent = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	modification = no
+# 	icon = gfx/interface/icons/other/hfe_diligent.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		years_passed > 0
+# 	}
+# 	self_modifier = {
+# 		leader_skill_levels = 2
+# 	}
+# 	leader_trait = {
+# 		scientist
+# 	}
+# 	leader_class = {
+# 		scientist
+# 	}
+# 	ai_categories = {
+# 		engineering
+# 		physics
+# 		society
+# 		survey
+# 	}
+# 	ai_weight = {
+# 		weight = 100
+# 	}
+# }
 hfe_scientist_trait_thoughtful = {
 	cost = 1
 	initial = yes
@@ -664,7 +731,7 @@ hfe_scientist_trait_satanist = {
 		from = {
 			has_country_flag = has_shroud_patron
 			is_gestalt = no
-	}
+		}
 	}
 	self_modifier = {
 		leader_age = -20
@@ -969,7 +1036,7 @@ hfe_admiral_trait_satanist = {
 		from = {
 			has_country_flag = has_shroud_patron
 			is_gestalt = no
-	}
+		}
 	}
 	self_modifier = {
 		leader_age = 20
@@ -1123,7 +1190,7 @@ hfe_general_trait_satanist = {
 		from = {
 			has_country_flag = has_shroud_patron
 			is_gestalt = no
-	}
+		}
 	}
 	modifier = {
 		army_morale = 0.3
@@ -1145,7 +1212,7 @@ hfe_general_trait_satanist = {
 # 	modification = no
 # 	icon = gfx/interface/icons/other/hfe_gravity_control.dds
 # 	leader_potential_add = {
-		#hfe_trigger_leaders_traits_enabled = yes
+#hfe_trigger_leaders_traits_enabled = yes
 # 	}
 # 	modifier = {
 # 		army_health = 0.2
@@ -1153,41 +1220,39 @@ hfe_general_trait_satanist = {
 # 	leader_trait = yes
 # 	leader_class = { general }
 # }
-
 # all
-hfe_generic_trait_talented = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	modification = no
-	#not allow on lvl up
-	icon = gfx/interface/icons/other/hfe_talented.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		exists = from
-		from = {
-			is_gestalt = no
-		}
-		years_passed > 0
-	}
-	self_modifier = {
-		leader_skill_levels = 1
-		species_leader_exp_gain = 0.1
-	}
-	leader_trait = {
-		admiral
-		scientist
-		general
-		governor
-	}
-	leader_class = {
-		admiral
-		scientist
-		general
-		governor
-	}
-}
-
+# hfe_generic_trait_talented = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	modification = no
+# 	#not allow on lvl up
+# 	icon = gfx/interface/icons/other/hfe_talented.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		exists = from
+# 		from = {
+# 			is_gestalt = no
+# 		}
+# 		years_passed > 0
+# 	}
+# 	self_modifier = {
+# 		leader_skill_levels = 1
+# 		species_leader_exp_gain = 0.1
+# 	}
+# 	leader_trait = {
+# 		admiral
+# 		scientist
+# 		general
+# 		governor
+# 	}
+# 	leader_class = {
+# 		admiral
+# 		scientist
+# 		general
+# 		governor
+# 	}
+# }
 hfe_generic_trait_noble = {
 	cost = 1
 	initial = yes
@@ -1197,14 +1262,26 @@ hfe_generic_trait_noble = {
 	icon = gfx/interface/icons/other/hfe_noble.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
-		exists = species
-		species = {
-			hfe_trigger_is_robot = no
-		}
 		exists = from
+		exists = species
+		OR = {
+			species = {
+				hfe_trigger_is_robot = no
+			}
+			FROM = {
+				has_country_flag = synthetic_empire
+			}
+		}
 		from = {
 			is_gestalt = no
-			has_authority = auth_imperial
+			OR = {
+				has_authority = auth_imperial
+				has_civic = civic_aristocratic_elite
+				has_civic = civic_feudal_realm
+				has_civic = civic_great_khans_vision
+				has_civic = civic_great_khans_legacy
+				has_civic = civic_diadochi
+			}
 		}
 		years_passed > 0
 	}

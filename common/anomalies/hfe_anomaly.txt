@@ -1,4 +1,5 @@
 #
+
 @null_spawn_chance = 0.9
 
 # wormhole
@@ -9,12 +10,13 @@ hfe_anomaly_wormhole = {
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
 			add = 1
 			hfe_trigger_story_enabled = yes
 			exists = from.owner
 			from.owner = {
-				# может потом переделать. чтобы был проход в туннель. если система есть. а джухеты мертвы
+				# ????? ????? ??????????. ????? ??? ?????? ? ???????. ???? ??????? ????. ? ??????? ??????
 				exists = event_target:hfe_egypt_country
 				not = {
 					any_relation = {
@@ -25,7 +27,7 @@ hfe_anomaly_wormhole = {
 		}
 	}
 	on_spawn = {
-		#log = "wormhole [this.GetName]"
+#		log = "wormhole [this.GetName]"
 		hfe_effect_create_signal_object_for_planet = yes
 	}
 	on_success = hfe.50
@@ -34,14 +36,15 @@ hfe_anomaly_wormhole = {
 # criopods
 hfe_anomaly_criopods = {
 	desc = hfe_anomaly_criopods_desc
-	# эта пикча тут ни к месту
+	# ??? ????? ??? ?? ? ?????
 	picture = GFX_evt_hfe_criopods
 	level = 3
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
-			add = 5
+			add = 3
 			hfe_trigger_story_enabled = yes
 			or = {
 				is_planet_class = pc_continental
@@ -53,7 +56,9 @@ hfe_anomaly_criopods = {
 			from.owner = {
 				num_pops > 0
 				or = {
+					species_portrait = "human"
 					has_country_flag = hfe_marked_as_human
+					species = { has_species_flag = hfe_marked_as_human_species }
 					is_xenophobe = yes
 					is_xenophile = yes
 					is_authoritarian = yes
@@ -62,11 +67,11 @@ hfe_anomaly_criopods = {
 			}
 		}
 		modifier = {
-			factor = 2
+			factor = 1.5
 			years_passed > 30
 		}
 		modifier = {
-			factor = 2
+			factor = 1.5
 			years_passed > 60
 		}
 		modifier = {
@@ -74,12 +79,12 @@ hfe_anomaly_criopods = {
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 120
 		}
 	}
 	on_spawn = {
-		#log = "criopods"
+#		log = "criopods"
 		hfe_effect_create_signal_object_for_planet = yes
 	}
 	on_success = hfe.5050
@@ -89,10 +94,11 @@ hfe_anomaly_criopods = {
 hfe_anomaly_dead_worms = {
 	desc = hfe_anomaly_dead_worms_desc
 	picture = GFX_evt_hfe_space_debris
-	level = 2
+	level = 1
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
 			add = 2
 			hfe_trigger_story_enabled = yes
@@ -111,12 +117,12 @@ hfe_anomaly_dead_worms = {
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 120
 		}
 	}
 	on_spawn = {
-		#log = "dead worms"
+#		log = "dead worms"
 		hfe_effect_create_signal_object_for_planet = yes
 	}
 	on_success = hfe.5055
@@ -126,29 +132,26 @@ hfe_anomaly_dead_worms = {
 hfe_anomaly_necrotic_autoevolution = {
 	desc = hfe_anomaly_necrotic_autoevolution_desc
 	picture = GFX_evt_hfe_ruins_robots
-	level = 3
+	level = 6
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
-			add = 2
+			add = 3
 			hfe_trigger_story_enabled = yes
 			is_planet_class = pc_barren
 		}
 		modifier = {
-			factor = 2
-			years_passed > 30
-		}
-		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 60
 		}
 		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 10
 			years_passed > 120
 		}
 	}
@@ -165,36 +168,33 @@ hfe_anomaly_necrotic_autoevolution = {
 hfe_anomaly_stargate = {
 	desc = hfe_anomaly_stargate_desc
 	picture = GFX_evt_ship_in_orbit
-	level = 3
+	level = 10
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
-			add = 4
+			add = 8
 			hfe_trigger_story_enabled = yes
 			habitable_planet = yes
 			exists = from.owner
 			from.owner = {
 				or = {
 					fleet_power > 1000
-					years_passed > 50
+					years_passed > 30
 				}
 			}
-		}
-		modifier = {
-			factor = 2
-			years_passed > 30
 		}
 		modifier = {
 			factor = 2
 			years_passed > 60
 		}
 		modifier = {
-			factor = 2
+			factor = 3
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 10
 			years_passed > 120
 		}
 	}
@@ -213,11 +213,15 @@ hfe_anomaly_blight = {
 	should_ai_and_humans_use = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
 			add = 1
 			host_has_dlc = "Synthetic Dawn Story Pack"
 			hfe_trigger_story_enabled = yes
-			hfe_trigger_hardcore_enabled = yes
+			OR = {
+				hfe_trigger_hardcore_enabled = yes
+				from.owner = { is_ai = yes }
+			}
 			uninhabitable_regular_planet = yes
 			exists = from.owner
 			from.owner = {
@@ -228,25 +232,24 @@ hfe_anomaly_blight = {
 		modifier = {
 			factor = 0.1
 			exists = from.owner
+#			hfe_trigger_hardcore_enabled = yes
 			from.owner = {
 				is_ai = yes
 			}
 		}
 		modifier = {
 			factor = 2
-			years_passed > 30
-		}
-		modifier = {
-			factor = 2
-			years_passed > 60
-		}
-		modifier = {
-			factor = 2
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 120
+		}
+		modifier = {
+			factor = 0
+			from.owner = {
+				is_gestalt = yes
+			}
 		}
 	}
 	on_spawn = {
@@ -262,8 +265,9 @@ hfe_anomaly_presapient_dolphin = {
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
-			add = 5
+			add = 3
 			hfe_trigger_story_enabled = yes
 			is_planet_class = pc_ocean
 			exists = from.owner
@@ -273,18 +277,14 @@ hfe_anomaly_presapient_dolphin = {
 		}
 		modifier = {
 			factor = 2
-			years_passed > 30
-		}
-		modifier = {
-			factor = 2
 			years_passed > 60
 		}
 		modifier = {
-			factor = 2
+			factor = 3
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 5
 			years_passed > 120
 		}
 	}
@@ -333,26 +333,27 @@ hfe_anomaly_future_advisor = {
 	max_once_global = yes
 	null_spawn_chance = @null_spawn_chance
 	spawn_chance = {
+		base = 0
 		modifier = {
-			add = 5
+			add = 1
 			hfe_trigger_story_enabled = yes
 			is_planet_class = pc_gas_giant
 			has_ring = yes
 		}
 		modifier = {
-			factor = 2
+			factor = 10
 			years_passed > 30
 		}
 		modifier = {
-			factor = 2
+			factor = 10
 			years_passed > 60
 		}
 		modifier = {
-			factor = 2
+			factor = 20
 			years_passed > 90
 		}
 		modifier = {
-			factor = 2
+			factor = 20
 			years_passed > 120
 		}
 	}

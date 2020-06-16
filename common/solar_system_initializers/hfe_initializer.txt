@@ -6,7 +6,7 @@ hfe_initializer_egypt_main = {
 		hfe_egypt_0
 	}
 	name = "Home of Light"
-	class = rl_standard_stars
+	class = sc_m
 	asteroid_belt = {
 		type = rocky_asteroid_belt
 		radius = 70
@@ -16,8 +16,8 @@ hfe_initializer_egypt_main = {
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20
-			max = 30
+			min = 30			# The star is artificial
+			max = 40			# The star is artificial
 		}
 		has_ring = no
 		name = Ra
@@ -73,92 +73,124 @@ hfe_initializer_egypt_main = {
 				name = "Ju Ahet"
 				type = human_fallen_empire
 				name_list = cybrxkhan_fantasy_egyptian
-				ship_prefix = ""
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_egypt_species
+				authority = auth_imperial
 				ethos = {
 					ethic = ethic_fanatic_spiritualist
+					ethic = ethic_authoritarian
 				}
-				authority = auth_imperial
 				civics = {
 					civic = hfe_civic_egypt_genetic
 					civic = hfe_civic_egypt_rulers
 				}
+				origin = hfe_civic_egypt_rulers_origin
 				effect = {
+					save_global_event_target_as = hfe_egypt_country
+					set_graphical_culture = reptilian_01					# Learned from Ra'ar
+					set_city_graphical_culture = fallen_empire_03					# Light blue/red/yellow
 					set_country_flag = hfe_egypt
 					set_country_flag = hfe_assimilator_discovered
 					set_country_flag = hfe_marked_as_human
-					give_technology = {
-						tech = tech_titans
-					}
+					hfe_effect_create_fleet = yes
 					kill_leader = {
 						type = ruler
 						show_notification = no
 					}
 					create_leader = {
-						name = Amonhirkhopshef
+						name = "Amonhirkhopshef Mutatistep"
 						species = event_target:hfe_egypt_species
 						class = ruler
-						skill = 5
+						skill = 10
 						leader_age_min = 250
 						leader_age_max = 650
+						gender = male
 						traits = {
 							trait = leader_trait_ruler_chosen
 							trait = hfe_ruler_trait_transcendent_0
 						}
 					}
 					assign_leader = last_created_leader
-					while = {
+					if = {
 						limit = {
-							exists = ruler
-							ruler = {
-								gender = female
-							}
+							has_global_flag = HFE_TSP_spawn_test
 						}
-						kill_leader = {
-							type = ruler
-							show_notification = no
-						}
-						create_leader = {
-							name = Amonhirkhopshef
-							species = event_target:hfe_egypt_species
-							class = ruler
-							skill = 5
-							leader_age_min = 250
-							leader_age_max = 650
-							traits = {
-								trait = leader_trait_ruler_chosen
-								trait = hfe_ruler_trait_transcendent_0
-							}
-						}
-						assign_leader = last_created_leader
+						log = "Ju Ahet actual country installed"
 					}
-					save_global_event_target_as = hfe_egypt_country
 				}
 			}
 			set_owner = event_target:hfe_egypt_country
 			set_planet_flag = hfe_home_of_light
 			set_capital = yes
 			hfe_effect_init_set_pops_100 = yes
-			create_pop = {
-				species = event_target:hfe_ahet_species
-			}
-			last_created_pop = {
-				modify_species = {
-					add_trait = hfe_species_trait_happy_slave
+			# Generate Slave Ahets
+			create_species = {
+				name = "Ahet"
+				plural = "Ahets"
+				adjective = "Slave Ahet"
+				class = REP
+				portrait = rep12
+				name_list = cybrxkhan_fantasy_egyptian
+				pops_can_be_colonizers = yes
+				can_generate_leaders = no
+				pops_can_migrate = no
+				can_be_modified = no				# "Forever a slave" means forever a slave
+				homeworld = this
+				species_bio = "Through advanced genetic engineering and breeding, these Ahets were ripped of their Free Will. They were forced into eons of servitude, these Ahets are the descendants of the kidnappers of the Ju Ahet. Confined to Ju Ahet's core worlds, they serve their former chattel for all eternity. Dumbed down, docile, and quiet, they seek to serve a master even when they are not compelled to do so."
+				traits = {
+					ideal_planet_class = pc_nuked
+					trait = hfe_species_trait_happy_slave
+					trait = trait_docile
+					trait = trait_strong
 				}
-				species = {
+				effect = {
+					set_species_identity = event_target:hfe_ahet_species
 					save_global_event_target_as = hfe_ahet_servant_species
 				}
-				kill_pop = yes
+			}
+			# Generate Delicious Ahets
+			create_species = {
+				name = "Delicious Ahet"
+				plural = "Delicious Ahets"
+				adjective = "Delicious Ahet"
+				class = REP
+				portrait = rep12
+				name_list = cybrxkhan_fantasy_egyptian
+				pops_can_be_colonizers = yes
+				can_generate_leaders = no
+				pops_can_migrate = no
+				can_be_modified = no				# "Forever a slave" means forever a slave
+				homeworld = this
+				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets are entirely descended from the officers, governors, and elite rulers of the extinct Ahet empire. Specifically targetted and made an example of, these Ahets endure the most humiliating life possible: they are a delicacy on every Ju Ahet table."
+				traits = {
+					ideal_planet_class = pc_nuked
+					trait = trait_presapient_docile_livestock
+					trait = trait_nerve_stapled
+					trait = trait_delicious
+				}
+				effect = {
+					set_species_identity = event_target:hfe_ahet_species
+					set_species_flag = hfe_forever_slave
+					save_global_event_target_as = hfe_ahet_delicious_species
+				}
 			}
 			every_owned_pop = {
+				# This is easier than creating a set number of Ju Ahets and set number of Ahets, the Pops "changed" are not transformed in-universe, obviously, so use your imagination and pretend they were never there
 				random_list = {
 					40 = {
 					}
 					10 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
+					1 = {
+						change_species = event_target:hfe_ahet_delicious_species
+					}
+				}
+			}
+			while = {
+				count = 2
+				create_pop = {
+					species = event_target:hfe_ahet_delicious_species
 				}
 			}
 			add_building = building_system_capital
@@ -179,7 +211,7 @@ hfe_initializer_egypt_main = {
 			add_building = building_nano_forge
 			add_building = building_nano_forge
 			while = {
-				count = 12
+				count = 30
 				create_army = {
 					owner = owner
 					species = owner
@@ -187,57 +219,12 @@ hfe_initializer_egypt_main = {
 				}
 			}
 			hfe_effect_create_starbase_citadel_with_buildings_from_planet = yes
-			owner = {
-				hfe_effect_create_egypt_fleet = yes
-				hfe_effect_create_egypt_fleet = yes
-				hfe_effect_create_egypt_fleet = yes
-				if = {
-					limit = {
-						is_difficulty > 0
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 1
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 2
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 3
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				if = {
-					limit = {
-						is_difficulty > 4
-					}
-					hfe_effect_create_egypt_fleet = yes
-				}
-				every_owned_ship = {
-					repair_ship = yes
-					add_modifier = {
-						modifier = hfe_unkeep_80
-					}
-				}
-			}
 		}
 		change_orbit = @base_moon_distance
 		moon = {
-			name = Thoth
-			class = pc_barren
-			entity = barren_planet_01_destroyed_entity
-			orbit_angle = {
-				min = 90
-				max = 270
-			}
+			name = "Heresy"
+			class = pc_shattered
+			orbit_angle = random
 			orbit_distance = 5
 		}
 	}
@@ -247,7 +234,7 @@ hfe_initializer_egypt_main = {
 			max = 2
 		}
 		orbit_distance = 20
-		class = random_non_colonizable
+		class = random
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -293,6 +280,23 @@ hfe_initializer_egypt_main = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			log = "Ju Ahet home system successfully spawned"
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_egypt_country
+			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "All is well in Egypt"
+			}
+		}
 	}
 }
 
@@ -334,14 +338,20 @@ hfe_initializer_egypt_col_0 = {
 		}
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
-			hfe_effect_init_set_pops_50 = yes
+			hfe_effect_init_set_pops_80 = yes
 			every_owned_pop = {
 				random_list = {
-					40 = {
+					60 = {
 					}
-					10 = {
+					15 = {
 						change_species = event_target:hfe_ahet_servant_species
 					}
+				}
+			}
+			while = {
+				count = 5
+				create_pop = {
+					species = event_target:hfe_ahet_delicious_species
 				}
 			}
 			add_building = building_system_capital
@@ -361,7 +371,7 @@ hfe_initializer_egypt_col_0 = {
 			add_building = building_nano_forge
 			add_building = building_nano_forge
 			while = {
-				count = 10
+				count = 12
 				create_pop = {
 					species = event_target:hfe_ahet_servant_species
 				}
@@ -371,8 +381,12 @@ hfe_initializer_egypt_col_0 = {
 		change_orbit = @base_moon_distance
 		moon = {
 			count = {
-				min = 0
-				max = 1
+				min = 1
+				max = 2
+			}
+			size = {
+				min = 4
+				max = 7
 			}
 			class = random_non_colonizable
 			orbit_angle = {
@@ -392,10 +406,7 @@ hfe_initializer_egypt_col_0 = {
 		}
 		change_orbit = @base_moon_distance
 		moon = {
-			count = {
-				min = 0
-				max = 1
-			}
+			size = 8
 			class = random_non_colonizable
 			orbit_angle = {
 				min = 90
@@ -442,59 +453,59 @@ hfe_initializer_egypt_col_0 = {
 			orbit_distance = 5
 		}
 	}
-	# planet = {
-	# 	orbit_distance = 20
-	# 	class = pc_gas_giant
-	# 	orbit_angle = {
-	# 		min = 90
-	# 		max = 270
-	# 	}
-	# 	change_orbit = @base_moon_distance
-	# 	moon = {
-	# 		name = "Assimilation Zone"
-	# 		class = pc_habitat
-	# 		size = 9
-	# 		orbit_angle = {
-	# 			min = 90
-	# 			max = 270
-	# 		}
-	# 		orbit_distance = 5
-	# 		deposit_blockers = none
-	# 		init_effect = {
-	# 			set_owner = event_target:hfe_egypt_country
-	# 			# TODO
-	# 			add_building = building_system_capital
-	# 			add_building = building_master_archive
-	# 			add_building = building_fe_stronghold
-	# 			add_building = building_fe_dome
-	# 			add_building = building_fe_dome
-	# 			add_building = building_class_4_singularity
-	# 			add_building = building_class_4_singularity
-	# 			add_building = building_affluence_center
-	# 			add_building = building_affluence_center
-	# 			add_building = building_nourishment_center
-	# 			add_building = building_nourishment_center
-	# 			add_building = building_dimensional_fabricator
-	# 			add_building = building_dimensional_fabricator
-	# 			add_building = building_nano_forge
-	# 			add_building = building_nano_forge
-	# 			hfe_effect_init_set_pops_50 = yes
-	# 			while = {
-	# 				count = 10
-	# 				create_pop = {
-	# 					species = event_target:hfe_ahet_servant_species
-	# 				}
-	# 			}
-	# 		}
-	# 	}
-	# }
 	planet = {
-		count = {
-			min = 0
-			max = 1
-		}
+		name = "Hotep"
 		orbit_distance = 20
-		class = random_non_colonizable
+		class = pc_gas_giant
+		size = 40
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		#	 	change_orbit = @base_moon_distance
+		# 		moon = {
+		#	 		name = "Assimilation Zone"
+		# 			class = pc_habitat
+		# 			size = 20
+		#	 		orbit_angle = {
+		# 				min = 90
+		# 				max = 270
+		#	 		}
+		# 			orbit_distance = 5
+		# 			deposit_blockers = none
+		#	 		init_effect = {
+		# 				set_owner = event_target:hfe_egypt_country
+		#	 			# TODO
+		# 				add_building = building_system_capital
+		# 				add_building = building_master_archive
+		# 				add_building = building_fe_stronghold
+		#	 			add_building = building_fe_dome
+		# 				add_building = building_fe_dome
+		#				add_building = building_fe_dome
+		# 				add_building = building_class_4_singularity
+		# 				add_building = building_class_4_singularity
+		#	 			add_building = building_affluence_center
+		# 				add_building = building_affluence_center
+		# 				add_building = building_nourishment_center
+		# 				add_building = building_nourishment_center
+		#	 			add_building = building_dimensional_fabricator
+		# 				add_building = building_dimensional_fabricator
+		# 				add_building = building_nano_forge
+		# 				add_building = building_nano_forge
+		#	 			hfe_effect_init_set_pops_50 = yes
+		# 				while = {
+		# 					count = 25
+		#	 				create_pop = {
+		# 						species = event_target:hfe_ahet_servant_species
+		# 					}
+		# 				}
+		# 			}
+		#	 	}
+	}
+	planet = {
+		orbit_distance = 20
+		size = 20
+		class = random
 		orbit_angle = {
 			min = 90
 			max = 270
@@ -502,6 +513,12 @@ hfe_initializer_egypt_col_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "First Ju Ahet Colony spawned"
+		}
 	}
 }
 
@@ -532,19 +549,19 @@ hfe_initializer_egypt_col_1 = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 20
-			max = 25
-		}
+		size = 25
 		init_effect = {
 			set_owner = event_target:hfe_egypt_country
-			hfe_effect_init_set_pops_50 = yes
+			hfe_effect_init_set_pops_80 = yes
 			every_owned_pop = {
 				random_list = {
 					40 = {
 					}
 					10 = {
 						change_species = event_target:hfe_ahet_servant_species
+					}
+					1 = {
+						change_species = event_target:hfe_ahet_delicious_species
 					}
 				}
 			}
@@ -671,6 +688,12 @@ hfe_initializer_egypt_col_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Second Ju Ahet Colony spawned"
+		}
 	}
 }
 
@@ -717,15 +740,27 @@ hfe_initializer_ahet_0 = {
 			create_country = {
 				name = "Ahet Community"
 				type = primitive
+				authority = random
+				ethos = {
+					ethic = ethic_xenophile
+					ethic = ethic_authoritarian
+					ethic = ethic_pacifist
+				}
 				civics = {
 					civic = hfe_civic_primitive_was_default
 					civic = hfe_civic_primitive_fem_rept_lobby
 				}
 				species = event_target:hfe_ahet_species
+				origin = origin_lost_colony
 				effect = {
 					hfe_effect_primitive_set_late_medieval_age = yes
 					set_country_flag = hfe_ahet_primitive_0
-					#log = "created ahets"
+					if = {
+						limit = {
+							has_global_flag = HFE_TSP_spawn_test
+						}
+						log = "created ahets primitive 0"
+					}
 					prev = {
 						# create_colony = {
 						# 	owner = prev
@@ -734,7 +769,12 @@ hfe_initializer_ahet_0 = {
 					}
 				}
 			}
-			log = "[this.GetName]"
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Ahet Co-Op [this.GetName]"
+			}
 			# to remove errors from log
 			event_target:hfe_ahet_species = {
 				set_species_homeworld = prev
@@ -823,6 +863,12 @@ hfe_initializer_ahet_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Ahet Cooperative Colony spawned"
+		}
 	}
 }
 
@@ -855,6 +901,7 @@ hfe_initializer_ahet_1 = {
 		}
 	}
 	planet = {
+		name = Raarwr
 		orbit_distance = 20
 		class = pc_ocean
 		entity = hfe_entity_ocean_03_orange
@@ -862,24 +909,30 @@ hfe_initializer_ahet_1 = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 15
-			max = 25
-		}
+		size = 25
 		init_effect = {
 			set_planet_flag = hfe_ahet_colony_1
 			create_species = {
+				name = Eterfoundite
+				plural = Eterfoundites
+				adjective = Eterfoundite
 				class = random
 				blocked_archetypes = {
-					MACHINE       
-					ROBOT       
-					LITHOID
+					MACHINE
+					ROBOT
+					PRESAPIENT
 				}
 				homeworld = this
+				species_bio = "The Eterfoundites got their name from the Ahet refugees that they share the planet with. After the fall of the Ahet dominions in their species' apocalyptic war, the Ahets that survived the genocide that followed desparately fled in ships and cargo holds to find somewhere, anywhere to go. The Ahets that landed on Raarwr were in luck: the kind Eterfoundites welcomed them with open arms and accepted them as equals. They now live peacefully together in a quaint, primitive democracy of elders and nobles."
+				traits = {
+					trait = trait_conformists
+					trait = trait_social_pheromones
+				}
 			}
 			create_country = {
 				name = "Eternal Foundation"
 				type = primitive
+				authority = auth_democratic
 				ethos = {
 					ethic = ethic_fanatic_xenophile
 					ethic = ethic_pacifist
@@ -889,8 +942,11 @@ hfe_initializer_ahet_1 = {
 					civic = hfe_civic_primitive_was_default
 				}
 				species = last_created_species
+				origin = origin_lost_colony
 				effect = {
-					hfe_effect_primitive_set_industrial_age = yes
+					set_graphical_culture = fallen_empire_03
+					hfe_effect_primitive_set_steam_age = yes
+					set_city_graphical_culture = preindustrial_01
 					set_country_flag = hfe_ahet_primitive_1
 					prev = {
 						# create_colony = {
@@ -957,14 +1013,20 @@ hfe_initializer_ahet_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Ahet Refugees spawned"
+		}
 	}
 }
 
 # varelse
 hfe_initializer_varelse = {
-	prevent_anomalies = yes
-	#name = "test"
-	class = rl_standard_stars
+	# The Varelse were once a Fallen Empire
+	name = "Deprived"
+	class = sc_k
 	flags = {
 		primitive_system
 	}
@@ -973,20 +1035,19 @@ hfe_initializer_varelse = {
 		orbit_distance = 0
 		orbit_angle = 1
 		size = {
-			min = 20
+			min = 25
 			max = 30
 		}
 		has_ring = no
+		satellite_naming_policy = upper_case_roman_numerals
 	}
-	change_orbit = 20
+	change_orbit = 23
 	planet = {
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 3
-		}
+		count = 1
+		class = pc_molten
 	}
-	change_orbit = 20
+	change_orbit = 36
 	planet = {
 		name = "Colony Beta"
 		orbit_distance = 0
@@ -996,116 +1057,274 @@ hfe_initializer_varelse = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 15
-			max = 25
-		}
+		size = 32
 		modifiers = none
-		deposit_blockers = none
+		# deposit_blockers = none
 		init_effect = {
+			save_global_event_target_as = hfe_varelse_colony_planet
 			create_country = {
-				name = "Colony Beta"
+				name = "Cult of the Machine-That-Speaks-to-God"
+				ship_prefix = "Godforge"
 				type = primitive
 				ignore_initial_colony_error = yes
 				species = event_target:hfe_varelse_species
+				origin = origin_remnants
+				authority = auth_dictatorial
 				ethos = {
 					ethic = ethic_militarist
 					ethic = ethic_xenophobe
 					ethic = ethic_spiritualist
 				}
 				civics = {
-					civic = hfe_civic_primitive_was_fallen
-					civic = hfe_civic_primitive_degraded_society
+					# Later changed by Event
+					civic = hfe_civic_primitive_was_default
+					civic = hfe_civic_high_mechanicus
 				}
 				effect = {
+					species = {
+						set_species_homeworld = event_target:hfe_varelse_colony_planet
+					}
 					hfe_effect_primitive_set_machine_age = yes
 					set_country_flag = hfe_varelse_primitive_0
 					set_country_flag = hfe_varelse
 					prev = {
 						set_owner = prev
 					}
+					# really neeed it?
+					# kill_leader = {
+					# 	type = ruler
+					# 	show_notification = no
+					# }
+					create_leader = {
+						class = ruler
+						name = "The Master"
+						species = event_target:hfe_varelse_species
+						gender = male
+						immortal = yes
+						skill = 5
+						leader_age_max = 500
+						leader_age_min = 100
+						traits = {
+							add_trait = leader_trait_ruler_cyborg
+							add_trait = hfe_ruler_trait_cult_of_personality
+							add_trait = leader_trait_substance_abuser
+							add_trait = leader_trait_corrupt
+						}
+					}
+					assign_leader = last_created_leader
+					set_policy = {
+						policy = robot_pop_policy
+						option = robot_pops_allowed
+						cooldown = no
+					}
+					create_species = {
+						name = "Godforge Drone"
+						plural = "Godforge Drones"
+						adjective = "Godforge Engine"
+						class = ROBOT
+						namelist = cybrxkhan_fantasy_egyptian
+						portrait = sd_pla_robot						# I actually love this type and they are not ugly at all
+						species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
+						# extra_trait_points = 2
+						traits = {
+							trait = "trait_mechanical"
+							trait = "trait_robot_bulky"
+							trait = "trait_robot_uncanny"
+							trait = "trait_robot_custom_made"
+							trait = "trait_robot_high_bandwidth"
+							trait = "trait_robot_domestic_protocols"
+						}
+						effect = {
+							# idk if robots need homeworld
+							# set_species_homeworld = event_target:hfe_varelse_colony_planet
+							save_event_target_as = hfe_varelse_leftover_robots
+							set_citizenship_type = {
+								type = citizenship_robot_servitude
+							}
+						}
+					}
+					create_leader = {
+						name = "Damaged Godforge Core"
+						class = general
+						event_leader = yes
+						species = event_target:hfe_varelse_leftover_robots
+						immortal = yes
+						skill = 1
+						leader_age_max = 3000
+						leader_age_min = 1000
+						traits = {
+							add_trait = leader_trait_general_synthetic
+							add_trait = leader_trait_maimed
+						}
+						effect = {
+							save_event_target_as = hfe_varelse_general
+						}
+					}
 				}
 			}
-			# to remove error in log
 			event_target:hfe_varelse_species = {
 				set_species_homeworld = prev
 			}
-			# to fix create colony spawn pop of root species bug
-			every_owned_pop = {
-				kill_pop = yes
-			}
 			set_planet_flag = hfe_varelse_colony
+			set_planet_flag = primitives_nuked_themselves			# As the High Mechanicus controls the whole planet, this can't happen
 			hfe_effect_primitive_add_pops = yes
+			add_building = hfe_building_godforge_main
+			add_building = hfe_building_godforge_stronghold
+			add_building = hfe_building_godforge_temple
 			hfe_effect_primitive_add_buildings = yes
-			add_building = building_nano_forge
+			# remove_building = building_primitive_capital
+			# add_building = hfe_building_mechanicus_pseudo_capital
+			add_deposit = hfe_deposit_godforge_farm
+			add_deposit = d_bomb_crater
+			add_deposit = d_decrepit_dwellings
+			# add_deposit = d_dust_caverns
+			# add_deposit = d_dust_caverns
+			# add_deposit = d_geothermal_vent
+			# add_deposit = d_ore_rich_caverns
+			# add_deposit = d_veiny_cliffs
+			# add_deposit = d_rich_mountain
+			# add_deposit = d_fungal_caves
+			add_deposit = d_relic_metal_boneyard
+			add_deposit = d_ancient_bombardment_craters
+			# add_random_non_blocker_deposit = yes
+			# add_random_non_blocker_deposit = yes
+			# add_random_non_blocker_deposit = yes
+			# seems it do not work
+			# owner = {
+			# 	set_built_species = event_target:hfe_varelse_leftover_robots
+			# }
+			# extra pops
 			while = {
-				count = 7
+				count = 15
 				create_pop = {
 					species = owner
 				}
 			}
-			# TODO
-			# war blockers
 			while = {
-				count = 8
-				create_army = {
-					name = "Divine Industrial Army"
-					owner = owner
-					species = event_target:hfe_varelse_species
-					type = industrial_army
+				count = 15
+				create_pop = {
+					species = event_target:hfe_varelse_leftover_robots
 				}
 			}
-		}
-		change_orbit = @base_moon_distance
-		moon = {
-			count = {
-				min = 0
-				max = 1
+			add_modifier = {
+				modifier = hfe_colony_type_varelse
+				days = -1
 			}
-			orbit_angle = {
-				min = 90
-				max = 270
+			add_modifier = {
+				modifier = bleak_planet
+				days = -1
 			}
-			orbit_distance = 5
+			add_modifier = {
+				modifier = high_gravity
+				days = -1
+			}
+			# war blockers
+			while = {
+				count = 30
+				create_army = {
+					name = "Zealots"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = hfe_army_high_mechanicus_zealots
+				}
+			}
+			while = {
+				count = 15
+				create_army = {
+					name = "Instruments of the Machine"
+					owner = owner
+					species = event_target:hfe_varelse_leftover_robots
+					type = hfe_army_mechanicus_godforge_drones
+				}
+			}
+			while = {
+				count = 5
+				create_army = {
+					name = "Godforge Sentinels"
+					owner = owner
+					species = event_target:hfe_varelse_leftover_robots
+					type = hfe_army_godforge_core_watch
+				}
+			}
+			while = {
+				count = 3
+				create_army = {
+					name = "Adaptus Mechanicus"
+					owner = owner
+					species = event_target:hfe_varelse_species
+					type = robotic_defense_army
+				}
+			}
+			create_army = {
+				name = "The Master's Personal Guard"
+				owner = owner
+				species = event_target:hfe_varelse_species
+				type = hfe_army_high_mechanicus_bodyguards
+			}
+			create_army = {
+				name = "The Machine-That-Speaks-to-God"
+				owner = owner
+				species = event_target:hfe_varelse_leftover_robots
+				type = care_defensive_protocols
+				leader = event_target:hfe_varelse_general
+			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Colony Beta planet finalized"
+			}
 		}
 	}
+	change_orbit = 5
 	planet = {
-		orbit_distance = 20
-		count = {
-			min = 1
-			max = 4
-		}
-		change_orbit = @base_moon_distance
+		orbit_distance = 15
+		class = pc_barren_cold
+		count = 1
 		moon = {
-			count = {
-				min = 0
-				max = 1
-			}
-			orbit_angle = {
-				min = 90
-				max = 270
-			}
-			orbit_distance = 5
+			class = random
+			orbit_distance = @base_moon_distance
 		}
 	}
+	change_orbit = 5
 	planet = {
-		orbit_distance = 20
-		count = {
-			min = 0
-			max = 2
+		orbit_distance = 15
+		class = pc_frozen
+		size = 18
+		count = 1
+	}
+	change_orbit = 40
+	planet = {
+		#		orbit_distance = 0
+		class = pc_t_star
+		size = 34
+		orbit_angle = random
+		change_orbit = @base_moon_distance
+		moon = {
+			class = pc_frozen
+			count = 6
+			orbit_angle = random
+			orbit_distance = 4
 		}
+		satellite_naming_policy = upper_case_roman_numerals
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Colony Beta completely spawned"
+		}
 	}
 }
 
 # ahet home
 hfe_initializer_ahet_home = {
-	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
 		hfe_ahet_home
+		hfe_ahet_home_star
 	}
 	name = Barsoom
 	planet = {
@@ -1120,72 +1339,141 @@ hfe_initializer_ahet_home = {
 	}
 	change_orbit = 20
 	planet = {
+		count = 1
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 3
-		}
 	}
-	change_orbit = 20
 	planet = {
-		orbit_distance = 10
+		count = 1
+		class = random
+		size = 14
+	}
+	change_orbit = 22
+	planet = {
+		orbit_distance = 0
+		name = "Our Happy Ending"
 		class = hfe_pc_ahet_home
+		has_ring = yes
 		orbit_angle = {
 			min = 90
 			max = 270
 		}
-		size = {
-			min = 20
-			max = 25
-		}
+		size = 35
+		satellite_naming_policy = upper_case_roman_numerals
+		modifiers = none
+		deposit_blockers = none
 		init_effect = {
+			prevent_anomaly = yes
 			set_planet_flag = hfe_ahet_home
+			add_modifier = {
+				modifier = lush_planet
+				days = -1
+			}
+			add_modifier = {
+				modifier = natural_beauty
+				days = -1
+			}
+			add_modifier = {
+				modifier = high_gravity
+				days = -1
+			}
 		}
+		change_orbit = 5
 		moon = {
 			count = 1
+			name = "Collapsed Dimensional Portal I"
 			class = pc_black_hole
 			size = 1
 			orbit_angle = {
 				min = 0
 				max = 90
 			}
-			orbit_distance = 10
+			orbit_distance = 1.2
+			modifiers = none
+			init_effect = {
+				add_deposit = d_engineering_9
+				prevent_anomaly = yes
+			}
+			has_ring = yes
 		}
-	}
-	planet = {
-		orbit_distance = 20
-		count = {
-			min = 1
-			max = 4
-		}
-		change_orbit = @base_moon_distance
 		moon = {
-			count = {
-				min = 0
-				max = 2
+			count = 1
+			name = "Collapsed Dimensional Portal IV"
+			class = pc_black_hole
+			size = 1
+			orbit_angle = random
+			orbit_distance = 1.6
+			modifiers = none
+			init_effect = {
+				add_deposit = d_physics_6
+				prevent_anomaly = yes
+				create_ambient_object = {
+					type = broken_holy_world_outpost
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 5
+					}
+				}
 			}
-			orbit_angle = {
-				min = 90
-				max = 270
-			}
-			orbit_distance = 5
+			has_ring = yes
 		}
 	}
+	change_orbit = 9
+	planet = {
+		count = 1
+		#has_ring = yes
+		change_orbit = 1
+		class = random
+		size = 23
+		moon = {
+			count = 3
+			orbit_angle = {
+				min = 140
+				max = 195
+			}
+			size = 13
+			orbit_distance = 5.5
+			has_ring = no
+		}
+	}
+	change_orbit = 10
+	planet = {
+		orbit_distance = 4
+		count = 1
+		has_ring = yes
+		change_orbit = 5
+		class = pc_barren_cold
+	}
+	change_orbit = 10
+	planet = {
+		orbit_distance = 3
+		count = 1
+		has_ring = yes
+		change_orbit = 5
+		class = pc_frozen
+	}
+	change_orbit = 10
 	planet = {
 		orbit_distance = 20
-		count = {
-			min = 0
-			max = 2
-		}
+		count = 1
+		class = pc_gas_giant
+		size = 33
+		has_ring = yes
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Ahet Happy Ending spawned"
+		}
 	}
 }
 
 # memorial
 hfe_initializer_memorial_0 = {
-	prevent_anomalies = yes
 	class = rl_standard_stars
 	flags = {
 		hfe_memorial_system
@@ -1215,9 +1503,7 @@ hfe_initializer_memorial_0 = {
 		}
 		deposit_blockers = none
 		init_effect = {
-			# every_tile = {
-			# 	hfe_effect_set_memorial_tile = yes
-			# }
+			prevent_anomaly = yes
 		}
 		moon = {
 			count = {
@@ -1257,11 +1543,16 @@ hfe_initializer_memorial_0 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Memorial World spawned"
+		}
 	}
 }
 
 hfe_initializer_memorial_1 = {
-	prevent_anomalies = yes
 	class = rl_standard_stars
 	asteroid_belt = {
 		type = rocky_asteroid_belt
@@ -1320,12 +1611,15 @@ hfe_initializer_memorial_1 = {
 				min = 0
 				max = 1
 			}
-			class = random_non_colonizable
+			class = random
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
 			orbit_distance = 10
+		}
+		init_effect = {
+			prevent_anomaly = yes
 		}
 	}
 	planet = {
@@ -1353,6 +1647,12 @@ hfe_initializer_memorial_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Memorial World spawned"
+		}
 	}
 }
 
@@ -1398,6 +1698,9 @@ hfe_initializer_memorial_2 = {
 			}
 			orbit_distance = 10
 		}
+		init_effect = {
+			prevent_anomaly = yes
+		}
 	}
 	planet = {
 		count = {
@@ -1442,6 +1745,12 @@ hfe_initializer_memorial_2 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Memorial World spawned"
+		}
 	}
 }
 
@@ -1484,12 +1793,15 @@ hfe_initializer_memorial_3 = {
 				min = 0
 				max = 1
 			}
-			class = random_non_colonizable
+			class = random
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
 			orbit_distance = 10
+		}
+		init_effect = {
+			prevent_anomaly = yes
 		}
 	}
 	planet = {
@@ -1505,6 +1817,12 @@ hfe_initializer_memorial_3 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Memorial World spawned"
+		}
 	}
 }
 
@@ -1518,6 +1836,7 @@ hfe_initializer_copernicus = {
 	}
 	name = Copernicus
 	planet = {
+		name = "Copernicus B"
 		class = star
 		orbit_distance = 13
 		orbit_angle = 210
@@ -1525,35 +1844,67 @@ hfe_initializer_copernicus = {
 		init_effect = {
 			set_planet_flag = hfe_copernicus.2
 			set_planet_flag = hfe_handmade_garden
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Geocentrism wasn't wrong"
+			}
 		}
 	}
 	planet = {
+		name = "Copernicus A"
 		orbit_distance = -12
 		orbit_angle = 30
 		class = pc_gaia
 		entity = hfe_entity_gaia_pink
-		size = {
-			min = 20
-			max = 25
-		}
+		size = 25
 		init_effect = {
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Geocentric core planet spawned"
+			}
 			set_planet_flag = hfe_copernicus.0
+			set_planet_flag = hfe_handmade_garden
+			save_global_event_target_as = hfe_corpernicus_preserve
 			create_species = {
-				class = random
+				name = "Blessox"
+				plural = "Blessoxen"
+				adjective = "Blessed"
+				class = random_non_machine
 				blocked_archetypes = {
-					MACHINE       
-					ROBOT       
-					LITHOID
+					MACHINE
+					ROBOT
 				}
 				homeworld = this
+				name_list = ART4				# Same as Ahets
+				traits = random
+				traits = {
+					trait = trait_presapient_natural_intellectuals
+					trait = trait_docile
+				}
+				# It can be presumed these creatures were modified
+				#				is_mod = yes
+				allow_negative_traits = no
 			}
 			create_country = {
+				name = "Geocentric Sanctuary"
+				authority = auth_dictatorial
+				name_list = REP1
+				ship_prefix = "Geocentric"
 				civics = {
 					civic = civic_secret_of_fire
 					civic = civic_the_wheel
 				}
+				ethos = {
+					ethic = ethic_fanatic_spiritualist
+					ethic = ethic_xenophile
+				}
 				species = last_created_species
 				type = primitive
+				origin = origin_enlightened
 				effect = {
 					hfe_effect_primitive_set_stone_age = yes
 					prev = {
@@ -1570,18 +1921,37 @@ hfe_initializer_copernicus = {
 			}
 			hfe_effect_primitive_add_buildings = yes
 			hfe_effect_primitive_add_pops = yes
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Corpernicus Primitives spawned"
+			}
 		}
 		planet = {
-			init_effect = {
-				set_planet_flag = hfe_copernicus.1
-			}
-			class = pc_asteroid
+			class = pc_rare_crystal_asteroid
+			size = 20
 			orbit_distance = 200
 			orbit_angle = random
+			init_effect = {
+				set_planet_flag = hfe_copernicus.1
+				if = {
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
+					log = "Corpernicus computation asteroid spawned"
+				}
+			}
 		}
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Ptolemy of Alexandria did nothing wrong"
+		}
 	}
 }
 
@@ -1589,13 +1959,18 @@ hfe_initializer_copernicus = {
 hfe_initializer_drone_sector_0 = {
 	prevent_anomalies = yes
 	flags = {
-		hfe_drone_0
+		hostile_system
+		hfe_drone_home_system
 	}
 	class = rl_standard_stars
 	name = "Drone Sector 0"
 	asteroid_belt = {
-		type = rocky_asteroid_belt
+		type = crystal_asteroid_belt
 		radius = 100
+	}
+	asteroid_belt = {
+		type = crystal_asteroid_belt
+		radius = 110
 	}
 	planet = {
 		class = star
@@ -1608,72 +1983,73 @@ hfe_initializer_drone_sector_0 = {
 	}
 	change_orbit = 100
 	planet = {
-		count = {
-			min = 4
-			max = 6
-		}
-		class = pc_asteroid
+		count = 3
+		class = pc_rare_crystal_asteroid
 		orbit_distance = 0
 		orbit_angle = random
 	}
-	change_orbit = 20
+	change_orbit = 10
 	planet = {
-		count = {
-			min = 1
-			max = 3
-		}
+		count = 5
+		class = pc_rare_crystal_asteroid
+		orbit_distance = 0
+		orbit_angle = random
+	}
+	change_orbit = 25
+	planet = {
+		count = 1
 		class = pc_gas_giant
 		orbit_distance = 20
 		orbit_angle = random
 		change_orbit = @base_moon_distance
 		moon = {
-			count = {
-				min = 1
-				max = 2
-			}
+			count = 1
 			orbit_angle = {
 				min = 90
 				max = 270
 			}
+			class = pc_broken
 			orbit_distance = 5
+			init_effect = {
+				add_deposit = d_minerals_1
+			}
 		}
 	}
+	change_orbit = 5
+	planet = {
+		name = "Treasure Zone"
+		class = pc_broken
+		size = 39
+		has_ring = yes
+		modifiers = none
+		orbit_distance = 5
+		orbit_angle = random
+		init_effect = {
+			set_deposit = d_energy_10
+			add_deposit = d_minerals_10
+			add_deposit = d_trade_value_10
+		}
+	}
+	change_orbit = 7
 	planet = {
 		count = {
 			min = 1
 			max = 2
 		}
-		class = random_non_colonizable
+		class = pc_broken
 		orbit_distance = 30
 		orbit_angle = random
 	}
 	init_effect = {
-		hfe_effect_add_hyperlanes = yes
-		every_system_planet = {
-			limit = {
-				has_deposit = no
-			}
-			if = {
-				limit = {
-					is_asteroid = yes
-				}
-				hfe_effect_set_mineral_orbital_deposit = yes
-			}
-			else_if = {
-				limit = {
-					or = {
-						is_star = yes
-						is_planet_class = pc_gas_giant
-					}
-				}
-				hfe_effect_set_energy_orbital_deposit = yes
-			}
-		}
 		create_country = {
 			name = "Harvesting Branch 42"
 			name_list = AI
 			type = hfe_drone
 			day_zero_contact = no
+			authority = auth_machine_intelligence
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
 			flag = {
 				icon = {
 					category = "zoological"
@@ -1681,13 +2057,13 @@ hfe_initializer_drone_sector_0 = {
 				}
 				background = {
 					category = "backgrounds"
-					file = "00_solid.dds"
+					file = "horizontal_stripe.dds"
 				}
 				colors = {
 					"black"
-					"black"
-					"null"
-					"null"
+					"dark_brown"
+					"dark_brown"
+					"brown"
 				}
 			}
 			effect = {
@@ -1708,8 +2084,8 @@ hfe_initializer_drone_sector_0 = {
 				every_country = {
 					limit = {
 						or = {
-							is_country_type = enclave
 							is_country_type = primitive
+							is_country_type = enclave
 							is_guardian_country = yes
 						}
 					}
@@ -1722,6 +2098,7 @@ hfe_initializer_drone_sector_0 = {
 				}
 			}
 		}
+		hfe_effect_add_hyperlanes = yes
 		create_starbase = {
 			size = starbase_outpost
 			owner = event_target:hfe_drone_country
@@ -1729,15 +2106,43 @@ hfe_initializer_drone_sector_0 = {
 		starbase = {
 			set_starbase_size = starbase_citadel
 		}
+		every_system_planet = {
+			limit = {
+				has_deposit = no
+			}
+			if = {
+				limit = {
+					is_asteroid = yes
+				}
+				hfe_effect_set_mineral_orbital_deposit = yes
+			}
+			else_if = {
+				limit = {
+					or = {
+						is_star = yes
+						is_planet_class = pc_gas_giant
+					}
+				}
+				hfe_effect_set_energy_orbital_deposit = yes
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Harvesting Marvel Core activated"
+		}
 	}
 }
 
 hfe_initializer_drone_sector_1 = {
 	prevent_anomalies = yes
 	flags = {
-		hfe_drone_1
+		hostile_system
+		hfe_drone_home_system
+		hfe_drone_economic_zone
 	}
-	class = rl_standard_stars
+	class = sc_k
 	name = "Drone Sector 1"
 	asteroid_belt = {
 		type = rocky_asteroid_belt
@@ -1755,12 +2160,43 @@ hfe_initializer_drone_sector_1 = {
 			min = 10
 			max = 20
 		}
+		init_effect = {
+			add_deposit = d_trade_value_8
+			create_ambient_object = {
+				type = caravaneer_billboard_1
+				scale = 4
+				location = this
+				entity_offset_height = {
+					min = -9
+					max = -11
+				}
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 40
+					angle = 45
+				}
+			}
+			create_ambient_object = {
+				type = caravaneer_billboard_3
+				scale = 4
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 4
+					angle = random
+				}
+			}
+		}
 	}
 	change_orbit = 60
 	planet = {
 		count = {
-			min = 4
-			max = 6
+			min = 2
+			max = 8
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1769,8 +2205,8 @@ hfe_initializer_drone_sector_1 = {
 	change_orbit = 90
 	planet = {
 		count = {
-			min = 4
-			max = 6
+			min = 2
+			max = 8
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1794,6 +2230,24 @@ hfe_initializer_drone_sector_1 = {
 			}
 			orbit_distance = 5
 		}
+		init_effect = {
+			create_ambient_object = {
+				type = caravaneer_billboard_1
+				scale = 4
+				location = this
+				entity_offset_height = {
+					min = -9
+					max = -11
+				}
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 18
+					angle = random
+				}
+			}
+		}
 	}
 	planet = {
 		count = {
@@ -1806,6 +2260,13 @@ hfe_initializer_drone_sector_1 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		create_starbase = {
+			size = starbase_outpost
+			owner = event_target:hfe_drone_country
+		}
+		starbase = {
+			set_starbase_size = starbase_citadel
+		}
 		every_system_planet = {
 			limit = {
 				has_deposit = no
@@ -1826,12 +2287,11 @@ hfe_initializer_drone_sector_1 = {
 				hfe_effect_set_energy_orbital_deposit = yes
 			}
 		}
-		create_starbase = {
-			size = starbase_outpost
-			owner = event_target:hfe_drone_country
-		}
-		starbase = {
-			set_starbase_size = starbase_citadel
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Harvesting Marvel Zone activated"
 		}
 	}
 }
@@ -1839,7 +2299,8 @@ hfe_initializer_drone_sector_1 = {
 hfe_initializer_drone_sector_2 = {
 	prevent_anomalies = yes
 	flags = {
-		hfe_drone_2
+		hostile_system
+		hfe_drone_home_system
 	}
 	class = rl_standard_stars
 	name = "Drone Sector 10"
@@ -1864,7 +2325,7 @@ hfe_initializer_drone_sector_2 = {
 	planet = {
 		count = {
 			min = 4
-			max = 6
+			max = 5
 		}
 		class = pc_asteroid
 		orbit_distance = 0
@@ -1872,7 +2333,7 @@ hfe_initializer_drone_sector_2 = {
 	}
 	change_orbit = 160
 	planet = {
-		count = 4
+		count = 3
 		class = pc_ice_asteroid
 		orbit_distance = 0
 		orbit_angle = random
@@ -1909,6 +2370,13 @@ hfe_initializer_drone_sector_2 = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		create_starbase = {
+			size = starbase_outpost
+			owner = event_target:hfe_drone_country
+		}
+		starbase = {
+			set_starbase_size = starbase_citadel
+		}
 		every_system_planet = {
 			limit = {
 				has_deposit = no
@@ -1929,24 +2397,28 @@ hfe_initializer_drone_sector_2 = {
 				hfe_effect_set_energy_orbital_deposit = yes
 			}
 		}
-		create_starbase = {
-			size = starbase_outpost
-			owner = event_target:hfe_drone_country
-		}
-		starbase = {
-			set_starbase_size = starbase_citadel
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Harvesting Marvel Zone activated"
 		}
 	}
 }
 
 # future
 hfe_initializer_future_main = {
+	spawn_chance = 0
 	prevent_anomalies = yes
 	name = Tartarus
 	class = rl_binary_stars
 	asteroid_belt = {
-		type = rocky_asteroid_belt
+		type = crystal_asteroid_belt
 		radius = 70
+	}
+	flags = {
+		hfe_future_system
+		hfe_future_core
 	}
 	planet = {
 		name = Tartarus
@@ -1976,14 +2448,15 @@ hfe_initializer_future_main = {
 	change_orbit = 20
 	planet = {
 		count = {
-			min = 1
-			max = 3
+			min = 2
+			max = 6
 		}
-		class = pc_asteroid
+		class = pc_rare_crystal_asteroid
 		orbit_angle = {
 			min = 40
 			max = 100
 		}
+		orbit_distance = 0
 	}
 	planet = {
 		name = "Tellus"
@@ -2004,11 +2477,13 @@ hfe_initializer_future_main = {
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
+				set_planet_flag = hfe_future_planet
 				create_country = {
 					name = "Kad Republic"
 					type = human_fallen_empire
 					name_list = HUMAN1
-					ship_prefix = "USS"
+					ship_prefix = "Diplomat"
+					origin = hfe_civic_future_peaceful
 					ignore_initial_colony_error = yes
 					ethos = {
 						ethic = ethic_fanatic_pacifist
@@ -2016,8 +2491,8 @@ hfe_initializer_future_main = {
 					}
 					authority = auth_democratic
 					civics = {
-						civic = civic_parliamentary_system
-						civic = civic_efficient_bureaucracy
+						civic = civic_free_haven
+						civic = civic_diplomatic_corps
 					}
 					species = event_target:hfe_future_species
 					flag = {
@@ -2030,21 +2505,20 @@ hfe_initializer_future_main = {
 							file = vertical.dds
 						}
 						colors = {
-							turquoise
-							black
-							null
-							null
+							"turquoise"
+							"black"
+							"pink"
+							"red"
 						}
 					}
 					effect = {
 						set_country_flag = hfe_future
 						set_country_flag = hfe_brainworm_discovered
 						set_country_flag = hfe_marked_as_human
+						set_country_flag = galcom_form_aye
 						save_global_event_target_as = hfe_future_country
 						save_global_event_target_as = hfe_coalition_leader
-						give_technology = {
-							tech = tech_titans
-						}
+						hfe_effect_create_fleet = yes
 					}
 				}
 				set_owner = event_target:hfe_future_country
@@ -2067,71 +2541,31 @@ hfe_initializer_future_main = {
 				add_building = building_nano_forge
 				hfe_effect_init_set_pops_100 = yes
 				while = {
-					count = 12
+					count = 30
 					create_army = {
+						name = "Protectors of the Innocent"
 						owner = owner
 						species = owner
-						type = gene_warrior_army
+						type = defense_army
 					}
 				}
 				hfe_effect_create_starbase_citadel_with_buildings_from_planet = yes
-				owner = {
-					hfe_effect_create_future_fleet = yes
-					hfe_effect_create_future_fleet = yes
-					hfe_effect_create_future_fleet = yes
-					if = {
-						limit = {
-							is_difficulty > 0
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 1
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 2
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 3
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					if = {
-						limit = {
-							is_difficulty > 4
-						}
-						hfe_effect_create_future_fleet = yes
-					}
-					every_owned_ship = {
-						repair_ship = yes
-						add_modifier = {
-							modifier = hfe_unkeep_80
-						}
-					}
-				}
 			}
 		}
 		moon = {
 			name = "Nova Futurum"
 			class = pc_gaia
 			entity = hfe_entity_gaia_purple
-			size = 15
+			size = 20
 			orbit_distance = 8
 			orbit_angle = 10
 			modifiers = none
 			deposit_blockers = none
 			init_effect = {
 				set_planet_flag = hfe_handmade_garden
+				set_planet_flag = hfe_future_planet
 				set_owner = event_target:hfe_future_country
 				add_building = hfe_building_virtual
-				add_building = building_luxury_residence
 				add_building = building_system_capital
 				add_building = building_fe_stronghold
 				add_building = building_fe_dome
@@ -2152,5 +2586,11 @@ hfe_initializer_future_main = {
 	}
 	init_effect = {
 		hfe_effect_add_hyperlanes = yes
+		if = {
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
+			log = "Kad Republic spawned"
+		}
 	}
 }

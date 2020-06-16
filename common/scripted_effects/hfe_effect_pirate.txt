@@ -221,7 +221,6 @@ hfe_effect_pirate_init_colony = {
 		# log = "pirate created new base [this.GetName] in [solar_system.GetName] system, owner: [owner.GetName]"
 		# }
 		hfe_effect_create_starbase_starport_from_planet = yes
-		hfe_effect_starbase_add_shipyard_0 = yes
 	}
 }
 
@@ -244,10 +243,12 @@ hfe_effect_pirate_change_to_pc_pirate_base = {
 hfe_effect_pirate_init_country = {
 	create_country = {
 		type = hfe_pirate
+		day_zero_contact = no
 		species = event_target:hfe_pirate_target
 		name_list = hfe_namelist_pirate
 		released_from_country = event_target:hfe_pirate_target
 		ignore_initial_colony_error = yes
+		origin = hfe_origin_pirate
 		effect = {
 			hfe_effect_gov_fix = yes
 			change_country_flag = {
@@ -260,13 +261,15 @@ hfe_effect_pirate_init_country = {
 					file = 00_solid.dds
 				}
 				colors = {
-					dark_grey
-					dark_grey
-					null
-					null
+					"dark_grey"
+					"dark_grey"
+					"black"
+					"beige"
 				}
 			}
 			randomize_flag_symbol = pirate
+			save_event_target_as = hfe_pirate_clan
+			set_country_flag = hfe_pirate
 			if = {
 				limit = {
 					has_authority = auth_corporate
@@ -292,9 +295,10 @@ hfe_effect_pirate_init_country = {
 			}
 			add_modifier = {
 				modifier = hfe_pirate_country_unkeep
+				days = -1
 			}
 			random_list = {
-				10 = {
+				100 = {
 					set_graphical_culture = hfe_graphical_culture_pirate
 				}
 				10 = {
@@ -317,17 +321,18 @@ hfe_effect_pirate_init_country = {
 				tech = tech_sensors_2
 				message = no
 			}
+			# for leaders
 			add_resource = {
-				energy = 500
+				energy = 2000
 			}
 			if = {
 				limit = {
-					always = no
 					end_game_years_passed > 0
 				}
 				add_resource = {
 					minerals = 10000
 					alloys = 2500
+					influence = 500
 				}
 				add_modifier = {
 					modifier = hfe_pirate_country_boost
@@ -336,7 +341,6 @@ hfe_effect_pirate_init_country = {
 			}
 			else_if = {
 				limit = {
-					always = no
 					mid_game_years_passed > 0
 				}
 				add_resource = {
@@ -362,7 +366,6 @@ hfe_effect_pirate_init_country = {
 				who = event_target:hfe_pirate_target
 				flag = pirate_relation
 			}
-			save_event_target_as = hfe_pirate_clan
 			# for vanilla localization
 			save_event_target_as = pirate_band
 			every_country = {
@@ -395,19 +398,17 @@ hfe_effect_pirate_init_country = {
 					set_friendly = no
 				}
 			}
-			while = {
-				count = 5
-				create_leader = {
-					class = scientist
-				}
-			}
-			create_leader = {
-				class = admiral
-			}
-			create_leader = {
-				class = ruler
-			}
-			assign_leader = last_created_leader
+			# every_country = {
+			# 	limit = {
+			# 		is_country_type = hfe_features_exodus
+			# 	}
+			# 	set_faction_hostility = {
+			# 		target = prev
+			# 		set_hostile = yes
+			# 		set_neutral = no
+			# 		set_friendly = no
+			# 	}
+			# }
 			event_target:hfe_pirate_target = {
 				if = {
 					limit = {
@@ -425,6 +426,10 @@ hfe_effect_pirate_init_country = {
 					has_global_flag = hfe_pirate_logs
 				}
 				#	log = "new pirate country spawned"
+				ROOT = {
+					set_country_flag = but_nobody_came
+					remove_country_flag = but_nobody_came
+				}
 			}
 		}
 	}
@@ -436,6 +441,10 @@ hfe_effect_save_slave_target = {
 		if = {
 			limit = {
 				exists = event_target:hfe_slave_target_5
+			}
+			owner = {
+				set_country_flag = but_nobody_came
+				remove_country_flag = but_nobody_came
 			}
 		}
 		else_if = {
@@ -678,6 +687,10 @@ hfe_effect_pirate_attack_count_check = {
 					has_global_flag = hfe_pirate_logs
 				}
 				#	log = "fire effect hfe_effect_pirate_attack_count_check for [this.GetName] pirate is [hfe_pirate_country.GetName]"
+				ROOT = {
+					set_country_flag = but_nobody_came
+					remove_country_flag = but_nobody_came
+				}
 			}
 			country_event = {
 				id = hfe_pirate.200
@@ -712,6 +725,10 @@ hfe_effect_pirate_flee_fleets = {
 						}
 					}
 					#	log = "[this.GetName] flee to [owner.GetName] from [prev.GetName]"
+					ROOT = {
+						set_country_flag = but_nobody_came
+						remove_country_flag = but_nobody_came
+					}
 				}
 			}
 		}
@@ -1131,6 +1148,10 @@ hfe_effect_pirate_path_target_planet = {
 						has_fleet_flag = hfe_pirate_log_fleet
 					}
 					#	log = "[this.GetName] will suppress starbase of [solar_system.GetName]"
+					ROOT = {
+						set_country_flag = but_nobody_came
+						remove_country_flag = but_nobody_came
+					}
 				}
 				set_fleet_flag = hfe_pirate_fleet_move_to_target
 				clear_fleet_actions = this
@@ -1183,7 +1204,11 @@ hfe_effect_pirate_path_target_planet = {
 						limit = {
 							has_fleet_flag = hfe_pirate_log_fleet
 						}
-						#	log = "[this.GetName] want to plunder [prev.GetName]"
+						#	log = "[this.GetName] wants to plunder [prev.GetName]"
+						ROOT = {
+							set_country_flag = but_nobody_came
+							remove_country_flag = but_nobody_came
+						}
 					}
 					set_fleet_flag = hfe_pirate_fleet_move_to_target
 					clear_fleet_actions = this
@@ -1257,12 +1282,16 @@ hfe_effect_pirate_path_target_system = {
 				factor = 2
 				has_hp_percentage < 0.8
 			}
-			if = {
-				limit = {
-					has_fleet_flag = hfe_pirate_log_fleet
-				}
-				#	log = "[this.GetName] in [solar_system.GetName] go home system"
-			}
+			#			if = {
+			#				limit = {
+			#					has_fleet_flag = hfe_pirate_log_fleet
+			#				}
+			#			#	log = "[this.GetName] in [solar_system.GetName] go home system"
+			#				ROOT = {
+			#					set_country_flag = but_nobody_came
+			#					remove_country_flag = but_nobody_came
+			#				}
+			#			}
 			hfe_effect_pirate_path_target_home = yes
 		}
 		# move ahead
@@ -1279,6 +1308,10 @@ hfe_effect_pirate_path_target_system = {
 					has_fleet_flag = hfe_pirate_log_fleet
 				}
 				#	log = "[this.GetName] in [solar_system.GetName] try to find system target"
+				ROOT = {
+					set_country_flag = but_nobody_came
+					remove_country_flag = but_nobody_came
+				}
 			}
 			closest_system = {
 				limit = {
@@ -1300,6 +1333,10 @@ hfe_effect_pirate_path_target_system = {
 							has_fleet_flag = hfe_pirate_log_fleet
 						}
 						#	log = "[this.GetName] in [solar_system.GetName] find prior target, it is [prev.GetName]"
+						ROOT = {
+							set_country_flag = but_nobody_came
+							remove_country_flag = but_nobody_came
+						}
 					}
 					set_timed_fleet_flag = {
 						flag = hfe_pirate_fleet_target_system@prev
@@ -1340,6 +1377,10 @@ hfe_effect_pirate_path_target_system = {
 								has_fleet_flag = hfe_pirate_log_fleet
 							}
 							#	log = "[this.GetName] in [solar_system.GetName] find target with planet, it is [prev.GetName]"
+							ROOT = {
+								set_country_flag = but_nobody_came
+								remove_country_flag = but_nobody_came
+							}
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_target_system@prev
@@ -1385,6 +1426,10 @@ hfe_effect_pirate_path_target_system = {
 								has_fleet_flag = hfe_pirate_log_fleet
 							}
 							#	log = "[this.GetName] in [solar_system.GetName] find target with mining, it is [prev.GetName]"
+							ROOT = {
+								set_country_flag = but_nobody_came
+								remove_country_flag = but_nobody_came
+							}
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_target_system@prev
@@ -1441,6 +1486,10 @@ hfe_effect_pirate_path_go_to_next = {
 					has_fleet_flag = hfe_pirate_log_fleet
 				}
 				#	log = "[this.GetName] move to [hfe_pirate_fleet_target_system_next.GetName]"
+				ROOT = {
+					set_country_flag = but_nobody_came
+					remove_country_flag = but_nobody_came
+				}
 			}
 			clear_fleet_actions = this
 			queue_actions = {
@@ -1472,6 +1521,10 @@ hfe_effect_pirate_path_go_to_next = {
 					has_fleet_flag = hfe_pirate_log_fleet
 				}
 				#	log = "[this.GetName] in [solar_system.GetName] target not find, wait 180 days"
+				ROOT = {
+					set_country_flag = but_nobody_came
+					remove_country_flag = but_nobody_came
+				}
 			}
 			hfe_effect_pirate_path_fleet_reset = yes
 			if = {

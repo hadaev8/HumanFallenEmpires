@@ -13,7 +13,6 @@
 # propagator -> Will they only get aggressive once boxed in?
 # multispecies -> Will they give rights to aliens?
 # species_mod_priority = {}		define weights for how much the AI should try to modify a given species (root=country, this=species)
-
 ##### Modifiers:
 # aggressiveness -> Chance of declaring wars
 # trade_willingness -> At 1.0 willingness they will accept a deal that is equally good for both sides
@@ -23,27 +22,23 @@
 # threat_modifier -> Affects how much threat is generated for this empire when others are conquered
 # threat_others_modifier -> Afffects how much threat is generated for other empires when this empire is conquered
 # friction_modifier -> Affects border friction
-
 # Ships
 # armor_ratio -> Amount of armor they should aim for on ships
 # shields_ratio -> Amount of shields they should aim for on ships
-
 ##### Diplomacy:
 # federation_acceptance -> Added directly to chance of accepting to form/join a federation
 # nap_acceptance -> Added directly to chance of accepting to form a non-aggression pact
 # migration_pact_acceptance -> Added directly to chance of accepting to form a migration pact
 # defensive_pact_acceptance -> Added directly to chance of accepting to form a defensive pact
-
 ##### Diplomacy:
 # advanced_start_chance -> Likelyhood of this empire being an advanced start (higher = better chance of being one of empires selected for advanced start)
-
 # NOTE: Weight is additive!
-
 hfe_personality_egypt = {
 	aggressiveness = 1.5
 	trade_willingness = 0.5
-	bravery = 2.0
-	threat_modifier = 0.0
+	bravery = 2
+	threat_modifier = 0
+	threat_others_modifier = 2	# Shutting down a FE is intimidating
 	friction_modifier = 1
 	claims_modifier = 1.5
 	behaviour = {
@@ -54,14 +49,13 @@ hfe_personality_egypt = {
 		slaver = yes
 		uplifter = yes
 		purger = no
-		infiltrator = yes
+		infiltrator = no
 		dominator = yes
 		robot_exploiter = no
 		robot_liberator = no
 		propagator = no
 		multispecies = no
 		isolationist = yes
-		#crisis_fighter = no
 	}
 	allow = {
 		has_country_flag = hfe_egypt
@@ -74,15 +68,16 @@ hfe_personality_egypt = {
 
 hfe_personality_future = {
 	aggressiveness = 0.1
-	trade_willingness = 1.0
-	bravery = 2.0
-	threat_modifier = 0.0
-	friction_modifier = 0.0
+	trade_willingness = 1.05
+	bravery = 2
+	threat_modifier = 0
+	threat_others_modifier = 2	# SHutting down a FE is intimidating
+	friction_modifier = 0
 	claims_modifier = 1.5
 	behaviour = {
 		conqueror = no
 		subjugator = yes
-		liberator = no
+		liberator = yes
 		opportunist = yes
 		slaver = no
 		uplifter = yes
@@ -94,7 +89,7 @@ hfe_personality_future = {
 		propagator = no
 		multispecies = yes
 		isolationist = yes
-		#crisis_fighter = no
+		crisis_fighter = yes
 	}
 	allow = {
 		has_country_flag = hfe_future
@@ -106,16 +101,16 @@ hfe_personality_future = {
 }
 
 hfe_personality_egypt_awakened = {
-	aggressiveness = 6
+	aggressiveness = 10
 	trade_willingness = 0.7
 	bravery = 3
-	combat_bravery = 2.0	# rarely ever retreat in battle
+	combat_bravery = 2	# rarely ever retreat in battle
 	military_spending = 2
 	colony_spending = 3
 	federation_acceptance = -1000
 	nap_acceptance = -50
 	defensive_pact_acceptance = -50
-	commercial_pact_acceptance = -50
+	commercial_pact_acceptance = 0
 	research_agreement_acceptance = -50
 	migration_pact_acceptance = -50
 	weapon_preferences = weapon_type_kinetic
@@ -124,7 +119,7 @@ hfe_personality_egypt_awakened = {
 	threat_modifier = 0.75
 	threat_others_modifier = 0.5
 	friction_modifier = 2
-	claims_modifier = 1.5
+	claims_modifier = 2
 	behaviour = {
 		conqueror = yes
 		subjugator = yes
@@ -136,11 +131,13 @@ hfe_personality_egypt_awakened = {
 		displacer = no
 		infiltrator = yes
 		dominator = yes
-		robot_exploiter = no
+		robot_exploiter = yes
 		robot_liberator = no
-		propagator = no
+		propagator = yes
 		multispecies = no
 		crisis_fighter = yes
+		crisis_leader = yes
+		isolationist = yes
 	}
 	allow = {
 		has_country_flag = hfe_egypt
@@ -152,18 +149,18 @@ hfe_personality_egypt_awakened = {
 }
 
 hfe_personality_future_awakened = {
-	aggressiveness = 6
-	trade_willingness = 1
+	aggressiveness = 10
+	trade_willingness = 1.1
 	bravery = 3
-	combat_bravery = 2.0	# rarely ever retreat in battle
+	combat_bravery = 2	# rarely ever retreat in battle
 	military_spending = 2
 	colony_spending = 3
-	federation_acceptance = -1000
+	federation_acceptance = -1000	# They form their own Federation
 	nap_acceptance = -50
 	commercial_pact_acceptance = 10
-	research_agreement_acceptance = -50
+	research_agreement_acceptance = -10
 	defensive_pact_acceptance = -50
-	migration_pact_acceptance = 30
+	migration_pact_acceptance = 100
 	weapon_preferences = weapon_type_energy
 	armor_ratio = 0.2
 	shields_ratio = 0.8
@@ -174,19 +171,20 @@ hfe_personality_future_awakened = {
 	behaviour = {
 		conqueror = no
 		subjugator = yes
-		liberator = no
+		liberator = yes
 		opportunist = yes
 		slaver = no
 		uplifter = yes
 		purger = no
 		displacer = no
 		infiltrator = yes
-		dominator = yes
+		dominator = no
 		robot_exploiter = yes
 		robot_liberator = no
-		propagator = no
+		propagator = yes
 		multispecies = yes
 		crisis_fighter = yes
+		crisis_leader = yes
 	}
 	allow = {
 		has_country_flag = hfe_future
@@ -208,7 +206,7 @@ hfe_personality_ahet_primitive_0 = {
 	nap_acceptance = 0
 	defensive_pact_acceptance = 0
 	migration_pact_acceptance = 0
-	weapon_preferences = weapon_type_energy
+	weapon_preferences = weapon_type_strike_craft
 	armor_ratio = 0
 	shields_ratio = 0
 	threat_modifier = 0
@@ -218,18 +216,18 @@ hfe_personality_ahet_primitive_0 = {
 	behaviour = {
 		conqueror = no
 		subjugator = no
-		liberator = no
-		opportunist = no
+		liberator = yes
+		opportunist = yes
 		slaver = no
-		uplifter = no
+		uplifter = yes
 		purger = no
 		displacer = no
 		infiltrator = no
-		dominator = no
+		dominator = yes
 		robot_exploiter = no
-		robot_liberator = no
-		propagator = no
-		multispecies = no
+		robot_liberator = yes
+		propagator = yes
+		multispecies = yes
 		crisis_fighter = no
 	}
 	allow = {
@@ -242,43 +240,45 @@ hfe_personality_ahet_primitive_0 = {
 }
 
 hfe_personality_varelse_primitive_0_0 = {
-	aggressiveness = 0
-	trade_willingness = 0
-	bravery = 0
-	combat_bravery = 0
-	military_spending = 0
-	colony_spending = 0
+	aggressiveness = 0.6
+	trade_willingness = 1.1
+	bravery = 0.5
+	combat_bravery = 1
+	military_spending = 3
+	colony_spending = 1.1
 	federation_acceptance = 0
-	nap_acceptance = 0
-	defensive_pact_acceptance = 0
-	migration_pact_acceptance = 0
-	weapon_preferences = weapon_type_energy
-	armor_ratio = 0
-	shields_ratio = 0
-	threat_modifier = 0
-	threat_others_modifier = 0
-	friction_modifier = 0
-	claims_modifier = 0
+	nap_acceptance = 50
+	defensive_pact_acceptance = 50
+	migration_pact_acceptance = -10
+	research_agreement_acceptance = -1000
+	weapon_preferences = weapon_type_explosive
+	hull_ratio = 0.25
+	armor_ratio = 0.5
+	shields_ratio = 0.25
+	threat_modifier = 1
+	threat_others_modifier = 1.2
+	friction_modifier = 0.2
+	claims_modifier = 10
 	behaviour = {
 		conqueror = no
-		subjugator = no
-		liberator = no
-		opportunist = no
+		subjugator = yes
+		liberator = yes
+		opportunist = yes
 		slaver = no
-		uplifter = no
+		uplifter = yes
 		purger = no
 		displacer = no
 		infiltrator = no
-		dominator = no
-		robot_exploiter = no
+		dominator = yes
+		robot_exploiter = yes
 		robot_liberator = no
-		propagator = no
+		propagator = yes
 		multispecies = no
-		crisis_fighter = no
+		crisis_fighter = yes
+		wants_tribute = yes
 	}
 	allow = {
 		has_country_flag = hfe_varelse_primitive_0
-		is_country_type = primitive
 		is_spiritualist = yes
 	}
 	weight_modifier = {
@@ -287,43 +287,45 @@ hfe_personality_varelse_primitive_0_0 = {
 }
 
 hfe_personality_varelse_primitive_0_1 = {
-	aggressiveness = 0
-	trade_willingness = 0
-	bravery = 0
-	combat_bravery = 0
-	military_spending = 0
-	colony_spending = 0
-	federation_acceptance = 0
-	nap_acceptance = 0
-	defensive_pact_acceptance = 0
+	aggressiveness = 10
+	trade_willingness = 1
+	bravery = 2
+	combat_bravery = 0.5
+	military_spending = 5
+	colony_spending = 1
+	federation_acceptance = -20
+	nap_acceptance = 50
+	defensive_pact_acceptance = 20
+	commercial_pact_acceptance = 40
 	migration_pact_acceptance = 0
-	weapon_preferences = weapon_type_energy
-	armor_ratio = 0
-	shields_ratio = 0
-	threat_modifier = 0
-	threat_others_modifier = 0
-	friction_modifier = 0
-	claims_modifier = 0
+	research_agreement_acceptance = 500
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.33
+	shields_ratio = 0.33
+	hull_ratio = 0.1
+	threat_modifier = 2
+	threat_others_modifier = 0.5
+	friction_modifier = 2
+	claims_modifier = 2
 	behaviour = {
-		conqueror = no
-		subjugator = no
+		conqueror = yes
+		subjugator = yes
 		liberator = no
-		opportunist = no
-		slaver = no
+		opportunist = yes
+		slaver = yes
 		uplifter = no
 		purger = no
 		displacer = no
 		infiltrator = no
-		dominator = no
+		dominator = yes
 		robot_exploiter = no
-		robot_liberator = no
-		propagator = no
+		robot_liberator = yes
+		propagator = yes
 		multispecies = no
-		crisis_fighter = no
+		crisis_fighter = yes
 	}
 	allow = {
 		has_country_flag = hfe_varelse_primitive_0
-		is_country_type = primitive
 		is_materialist = yes
 	}
 	weight_modifier = {
@@ -332,44 +334,48 @@ hfe_personality_varelse_primitive_0_1 = {
 }
 
 hfe_personality_varelse = {
-	aggressiveness = 1.75
-	trade_willingness = 0.7
+	aggressiveness = 5
+	trade_willingness = 0.8
 	bravery = 1.5
-	combat_bravery = 2.0	# rarely ever retreat in battle
-	military_spending = 1
-	colony_spending = 1.5
+	combat_bravery = 2	# rarely ever retreat in battle
+	military_spending = 2
+	colony_spending = 2
 	federation_acceptance = -10
-	nap_acceptance = -50
-	defensive_pact_acceptance = -20
+	nap_acceptance = -10
+	defensive_pact_acceptance = -40
 	migration_pact_acceptance = -30
-	weapon_preferences = weapon_type_explosive
+	commercial_pact_acceptance = 10
+	research_agreement_acceptance = 40
+	weapon_preferences = weapon_type_strike_craft
 	armor_ratio = 0.5
 	shields_ratio = 0.5
+	hull_ratio = 0.66
 	threat_modifier = 0.75
 	threat_others_modifier = 0.5
-	friction_modifier = 1.0
-	claims_modifier = 1.5
+	friction_modifier = 1
+	claims_modifier = 3
 	behaviour = {
 		conqueror = yes
-		subjugator = yes
+		subjugator = no
 		liberator = no
 		opportunist = yes
 		slaver = yes
 		uplifter = yes
 		purger = no
 		displacer = no
-		infiltrator = yes
+		infiltrator = no
 		dominator = yes
 		robot_exploiter = yes
 		robot_liberator = no
-		propagator = no
-		multispecies = yes
+		propagator = yes
+		multispecies = no
 		crisis_fighter = yes
+		isolationist = yes
 	}
 	allow = {
 		has_country_flag = hfe_varelse
 		not = {
-			is_country_type = primitive
+			has_country_flag = hfe_varelse_primitive_0
 		}
 	}
 	weight_modifier = {
@@ -379,35 +385,91 @@ hfe_personality_varelse = {
 
 hfe_personality_drone = {
 	aggressiveness = 3
-	trade_willingness = 0
-	bravery = 3
-	combat_bravery = 3	# rarely ever retreat in battle
-	military_spending = 1
-	colony_spending = 3
+	trade_willingness = -100
+	bravery = 100
+	combat_bravery = 1	# rarely ever retreat in battle
+	military_spending = 5
+	colony_spending = 0
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
 	federation_acceptance = -1000
+	research_agreement_acceptance = -1000
+	commercial_pact_acceptance = 0
+	migration_pact_acceptance = -1000
 	weapon_preferences = weapon_type_energy
-	armor_ratio = 0.5
-	shields_ratio = 0.5
+	armor_ratio = 0.4
+	shields_ratio = 0.6	# Resistant to lasers, which Ancient Drones shoot
 	threat_modifier = 0
 	friction_modifier = 0
+	advanced_start_chance = 100
 	behaviour = {
 		conqueror = yes
 		subjugator = no
 		liberator = no
 		opportunist = yes
-		slaver = yes
+		slaver = no
+		uplifter = no
+		purger = yes
+		infiltrator = no
+		dominator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = yes
+		multispecies = no
+		crisis_fighter = no
+		isolationist = yes		# Would this make it impossible for you to enter a Drone System?
+		#		demands_clear_borders = yes
+	}
+	allow = {
+		is_country_type = hfe_drone
+	}
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+hfe_personality_berserker = {
+	aggressiveness = 999
+	trade_willingness = -1000
+	bravery = 999
+	combat_bravery = 999	# rarely ever retreat in battle
+	military_spending = 100
+	colony_spending = 0
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+	federation_acceptance = -1000
+	research_agreement_acceptance = -1000
+	commercial_pact_acceptance = -1000
+	migration_pact_acceptance = -1000
+	advanced_start_chance = 100
+	weapon_preferences = weapon_type_explosive
+	hull_ratio = 0.5
+	armor_ratio = 0.25
+	shields_ratio = 0.25
+	threat_modifier = 0
+	threat_others_modifier = 0
+	friction_modifier = 0
+	claims_modifier = 0
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
 		uplifter = no
 		purger = no
 		infiltrator = no
 		dominator = no
 		robot_exploiter = no
 		robot_liberator = no
-		propagator = no
-		multispecies = no
+		propagator = yes
+		multispecies = yes
 		crisis_fighter = no
+		berserker = yes
+		#		limited = yes
 	}
 	allow = {
-		is_country_type = hfe_drone
+		is_country_type = hfe_berserk
 	}
 	weight_modifier = {
 		weight = 1000

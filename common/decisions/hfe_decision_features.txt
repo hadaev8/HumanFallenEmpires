@@ -1,14 +1,18 @@
+#
 
 # exodus
 hfe_decision_features_exodus = {
 	owned_planets_only = yes
-	sound = event_administrative_work
+	sound = event_red_alert
 	icon = decision_landing_ship
 	resources = {
 		category = decisions
 		cost = {
 			trigger = {
 				num_pops < 10
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 100
 		}
@@ -16,6 +20,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 10
 				num_pops < 20
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 200
 		}
@@ -23,6 +30,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 20
 				num_pops < 30
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 300
 		}
@@ -30,6 +40,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 30
 				num_pops < 40
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 400
 		}
@@ -37,6 +50,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 40
 				num_pops < 50
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 500
 		}
@@ -44,6 +60,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 50
 				num_pops < 60
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 600
 		}
@@ -51,6 +70,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 60
 				num_pops < 70
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 700
 		}
@@ -58,6 +80,9 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 70
 				num_pops < 85
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 800
 		}
@@ -65,34 +90,98 @@ hfe_decision_features_exodus = {
 			trigger = {
 				num_pops >= 85
 				num_pops < 100
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 900
 		}
 		cost = {
 			trigger = {
 				num_pops >= 100
+				NOT = {
+					owner = { has_ethic = ethic_gestalt_consciousness }
+				}
 			}
 			consumer_goods = 1000
+		}
+		cost = {
+			trigger = {
+				owner = {
+					has_ethic = ethic_gestalt_consciousness
+					has_authority = auth_hive_mind
+				}
+			}
+			food = 1000
+		}
+		cost = {
+			trigger = {
+				owner = {
+					has_ethic = ethic_gestalt_consciousness
+					NOT = { has_authority = auth_hive_mind }
+				}
+			}
+			energy = 1000
 		}
 	}
 	prerequisites = {
 		hfe_tech_features_exodus
 	}
+	potential = {
+		owner = {
+			NOT = {
+				has_origin = hfe_civic_features_exodus
+				has_country_flag = hfe_chosen_to_exodus
+				has_country_flag = hfe_was_government_in_exile
+				has_authority = auth_ancient_machine_intelligence
+				has_civic = civic_great_khans_vision
+			}
+		}
+	}
 	allow = {
 		exists = owner
 		owner = {
 			is_ai = no
-			num_owned_planets = 1
+			num_owned_planets = 1 # The Exodus is an emergency to deliver an OPM from death
 		}
 	}
 	effect = {
+		owner = {
+			set_country_flag = hfe_chosen_to_exodus
+			set_country_flag = hfe_is_government_in_exile # Used to check if a country is currently undergoing the Exodus
+			set_country_flag = hfe_was_government_in_exile # Used to calculate flavor and special features once the Exodus ends
+		}
+		owner = {
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							is_fallen_empire = yes
+							is_country_type = fallen_empire
+							is_country_type = awakened_fallen_empire
+						}
+						NOT = {
+							is_country_type = human_fallen_empire 
+							has_country_flag = hfe_egypt
+							has_country_flag = hfe_future
+						}
+					}
+				}
+				set_country_flag = fallen_empire_on_the_run
+			}
+		}
+		owner = {
+			set_country_type = hfe_features_exodus
+		}
 		hidden_effect = {
 			owner = {
 				add_modifier = {
-					modifier = hfe_discovery_translator
+					modifier = tsp_hfe_features_exodus_game_over_prevention
+					days = -1
 				}
-				set_country_type = hfe_features_exodus
 			}
+		}
+		hidden_effect = {
 			every_owned_pop = {
 				owner = {
 					change_variable = {
@@ -102,6 +191,8 @@ hfe_decision_features_exodus = {
 					add_resource = {
 						energy = 50
 						minerals = 50
+						alloys = 25
+						consumer_goods = 25
 					}
 				}
 				kill_pop = yes
@@ -113,10 +204,15 @@ hfe_decision_features_exodus = {
 				create_ship = {
 					name = "New Hope"
 					random_existing_design = colonizer
+					graphical_culture = hfe_graphical_culture_pirate
 				}
 				set_location = root
 			}
 		}
+		owner = {
+			add_resource = { influence = 1000 }
+		}
+		set_planet_flag = hfe_exodus_happened_here
 		hfe_effect_clear_buildings_and_destroy_colony = yes
 	}
 	ai_weight = {
