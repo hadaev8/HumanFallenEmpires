@@ -6,10 +6,10 @@ hfe_district_memorial_cataloger = {
 	min_for_deposits_on_planet = 1
 	max_for_deposits_on_planet = 15
 	show_on_uncolonized = {
-		is_planet_class = hfe_pc_memorial
+		uses_district_set = hfe_district_set_pc_memorial
 	}
 	potential = {
-		is_planet_class = hfe_pc_memorial
+		uses_district_set = hfe_district_set_pc_memorial
 	}
 	conversion_ratio = 2
 	convert_to = {
@@ -63,6 +63,76 @@ hfe_district_memorial_cataloger = {
 				}
 			}
 		}
+		modifier = {
+			factor = 5
+			owner = {
+				has_monthly_income = {
+					resource = engineering_research
+					value < 0
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			free_housing < 0
+		}
+		modifier = {
+			factor = 3
+			any_owned_pop = {
+				OR = {
+					is_unemployed = yes
+					has_job = servant
+				}
+			}
+		}
+	}
+}
+
+hfe_district_memorial_recycler = {
+	base_buildtime = 240
+	icon = district_city
+	min_for_deposits_on_planet = 1
+	max_for_deposits_on_planet = 15
+	show_on_uncolonized = {
+		uses_district_set = hfe_district_set_pc_memorial
+	}
+	potential = {
+		uses_district_set = hfe_district_set_pc_memorial
+	}
+	conversion_ratio = 2
+	convert_to = {
+		district_farming
+		district_farming_uncapped
+	}
+	resources = {
+		category = planet_districts
+		cost = {
+			minerals = @base_cost
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+	triggered_planet_modifier = {
+		potential = {
+			hfe_trigger_owner_is_gestalt = no
+		}
+		job_hfe_job_recycler_add = 3
+	}
+	triggered_planet_modifier = {
+		potential = {
+			hfe_trigger_owner_is_gestalt = yes
+		}
+		job_hfe_job_recycler_gestalt_add = 3
+	}
+	planet_modifier = {
+		planet_housing_add = 4
+	}
+	prerequisites = {
+		tech_mechanized_mining
+	}
+	ai_weight = {
+		weight = 2
 		modifier = {
 			factor = 5
 			owner = {
