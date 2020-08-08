@@ -155,7 +155,6 @@ hfe_ruler_trait_puppet = {
 			}
 			is_gestalt = no
 		}
-		years_passed > 0
 	}
 	modifier = {
 		# opinion effect
@@ -237,7 +236,6 @@ hfe_ruler_trait_lovable_buffoon = {
 				has_trait = leader_trait_intellectual
 			}
 		}
-		years_passed > 0
 	}
 	opposites = {
 		trait_ruler_champion_of_the_people
@@ -635,7 +633,7 @@ hfe_governor_trait_satanist = {
 # 	icon = gfx/interface/icons/other/hfe_diligent.dds
 # 	leader_potential_add = {
 # 		hfe_trigger_leaders_traits_enabled = yes
-# 		years_passed > 0
+# 		
 # 	}
 # 	self_modifier = {
 # 		leader_skill_levels = 2
@@ -1049,6 +1047,33 @@ hfe_admiral_trait_satanist = {
 	}
 }
 
+hfe_admiral_trait_melee = {
+	cost = 0
+	initial = yes
+	randomized = yes
+	modification = no
+	icon = gfx/interface/icons/other/hfe_melee.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			hfe_trigger_insane_admiral_trait = yes
+		}
+	}
+	modifier = {
+		ship_weapon_range_mult = -0.5
+		ship_speed_mult = 0.1
+		ship_weapon_damage = 0.15
+	}
+	leader_trait = {
+		admiral
+	}
+	leader_class = {
+		admiral
+	}
+}
+
+# evet related
 hfe_admiral_trait_future_train = {
 	cost = 0
 	initial = no
@@ -1058,7 +1083,6 @@ hfe_admiral_trait_future_train = {
 	modifier = {
 		ship_fire_rate_mult = 0.1
 		ship_orbital_bombardment_mult = 0.1
-		# event effect
 	}
 	leader_trait = {
 		admiral
@@ -1200,22 +1224,27 @@ hfe_general_trait_satanist = {
 	}
 }
 
-#  Outstanding Tactician - This General can put armies to best of theirs potential, making them far harder targets. +20% Army Health.
-# hfe_general_trait_tactician = {
-# 	cost = 1
-#	initial = yes
-#	randomized = yes
-# 	modification = no
-# 	icon = gfx/interface/icons/other/hfe_gravity_control.dds
-# 	leader_potential_add = {
-#hfe_trigger_leaders_traits_enabled = yes
-# 	}
-# 	modifier = {
-# 		army_health = 0.2
-# 	}
-# 	leader_trait = yes
-# 	leader_class = { general }
-# }
+hfe_general_trait_tactician = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	modification = no
+	icon = gfx/interface/icons/other/hfe_tactician.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	modifier = {
+		army_health = 0.1
+		army_disengage_chance_mult = 1
+	}
+	leader_trait = {
+		general
+	}
+	leader_class = {
+		general
+	}
+}
+
 # all
 # hfe_generic_trait_talented = {
 # 	cost = 1
@@ -1230,7 +1259,7 @@ hfe_general_trait_satanist = {
 # 		from = {
 # 			is_gestalt = no
 # 		}
-# 		years_passed > 0
+# 		
 # 	}
 # 	self_modifier = {
 # 		leader_skill_levels = 1
@@ -1260,29 +1289,54 @@ hfe_generic_trait_noble = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		exists = species
-		OR = {
-			species = {
-				hfe_trigger_is_robot = no
-			}
-			FROM = {
-				has_country_flag = synthetic_empire
-			}
-		}
 		from = {
 			is_gestalt = no
 			OR = {
 				has_authority = auth_imperial
-				has_civic = civic_aristocratic_elite
-				has_civic = civic_feudal_realm
-				has_civic = civic_great_khans_vision
-				has_civic = civic_great_khans_legacy
-				has_civic = civic_diadochi
+				has_valid_civic = civic_aristocratic_elite
+				has_valid_civic = civic_great_khans_vision
+				has_valid_civic = civic_great_khans_legacy
+				has_valid_civic = civic_diadochi
+			}
+			not = {
+				has_valid_civic = hfe_civic_features_designed_aristocracy
 			}
 		}
-		years_passed > 0
 	}
 	self_modifier = {
 		species_leader_exp_gain = -0.3
+		leaders_upkeep_mult = -0.8
+	}
+	leader_trait = {
+		admiral
+		scientist
+		general
+		governor
+	}
+	leader_class = {
+		admiral
+		scientist
+		general
+		governor
+	}
+}
+
+hfe_generic_trait_noble_good = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	modification = no
+	#not allow on lvl up
+	icon = gfx/interface/icons/other/hfe_noble.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			has_valid_civic = hfe_civic_features_designed_aristocracy
+		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.3
 		leaders_upkeep_mult = -0.8
 	}
 	leader_trait = {

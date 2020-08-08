@@ -4330,6 +4330,7 @@ ship_event = {
 }
 
 # after colonisation 511
+# TODO TRIGGER ON PLANERT WITH 20 POPS
 planet_event = {
 	id = hfe.511
 	title = hfe.511.name
@@ -4680,6 +4681,7 @@ country_event = {
 					modifier = hfe_navy_size
 					years = 10
 				}
+				hfe_effect_resource_bonus = yes
 				while = {
 					count = 3
 					root = {
@@ -4710,7 +4712,6 @@ country_event = {
 						set_location = event_target:hfe_stargate
 					}
 				}
-				hfe_effect_resource_bonus = yes
 				declare_war = {
 					target = root
 					name = "War with Forsakens"
@@ -5114,6 +5115,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = event_target:hfe_stargate
+		exists = from.fleet.solar_system
 	}
 	immediate = {
 		event_target:hfe_stargate_scientist = {
@@ -5122,6 +5124,13 @@ country_event = {
 			}
 		}
 		destroy_fleet = from.fleet
+		from.fleet.solar_system = {
+			every_fleet_in_system = {
+				every_owned_ship = {
+					reduce_hp_percent = 0.99
+				}
+			}
+		}
 	}
 	option = {
 		name = hfe_next
@@ -5182,8 +5191,7 @@ country_event = {
 	}
 	option = {
 		name = FASCINATING
-		# ?????-?? ???????, ???????? ???????, ?? ???????? ?????? ?????
-		hfe_effect_add_engineering_research.4 = yes
+		hfe_effect_give_random_tech = yes
 	}
 }
 
@@ -5211,6 +5219,42 @@ country_event = {
 	}
 	option = {
 		name = hfe.532.2
+	}
+}
+
+# 11 planet mutate
+country_event = {
+	id = hfe.533
+	title = hfe.533.name
+	desc = hfe.533.desc
+	picture = GFX_evt_hfe_holocube_2
+	show_sound = event_activating_unknown_technology
+	location = event_target:hfe_stargate
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:hfe_stargate
+	}
+	immediate = {
+		event_target:hfe_stargate = {
+			destroy_ambient_object = this
+		}
+		event_target:hfe_stargate_planet = {
+			# change planet model
+			# mutate pops
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = no
+				}
+				modify_species = {
+					add_trait = hfe_species_trait_tough
+				}
+			}
+			# add deposit
+			add_deposit = hfe_deposit_stargate_impact
+		}
+	}
+	option = {
+		name = hfe.533.0
 	}
 }
 
