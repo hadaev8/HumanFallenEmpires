@@ -1,67 +1,42 @@
 namespace = hfe_population
-# set modifier on planet by pop by on actions
+# fix robot pop by on_planet_transfer
 planet_event = {
 	id = hfe_population.0
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		hfe_trigger_population_enabled = yes
-		exists = planet
 		exists = owner
 	}
 	immediate = {
-		set_timed_planet_flag = {
-			flag = hfe_robot_species_processing_block
-			months = 1
-		}
 		every_owned_pop = {
-			hfe_effect_population_fix_robot_pop = yes
+			pop_event = {
+				id = hfe_population.1
+			}
 		}
-		owner = {
-			hfe_effect_population_country_set_robot_pop_identity = yes
-		}
+		# TODO
+		# owner = {
+		# 	hfe_effect_population_country_set_robot_pop_identity = yes
+		# }
 	}
 }
 
+# fix robot pop by on_pop_abducted
 pop_event = {
 	id = hfe_population.1
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		# TODO
-		always = no
-		NOT = {
-			planet = {
-				has_planet_flag = hfe_robot_species_processing_block
-			}
-		}
 		hfe_trigger_population_enabled = yes
-		OR = {
+		exists = owner
+		or = {
 			has_trait = trait_mechanical
 			has_trait = trait_machine_unit
 		}
 	}
 	immediate = {
 		hfe_effect_population_fix_robot_pop = yes
-		if = {
-			limit = {
-				exists = owner
-			}
-			owner = {
-				hfe_effect_population_country_set_robot_pop_identity = yes
-			}
-		}
 	}
-	#	after = {
-	#		owner = {
-	#			every_owned_planet = {
-	#				planet_event = {
-	#					id = hfe_population.0
-	#					days = 0
-	#				}
-	#			}
-	#		}
-	#	}
 }
 
 # change main species 50 - 100

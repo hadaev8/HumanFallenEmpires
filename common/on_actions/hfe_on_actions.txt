@@ -479,39 +479,6 @@ on_war_lost = {
 	}
 }
 
-# Triggers country_event for the attacker upon victory
-# (Before controller is switched)
-# This = country, leader attacker
-# From = country, planet owner
-# FromFrom = planet
-# IDENTITIES: attacker is the side that "IsHostile" to
-# the planet controller; e.g. spawned monster armies
-# are attackers, but if they win and the player attempts
-# to retake the planet, the player is the attacker
-on_planet_attackers_win = {
-	events = {
-		# gain general
-		hfe_leaders.40
-		# teachable lvl up
-		hfe_leaders.102
-		# retake zombie planet
-		hfe_plague.6
-	}
-}
-
-# Triggers country_event for the defender upon victory
-# This = country, planet owner
-# From = country, attack leader
-# FromFrom = planet
-on_planet_defenders_win = {
-	events = {
-		# gain general
-		hfe_leaders.40
-		# teachable lvl up
-		hfe_leaders.102
-	}
-}
-
 # A pop has finished growing
 # This = Planet scope
 # From = Country
@@ -579,7 +546,6 @@ on_colonization_started = {
 # Scope = Planet
 on_colonized = {
 	events = {
-		#hfe_population.1
 		# gain governor
 		hfe_leaders.12
 		# biobomb
@@ -589,13 +555,6 @@ on_colonized = {
 	}
 }
 
-# A colony has been destroyed. Called just before owner and controller is cleared
-# Scope = Planet
-# on_colony_destroyed = {
-# 	events = {
-# 		hfe_population.1
-# 	}
-# }
 # This = owner of fleet 1
 # From = owner of fleet 2
 # FromFrom = fleet 1
@@ -643,9 +602,41 @@ on_building_starbase_outpost = {
 # This = Planet
 on_blocker_cleared = {
 	events = {
-		#		hfe_population.1
 		# gain governor
 		hfe_leaders.10
+	}
+}
+
+# Triggers country_event for the attacker upon victory
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+# IDENTITIES: attacker is the side that "IsHostile" to
+# the planet controller; e.g. spawned monster armies
+# are attackers, but if they win and the player attempts
+# to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+	events = {
+		# gain general
+		hfe_leaders.40
+		# teachable lvl up
+		hfe_leaders.102
+		# retake zombie planet
+		hfe_plague.6
+	}
+}
+
+# Triggers country_event for the defender upon victory
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		# gain general
+		hfe_leaders.40
+		# teachable lvl up
+		hfe_leaders.102
 	}
 }
 
@@ -670,8 +661,6 @@ on_planet_bombarded = {
 #This = Planet scope
 on_planet_ownerless = {
 	events = {
-		# remove modifiers
-		#		hfe_population.7
 		# convert pirate planet to asteroid
 		hfe_pirate.57
 	}
@@ -681,7 +670,6 @@ on_planet_ownerless = {
 #This = Planet scope
 on_planet_transfer = {
 	events = {
-		#hfe_population.1
 		# copernicus
 		hfe.363
 		# aggressive diplomacy civic
@@ -692,51 +680,12 @@ on_planet_transfer = {
 		hfe.500
 		# instant assimilation
 		hfe.5084
-		# convert robots-machines
+		# fix robot pop
 		hfe_population.0
 		# exodus settle
 		hfe_features.3
-	}
-}
-
-# If you abduct someone's robot
-on_pop_abducted = {
-	events = {
-		hfe_population.1		# Fix robots from dying
-	}
-}
-
-# Bought from the Slave Market
-#on_pop_added = { 
-#	events = {
-#		hfe_population.1 # Fix robots from dying
-#	}
-#}
-# For nations with Full AI Rights and citizenship,
-# fix liberated robots with newly minted Free Will
-on_pop_emancipated = {
-	events = {
-		hfe_population.1		# Fix robots from dying
-	}
-}
-
-# For nations that enforce AI Servitude,
-# fix captured robots stripped of their Free Will
-on_pop_enslaved = {
-	events = {
-		hfe_population.1		# Fix robots from dying
-	}
-}
-
-# Planet has been terraformed
-# This = Planet
-# From = Terraforming country
-on_terraforming_complete = {
-	events = {
-		# terraforming ruler reward
-		hfe_leaders.100
-		# remove plague bombarding modifier
-		hfe_plague.153
+		# hfe_civic_features_power_in_low_numbers effect
+		hfe_features.21
 	}
 }
 
@@ -752,6 +701,28 @@ on_planet_occupied = {
 		hfe_plague.7
 		# annex occupying systems
 		hfe_total_war.51
+	}
+}
+
+# Pop is abducted by raiding stance
+# This = Pop scope
+# From = planet abducted from
+on_pop_abducted = {
+	events = {
+		# fix robot pop
+		hfe_population.1
+	}
+}
+
+# Planet has been terraformed
+# This = Planet
+# From = Terraforming country
+on_terraforming_complete = {
+	events = {
+		# terraforming ruler reward
+		hfe_leaders.100
+		# remove plague bombarding modifier
+		hfe_plague.153
 	}
 }
 

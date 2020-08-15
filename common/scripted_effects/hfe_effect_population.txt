@@ -1,90 +1,82 @@
 #
-hfe_effect_population_country_set_robot_pop_identity = {
-	#	if = {
-	#		limit = {
-	#			has_trait = trait_machine_unit
-	#			is_robot_pop = yes
-	#			owner = {
-	#				is_machine_empire = no
-	#			}
-	#		}
-	#		every_owned_pop_species = {
-	#			limit = {
-	#				has_trait = trait_machine_unit
-	#				is_robot_pop = yes
-	#				not = {
-	#					is_same_species = prev.species
-	#				}
-	#			}
-	#			root = {
-	#				modify_species = {
-	#					base = prev
-	#					species = prev
-	#					add_trait = hfe_species_trait_test
-	#				}
-	#			}
-	#			set_species_identity = prev.species
-	#			root = {
-	#				modify_species = {
-	#					species = prev
-	#					remove_trait = hfe_species_trait_test
-	#				}
-	#			}
-	#		}
-	#	}
-	#	else_if = {
-	#		limit = {
-	#			has_trait = trait_mechanical
-	#		}
-	#		every_owned_pop_species = {
-	#			limit = {
-	#				has_trait = trait_mechanical
-	#				not = {
-	#					is_same_species = prev.species
-	#				}
-	#			}
-	#			root = {
-	#				modify_species = {
-	#					base = none
-	#					species = prev
-	#					add_trait = hfe_species_trait_test
-	#				}
-	#			}
-	#			set_species_identity = prev.species
-	#			root = {
-	#				modify_species = {
-	#					species = prev
-	#					remove_trait = hfe_species_trait_test
-	#				}
-	#			}
-	#		}
-	#	}
-	#	else = {
-	#		if = {
-	#			limit = { owner = { is_machine_empire = no } }
-	#			hfe_effect_population_process_robot_species_identity = yes
-	#		}
-	#	}
-}
-
+# hfe_effect_population_country_set_robot_pop_identity = {
+# 	if = {
+# 		limit = {
+# 			has_trait = trait_machine_unit
+# 			is_robot_pop = yes
+# 			owner = {
+# 				is_machine_empire = no
+# 			}
+# 		}
+# 		every_owned_pop_species = {
+# 			limit = {
+# 				has_trait = trait_machine_unit
+# 				is_robot_pop = yes
+# 				not = {
+# 					is_same_species = prev.species
+# 				}
+# 			}
+# 			root = {
+# 				modify_species = {
+# 					base = prev
+# 					species = prev
+# 					add_trait = hfe_species_trait_test
+# 				}
+# 			}
+# 			set_species_identity = prev.species
+# 			root = {
+# 				modify_species = {
+# 					species = prev
+# 					remove_trait = hfe_species_trait_test
+# 				}
+# 			}
+# 		}
+# 	}
+# 	else_if = {
+# 		limit = {
+# 			has_trait = trait_mechanical
+# 		}
+# 		every_owned_pop_species = {
+# 			limit = {
+# 				has_trait = trait_mechanical
+# 				not = {
+# 					is_same_species = prev.species
+# 				}
+# 			}
+# 			root = {
+# 				modify_species = {
+# 					base = none
+# 					species = prev
+# 					add_trait = hfe_species_trait_test
+# 				}
+# 			}
+# 			set_species_identity = prev.species
+# 			root = {
+# 				modify_species = {
+# 					species = prev
+# 					remove_trait = hfe_species_trait_test
+# 				}
+# 			}
+# 		}
+# 	}
+# 	else = {
+# 		if = {
+# 			limit = { owner = { is_machine_empire = no } }
+# 			hfe_effect_population_process_robot_species_identity = yes
+# 		}
+# 	}
+# }
 hfe_effect_population_fix_robot_pop = {
 	if = {
 		limit = {
-			OR = {
-				has_trait = trait_machine_unit
-				THIS = {
-					species = {
-						is_archetype = MACHINE
-					}
-				}
-			}
+			has_trait = trait_machine_unit
 			exists = owner
 			owner = {
 				is_machine_empire = no
 			}
 		}
 		modify_species = {
-			base = prev
+			# base = prev
 			remove_trait = trait_machine_unit
 			add_trait = trait_mechanical
 		}
@@ -92,21 +84,14 @@ hfe_effect_population_fix_robot_pop = {
 	}
 	else_if = {
 		limit = {
-			OR = {
-				has_trait = trait_mechanical
-				THIS = {
-					species = {
-						is_archetype = ROBOT
-					}
-				}
-			}
+			has_trait = trait_mechanical
 			exists = owner
 			owner = {
 				is_machine_empire = yes
 			}
 		}
 		modify_species = {
-			#			base = prev
+			# base = prev
 			remove_trait = trait_mechanical
 			add_trait = trait_machine_unit
 		}
@@ -114,39 +99,38 @@ hfe_effect_population_fix_robot_pop = {
 	}
 }
 
-hfe_effect_population_process_robot_species_identity = {
-	random_owned_pop = {
-		limit = {
-			has_trait = trait_mechanical
-		}
-		save_event_target_as = hfe_robot_pop_species
-	}
-	every_owned_pop_species = {
-		limit = {
-			has_trait = trait_mechanical
-			exists = event_target:hfe_robot_pop_species
-			not = {
-				is_same_species = event_target:hfe_robot_pop_species
-			}
-		}
-		root = {
-			modify_species = {
-				base = none
-				species = prev
-				add_trait = hfe_species_trait_test
-			}
-		}
-		#		set_species_identity = prev.species
-		set_species_identity = prev
-		root = {
-			modify_species = {
-				species = prev
-				remove_trait = hfe_species_trait_test
-			}
-		}
-	}
-}
-
+# hfe_effect_population_process_robot_species_identity = {
+# 	random_owned_pop = {
+# 		limit = {
+# 			has_trait = trait_mechanical
+# 		}
+# 		save_event_target_as = hfe_robot_pop_species
+# 	}
+# 	every_owned_pop_species = {
+# 		limit = {
+# 			has_trait = trait_mechanical
+# 			exists = event_target:hfe_robot_pop_species
+# 			not = {
+# 				is_same_species = event_target:hfe_robot_pop_species
+# 			}
+# 		}
+# 		root = {
+# 			modify_species = {
+# 				base = none
+# 				species = prev
+# 				add_trait = hfe_species_trait_test
+# 			}
+# 		}
+# 		#		set_species_identity = prev.species
+# 		set_species_identity = prev
+# 		root = {
+# 			modify_species = {
+# 				species = prev
+# 				remove_trait = hfe_species_trait_test
+# 			}
+# 		}
+# 	}
+# }
 hfe_effect_population_remove_object_shield_global = {
 	every_ambient_object = {
 		limit = {

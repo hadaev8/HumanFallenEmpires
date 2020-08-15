@@ -786,6 +786,8 @@ country_event = {
 	}
 }
 
+# TODO exodus landed back on same planet - add debuff modifier 13
+# exodus good end 14
 country_event = {
 	id = hfe_features.14
 	title = hfe_features.14.name
@@ -884,7 +886,7 @@ country_event = {
 	}
 }
 
-# if your colony is destroyed = end game
+# exodus bad end if your colony ship is destroyed 16
 # This = owner of ship 1 (destroyed)
 # From = owner of ship 2 (combatant)
 # FromFrom = ship 1
@@ -910,5 +912,35 @@ country_event = {
 			destroy_country = yes
 		}
 		log = "EXODUS GAME OVER!"
+	}
+}
+
+# hfe_civic_features_power_in_low_numbers effect 20
+country_event = {
+	id = hfe_features.20
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_valid_civic = hfe_civic_features_power_in_low_numbers
+	}
+	immediate = {
+		hfe_effect_features_power_in_low_numbers = yes
+	}
+}
+
+# trigger recalc for prev event 21
+planet_event = {
+	id = hfe_features.21
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+	}
+	immediate = {
+		owner = {
+			country_event = {
+				id = hfe_features.20
+			}
+		}
 	}
 }
