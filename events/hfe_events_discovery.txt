@@ -142,7 +142,11 @@ country_event = {
 	}
 }
 
-# discovery auto contact
+# discovery auto contact by on_first_contact
+# Triggered when two empires discover each other
+# This = Empire 1
+# From = Empire 2
+# Fromfromfrom = System where contact occurred
 country_event = {
 	id = hfe_discovery.50
 	hide_window = yes
@@ -155,40 +159,6 @@ country_event = {
 			is_country_type = hfe_pirate
 			is_country_type = hfe_plague_zombie
 		}
-		# from = {
-		# 	OR = {
-		# 		has_modifier = hfe_discovery_translator
-		# 		hfe_trigger_is_fallen = yes
-		# 		# pirate will know pirate, why not
-		# 		is_country_type = hfe_pirate
-		# 		is_country_type = pirate
-		# 		# vanilla
-		# 		is_guardian_country = yes
-		# 		is_country_type = default
-		# 		is_country_type = nomad
-		# 		is_country_type = enclave
-		# 		is_country_type = dormant_marauders
-		# 		is_country_type = marauder_raiders
-		# 		is_country_type = awakened_marauders
-		# 		is_country_type = marauder_raiders
-		# 		is_country_type = caravaneer_home
-		# 		is_country_type = caravaneer_fleet
-		# 		is_country_type = enclave
-		# 		is_country_type = prikki
-		# 		is_country_type = swarm
-		# 		# Allows the Discovery Fleet to track the Crisis too
-		# 		is_country_type = extradimensional
-		# 		is_country_type = extradimensional_2
-		# 		is_country_type = extradimensional_3
-		# 		is_country_type = ai_empire
-		# 	}
-		# }
-		# nand = {
-		# 	is_country_type = hfe_pirate
-		# 	from = {
-		# 		hfe_trigger_is_fallen = yes
-		# 	}
-		# }
 	}
 	immediate = {
 		if = {
@@ -203,13 +173,12 @@ country_event = {
 		else = {
 			establish_communications_no_message = from
 		}
+		# discovery event
 		if = {
 			limit = {
+				has_origin = hfe_civic_discovery_habitat
 				from = {
-					OR = {
-						is_country_type = default
-						has_origin = hfe_civic_discovery_habitat
-					}
+					is_country_type = default
 				}
 			}
 			country_event = {
@@ -217,9 +186,16 @@ country_event = {
 				days = 5
 			}
 		}
-		# contact events
-		country_event = {
-			id = hfe.705
+		# thoth contact event
+		if = {
+			limit = {
+				is_country_type = hfe_thoth
+			}
+			from = {
+				country_event = {
+					id = hfe.705
+				}
+			}
 		}
 	}
 }
