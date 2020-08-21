@@ -863,6 +863,9 @@ ship_event = {
 			is_ship_size = science
 		}
 		fleet = {
+			hidden_effect = {
+				clear_fleet_actions = this
+			}
 			fleet_action_research_special_project = {
 				special_project = hfe_project_varelse_fleet
 				target = event_target:hfe_varelse_fleet_location
@@ -4655,7 +4658,6 @@ country_event = {
 			}
 			effect = {
 				set_country_flag = hfe_forsaken
-				hfe_effect_gov_fix = yes
 				set_country_flag = hfe_auto_delete
 				set_graphical_culture = hfe_graphical_culture_pirate
 				event_target:hfe_stargate_planet = {
@@ -6324,14 +6326,6 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		every_system = {
-			every_system_planet = {
-				surveyed = {
-					set_surveyed = yes
-					surveyor = root
-				}
-			}
-		}
 		set_global_flag = hfe_drone_awake
 		remove_global_flag = hfe_has_event.606
 	}
@@ -6377,8 +6371,9 @@ fleet_event = {
 	desc = hfe.700.desc
 	picture = GFX_evt_hfe_thoth
 	show_sound = event_ship_thrusters
-	is_triggered_only = yes
+	location = root
 	trackable = yes
+	is_triggered_only = yes
 	trigger = {
 		has_global_flag = hfe_has_event.699
 		not = {
@@ -6408,6 +6403,9 @@ fleet_event = {
 					has_skill > 3
 				}
 			}
+		}
+		hidden_effect = {
+			clear_fleet_actions = root
 		}
 		fleet_action_research_special_project = {
 			special_project = hfe_project_thoth_contact
@@ -6531,7 +6529,8 @@ country_event = {
 		hfe_effect_event_702_next = yes
 	}
 	option = {
-		name = hfe.702.0.3		# Terminators to other machine
+		name = hfe.702.0.3
+		# Terminators to other machine
 		exclusive_trigger = {
 			has_country_flag = hfe.702.0
 			has_civic = civic_machine_terminator
@@ -6539,7 +6538,8 @@ country_event = {
 		hfe_effect_event_702_next = yes
 	}
 	option = {
-		name = hfe.702.0.4		# Machine to machine
+		name = hfe.702.0.4
+		# Machine to machine
 		exclusive_trigger = {
 			has_country_flag = hfe.702.0
 			is_machine_empire = yes
@@ -6550,7 +6550,8 @@ country_event = {
 		hfe_effect_event_702_next = yes
 	}
 	option = {
-		name = hfe.702.0.5		# Obscure "Captain Underpants" reference
+		name = hfe.702.0.5
+		# Obscure "Captain Underpants" reference
 		exclusive_trigger = {
 			has_country_flag = hfe.702.0
 			has_civic = civic_hive_devouring_swarm
@@ -6670,6 +6671,7 @@ country_event = {
 			exists = event_target:hfe_egypt_country
 			event_target:hfe_egypt_country = {
 				any_owned_fleet = {
+					is_ship_class = shipclass_military
 					fleet_power > 10000
 				}
 			}
@@ -6689,10 +6691,11 @@ country_event = {
 				}
 				random_owned_fleet = {
 					limit = {
+						is_ship_class = shipclass_military
 						fleet_power > 10000
 					}
 					set_location = {
-						target = event_target:hfe_thoth_location
+						target = event_target:hfe_thoth_station
 						distance = 30
 						angle = random
 					}
@@ -7010,7 +7013,7 @@ country_event = {
 country_event = {
 	id = hfe.711
 	title = TRANSMISSION
-	location = event_target:hfe_thoth_location
+	location = event_target:hfe_thoth_station
 	# trackable = yes
 	desc = hfe.711.desc.0.0
 	desc = hfe.711.desc.0.1
@@ -7305,7 +7308,7 @@ country_event = {
 		}
 		enable_special_project = {
 			name = hfe_project_thoth_memory
-			location = event_target:hfe_thoth_location
+			location = event_target:hfe_thoth_station
 			owner = root
 		}
 		if = {
@@ -7764,41 +7767,42 @@ country_event = {
 	immediate = {
 		set_country_flag = hfe_future_contacted
 		establish_communications = from
-		from = {
-			while = {
-				limit = {
-					nand = {
-						any_owned_leader = {
-							gender = female
-						}
-						any_owned_leader = {
-							gender = male
-						}
-					}
-				}
-				create_leader = {
-					class = admiral
-					species = this
-					skill = 3
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					gender = female
-				}
-				save_event_target_as = hfe_female_leader
-			}
-			random_owned_leader = {
-				limit = {
-					gender = male
-					leader_class = admiral
-				}
-				save_event_target_as = hfe_male_leader
-			}
-		}
 		if = {
 			limit = {
 				is_ai = no
+			}
+			from = {
+				while = {
+					limit = {
+						nand = {
+							any_owned_leader = {
+								gender = female
+							}
+							any_owned_leader = {
+								gender = male
+								leader_class = admiral
+							}
+						}
+					}
+					create_leader = {
+						class = admiral
+						species = this
+						skill = 3
+					}
+				}
+				random_owned_leader = {
+					limit = {
+						gender = female
+					}
+					save_event_target_as = hfe_female_leader
+				}
+				random_owned_leader = {
+					limit = {
+						gender = male
+						leader_class = admiral
+					}
+					save_event_target_as = hfe_male_leader
+				}
 			}
 			set_country_flag = hfe.5001.step0
 			country_event = {
@@ -8933,7 +8937,6 @@ country_event = {
 					ethic = ethic_militarist
 				}
 				effect = {
-					hfe_effect_gov_fix = yes
 					prev = {
 						create_colony = {
 							owner = prev
@@ -9309,19 +9312,32 @@ ship_event = {
 		owner = {
 			save_event_target_as = hfe_blight_remnants
 		}
+		# some generic machine species
+		create_species = {
+			class = MACHINE
+			traits = {
+				trait = trait_machine_unit
+				trait = random_traits
+			}
+			effect = {
+				save_event_target_as = hfe_blight_machine_species
+			}
+		}
 		create_country = {
 			type = default
-			name = "The Great Blight"			# ????????
-			ship_prefix = "AI Manager Drone"
+			name = "The Great Blight"
+			ship_prefix = "Manager Drone"
 			name_list = HIVE
+			# need to pass machine species because new bug/intended vanilla feature
+			species = event_target:hfe_blight_machine_species
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
 			authority = auth_machine_intelligence
 			origin = origin_machine
 			civics = {
 				civic = civic_machine_assimilator
 				civic = hfe_civic_blight
-			}
-			ethos = {
-				ethic = ethic_gestalt_consciousness
 			}
 			flag = {
 				icon = {
@@ -9341,13 +9357,8 @@ ship_event = {
 			}
 			ignore_initial_colony_error = yes
 			released_from_country = event_target:hfe_blight_remnants
-			species = event_target:hfe_blight_remnants
 			effect = {
 				hfe_effect_resource_bonus = yes
-				modify_species = {
-					add_trait = trait_cybernetic
-					#					add_trait = trait_machine_unit
-				}
 				if = {
 					limit = {
 						exists = event_target:hfe_blight_remnants.ruler
@@ -9356,11 +9367,12 @@ ship_event = {
 						target = event_target:hfe_blight_remnants.ruler
 						class = ruler
 						traits = {
-							trait = leader_trait_ruler_hive_mind							# So that he is immortal
+							# immortal
+							trait = leader_trait_ruler_hive_mind
 							trait = leader_trait_ruler_cyborg
 						}
 						effect = {
-							set_name = "Unit 666"
+							set_name = "Voice of Blight"
 							owner = {
 								assign_leader = prev
 							}
@@ -9368,6 +9380,7 @@ ship_event = {
 					}
 				}
 				save_event_target_as = hfe_blight
+				# take planets
 				event_target:hfe_blight_remnants.capital_scope = {
 					while = {
 						count = 30
@@ -9408,6 +9421,7 @@ ship_event = {
 										is_country = event_target:hfe_blight_remnants
 									}
 								}
+								# this rename every fleet including mining stations but why not
 								set_name = "Directive 666 Drones"
 								set_owner = event_target:hfe_blight
 							}
@@ -9417,19 +9431,27 @@ ship_event = {
 						}
 					}
 				}
+				set_built_species = event_target:hfe_blight_machine_species
+				change_dominant_species = {
+					species = event_target:hfe_blight_remnants.species
+				}
+				modify_species = {
+					add_trait = trait_cybernetic
+				}
 				every_owned_pop = {
 					pop_event = {
 						id = hfe.5085
 					}
 				}
-				every_owned_pop_species = {
-					set_citizenship_type = {
-						type = citizenship_full_machine
-					}
-					set_living_standard = {
-						type = living_standard_hive_mind
-					}
-				}
+				# gues it not needed
+				# every_owned_pop_species = {
+				# 	set_citizenship_type = {
+				# 		type = citizenship_full_machine
+				# 	}
+				# 	set_living_standard = {
+				# 		type = living_standard_hive_mind
+				# 	}
+				# }
 				declare_war = {
 					target = event_target:hfe_blight_remnants
 					attacker_war_goal = hfe_wg_annex
@@ -9476,14 +9498,32 @@ ship_event = {
 					id = hfe.5082
 				}
 			}
+			# ai cheats
 			event_target:hfe_blight = {
 				add_modifier = {
 					modifier = hfe_space_boom
 					years = 10
 				}
+				# ai need machine pop to build machine armies and it take too much time			
+				create_fleet = {
+					name = "Integration Force"
+					effect = {
+						set_owner = prev
+						set_fleet_stance = passive
+						while = {
+							count = 12
+							create_army_transport = {
+								army_type = machine_assault_1
+								species = event_target:hfe_blight_machine_species
+							}
+						}
+						set_location = prev.capital_scope
+					}
+				}
 			}
 		}
 	}
+	# switch to blight
 	option = {
 		name = hfe.5080.0
 		trigger = {
@@ -9511,6 +9551,9 @@ country_event = {
 	show_sound = event_swarm
 	location = root
 	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
 	option = {
 		play_sound = event_screams
 		name = hfe.5081.0
@@ -9526,6 +9569,9 @@ country_event = {
 	show_sound = event_red_alert
 	location = root
 	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
 	option = {
 		name = hfe.5082.0
 		# play_sound = event_swarm
@@ -9934,7 +9980,6 @@ country_event = {
 					species = event_target:hfe_new_country_species
 					ignore_initial_colony_error = yes
 					effect = {
-						hfe_effect_gov_fix = yes
 						add_modifier = {
 							modifier = hfe_reunification_age
 							years = 50
@@ -10198,12 +10243,12 @@ ship_event = {
 					class = admiral					#hfe_admiral_general
 					species = event_target:hfe_future_species
 					gender = female
-					skill = 5
+					skill = 2
 					traits = {
+						trait = leader_trait_trickster
 						trait = hfe_admiral_trait_future_train
 					}
 					effect = {
-						#change_leader_portrait = hfe_portrait_future
 						save_event_target_as = hfe_5090_leader
 					}
 				}

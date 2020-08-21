@@ -99,6 +99,178 @@ hfe_effect_population_fix_robot_pop = {
 	}
 }
 
+# switch to hive
+hfe_effect_gov_fix_to_hive = {
+	if = {
+		limit = {
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			hfe_trigger_non_sapient_robot = yes
+			not = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			authority = auth_machine_intelligence
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0.5
+					not = {
+						any_owned_pop_species = {
+							hfe_trigger_is_robot = no
+						}
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_servitor
+						civic = random
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0.5
+					not = {
+						any_owned_pop_species = {
+							hfe_trigger_is_robot = no
+						}
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_assimilator
+						civic = random
+					}
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					any_owned_pop_species = {
+						hfe_trigger_is_robot = no
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_terminator
+						civic = random
+					}
+				}
+			}
+			10 = {
+				change_government = {
+					civics = random
+				}
+			}
+		}
+		kill_leader = {
+			type = ruler
+			show_notification = no
+		}
+		# remove robot trait
+		if = {
+			limit = {
+				has_trait = trait_mechanical
+			}
+			modify_species = {
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
+			}
+		}
+		set_name = random
+	}
+	else_if = {
+		limit = {
+			host_has_dlc = "Utopia"
+			has_trait = trait_hive_mind
+			not = {
+				has_authority = auth_hive_mind
+			}
+		}
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			authority = auth_hive_mind
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		random_list = {
+			9 = {
+				change_government = {
+					civics = random
+				}
+			}
+			1 = {
+				change_government = {
+					civics = {
+						civic = civic_hive_devouring_swarm
+						civic = random
+					}
+				}
+			}
+		}
+		kill_leader = {
+			type = ruler
+			show_notification = no
+		}
+		set_name = random
+	}
+}
+
+# from hive
+hfe_effect_gov_fix_from_hive = {
+	if = {
+		limit = {
+			is_gestalt = yes
+			hfe_trigger_non_sapient = no
+			# in general its ok if cybernetics will be released from hive authority but not blight
+			not = {
+				has_valid_civic = hfe_civic_blight
+			}
+		}
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		change_government = {
+			civics = random
+		}
+		set_name = random
+	}
+}
+
+# just reset
+hfe_effect_gov_reset = {
+	create_country = {
+		type = default
+		species = this
+		ignore_initial_colony_error = yes
+		origin = origin_default
+	}
+	copy_ethos_and_authority = last_created_country
+	change_government = {
+		civics = random
+	}
+	set_name = random
+}
+
 # hfe_effect_population_process_robot_species_identity = {
 # 	random_owned_pop = {
 # 		limit = {
@@ -139,35 +311,3 @@ hfe_effect_population_remove_object_shield_global = {
 		destroy_ambient_object = this
 	}
 }
-
-# hfe_effect_exodus_reset_capital = {
-# 	remove_building = building_colony_shelter
-# 	remove_building = building_hive_capital
-# 	remove_building = building_deployment_post
-# 	remove_building = building_resort_capital
-# 	remove_building = building_slave_capital
-# 	remove_building = building_capital
-# 	remove_building = building_hive_capital
-# 	remove_building = building_machine_capital
-# 	remove_building = building_resort_capital
-# 	remove_building = building_slave_capital
-# 	remove_building = building_major_capital
-# 	remove_building = building_hive_major_capital
-# 	remove_building = building_machine_major_capital
-# 	remove_building = building_resort_major_capital
-# 	remove_building = building_slave_major_capital
-# 	remove_building = building_system_capital
-# 	remove_building = building_machine_system_capital
-# 	#	remove_building = building_hive_system_capital
-# 	remove_building = building_hab_capital
-# 	remove_building = building_hab_major_capital
-# 	remove_building = building_ancient_control_center
-# 	remove_building = building_ancient_palace
-# 	remove_building = hfe_building_mechanicus_pseudo_capital
-# 	#	if = {
-# 	#		limit = {
-# 	#			has_global_flag = HFE_TSP_spawn_test
-# 	#		}
-# 	#		log = "Planet capital buildings purged"
-# 	#	}
-# }

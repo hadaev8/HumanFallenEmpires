@@ -101,7 +101,6 @@ country_event = {
 		custom_tooltip = hfe_menu.0.tooltip
 		trigger = {
 			hfe_trigger_menu_has_submenu = no
-			has_global_flag = hfe_installed
 			has_country_flag = hfe_marked_as_human
 		}
 		hidden_effect = {
@@ -111,18 +110,24 @@ country_event = {
 			every_country = {
 				limit = {
 					has_country_flag = hfe_marked_as_human
+					exists = species
+					species = {
+						not = {
+							has_species_flag = hfe_marked_as_human_species
+						}
+					}
 				}
 				species = {
-					set_species_identity = event_target:hfe_human_species
 					set_species_flag = hfe_marked_as_human_species
 				}
 			}
-			every_owned_pop_species = {
+			every_galaxy_species = {
 				limit = {
-					OR = {
+					or = {
 						species_portrait = human
 						species_portrait = hfe_portrait_future
 						species_portrait = hfe_portrait_egypt
+						has_species_flag = hfe_marked_as_human_species
 					}
 					not = {
 						is_same_species = event_target:hfe_human_species
@@ -141,14 +146,15 @@ country_event = {
 		custom_tooltip = hfe_menu.1.tooltip
 		trigger = {
 			hfe_trigger_menu_has_submenu = no
-			has_global_flag = hfe_installed
 			not = {
 				has_country_flag = hfe_marked_as_human
 			}
 		}
 		hidden_effect = {
 			set_country_flag = hfe_marked_as_human
-			species = { set_species_flag = hfe_marked_as_human_species }
+			species = {
+				set_species_flag = hfe_marked_as_human_species
+			}
 			country_event = {
 				id = hfe_menu.1
 			}

@@ -1062,6 +1062,31 @@ hfe_initializer_varelse = {
 		# deposit_blockers = none
 		init_effect = {
 			save_global_event_target_as = hfe_varelse_colony_planet
+			create_species = {
+				name = "Godforge Drone"
+				plural = "Godforge Drones"
+				adjective = "Godforge Engine"
+				class = ROBOT
+				namelist = cybrxkhan_fantasy_egyptian
+				# I actually love this type and they are not ugly at all
+				portrait = sd_pla_robot
+				species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
+				# extra_trait_points = 2
+				traits = {
+					trait = "trait_mechanical"
+					trait = "trait_robot_bulky"
+					trait = "trait_robot_uncanny"
+					trait = "trait_robot_custom_made"
+					trait = "trait_robot_high_bandwidth"
+					trait = "trait_robot_domestic_protocols"
+				}
+				effect = {
+					save_event_target_as = hfe_varelse_leftover_robots
+					set_citizenship_type = {
+						type = citizenship_robot_servitude
+					}
+				}
+			}
 			create_country = {
 				name = "Cult of the Machine-That-Speaks-to-God"
 				ship_prefix = "Godforge"
@@ -1081,15 +1106,18 @@ hfe_initializer_varelse = {
 					civic = hfe_civic_godforge
 				}
 				effect = {
-					species = {
-						set_species_homeworld = event_target:hfe_varelse_colony_planet
-					}
 					hfe_effect_primitive_set_machine_age = yes
 					set_country_flag = hfe_varelse_primitive_0
 					set_country_flag = hfe_varelse
 					prev = {
 						set_owner = prev
 					}
+					set_policy = {
+						policy = robot_pop_policy
+						option = robot_pops_allowed
+						cooldown = no
+					}
+					#set_built_species = event_target:hfe_varelse_leftover_robots
 					# really neeed it?
 					# kill_leader = {
 					# 	type = ruler
@@ -1112,37 +1140,6 @@ hfe_initializer_varelse = {
 						}
 					}
 					assign_leader = last_created_leader
-					set_policy = {
-						policy = robot_pop_policy
-						option = robot_pops_allowed
-						cooldown = no
-					}
-					create_species = {
-						name = "Godforge Drone"
-						plural = "Godforge Drones"
-						adjective = "Godforge Engine"
-						class = ROBOT
-						namelist = cybrxkhan_fantasy_egyptian
-						portrait = sd_pla_robot						# I actually love this type and they are not ugly at all
-						species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
-						# extra_trait_points = 2
-						traits = {
-							trait = "trait_mechanical"
-							trait = "trait_robot_bulky"
-							trait = "trait_robot_uncanny"
-							trait = "trait_robot_custom_made"
-							trait = "trait_robot_high_bandwidth"
-							trait = "trait_robot_domestic_protocols"
-						}
-						effect = {
-							# idk if robots need homeworld
-							# set_species_homeworld = event_target:hfe_varelse_colony_planet
-							save_event_target_as = hfe_varelse_leftover_robots
-							set_citizenship_type = {
-								type = citizenship_robot_servitude
-							}
-						}
-					}
 					create_leader = {
 						name = "Damaged Godforge Core"
 						class = general
@@ -1167,7 +1164,6 @@ hfe_initializer_varelse = {
 			}
 			set_planet_flag = hfe_varelse_colony
 			set_planet_flag = primitives_nuked_themselves			# As the High Mechanicus controls the whole planet, this can't happen
-			hfe_effect_primitive_add_pops = yes
 			add_building = hfe_building_godforge_main
 			add_building = hfe_building_godforge_stronghold
 			add_building = hfe_building_godforge_temple
@@ -1189,10 +1185,7 @@ hfe_initializer_varelse = {
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
-			# seems it do not work
-			# owner = {
-			# 	set_built_species = event_target:hfe_varelse_leftover_robots
-			# }
+			hfe_effect_primitive_add_pops = yes
 			# extra pops
 			while = {
 				count = 15
