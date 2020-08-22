@@ -743,10 +743,24 @@ hfe_effect_varelse_fleet_find_new_home = {
 	clear_fleet_actions = this
 	closest_system = {
 		limit = {
-			not = {
-				exists = owner
+			or = {
+				not = {
+					exists = owner
+				}
+				owner = {
+					is_country_type = hfe_pirate
+				}
 			}
 			any_system_planet = {
+				or = {
+					not = {
+						exists = owner
+					}
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				hfe_trigger_holy_planet = no
 				habitability = {
 					who = event_target:hfe_varelse_species
 					value > 0.7
@@ -756,9 +770,18 @@ hfe_effect_varelse_fleet_find_new_home = {
 		}
 		random_system_planet = {
 			limit = {
+				or = {
+					not = {
+						exists = owner
+					}
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				hfe_trigger_holy_planet = no
 				habitability = {
 					who = event_target:hfe_varelse_species
-					value > 0.5
+					value > 0.7
 				}
 			}
 			save_event_target_as = hfe_varelse_fleet_new_home
@@ -773,6 +796,13 @@ hfe_effect_varelse_fleet_find_new_home = {
 		closest_system = {
 			limit = {
 				any_system_planet = {
+					nand = {
+						exists = owner
+						owner = {
+							has_country_flag = hfe_has_event_52
+						}
+					}
+					hfe_trigger_holy_planet = no
 					habitability = {
 						who = event_target:hfe_varelse_species
 						value > 0.5
@@ -782,6 +812,13 @@ hfe_effect_varelse_fleet_find_new_home = {
 			}
 			random_system_planet = {
 				limit = {
+					nand = {
+						exists = owner
+						owner = {
+							has_country_flag = hfe_has_event_52
+						}
+					}
+					hfe_trigger_holy_planet = no
 					habitability = {
 						who = event_target:hfe_varelse_species
 						value > 0.5
@@ -802,7 +839,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 	else = {
 		auto_move_to_planet = {
 			target = event_target:hfe_varelse_fleet_new_home
-			clear_auto_move_on_arrival = yes
+			clear_auto_move_on_arrival = no
 			arrival_effect = hfe_effect_varelse_fleet_find_new_home_make_colony
 		}
 	}
@@ -811,7 +848,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 hfe_effect_varelse_fleet_find_new_home_make_colony = {
 	from = {
 		create_country = {
-			name = "Neo-Varelse Hegemony"
+			name = "New Varelse Hegemony"
 			type = default
 			species = event_target:hfe_varelse_species
 			origin = hfe_civic_features_exodus
@@ -820,21 +857,50 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 				ethic = ethic_militarist
 				ethic = ethic_materialist
 			}
+			authority = auth_dictatorial
 			effect = {
+				random_country = {
+					limit = {
+						has_country_flag = hfe_has_event_52
+					}
+					establish_communications_no_message = prev
+					prev = {
+						add_opinion_modifier = {
+							who = prev
+							modifier = hfe_opinion_varelse_saved_from_time_trap
+						}
+					}
+				}
 				set_country_flag = hfe_was_government_in_exile
 				set_country_flag = hfe_chosen_to_exodus
 				set_country_flag = hfe_varelse
+				# to recalc personality
+				change_government = {
+					authority = auth_imperial
+				}
+				change_government = {
+					authority = auth_dictatorial
+				}
 				hfe_effect_resource_bonus = yes
 				# TODO check how it looks
 				# set_graphical_culture = reptilian_01
 				# set_city_graphical_culture = reptilian_01
 				hfe_effect_init_give_tech_t3 = yes
 				prev = {
-					create_colony = {
-						owner = prev
+					if = {
+						limit = {
+							exists = owner
+						}
+						conquer = prev
 					}
+					else = {
+						create_colony = {
+							owner = prev
+						}
+					}
+					# set_owner = prev
 				}
-				event_target:hfe_varelse_fleet = {
+				prevprev = {
 					set_owner = prev
 				}
 				every_owned_ship = {
@@ -853,7 +919,11 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 		}
 		add_modifier = {
 			modifier = hfe_population_boom
-			days = 3650
+			years = 10
+		}
+		add_modifier = {
+			modifier = hfe_idustrial_boom
+			years = 1
 		}
 		hfe_effect_create_starbase_citadel_from_planet = yes
 		#		log = "Surprise Varelse fleet settled down"
@@ -1086,42 +1156,6 @@ hfe_effect_add_psionic_trait = {
 				add_trait = leader_trait_ruler_psionic
 			}
 		}
-	}
-}
-
-# for planet
-hfe_effect_convert_to_asteroid = {
-	#	# log = "converting to asteroid [this.GetName]"
-	#	# flee fleets
-	if = {
-		limit = {
-			exists = owner
-			owner = {
-				is_country_type = hfe_pirate
-				num_owned_planets = 1
-			}
-		}
-		owner = {
-			hfe_effect_pirate_flee_fleets = yes
-		}
-	}
-	hfe_effect_clear_buildings_and_destroy_colony = yes
-	if = {
-		limit = {
-			has_planet_flag = hfe_former_pc_ice_asteroid
-		}
-		remove_planet_flag = hfe_former_pc_ice_asteroid
-		change_pc = pc_ice_asteroid
-	}
-	else_if = {
-		limit = {
-			has_planet_flag = hfe_former_pc_crystal_asteroid
-		}
-		remove_planet_flag = hfe_former_pc_crystal_asteroid
-		change_pc = pc_crystal_asteroid
-	}
-	else = {
-		change_pc = pc_asteroid
 	}
 }
 

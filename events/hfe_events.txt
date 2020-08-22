@@ -695,7 +695,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		nor = {
-			has_global_flag = hfe_future_in_expansion
+			is_country_type = default
 			has_global_flag = hfe_expansion_block
 		}
 		mid_game_years_passed > 0
@@ -735,11 +735,10 @@ country_event = {
 	immediate = {
 		set_timed_global_flag = {
 			flag = hfe_expansion_block
-			days = 1825
+			years = 10
 		}
 		#		country_add_ethic = ethic_xenophobe
 		set_country_type = default
-		set_global_flag = hfe_egypt_in_expansion
 		every_playable_country = {
 			establish_communications_no_message = root
 			if = {
@@ -761,8 +760,9 @@ country_event = {
 	title = hfe.49.name
 	desc = hfe.49.desc.0
 	diplomatic = yes
+	location = event_target:hfe_egypt_country.capital_scope
 	is_triggered_only = yes
-	show_sound = event_celebration
+	show_sound = event_alien_signal
 	picture_event_data = {
 		portrait = event_target:hfe_egypt_country.ruler
 		room = hfe_egypt_room
@@ -899,6 +899,9 @@ ship_event = {
 	immediate = {
 		event_target:hfe_varelse_fleet_location = {
 			hfe_effect_remove_signal_object_from_this = yes
+		}
+		owner = {
+			set_country_flag = hfe_has_event_52
 		}
 		create_country = {
 			name = "Varelse Fleet Trapped In Time"
@@ -1624,15 +1627,17 @@ planet_event = {
 		is_planet_class = hfe_pc_memorial
 		exists = owner
 		num_pops > 0
+		not = {
+			has_planet_flag = hfe_memorial_pyramid
+		}
 	}
 	immediate = {
-		set_planet_flag = hfe_planet_pyramid
+		set_planet_flag = hfe_memorial_pyramid
 	}
 	option = {
 		name = hfe.150.0
 		# add_building = building_great_pyramid
 		hidden_effect = {
-			set_planet_flag = hfe_project_pyramid
 			save_event_target_as = hfe_memorial_planet
 		}
 		enable_special_project = {
@@ -1973,14 +1978,16 @@ planet_event = {
 		is_planet_class = hfe_pc_memorial
 		exists = owner
 		num_pops > 0
+		not = {
+			has_planet_flag = hfe_memorial_warehouse
+		}
 	}
 	immediate = {
-		set_planet_flag = hfe_military_warehouse_planet
+		set_planet_flag = hfe_memorial_warehouse
 	}
 	option = {
 		name = hfe.200.0
 		hidden_effect = {
-			set_planet_flag = hfe_project_military_warehouse
 			save_event_target_as = hfe_memorial_planet
 		}
 		enable_special_project = {
@@ -2251,7 +2258,7 @@ ship_event = {
 		name = hfe.206.0
 		hfe_effect_leader_add_exp_100 = yes
 		owner = {
-			hfe_effect_add_engineering_research.3 = yes
+			hfe_effect_give_random_tech = yes
 		}
 	}
 }
@@ -2300,14 +2307,16 @@ planet_event = {
 		is_planet_class = hfe_pc_memorial
 		exists = owner
 		num_pops > 0
+		not = {
+			has_planet_flag = hfe_memorial_cruiser
+		}
 	}
 	immediate = {
-		set_planet_flag = hfe_found_cruiser_planet
+		set_planet_flag = hfe_memorial_cruiser
 	}
 	option = {
 		name = hfe.250.0
 		hidden_effect = {
-			set_planet_flag = hfe_project_found_cruiser_planet
 			save_event_target_as = hfe_memorial_planet
 		}
 		enable_special_project = {
@@ -2589,14 +2598,16 @@ planet_event = {
 			}
 		}
 		num_pops > 0
+		not = {
+			has_planet_flag = hfe_memorial_sputnik
+		}
 	}
 	immediate = {
-		set_planet_flag = hfe_sputnik_planet
+		set_planet_flag = hfe_memorial_sputnik
 	}
 	option = {
 		name = hfe.300.0
 		hidden_effect = {
-			set_planet_flag = hfe_project_sputnik
 			save_event_target_as = hfe_memorial_planet
 		}
 		enable_special_project = {
@@ -2664,7 +2675,7 @@ ship_event = {
 					33 = {
 						modifier = {
 							factor = 0
-							has_planet_flag = hfe_planet_pyramid
+							has_planet_flag = hfe_memorial_pyramid
 						}
 						planet_event = {
 							id = hfe.150
@@ -2675,7 +2686,7 @@ ship_event = {
 					33 = {
 						modifier = {
 							factor = 0
-							has_planet_flag = hfe_military_warehouse_planet
+							has_planet_flag = hfe_memorial_warehouse
 						}
 						planet_event = {
 							id = hfe.200
@@ -2686,7 +2697,7 @@ ship_event = {
 					33 = {
 						modifier = {
 							factor = 0
-							has_planet_flag = hfe_found_cruiser_planet
+							has_planet_flag = hfe_memorial_cruiser
 						}
 						planet_event = {
 							id = hfe.250
@@ -8444,7 +8455,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		nor = {
-			has_global_flag = hfe_future_in_expansion
+			is_country_type = default
 			has_global_flag = hfe_expansion_block
 		}
 		mid_game_years_passed > 0
@@ -8484,11 +8495,8 @@ country_event = {
 	immediate = {
 		set_timed_global_flag = {
 			flag = hfe_expansion_block
-			days = 1825
+			years = 10
 		}
-		# Remove diplomatic power malus
-		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
-		remove_modifier = hfe_tsp_thoth_early_diplomacy_unkeep
 		hfe_effect_cleanse_ethics = yes
 		country_add_ethic = ethic_militarist
 		country_add_ethic = ethic_egalitarian
@@ -8498,6 +8506,7 @@ country_event = {
 			civics = {
 				civic = civic_free_haven
 				civic = civic_diplomatic_corps
+				civic = civic_idealistic_foundation
 			}
 		}
 		every_owned_pop = {
@@ -8513,17 +8522,22 @@ country_event = {
 				}
 			}
 		}
+		set_country_type = default
 		kill_leader = {
 			type = ruler
 			show_notification = no
 		}
-		set_country_type = default
-		set_global_flag = hfe_future_in_expansion
-		set_policy = {
-			policy = refugees
-			option = refugees_allowed
-			cooldown = yes
+		create_leader = {
+			class = ruler
+			skill = 5
 		}
+		assign_leader = last_created_leader
+		# really need it?
+		# set_policy = {
+		# 	policy = refugees
+		# 	option = refugees_allowed
+		# 	cooldown = yes
+		# }
 		every_playable_country = {
 			establish_communications_no_message = root
 			if = {
@@ -8544,6 +8558,8 @@ country_event = {
 	title = hfe.5011.name
 	desc = hfe.5011.desc.0
 	diplomatic = yes
+	location = event_target:hfe_future_country.capital_scope
+	show_sound = event_alien_signal
 	is_triggered_only = yes
 	picture_event_data = {
 		portrait = event_target:hfe_future_country.ruler

@@ -1,5 +1,7 @@
 #
 namespace = hfe_maintenance
+
+# drones use vanilla starbases which only can be disabled
 # This = Ship
 # From = Disabler Ship
 # kill starbases of drone on_ship_disabled
@@ -16,16 +18,6 @@ ship_event = {
 		is_ship_class = shipclass_starbase
 	}
 	immediate = {
-		owner = {
-			every_owned_planet = {
-				limit = {
-					solar_system = {
-						is_same_value = root.solar_system
-					}
-				}
-				hfe_effect_convert_to_asteroid = yes
-			}
-		}
 		if = {
 			limit = {
 				has_global_flag = HFE_TSP_spawn_test
@@ -36,7 +28,7 @@ ship_event = {
 	}
 }
 
-# log drone outpost
+# log drone outpost 1
 ship_event = {
 	id = hfe_maintenance.1
 	hide_window = yes
@@ -53,28 +45,6 @@ ship_event = {
 	}
 	immediate = {
 		log = "outpost build in [solar_system.GetName] by [owner.GetName]"
-	}
-}
-
-# convert pirate base to asteroid
-planet_event = {
-	id = hfe_maintenance.2
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		owner = {
-			is_country_type = hfe_drone
-		}
-	}
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
-			}
-			log = "converting to asteroid [this.GetName]"
-		}
-		hfe_effect_convert_to_asteroid = yes
 	}
 }
 
@@ -137,8 +107,8 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		has_country_flag = hfe_auto_delete
-		num_fleets < 1
-		num_owned_planets < 1
+		num_fleets = 0
+		num_owned_planets = 0
 	}
 	immediate = {
 		destroy_country = yes

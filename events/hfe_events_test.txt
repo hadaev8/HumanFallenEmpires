@@ -1,14 +1,16 @@
 #
 namespace = hfe_test
-# country_event = {
-# 	id = hfe_test.0
-# 	title = _hfe_scripted_loc_test_
-# 	desc = _hfe_scripted_loc_test_
-# 	is_triggered_only = yes
-# 	option = {
-# 		name = _hfe_scripted_loc_test_
-# 	}
-# }
+country_event = {
+	id = hfe_test.0
+	title = _hfe_scripted_loc_test_
+	desc = _hfe_scripted_loc_test_
+	picture = GFX_evt_glitchy_matrix
+	is_triggered_only = yes
+	option = {
+		name = hfe_population_disaster
+	}
+}
+
 country_event = {
 	id = hfe_test.1
 	hide_window = yes
@@ -581,13 +583,17 @@ ship_event = {
 	immediate = {
 		if = {
 			limit = {
+				has_global_flag = hfe_pirate_logs
 				owner = {
 					is_country_type = hfe_pirate
 				}
 			}
 			log = "pirate ship upgraded [fleet.GetName] [owner.GetName]"
 		}
-		else = {
+		else_if = {
+			limit = {
+				has_global_flag = hfe_general_logs
+			}
 			log = "drone ship upgraded [fleet.GetName] [owner.GetName]"
 		}
 	}

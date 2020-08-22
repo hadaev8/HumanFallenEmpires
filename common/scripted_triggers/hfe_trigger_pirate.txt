@@ -103,12 +103,19 @@ hfe_trigger_pirate_raid_have_flag = {
 	}
 }
 
+hfe_trigger_pirate_raid_country_check = {
+	hfe_trigger_pirate_raid_distance_check = yes
+	is_hostile = event_target:hfe_pirate_country
+	hfe_trigger_pirate_raid_have_flag = no
+}
+
 hfe_trigger_pirate_raid_distance_check = {
 	event_target:hfe_pirate_country = {
 		any_owned_fleet = {
 			is_ship_class = shipclass_military
 			closest_system = {
 				limit = {
+					# prevprevprev is potential raid target
 					is_owned_by = prevprevprev
 				}
 				max_steps = 10
@@ -507,6 +514,10 @@ hfe_trigger_pirate_this_fleet_more_power_then_root = {
 
 # for planet
 hfe_trigger_pirate_valid_base_planet = {
+	# dont mess with dlc content
+	not = {
+		is_planet_class = pc_crystal_asteroid
+	}
 	or = {
 		is_asteroid = yes
 		is_planet_class = hfe_pc_pirate_base

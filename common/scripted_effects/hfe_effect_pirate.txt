@@ -230,20 +230,56 @@ hfe_effect_pirate_init_colony = {
 	}
 }
 
+# for planet
 hfe_effect_pirate_change_to_pc_pirate_base = {
 	if = {
 		limit = {
 			is_planet_class = pc_ice_asteroid
 		}
-		set_planet_flag = hfe_former_pc_ice_asteroid
+		set_planet_flag = hfe_pirate_former_pc_ice_asteroid
 	}
 	else_if = {
 		limit = {
-			is_planet_class = pc_asteroid
+			is_planet_class = pc_rare_crystal_asteroid
 		}
-		set_planet_flag = hfe_former_pc_crystal_asteroid
+		set_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
 	}
 	change_pc = hfe_pc_pirate_base
+}
+
+# for planet
+hfe_effect_pirate_change_to_pc_asteroid = {
+	# log = "converting to asteroid [this.GetName]"
+	if = {
+		limit = {
+			exists = owner
+			owner = {
+				is_country_type = hfe_pirate
+				num_owned_planets = 1
+			}
+		}
+		owner = {
+			hfe_effect_pirate_flee_fleets = yes
+		}
+	}
+	hfe_effect_clear_buildings_and_destroy_colony = yes
+	if = {
+		limit = {
+			has_planet_flag = hfe_pirate_former_pc_ice_asteroid
+		}
+		remove_planet_flag = hfe_pirate_former_pc_ice_asteroid
+		change_pc = pc_ice_asteroid
+	}
+	else_if = {
+		limit = {
+			has_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
+		}
+		remove_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
+		change_pc = pc_rare_crystal_asteroid
+	}
+	else = {
+		change_pc = pc_asteroid
+	}
 }
 
 hfe_effect_pirate_init_country = {
