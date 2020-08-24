@@ -209,7 +209,7 @@ planet_event = {
 				amount = 1
 			}
 		}
-		# set modifier and inform
+		# set modifier
 		switch = {
 			trigger = has_global_flag
 			hfe_plague_lvl_3 = {
@@ -290,7 +290,7 @@ planet_event = {
 		# kill pop
 		planet_event = {
 			id = hfe_plague.2
-			days = 180
+			days = 90
 			random = 180
 		}
 		# send plague
@@ -368,6 +368,10 @@ planet_event = {
 						modifier = {
 							factor = 4
 							has_building = building_hospital
+						}
+						modifier = {
+							factor = 2
+							has_building = building_psi_corps
 						}
 						modifier = {
 							factor = 2
@@ -694,6 +698,10 @@ planet_event = {
 							}
 							modifier = {
 								factor = 2
+								has_building = building_psi_corps
+							}
+							modifier = {
+								factor = 2
 								habitable_structure = yes
 							}
 							modifier = {
@@ -1002,10 +1010,11 @@ planet_event = {
 				id = hfe_plague.62
 			}
 		}
-		# every_owned_pop = {
-		# 	#set_pop_flag = event_purge
-		# 	unemploy_pop = yes
-		# }
+		every_owned_pop = {
+			set_pop_flag = event_purge
+			set_pop_flag = hfe_plague_event_purge
+			unemploy_pop = yes
+		}
 		every_planet_army = {
 			limit = {
 				not = {
@@ -1040,7 +1049,11 @@ country_event = {
 			log = "Plague. Take planet [this.GetName] in [solar_system.GetName] from zombies new owner: [owner.GetName]"
 		}
 		every_owned_pop = {
+			limit = {
+				has_pop_flag = hfe_plague_event_purge
+			}
 			remove_pop_flag = event_purge
+			remove_pop_flag = hfe_plague_event_purge
 		}
 	}
 	option = {

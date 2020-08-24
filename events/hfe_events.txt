@@ -165,7 +165,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
-	# exiting dialog
+	# exiting dialog options
 	option = {
 		name = hfe.47.0.6
 		response_text = hfe.47.desc.badend
@@ -174,8 +174,12 @@ country_event = {
 			is_militarist = yes
 			fleet_power > 75000
 		}
-		hfe_effect_militarist_attraction.3 = yes
-		hfe_effect_event_47_clear_flags = yes
+		hfe_effect_militarist_attraction.5 = yes
+		# need it to trigger wormhole event
+		hidden_effect = {
+			set_country_flag = hfe.47.step4
+		}
+		hfe_effect_event_47_next = yes
 		event_target:hfe_egypt_country = {
 			add_opinion_modifier = {
 				who = root
@@ -194,7 +198,11 @@ country_event = {
 			is_xenophobe = yes
 		}
 		hfe_effect_xenophobe_attraction.3 = yes
-		hfe_effect_event_47_clear_flags = yes
+		# need it to trigger wormhole event
+		hidden_effect = {
+			set_country_flag = hfe.47.step4
+		}
+		hfe_effect_event_47_next = yes
 		event_target:hfe_egypt_country = {
 			add_opinion_modifier = {
 				who = root
@@ -209,7 +217,11 @@ country_event = {
 			has_country_flag = hfe.47.step0
 			has_civic = civic_machine_terminator
 		}
-		hfe_effect_event_47_clear_flags = yes
+		# need it to trigger wormhole event
+		hidden_effect = {
+			set_country_flag = hfe.47.step4
+		}
+		hfe_effect_event_47_next = yes
 		event_target:hfe_egypt_country = {
 			add_opinion_modifier = {
 				who = root
@@ -224,7 +236,11 @@ country_event = {
 			has_country_flag = hfe.47.step0
 			has_civic = civic_hive_devouring_swarm
 		}
-		hfe_effect_event_47_clear_flags = yes
+		# need it to trigger wormhole event
+		hidden_effect = {
+			set_country_flag = hfe.47.step4
+		}
+		hfe_effect_event_47_next = yes
 		event_target:hfe_egypt_country = {
 			add_opinion_modifier = {
 				who = root
@@ -237,9 +253,16 @@ country_event = {
 		response_text = hfe.47.desc.badend.4
 		trigger = {
 			has_country_flag = hfe.47.step0
+			not = {
+				has_country_flag = hfe_marked_as_human
+			}
 			has_civic = civic_fanatic_purifiers
 		}
-		hfe_effect_event_47_clear_flags = yes
+		# need it to trigger wormhole event
+		hidden_effect = {
+			set_country_flag = hfe.47.step4
+		}
+		hfe_effect_event_47_next = yes
 		event_target:hfe_egypt_country = {
 			add_opinion_modifier = {
 				who = root
@@ -699,7 +722,7 @@ country_event = {
 			has_global_flag = hfe_expansion_block
 		}
 		mid_game_years_passed > 0
-		or = {
+		OR = {
 			end_game_years_passed > 0
 			has_global_flag = galactic_crisis_happened
 			has_global_flag = hfe_war_in_heaven_started
@@ -707,26 +730,18 @@ country_event = {
 			recently_lost_war = yes
 			any_playable_country = {
 				or = {
-					and = {
-						is_difficulty > 0
-						relative_power = {
-							who = root
-							category = fleet
-							value > inferior
-						}
+					relative_power = {
+						who = root
+						category = fleet
+						value >= equivalent
 					}
 					and = {
 						is_difficulty > 1
 						relative_power = {
 							who = root
 							category = fleet
-							value > pathetic
+							value >= inferior
 						}
-					}
-					relative_power = {
-						who = root
-						category = fleet
-						value > equivalent
 					}
 				}
 			}
@@ -783,12 +798,18 @@ ship_event = {
 	show_sound = event_ship_thrusters
 	location = root
 	is_triggered_only = yes
+	trigger = {
+		exists = solar_system
+		exists = from
+		exists = owner
+		exists = event_target:hfe_egypt_country.capital_scope
+	}
 	immediate = {
+		solar_system = {
+			save_event_target_as = hfe_wormhole_system
+		}
 		from = {
 			hfe_effect_remove_signal_object_from_this = yes
-		}
-		event_target:hfe_egypt_country.capital_scope = {
-			save_event_target_as = hfe_ra_home
 		}
 		owner = {
 			set_country_flag = hfe_egypt_wormhole
@@ -800,17 +821,16 @@ ship_event = {
 		hidden_effect = {
 			fleet = {
 				set_location = {
-					target = event_target:hfe_ra_home
+					target = event_target:hfe_egypt_country.capital_scope
 					distance = 5
 					angle = random
 				}
 			}
-			#	remove_country_flag = hfe_egypt_wormhole
 		}
 	}
 }
 
-# varelse fleet in time trap 51-53
+# varelse fleet in time trap 51-54
 # start event
 ship_event = {
 	id = hfe.51
@@ -1149,6 +1169,128 @@ fleet_event = {
 				}
 			}
 		}
+	}
+}
+
+# bonus to egypt contact wormhole anomaly 55
+country_event = {
+	id = hfe.55
+	title = hfe.55.name
+	desc = {
+		trigger = {
+			text = hfe.55.desc.0
+			success_text = {
+				text = hfe.55.desc.1
+				has_seen_any_bypass = wormhole
+				not = {
+					has_technology = tech_wormhole_stabilization
+				}
+			}
+		}
+	}
+	picture = GFX_evt_hfe_wormhole
+	location = event_target:hfe_wormhole_system
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:hfe_wormhole_system
+	}
+	immediate = {
+		event_target:hfe_wormhole_system = {
+			random_system = {
+				limit = {
+					has_natural_wormhole = no
+					not = {
+						has_star_flag = sealed_system
+					}
+					distance = {
+						source = prev
+						min_distance >= 500
+					}
+				}
+				weights = {
+					base = 100
+					modifier = {
+						mult = 0.01
+						exists = owner
+						# surprize extermination
+						owner = {
+							is_homicidal = no
+						}
+					}
+				}
+				prev = {
+					# done this way to ensure we don't spawn "orphan" wormholes (wormholes that aren't linked to anything)
+					spawn_natural_wormhole = {
+						bypass_type = hfe_wormhole
+						random_pos = yes
+						orbit_angle = 360
+					}
+				}
+				spawn_natural_wormhole = {
+					bypass_type = hfe_wormhole
+					random_pos = yes
+					orbit_angle = 360
+				}
+				link_wormholes = prev
+			}
+		}
+	}
+	option = {
+		name = hfe.55.0
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_belligerent
+		}
+	}
+	option = {
+		name = hfe.55.1
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_cooperative
+		}
+	}
+	option = {
+		name = hfe.55.2
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_isolationist
+		}
+	}
+	option = {
+		name = hfe.55.3
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_expansionist
+		}
+	}
+	option = {
+		name = hfe.55.4
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_mercantile
+		}
+	}
+	option = {
+		name = hfe.55.5
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_supremacist
+		}
+	}
+	option = {
+		name = hfe.55.6
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_hunger
+		}
+	}
+	option = {
+		name = hfe.55.7
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_extermination
+		}
+	}
+	option = {
+		name = hfe.55.8
+		exclusive_trigger = {
+			has_policy_flag = diplo_stance_purification
+		}
+	}
+	option = {
+		name = INTERESTING
 	}
 }
 
@@ -8467,26 +8609,18 @@ country_event = {
 			recently_lost_war = yes
 			any_playable_country = {
 				or = {
-					and = {
-						is_difficulty > 0
-						relative_power = {
-							who = root
-							category = fleet
-							value > inferior
-						}
+					relative_power = {
+						who = root
+						category = fleet
+						value >= equivalent
 					}
 					and = {
 						is_difficulty > 1
 						relative_power = {
 							who = root
 							category = fleet
-							value > pathetic
+							value >= inferior
 						}
-					}
-					relative_power = {
-						who = root
-						category = fleet
-						value > equivalent
 					}
 				}
 			}
