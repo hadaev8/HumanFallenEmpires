@@ -11,16 +11,15 @@ country_event = {
 			limit = {
 				is_country_type = hfe_pirate
 			}
-			count < 26
+			count <= 25
 		}
 	}
 	immediate = {
-		#		save_event_target_as = hfe_pirate_target
 		hfe_effect_pirate_init = yes
 	}
 }
 
-# birth of piracy info event
+# birth of piracy info event 1
 country_event = {
 	id = hfe_pirate.1
 	title = pirate.1.name
@@ -183,7 +182,7 @@ country_event = {
 	}
 }
 
-# pirate life simulation
+# pirate life simulation 2
 country_event = {
 	id = hfe_pirate.2
 	hide_window = yes
@@ -356,7 +355,7 @@ country_event = {
 	}
 }
 
-# pirate build new base
+# pirate build new base 3
 country_event = {
 	id = hfe_pirate.3
 	hide_window = yes
@@ -390,7 +389,7 @@ country_event = {
 	}
 }
 
-# pirate fleet logic set by ship build on action
+# pirate fleet logic set by ship build on action 4
 ship_event = {
 	id = hfe_pirate.4
 	hide_window = yes
@@ -414,7 +413,7 @@ ship_event = {
 	}
 }
 
-# send pirate fleet to hunt by pulse
+# send pirate fleet to hunt by pulse 5
 country_event = {
 	id = hfe_pirate.5
 	hide_window = yes
@@ -435,7 +434,7 @@ country_event = {
 	}
 }
 
-# info event
+# spawn info event 7
 country_event = {
 	id = hfe_pirate.7
 	title = pirate.50.name
@@ -503,18 +502,15 @@ country_event = {
 }
 
 # pirate diplo simulation
-# sell slaves
+# sell slaves 10
 country_event = {
 	id = hfe_pirate.10
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		num_pops > 0
-		or = {
-			num_pops > 1
-			any_owned_planet = {
-				free_housing < 0
-			}
+		any_owned_planet = {
+			free_housing < 0
 		}
 	}
 	immediate = {
@@ -567,7 +563,7 @@ country_event = {
 	}
 }
 
-# sell energy
+# sell energy 11
 country_event = {
 	id = hfe_pirate.11
 	hide_window = yes
@@ -638,7 +634,7 @@ country_event = {
 	}
 }
 
-# pirate gain resources after kill station
+# pirate gain resources after kill station 52
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
@@ -688,7 +684,8 @@ country_event = {
 	}
 }
 
-# pirate bombard colony by on_planet_bombarded
+# pirate bombard colony 53
+# on_planet_bombarded
 # Planet has taken damage from orbital bombardment
 # This = Planet
 # From = Bombarder
@@ -729,7 +726,7 @@ planet_event = {
 	}
 }
 
-# clear system if someone killed pirate starbase
+# clear system if someone killed pirate starbase 54
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
@@ -767,7 +764,8 @@ country_event = {
 	}
 }
 
-# add pirate trait to admiral 55 on_leader_spawned
+# add pirate trait to admiral 55
+# on_leader_spawned
 country_event = {
 	id = hfe_pirate.55
 	hide_window = yes
@@ -792,9 +790,11 @@ country_event = {
 	}
 }
 
+
+# take starbases of pirate 56
+# on_ship_disabled
 # This = Ship
 # From = Disabler Ship
-# take starbases of pirate on_ship_disabled
 ship_event = {
 	id = hfe_pirate.56
 	hide_window = yes
@@ -805,12 +805,6 @@ ship_event = {
 		exists = from.owner
 		exists = fleet
 		exists = solar_system
-		# from.owner = {
-		# 	is_country_type = hfe_pirate
-		# }
-		# owner = {
-		# 	is_country_type = hfe_pirate
-		# }
 		is_ship_class = shipclass_starbase
 	}
 	immediate = {
@@ -1141,7 +1135,8 @@ ship_event = {
 	}
 }
 
-# fix pirate planet class ownerless on_planet_ownerless on_planet_transfer on_planet_bombarded
+# fix pirate planet class ownerless 57
+# on_planet_ownerless on_planet_transfer on_planet_bombarded
 planet_event = {
 	id = hfe_pirate.57
 	hide_window = yes
@@ -1174,8 +1169,9 @@ planet_event = {
 	}
 }
 
-# send default or pirate country fleets before get destroyed on_country_destroyed
+# send default or pirate country fleets before get destroyed 58
 # looks like not worked for default country type
+# on_country_destroyed
 country_event = {
 	id = hfe_pirate.58
 	hide_window = yes
@@ -1199,11 +1195,13 @@ country_event = {
 	}
 }
 
+
+# for hfe_chain_pirate_count counters 60
+# on_ship_destroyed_perp
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
 # FromFromFrom = ship 2
-# for hfe_chain_pirate_count counters on_ship_destroyed_perp
 country_event = {
 	id = hfe_pirate.60
 	hide_window = yes
@@ -1250,11 +1248,13 @@ country_event = {
 	}
 }
 
+
+# fix pirate non hostile then attacked by player 61
+# on_entering_battle
 # This = owner of fleet 1
 # From = owner of fleet 2
 # FromFrom = fleet 1
 # FromFromFrom = fleet 2
-# fix pirate non hostile then attacked by player on_entering_battle
 country_event = {
 	id = hfe_pirate.61
 	hide_window = yes
@@ -1279,15 +1279,17 @@ country_event = {
 	}
 }
 
+
+# get disabled starbase 62
 # A fleet has entered a system
 # Scope = Fleet
 # From = System
-# get disabled starbase
 fleet_event = {
 	id = hfe_pirate.62
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		always = no
 		exists = solar_system.starbase
 		exists = owner
 		owner = {
@@ -1326,7 +1328,7 @@ fleet_event = {
 	}
 }
 
-# observation outpost mission
+# observation outpost mission 63
 country_event = {
 	id = hfe_pirate.63
 	hide_window = yes
@@ -1355,7 +1357,7 @@ country_event = {
 	}
 }
 
-# observation outpost mission reset after compliting
+# observation outpost mission reset after compliting 64
 planet_event = {
 	id = hfe_pirate.64
 	hide_window = yes
@@ -1370,7 +1372,7 @@ planet_event = {
 }
 
 # pirate diplomacy 100-150
-# start event diplomacy
+# start event diplomacy 100
 country_event = {
 	id = hfe_pirate.100
 	hide_window = yes
@@ -1399,7 +1401,7 @@ country_event = {
 	}
 }
 
-# pirate diplomacy main menu
+# pirate diplomacy main menu 101
 country_event = {
 	id = hfe_pirate.101
 	title = hfe_nothing
@@ -1463,23 +1465,27 @@ country_event = {
 					value = 0
 				}
 			}
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.1
-			# 	has_country_flag = hfe_pirate.101.psi_test_menu
-			# 	check_variable = {
-			# 		which = take_place_1
-			# 		value = 1
-			# 	}
-			# }
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.1
+				has_country_flag = hfe_pirate.101.psi_test_menu
+				nor = {
+					has_country_flag = hfe_pirate.101.psi_test_end_lose
+					has_country_flag = hfe_pirate.101.psi_test_end_win
+				}
+				check_variable = {
+					which = take_place_1
+					value = 1
+				}
+			}
 			# psi test end
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.2
-			# 	has_country_flag = hfe_pirate.101.psi_test_end_lose
-			# }
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.3
-			# 	has_country_flag = hfe_pirate.101.psi_test_end_win
-			# }
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.2
+				has_country_flag = hfe_pirate.101.psi_test_end_lose
+			}
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.3
+				has_country_flag = hfe_pirate.101.psi_test_end_win
+			}
 			# casino
 			success_text = {
 				text = hfe_pirate.101.casino_menu.desc.0
@@ -2664,11 +2670,15 @@ country_event = {
 	option = {
 		name = hfe_pirate.101.psi_test_menu
 		trigger = {
-			always = no
 			has_country_flag = hfe_pirate.101.service_menu
 			exists = ruler
 			event_target:hfe_pirate_country = {
 				is_spiritualist = no
+				# TODO check if any pirate really can have what ammount of energy because it can waste energy on trade
+				# resource_stockpile_compare = {
+				# 	resource = energy
+				# 	value > 10000
+				# }
 			}
 		}
 		add_resource = {
@@ -2763,14 +2773,9 @@ country_event = {
 			has_country_flag = hfe_pirate.101.psi_test_end_lose
 		}
 		hidden_effect = {
-			remove_country_flag = hfe_pirate.101.psi_test_end
-			remove_country_flag = hfe_pirate.101.psi_test_end_lose
-			remove_country_flag = hfe_pirate.101.psi_test_menu
-			hfe_effect_cards_clean_all = yes
-			set_variable = {
-				which = hfe_pirate_psi_test_score
-				value = 0
-			}
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.psi_test_menu
+			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
 				id = hfe_pirate.101
 			}
@@ -2782,6 +2787,20 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.psi_test_end_win
 		}
+		if = {
+			limit = {
+				exists = ruler
+				ruler = {
+					nor = {
+						has_ruler_trait = leader_trait_ruler_psionic
+						has_ruler_trait = leader_trait_ruler_chosen
+					}
+				}
+			}
+			ruler = {
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+		}
 		add_resource = {
 			energy = 10000
 		}
@@ -2791,14 +2810,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = hfe_pirate.101.psi_test_end
-			remove_country_flag = hfe_pirate.101.psi_test_end_win
-			remove_country_flag = hfe_pirate.101.psi_test_menu
-			hfe_effect_cards_clean_all = yes
-			set_variable = {
-				which = hfe_pirate_psi_test_score
-				value = 0
-			}
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.psi_test_menu
+			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
 				id = hfe_pirate.101
 			}
@@ -3171,7 +3185,7 @@ country_event = {
 }
 
 # blackjack event 150 - 200
-# main blackjack event
+# main blackjack event 150
 country_event = {
 	id = hfe_pirate.150
 	title = TRANSMISSION
@@ -3308,7 +3322,7 @@ country_event = {
 	}
 }
 
-# blackjack challenge
+# blackjack challenge 151
 country_event = {
 	id = hfe_pirate.151
 	title = TRANSMISSION
@@ -3351,7 +3365,7 @@ country_event = {
 }
 
 # other pirate related diplo events 200 - 250
-# offer protection and extend protection later
+# offer protection and extend protection later 200
 country_event = {
 	id = hfe_pirate.200
 	title = TRANSMISSION
@@ -3565,8 +3579,8 @@ country_event = {
 	}
 }
 
-# pirate fleet ai 300
-# trigger gateway
+# pirate fleet ai
+# trigger gateway 300
 fleet_event = {
 	id = hfe_pirate.300
 	hide_window = yes
@@ -3611,7 +3625,7 @@ fleet_event = {
 	}
 }
 
-# select target
+# select target 301
 fleet_event = {
 	id = hfe_pirate.301
 	hide_window = yes
@@ -3645,6 +3659,7 @@ fleet_event = {
 	}
 }
 
+# assign select target event 302
 # on_entering_system_fleet
 fleet_event = {
 	id = hfe_pirate.302
@@ -3674,6 +3689,7 @@ fleet_event = {
 	}
 }
 
+# if enemy fleet enter system 303
 # on_entering_system_fleet
 fleet_event = {
 	id = hfe_pirate.303
@@ -3706,6 +3722,7 @@ fleet_event = {
 	}
 }
 
+# assign select target event 305
 # on_space_battle_won
 country_event = {
 	id = hfe_pirate.305
@@ -3727,7 +3744,7 @@ country_event = {
 	}
 }
 
-# clean fleet actions after emercy ftl
+# clean fleet actions after emercy ftl 306
 fleet_event = {
 	id = hfe_pirate.306
 	hide_window = yes
