@@ -77,8 +77,10 @@ hfe_initializer_egypt_main = {
 				species = event_target:hfe_egypt_species
 				authority = auth_imperial
 				ethos = {
-					ethic = ethic_fanatic_spiritualist
+					ethic = ethic_spiritualist
 					ethic = ethic_authoritarian
+					# need xenophobe to eat ahets
+					ethic = ethic_xenophobe
 				}
 				civics = {
 					civic = hfe_civic_egypt_genetic
@@ -134,18 +136,19 @@ hfe_initializer_egypt_main = {
 				pops_can_be_colonizers = yes
 				can_generate_leaders = no
 				pops_can_migrate = no
-				can_be_modified = no				# "Forever a slave" means forever a slave
+				# "Forever a slave" means forever a slave
+				can_be_modified = no
 				homeworld = this
 				species_bio = "Through advanced genetic engineering and breeding, these Ahets were ripped of their Free Will. They were forced into eons of servitude, these Ahets are the descendants of the kidnappers of the Ju Ahet. Confined to Ju Ahet's core worlds, they serve their former chattel for all eternity. Dumbed down, docile, and quiet, they seek to serve a master even when they are not compelled to do so."
 				traits = {
-					ideal_planet_class = pc_nuked
+					ideal_planet_class = pc_tropical
 					trait = hfe_species_trait_happy_slave
 					trait = trait_docile
 					trait = trait_strong
 				}
 				effect = {
 					set_species_identity = event_target:hfe_ahet_species
-					save_global_event_target_as = hfe_ahet_servant_species
+					save_event_target_as = hfe_ahet_servant_species
 				}
 			}
 			# Generate Delicious Ahets
@@ -159,11 +162,12 @@ hfe_initializer_egypt_main = {
 				pops_can_be_colonizers = yes
 				can_generate_leaders = no
 				pops_can_migrate = no
-				can_be_modified = no				# "Forever a slave" means forever a slave
+				# "Forever a slave" means forever a slave
+				can_be_modified = no
 				homeworld = this
-				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets are entirely descended from the officers, governors, and elite rulers of the extinct Ahet empire. Specifically targetted and made an example of, these Ahets endure the most humiliating life possible: they are a delicacy on every Ju Ahet table."
+				species_bio = "Differentiating from the normal Ahet slaves in the Ju Ahet stock, these Ahets was made to be tasty, savory, yummy, palatable, appelitizing, toothsome, flavorous, gustable, sapid, sipid, savoury and yum-yum."
 				traits = {
-					ideal_planet_class = pc_nuked
+					ideal_planet_class = pc_tropical
 					trait = trait_presapient_docile_livestock
 					trait = trait_nerve_stapled
 					trait = trait_delicious
@@ -171,7 +175,7 @@ hfe_initializer_egypt_main = {
 				effect = {
 					set_species_identity = event_target:hfe_ahet_species
 					set_species_flag = hfe_forever_slave
-					save_global_event_target_as = hfe_ahet_delicious_species
+					save_event_target_as = hfe_ahet_delicious_species
 				}
 			}
 			every_owned_pop = {
@@ -751,6 +755,7 @@ hfe_initializer_ahet_0 = {
 					civic = hfe_civic_primitive_fem_rept_lobby
 				}
 				species = event_target:hfe_ahet_species
+				# not sure if it good idea
 				origin = origin_lost_colony
 				effect = {
 					hfe_effect_primitive_set_late_medieval_age = yes
@@ -766,6 +771,14 @@ hfe_initializer_ahet_0 = {
 						# 	owner = prev
 						# }
 						set_owner = prev
+					}
+					create_leader = {
+						class = general
+						species = event_target:hfe_ahet_species
+						skill = 2
+						effect = {
+							save_event_target_as = hfe_ahet_general
+						}
 					}
 				}
 			}
@@ -785,11 +798,13 @@ hfe_initializer_ahet_0 = {
 			}
 			hfe_effect_primitive_add_buildings = yes
 			hfe_effect_primitive_add_pops = yes
+			# TODO something wrong with it
 			create_army = {
 				name = "National Army of Pluan Zialeo"
 				owner = owner
 				species = owner
 				type = industrial_army
+				leader = event_target:hfe_ahet_general
 			}
 			create_army = {
 				name = "1st Army of Nalvati Rokhever"
@@ -923,7 +938,7 @@ hfe_initializer_ahet_1 = {
 					PRESAPIENT
 				}
 				homeworld = this
-				species_bio = "The Eterfoundites got their name from the Ahet refugees that they share the planet with. After the fall of the Ahet dominions in their species' apocalyptic war, the Ahets that survived the genocide that followed desparately fled in ships and cargo holds to find somewhere, anywhere to go. The Ahets that landed on Raarwr were in luck: the kind Eterfoundites welcomed them with open arms and accepted them as equals. They now live peacefully together in a quaint, primitive democracy of elders and nobles."
+				species_bio = "The Eterfoundites got their name from the Ahet refugees that they share the planet with. After the fall of the Ahet dominions in their species' apocalyptic war, or maybe plague, the Ahets that survived desparately fled in ships and cargo holds to find somewhere, anywhere to go. The Ahets that landed on Raarwr were in luck: the kind Eterfoundites welcomed them with open arms and accepted them as equals. They now live peacefully together in a quaint, primitive democracy of elders and nobles."
 				traits = {
 					trait = trait_conformists
 					trait = trait_social_pheromones
@@ -954,6 +969,14 @@ hfe_initializer_ahet_1 = {
 						# }
 						set_owner = prev
 					}
+					create_leader = {
+						class = general
+						species = this
+						skill = 2
+						effect = {
+							save_event_target_as = hfe_ahet_general
+						}
+					}
 				}
 			}
 			# to fix create colony spawn pop of root species bug
@@ -970,6 +993,12 @@ hfe_initializer_ahet_1 = {
 						change_species = event_target:hfe_ahet_species
 					}
 				}
+			}
+			create_army = {
+				owner = owner
+				species = owner
+				type = industrial_army
+				leader = event_target:hfe_ahet_general
 			}
 		}
 		change_orbit = @base_moon_distance
@@ -1146,7 +1175,7 @@ hfe_initializer_varelse = {
 						event_leader = yes
 						species = event_target:hfe_varelse_leftover_robots
 						immortal = yes
-						skill = 1
+						skill = 3
 						leader_age_max = 3000
 						leader_age_min = 1000
 						traits = {
@@ -2020,16 +2049,28 @@ hfe_initializer_drone_sector_0 = {
 		orbit_angle = random
 	}
 	init_effect = {
+		# some generic machine species
+		create_species = {
+			class = MACHINE
+			traits = {
+				trait = trait_machine_unit
+				trait = random_traits
+			}
+			effect = {
+				save_event_target_as = hfe_drone_species
+			}
+		}
 		create_country = {
 			name = "Harvesting Branch 42"
 			name_list = AI
+			species = event_target:hfe_drone_species
 			type = hfe_drone
 			day_zero_contact = no
-			# do not work in game
-			# authority = auth_machine_intelligence
-			# ethos = {
-			# 	ethic = ethic_gestalt_consciousness
-			# }
+			# need machine species to work
+			authority = auth_machine_intelligence
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
 			flag = {
 				icon = {
 					category = "zoological"
@@ -2061,6 +2102,7 @@ hfe_initializer_drone_sector_0 = {
 					message = no
 					tech = tech_mining_drone_weapon_1
 				}
+				# love primitives lorewise, love enclaves and leviathans to not ruin player experience
 				every_country = {
 					limit = {
 						or = {

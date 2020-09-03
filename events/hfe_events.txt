@@ -752,7 +752,6 @@ country_event = {
 			flag = hfe_expansion_block
 			years = 10
 		}
-		#		country_add_ethic = ethic_xenophobe
 		set_country_type = default
 		every_playable_country = {
 			establish_communications_no_message = root
@@ -1923,20 +1922,6 @@ country_event = {
 			remove_country_flag = hfe.152.0
 		}
 	}
-	#	option = {
-	#		name = hfe.152.5
-	#		trigger = {
-	#			has_country_flag = hfe.152.0
-	#		}
-	#		hidden_effect = {
-	#		# ???????? ??????????
-	#		}
-	#	}
-	# TODO
-	# after = {
-	# hidden_effect = {
-	# }
-	# }
 }
 
 # obelisk
@@ -2045,7 +2030,7 @@ planet_event = {
 	immediate = {
 		every_owned_pop = {
 			limit = {
-				#is_robot_pop = no
+				hfe_trigger_is_robot = no
 			}
 			modify_species = {
 				add_trait = hfe_species_trait_test
@@ -9530,6 +9515,27 @@ ship_event = {
 					}
 				}
 				save_event_target_as = hfe_blight
+				# ai need machine pop to build machine armies and it take too much time			
+				create_fleet = {
+					name = "Integration Force"
+					effect = {
+						set_owner = prev
+						set_fleet_stance = passive
+						while = {
+							count = 12
+							create_army_transport = {
+								army_type = machine_assault_1
+								species = event_target:hfe_blight_machine_species
+							}
+						}
+						set_location = prev.capital_scope
+					}
+				}
+				# ai cheats
+				add_modifier = {
+					modifier = hfe_space_boom
+					years = 10
+				}
 				# take planets
 				event_target:hfe_blight_remnants.capital_scope = {
 					while = {
@@ -9648,29 +9654,6 @@ ship_event = {
 					id = hfe.5082
 				}
 			}
-			# ai cheats
-			event_target:hfe_blight = {
-				add_modifier = {
-					modifier = hfe_space_boom
-					years = 10
-				}
-				# ai need machine pop to build machine armies and it take too much time			
-				create_fleet = {
-					name = "Integration Force"
-					effect = {
-						set_owner = prev
-						set_fleet_stance = passive
-						while = {
-							count = 12
-							create_army_transport = {
-								army_type = machine_assault_1
-								species = event_target:hfe_blight_machine_species
-							}
-						}
-						set_location = prev.capital_scope
-					}
-				}
-			}
 		}
 	}
 	# switch to blight
@@ -9681,9 +9664,16 @@ ship_event = {
 				is_ai = no
 			}
 		}
+		allow = {
+			event_target:hfe_blight = {
+				is_ai = yes
+			}
+		}
 		event_target:hfe_blight = {
 			set_player = event_target:hfe_blight_remnants
 			hidden_effect = {
+				# remove ai cheat
+				remove_modifier = hfe_space_boom
 				country_event = {
 					id = hfe.5081
 				}
@@ -10591,7 +10581,7 @@ country_event = {
 		room = hfe_future_room
 	}
 	trigger = {
-		any_owned_pop_species = {
+		any_owned_species = {
 			has_trait = trait_mechanical
 		}
 		exists = event_target:hfe_future_country

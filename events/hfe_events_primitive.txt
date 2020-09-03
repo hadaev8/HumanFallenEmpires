@@ -1,7 +1,7 @@
 #
 namespace = hfe_primitive
-# functional events for primitives 0
-# primitive can make colony in same system
+# primitive life
+# primitive can make colony in same system 200
 country_event = {
 	id = hfe_primitive.200
 	hide_window = yes
@@ -14,7 +14,7 @@ country_event = {
 			any_system_planet = {
 				habitability = {
 					who = root.species
-					value > 0.1
+					value > 0.2
 				}
 				# can_colonize = {
 				# 	who = root
@@ -33,10 +33,10 @@ country_event = {
 				set_owner = root
 				create_ship = {
 					random_existing_design = colonizer
-					colonizer_species = owner_species
+					colonizer_species = root.species
 				}
 				set_location = root.capital_scope
-				save_event_target_as = hfe_primitive_100_fleet
+				save_event_target_as = hfe_primitive_200_fleet
 				queue_actions = {
 					find_closest_planet = {
 						trigger = {
@@ -57,13 +57,13 @@ country_event = {
 								start_colony = {
 									owner = root
 								}
-								delete_fleet = event_target:hfe_primitive_100_fleet
+								delete_fleet = event_target:hfe_primitive_200_fleet
 							}
 						}
 						failed = {
 							effect = {
 								id = hfe_primitive.200_fleet_effect.1
-								delete_fleet = event_target:hfe_primitive_100_fleet
+								delete_fleet = event_target:hfe_primitive_200_fleet
 							}
 						}
 					}
@@ -72,3 +72,29 @@ country_event = {
 		}
 	}
 }
+
+# TODO info event
+# primitive lvl up if win invasion
+# Triggers country_event for the defender upon victory
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+# on_planet_defenders_win
+country_event = {
+	id = hfe_primitive.202
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = primitive
+		exists = from
+	}
+	immediate = {
+		hfe_effect_primitive_up = yes
+		add_opinion_modifier = {
+			who = from
+			modifier = hfe_opinion_primitive_invasion_attempt
+		}
+	}
+}
+
+# TODO info event
