@@ -1129,7 +1129,8 @@ planet_event = {
 	}
 }
 
-# report event after lvl 2 for on_tech_increased 9
+# plague report notification 9
+# on_tech_increased
 country_event = {
 	id = hfe_plague.9
 	title = hfe_plague.9.name
@@ -1571,6 +1572,7 @@ planet_event = {
 	immediate = {
 		fromfrom = {
 			remove_pop_flag = event_purge
+			remove_pop_flag = hfe_plague_pop
 		}
 	}
 }
@@ -1909,63 +1911,17 @@ country_event = {
 			has_technology = hfe_tech_plague_immune
 		}
 	}
-	option = {
-		name = hfe_plague.58.0
-		trigger = {
-			OR = {
-				NOT = {
-					has_tech_option = hfe_tech_plague_immune
-				}
-				#				NOT = { has_technology = hfe_tech_plague_immune }
-				NOT = {
-					has_technology = tech_gene_tailoring
-				}
-				NOT = {
-					has_tech_option = tech_gene_tailoring
-				}
-			}
-		}
+	immediate = {
 		if = {
 			limit = {
 				has_global_flag = hfe_plague_logs
 			}
 			log = "Plague. [Root.GetName] now know immune"
 		}
-		if = {
-			limit = {
-				NOT = {
-					has_technology = hfe_tech_plague_immune
-					has_tech_option = hfe_tech_plague_immune
-				}
-			}
-			add_research_option = hfe_tech_plague_immune
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_hardcore_disable
-			}
-			add_research_option = tech_gene_tailoring
-		}
 	}
 	option = {
-		name = hfe_plague.58.1
-		trigger = {
-			has_tech_option = hfe_tech_plague_immune
-		}
-		add_tech_progress = {
-			tech = hfe_tech_plague_immune
-			progress = 0.01
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_hardcore_disable
-				NOT = {
-					has_technology = tech_gene_tailoring
-					has_tech_option = tech_gene_tailoring
-				}
-			}
-			add_research_option = tech_gene_tailoring
-		}
+		name = hfe_plague.58.0
+		hfe_effect_plague_give_immune_tech_boost = yes
 	}
 }
 
@@ -2271,7 +2227,8 @@ country_event = {
 	}
 }
 
-# plague bombardment by on_planet_zero_health
+# plague bombardment 161
+# on_planet_zero_health
 # Planet has reached 0 health from orbital bombardment
 # This = Planet
 # From = Bombarder
@@ -2294,6 +2251,184 @@ planet_event = {
 		}
 		planet_event = {
 			id = hfe_plague.1
+		}
+	}
+}
+
+# notification for getting immune tech and also option to share it 170
+# on_tech_increased
+country_event = {
+	id = hfe_plague.170
+	title = hfe_plague.170.name
+	desc = {
+		trigger = {
+			text = hfe_plague.170.desc.0
+			success_text = {
+				text = hfe_plague.170.desc.1
+				any_relation = {
+					is_country_type = default
+					not = {
+						has_technology = hfe_tech_plague_immune
+					}
+					# filter out very bad relations like purifers, still purifiers of same species will do it
+					their_opinion = {
+						who = root
+						value > -500
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_celebration
+	is_triggered_only = yes
+	trigger = {
+		last_increased_tech = hfe_tech_plague_immune
+	}
+	# have nobody to share
+	option = {
+		name = EXCELLENT
+		exclusive_trigger = {
+			not = {
+				any_relation = {
+					is_country_type = default
+					not = {
+						has_technology = hfe_tech_plague_immune
+					}
+					# filter out very bad relations like purifers, still purifiers of same species will do it
+					their_opinion = {
+						who = root
+						value > -500
+					}
+				}
+			}
+		}
+		hfe_effect_add_unity.1 = yes
+	}
+	# share to everyone, almost everyone
+	option = {
+		name = hfe_plague.170.0
+		trigger = {
+			is_xenophobe = no
+		}
+		hfe_effect_xenophile_attraction.3 = yes
+		hidden_effect = {
+			every_relation = {
+				limit = {
+					is_country_type = default
+					not = {
+						has_technology = hfe_tech_plague_immune
+					}
+					# filter out very bad relations like purifers, still purifiers of same species will do it
+					their_opinion = {
+						who = root
+						value > -500
+					}
+				}
+				country_event = {
+					id = hfe_plague.171
+					days = 1
+					random = 15
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 100
+				is_xenophile = yes
+			}
+		}
+	}
+	# share to federation or friends
+	option = {
+		name = hfe_plague.170.1
+		if = {
+			limit = {
+				exists = federation
+			}
+			custom_tooltip = hfe_plague.170.1.tooltip
+		}
+		hfe_effect_xenophile_attraction.2 = yes
+		hidden_effect = {
+			every_relation = {
+				limit = {
+					is_country_type = default
+					not = {
+						has_technology = hfe_tech_plague_immune
+					}
+					or = {
+						is_in_federation_with = root
+						their_opinion = {
+							who = root
+							value > 50
+						}
+					}
+				}
+				country_event = {
+					id = hfe_plague.171
+					days = 1
+					random = 15
+				}
+			}
+		}
+	}
+	# share to federation only
+	option = {
+		name = hfe_plague.170.2
+		trigger = {
+			exists = federation
+		}
+		hfe_effect_xenophile_attraction.1 = yes
+		hidden_effect = {
+			every_federation_ally = {
+				limit = {
+					is_country_type = default
+					not = {
+						has_technology = hfe_tech_plague_immune
+					}
+				}
+				country_event = {
+					id = hfe_plague.171
+					days = 1
+					random = 15
+				}
+			}
+		}
+	}
+	# not share
+	option = {
+		name = hfe_plague.170.3
+		trigger = {
+			is_xenophile = no
+		}
+		hfe_effect_xenophobe_attraction.2 = yes
+	}
+}
+
+country_event = {
+	id = hfe_plague.171
+	title = hfe_plague.171.name
+	desc = hfe_plague.171.desc
+	picture = GFX_evt_news_room
+	show_sound = event_celebration
+	location = from
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+	}
+	option = {
+		name = hfe_plague.171.0
+		exclusive_trigger = {
+			has_technology = hfe_tech_plague_immune
+		}
+	}
+	option = {
+		name = EXCELLENT
+		hfe_effect_plague_give_immune_tech_boost = yes
+		add_opinion_modifier = {
+			who = from
+			modifier = hfe_opinion_immune_shared
 		}
 	}
 }
