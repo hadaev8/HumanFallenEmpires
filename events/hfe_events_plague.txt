@@ -403,15 +403,15 @@ planet_event = {
 						}
 						random_list = {
 							90 = {
-							}
-							# get immune
-							10 = {
 								modifier = {
-									factor = 2
+									factor = 0
 									owner = {
 										has_technology = hfe_tech_plague_immune
 									}
 								}
+							}
+							# get immune
+							10 = {
 								owner = {
 									country_event = {
 										id = hfe_plague.58
@@ -986,7 +986,11 @@ planet_event = {
 	}
 }
 
-# zombies take planet for on_planet_occupied 5
+# zombies take planet 5
+# on_planet_occupied
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
 planet_event = {
 	id = hfe_plague.5
 	hide_window = yes
@@ -1010,67 +1014,32 @@ planet_event = {
 				id = hfe_plague.62
 			}
 		}
+		set_owner = fromfrom
 		every_owned_pop = {
 			set_pop_flag = event_purge
 			set_pop_flag = hfe_plague_event_purge
 			unemploy_pop = yes
 		}
-		every_planet_army = {
-			limit = {
-				not = {
-					army_type = hfe_plague_zombie_army
-				}
-			}
-			remove_army = yes
-		}
+		# every_planet_army = {
+		# 	limit = {
+		# 		not = {
+		# 			army_type = hfe_plague_zombie_army
+		# 		}
+		# 	}
+		# 	remove_army = yes
+		# }
 	}
 }
 
-# retake zombie planet on_planet_attackers_win
-country_event = {
-	id = hfe_plague.6
-	title = hfe_plague.7.name
-	desc = hfe_plague.7.desc
-	picture = GFX_evt_ground_combat
-	show_sound = event_ground_battle
-	is_triggered_only = yes
-	location = root
-	trigger = {
-		exists = from
-		from = {
-			is_country_type = hfe_plague_zombie
-		}
-	}
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = hfe_plague_logs
-			}
-			log = "Plague. Take planet [this.GetName] in [solar_system.GetName] from zombies new owner: [owner.GetName]"
-		}
-		every_owned_pop = {
-			limit = {
-				has_pop_flag = hfe_plague_event_purge
-			}
-			remove_pop_flag = event_purge
-			remove_pop_flag = hfe_plague_event_purge
-		}
-	}
-	option = {
-		name = hfe_plague.7.0
-		hfe_effect_add_unity.1 = yes
-	}
-}
-
-# retake zombie planet for on_planet_occupied 7
+# retake zombie planet 6
+# on_planet_occupied
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
 planet_event = {
-	id = hfe_plague.7
-	title = hfe_plague.7.name
-	desc = hfe_plague.7.desc
-	picture = GFX_evt_ground_combat
-	show_sound = event_ground_battle
+	id = hfe_plague.6
+	hide_window = yes
 	is_triggered_only = yes
-	location = root
 	trigger = {
 		exists = owner
 		owner = {
@@ -1086,18 +1055,17 @@ planet_event = {
 			log = "Plague. Take planet [this.GetName] in [solar_system.GetName] from zombies new owner: [owner.GetName]"
 		}
 		set_owner = fromfrom
+		owner = {
+			country_event = {
+				id = hfe_plague.63
+			}
+		}
 		every_owned_pop = {
 			limit = {
 				has_pop_flag = hfe_plague_event_purge
 			}
 			remove_pop_flag = event_purge
 			remove_pop_flag = hfe_plague_event_purge
-		}
-	}
-	option = {
-		name = hfe_plague.7.0
-		fromfrom = {
-			hfe_effect_add_unity.1 = yes
 		}
 	}
 }
@@ -1493,65 +1461,64 @@ country_event = {
 }
 
 # send planet to zombie owner then last pop purged on_pop_purged
-planet_event = {
-	id = hfe_plague.11
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		exists = controller
-		controller = {
-			is_country_type = hfe_plague_zombie
-		}
-	}
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = hfe_plague_logs
-			}
-			log = "Plague. Send planet to zombie owner then last pop purged [this.GetName] in [solar_system.GetName]"
-		}
-		owner = {
-			if = {
-				limit = {
-					has_event_chain = hfe_chain_plague_count
-				}
-				add_event_chain_counter = {
-					event_chain = hfe_chain_plague_count
-					counter = hfe_chain_plague_kill_pop_count
-					amount = 1
-				}
-			}
-		}
-		every_playable_country = {
-			limit = {
-				has_event_chain = hfe_chain_plague_count
-			}
-			add_event_chain_counter = {
-				event_chain = hfe_chain_plague_count
-				counter = hfe_chain_plague_kill_pop_count_total
-				amount = 1
-			}
-		}
-		every_owned_pop = {
-			limit = {
-				not = {
-					has_pop_flag = hfe_plague_event_purge
-				}
-			}
-			set_pop_flag = event_purge
-			set_pop_flag = hfe_plague_event_purge
-			unemploy_pop = yes
-		}
-		if = {
-			limit = {
-				num_pops = 0
-			}
-			set_owner = controller
-		}
-	}
-}
-
+# planet_event = {
+# 	id = hfe_plague.11
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	trigger = {
+# 		exists = owner
+# 		exists = controller
+# 		controller = {
+# 			is_country_type = hfe_plague_zombie
+# 		}
+# 	}
+# 	immediate = {
+# 		if = {
+# 			limit = {
+# 				has_global_flag = hfe_plague_logs
+# 			}
+# 			log = "Plague. Send planet to zombie owner then last pop purged [this.GetName] in [solar_system.GetName]"
+# 		}
+# 		owner = {
+# 			if = {
+# 				limit = {
+# 					has_event_chain = hfe_chain_plague_count
+# 				}
+# 				add_event_chain_counter = {
+# 					event_chain = hfe_chain_plague_count
+# 					counter = hfe_chain_plague_kill_pop_count
+# 					amount = 1
+# 				}
+# 			}
+# 		}
+# 		every_playable_country = {
+# 			limit = {
+# 				has_event_chain = hfe_chain_plague_count
+# 			}
+# 			add_event_chain_counter = {
+# 				event_chain = hfe_chain_plague_count
+# 				counter = hfe_chain_plague_kill_pop_count_total
+# 				amount = 1
+# 			}
+# 		}
+# 		every_owned_pop = {
+# 			limit = {
+# 				not = {
+# 					has_pop_flag = hfe_plague_event_purge
+# 				}
+# 			}
+# 			set_pop_flag = event_purge
+# 			set_pop_flag = hfe_plague_event_purge
+# 			unemploy_pop = yes
+# 		}
+# 		if = {
+# 			limit = {
+# 				num_pops = 0
+# 			}
+# 			set_owner = controller
+# 		}
+# 	}
+# }
 # A pop has been displaced
 # This = Planet scope
 # From = Country
@@ -1878,15 +1845,6 @@ country_event = {
 		trigger = {
 			has_global_flag = hfe_plague_lvl_3
 		}
-		hidden_effect = {
-			random_list = {
-				40 = {
-					play_sound = event_screams
-				}
-				60 = {
-				}
-			}
-		}
 	}
 	option = {
 		name = hfe_block
@@ -1972,7 +1930,7 @@ country_event = {
 	}
 }
 
-# everyone die on planet notification for owner
+# planet lost to zombie notification
 country_event = {
 	id = hfe_plague.62
 	title = hfe_plague.62.name
@@ -1996,6 +1954,53 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = hfe_plague_block_zombie
 		}
+	}
+}
+
+# retake zombie planet notification
+country_event = {
+	id = hfe_plague.63
+	title = hfe_plague.63.name
+	desc = hfe_plague.63.desc
+	picture = GFX_evt_hfe_zombie
+	show_sound = event_ground_battle
+	is_triggered_only = yes
+	location = from
+	option = {
+		name = EXCELLENT
+	}
+	option = {
+		exclusive_trigger = {
+			is_authoritarian = yes
+		}
+		name = hfe_plague.63.0
+	}
+	option = {
+		exclusive_trigger = {
+			is_egalitarian = yes
+		}
+		name = hfe_plague.63.1
+	}
+	option = {
+		exclusive_trigger = {
+			is_xenophobe = yes
+		}
+		name = hfe_plague.63.2
+	}
+	option = {
+		exclusive_trigger = {
+			is_militarist = yes
+		}
+		name = hfe_plague.63.4
+	}
+	option = {
+		exclusive_trigger = {
+			is_spiritualist = yes
+		}
+		name = hfe_plague.63.6
+	}
+	after = {
+		hfe_effect_add_unity.1 = yes
 	}
 }
 
