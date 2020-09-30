@@ -35,14 +35,52 @@ country_event = {
 		}
 	}
 	immediate = {
-		random_list = {
-			20 = {
-				break = yes
-			}
-			10 = {
+		set_global_flag = hfe_plague_started
+		create_species = {
+			name = Zombies
+			class = random
+			blocked_archetypes = {
+				MACHINE
+				ROBOT
+				LITHOID
 			}
 		}
-		set_global_flag = hfe_plague_started
+		create_country = {
+			name = Zombies
+			species = last_created_species
+			type = hfe_plague_zombie
+			flag = {
+				icon = {
+					category = hfe_emblem
+					file = hfe_emblem_zombie.dds
+				}
+				background = {
+					category = backgrounds
+					file = 00_solid.dds
+				}
+				colors = {
+					"black"
+					"black"
+					"dark_green"
+					"light_green"
+				}
+			}
+			effect = {
+				save_global_event_target_as = hfe_plague_zombie_country
+				every_playable_country = {
+					establish_communications = prev
+					begin_event_chain = {
+						event_chain = hfe_chain_plague_count
+						target = this
+					}
+					country_event = {
+						id = hfe_plague.50
+						days = 1
+						random = 15
+					}
+				}
+			}
+		}
 		event_target:global_event_country = {
 			set_variable = {
 				which = hfe_plague_planet_num
@@ -106,7 +144,7 @@ country_event = {
 				}
 				planet_event = {
 					id = hfe_plague.1
-					days = 16
+					days = 1
 					random = 365
 				}
 			}
@@ -114,47 +152,6 @@ country_event = {
 		set_variable = {
 			which = hfe_plague_power
 			value = 0
-		}
-		create_species = {
-			name = Zombies
-			class = random
-			blocked_archetypes = {
-				MACHINE
-				ROBOT
-				LITHOID
-			}
-		}
-		create_country = {
-			name = Zombies
-			species = last_created_species
-			type = hfe_plague_zombie
-			flag = {
-				icon = {
-					category = hfe_emblem
-					file = hfe_emblem_zombie.dds
-				}
-				background = {
-					category = backgrounds
-					file = 00_solid.dds
-				}
-				colors = {
-					"black"
-					"black"
-					"dark_green"
-					"light_green"
-				}
-			}
-			effect = {
-				save_global_event_target_as = hfe_plague_zombie_country
-				every_playable_country = {
-					establish_communications = prev
-					country_event = {
-						id = hfe_plague.50
-						days = 1
-						random = 15
-					}
-				}
-			}
 		}
 	}
 }
@@ -721,15 +718,16 @@ planet_event = {
 									}
 								}
 							}
-							modifier = {
-								factor = 2
-								owner = {
-									not = {
-										is_country = root.owner
-									}
-									has_closed_borders = root.owner
-								}
-							}
+							# ai cant do it
+							# modifier = {
+							# 	factor = 2
+							# 	owner = {
+							# 		not = {
+							# 			is_country = root.owner
+							# 		}
+							# 		has_closed_borders = root.owner
+							# 	}
+							# }
 							modifier = {
 								factor = 10
 								owner = {
@@ -1502,12 +1500,6 @@ country_event = {
 	picture = GFX_evt_news_room
 	show_sound = event_laboratory_sound
 	is_triggered_only = yes
-	immediate = {
-		begin_event_chain = {
-			event_chain = hfe_chain_plague_count
-			target = this
-		}
-	}
 	option = {
 		name = hfe_plague.50.0
 	}
@@ -1558,7 +1550,7 @@ country_event = {
 	# materialist-spiritualist
 	option = {
 		name = hfe_plague.50.4
-		custom_tooltip = hfe_plague.50.4.tooltip
+		#custom_tooltip = hfe_plague.50.4.tooltip
 		exclusive_trigger = {
 			or = {
 				is_spiritualist = yes
