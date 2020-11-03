@@ -932,93 +932,128 @@ planet_event = {
 }
 
 # zombies take planet 5
-# on_planet_occupied
-# Root = Planet
-# From = Planet Owner
-# FromFrom = Planet Controller (the one occupying)
-planet_event = {
+# on_planet_attackers_win
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+country_event = {
 	id = hfe_plague.5
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		exists = owner
+		is_country_type = hfe_plague_zombie
+		exists = from
 		exists = fromfrom
-		fromfrom = {
-			is_country_type = hfe_plague_zombie
-		}
 	}
 	immediate = {
 		if = {
 			limit = {
 				has_global_flag = hfe_plague_logs
 			}
-			log = "Plague. Zombies take planet [this.GetName] in [solar_system.GetName] owner: [owner.GetName]"
+			log = "Plague. Zombies take planet [fromfrom.GetName] in [fromfrom.solar_system.GetName] owner: [from.GetName]"
 		}
-		owner = {
+		from = {
 			country_event = {
 				id = hfe_plague.62
+				scopes = {
+					from = fromfrom
+				}
 			}
 		}
-		set_owner = fromfrom
-		every_owned_pop = {
-			set_pop_flag = event_purge
-			set_pop_flag = hfe_plague_event_purge
-			unemploy_pop = yes
+		fromfrom = {
+			set_controller = root
+			set_owner = root
+			every_owned_pop = {
+				unemploy_pop = yes
+			}
+			check_planet_employment = yes
 		}
-		# every_planet_army = {
-		# 	limit = {
-		# 		not = {
-		# 			army_type = hfe_plague_zombie_army
-		# 		}
-		# 	}
-		# 	remove_army = yes
-		# }
 	}
 }
 
 # retake zombie planet 6
-# on_planet_occupied
-# Root = Planet
-# From = Planet Owner
-# FromFrom = Planet Controller (the one occupying)
-planet_event = {
+# on_planet_attackers_win
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+country_event = {
 	id = hfe_plague.6
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		exists = owner
-		owner = {
+		exists = fromfrom
+		from = {
 			is_country_type = hfe_plague_zombie
 		}
-		exists = fromfrom
 	}
 	immediate = {
 		if = {
 			limit = {
 				has_global_flag = hfe_plague_logs
 			}
-			log = "Plague. Take planet [this.GetName] in [solar_system.GetName] from zombies new owner: [owner.GetName]"
+			log = "Plague. Take planet [fromfrom.GetName] in [fromfrom.solar_system.GetName] from zombies new owner: [from.GetName]"
 		}
-		set_owner = fromfrom
-		owner = {
+		from = {
 			country_event = {
 				id = hfe_plague.63
+				scopes = {
+					from = fromfrom
+				}
 			}
 		}
-		every_owned_pop = {
-			limit = {
-				has_pop_flag = hfe_plague_event_purge
+		fromfrom = {
+			set_controller = root
+			set_owner = root
+			every_owned_pop = {
+				unemploy_pop = yes
 			}
-			remove_pop_flag = event_purge
-			remove_pop_flag = hfe_plague_event_purge
+			check_planet_employment = yes
 		}
 	}
 }
 
+# add purged pop to stats
+# on_pop_purged
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+planet_event = {
+	id = hfe_plague.7
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		exists = fromfrom
+		fromfrom = {
+			has_job = hfe_plague_purge
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_plague_logs
+			}
+			log = "Plague. purged pop added to stats"
+		}
+		every_playable_country = {
+			limit = {
+				has_event_chain = hfe_chain_plague_count
+			}
+			add_event_chain_counter = {
+				event_chain = hfe_chain_plague_count
+				counter = hfe_chain_plague_kill_pop_count_total
+				amount = 1
+			}
+		}
+	}
+}
+
+# clear zombie planet by orbital bombardment 8
 # Planet has reached 0 health from orbital bombardment
 # This = Planet
 # From = Bombarder
-# clear zombie planet by orbital bombardment
 planet_event = {
 	id = hfe_plague.8
 	hide_window = yes

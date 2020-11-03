@@ -1,71 +1,3 @@
-#
-# hfe_effect_population_country_set_robot_pop_identity = {
-# 	if = {
-# 		limit = {
-# 			has_trait = trait_machine_unit
-# 			is_robot_pop = yes
-# 			owner = {
-# 				is_machine_empire = no
-# 			}
-# 		}
-# 		every_owned_pop_species = {
-# 			limit = {
-# 				has_trait = trait_machine_unit
-# 				is_robot_pop = yes
-# 				not = {
-# 					is_same_species = prev.species
-# 				}
-# 			}
-# 			root = {
-# 				modify_species = {
-# 					base = prev
-# 					species = prev
-# 					add_trait = hfe_species_trait_test
-# 				}
-# 			}
-# 			set_species_identity = prev.species
-# 			root = {
-# 				modify_species = {
-# 					species = prev
-# 					remove_trait = hfe_species_trait_test
-# 				}
-# 			}
-# 		}
-# 	}
-# 	else_if = {
-# 		limit = {
-# 			has_trait = trait_mechanical
-# 		}
-# 		every_owned_pop_species = {
-# 			limit = {
-# 				has_trait = trait_mechanical
-# 				not = {
-# 					is_same_species = prev.species
-# 				}
-# 			}
-# 			root = {
-# 				modify_species = {
-# 					base = none
-# 					species = prev
-# 					add_trait = hfe_species_trait_test
-# 				}
-# 			}
-# 			set_species_identity = prev.species
-# 			root = {
-# 				modify_species = {
-# 					species = prev
-# 					remove_trait = hfe_species_trait_test
-# 				}
-# 			}
-# 		}
-# 	}
-# 	else = {
-# 		if = {
-# 			limit = { owner = { is_machine_empire = no } }
-# 			hfe_effect_population_process_robot_species_identity = yes
-# 		}
-# 	}
-# }
 hfe_effect_population_fix_robot_pop = {
 	if = {
 		limit = {
@@ -75,10 +7,36 @@ hfe_effect_population_fix_robot_pop = {
 				is_machine_empire = no
 			}
 		}
-		modify_species = {
-			# base = prev
-			remove_trait = trait_machine_unit
-			add_trait = trait_mechanical
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_mechanical
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+				remove_trait = trait_machine_unit
+				add_trait = trait_mechanical
+			}
+		}
+		else = {
+			modify_species = {
+				remove_trait = trait_machine_unit
+				add_trait = trait_mechanical
+			}
 		}
 		remove_modifier = pop_recently_conquered
 	}
@@ -91,7 +49,8 @@ hfe_effect_population_fix_robot_pop = {
 			}
 		}
 		modify_species = {
-			# base = prev
+			# untested
+			base = owner
 			remove_trait = trait_mechanical
 			add_trait = trait_machine_unit
 		}
@@ -123,7 +82,7 @@ hfe_effect_gov_fix_to_hive = {
 		random_list = {
 			10 = {
 				modifier = {
-					factor = 0.5
+					factor = 0.1
 					not = {
 						any_owned_species = {
 							hfe_trigger_is_robot = no
@@ -139,7 +98,7 @@ hfe_effect_gov_fix_to_hive = {
 			}
 			10 = {
 				modifier = {
-					factor = 0.5
+					factor = 0.1
 					not = {
 						any_owned_species = {
 							hfe_trigger_is_robot = no
@@ -153,9 +112,9 @@ hfe_effect_gov_fix_to_hive = {
 					}
 				}
 			}
-			1 = {
+			10 = {
 				modifier = {
-					factor = 0
+					factor = 0.1
 					any_owned_species = {
 						hfe_trigger_is_robot = no
 					}
@@ -168,6 +127,12 @@ hfe_effect_gov_fix_to_hive = {
 				}
 			}
 			10 = {
+				modifier = {
+					factor = 0.1
+					any_owned_species = {
+						hfe_trigger_is_robot = no
+					}
+				}
 				change_government = {
 					civics = random
 				}
@@ -271,38 +236,6 @@ hfe_effect_gov_reset = {
 	set_name = random
 }
 
-# hfe_effect_population_process_robot_species_identity = {
-# 	random_owned_pop = {
-# 		limit = {
-# 			has_trait = trait_mechanical
-# 		}
-# 		save_event_target_as = hfe_robot_pop_species
-# 	}
-# 	every_owned_pop_species = {
-# 		limit = {
-# 			has_trait = trait_mechanical
-# 			exists = event_target:hfe_robot_pop_species
-# 			not = {
-# 				is_same_species = event_target:hfe_robot_pop_species
-# 			}
-# 		}
-# 		root = {
-# 			modify_species = {
-# 				base = none
-# 				species = prev
-# 				add_trait = hfe_species_trait_test
-# 			}
-# 		}
-# 		#		set_species_identity = prev.species
-# 		set_species_identity = prev
-# 		root = {
-# 			modify_species = {
-# 				species = prev
-# 				remove_trait = hfe_species_trait_test
-# 			}
-# 		}
-# 	}
-# }
 hfe_effect_population_remove_object_shield_global = {
 	every_ambient_object = {
 		limit = {

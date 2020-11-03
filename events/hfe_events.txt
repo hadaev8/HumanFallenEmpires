@@ -9411,30 +9411,11 @@ country_event = {
 	}
 }
 
-# blight event 5080 - 5090
+# blight event 5079 - 5090
 # event after anomaly
 ship_event = {
-	id = hfe.5080
-	title = hfe.5080.name
-	desc = {
-		trigger = {
-			hidden:owner = {
-				text = hfe.5080.desc.0
-				success_text = {
-					text = hfe.5080.desc.1.0
-					has_country_flag = hfe_future_contacted
-				}
-				fail_text = {
-					text = hfe.5080.desc.1.1
-					has_country_flag = hfe_future_contacted
-				}
-				text = hfe.5080.desc.2
-			}
-		}
-	}
-	picture = GFX_evt_hfe_robot_city
-	show_sound = event_activating_unknown_technology
-	location = root
+	id = hfe.5079
+	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		exists = from
@@ -9445,16 +9426,88 @@ ship_event = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		owner = {
-			save_event_target_as = hfe_blight_remnants
-		}
-		# some generic machine species
-		create_species = {
-			class = MACHINE
-			traits = {
-				trait = trait_machine_unit
-				trait = random_traits
+			country_event = {
+				id = hfe.5080
 			}
-			effect = {
+		}
+	}
+}
+
+# switch to country scope
+country_event = {
+	id = hfe.5080
+	title = hfe.5080.name
+	desc = {
+		trigger = {
+			# normal
+			success_text = {
+				text = hfe.5080.desc.0.0
+				is_machine_empire = no
+			}
+			success_text = {
+				text = hfe.5080.desc.0.1
+				has_country_flag = hfe_future_contacted
+				is_machine_empire = no
+			}
+			success_text = {
+				text = hfe.5080.desc.0.2
+				not = {
+					has_country_flag = hfe_future_contacted
+				}
+				is_machine_empire = no
+			}
+			success_text = {
+				text = hfe.5080.desc.0.3
+				is_machine_empire = no
+			}
+			# robots
+			success_text = {
+				text = hfe.5080.desc.1
+				has_valid_civic = civic_machine_servitor
+			}
+			success_text = {
+				text = hfe.5080.desc.2
+				has_valid_civic = civic_machine_assimilator
+			}
+			success_text = {
+				text = hfe.5080.desc.3
+				has_valid_civic = civic_machine_terminator
+			}
+			success_text = {
+				text = hfe.5080.desc.4
+				is_machine_empire = yes
+				nor = {
+					has_valid_civic = civic_machine_servitor
+					has_valid_civic = civic_machine_assimilator
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+		}
+	}
+	picture = GFX_evt_hfe_robot_city
+	show_sound = event_activating_unknown_technology
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		save_event_target_as = hfe_blight_remnants
+		if = {
+			limit = {
+				is_machine_empire = no
+			}
+			# some generic machine species
+			create_species = {
+				class = MACHINE
+				traits = {
+					trait = trait_machine_unit
+					trait = random_traits
+				}
+				effect = {
+					save_event_target_as = hfe_blight_machine_species
+				}
+			}
+		}
+		else = {
+			species = {
 				save_event_target_as = hfe_blight_machine_species
 			}
 		}
@@ -9496,6 +9549,9 @@ ship_event = {
 				hfe_effect_resource_bonus = yes
 				if = {
 					limit = {
+						event_target:hfe_blight_remnants = {
+							is_machine_empire = no
+						}
 						exists = event_target:hfe_blight_remnants.ruler
 					}
 					clone_leader = {
@@ -9591,23 +9647,19 @@ ship_event = {
 				change_dominant_species = {
 					species = event_target:hfe_blight_remnants.species
 				}
-				modify_species = {
-					add_trait = trait_cybernetic
+				if = {
+					limit = {
+						hfe_trigger_is_robot = no
+					}
+					modify_species = {
+						add_trait = trait_cybernetic
+					}
 				}
 				every_owned_pop = {
 					pop_event = {
 						id = hfe.5085
 					}
 				}
-				# gues it not needed
-				# every_owned_pop_species = {
-				# 	set_citizenship_type = {
-				# 		type = citizenship_full_machine
-				# 	}
-				# 	set_living_standard = {
-				# 		type = living_standard_hive_mind
-				# 	}
-				# }
 				declare_war = {
 					target = event_target:hfe_blight_remnants
 					attacker_war_goal = hfe_wg_annex
@@ -9624,15 +9676,20 @@ ship_event = {
 						70 = {
 							set_name = "Last of [prev.GetSpeciesNamePlural]"
 						}
-						70 = {
-							set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders"
-						}
+						# 70 = {
+						# 	set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders"
+						# }
 						10 = {
 							set_name = "The End"
 						}
 					}
-					kill_leader = {
-						type = ruler
+					if = {
+						limit = {
+							is_machine_empire = no
+						}
+						kill_leader = {
+							type = ruler
+						}
 					}
 					set_variable = {
 						which = hfe_blight_counter
@@ -9646,23 +9703,11 @@ ship_event = {
 			}
 		}
 	}
-	option = {
-		name = hfe.5080.1
-		hidden_effect = {
-			event_target:hfe_blight_remnants = {
-				country_event = {
-					id = hfe.5082
-				}
-			}
-		}
-	}
 	# switch to blight
 	option = {
 		name = hfe.5080.0
 		trigger = {
-			owner = {
-				is_ai = no
-			}
+			is_ai = no
 		}
 		allow = {
 			event_target:hfe_blight = {
@@ -9676,6 +9721,50 @@ ship_event = {
 				remove_modifier = hfe_space_boom
 				country_event = {
 					id = hfe.5081
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe.5080.1
+		trigger = {
+			is_machine_empire = no
+		}
+	}
+	option = {
+		name = hfe.5080.2
+		trigger = {
+			has_valid_civic = civic_machine_servitor
+		}
+	}
+	option = {
+		name = hfe.5080.3
+		trigger = {
+			has_valid_civic = civic_machine_assimilator
+		}
+	}
+	option = {
+		name = hfe.5080.4
+		trigger = {
+			has_valid_civic = civic_machine_terminator
+		}
+	}
+	option = {
+		name = hfe.5080.5
+		trigger = {
+			is_machine_empire = yes
+			nor = {
+				has_valid_civic = civic_machine_servitor
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+	}
+	after = {
+		hidden_effect = {
+			event_target:hfe_blight_remnants = {
+				country_event = {
+					id = hfe.5082
 				}
 			}
 		}
@@ -9704,7 +9793,37 @@ country_event = {
 country_event = {
 	id = hfe.5082
 	title = hfe.5082.name
-	desc = hfe.5082.desc
+	desc = {
+		trigger = {
+			# normal
+			success_text = {
+				text = hfe.5082.desc.0
+				is_machine_empire = no
+			}
+			# robots
+			success_text = {
+				text = hfe.5082.desc.1
+				has_valid_civic = civic_machine_servitor
+			}
+			success_text = {
+				text = hfe.5082.desc.2
+				has_valid_civic = civic_machine_assimilator
+			}
+			success_text = {
+				text = hfe.5082.desc.3
+				has_valid_civic = civic_machine_terminator
+			}
+			success_text = {
+				text = hfe.5082.desc.4
+				is_machine_empire = yes
+				nor = {
+					has_valid_civic = civic_machine_servitor
+					has_valid_civic = civic_machine_assimilator
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+		}
+	}
 	picture = GFX_evt_organic_oppression
 	show_sound = event_red_alert
 	location = root
@@ -9714,14 +9833,36 @@ country_event = {
 	}
 	option = {
 		name = hfe.5082.0
-		# play_sound = event_swarm
 	}
-	# after = {
-	# 	country_event = {
-	# 		id = hfe.5083
-	# 		days = 0
-	# 	}
-	# }
+	option = {
+		name = hfe.5082.1
+		exclusive_trigger = {
+			has_valid_civic = civic_machine_servitor
+		}
+	}
+	option = {
+		name = hfe.5082.2
+		exclusive_trigger = {
+			has_valid_civic = civic_machine_assimilator
+		}
+	}
+	option = {
+		name = hfe.5082.3
+		exclusive_trigger = {
+			has_valid_civic = civic_machine_terminator
+		}
+	}
+	option = {
+		name = hfe.5082.4
+		exclusive_trigger = {
+			is_machine_empire = yes
+			nor = {
+				has_valid_civic = civic_machine_servitor
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+	}
 }
 
 # country_event = {
