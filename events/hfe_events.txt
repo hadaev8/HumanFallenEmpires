@@ -717,35 +717,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		nor = {
-			is_country_type = default
-			has_global_flag = hfe_expansion_block
-		}
-		mid_game_years_passed > 0
-		OR = {
-			end_game_years_passed > 0
-			has_global_flag = galactic_crisis_happened
-			has_global_flag = hfe_war_in_heaven_started
-			is_at_war = yes
-			recently_lost_war = yes
-			any_playable_country = {
-				or = {
-					relative_power = {
-						who = root
-						category = fleet
-						value >= equivalent
-					}
-					and = {
-						is_difficulty > 1
-						relative_power = {
-							who = root
-							category = fleet
-							value >= inferior
-						}
-					}
-				}
-			}
-		}
+		hfe_trigger_human_fallen_awake = yes
 	}
 	immediate = {
 		set_timed_global_flag = {
@@ -753,6 +725,13 @@ country_event = {
 			years = 10
 		}
 		set_country_type = default
+		change_government = {
+			civics = {
+				civic = hfe_civic_egypt_genetic
+				civic = hfe_civic_egypt_rulers
+				civic = hfe_civic_egypt_fury
+			}
+		}
 		every_playable_country = {
 			establish_communications_no_message = root
 			if = {
@@ -881,15 +860,15 @@ ship_event = {
 		trigger = {
 			is_ship_size = science
 		}
-		fleet = {
-			hidden_effect = {
-				clear_fleet_actions = this
-			}
-			fleet_action_research_special_project = {
-				special_project = hfe_project_varelse_fleet
-				target = event_target:hfe_varelse_fleet_location
-			}
-		}
+		# fleet = {
+		# 	hidden_effect = {
+		# 		clear_fleet_actions = this
+		# 	}
+		# 	fleet_action_research_special_project = {
+		# 		special_project = hfe_project_varelse_fleet
+		# 		target = event_target:hfe_varelse_fleet_location
+		# 	}
+		# }
 	}
 	option = {
 		name = hfe.51.1
@@ -2597,7 +2576,7 @@ ship_event = {
 									orbit_planet = this
 									effect = {
 										id = hfe.253.effect.0
-										# need test it
+										# TODO need test it
 										prev.owner = {
 											set_faction_hostility = {
 												set_hostile = yes
@@ -6542,13 +6521,13 @@ fleet_event = {
 				}
 			}
 		}
-		hidden_effect = {
-			clear_fleet_actions = root
-		}
-		fleet_action_research_special_project = {
-			special_project = hfe_project_thoth_contact
-			target = event_target:hfe_thoth_station
-		}
+		# hidden_effect = {
+		# 	clear_fleet_actions = root
+		# }
+		# fleet_action_research_special_project = {
+		# 	special_project = hfe_project_thoth_contact
+		# 	target = event_target:hfe_thoth_station
+		# }
 	}
 	option = {
 		name = hfe.700.1
@@ -8581,40 +8560,19 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		nor = {
-			is_country_type = default
-			has_global_flag = hfe_expansion_block
-		}
-		mid_game_years_passed > 0
-		OR = {
-			end_game_years_passed > 0
-			has_global_flag = galactic_crisis_happened
-			has_global_flag = hfe_war_in_heaven_started
-			is_at_war = yes
-			recently_lost_war = yes
-			any_playable_country = {
-				or = {
-					relative_power = {
-						who = root
-						category = fleet
-						value >= equivalent
-					}
-					and = {
-						is_difficulty > 1
-						relative_power = {
-							who = root
-							category = fleet
-							value >= inferior
-						}
-					}
-				}
-			}
-		}
+		hfe_trigger_human_fallen_awake = yes
 	}
 	immediate = {
 		set_timed_global_flag = {
 			flag = hfe_expansion_block
 			years = 10
+		}
+		change_government = {
+			civics = {
+				civic = hfe_civic_future_virtual_train
+				civic = hfe_civic_future_mobilisation
+				civic = hfe_civic_future_comand
+			}
 		}
 		hfe_effect_cleanse_ethics = yes
 		country_add_ethic = ethic_militarist
@@ -9522,10 +9480,10 @@ country_event = {
 				ethic = ethic_gestalt_consciousness
 			}
 			authority = auth_machine_intelligence
-			origin = origin_machine
+			origin = hfe_origin_blight
 			civics = {
 				civic = civic_machine_assimilator
-				civic = hfe_civic_blight
+				civic = random
 			}
 			flag = {
 				icon = {
@@ -9563,7 +9521,8 @@ country_event = {
 							trait = leader_trait_ruler_cyborg
 						}
 						effect = {
-							set_name = "Voice of Blight"
+							# its already in ruler's title
+							# set_name = "Voice of Blight"
 							owner = {
 								assign_leader = prev
 							}
@@ -9571,22 +9530,6 @@ country_event = {
 					}
 				}
 				save_event_target_as = hfe_blight
-				# ai need machine pop to build machine armies and it take too much time			
-				create_fleet = {
-					name = "Integration Force"
-					effect = {
-						set_owner = prev
-						set_fleet_stance = passive
-						while = {
-							count = 12
-							create_army_transport = {
-								army_type = machine_assault_1
-								species = event_target:hfe_blight_machine_species
-							}
-						}
-						set_location = prev.capital_scope
-					}
-				}
 				# ai cheats
 				add_modifier = {
 					modifier = hfe_space_boom
@@ -9636,11 +9579,32 @@ country_event = {
 								# this rename every fleet including mining stations but why not
 								set_name = "Directive 666 Drones"
 								set_owner = event_target:hfe_blight
+								hfe_effect_add_cyborg_trait_to_leader = yes
 							}
 							starbase = {
 								set_owner = event_target:hfe_blight
 							}
 						}
+					}
+				}
+				# upgrade taken leaders
+				every_owned_leader = {
+					hfe_effect_add_cyborg_trait = yes
+				}
+				# ai need machine pop to build machine armies and it take too much time			
+				create_fleet = {
+					name = "Integration Force"
+					effect = {
+						set_owner = prev
+						set_fleet_stance = passive
+						while = {
+							count = 12
+							create_army_transport = {
+								army_type = machine_assault_1
+								species = event_target:hfe_blight_machine_species
+							}
+						}
+						set_location = prev.capital_scope
 					}
 				}
 				set_built_species = event_target:hfe_blight_machine_species
@@ -9912,7 +9876,8 @@ planet_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			has_valid_civic = hfe_civic_blight
+			has_valid_civic = civic_machine_assimilator
+			has_origin = hfe_origin_blight
 		}
 	}
 	immediate = {
@@ -9932,7 +9897,8 @@ pop_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			has_valid_civic = hfe_civic_blight
+			has_valid_civic = civic_machine_assimilator
+			has_origin = hfe_origin_blight
 		}
 		hfe_trigger_is_robot = no
 		not = {
@@ -9944,6 +9910,8 @@ pop_event = {
 			remove_trait = trait_hive_mind
 			add_trait = trait_cybernetic
 		}
+		apply_post_assimilation_effects = yes
+		remove_modifier = pop_recently_conquered
 	}
 }
 
@@ -9953,7 +9921,8 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_valid_civic = hfe_civic_blight
+		has_valid_civic = civic_machine_assimilator
+		has_origin = hfe_origin_blight
 	}
 	immediate = {
 		# need to set event chain in coutry event to show variables
@@ -10094,7 +10063,7 @@ country_event = {
 	}
 }
 
-# event for blight then no other empires for assimilation
+# event for blight then no other empires for assimilation 5087
 country_event = {
 	id = hfe.5087
 	title = hfe.5087.name
@@ -10113,6 +10082,7 @@ country_event = {
 	}
 }
 
+# main effect 5088
 country_event = {
 	id = hfe.5088
 	hide_window = yes
@@ -10202,6 +10172,32 @@ country_event = {
 					}
 					hfe_effect_primitive_make_primitive = yes
 				}
+				3 = {
+					modifier = {
+						factor = 0
+						not = {
+							is_planet_class = pc_habitat
+						}
+					}
+					modifier = {
+						factor = 0
+						is_capital = yes
+					}
+					remove_planet = yes
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						not = {
+							is_planet_class = pc_ringworld_habitable
+						}
+					}
+					modifier = {
+						factor = 0
+						is_capital = yes
+					}
+					change_pc = pc_ringworld_habitable_damaged
+				}
 				7 = {
 				}
 			}
@@ -10249,6 +10245,13 @@ country_event = {
 							modifier = {
 								mult = 10
 								hfe_trigger_is_robot_or_hive = no
+							}
+							modifier = {
+								mult = 1000
+								hfe_trigger_is_robot = yes
+								planet = {
+									is_planet_class = pc_machine
+								}
 							}
 						}
 						species = {
@@ -10386,9 +10389,10 @@ country_event = {
 									}
 								}
 								prev = {
-									give_technology = {
-										tech = tech_gateway_activation
-									}
+									# give_technology = {
+									# 	tech = tech_gateway_activation
+									# }
+									set_country_flag = encountered_first_gateway
 								}
 							}
 							every_system_planet = {
@@ -10426,7 +10430,136 @@ country_event = {
 								}
 							}
 						}
-						set_name = random
+						if = {
+							limit = {
+								any_owned_planet = {
+									is_planet = event_target:hfe_capital_scope
+								}
+							}
+							set_name = "Prime Cluster Successors"
+							change_dominant_species = {
+								species = root.species
+								change_all = yes
+							}
+							if = {
+								limit = {
+									hfe_trigger_is_robot = yes
+									exists = ruler
+								}
+								ruler = {
+									set_name = "AIM 3029bac System Image"
+								}
+							}
+							set_player = root
+						}
+						else = {
+							set_name = random
+						}
+						# place some origins
+						# only necrophage really important, doorstep unlocks chain to open gates, rest all for fun and immersion
+						if = {
+							limit = {
+								has_trait = trait_necrophage
+							}
+							set_origin = origin_necrophage
+						}
+						else_if = {
+							limit = {
+								prev = {
+									or = {
+										has_megastructure = gateway_final
+										has_megastructure = gateway_restored
+										has_megastructure = gateway_ruined
+									}
+								}
+							}
+							prev = {
+								random_system_megastructure = {
+									limit = {
+										or = {
+											is_megastructure_type = gateway_final
+											is_megastructure_type = gateway_restored
+											is_megastructure_type = gateway_ruined
+										}
+									}
+									set_megastructure_flag = doorstep_gateway@prev
+									save_event_target_as = doorstep_gateway
+								}
+							}
+							set_origin = origin_galactic_doorstep
+							country_event = {
+								id = origin.1000
+								days = 300
+								random = 30
+							}
+						}
+						else_if = {
+							limit = {
+								host_has_dlc = "Utopia"
+								is_materialist = yes
+								any_owned_species = {
+									hfe_trigger_is_robot = yes
+								}
+							}
+							set_origin = origin_mechanists
+						}
+						else_if = {
+							limit = {
+								host_has_dlc = "Utopia"
+								is_gestalt = no
+								not = {
+									has_trait = trait_syncretic_proles
+								}
+								any_owned_species = {
+									has_trait = trait_syncretic_proles
+								}
+							}
+							set_origin = origin_syncretic_evolution
+						}
+						else_if = {
+							limit = {
+								host_has_dlc = "Apocalypse"
+								ideal_planet_class = pc_gaia
+							}
+							set_origin = origin_life_seeded
+						}
+						else_if = {
+							limit = {
+								host_has_dlc = "Apocalypse"
+								has_trait = trait_survivor
+							}
+							set_origin = origin_post_apocalyptic
+						}
+						else_if = {
+							limit = {
+								OR = {
+									has_ancrel = yes
+									host_has_dlc = Federations
+								}
+								any_owned_planet = {
+									is_planet_class = pc_relic
+								}
+							}
+							set_origin = origin_remnants
+						}
+						else_if = {
+							limit = {
+								host_has_dlc = Federations
+								any_owned_planet = {
+									is_planet_class = pc_ringworld_habitable
+								}
+							}
+							set_origin = origin_shattered_ring
+						}
+						else_if = {
+							limit = {
+								is_machine_empire = yes
+								any_owned_planet = {
+									is_planet_class = pc_machine
+								}
+							}
+							set_origin = origin_machine
+						}
 					}
 				}
 			}
@@ -10439,23 +10572,75 @@ country_event = {
 				}
 			}
 		}
-		event_target:hfe_capital_scope = {
-			owner = {
-				set_name = "Prime Cluster Successors"
-				change_dominant_species = {
-					species = root.species
-					change_all = yes
-				}
-				ruler = {
-					set_name = "AIM 3029bac System Image"
-				}
-				set_player = root
-			}
-		}
 		# TODO galactic community
 		remove_global_flag = galactic_community_founded
 		remove_global_flag = galcom_founding_begun
 		remove_global_flag = galactic_council_formed
+	}
+}
+
+# blight assimilate fleet 5089
+# on_space_battle_won
+# This = owner of fleet 1 (winner)
+# From = owner of fleet 2 (loser)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = hfe.5089
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_valid_civic = civic_machine_assimilator
+		has_origin = hfe_origin_blight
+		exists = from
+		from = {
+			or = {
+				is_country_type = default
+				hfe_trigger_is_fallen = yes
+			}
+		}
+		exists = fromfromfrom
+		fromfromfrom = {
+			is_ship_class = shipclass_military
+			num_ships > 1
+		}
+	}
+	immediate = {
+		random_list = {
+			1 = {
+				fromfromfrom = {
+					set_owner = root
+					hfe_effect_add_cyborg_trait_to_leader = yes
+				}
+				create_message = {
+					type = hfe_message_type_blight_assimilation
+					localization = hfe_message_type_blight_assimilation_desc
+					days = 30
+					target = fromfrom
+					variable = {
+						type = name
+						localization = hfe_fleet
+						scope = fromfromfrom
+					}
+				}
+				from = {
+					create_message = {
+						type = hfe_message_type_blight_assimilation
+						localization = hfe_message_type_blight_assimilation_from_us_desc
+						days = 30
+						# TODO should it be from?
+						target = fromfrom
+						variable = {
+							type = name
+							localization = hfe_fleet
+							scope = fromfromfrom
+						}
+					}
+				}
+			}
+			2 = {
+			}
+		}
 	}
 }
 
@@ -10558,11 +10743,41 @@ country_event = {
 				has_country_flag = hfe.5091.step0
 			}
 			success_text = {
+				text = hfe.5091.desc.0.0
+				has_valid_civic = civic_machine_servitor
+				has_country_flag = hfe.5091.step0
+			}
+			success_text = {
+				text = hfe.5091.desc.0.1
+				has_valid_civic = civic_machine_assimilator
+				has_country_flag = hfe.5091.step0
+			}
+			success_text = {
 				text = hfe.5091.desc.1
 				has_country_flag = hfe.5091.step1
 			}
 			success_text = {
+				text = hfe.5091.desc.1.0
+				has_valid_civic = civic_machine_servitor
+				has_country_flag = hfe.5091.step1
+			}
+			success_text = {
+				text = hfe.5091.desc.1.1
+				has_valid_civic = civic_machine_assimilator
+				has_country_flag = hfe.5091.step1
+			}
+			success_text = {
 				text = hfe.5091.desc.2
+				has_country_flag = hfe.5091.step2
+			}
+			success_text = {
+				text = hfe.5091.desc.2.0
+				has_valid_civic = civic_machine_servitor
+				has_country_flag = hfe.5091.step2
+			}
+			success_text = {
+				text = hfe.5091.desc.2.1
+				has_valid_civic = civic_machine_assimilator
 				has_country_flag = hfe.5091.step2
 			}
 			success_text = {
@@ -10672,6 +10887,11 @@ country_event = {
 		activate_saved_leader = {
 			add_to_owned = yes
 			key = hfe_5090_leader
+		}
+		hidden_effect = {
+			event_target:hfe_5090_leader = {
+				add_trait = leader_trait_admiral_cyborg
+			}
 		}
 		default_hide_option = yes
 	}

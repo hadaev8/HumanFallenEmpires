@@ -10,6 +10,7 @@ ship_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = this
+		exists = fleet
 		exists = owner
 		owner = {
 			is_country_type = hfe_drone
@@ -356,41 +357,42 @@ pop_event = {
 # 		}
 # 	}
 # }
-# fix psi traits
+# change subject type for egypt/future
+# on_becoming_subject
+# This = subject
+# From = subject's overlord
 country_event = {
 	id = hfe_maintenance.50
 	hide_window = yes
 	is_triggered_only = yes
-	immediate = {
-		every_owned_pop_species = {
-			limit = {
-				has_trait = trait_latent_psionic
-				has_trait = trait_psionic
-			}
-			modify_species = {
-				remove_trait = trait_latent_psionic
-				remove_trait = trait_mechanical
-				remove_trait = trait_machine_unit
+	trigger = {
+		exists = from
+		from = {
+			or = {
+				has_country_flag = hfe_egypt
+				and = {
+					exists = event_target:hfe_coalition_leader
+					is_country = event_target:hfe_coalition_leader
+				}
 			}
 		}
 	}
-}
-
-# change subject type
-country_event = {
-	id = hfe_maintenance.51
-	hide_window = yes
-	is_triggered_only = yes
 	immediate = {
-		every_subject = {
+		if = {
 			limit = {
-				not = {
-					is_subject_type = hfe_vassal_egypt
+				from = {
+					has_country_flag = hfe_egypt
 				}
 			}
 			set_subject_of = {
-				who = root
+				who = from
 				subject_type = hfe_vassal_egypt
+			}
+		}
+		else = {
+			set_subject_of = {
+				who = from
+				subject_type = hfe_vassal_future
 			}
 		}
 	}
@@ -552,19 +554,6 @@ event = {
 			event_target:hfe_coalition_leader = {
 				country_event = {
 					id = hfe.5020
-					days = 1
-					random = 700
-				}
-			}
-		}
-		# egypt change vassal type
-		if = {
-			limit = {
-				exists = event_target:hfe_egypt_country
-			}
-			event_target:hfe_egypt_country = {
-				country_event = {
-					id = hfe_maintenance.51
 					days = 1
 					random = 700
 				}
@@ -847,6 +836,14 @@ event = {
 				}
 			}
 		}
+		every_country = {
+			# awake fallen
+			country_event = {
+				id = hfe_total_war.1000
+				days = 1
+				random = 3650
+			}
+		}
 		event_target:global_event_country = {
 			# plague start
 			random_list = {
@@ -859,12 +856,6 @@ event = {
 						random = 3650
 					}
 				}
-			}
-			# awake fallen
-			country_event = {
-				id = hfe_total_war.1000
-				days = 1
-				random = 3650
 			}
 			# war in heavens trigger
 			country_event = {

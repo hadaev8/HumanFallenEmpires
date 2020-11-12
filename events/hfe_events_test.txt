@@ -787,6 +787,88 @@ planet_event = {
 	}
 }
 
+country_event = {
+	id = hfe_test.31
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_species = {
+			limit = {
+				has_citizenship_type = {
+					country = root
+					type = citizenship_full_machine
+				}
+			}
+			set_military_service_type = {
+				country = root
+				type = military_service_full
+				cooldown = yes
+			}
+			set_migration_controls = {
+				country = root
+				type = no
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.32
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_federation = {
+			if = {
+				limit = {
+					relative_power = {
+						who = root
+						value = superior
+					}
+				}
+				root = {
+					add_resource = {
+						minerals = 100
+					}
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+				exists = federation
+			}
+			if = {
+				limit = {
+					relative_power = {
+						who = root
+						value = superior
+					}
+				}
+				root = {
+					add_resource = {
+						energy = 100
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.33
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				hfe_trigger_is_robot = yes
+			}
+			change_species = root
+		}
+	}
+}
+
 # country_event = { # Only called by Console Command cheat codes
 # 	id = hfe_test.28
 # 	title = "HFE_INIT_SPAWN_LOG_TSP"

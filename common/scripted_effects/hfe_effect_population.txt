@@ -1,5 +1,76 @@
 hfe_effect_population_fix_robot_pop = {
+	# robot to robot
 	if = {
+		limit = {
+			has_trait = trait_mechanical
+			exists = owner
+			owner = {
+				is_machine_empire = no
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+						not = {
+							is_same_species = prevprev
+						}
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+			}
+		}
+	}
+	# machine to machine
+	else_if = {
+		limit = {
+			has_trait = trait_machine_unit
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+			}
+		}
+		remove_modifier = pop_recently_conquered
+	}
+	# machine to robot
+	else_if = {
 		limit = {
 			has_trait = trait_machine_unit
 			exists = owner
@@ -40,6 +111,7 @@ hfe_effect_population_fix_robot_pop = {
 		}
 		remove_modifier = pop_recently_conquered
 	}
+	# robot to machine
 	else_if = {
 		limit = {
 			has_trait = trait_mechanical
@@ -48,11 +120,36 @@ hfe_effect_population_fix_robot_pop = {
 				is_machine_empire = yes
 			}
 		}
-		modify_species = {
-			# untested
-			base = owner
-			remove_trait = trait_mechanical
-			add_trait = trait_machine_unit
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
+			}
+		}
+		else = {
+			modify_species = {
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
+			}
 		}
 		remove_modifier = pop_recently_conquered
 	}
@@ -204,7 +301,7 @@ hfe_effect_gov_fix_from_hive = {
 			hfe_trigger_non_sapient = no
 			# in general its ok if cybernetics will be released from hive authority but not blight
 			not = {
-				has_valid_civic = hfe_civic_blight
+				has_origin = hfe_origin_blight
 			}
 		}
 		create_country = {

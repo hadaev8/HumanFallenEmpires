@@ -173,15 +173,15 @@ planet_event = {
 			flag = hfe_plague_planet
 			days = 3655
 		}
-		every_owned_pop = {
-			limit = {
-				hfe_trigger_plague_is_immune = no
-			}
-			set_timed_pop_flag = {
-				flag = hfe_plague_pop
-				days = 3650
-			}
-		}
+		# every_owned_pop = {
+		# 	limit = {
+		# 		hfe_trigger_plague_is_immune = no
+		# 	}
+		# 	set_timed_pop_flag = {
+		# 		flag = hfe_plague_pop
+		# 		days = 3650
+		# 	}
+		# }
 		owner = {
 			if = {
 				limit = {
@@ -294,10 +294,6 @@ planet_event = {
 			days = 180
 			random = 180
 		}
-		set_timed_planet_flag = {
-			flag = hfe_plague_planet_owner@owner
-			days = 3655
-		}
 		# check planet after 10 years
 		planet_event = {
 			id = hfe_plague.4
@@ -356,6 +352,25 @@ planet_event = {
 				random_list = {
 					# not die
 					10 = {
+						# crime
+						modifier = {
+							factor = 1.25
+							planet_crime < 10
+						}
+						# amenities
+						modifier = {
+							factor = 1.25
+							free_amenities > 0
+						}
+						modifier = {
+							factor = 1.25
+							free_amenities > 10
+						}
+						modifier = {
+							factor = 1.25
+							free_amenities > 20
+						}
+						# buildings
 						modifier = {
 							factor = 2
 							has_building = building_clinic
@@ -368,26 +383,39 @@ planet_event = {
 							factor = 2
 							has_building = building_psi_corps
 						}
+						# good planet type
 						modifier = {
 							factor = 2
-							habitable_structure = yes
+							or = {
+								is_planet_class = pc_gaia
+								habitable_structure = yes
+							}
 						}
+						# edict
 						modifier = {
 							factor = 2
 							owner = {
 								has_edict = hfe_plague_quarantine
 							}
 						}
+						# ai bonus
 						modifier = {
 							factor = 2
 							owner = {
 								is_ai = yes
 							}
 						}
+						# tech
 						modifier = {
 							factor = 2
 							owner = {
 								has_technology = hfe_tech_plague_immune
+							}
+						}
+						modifier = {
+							factor = 2
+							owner = {
+								has_technology = hfe_tech_plague_immune_2
 							}
 						}
 						if = {
@@ -398,6 +426,12 @@ planet_event = {
 						}
 						random_list = {
 							90 = {
+								modifier = {
+									factor = 0
+									owner = {
+										has_technology = hfe_tech_plague_immune_2
+									}
+								}
 								modifier = {
 									factor = 0.1
 									owner = {
@@ -417,15 +451,63 @@ planet_event = {
 									limit = {
 										hfe_trigger_plague_is_immune = no
 									}
-									modify_species = {
-										add_trait = hfe_species_trait_immune
-									}
+									set_pop_flag = hfe_plague_pop_immune
 								}
 							}
 						}
 					}
 					# die
 					30 = {
+						# amenities
+						modifier = {
+							factor = 1.25
+							free_amenities < 0
+						}
+						modifier = {
+							factor = 1.25
+							free_amenities < -10
+						}
+						modifier = {
+							factor = 1.25
+							free_amenities < -20
+						}
+						# crime
+						modifier = {
+							factor = 1.25
+							planet_crime > 10
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 20
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 30
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 40
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 50
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 60
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 70
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 80
+						}
+						modifier = {
+							factor = 1.25
+							planet_crime > 90
+						}
 						# pop ammount scale
 						modifier = {
 							factor = 2
@@ -578,19 +660,37 @@ planet_event = {
 													count < 15
 												}
 											}
-											create_army = {
-												name = Zombies
-												owner = event_target:hfe_plague_zombie_country
-												type = hfe_plague_zombie_army
-											}
-											every_playable_country = {
-												limit = {
-													has_event_chain = hfe_chain_plague_count
+											random_list = {
+												10 = {
+													modifier = {
+														factor = 2
+														owner = {
+															is_ai = yes
+														}
+													}
+													modifier = {
+														factor = 4
+														owner = {
+															has_technology = hfe_tech_plague_anti_zombie
+														}
+													}
 												}
-												add_event_chain_counter = {
-													event_chain = hfe_chain_plague_count
-													counter = hfe_chain_plague_zombie_count_total
-													amount = 1
+												10 = {
+													create_army = {
+														name = Zombies
+														owner = event_target:hfe_plague_zombie_country
+														type = hfe_plague_zombie_army
+													}
+													every_playable_country = {
+														limit = {
+															has_event_chain = hfe_chain_plague_count
+														}
+														add_event_chain_counter = {
+															event_chain = hfe_chain_plague_count
+															counter = hfe_chain_plague_zombie_count_total
+															amount = 1
+														}
+													}
 												}
 											}
 										}
@@ -664,6 +764,25 @@ planet_event = {
 					random_list = {
 						# not send plague
 						10 = {
+							# crime
+							modifier = {
+								factor = 1.25
+								planet_crime < 10
+							}
+							# amenities
+							modifier = {
+								factor = 1.25
+								free_amenities > 0
+							}
+							modifier = {
+								factor = 1.25
+								free_amenities > 10
+							}
+							modifier = {
+								factor = 1.25
+								free_amenities > 20
+							}
+							# buildings
 							modifier = {
 								factor = 2
 								has_building = building_clinic
@@ -676,22 +795,29 @@ planet_event = {
 								factor = 2
 								has_building = building_psi_corps
 							}
+							# good planet type
 							modifier = {
 								factor = 2
-								habitable_structure = yes
+								or = {
+									is_planet_class = pc_gaia
+									habitable_structure = yes
+								}
 							}
+							# edict
 							modifier = {
 								factor = 2
 								owner = {
 									has_edict = hfe_plague_quarantine
 								}
 							}
+							# ai bonus
 							modifier = {
 								factor = 2
 								owner = {
 									is_ai = yes
 								}
 							}
+							# tech
 							modifier = {
 								factor = 2
 								owner = {
@@ -700,14 +826,23 @@ planet_event = {
 							}
 							modifier = {
 								factor = 2
+								owner = {
+									has_technology = hfe_tech_plague_immune_2
+								}
+							}
+							# lvl 3 have worse spread
+							modifier = {
+								factor = 2
 								has_global_flag = hfe_plague_lvl_3
 							}
+							# fallens have extra resist
 							modifier = {
 								factor = 2
 								owner = {
 									hfe_trigger_is_fallen = yes
 								}
 							}
+							# cross boarding also gives resist
 							modifier = {
 								factor = 2
 								owner = {
@@ -716,16 +851,7 @@ planet_event = {
 									}
 								}
 							}
-							# ai cant do it
-							# modifier = {
-							# 	factor = 2
-							# 	owner = {
-							# 		not = {
-							# 			is_country = root.owner
-							# 		}
-							# 		has_closed_borders = root.owner
-							# 	}
-							# }
+							# purifers have boost
 							modifier = {
 								factor = 10
 								owner = {
@@ -744,6 +870,56 @@ planet_event = {
 						}
 						# send plague
 						30 = {
+							# amenities
+							modifier = {
+								factor = 1.25
+								free_amenities < 0
+							}
+							modifier = {
+								factor = 1.25
+								free_amenities < -10
+							}
+							modifier = {
+								factor = 1.25
+								free_amenities < -20
+							}
+							# crime
+							modifier = {
+								factor = 1.25
+								planet_crime > 10
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 20
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 30
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 40
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 50
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 60
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 70
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 80
+							}
+							modifier = {
+								factor = 1.25
+								planet_crime > 90
+							}
 							# pop ammount scale
 							modifier = {
 								factor = 2
@@ -860,9 +1036,16 @@ planet_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		exists = owner
 		has_planet_flag = hfe_plague_planet
 	}
 	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_plague_logs
+			}
+			log = "Plague. Reducing counters by 10 years delay"
+		}
 		every_playable_country = {
 			limit = {
 				has_event_chain = hfe_chain_plague_count
@@ -873,59 +1056,81 @@ planet_event = {
 				amount = -1
 			}
 		}
-		if = {
-			limit = {
-				num_pops > 0
-				exists = owner
-			}
-			owner = {
-				if = {
-					limit = {
-						has_event_chain = hfe_chain_plague_count
-					}
-					add_event_chain_counter = {
-						event_chain = hfe_chain_plague_count
-						counter = hfe_chain_plague_infested_planet
-						amount = -1
-					}
-				}
-			}
-		}
-		else = {
-			every_playable_country = {
+		owner = {
+			if = {
 				limit = {
 					has_event_chain = hfe_chain_plague_count
 				}
 				add_event_chain_counter = {
 					event_chain = hfe_chain_plague_count
-					counter = hfe_chain_plague_kill_planet_count_total
+					counter = hfe_chain_plague_infested_planet
+					amount = -1
+				}
+			}
+		}
+	}
+}
+
+# reduce the counter and send notification 11
+# on_planet_ownerless
+#From = Country scope
+#This = Planet scope
+planet_event = {
+	id = hfe_plague.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		or = {
+			has_planet_flag = hfe_plague_planet
+			and = {
+				exists = controller
+				controller = {
+					is_country_type = hfe_plague_zombie
+				}
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_plague_logs
+			}
+			log = "Plague. Reducing counters by on_planet_ownerless"
+		}
+		owner = {
+			if = {
+				limit = {
+					has_event_chain = hfe_chain_plague_count
+				}
+				add_event_chain_counter = {
+					event_chain = hfe_chain_plague_count
+					counter = hfe_chain_plague_infested_planet
+					amount = -1
+				}
+				add_event_chain_counter = {
+					event_chain = hfe_chain_plague_count
+					counter = hfe_chain_plague_kill_planet_count
 					amount = 1
 				}
 			}
-			random_country = {
-				limit = {
-					root = {
-						has_planet_flag = hfe_plague_planet_owner@prev
-					}
-				}
-				country_event = {
-					id = hfe_plague.61
-				}
-				if = {
-					limit = {
-						has_event_chain = hfe_chain_plague_count
-					}
-					add_event_chain_counter = {
-						event_chain = hfe_chain_plague_count
-						counter = hfe_chain_plague_kill_planet_count
-						amount = 1
-					}
-					add_event_chain_counter = {
-						event_chain = hfe_chain_plague_count
-						counter = hfe_chain_plague_infested_planet
-						amount = -1
-					}
-				}
+			country_event = {
+				id = hfe_plague.61
+			}
+		}
+		every_playable_country = {
+			limit = {
+				has_event_chain = hfe_chain_plague_count
+			}
+			add_event_chain_counter = {
+				event_chain = hfe_chain_plague_count
+				counter = hfe_chain_plague_infested_planet_total
+				amount = -1
+			}
+			add_event_chain_counter = {
+				event_chain = hfe_chain_plague_count
+				counter = hfe_chain_plague_kill_planet_count_total
+				amount = 1
 			}
 		}
 	}
@@ -960,10 +1165,18 @@ country_event = {
 					from = fromfrom
 				}
 			}
+			if = {
+				limit = {
+					not = {
+						has_communications = root
+					}
+				}
+				establish_communications_no_message = root
+			}
 		}
 		fromfrom = {
-			set_controller = root
-			set_owner = root
+			# set_controller = root
+			# set_owner = root
 			every_owned_pop = {
 				unemploy_pop = yes
 			}
@@ -1003,8 +1216,14 @@ country_event = {
 			}
 		}
 		fromfrom = {
-			set_controller = root
-			set_owner = root
+			# for backward compatibility, remove later
+			if = {
+				limit = {
+					is_owned_by = from
+				}
+				set_controller = root
+				set_owner = root
+			}
 			every_owned_pop = {
 				unemploy_pop = yes
 			}
@@ -1013,7 +1232,7 @@ country_event = {
 	}
 }
 
-# add purged pop to stats
+# add purged pop to stats 7
 # on_pop_purged
 # This = Planet scope
 # From = Country
@@ -1089,7 +1308,21 @@ country_event = {
 					habitable_structure = yes
 				}
 			}
-			text = hfe_plague.9.desc.2
+			success_text = {
+				text = hfe_plague.9.desc.2
+				any_owned_planet = {
+					is_planet_class = pc_gaia
+				}
+			}
+			success_text = {
+				text = hfe_plague.9.desc.3
+				has_ascension_perk = ap_mind_over_matter
+			}
+			success_text = {
+				text = hfe_plague.9.desc.4
+				has_ascension_perk = ap_transcendence
+			}
+			text = hfe_plague.9.desc.5
 		}
 	}
 	show_sound = event_laboratory_sound
@@ -1100,6 +1333,12 @@ country_event = {
 		has_global_flag = hfe_plague_started
 	}
 	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_planet_class = pc_gaia
+			}
+			save_event_target_as = hfe_plague_gaia
+		}
 		random_owned_leader = {
 			limit = {
 				leader_class = scientist
@@ -1434,90 +1673,6 @@ country_event = {
 		add_modifier = {
 			modifier = hfe_unity
 			days = 365
-		}
-	}
-}
-
-# send planet to zombie owner then last pop purged on_pop_purged
-# planet_event = {
-# 	id = hfe_plague.11
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		exists = owner
-# 		exists = controller
-# 		controller = {
-# 			is_country_type = hfe_plague_zombie
-# 		}
-# 	}
-# 	immediate = {
-# 		if = {
-# 			limit = {
-# 				has_global_flag = hfe_plague_logs
-# 			}
-# 			log = "Plague. Send planet to zombie owner then last pop purged [this.GetName] in [solar_system.GetName]"
-# 		}
-# 		owner = {
-# 			if = {
-# 				limit = {
-# 					has_event_chain = hfe_chain_plague_count
-# 				}
-# 				add_event_chain_counter = {
-# 					event_chain = hfe_chain_plague_count
-# 					counter = hfe_chain_plague_kill_pop_count
-# 					amount = 1
-# 				}
-# 			}
-# 		}
-# 		every_playable_country = {
-# 			limit = {
-# 				has_event_chain = hfe_chain_plague_count
-# 			}
-# 			add_event_chain_counter = {
-# 				event_chain = hfe_chain_plague_count
-# 				counter = hfe_chain_plague_kill_pop_count_total
-# 				amount = 1
-# 			}
-# 		}
-# 		every_owned_pop = {
-# 			limit = {
-# 				not = {
-# 					has_pop_flag = hfe_plague_event_purge
-# 				}
-# 			}
-# 			set_pop_flag = event_purge
-# 			set_pop_flag = hfe_plague_event_purge
-# 			unemploy_pop = yes
-# 		}
-# 		if = {
-# 			limit = {
-# 				num_pops = 0
-# 			}
-# 			set_owner = controller
-# 		}
-# 	}
-# }
-# A pop has been displaced
-# This = Planet scope
-# From = Country
-# FromFrom = Pop
-# on_pop_displaced
-# fix for purged pop flip to another planet
-planet_event = {
-	id = hfe_plague.12
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = fromfrom
-		fromfrom = {
-			has_pop_flag = event_purge
-			has_pop_flag = hfe_plague_pop
-		}
-	}
-	immediate = {
-		fromfrom = {
-			remove_pop_flag = event_purge
-			remove_pop_flag = hfe_plague_pop
 		}
 	}
 }
@@ -2218,6 +2373,8 @@ planet_event = {
 		exists = owner
 		exists = from
 		has_orbital_bombardment_stance = hfe_stance_plague_spread
+		# should it be 50+ ?
+		planet_devastation > 20
 	}
 	immediate = {
 		if = {

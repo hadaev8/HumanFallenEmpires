@@ -1674,6 +1674,16 @@ hfe_effect_leader_add_exp_200 = {
 }
 
 hfe_effect_this_make_overlord_of_prev = {
+	prev = {
+		if = {
+			limit = {
+				exists = federation
+			}
+			leave_alliance = {
+				override_requirements = yes
+			}
+		}
+	}
 	if = {
 		limit = {
 			is_country_type = awakened_fallen_empire
@@ -2690,6 +2700,57 @@ hfe_effect_transfer_resources_from_root_to_this = {
 		}
 		add_resource = {
 			sr_dark_matter = 10
+		}
+	}
+}
+
+hfe_effect_add_cyborg_trait = {
+	if = {
+		limit = {
+			leader_class = admiral
+		}
+		add_trait = leader_trait_admiral_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = general
+		}
+		add_trait = leader_trait_general_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = governor
+		}
+		add_trait = leader_trait_governor_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = scientist
+		}
+		add_trait = leader_trait_scientist_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = ruler
+		}
+		add_trait = leader_trait_ruler_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+}
+
+# for fleet
+hfe_effect_add_cyborg_trait_to_leader = {
+	if = {
+		limit = {
+			exists = leader
+		}
+		leader = {
+			set_owner = prev.owner
+			hfe_effect_add_cyborg_trait = yes
 		}
 	}
 }

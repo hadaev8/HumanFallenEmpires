@@ -49,7 +49,7 @@ hfe_trigger_is_assimilator = {
 	is_homicidal = no
 	OR = {
 		has_valid_civic = civic_machine_assimilator
-		#		has_valid_civic = hfe_civic_blight
+		#		has_origin = hfe_origin_blight
 		hfe_trigger_brainworm_country = yes
 		AND = {
 			has_authority = auth_hive_mind
@@ -205,6 +205,24 @@ hfe_trigger_features_opinion_enabled = {
 hfe_trigger_global_enabled = {
 	not = {
 		has_global_flag = hfe_global_disable
+	}
+}
+
+hfe_trigger_war_in_heavens_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_disable
+	}
+}
+
+hfe_trigger_war_in_heavens_custom_wg_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_custom_wg_disable
+	}
+}
+
+hfe_trigger_war_in_heavens_custom_wg_system_shift_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_custom_wg_system_shift_disable
 	}
 }
 
@@ -431,5 +449,46 @@ hfe_trigger_holy_planet = {
 	has_modifier = holy_planet
 	any_country = {
 		has_ai_personality_behaviour = holy_planets
+	}
+}
+
+# for country
+hfe_trigger_fallen_awake_playable_country_power = {
+	any_playable_country = {
+		or = {
+			relative_power = {
+				who = prev
+				category = fleet
+				value >= equivalent
+			}
+			and = {
+				is_difficulty > 1
+				relative_power = {
+					who = prev
+					category = fleet
+					value >= inferior
+				}
+			}
+			any_owned_planet = {
+				has_planet_flag = fallen_empire_world
+			}
+		}
+	}
+}
+
+# for country
+hfe_trigger_human_fallen_awake = {
+	nor = {
+		is_country_type = default
+		has_global_flag = hfe_expansion_block
+	}
+	mid_game_years_passed > 0
+	OR = {
+		end_game_years_passed > 0
+		has_global_flag = galactic_crisis_happened
+		has_global_flag = hfe_war_in_heaven_started
+		is_at_war = yes
+		recently_lost_war = yes
+		hfe_trigger_fallen_awake_playable_country_power = yes
 	}
 }
