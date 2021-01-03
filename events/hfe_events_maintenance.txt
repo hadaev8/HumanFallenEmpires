@@ -1,5 +1,6 @@
 #
 namespace = hfe_maintenance
+# drones use vanilla starbases which only can be disabled
 # This = Ship
 # From = Disabler Ship
 # kill starbases of drone on_ship_disabled
@@ -9,6 +10,7 @@ ship_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = this
+		exists = fleet
 		exists = owner
 		owner = {
 			is_country_type = hfe_drone
@@ -16,25 +18,17 @@ ship_event = {
 		is_ship_class = shipclass_starbase
 	}
 	immediate = {
-		owner = {
-			every_owned_planet = {
-				limit = {
-					solar_system = {
-						is_same_value = root.solar_system
-					}
-				}
-				hfe_effect_convert_to_asteroid = yes
-			}
-		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "drone loss starbase on [root.solar_system.GetName] killer [root.from.owner.GetName]"
 		}
 		destroy_fleet = fleet
 	}
 }
 
-# log drone outpost
+# log drone outpost 1
 ship_event = {
 	id = hfe_maintenance.1
 	hide_window = yes
@@ -54,77 +48,57 @@ ship_event = {
 	}
 }
 
-# convert pirate base to asteroid
-planet_event = {
-	id = hfe_maintenance.2
+# survey
+ship_event = {
+	id = hfe_maintenance.3
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		exists = solar_system
 		exists = owner
 		owner = {
-			is_country_type = hfe_drone
+			or = {
+				and = {
+					has_global_flag = hfe_drone_awake
+					is_country_type = hfe_drone
+				}
+				is_country_type = hfe_pirate
+			}
 		}
 	}
 	immediate = {
-		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
-			log = "converting to asteroid [this.GetName]"
+		solar_system = {
+			every_neighbor_system = {
+				limit = {
+					is_surveyed = {
+						who = root.owner
+						status = no
+					}
+				}
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = root.owner
+					}
+				}
+				every_neighbor_system = {
+					limit = {
+						is_surveyed = {
+							who = root.owner
+							status = no
+						}
+					}
+					every_system_planet = {
+						surveyed = {
+							set_surveyed = yes
+							surveyor = root.owner
+						}
+					}
+				}
+			}
 		}
-		hfe_effect_convert_to_asteroid = yes
 	}
 }
-
-#ship_event = {
-#	id = hfe_maintenance.3
-#	hide_window = yes
-#	is_triggered_only = yes
-#
-#	trigger = {
-#		exists = solar_system
-#		exists = owner
-#		owner = {
-#			is_country_type = hfe_drone
-#		}
-#		has_global_flag = hfe_drone_awake
-#	}
-#
-#	immediate = {
-#		solar_system = {
-#			every_neighbor_system = {
-#				limit = {
-#					is_surveyed = {
-#						who = root.owner
-#						status = no
-#					}
-#				}
-#				every_system_planet = {
-#					surveyed = {
-#						set_surveyed = yes
-#						surveyor = root.owner
-#					}
-#				}
-#				every_neighbor_system = {
-#					limit = {
-#						is_surveyed = {
-#							who = root.owner
-#							status = no
-#						}
-#					}
-#					every_system_planet = {
-#						surveyed = {
-#							set_surveyed = yes
-#							surveyor = root.owner
-#						}
-#					}
-#				}
-#			}
-#		}
-#		if = {
-#			limit = { has_global_flag = HFE_TSP_spawn_test }
-#			log = "Harvesting Marvel awakens"
-#		}
-#	}
-#}
 
 # clean countries
 country_event = {
@@ -133,8 +107,8 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		has_country_flag = hfe_auto_delete
-		num_fleets < 1
-		num_owned_planets < 1
+		num_fleets = 0
+		num_owned_planets = 0
 	}
 	immediate = {
 		destroy_country = yes
@@ -383,43 +357,42 @@ pop_event = {
 # 		}
 # 	}
 # }
-
-
-# fix psi traits
+# change subject type for egypt/future
+# on_becoming_subject
+# This = subject
+# From = subject's overlord
 country_event = {
 	id = hfe_maintenance.50
 	hide_window = yes
 	is_triggered_only = yes
-	immediate = {
-		every_owned_pop = {
-			limit = {
-				has_trait = trait_latent_psionic
-				has_trait = trait_psionic
-			}
-			modify_species = {
-				remove_trait = trait_latent_psionic
-				remove_trait = trait_mechanical
-				remove_trait = trait_machine_unit
+	trigger = {
+		exists = from
+		from = {
+			or = {
+				has_country_flag = hfe_egypt
+				and = {
+					exists = event_target:hfe_coalition_leader
+					is_country = event_target:hfe_coalition_leader
+				}
 			}
 		}
 	}
-}
-
-# change subject type
-country_event = {
-	id = hfe_maintenance.51
-	hide_window = yes
-	is_triggered_only = yes
 	immediate = {
-		every_subject = {
+		if = {
 			limit = {
-				not = {
-					is_subject_type = hfe_vassal_egypt
+				from = {
+					has_country_flag = hfe_egypt
 				}
 			}
 			set_subject_of = {
-				who = root
+				who = from
 				subject_type = hfe_vassal_egypt
+			}
+		}
+		else = {
+			set_subject_of = {
+				who = from
+				subject_type = hfe_vassal_future
 			}
 		}
 	}
@@ -455,6 +428,12 @@ country_event = {
 		# blight targets recalc
 		country_event = {
 			id = hfe.5086
+			days = 1
+			random = 355
+		}
+		# hfe_civic_features_power_in_low_numbers effect
+		country_event = {
+			id = hfe_features.20
 			days = 1
 			random = 355
 		}
@@ -580,19 +559,6 @@ event = {
 				}
 			}
 		}
-		# egypt change vassal type
-		if = {
-			limit = {
-				exists = event_target:hfe_egypt_country
-			}
-			event_target:hfe_egypt_country = {
-				country_event = {
-					id = hfe_maintenance.51
-					days = 1
-					random = 700
-				}
-			}
-		}
 		# varelse mehanicus event
 		if = {
 			limit = {
@@ -603,17 +569,14 @@ event = {
 			random_country = {
 				limit = {
 					is_country_type = primitive
+					has_country_flag = hfe_varelse_primitive_0
 					any_owned_planet = {
-						OR = {
-							has_planet_flag = hfe_varelse_colony
-							has_planet_flag = hfe_colony_beta
-						}
+						has_planet_flag = hfe_varelse_colony
 					}
 				}
 				random_owned_planet = {
 					limit = {
 						has_planet_flag = hfe_varelse_colony
-						has_planet_flag = hfe_colony_beta
 						has_observation_outpost = yes
 					}
 					planet_event = {
@@ -691,13 +654,13 @@ event = {
 								any_defender = {
 									is_country = prevprev
 								}
-								defender_war_exhaustion > 0.20
+								defender_war_exhaustion > 0.2
 							}
 							and = {
 								any_attacker = {
 									is_country = prevprev
 								}
-								attacker_war_exhaustion > 0.20
+								attacker_war_exhaustion > 0.2
 							}
 						}
 					}
@@ -813,7 +776,7 @@ event = {
 				exists = event_target:hfe_future_country
 				any_country = {
 					is_ai = no
-					any_owned_pop = {
+					any_owned_species = {
 						has_trait = trait_mechanical
 					}
 					not = {
@@ -831,7 +794,7 @@ event = {
 					random_country = {
 						limit = {
 							is_ai = no
-							any_owned_pop = {
+							any_owned_species = {
 								has_trait = trait_mechanical
 							}
 							not = {
@@ -873,18 +836,26 @@ event = {
 				}
 			}
 		}
-		event_target:global_event_country = {
-			# plague start
-			country_event = {
-				id = hfe_plague.0
-				days = 1
-				random = 3650
-			}
+		every_country = {
 			# awake fallen
 			country_event = {
 				id = hfe_total_war.1000
 				days = 1
 				random = 3650
+			}
+		}
+		event_target:global_event_country = {
+			# plague start
+			random_list = {
+				2 = {
+				}
+				1 = {
+					country_event = {
+						id = hfe_plague.0
+						days = 1
+						random = 3650
+					}
+				}
 			}
 			# war in heavens trigger
 			country_event = {
@@ -904,125 +875,6 @@ event = {
 				days = 1
 				random = 3650
 			}
-		}
-	}
-}
-
-# Call Varelse Deposits
-country_event = {
-	id = hfe_maintenance.105
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		is_ai = no
-	}
-
-	immediate = {
-		event_target:hfe_varelse_colony_planet = {
-			planet_event = {
-				id = hfe_maintenance.106
-				days = 6
-			}
-		}
-		event_target:colony_delta = {
-			planet_event = {
-				id = hfe_maintenance.107
-				days = 6
-			}
-		}
-	}
-}
-
-# Check if Colony Beta's Cult Deposits still exist
-planet_event = {
-	id = hfe_maintenance.106
-	hide_window = yes
-	is_triggered_only = yes # Called by On-Action
-
-	trigger = {
-#		OR = {
-#			is_planet = event_target:hfe_varelse_colony_planet
-			has_planet_flag = hfe_colony_beta
-#		}
-	}
-
-	immediate = {
-		remove_deposit = d_dust_desert
-		if = {
-			limit = {
-				NOT = { has_deposit = hfe_deposit_mechanicus_farm_spire }
-			}
-			add_deposit = hfe_deposit_mechanicus_farm_spire
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_relic_metal_boneyard }
-			}
-			add_deposit = d_relic_metal_boneyard
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_ancient_bombardment_craters }
-			}
-			add_deposit = d_ancient_bombardment_craters
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_dust_caverns }
-			}
-			add_deposit = d_dust_caverns
-			add_deposit = d_dust_caverns
-		}
-	}
-}
-
-# Check if Colony Delta's Deposits still exist
-planet_event = {
-	id = hfe_maintenance.107
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		has_planet_flag = hfe_colony_delta
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				NOT = { has_deposit = d_irradiated_ruins }
-			}
-			add_deposit = d_irradiated_ruins
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_irradiated_valley }
-			}
-			add_deposit = d_irradiated_valley
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_ancient_bombardment_craters }
-			}
-			add_deposit = d_ancient_bombardment_craters
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_odd_factory }
-			}
-			add_deposit = d_odd_factory
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_industrial_sector }
-			}
-			add_deposit = d_industrial_sector
-		}
-		if = {
-			limit = {
-				NOT = { has_deposit = d_relic_metal_boneyard }
-			}
-			add_deposit = d_relic_metal_boneyard
 		}
 	}
 }

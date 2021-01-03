@@ -1,12 +1,10 @@
 #ai_weight - checks that required resources are available by AI will be made in code for performance reasons
-
 #modifiers that can be added from modules
 #"modifier", category: MODIFIER_CATEGORY_SPACEPORT. things that affect the builder part of the spaceport. like construction costs and speeds
 #"orbit_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. applied on all orbiting fleets and ships
 #"planet_modifier", category: MODIFIER_CATEGORY_PLANET | MODIFIER_CATEGORY_POP | MODIFIER_CATEGORY_TILE. affects the planet
 #"station_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. affects the ship part of the spaceport. like health and armor
 #"ship_modifier", category: MODIFIER_CATEGORY_SHIP. affects all ships that are built by this space port
-
 hfe_starbase_building_drone_energy = {
 	icon = GFX_spaceport_module_hydroponic_farms
 	construction_days = 180
@@ -16,7 +14,7 @@ hfe_starbase_building_drone_energy = {
 			minerals = 100
 		}
 		produces = {
-			energy = 20
+			energy = 10
 		}
 	}
 	potential = {
@@ -71,15 +69,8 @@ hfe_starbase_building_drone_logistics = {
 		country_resource_max_minerals_add = 1000
 		country_resource_max_alloys_add = 200
 		country_naval_cap_add = 20
-		country_starbase_capacity_add = 1
+		country_starbase_capacity_add = 0.75
 	}
-	station_modifier = {
-		starbase_trade_protection_add = 4
-	}
-#	system_modifier = {
-#		max_trade_piracy_add = -1
-#	}
-
 	ai_build_at_chokepoint = yes
 	ai_build_outside_chokepoint = yes
 	ai_weight = {
@@ -141,7 +132,7 @@ hfe_starbase_building_drone_alloys = {
 					}
 					resource_income_compare = {
 						resource = minerals
-						value > 30
+						value > 20
 					}
 				}
 			}
@@ -157,17 +148,24 @@ hfe_starbase_building_drone_alloys = {
 					}
 					resource_income_compare = {
 						resource = minerals
-						value > 30
+						value > 20
 					}
 				}
 			}
-			alloys = 5
+			alloys = 10
 		}
 	}
 	ai_build_at_chokepoint = yes
 	ai_build_outside_chokepoint = yes
 	ai_weight = {
 		weight = 1000
+		modifier = {
+			factor = 10
+			exists = owner
+			owner = {
+				has_deficit = alloys
+			}
+		}
 		modifier = {
 			factor = 0
 			exists = owner
@@ -185,5 +183,61 @@ hfe_starbase_building_drone_alloys = {
 				}
 			}
 		}
+	}
+}
+
+# reward building
+hfe_starbase_building_drone_trading_hub = {
+	icon = "GFX_starbase_offworld_trading_company"
+	construction_days = 180
+	potential = {
+		exists = solar_system
+		solar_system = {
+			has_star_flag = hfe_drone_economic_zone
+		}
+		exists = owner
+		owner = {
+			is_country_type = default
+		}
+	}
+	resources = {
+		category = starbase_buildings
+		cost = {
+			rare_crystals = 500
+			influence = 100
+		}
+		upkeep = {
+			rare_crystals = 2
+		}
+		upkeep = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			alloys = 2
+			consumer_goods = 4
+		}
+		upkeep = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			alloys = 6
+		}
+	}
+	station_modifier = {
+		trade_value_add = 3
+		starbase_trade_collection_range_add = 1
+		starbase_trade_protection_add = -1
+	}
+	country_modifier = {
+		country_trade_fee = -0.03
+	}
+	ai_build_outside_chokepoint = yes
+	ai_build_at_chokepoint = yes
+	ai_weight = {
+		weight = 1000
 	}
 }

@@ -1,45 +1,61 @@
 #
 namespace = hfe_init
-
 # triggered from on game start 0
 event = {
 	id = hfe_init.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
-		if = {
+		# install anyway
+		random_country = {
 			limit = {
-				any_country = {
-					is_country_type = default
-					is_ai = no
-					not = {
-						has_country_flag = hfe_discovery
+				is_country_type = global_event
+			}
+			# log = "global event exists"
+			country_event = {
+				id = hfe_init.100
+				days = 100
+			}
+		}
+		# use every country because we need to set flag to host
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			set_country_flag = hfe_host
+			break = yes
+		}
+	}
+}
+
+event = {
+	id = hfe_init.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = hfe_host
+			}
+			if = {
+				limit = {
+					has_origin = hfe_civic_discovery_habitat
+				}
+				random_country = {
+					limit = {
+						is_country_type = global_event
+					}
+					# log = "global event exists"
+					# 1 day delay for discovery
+					country_event = {
+						id = hfe_init.2
+						days = 1
 					}
 				}
 			}
-			random_country = {
-				limit = {
-					is_country_type = default
-					is_ai = no
-				}
+			else = {
 				country_event = {
 					id = hfe_init.50
-				}
-			}
-		}
-		else = {
-			random_country = {
-				limit = {
-					is_country_type = global_event
-				}
-				country_event = {
-					id = hfe_init.49
-					days = 1
-				}
-				country_event = {
-					id = hfe_init.100
-					days = 100
 				}
 			}
 		}
@@ -47,14 +63,13 @@ event = {
 }
 
 country_event = {
-	id = hfe_init.49
+	id = hfe_init.2
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
 		random_country = {
 			limit = {
-				is_ai = no
+				has_country_flag = hfe_host
 			}
 			country_event = {
 				id = hfe_init.50
@@ -70,13 +85,11 @@ country_event = {
 	desc = hfe_init.50.desc
 	picture = GFX_evt_hfe_fallen_3
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_global_flag = hfe_installed
 		}
 	}
-
 	# disable story
 	option = {
 		name = hfe_init.50.0.defined_text
@@ -474,13 +487,11 @@ country_event = {
 	id = hfe_init.100
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		not = {
 			has_global_flag = hfe_installed
 		}
 	}
-
 	immediate = {
 		every_country = {
 			# prevent spawn vanilla pirate
@@ -502,7 +513,9 @@ country_event = {
 	after = {
 		remove_global_flag = hfe_init_fast_start
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "HFE started"
 		}
 	}
@@ -513,11 +526,9 @@ country_event = {
 	id = hfe_init.101
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		hfe_trigger_fast_start_enabled = yes
 	}
-
 	immediate = {
 		# init options
 		# more colony
@@ -809,24 +820,27 @@ country_event = {
 	id = hfe_init.102
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		hfe_trigger_story_enabled = yes
 	}
-
 	immediate = {
 		# find humans
 		every_country = {
 			limit = {
 				OR = {
+					has_country_flag = hfe_marked_as_human
 					has_country_flag = human_1
 					has_country_flag = human_2
 					species_portrait = human
 					species_portrait = hfe_portrait_future
 					species_portrait = hfe_portrait_egypt
 				}
+				exists = species
 			}
 			set_country_flag = hfe_marked_as_human
+			species = {
+				set_species_flag = hfe_marked_as_human_species
+			}
 		}
 		random_country = {
 			limit = {
@@ -860,7 +874,9 @@ country_event = {
 				}
 				save_global_event_target_as = hfe_earth
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "hfe find earth"
 				}
 			}
@@ -886,6 +902,7 @@ country_event = {
 			immortal = yes
 			species_bio = "The almighty men of Ju Ahet. Descended from the Old Kingdom Ancient Egyptians, who built the pyramids, this race was initially enslaved by the Ahets before rebelling. While Ancient Egypt considered blue to be the holy color, the Ju Ahets consider purple to be so instead, due to ''direct revelations'' from Ra, their chief god.'"
 			effect = {
+				set_species_flag = hfe_marked_as_human_species
 				if = {
 					limit = {
 						exists = event_target:hfe_earth
@@ -900,7 +917,9 @@ country_event = {
 				}
 				save_global_event_target_as = hfe_egypt_species
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "Ju Ahet Species spawned"
 				}
 			}
@@ -914,7 +933,6 @@ country_event = {
 			portrait = rep12
 			name_list = ART4
 			species_bio = "The Ahets are the reptilian species that enslaved the Ju Ahet. They once held the technology of a Fallen Empire. When the Ju Ahets staged a rebellion and took over, they were slaughtered en masse. Four great battles ended them on four of their five core worlds. These graveyard planets of billions of bones are rumored to still exist.  Now, the only known Ahets are in a primitive state, desparately clinging to survival."
-#			homeworld = event_target:hfe_ahet_happy_ending
 			traits = {
 				ideal_planet_class = pc_tropical
 				trait = trait_slow_breeders
@@ -924,16 +942,14 @@ country_event = {
 				trait = trait_sedentary
 			}
 			effect = {
-				set_species_flag = hfe_ahet_species
-#				set_species_homeworld = event_target:hfe_ahet_happy_ending
+				save_global_event_target_as = hfe_ahet_species
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "Ahets spawned"
 				}
 			}
-		}
-		last_created_species = {
-			save_global_event_target_as = hfe_ahet_species
 		}
 		# varelse
 		create_species = {
@@ -942,7 +958,8 @@ country_event = {
 			adjective = Varelsite
 			class = REP
 			extra_trait_points = 4
-			species_bio = "The Varelses were once a mighty Fallen Empire that was the Rival of the Ju Ahets. They were defeated in a genocidal spree by the Ju Ahets and their capital moon, Colony Alpha, was detonated. The second planet, which it orbited, was home to many tens of billions, and was bombed to toxic ashes and the atmosphere was deliberately poisoned by the Ju Ahets."
+			# TODO
+			species_bio = "The Varelses were once a mighty space empire that was the Rival of the Ju Ahets. They were defeated in a genocidal spree by the Ju Ahets and their capital moon, Colony Alpha, was detonated. The second planet, which it orbited, was home to many tens of billions, and was bombed to toxic ashes and the atmosphere was deliberately poisoned by the Ju Ahets."
 			traits = {
 				ideal_planet_class = pc_desert
 				trait = trait_industrious
@@ -952,16 +969,14 @@ country_event = {
 				trait = trait_extremely_adaptive
 			}
 			effect = {
-				set_species_flag = hfe_varelse_species
+				save_global_event_target_as = hfe_varelse_species
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "Varelse spawned"
 				}
 			}
-		}
-		last_created_species = {
-			save_global_event_target_as = hfe_varelse_species
-#			set_species_homeworld = event_target:hfe_ju_ahet_punishment_moon
 		}
 		# future
 		create_species = {
@@ -979,6 +994,7 @@ country_event = {
 			}
 			species_bio = "The men of the Kad Republic. Kadmen come from a future where their society was destroyed by some sort of Hive Mind-like entity. Their last remnants fled to the past, where they sit in isolation to this day."
 			effect = {
+				set_species_flag = hfe_marked_as_human_species
 				if = {
 					limit = {
 						exists = event_target:hfe_earth
@@ -988,18 +1004,22 @@ country_event = {
 				set_species_identity = event_target:hfe_egypt_species
 				save_global_event_target_as = hfe_future_species
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "Kadmen spawned"
 				}
 			}
 		}
 		# spawn story systems
-		country_event = {
-			id = hfe_init.110
-		}
+		# 1 and 2 day for ju ahet and drones
 		country_event = {
 			id = hfe_init.111
-			days = 1
+		}
+		# 3 day to kad
+		country_event = {
+			id = hfe_init.110
+			days = 2
 		}
 	}
 }
@@ -1009,7 +1029,6 @@ country_event = {
 	id = hfe_init.103
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		hfe_effect_init_expand_borders = yes
 		country_event = {
@@ -1024,7 +1043,6 @@ country_event = {
 	id = hfe_init.104
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		hfe_effect_init_set_minings_stations = yes
 	}
@@ -1035,11 +1053,9 @@ planet_event = {
 	id = hfe_init.106
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		exists = owner
 	}
-
 	immediate = {
 		hfe_effect_init_develop_planet = yes
 	}
@@ -1050,11 +1066,9 @@ planet_event = {
 	id = hfe_init.107
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		exists = owner
 	}
-
 	immediate = {
 		hfe_effect_init_set_all_districs = yes
 	}
@@ -1065,11 +1079,50 @@ country_event = {
 	id = hfe_init.110
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		random_rim_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
+			}
+			weights = {
+				base = 1000
+				# heavy checks but system spawn heavy operation anyway
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 5
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 4
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 3
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
 			}
 			set_timed_star_flag = {
 				flag = hfe_star_spawn_block
@@ -1083,8 +1136,10 @@ country_event = {
 			}
 			set_global_flag = hfe_future_spawned
 			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
-				log = "Kad Republic found and clay spawned"
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Kad Republic spawned from first try"
 			}
 		}
 		if = {
@@ -1096,6 +1151,46 @@ country_event = {
 			random_system = {
 				limit = {
 					hfe_trigger_system_in_free_space = yes
+				}
+				weights = {
+					base = 1000
+					# heavy checks but system spawn heavy operation anyway
+					modifier = {
+						mult = 0.1
+						any_system = {
+							distance = {
+								source = prev
+								min_jumps = 0
+								max_jumps = 5
+								type = hyperlane
+							}
+							hfe_trigger_system_in_someones_space = yes
+						}
+					}
+					modifier = {
+						mult = 0.1
+						any_system = {
+							distance = {
+								source = prev
+								min_jumps = 0
+								max_jumps = 4
+								type = hyperlane
+							}
+							hfe_trigger_system_in_someones_space = yes
+						}
+					}
+					modifier = {
+						mult = 0.1
+						any_system = {
+							distance = {
+								source = prev
+								min_jumps = 0
+								max_jumps = 3
+								type = hyperlane
+							}
+							hfe_trigger_system_in_someones_space = yes
+						}
+					}
 				}
 				set_timed_star_flag = {
 					flag = hfe_star_spawn_block
@@ -1109,35 +1204,36 @@ country_event = {
 				}
 				set_global_flag = hfe_future_spawned
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
-					log = "Kad Republic not found but clay spawned"
-				}
-			}
-		}
-		event_target:hfe_future_country = {
-			hfe_effect_init_give_tech_t5 = yes
-			add_modifier = {
-				modifier = fallen_empire_base
-				days = -1
-			}
-			country_event = {
-				id = hfe_init.103
-				days = 1
-			}
-			country_event = {
-				id = hfe_init.103
-				days = 2
-			}
-			every_owned_planet = {
-				planet_event = {
-					id = hfe_init.107
-					days = 1
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
+					log = "Kad Republic spawned from second try"
 				}
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
-			log = "Kad Republic clay acquired"
+			limit = {
+				exists = event_target:hfe_future_country
+			}
+			event_target:hfe_future_country = {
+				country_event = {
+					id = hfe_init.103
+					days = 1
+				}
+				country_event = {
+					id = hfe_init.103
+					days = 2
+				}
+				every_owned_planet = {
+					planet_event = {
+						id = hfe_init.107
+						days = 1
+					}
+				}
+			}
+		}
+		else = {
+			log = "Kad Republic not spawned"
 		}
 	}
 }
@@ -1147,12 +1243,15 @@ country_event = {
 	id = hfe_init.111
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		if = {
-			limit = { exists = event_target:hfe_egypt_country }
+			limit = {
+				exists = event_target:hfe_egypt_country
+			}
 			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
 				log = "Ju Ahet located, begin HFE spawn batch command"
 			}
 		}
@@ -1170,6 +1269,46 @@ country_event = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
 			}
+			weights = {
+				base = 1000
+				# heavy checks but system spawn heavy operation anyway
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 5
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 4
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 3
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+			}
 			set_timed_star_flag = {
 				flag = hfe_star_spawn_block
 				days = 10
@@ -1181,7 +1320,9 @@ country_event = {
 				initializer = hfe_initializer_egypt_main
 			}
 			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
 				log = "Ju Ahet Home of Light called by HFE INIT 111"
 			}
 			set_global_flag = hfe_egypt_spawned
@@ -1193,7 +1334,9 @@ country_event = {
 					initializer = hfe_initializer_egypt_col_0
 				}
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "First Ju Ahet Colony called by HFE INIT 111"
 				}
 				random_neighbor_system = {
@@ -1211,13 +1354,17 @@ country_event = {
 					}
 				}
 				if = {
-					limit = { has_global_flag = HFE_TSP_spawn_test }
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
 					log = "Second Ju Ahet Colony called by HFE INIT 111"
 				}
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Ju Ahet colonies successfully spawned by HFE INIT 111"
 		}
 		# some other systems
@@ -1430,7 +1577,9 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "All four Memorial Worlds put in place by HFE INIT 111"
 		}
 		random_system = {
@@ -1447,7 +1596,9 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Colony Beta called by HFE EVENT INIT 111"
 		}
 		random_system = {
@@ -1464,7 +1615,9 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "First Ahet planet called in HFE EVENT INIT 111"
 		}
 		random_system = {
@@ -1481,7 +1634,9 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Second Ahet Planet called in HFE EVENT INIT 111"
 		}
 		random_system = {
@@ -1498,7 +1653,9 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Ahet Happy Ending called in HFE EVENT INIT 111"
 		}
 		random_system = {
@@ -1515,47 +1672,47 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Ptolemy of Alexandria proven right by HFE EVENT INIT 111"
 		}
 		set_spawn_system_batch = end
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "All HFE Story Planets successfully spawned!"
 		}
 		# expand borders and develop
-		event_target:hfe_egypt_country = {
-			set_city_graphical_culture = fallen_empire_03 # Yellow and light blue
-			hfe_effect_init_give_tech_t5 = yes
-			add_modifier = {
-				modifier = fallen_empire_base
-				days = -1
+		if = {
+			limit = {
+				exists = event_target:hfe_egypt_country
 			}
-			country_event = {
-				id = hfe_init.103
-				days = 1
-			}
-			every_owned_planet = {
-				planet_event = {
-					id = hfe_init.107
-					days = 2
+			event_target:hfe_egypt_country = {
+				country_event = {
+					id = hfe_init.103
+					days = 1
+				}
+				every_owned_planet = {
+					planet_event = {
+						id = hfe_init.107
+						days = 2
+					}
 				}
 			}
-			# country_event = {
-			# id = hfe_init.103
-			# days = 3
-			# }
+		}
+		else = {
+			log = "Ju Ahet not spawned"
 		}
 		country_event = {
 			id = hfe_init.112
 			days = 1
 		}
-#		country_event = {
-#			id = hfe_init.113
-#			days = 14
-#		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Ju Ahet clay acquired"
 		}
 	}
@@ -1566,12 +1723,51 @@ country_event = {
 	id = hfe_init.112
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		set_spawn_system_batch = begin
 		random_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
+			}
+			weights = {
+				base = 1000
+				# heavy checks but system spawn heavy operation anyway
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 5
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 4
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
+				modifier = {
+					mult = 0.1
+					any_system = {
+						distance = {
+							source = prev
+							min_jumps = 0
+							max_jumps = 3
+							type = hyperlane
+						}
+						hfe_trigger_system_in_someones_space = yes
+					}
+				}
 			}
 			set_timed_star_flag = {
 				flag = hfe_star_spawn_block
@@ -1585,12 +1781,14 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Harvesting Marvel Core called by HFE INIT 112"
 		}
 		random_system = {
 			limit = {
-				has_star_flag = hfe_drone_0
+				has_star_flag = hfe_drone_home_system
 			}
 			spawn_system = {
 				min_distance = 10
@@ -1601,7 +1799,7 @@ country_event = {
 		}
 		random_system = {
 			limit = {
-				has_star_flag = hfe_drone_1
+				has_star_flag = hfe_drone_home_system
 			}
 			spawn_system = {
 				min_distance = 10
@@ -1623,59 +1821,14 @@ country_event = {
 				}
 			}
 		}
+		else = {
+			log = "Harvesting Marvel not spawned"
+		}
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Harvesting Marvel clay acquired"
 		}
 	}
-	after = {
-		every_country = {
-			limit = {
-				is_country_type = drone
-			}
-			set_subject_of = {
-				subject_type = vassal
-				who = event_target:hfe_drone_country
-			}
-		}
-	}
 }
-
-#country_event = {
-#	id = hfe_init.113
-#	hide_window = yes
-##	is_triggered_only = yes
-#
-#	trigger = {
-#		OR = {
-#			has_origin = hfe_civic_egypt_rulers_origin
-#			has_civic = hfe_civic_egypt_genetic
-#			has_country_flag = hfe_egypt
-#		}
-#		NOT = {
-#			has_global_flag = hfe_egypt_genetic_dominance # Prevents it being spamemd
-#		}
-#	}
-#
-#	mean_time_to_happen = {
-#		days = 14
-#	}
-#
-#	immediate = {
-#		log = "HFE - Ju Ahet now has its canonical genetic prowess"
-#		
-#		give_technology = { message = no tech = tech_gene_tailoring }
-#		give_technology = { message = no tech = tech_genome_mapping }
-#		give_technology = { message = no tech = tech_vitality_boosters }
-#		give_technology = { message = no tech = tech_epigenetic_triggers }
-#		give_technology = { message = no tech = tech_cloning }
-#		give_technology = { message = no tech = tech_gene_banks }
-#		give_technology = { message = no tech = tech_gene_seed_purification }
-#		give_technology = { message = no tech = tech_gene_expressions }
-#		give_technology = { message = no tech = tech_selected_lineages }
-#		give_technology = { message = no tech = tech_glandular_acclimation }
-#		give_technology = { message = no tech = tech_genetic_resequencing }
-#
-#		set_global_flag = hfe_egypt_genetic_dominance
-#	}
-#}

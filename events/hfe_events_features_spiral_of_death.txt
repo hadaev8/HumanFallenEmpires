@@ -1,23 +1,29 @@
 namespace = hfe_features_spiral_of_death
-
 # start civic 0
 country_event = {
 	id = hfe_features_spiral_of_death.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		has_origin = hfe_civic_features_spiral_of_death
 		exists = capital_scope
 	}
-
 	immediate = {
-		#hfe_effect_init_give_tech_t1 = yes
+		# add t1 tech day later because it case crush lol
+		country_event = {
+			id = hfe_features_spiral_of_death.9
+			days = 1
+		}
 		hfe_effect_init_expand_borders = yes
 		set_country_flag = custom_start_screen
 		set_country_flag = first_colony
 		set_country_flag = Story7
 		capital_scope = {
+			set_ring = no
+			add_modifier = {
+				modifier = hfe_features_spiral_of_death_counter
+				days = 3230
+			}
 			planet_event = {
 				id = hfe_init.106
 			}
@@ -31,7 +37,7 @@ country_event = {
 			}
 			# TODO
 			# set blockers
-			hfe_effect_remove_prescripted_ideal = yes
+			# hfe_effect_remove_prescripted_ideal = yes
 			every_moon = {
 				remove_planet = yes
 			}
@@ -179,8 +185,8 @@ planet_event = {
 	id = hfe_features_spiral_of_death.1
 	hide_window = yes
 	is_triggered_only = yes
-
 	immediate = {
+		set_ring = yes
 		if = {
 			limit = {
 				any_owned_pop = {
@@ -237,15 +243,15 @@ planet_event = {
 			}
 		}
 		# create_ambient_object = {
-			# type = hfe_object_explosion
-			# location = this
-			# duration = 50
-			# use_3d_location = yes
-			# entity_scale_to_size = yes
-			# scale = 0.5
+		# type = hfe_object_explosion
+		# location = this
+		# duration = 50
+		# use_3d_location = yes
+		# entity_scale_to_size = yes
+		# scale = 0.5
 		# }
 		hfe_effect_clear_buildings_and_destroy_colony = yes
-		change_pc = pc_shattered
+		change_pc = pc_molten
 		set_deposit = d_minerals_10
 		event_target:hfe_features_spiral_of_death_falling_moon_country = {
 			destroy_country = yes
@@ -254,6 +260,15 @@ planet_event = {
 }
 
 # main story 2 - 50
+country_event = {
+	id = hfe_features_spiral_of_death.9
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		hfe_effect_init_give_tech_t1 = yes
+	}
+}
+
 # before planet killed if lost
 country_event = {
 	id = hfe_features_spiral_of_death.10
@@ -274,7 +289,6 @@ country_event = {
 	show_sound = event_red_alert
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		exists = event_target:hfe_features_spiral_of_death_falling_moon_target.owner
 		event_target:hfe_features_spiral_of_death_falling_moon_target.owner = {
@@ -282,7 +296,6 @@ country_event = {
 		}
 		num_owned_planets < 2
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.10.0
 		trigger = {
@@ -361,7 +374,6 @@ country_event = {
 	show_sound = event_super_explosion
 	location = from
 	is_triggered_only = yes
-
 	immediate = {
 		if = {
 			limit = {
@@ -408,7 +420,6 @@ country_event = {
 			}
 		}
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.11.0
 		trigger = {
@@ -424,7 +435,6 @@ country_event = {
 	option = {
 		name = hfe_features_spiral_of_death.11.1
 		trigger = {
-			is_gestalt = no
 			or = {
 				is_militarist = yes
 				is_xenophobe = yes
@@ -484,7 +494,6 @@ country_event = {
 		}
 		hfe_effect_add_unity.1 = yes
 	}
-
 	after = {
 		hidden_effect = {
 			remove_country_flag = hfe_features_spiral_of_death_left_pop
@@ -642,7 +651,6 @@ ship_event = {
 	show_sound = event_alien_nature
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -656,13 +664,11 @@ ship_event = {
 			colonizeable_planet = yes
 		}
 	}
-
 	immediate = {
 		owner = {
 			set_country_flag = hfe_has_event_features_spiral_of_death.12
 		}
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.12.0
 		exclusive_trigger = {
@@ -704,7 +710,6 @@ planet_event = {
 	show_sound = event_ship_thrusters
 	location = root
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -714,13 +719,11 @@ planet_event = {
 			has_origin = hfe_civic_features_spiral_of_death
 		}
 	}
-
 	immediate = {
 		owner = {
 			set_country_flag = hfe_has_event_features_spiral_of_death.13
 		}
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.13.0
 		trigger = {
@@ -753,12 +756,10 @@ country_event = {
 	show_sound = event_ship_thrusters
 	location = root
 	is_triggered_only = yes
-
 	trigger = {
 		exists = ruler
 		is_gestalt = no
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.14.0
 		ruler = {
@@ -791,7 +792,6 @@ country_event = {
 	show_sound = event_administrative_work
 	location = root
 	is_triggered_only = yes
-
 	trigger = {
 		any_owned_leader = {
 			not = {
@@ -802,7 +802,6 @@ country_event = {
 			has_country_flag = hfe_has_event_features_spiral_of_death.13
 		}
 	}
-
 	immediate = {
 		random_owned_leader = {
 			limit = {
@@ -813,7 +812,6 @@ country_event = {
 			save_event_target_as = hfe_features_spiral_of_death_50_leader
 		}
 	}
-
 	option = {
 		name = hfe_features_spiral_of_death.50.0
 		trigger = {
@@ -839,6 +837,4 @@ country_event = {
 }
 
 # find resources
-
 # find pop
-

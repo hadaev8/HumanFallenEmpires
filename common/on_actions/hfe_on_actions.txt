@@ -1,9 +1,3 @@
-on_monthly_pulse_country = {
-	events = {
-		hfe_population.50
-	}
-}
-
 on_yearly_pulse_country = {
 	events = {
 		hfe_maintenance.100
@@ -18,17 +12,7 @@ on_bi_yearly_pulse_country = {
 
 on_bi_yearly_pulse = {
 	events = {
-#		hfe.715
 		hfe_maintenance.102
-#		hfe_maintenance.106
-#		hfe_maintenance.107
-	}
-}
-
-on_bi_yearly_pulse_country = {
-	events = {
-		# Check Varelse Deposits
-		hfe_maintenance.105
 	}
 }
 
@@ -48,6 +32,7 @@ on_decade_pulse = {
 on_game_start = {
 	events = {
 		hfe_init.0
+		hfe_init.1
 	}
 }
 
@@ -87,10 +72,19 @@ on_leader_spawned = {
 # from: founder species
 # fromfrom: secondary species (if exists)
 empire_init_capital_planet = {
- 	events = {
+	events = {
 		# brainworm
 		hfe_brainworm.0
- 	}
+	}
+}
+
+# called during empire initialization when starting a new game
+# scope: country
+empire_init_create_ships = {
+	events = {
+		# hfe_civic_features_designed_aristocracy affect starting leaders
+		hfe_features.2
+	}
 }
 
 # A leader leveled up.
@@ -109,6 +103,8 @@ on_tech_increased = {
 	events = {
 		# plague explain
 		hfe_plague.9
+		# share cure for plague
+		hfe_plague.170
 		# gain scientist
 		hfe_leaders.20
 		# scientist satanist can generate tech
@@ -139,9 +135,17 @@ on_entering_system_first_time = {
 		hfe.410
 		# copernicus
 		hfe.355
+		# drones and pirate survey
+		hfe_maintenance.3
+	}
+	random_events = {
+		# vanilla have 200 for nothing
+		# varelse fleet event
+		2 = hfe.51
+		# thoth start, spawn system
+		2 = hfe.699
 	}
 }
-
 
 # Triggers event when ship enters a system.
 # Scope = Ship
@@ -152,15 +156,7 @@ on_entering_system = {
 		# random story events
 		hfe_discovery.500
 		# add comms with enclaves
-		hfe_discovery.56
-#		# drones survey
-#		hfe_maintenance.3
-	}
-	random_events = {
-		# varelse fleet event
-		3 = hfe.51
-		# thoth start, spawn system
-		5 = hfe.700
+		# hfe_discovery.56
 	}
 }
 
@@ -170,14 +166,16 @@ on_entering_system = {
 # From = System
 on_entering_system_fleet = {
 	events = {
-		hfe.706 # Entering Thoth's hiding place
+		hfe.700		# Entering Thoth's hiding place
 	}
 }
 
 # Triggered when two empires discover each other
+# This = Empire 1
+# From = Empire 2
+# Fromfromfrom = System where contact occurred
 on_first_contact = {
 	events = {
-		hfe_discovery.52
 		hfe_discovery.50
 		# contact with egypt
 		hfe.46
@@ -201,9 +199,8 @@ on_custom_diplomacy = {
 		# pirate
 		hfe_pirate.100
 		# thoth
-		hfe.713 # Fall back if Thoth does not load, also to AI and those who didn't discover him
-		hfe.714 # Thoth's response before you contact him
-		hfe.710 # Player talks with Thoth
+		# hfe.713		# Fall back if Thoth does not load, also to AI and those who didn't discover him
+		hfe.710		# Player talks with Thoth
 	}
 }
 
@@ -237,7 +234,6 @@ on_survey = {
 #	# events = {
 #	# }
 # }
-
 # A fleet has entered a system
 # Scope = Fleet
 # From = System
@@ -399,9 +395,6 @@ on_building_complete = {
 		hfe_leaders.10
 		# Planet Shield
 		hfe_population.114
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
@@ -413,9 +406,6 @@ on_building_upgraded = {
 		hfe_leaders.11
 		# planet shield
 		hfe_population.114
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
@@ -424,12 +414,9 @@ on_building_upgraded = {
 on_building_demolished = {
 	events = {
 		# building_assimilator feature
-#		hfe_maintenance.13
+		# hfe_maintenance.13
 		# planet shield
 		hfe_population.114
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
@@ -438,12 +425,9 @@ on_building_demolished = {
 on_building_replaced = {
 	events = {
 		# building_assimilator feature
-#		hfe_maintenance.13
+		# hfe_maintenance.13
 		# planet shield
 		hfe_population.114
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
@@ -500,39 +484,6 @@ on_war_lost = {
 	}
 }
 
-# Triggers country_event for the attacker upon victory
-# (Before controller is switched)
-# This = country, leader attacker
-# From = country, planet owner
-# FromFrom = planet
-# IDENTITIES: attacker is the side that "IsHostile" to
-# the planet controller; e.g. spawned monster armies
-# are attackers, but if they win and the player attempts
-# to retake the planet, the player is the attacker
-on_planet_attackers_win = {
-	events = {
-		# gain general
-		hfe_leaders.40
-		# teachable lvl up
-		hfe_leaders.102
-		# retake zombie planet
-		hfe_plague.6
-	}
-}
-
-# Triggers country_event for the defender upon victory
-# This = country, planet owner
-# From = country, attack leader
-# FromFrom = planet
-on_planet_defenders_win = {
-	events = {
-		# gain general
-		hfe_leaders.40
-		# teachable lvl up
-		hfe_leaders.102
-	}
-}
-
 # A pop has finished growing
 # This = Planet scope
 # From = Country
@@ -563,19 +514,8 @@ on_pop_assembled = {
 # FromFrom = Pop
 on_pop_purged = {
 	events = {
-		# send planet to zombie owner then last pop purged
-		hfe_plague.11
-	}
-}
-
-# A pop has been displaced
-# This = Planet scope
-# From = Country
-# FromFrom = Pop
-on_pop_displaced = {
-	events = {
-		# fix for purged pop flip to another planet
-		hfe_plague.12
+		# add purged pop to stats
+		hfe_plague.7
 	}
 }
 
@@ -600,25 +540,14 @@ on_colonization_started = {
 # Scope = Planet
 on_colonized = {
 	events = {
-		#hfe_population.1
 		# gain governor
 		hfe_leaders.12
 		# biobomb
 		hfe_features.1
-		# stargate event
-		hfe.511
 		# Exodus
-#		hfe_features.17
+		# hfe_features.17
 	}
 }
-
-# A colony has been destroyed. Called just before owner and controller is cleared
-# Scope = Planet
-# on_colony_destroyed = {
-# 	events = {
-# 		hfe_population.1
-# 	}
-# }
 
 # This = owner of fleet 1
 # From = owner of fleet 2
@@ -644,6 +573,8 @@ on_space_battle_won = {
 		hfe_pirate.305
 		# admiral satanist can kill retreating admiral
 		hfe_leaders.107
+		# blight assimilate fleet
+		hfe.5089
 	}
 }
 
@@ -657,7 +588,6 @@ on_building_research_station = {
 	}
 }
 
-
 on_building_starbase_outpost = {
 	events = {
 		hfe_maintenance.1
@@ -668,21 +598,53 @@ on_building_starbase_outpost = {
 # This = Planet
 on_blocker_cleared = {
 	events = {
-#		hfe_population.1
 		# gain governor
 		hfe_leaders.10
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
-# Planet has taken damage from orbital bombardment
+# Triggers country_event for the attacker upon victory
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+# IDENTITIES: attacker is the side that "IsHostile" to
+# the planet controller; e.g. spawned monster armies
+# are attackers, but if they win and the player attempts
+# to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+	events = {
+		# gain general
+		hfe_leaders.40
+		# teachable lvl up
+		hfe_leaders.102
+		# zombie take planet
+		hfe_plague.5
+		# retake zombie planet
+		hfe_plague.6
+	}
+}
+
+# Triggers country_event for the defender upon victory
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		# gain general
+		hfe_leaders.40
+		# teachable lvl up
+		hfe_leaders.102
+		# primitive lvl up if win invasion
+		hfe_primitive.202
+	}
+}
+
+# Planet has taken damage from orbital bombardment - Damage is applied daily
 # This = Planet
 # From = Bombarder
 on_planet_bombarded = {
 	events = {
-		hfe_maintenance.2
 		# pirate bombard planet
 		hfe_pirate.53
 		# convert pirate planet to asteroid
@@ -698,21 +660,19 @@ on_planet_bombarded = {
 #This = Planet scope
 on_planet_ownerless = {
 	events = {
-		# remove modifiers
-#		hfe_population.7
 		# convert pirate planet to asteroid
 		hfe_pirate.57
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
+		# reduce the counter and send notification
+		hfe_plague.11
 	}
 }
 
-#From = Country scope
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
 #This = Planet scope
 on_planet_transfer = {
 	events = {
-		#hfe_population.1
 		# copernicus
 		hfe.363
 		# aggressive diplomacy civic
@@ -723,43 +683,33 @@ on_planet_transfer = {
 		hfe.500
 		# instant assimilation
 		hfe.5084
-		# convert robots-machines
+		# fix robot pop
 		hfe_population.0
-		# exodus
+		# exodus settle
 		hfe_features.3
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
+		# hfe_civic_features_power_in_low_numbers effect
+		hfe_features.21
 	}
 }
 
-# If you abduct someone's robot
+# A planets controller becomes a country not the same as the owner.
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
+on_planet_occupied = {
+	events = {
+		# annex occupying systems
+		hfe_total_war.51
+	}
+}
+
+# Pop is abducted by raiding stance
+# This = Pop scope
+# From = planet abducted from
 on_pop_abducted = {
 	events = {
-		hfe_population.1 # Fix robots from dying
-	}
-}
-
-# Bought from the Slave Market
-#on_pop_added = { 
-#	events = {
-#		hfe_population.1 # Fix robots from dying
-#	}
-#}
-
-# For nations with Full AI Rights and citizenship,
-# fix liberated robots with newly minted Free Will
-on_pop_emancipated = {
-	events = {
-		hfe_population.1 # Fix robots from dying
-	}
-}
-
-# For nations that enforce AI Servitude,
-# fix captured robots stripped of their Free Will
-on_pop_enslaved = {
-	events = {
-		hfe_population.1 # Fix robots from dying
+		# fix robot pop
+		hfe_population.1
 	}
 }
 
@@ -772,24 +722,15 @@ on_terraforming_complete = {
 		hfe_leaders.100
 		# remove plague bombarding modifier
 		hfe_plague.153
-		# Check Varelse Deposits
-		hfe_maintenance.106
-		hfe_maintenance.107
 	}
 }
 
-# A planets controller becomes a country not the same as the owner.
-# Root = Planet
-# From = Planet Owner
-# FromFrom = Planet Controller (the one occupying)
-on_planet_occupied = {
+# This = subject
+# From = subject's overlord
+on_becoming_subject = {
 	events = {
-		# zombie take planet
-		hfe_plague.5
-		# retake planet from zombie
-		hfe_plague.7
-		# annex occupying systems
-		hfe_total_war.51
+		# change subject type for egypt/future
+		hfe_maintenance.50
 	}
 }
 
@@ -862,7 +803,6 @@ on_colony_7_years_old = {
 on_colony_8_years_old = {
 	random_events = {
 		20 = 0
-
 		1 = hfe.150
 		1 = hfe.200
 		1 = hfe.250
@@ -873,7 +813,6 @@ on_colony_8_years_old = {
 on_colony_9_years_old = {
 	random_events = {
 		20 = 0
-
 		1 = hfe.150
 		1 = hfe.200
 		1 = hfe.250
@@ -884,16 +823,9 @@ on_colony_9_years_old = {
 on_colony_10_years_old = {
 	random_events = {
 		20 = 0
-
 		1 = hfe.150
 		1 = hfe.200
 		1 = hfe.250
 		1 = hfe.300
 	}
 }
-
-#on_pirate_spawn = {
-#	events = {
-#		#hfe_pirate.0
-#	}
-#}

@@ -1,143 +1,336 @@
-#
-
-hfe_effect_population_country_set_robot_pop_identity = {
-#	if = {
-#		limit = {
-#			has_trait = trait_machine_unit
-#			is_robot_pop = yes
-#			owner = {
-#				is_machine_empire = no
-#			}
-#		}
-#		every_owned_pop_species = {
-#			limit = {
-#				has_trait = trait_machine_unit
-#				is_robot_pop = yes
-#				not = {
-#					is_same_species = prev.species
-#				}
-#			}
-#			root = {
-#				modify_species = {
-#					base = prev
-#					species = prev
-#					add_trait = hfe_species_trait_test
-#				}
-#			}
-#			set_species_identity = prev.species
-#			root = {
-#				modify_species = {
-#					species = prev
-#					remove_trait = hfe_species_trait_test
-#				}
-#			}
-#		}
-#	}
-#	else_if = {
-#		limit = {
-#			has_trait = trait_mechanical
-#		}
-#		every_owned_pop_species = {
-#			limit = {
-#				has_trait = trait_mechanical
-#				not = {
-#					is_same_species = prev.species
-#				}
-#			}
-#			root = {
-#				modify_species = {
-#					base = none
-#					species = prev
-#					add_trait = hfe_species_trait_test
-#				}
-#			}
-#			set_species_identity = prev.species
-#			root = {
-#				modify_species = {
-#					species = prev
-#					remove_trait = hfe_species_trait_test
-#				}
-#			}
-#		}
-#	}
-#	else = {
-#		if = {
-#			limit = { owner = { is_machine_empire = no } }
-#			hfe_effect_population_process_robot_species_identity = yes
-#		}
-#	}
-}
-
 hfe_effect_population_fix_robot_pop = {
+	# robot to robot
 	if = {
 		limit = {
-			OR = {
-				has_trait = trait_machine_unit
-				THIS = { species = { is_archetype = MACHINE } }
-			}
+			has_trait = trait_mechanical
 			exists = owner
 			owner = {
 				is_machine_empire = no
 			}
 		}
-		modify_species = {
-			base = prev
-			remove_trait = trait_machine_unit
-			add_trait = trait_mechanical
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+						not = {
+							is_same_species = prevprev
+						}
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
 		}
-		remove_modifier = pop_recently_conquered
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+			}
+		}
 	}
+	# machine to machine
 	else_if = {
 		limit = {
-			OR = {
-				has_trait = trait_mechanical
-				THIS = { species = { is_archetype = ROBOT } }
-			}
+			has_trait = trait_machine_unit
 			exists = owner
 			owner = {
 				is_machine_empire = yes
 			}
 		}
-		modify_species = {
-#			base = prev
-			remove_trait = trait_mechanical
-			add_trait = trait_machine_unit
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+			}
+		}
+		remove_modifier = pop_recently_conquered
+	}
+	# machine to robot
+	else_if = {
+		limit = {
+			has_trait = trait_machine_unit
+			exists = owner
+			owner = {
+				is_machine_empire = no
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_mechanical
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+				remove_trait = trait_machine_unit
+				add_trait = trait_mechanical
+			}
+		}
+		else = {
+			modify_species = {
+				remove_trait = trait_machine_unit
+				add_trait = trait_mechanical
+			}
+		}
+		remove_modifier = pop_recently_conquered
+	}
+	# robot to machine
+	else_if = {
+		limit = {
+			has_trait = trait_mechanical
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_robot_species
+				}
+			}
+			owner = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_machine_unit
+					}
+					save_event_target_as = hfe_robot_species
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_robot_species
+			}
+			modify_species = {
+				base = event_target:hfe_robot_species
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
+			}
+		}
+		else = {
+			modify_species = {
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
+			}
 		}
 		remove_modifier = pop_recently_conquered
 	}
 }
 
-hfe_effect_population_process_robot_species_identity = {
-	random_owned_pop = {
+# switch to hive
+hfe_effect_gov_fix_to_hive = {
+	if = {
 		limit = {
-			has_trait = trait_mechanical
-		}
-		save_event_target_as = hfe_robot_pop_species
-	}
-	every_owned_pop_species = {
-		limit = {
-			has_trait = trait_mechanical
-			exists = event_target:hfe_robot_pop_species
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			hfe_trigger_non_sapient_robot = yes
 			not = {
-				is_same_species = event_target:hfe_robot_pop_species
+				has_authority = auth_machine_intelligence
 			}
 		}
-		root = {
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			authority = auth_machine_intelligence
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0.1
+					not = {
+						any_owned_species = {
+							hfe_trigger_is_robot = no
+						}
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_servitor
+						civic = random
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0.1
+					not = {
+						any_owned_species = {
+							hfe_trigger_is_robot = no
+						}
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_assimilator
+						civic = random
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0.1
+					any_owned_species = {
+						hfe_trigger_is_robot = no
+					}
+				}
+				change_government = {
+					civics = {
+						civic = civic_machine_terminator
+						civic = random
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0.1
+					any_owned_species = {
+						hfe_trigger_is_robot = no
+					}
+				}
+				change_government = {
+					civics = random
+				}
+			}
+		}
+		kill_leader = {
+			type = ruler
+			show_notification = no
+		}
+		# remove robot trait
+		if = {
+			limit = {
+				has_trait = trait_mechanical
+			}
 			modify_species = {
-				base = none
-				species = prev
-				add_trait = hfe_species_trait_test
+				remove_trait = trait_mechanical
+				add_trait = trait_machine_unit
 			}
 		}
-#		set_species_identity = prev.species
-		set_species_identity = prev
-		root = {
-			modify_species = {
-				species = prev
-				remove_trait = hfe_species_trait_test
-			}
-		}
+		set_name = random
 	}
+	else_if = {
+		limit = {
+			host_has_dlc = "Utopia"
+			has_trait = trait_hive_mind
+			not = {
+				has_authority = auth_hive_mind
+			}
+		}
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			authority = auth_hive_mind
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		random_list = {
+			9 = {
+				change_government = {
+					civics = random
+				}
+			}
+			1 = {
+				change_government = {
+					civics = {
+						civic = civic_hive_devouring_swarm
+						civic = random
+					}
+				}
+			}
+		}
+		kill_leader = {
+			type = ruler
+			show_notification = no
+		}
+		set_name = random
+	}
+}
+
+# from hive
+hfe_effect_gov_fix_from_hive = {
+	if = {
+		limit = {
+			is_gestalt = yes
+			hfe_trigger_non_sapient = no
+			# in general its ok if cybernetics will be released from hive authority but not blight
+			not = {
+				has_origin = hfe_origin_blight
+			}
+		}
+		create_country = {
+			type = default
+			species = this.species
+			ignore_initial_colony_error = yes
+			origin = origin_default
+		}
+		copy_ethos_and_authority = last_created_country
+		change_government = {
+			civics = random
+		}
+		set_name = random
+	}
+}
+
+# just reset
+hfe_effect_gov_reset = {
+	create_country = {
+		type = default
+		species = this
+		ignore_initial_colony_error = yes
+		origin = origin_default
+	}
+	copy_ethos_and_authority = last_created_country
+	change_government = {
+		civics = random
+	}
+	set_name = random
 }
 
 hfe_effect_population_remove_object_shield_global = {
@@ -147,62 +340,4 @@ hfe_effect_population_remove_object_shield_global = {
 		}
 		destroy_ambient_object = this
 	}
-}
-
-hfe_effect_exodus_reset_capital = {
-	remove_building = building_colony_shelter
-	remove_building = building_hive_capital
-	remove_building = building_deployment_post
-	remove_building = building_resort_capital
-	remove_building = building_slave_capital
-	remove_building = building_capital
-	remove_building = building_hive_capital
-	remove_building = building_machine_capital
-	remove_building = building_resort_capital
-	remove_building = building_slave_capital
-	remove_building = building_major_capital
-	remove_building = building_hive_major_capital
-	remove_building = building_machine_major_capital
-	remove_building = building_resort_major_capital
-	remove_building = building_slave_major_capital
-	remove_building = building_system_capital
-	remove_building = building_machine_system_capital
-#	remove_building = building_hive_system_capital
-	remove_building = building_hab_capital
-	remove_building = building_hab_major_capital
-	remove_building = building_ancient_control_center
-	remove_building = building_ancient_palace
-	remove_building = hfe_building_mechanicus_pseudo_capital
-
-#	if = {
-#		limit = {
-#			has_global_flag = HFE_TSP_spawn_test
-#		}
-#		log = "Planet capital buildings purged"
-#	}
-}
-
-hfe_effect_exodus_set_new_home = {
-	capital_scope = {
-		add_modifier = {
-			modifier = tsp_hfe_exodus_happy_ending
-			days = -1
-		}
-		add_modifier = {
-			modifier = hfe_unity
-			days = 7300
-		}
-		add_modifier = {
-			modifier = hfe_population_boom
-			days = 5475
-		}
-		set_planet_flag = hfe_features_exodus_planet
-	}
-	ROOT = {
-		add_resource = {
-			unity = 3000
-			influence = 200
-		}
-	}
-	play_sound = event_celebration
 }

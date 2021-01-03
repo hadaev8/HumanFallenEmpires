@@ -1,7 +1,6 @@
 #
-
 # for country/planet
-hfe_effect_refuge_10 = {
+hfe_effect_refuge_20 = {
 	every_owned_pop = {
 		random_list = {
 			80 = {
@@ -15,7 +14,7 @@ hfe_effect_refuge_10 = {
 
 # for pop
 hfe_effect_refuge_or_die = {
-#	log = "pop refuge effect $thisgetname$"
+	#	log = "pop refuge effect $thisgetname$"
 	if = {
 		limit = {
 			hfe_trigger_is_robot = no
@@ -183,7 +182,7 @@ hfe_effect_refuge_or_die = {
 		}
 	}
 	else = {
-#		log = "refuge pop killed $thisgetname$"
+		#		log = "refuge pop killed $thisgetname$"
 		kill_pop = yes
 	}
 }
@@ -210,8 +209,8 @@ hfe_effect_settle_pop = {
 			}
 		}
 		event_target:hfe_settle_pop_target = {
-#			log = "ERROR: looping in settle pop"
-#			hfe_effect_refuge_or_die = yes
+			#			log = "ERROR: looping in settle pop"
+			#			hfe_effect_refuge_or_die = yes
 			kill_pop = yes
 		}
 	}
@@ -325,7 +324,7 @@ hfe_effect_settle_pop = {
 				}
 				hfe_effect_population_fix_robot_pop = yes
 			}
-#			log = "pop moved to [this.GetName]"
+			#			log = "pop moved to [this.GetName]"
 		}
 	}
 }
@@ -409,16 +408,30 @@ hfe_effect_event_47_next = {
 	hidden_effect = {
 		switch = {
 			trigger = has_country_flag
-			hfe.47.step0 = {
-				remove_country_flag = hfe.47.step0
-				set_country_flag = hfe.47.step1
-				country_event = {
-					id = hfe.47
+			hfe.47.step4 = {
+				# it also remove other non step flags
+				hfe_effect_event_47_clear_flags = yes
+				if = {
+					limit = {
+						has_country_flag = hfe_egypt_wormhole
+					}
+					remove_country_flag = hfe_egypt_wormhole
+					random_list = {
+						1 = {
+							country_event = {
+								id = hfe.55
+								days = 1
+								random = 15
+							}
+						}
+						1 = {
+						}
+					}
 				}
 			}
-			hfe.47.step1 = {
-				remove_country_flag = hfe.47.step1
-				set_country_flag = hfe.47.step2
+			hfe.47.step3 = {
+				remove_country_flag = hfe.47.step3
+				set_country_flag = hfe.47.step4
 				country_event = {
 					id = hfe.47
 				}
@@ -430,16 +443,19 @@ hfe_effect_event_47_next = {
 					id = hfe.47
 				}
 			}
-			hfe.47.step3 = {
-				remove_country_flag = hfe.47.step3
-				set_country_flag = hfe.47.step4
+			hfe.47.step1 = {
+				remove_country_flag = hfe.47.step1
+				set_country_flag = hfe.47.step2
 				country_event = {
 					id = hfe.47
 				}
 			}
-			hfe.47.step4 = {
-				# it also remove other non step flags
-				hfe_effect_event_47_clear_flags = yes
+			hfe.47.step0 = {
+				remove_country_flag = hfe.47.step0
+				set_country_flag = hfe.47.step1
+				country_event = {
+					id = hfe.47
+				}
 			}
 		}
 	}
@@ -449,12 +465,30 @@ hfe_effect_event_47_clear_flags = {
 	hidden_effect = {
 		remove_country_flag = hfe.47.step3_bad_news.0
 		remove_country_flag = hfe.47.step3_bad_news.1
-		remove_country_flag = hfe_egypt_wormhole
 		remove_country_flag = hfe.47.step0
 		remove_country_flag = hfe.47.step1
 		remove_country_flag = hfe.47.step2
 		remove_country_flag = hfe.47.step3
 		remove_country_flag = hfe.47.step4
+	}
+}
+
+hfe_effect_event_53_next = {
+	hidden_effect = {
+		switch = {
+			trigger = has_country_flag
+			hfe.53.0 = {
+				remove_country_flag = hfe.53.0
+				set_country_flag = hfe.53.1
+			}
+			hfe.53.1 = {
+				remove_country_flag = hfe.53.1
+				set_country_flag = hfe.53.2
+			}
+		}
+		country_event = {
+			id = hfe.53
+		}
 	}
 }
 
@@ -563,25 +597,25 @@ hfe_effect_event_711_next = {
 
 hfe_effect_event_5001_next = {
 	hidden_effect = {
-#		if = {
-#			limit = {
-#				NOT = {
-#					has_country_flag = hfe.5001.step0
-#					has_country_flag = hfe.5001.step1
-#					has_country_flag = hfe.5001.step2
-#					has_country_flag = hfe.5001.step3
-#					has_country_flag = hfe.5001.step4
-#					has_country_flag = hfe.5001.step5
-#					has_country_flag = hfe.5001.step6
-#					has_country_flag = hfe.5001.step7
-#					has_country_flag = hfe.5001.step5.human
-#					has_country_flag = hfe.5001.step4.human
-#					has_country_flag = hfe.5001.step3.human
-#					has_country_flag = hfe.5001.step2.human
-#				}
-#			}
-#			set_country_flag = hfe.5001.step0
-#		}
+		#		if = {
+		#			limit = {
+		#				NOT = {
+		#					has_country_flag = hfe.5001.step0
+		#					has_country_flag = hfe.5001.step1
+		#					has_country_flag = hfe.5001.step2
+		#					has_country_flag = hfe.5001.step3
+		#					has_country_flag = hfe.5001.step4
+		#					has_country_flag = hfe.5001.step5
+		#					has_country_flag = hfe.5001.step6
+		#					has_country_flag = hfe.5001.step7
+		#					has_country_flag = hfe.5001.step5.human
+		#					has_country_flag = hfe.5001.step4.human
+		#					has_country_flag = hfe.5001.step3.human
+		#					has_country_flag = hfe.5001.step2.human
+		#				}
+		#			}
+		#			set_country_flag = hfe.5001.step0
+		#		}
 		switch = {
 			trigger = has_country_flag
 			hfe.5001.step0 = {
@@ -725,10 +759,24 @@ hfe_effect_varelse_fleet_find_new_home = {
 	clear_fleet_actions = this
 	closest_system = {
 		limit = {
-			not = {
-				exists = owner
+			or = {
+				not = {
+					exists = owner
+				}
+				owner = {
+					is_country_type = hfe_pirate
+				}
 			}
 			any_system_planet = {
+				or = {
+					not = {
+						exists = owner
+					}
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				hfe_trigger_holy_planet = no
 				habitability = {
 					who = event_target:hfe_varelse_species
 					value > 0.7
@@ -738,9 +786,18 @@ hfe_effect_varelse_fleet_find_new_home = {
 		}
 		random_system_planet = {
 			limit = {
+				or = {
+					not = {
+						exists = owner
+					}
+					owner = {
+						is_country_type = primitive
+					}
+				}
+				hfe_trigger_holy_planet = no
 				habitability = {
 					who = event_target:hfe_varelse_species
-					value > 0.5
+					value > 0.7
 				}
 			}
 			save_event_target_as = hfe_varelse_fleet_new_home
@@ -755,6 +812,13 @@ hfe_effect_varelse_fleet_find_new_home = {
 		closest_system = {
 			limit = {
 				any_system_planet = {
+					nand = {
+						exists = owner
+						owner = {
+							has_country_flag = hfe_has_event_52
+						}
+					}
+					hfe_trigger_holy_planet = no
 					habitability = {
 						who = event_target:hfe_varelse_species
 						value > 0.5
@@ -764,6 +828,13 @@ hfe_effect_varelse_fleet_find_new_home = {
 			}
 			random_system_planet = {
 				limit = {
+					nand = {
+						exists = owner
+						owner = {
+							has_country_flag = hfe_has_event_52
+						}
+					}
+					hfe_trigger_holy_planet = no
 					habitability = {
 						who = event_target:hfe_varelse_species
 						value > 0.5
@@ -784,7 +855,7 @@ hfe_effect_varelse_fleet_find_new_home = {
 	else = {
 		auto_move_to_planet = {
 			target = event_target:hfe_varelse_fleet_new_home
-			clear_auto_move_on_arrival = yes
+			clear_auto_move_on_arrival = no
 			arrival_effect = hfe_effect_varelse_fleet_find_new_home_make_colony
 		}
 	}
@@ -793,29 +864,56 @@ hfe_effect_varelse_fleet_find_new_home = {
 hfe_effect_varelse_fleet_find_new_home_make_colony = {
 	from = {
 		create_country = {
-			name = "Neo-Varelse Hegemony"
+			name = "New Varelse Hegemony"
 			type = default
 			species = event_target:hfe_varelse_species
-			origin = "hfe_civic_features_exodus"
+			origin = hfe_civic_features_exodus
 			ethos = {
 				ethic = ethic_xenophobe
 				ethic = ethic_militarist
 				ethic = ethic_materialist
 			}
+			authority = auth_dictatorial
 			effect = {
+				random_country = {
+					limit = {
+						has_country_flag = hfe_has_event_52
+					}
+					establish_communications_no_message = prev
+					prev = {
+						add_opinion_modifier = {
+							who = prev
+							modifier = hfe_opinion_varelse_saved_from_time_trap
+						}
+					}
+				}
 				set_country_flag = hfe_was_government_in_exile
 				set_country_flag = hfe_chosen_to_exodus
 				set_country_flag = hfe_varelse
-				set_graphical_culture = fallen_empire_02
-				set_city_graphical_culture = reptilian_01
-				hfe_effect_gov_fix = yes
-				hfe_effect_init_give_tech_t5 = yes
-				prev = {
-					create_colony = {
-						owner = prev
-					}
+				# to recalc personality
+				change_government = {
+					authority = auth_imperial
 				}
-				event_target:hfe_varelse_fleet = {
+				change_government = {
+					authority = auth_dictatorial
+				}
+				hfe_effect_resource_bonus = yes
+				hfe_effect_init_give_tech_t3 = yes
+				prev = {
+					if = {
+						limit = {
+							exists = owner
+						}
+						conquer = prev
+					}
+					else = {
+						create_colony = {
+							owner = prev
+						}
+					}
+					# set_owner = prev
+				}
+				prevprev = {
 					set_owner = prev
 				}
 				every_owned_ship = {
@@ -824,28 +922,24 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 						modifier = hfe_unkeep
 					}
 				}
-				add_resource = {
-					minerals = 7500
-					energy = 7500
-					food = 7500
-					alloys = 6000
-					consumer_goods = 5000
-					influence = 1000
-				}
 			}
 		}
 		while = {
 			count = 6
 			create_pop = {
-				species = event_target:hfe_varelse_species
+				species = owner
 			}
 		}
 		add_modifier = {
 			modifier = hfe_population_boom
-			days = 3650
+			years = 10
+		}
+		add_modifier = {
+			modifier = hfe_idustrial_boom
+			years = 1
 		}
 		hfe_effect_create_starbase_citadel_from_planet = yes
-#		log = "Surprise Varelse fleet settled down"
+		#		log = "Surprise Varelse fleet settled down"
 	}
 }
 
@@ -925,165 +1019,46 @@ hfe_effect_save_event_target = {
 	}
 }
 
-#hfe_effect_clear_event_target = {
-# clear_global_event_target = hfe_event_target_0
-#	clear_global_event_target = hfe_event_target_1
-#	clear_global_event_target = hfe_event_target_2
-#	clear_global_event_target = hfe_event_target_3
-#	clear_global_event_target = hfe_event_target_4
-#	clear_global_event_target = hfe_event_target_5
-#}
-
 # for country
-hfe_effect_create_egypt_fleet = {
-	create_leader = {
-		class = admiral
-		species = this
-		skill = 5
-		leader_age_min = 100
-		leader_age_max = 650
-	}
-	create_fleet_from_naval_cap = 0.2
-	last_created_fleet = {
-		assign_leader = last_created_leader
-	}
-	create_fleet = {
-		settings = {
-		 	can_change_composition = no
-		 	uses_naval_capacity = no
-		}
-		effect = {
-			set_owner = prev
-#			if = {
-#				limit = { has_global_flag = HFE_TSP_spawn_test }
-#				log = "Ju Ahet gets fleet"
-#			}
-			while = {
-				count = 5
-				create_ship = {
-					random_existing_design = battleship
-				}
-			}
-			assign_leader = last_created_leader
-			while = {
-				count = 7
-				create_ship = {
-					random_existing_design = cruiser
-				}
-			}
-			while = {
-				count = 10
-				create_ship = {
-					random_existing_design = destroyer
-				}
-			}
-			while = {
-				count = 20
-				create_ship = {
-					random_existing_design = corvette
-				}
-			}
-			set_location = {
-				target = owner.capital_star
-				distance = 90
-				angle = random
-			}
+hfe_effect_create_admirals = {
+	while = {
+		count = 5
+		create_leader = {
+			class = admiral
+			species = this
+			skill = 5
+			leader_age_min = 100
+			leader_age_max = 300
 		}
 	}
 }
 
-# for country
-hfe_effect_create_future_fleet = {
-	create_leader = {
-		class = admiral
-		species = this
-		skill = 5
-		leader_age_min = 40
+hfe_effect_create_fleet = {
+	hfe_effect_create_admirals = yes
+	add_modifier = {
+		modifier = hfe_space_boom
+		years = 10
 	}
-	create_fleet = {
-		settings = {
-		 	can_change_composition = no
-		 	uses_naval_capacity = no
-		}
-		effect = {
-			set_owner = prev
-			while = {
-				count = 5
-				create_ship = {
-					random_existing_design = battleship
-				}
-			}
-			assign_leader = last_created_leader
-			while = {
-				count = 7
-				create_ship = {
-					random_existing_design = cruiser
-				}
-			}
-			while = {
-				count = 10
-				create_ship = {
-					random_existing_design = destroyer
-				}
-			}
-			while = {
-				count = 20
-				create_ship = {
-					random_existing_design = corvette
-				}
-			}
-			set_location = {
-				target = owner.capital_star
-				distance = 90
-				angle = random
-			}
-		}
+	add_modifier = {
+		modifier = hfe_navy_size
+		years = 200
+	}
+	add_resource = {
+		alloys = 100000
 	}
 }
 
-# for tile
-# hfe_effect_set_random_deposit = {
-# 	random_list = {
-# 		30 = {
-# 			hfe_effect_set_science_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_energy_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_mineral_deposit = yes
-# 		}
-# 	}
-# }
-# hfe_effect_set_science_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			hfe_effect_set_physics_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_society_deposit = yes
-# 		}
-# 		10 = {
-# 			hfe_effect_set_engineering_deposit = yes
-# 		}
-# 	}
-# }
-# hfe_effect_set_energy_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_energy_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_energy_deposit
-# 		}
-# 	}
-# }
+# ai can trade anyway, so ammount doesnt matter
+hfe_effect_resource_bonus = {
+	add_resource = {
+		energy = 5000
+		minerals = 5000
+		food = 5000
+		alloys = 5000
+		consumer_goods = 5000
+		influence = 500
+	}
+}
 
 hfe_effect_set_mineral_orbital_deposit = {
 	random_list = {
@@ -1155,107 +1130,6 @@ hfe_effect_set_energy_orbital_deposit = {
 	}
 }
 
-# hfe_effect_set_food_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_farmland_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_farmland_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_farmland_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_farmland_deposit
-# 		}
-# 	}
-# }
-# hfe_effect_set_physics_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_physics_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_physics_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_physics_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_physics_deposit
-# 		}
-# 	}
-# }
-# hfe_effect_set_society_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_society_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_society_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_society_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_society_deposit
-# 		}
-# 	}
-# }
-# hfe_effect_set_engineering_deposit = {
-# 	random_list = {
-# 		10 = {
-# 			set_deposit = d_engineering_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_rich_engineering_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_vast_engineering_deposit
-# 		}
-# 		10 = {
-# 			set_deposit = d_immense_engineering_deposit
-# 		}
-# 	}
-# }
-# hfe_effect_set_memorial_tile = {
-# 	random_list = {
-# 		20 = {
-# 		}
-# 		5 = {
-# 			set_blocker = tb_radioactive_wasteland
-# 		}
-# 		10 = {
-# 			set_blocker = tb_city_ruins
-# 		}
-# 		10 = {
-# 			set_blocker = tb_bombarded_land
-# 		}
-# 		10 = {
-# 			set_blocker = tb_battlefield_debris
-# 		}
-# 		2 = {
-# 			set_blocker = tb_ancient_ruins
-# 		}
-# 		1 = {
-# 			add_building = building_dark_matter_power_plant
-# 		}
-# 		1 = {
-# 			add_building = building_agri_processing_complex
-# 		}
-# 		1 = {
-# 			add_building = building_ancient_factory
-# 		}
-# 		1 = {
-# 			add_building = building_ancient_archives
-# 		}
-# 		20 = {
-# 			hfe_effect_set_random_deposit = yes
-# 		}
-# 	}
-# }
-
 # for leader
 hfe_effect_add_psionic_trait = {
 	if = {
@@ -1295,43 +1169,6 @@ hfe_effect_add_psionic_trait = {
 				add_trait = leader_trait_ruler_psionic
 			}
 		}
-	}
-}
-
-# for planet
-hfe_effect_convert_to_asteroid = {
-#	# log = "converting to asteroid [this.GetName]"
-
-#	# flee fleets
-	if = {
-		limit = {
-			exists = owner
-			owner = {
-				is_country_type = hfe_pirate
-				num_owned_planets = 1
-			}
-		}
-		owner = {
-			hfe_effect_pirate_flee_fleets = yes
-		}
-	}
-	hfe_effect_clear_buildings_and_destroy_colony = yes
-	if = {
-		limit = {
-			has_planet_flag = hfe_former_pc_ice_asteroid
-		}
-		remove_planet_flag = hfe_former_pc_ice_asteroid
-		change_pc = pc_ice_asteroid
-	}
-	else_if = {
-		limit = {
-			has_planet_flag = hfe_former_pc_crystal_asteroid
-		}
-		remove_planet_flag = hfe_former_pc_crystal_asteroid
-		change_pc = pc_crystal_asteroid
-	}
-	else = {
-		change_pc = pc_asteroid
 	}
 }
 
@@ -1419,16 +1256,6 @@ hfe_effect_create_starbase_citadel_with_buildings_from_planet = {
 		create_starbase = {
 			size = starbase_citadel
 			owner = event_target:hfe_starbase_owner
-			module = shipyard
-			module = shipyard
-			module = shipyard
-			module = hangar_bay
-			module = gun_battery
-			module = gun_battery
-			building = target_uplink_computer
-			building = defense_grid
-			building = colossus_yards
-			building = titan_yards
 		}
 	}
 }
@@ -1753,218 +1580,6 @@ hfe_effect_random_roll_flags_6_country = {
 	}
 }
 
-# used in create country to avoid random spawn with started civics
-hfe_effect_gov_fix = {
-	change_government = {
-		authority = random
-		civics = random
-	}
-	hfe_effect_gov_fix_to_hive = yes
-	hfe_effect_gov_fix_from_hive = yes
-	if = {
-		limit = {
-			not = {
-				exists = ruler
-			}
-		}
-		create_leader = {
-			class = ruler
-		}
-	}
-}
-
-# switch to hive
-hfe_effect_gov_fix_to_hive = {
-	if = {
-		limit = {
-			host_has_dlc = "Synthetic Dawn Story Pack"
-			hfe_trigger_non_sapient_robot = yes
-			not = {
-				has_authority = auth_machine_intelligence
-			}
-		}
-		create_country = {
-			type = default
-			species = this.species
-			ignore_initial_colony_error = yes
-			ethos = {
-				ethic = ethic_gestalt_consciousness
-			}
-			authority = auth_machine_intelligence
-			origin = origin_default
-			civics = {
-				civic = random
-				civic = random
-			}
-		}
-		copy_ethos_and_authority = last_created_country
-		random_list = {
-			10 = {
-				modifier = {
-					factor = 0.5
-					not = {
-						any_owned_pop_species = {
-							hfe_trigger_is_robot = no
-						}
-					}
-				}
-				change_government = {
-					civics = {
-						civic = civic_machine_servitor
-						civic = random
-					}
-				}
-			}
-			10 = {
-				modifier = {
-					factor = 0.5
-					not = {
-						any_owned_pop_species = {
-							hfe_trigger_is_robot = no
-						}
-					}
-				}
-				change_government = {
-					civics = {
-						civic = civic_machine_assimilator
-						civic = random
-					}
-				}
-			}
-			1 = {
-				modifier = {
-					factor = 0
-					any_owned_pop_species = {
-						hfe_trigger_is_robot = no
-					}
-				}
-				change_government = {
-					civics = {
-						civic = civic_machine_terminator
-						civic = random
-					}
-				}
-			}
-			10 = {
-				change_government = {
-					civics = random
-				}
-			}
-		}
-		kill_leader = {
-			type = ruler
-			show_notification = no
-		}
-		# remove robot trait
-		if = {
-			limit = {
-				has_trait = trait_mechanical
-			}
-			modify_species = {
-				remove_trait = trait_mechanical
-				add_trait = trait_machine_unit
-			}
-		}
-		set_name = random
-	}
-	else_if = {
-		limit = {
-			host_has_dlc = "Utopia"
-			has_trait = trait_hive_mind
-			not = {
-				has_authority = auth_hive_mind
-			}
-		}
-		create_country = {
-			type = default
-			species = this.species
-			ignore_initial_colony_error = yes
-			ethos = {
-				ethic = ethic_gestalt_consciousness
-			}
-			authority = auth_hive_mind
-			origin = origin_default
-			civics = {
-				civic = random
-				civic = random
-			}
-
-		}
-		copy_ethos_and_authority = last_created_country
-		random_list = {
-			50 = {
-				change_government = {
-					civics = {
-						civic = random
-						civic = random
-					}
-				}
-			}
-			2 = {
-				change_government = {
-					civics = {
-						civic = civic_hive_devouring_swarm
-						civic = random
-					}
-				}
-			}
-		}
-		kill_leader = {
-			type = ruler
-			show_notification = no
-		}
-		set_name = random
-	}
-}
-
-hfe_effect_gov_fix_from_hive = {
-	if = {
-		limit = {
-			is_gestalt = yes
-			hfe_trigger_non_sapient = no
-		}
-		create_country = {
-			type = default
-			species = this.species
-			ignore_initial_colony_error = yes
-			randomize_ethos = yes
-			civics = {
-				civic = random
-				civic = random
-			}
-			origin = origin_default
-		}
-		copy_ethos_and_authority = last_created_country
-		change_government = {
-			civics = {
-				civic = random
-				civic = random
-			}
-		}
-		set_name = random
-	}
-}
-
-hfe_effect_gov_reset_non_hive = {
-	create_country = {
-		type = default
-		species = this
-		ignore_initial_colony_error = yes
-		authority = random
-		randomize_ethos = yes
-		civics = {
-			civic = random
-			civic = random
-		}
-		origin = origin_default
-	}
-	copy_ethos_and_authority = last_created_country
-	change_government = {
-		civics = random
-	}
-	set_name = random
-}
-
 hfe_effect_root_this_change_pc_to_ideal = {
 	change_pc = rl_habitable_normal
 	root = {
@@ -2039,9 +1654,9 @@ hfe_effect_leader_add_exp_100 = {
 			add_experience = 100
 		}
 	}
-#	else = {
-#		log = "ERROR: EXP gaining leader not exists"
-#	}
+	#	else = {
+	#		log = "ERROR: EXP gaining leader not exists"
+	#	}
 }
 
 hfe_effect_leader_add_exp_200 = {
@@ -2053,12 +1668,22 @@ hfe_effect_leader_add_exp_200 = {
 			add_experience = 200
 		}
 	}
-#	else = {
-#		log = "ERROR: EXP gaining leader not exists"
-#	}
+	#	else = {
+	#		log = "ERROR: EXP gaining leader not exists"
+	#	}
 }
 
 hfe_effect_this_make_overlord_of_prev = {
+	prev = {
+		if = {
+			limit = {
+				exists = federation
+			}
+			leave_alliance = {
+				override_requirements = yes
+			}
+		}
+	}
 	if = {
 		limit = {
 			is_country_type = awakened_fallen_empire
@@ -2155,7 +1780,6 @@ hfe_effect_advisor_future_on = {
 			}
 			set_global_flag = hfe_advisor_future_on
 			custom_tooltip = hfe_advisor_future_on
-
 			# LOL
 			random_playable_country = {
 				limit = {
@@ -2167,7 +1791,7 @@ hfe_effect_advisor_future_on = {
 				}
 			}
 		}
-#		log = "FINALLY GOT THAT FRICKING ADVISOR"
+		#		log = "FINALLY GOT THAT FRICKING ADVISOR"
 	}
 }
 
@@ -2312,7 +1936,6 @@ hfe_effect_advisor_future_on = {
 # 		}
 # 	}
 # }
-
 # need root.species
 hfe_effect_remove_prescripted_ideal = {
 	while = {
@@ -2358,10 +1981,10 @@ hfe_effect_stargate_on = {
 			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
-#		if = {
-#			limit = { has_global_flag = HFE_TSP_spawn_test }
-#			log = "Star Gate activated"
-#		}
+		#		if = {
+		#			limit = { has_global_flag = HFE_TSP_spawn_test }
+		#			log = "Star Gate activated"
+		#		}
 	}
 }
 
@@ -2375,10 +1998,10 @@ hfe_effect_stargate_off = {
 			save_event_target_as = hfe_stargate
 		}
 		destroy_ambient_object = this
-#		if = {
-#			limit = { has_global_flag = HFE_TSP_spawn_test }
-#			log = "Star Gate shut down"
-#		}
+		#		if = {
+		#			limit = { has_global_flag = HFE_TSP_spawn_test }
+		#			log = "Star Gate shut down"
+		#		}
 	}
 }
 
@@ -2390,18 +2013,18 @@ hfe_effect_stargate_add = {
 	last_created_ambient_object = {
 		save_event_target_as = hfe_stargate
 	}
-#	if = {
-#		limit = { has_global_flag = HFE_TSP_spawn_test }
-#		log = "Star Gate spawned"
-#	}
+	#	if = {
+	#		limit = { has_global_flag = HFE_TSP_spawn_test }
+	#		log = "Star Gate spawned"
+	#	}
 }
 
 hfe_effect_stargate_remove = {
 	destroy_ambient_object = event_target:hfe_stargate
-#	if = {
-#		limit = { has_global_flag = HFE_TSP_spawn_test }
-#		log = "Star Gate terminated"
-#	}
+	#	if = {
+	#		limit = { has_global_flag = HFE_TSP_spawn_test }
+	#		log = "Star Gate terminated"
+	#	}
 }
 
 # give tech option
@@ -2491,7 +2114,9 @@ hfe_effect_create_crystal_fleet = {
 		33 = {
 			modifier = {
 				factor = 0
-				NOT = { has_global_flag = hfe_hardcore_disable }
+				NOT = {
+					has_global_flag = hfe_hardcore_disable
+				}
 			}
 		}
 	}
@@ -2830,10 +2455,10 @@ hfe_effect_get_space_monster_country = {
 					establish_communications_no_message = prev
 				}
 				save_global_event_target_as = hfe_global_space_monster
-#				if = {
-#					limit = { has_global_flag = HFE_TSP_spawn_test }
-#					log = "Butt Hurt Crystals spawned"
-#				}
+				#				if = {
+				#					limit = { has_global_flag = HFE_TSP_spawn_test }
+				#					log = "Butt Hurt Crystals spawned"
+				#				}
 			}
 		}
 	}
@@ -2846,16 +2471,16 @@ hfe_effect_spawn_space_monster = {
 			count = 5
 			random_list = {
 				10 = {
-#					if = {
-#						limit = { has_global_flag = HFE_TSP_spawn_test }
-#						log = "Butt Hurt Crystals disbanded"
-#					}
+					#					if = {
+					#						limit = { has_global_flag = HFE_TSP_spawn_test }
+					#						log = "Butt Hurt Crystals disbanded"
+					#					}
 				}
 				10 = {
-#					if = {
-#						limit = { has_global_flag = HFE_TSP_spawn_test }
-#						log = "Butt Hurt Crystals spanwed"
-#					}
+					#					if = {
+					#						limit = { has_global_flag = HFE_TSP_spawn_test }
+					#						log = "Butt Hurt Crystals spanwed"
+					#					}
 					# some crystals
 					create_fleet = {
 						name = "Butt Hurt Crystals"
@@ -3079,54 +2704,53 @@ hfe_effect_transfer_resources_from_root_to_this = {
 	}
 }
 
-hfe_effect_clone_leader = {
-	event_target:hfe_effect_clone_leader_target = {
-		if = {
-			limit = {
-				or = {
-					leader_class = ruler
-					leader_class = governor
-				}
-			}
-			event_target:hfe_effect_clone_leader_new_owner = {
-				clone_leader = {
-					target = prev
-					class = governor
-				}
-			}
+hfe_effect_add_cyborg_trait = {
+	if = {
+		limit = {
+			leader_class = admiral
 		}
-		else_if = {
-			limit = {
-				leader_class = scientist
-			}
-			event_target:hfe_effect_clone_leader_new_owner = {
-				clone_leader = {
-					target = prev
-					class = scientist
-				}
-			}
+		add_trait = leader_trait_admiral_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = general
 		}
-		else_if = {
-			limit = {
-				leader_class = admiral
-			}
-			event_target:hfe_effect_clone_leader_new_owner = {
-				clone_leader = {
-					target = prev
-					class = admiral
-				}
-			}
+		add_trait = leader_trait_general_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = governor
 		}
-		else_if = {
-			limit = {
-				leader_class = general
-			}
-			event_target:hfe_effect_clone_leader_new_owner = {
-				clone_leader = {
-					target = prev
-					class = general
-				}
-			}
+		add_trait = leader_trait_governor_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = scientist
+		}
+		add_trait = leader_trait_scientist_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+	else_if = {
+		limit = {
+			leader_class = ruler
+		}
+		add_trait = leader_trait_ruler_cyborg
+		add_ruler_trait = leader_trait_ruler_cyborg
+	}
+}
+
+# for fleet
+hfe_effect_add_cyborg_trait_to_leader = {
+	if = {
+		limit = {
+			exists = leader
+		}
+		leader = {
+			set_owner = prev.owner
+			hfe_effect_add_cyborg_trait = yes
 		}
 	}
 }

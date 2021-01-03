@@ -1,12 +1,10 @@
 # All leaders will have a common trait-point value set in defines, which they use to grab traits
-
 # leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
 # initial = no - if set to no, this trait can not be granted to leaders when they are generated
 # leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
 # requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
 # requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
 # prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
-
 # ruler
 hfe_ruler_trait_genomod = {
 	cost = 1
@@ -18,7 +16,9 @@ hfe_ruler_trait_genomod = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
-		from = { is_gestalt = no }
+		from = {
+			is_gestalt = no
+		}
 		exists = species
 		species = {
 			is_same_species = from
@@ -89,11 +89,11 @@ hfe_ruler_trait_warriror_honor = {
 	}
 	modifier = {
 		# opinion effect
-		hfe_planet_jobs_war_militarist_produces_mult = 0.1
 		max_rivalries = 1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.15
 		pop_ethic_militarist_attraction_mult = 0.15
 		# TODO
-#		rivalries_influence_produces_mult = 0.5
+		#		rivalries_influence_produces_mult = 0.5
 	}
 	leader_trait = {
 		ruler
@@ -115,8 +115,8 @@ hfe_ruler_trait_manipulative = {
 		from = {
 			OR = {
 				has_civic = civic_cutthroat_politics
-				has_civic = hfe_civic_high_mechanicus
-				has_civic = hfe_civic_overthrown_mechanicus
+				has_civic = hfe_civic_godforge
+				has_civic = hfe_civic_godforge_mat
 				has_civic = civic_criminal_heritage
 			}
 			is_gestalt = no
@@ -145,21 +145,16 @@ hfe_ruler_trait_puppet = {
 		exists = from
 		NOT = {
 			has_trait = trait_erudite
-			has_leader_flag = high_mechanicus_master
 		}
 		from = {
 			OR = {
 				has_valid_civic = civic_shadow_council
 				has_civic = civic_meritocracy
-				has_civic = hfe_civic_high_mechanicus
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_civic = hfe_civic_primitive_degraded_society
 				is_country_type = primitive
 				is_subject = yes
 			}
 			is_gestalt = no
 		}
-		years_passed > 0
 	}
 	modifier = {
 		# opinion effect
@@ -220,24 +215,27 @@ hfe_ruler_trait_lovable_buffoon = {
 	randomized = yes
 	modification = no
 	icon = gfx/interface/icons/other/hfe_lovable_buffoon.dds
-
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
-		NOT = {
-			has_trait = trait_erudite
-			has_trait = trait_charismatic
-			has_trait = trait_intelligent
-			has_trait = trait_enigmatic_intelligence
-			has_trait = trait_enigmatic_intelligence_poor
-			has_trait = hfe_species_trait_clever_beast
-			has_trait = hfe_species_trait_clever_beast_presapient_spawn
-			has_trait = trait_presapient_natural_intellectuals
-			has_trait = leader_trait_intellectual
-			FROM = { hfe_trigger_is_fallen = yes }
+		from = {
+			hfe_trigger_is_fallen = no
+			is_gestalt = no
 		}
-		from = { is_gestalt = no }
-		years_passed > 0
+		exists = species
+		species = {
+			nor = {
+				has_trait = trait_erudite
+				has_trait = trait_charismatic
+				has_trait = trait_intelligent
+				has_trait = trait_enigmatic_intelligence
+				has_trait = trait_enigmatic_intelligence_poor
+				has_trait = hfe_species_trait_clever_beast
+				has_trait = hfe_species_trait_clever_beast_presapient_spawn
+				has_trait = trait_presapient_natural_intellectuals
+				has_trait = leader_trait_intellectual
+			}
+		}
 	}
 	opposites = {
 		trait_ruler_champion_of_the_people
@@ -277,8 +275,8 @@ hfe_ruler_trait_greedy = {
 		}
 	}
 	modifier = {
- 		country_energy_produces_mult = 0.2
- 		planet_crime_add = 20
+		country_energy_produces_mult = 0.2
+		planet_crime_add = 20
 	}
 	leader_trait = {
 		ruler
@@ -305,7 +303,7 @@ hfe_ruler_trait_cult_of_personality = {
 		}
 	}
 	modifier = {
- 		pop_citizen_happiness = 0.05
+		pop_citizen_happiness = 0.05
 		planet_jobs_slave_produces_mult = 0.05
 	}
 	leader_trait = {
@@ -353,10 +351,8 @@ hfe_ruler_trait_army_lover = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
+			is_militarist = yes
 			num_communications > 3
-			NOT = { is_pacifist = yes }
-			is_gestalt = no
-			has_policy_flag = unrestricted_wars
 		}
 	}
 	modifier = {
@@ -415,12 +411,10 @@ hfe_ruler_trait_bureaucrat = {
 		empire_size_penalty_mult = -0.1
 	}
 	leader_trait = {
-#		ruler
-		governor
+		ruler
 	}
 	leader_class = {
-#		ruler
-		governor
+		ruler
 	}
 }
 
@@ -510,7 +504,8 @@ hfe_governor_trait_manager = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
 	modifier = {
-		planet_buildings_upkeep_mult = -0.15
+		planet_buildings_upkeep_mult = -0.1
+		empire_size_districts_mult = -0.1
 	}
 	leader_trait = {
 		governor
@@ -612,7 +607,7 @@ hfe_governor_trait_satanist = {
 		leader_age = -20
 	}
 	modifier = {
-		planet_jobs_produces_mult = 0.10
+		planet_jobs_produces_mult = 0.1
 		planet_stability_add = 10
 		planet_crime_add = 20
 	}
@@ -625,36 +620,35 @@ hfe_governor_trait_satanist = {
 }
 
 # scientist
-hfe_scientist_trait_diligent = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	modification = no
-	icon = gfx/interface/icons/other/hfe_diligent.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		years_passed > 0
-	}
-	self_modifier = {
-		leader_skill_levels = 2
-	}
-	leader_trait = {
-		scientist
-	}
-	leader_class = {
-		scientist
-	}
-	ai_categories = {
-		engineering
-		physics
-		society
-		survey
-	}
-	ai_weight = {
-		weight = 100
-	}
-}
-
+# hfe_scientist_trait_diligent = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	modification = no
+# 	icon = gfx/interface/icons/other/hfe_diligent.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		
+# 	}
+# 	self_modifier = {
+# 		leader_skill_levels = 2
+# 	}
+# 	leader_trait = {
+# 		scientist
+# 	}
+# 	leader_class = {
+# 		scientist
+# 	}
+# 	ai_categories = {
+# 		engineering
+# 		physics
+# 		society
+# 		survey
+# 	}
+# 	ai_weight = {
+# 		weight = 100
+# 	}
+# }
 hfe_scientist_trait_thoughtful = {
 	cost = 1
 	initial = yes
@@ -682,7 +676,7 @@ hfe_scientist_trait_thoughtful = {
 		society
 	}
 	ai_weight = {
-		weight = 100
+		weight = 50
 	}
 }
 
@@ -726,7 +720,7 @@ hfe_scientist_trait_satanist = {
 		from = {
 			has_country_flag = has_shroud_patron
 			is_gestalt = no
-	}
+		}
 	}
 	self_modifier = {
 		leader_age = -20
@@ -738,6 +732,14 @@ hfe_scientist_trait_satanist = {
 	}
 	leader_class = {
 		scientist
+	}
+	ai_categories = {
+		engineering
+		physics
+		society
+	}
+	ai_weight = {
+		weight = 200
 	}
 }
 
@@ -752,6 +754,7 @@ hfe_admiral_trait_envious_to_fallen = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
+			is_fallen_empire = no
 			any_relation = {
 				is_fallen_empire = yes
 			}
@@ -780,13 +783,21 @@ hfe_admiral_trait_laser_lover = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
 	modifier = {
-		weapon_type_energy_weapon_damage_mult = 0.15
+		weapon_type_energy_weapon_damage_mult = 0.1
 	}
 	leader_trait = {
 		admiral
 	}
 	leader_class = {
 		admiral
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 50
+		modifier = {
+			factor = 4
+			is_preferred_weapons = weapon_type_energy
+		}
 	}
 }
 
@@ -900,6 +911,14 @@ hfe_admiral_trait_former_fighter = {
 	prerequisites = {
 		tech_strike_craft_1
 	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 50
+		modifier = {
+			factor = 4
+			is_preferred_weapons = weapon_type_strike_craft
+		}
+	}
 }
 
 hfe_admiral_trait_extramundane = {
@@ -933,6 +952,10 @@ hfe_admiral_trait_extramundane = {
 	leader_class = {
 		admiral
 	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
 }
 
 hfe_admiral_trait_pirate = {
@@ -955,6 +978,10 @@ hfe_admiral_trait_pirate = {
 	leader_class = {
 		admiral
 	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
 }
 
 hfe_admiral_trait_protector = {
@@ -975,6 +1002,10 @@ hfe_admiral_trait_protector = {
 	}
 	leader_class = {
 		admiral
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 150
 	}
 }
 
@@ -1001,7 +1032,7 @@ hfe_admiral_trait_energy_expert = {
 }
 
 hfe_admiral_trait_dolphin = {
-	cost = 1
+	cost = 0
 	initial = no
 	randomized = no
 	modification = no
@@ -1015,6 +1046,10 @@ hfe_admiral_trait_dolphin = {
 	}
 	leader_class = {
 		admiral
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 150
 	}
 }
 
@@ -1031,7 +1066,7 @@ hfe_admiral_trait_satanist = {
 		from = {
 			has_country_flag = has_shroud_patron
 			is_gestalt = no
-	}
+		}
 	}
 	self_modifier = {
 		leader_age = 20
@@ -1046,24 +1081,63 @@ hfe_admiral_trait_satanist = {
 	leader_class = {
 		admiral
 	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
 }
 
-hfe_admiral_trait_future_train = {
+hfe_admiral_trait_melee = {
 	cost = 0
-	initial = no
-	randomized = no
+	initial = yes
+	randomized = yes
 	modification = no
-	icon = gfx/interface/icons/other/hfe_future.dds
+	icon = gfx/interface/icons/other/hfe_melee.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			hfe_trigger_insane_admiral_trait = yes
+		}
+	}
 	modifier = {
-		ship_fire_rate_mult = 0.1
-		ship_orbital_bombardment_mult = 0.1
-		# event effect
+		ship_weapon_range_mult = -0.5
+		ship_speed_mult = 0.1
+		ship_weapon_damage = 0.15
 	}
 	leader_trait = {
 		admiral
 	}
 	leader_class = {
 		admiral
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
+}
+
+# evet related
+hfe_admiral_trait_future_train = {
+	cost = 0
+	initial = no
+	randomized = no
+	modification = no
+	#not allow on lvl up
+	icon = gfx/interface/icons/other/hfe_future.dds
+	modifier = {
+		ship_fire_rate_mult = 0.1
+		ship_orbital_bombardment_mult = 0.1
+	}
+	leader_trait = {
+		admiral
+	}
+	leader_class = {
+		admiral
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
 	}
 }
 
@@ -1120,6 +1194,10 @@ hfe_general_trait_gravity_control = {
 	}
 	leader_class = {
 		general
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
 	}
 }
 
@@ -1180,7 +1258,7 @@ hfe_general_trait_satanist = {
 	icon = gfx/interface/icons/other/hfe_satanist.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic = yes
+		hfe_trigger_is_psionic_species = yes
 		exists = from
 		from = {
 			has_country_flag = has_shroud_patron
@@ -1188,8 +1266,7 @@ hfe_general_trait_satanist = {
 		}
 	}
 	modifier = {
-		army_morale = 0.3
-		army_morale_damage_mult = 0.3
+		army_morale_damage_mult = 0.5
 	}
 	leader_trait = {
 		general
@@ -1197,59 +1274,70 @@ hfe_general_trait_satanist = {
 	leader_class = {
 		general
 	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
 }
 
-#  Outstanding Tactician - This General can put armies to best of theirs potential, making them far harder targets. +20% Army Health.
-# hfe_general_trait_tactician = {
-# 	cost = 1
-#	initial = yes
-#	randomized = yes
-# 	modification = no
-# 	icon = gfx/interface/icons/other/hfe_gravity_control.dds
-# 	leader_potential_add = {
-		#hfe_trigger_leaders_traits_enabled = yes
-# 	}
-# 	modifier = {
-# 		army_health = 0.2
-# 	}
-# 	leader_trait = yes
-# 	leader_class = { general }
-# }
-
-# all
-hfe_generic_trait_talented = {
+hfe_general_trait_tactician = {
 	cost = 1
 	initial = yes
 	randomized = yes
 	modification = no
-	#not allow on lvl up
-	icon = gfx/interface/icons/other/hfe_talented.dds
+	icon = gfx/interface/icons/other/hfe_tactician.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
-		exists = from
-		from = {
-			is_gestalt = no
-		}
-		years_passed > 0
 	}
-	self_modifier = {
-		leader_skill_levels = 1
-		species_leader_exp_gain = 0.1
+	modifier = {
+		army_health = 0.1
+		army_disengage_chance_mult = 1
 	}
 	leader_trait = {
-		admiral
-		scientist
 		general
-		governor
 	}
 	leader_class = {
-		admiral
-		scientist
 		general
-		governor
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
 	}
 }
 
+# all
+# hfe_generic_trait_talented = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	modification = no
+# 	#not allow on lvl up
+# 	icon = gfx/interface/icons/other/hfe_talented.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		exists = from
+# 		from = {
+# 			is_gestalt = no
+# 		}
+# 		
+# 	}
+# 	self_modifier = {
+# 		leader_skill_levels = 1
+# 		species_leader_exp_gain = 0.1
+# 	}
+# 	leader_trait = {
+# 		admiral
+# 		scientist
+# 		general
+# 		governor
+# 	}
+# 	leader_class = {
+# 		admiral
+# 		scientist
+# 		general
+# 		governor
+# 	}
+# }
 hfe_generic_trait_noble = {
 	cost = 1
 	initial = yes
@@ -1261,24 +1349,19 @@ hfe_generic_trait_noble = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		exists = species
-		OR = {
-			species = {
-				hfe_trigger_is_robot = no
-			}
-			FROM = { has_country_flag = synthetic_empire }
-		}
 		from = {
 			is_gestalt = no
 			OR = {
 				has_authority = auth_imperial
-				has_civic = civic_aristocratic_elite
-				has_civic = civic_feudal_realm
-				has_civic = civic_great_khans_vision
-				has_civic = civic_great_khans_legacy
-				has_civic = civic_diadochi
+				has_valid_civic = civic_aristocratic_elite
+				has_valid_civic = civic_great_khans_vision
+				has_valid_civic = civic_great_khans_legacy
+				has_valid_civic = civic_diadochi
+			}
+			not = {
+				has_valid_civic = hfe_civic_features_designed_aristocracy
 			}
 		}
-		years_passed > 0
 	}
 	self_modifier = {
 		species_leader_exp_gain = -0.3
@@ -1295,6 +1378,46 @@ hfe_generic_trait_noble = {
 		scientist
 		general
 		governor
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 50
+	}
+}
+
+hfe_generic_trait_noble_good = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	modification = no
+	#not allow on lvl up
+	icon = gfx/interface/icons/other/hfe_noble.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			has_valid_civic = hfe_civic_features_designed_aristocracy
+		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.3
+		leaders_upkeep_mult = -0.8
+	}
+	leader_trait = {
+		admiral
+		scientist
+		general
+		governor
+	}
+	leader_class = {
+		admiral
+		scientist
+		general
+		governor
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
 	}
 }
 

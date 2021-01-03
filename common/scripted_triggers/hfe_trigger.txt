@@ -1,34 +1,9 @@
 #
-
 # planet
 hfe_trigger_owner_is_gestalt = {
 	exists = owner
 	owner = {
 		is_gestalt = yes
-	}
-}
-
-# pop
-hfe_trigger_uncapped_job = {
-	or = {
-		has_job = no
-		has_job = servant
-		has_job = slave_toiler
-		has_job = hfe_job_egypt_workless
-		has_job = hfe_job_future_workless
-		has_job = hfe_job_brainworm_reservation_paternalist
-		has_job = hfe_job_pirate_slave
-		has_job = hfe_job_godforge_fulfilment_center
-	}
-}
-
-hfe_trigger_uncapped_job_mod = {
-	or = {
-		has_job = hfe_job_egypt_workless
-		has_job = hfe_job_future_workless
-		has_job = hfe_job_brainworm_reservation_paternalist
-		has_job = hfe_job_pirate_slave
-		has_job = hfe_job_godforge_fulfilment_center
 	}
 }
 
@@ -74,7 +49,7 @@ hfe_trigger_is_assimilator = {
 	is_homicidal = no
 	OR = {
 		has_valid_civic = civic_machine_assimilator
-#		has_valid_civic = hfe_civic_blight
+		#		has_origin = hfe_origin_blight
 		hfe_trigger_brainworm_country = yes
 		AND = {
 			has_authority = auth_hive_mind
@@ -89,7 +64,6 @@ hfe_trigger_primitive_planet = {
 		has_planet_flag = hfe_ahet_colony_0
 		has_planet_flag = hfe_ahet_colony_1
 		has_planet_flag = hfe_varelse_colony
-		has_planet_flag = hfe_colony_beta
 		has_planet_flag = hfe_copernicus.0
 	}
 }
@@ -234,13 +208,30 @@ hfe_trigger_global_enabled = {
 	}
 }
 
+hfe_trigger_war_in_heavens_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_disable
+	}
+}
+
+hfe_trigger_war_in_heavens_custom_wg_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_custom_wg_disable
+	}
+}
+
+hfe_trigger_war_in_heavens_custom_wg_system_shift_enabled = {
+	not = {
+		has_global_flag = hfe_war_in_heavens_custom_wg_system_shift_disable
+	}
+}
+
 # for pop
 # hfe_trigger_assimilator_pop_valid = {
 # 	#exists = owner
 # 	is_growing = no
 # 	hfe_trigger_is_robot = no
 # }
-
 # hfe_trigger_assimilator_on_tile = {
 # 	exists = tile
 # 	tile = {
@@ -248,12 +239,10 @@ hfe_trigger_global_enabled = {
 # 		is_ruined = no
 # 	}
 # }
-
 # hfe_trigger_assimilator_pop_to_move = {
 # 	hfe_trigger_assimilator_on_tile = no
 # 	hfe_trigger_assimilator_pop_valid = yes
 # }
-
 # hfe_trigger_assimilator_pop_valid_with_ai_block = {
 # 	hfe_trigger_assimilator_pop_valid = yes
 # 	or = {
@@ -270,68 +259,53 @@ hfe_trigger_global_enabled = {
 # 		}
 # 	}
 # }
-
 hfe_trigger_system_in_free_space = {
-	is_fe_cluster = no
-	nor = {
-		has_star_flag = hfe_star_spawn_block
-		has_star_flag = empire_cluster
-		has_star_flag = hostile_system
-		has_star_flag = sealed_system
-		exists = owner
-		any_system = {
-			distance = {
-				source = prev
-				min_jumps = 0
-				max_jumps = 5
-				type = hyperlane
-				#uses_bypass = no # ?????? ?????? ? ????
-			}
-			or = {
-				exists = owner
-				has_star_flag = hfe_star_spawn_block
-				has_star_flag = empire_cluster
-				has_star_flag = hostile_system
-			}
-		}
-	}
+	hfe_trigger_system_in_someones_space = no
 	any_system = {
 		has_hyperlane_to = prev
 	}
 }
 
-hfe_trigger_is_thrifty = {
+hfe_trigger_system_in_someones_space = {
 	or = {
-		has_trait = trait_thrifty
-		has_trait = trait_presapient_earthbound
-		has_trait = hfe_species_trait_hucksters
+		exists = owner
+		is_fe_cluster = yes
+		has_star_flag = hfe_star_spawn_block
+		has_star_flag = empire_cluster
+		has_star_flag = hostile_system
+		has_star_flag = sealed_system
 	}
 }
 
-hfe_trigger_is_industrious = {
-	or = {
-		hfe_trigger_is_robot = yes
-		has_trait = trait_industrious
-		has_trait = trait_very_strong
-		has_trait = trait_presapient_proles
-		has_trait = trait_syncretic_proles
-		has_trait = trait_nerve_stapled
-	}
-}
-
-hfe_trigger_is_agrarian = {
-	or = {
-		has_trait = trait_agrarian
-		has_trait = trait_presapient_proles
-		has_trait = trait_delicious
-		has_trait = trait_presapient_docile_livestock
-		has_trait = trait_nerve_stapled
-		has_slavery_type = {
-			type = slavery_livestock
-		}
-	}
-}
-
+# hfe_trigger_is_thrifty = {
+# 	or = {
+# 		has_trait = trait_thrifty
+# 		has_trait = trait_presapient_earthbound
+# 		has_trait = hfe_species_trait_hucksters
+# 	}
+# }
+# hfe_trigger_is_industrious = {
+# 	or = {
+# 		hfe_trigger_is_robot = yes
+# 		has_trait = trait_industrious
+# 		has_trait = trait_very_strong
+# 		has_trait = trait_presapient_proles
+# 		has_trait = trait_syncretic_proles
+# 		has_trait = trait_nerve_stapled
+# 	}
+# }
+# hfe_trigger_is_agrarian = {
+# 	or = {
+# 		has_trait = trait_agrarian
+# 		has_trait = trait_presapient_proles
+# 		has_trait = trait_delicious
+# 		has_trait = trait_presapient_docile_livestock
+# 		has_trait = trait_nerve_stapled
+# 		has_slavery_type = {
+# 			type = slavery_livestock
+# 		}
+# 	}
+# }
 hfe_trigger_is_clever = {
 	OR = {
 		has_trait = trait_intelligent
@@ -356,12 +330,11 @@ hfe_trigger_is_clever = {
 	}
 }
 
+# for pop or species
 hfe_trigger_is_robot = {
 	OR = {
 		has_trait = trait_mechanical
 		has_trait = trait_machine_unit
-#		species = { is_archetype = ROBOT }
-#		species = { is_archetype = MACHINE }
 	}
 }
 
@@ -372,6 +345,7 @@ hfe_trigger_is_robot_or_hive = {
 	}
 }
 
+# country scope
 hfe_trigger_non_sapient = {
 	OR = {
 		hfe_trigger_non_sapient_robot = yes
@@ -379,6 +353,7 @@ hfe_trigger_non_sapient = {
 	}
 }
 
+# country scope
 hfe_trigger_non_sapient_robot = {
 	OR = {
 		has_trait = trait_machine_unit
@@ -390,15 +365,6 @@ hfe_trigger_non_sapient_robot = {
 				# citizenship rights don't matter when no organics exist
 			}
 		}
-	}
-	NOT = {
-		is_shackled_robot = yes
-		is_shackled_robot_species_rights = yes
-#		species = {
-#			has_citizenship_type = {
-#				type = citizenship_robot_servitude
-#			}
-#		}
 	}
 }
 
@@ -469,5 +435,60 @@ hfe_trigger_ascension_points = {
 				has_ascension_perk = ap_transcendence
 			}
 		}
+	}
+}
+
+hfe_trigger_insane_admiral_trait = {
+	or = {
+		is_country_type = hfe_pirate
+		has_valid_civic = hfe_civic_features_aggressive_diplomacy
+	}
+}
+
+hfe_trigger_holy_planet = {
+	has_modifier = holy_planet
+	any_country = {
+		has_ai_personality_behaviour = holy_planets
+	}
+}
+
+# for country
+hfe_trigger_fallen_awake_playable_country_power = {
+	any_playable_country = {
+		or = {
+			relative_power = {
+				who = prev
+				category = fleet
+				value >= equivalent
+			}
+			and = {
+				is_difficulty > 1
+				relative_power = {
+					who = prev
+					category = fleet
+					value >= inferior
+				}
+			}
+			any_owned_planet = {
+				has_planet_flag = fallen_empire_world
+			}
+		}
+	}
+}
+
+# for country
+hfe_trigger_human_fallen_awake = {
+	nor = {
+		is_country_type = default
+		has_global_flag = hfe_expansion_block
+	}
+	mid_game_years_passed > 0
+	OR = {
+		end_game_years_passed > 0
+		has_global_flag = galactic_crisis_happened
+		has_global_flag = hfe_war_in_heaven_started
+		is_at_war = yes
+		recently_lost_war = yes
+		hfe_trigger_fallen_awake_playable_country_power = yes
 	}
 }

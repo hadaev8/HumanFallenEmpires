@@ -1,5 +1,4 @@
 #
-
 # Temple of Thoth
 hfe_building_terraformer = {
 	icon = building_great_pyramid
@@ -11,16 +10,22 @@ hfe_building_terraformer = {
 	category = research
 	potential = {
 		exists = owner
-		owner = { is_gestalt = no }
-#		owner = { has_country_flag = hfe_egypt }
-		planet = { has_planet_flag = hfe_home_of_light }
+		owner = {
+			is_gestalt = no
+		}
+		#		owner = { has_country_flag = hfe_egypt }
+		planet = {
+			has_planet_flag = hfe_home_of_light
+		}
 	}
-#	allow = {
-#		planet = { has_planet_flag = hfe_home_of_light }
-#	}
+	#	allow = {
+	#		planet = { has_planet_flag = hfe_home_of_light }
+	#	}
 	destroy_trigger = {
 		exists = owner
-		owner = { is_gestalt = yes }
+		owner = {
+			is_gestalt = yes
+		}
 	}
 	convert_to = {
 		hfe_building_terraformer_machine
@@ -56,10 +61,14 @@ hfe_building_terraformer_machine = {
 	}
 	potential = {
 		exists = owner
-		planet = { has_planet_flag = hfe_home_of_light }
-		owner = { 
+		planet = {
+			has_planet_flag = hfe_home_of_light
+		}
+		owner = {
 			is_machine_empire = yes
-			NOT = { has_valid_civic = civic_machine_servitor }
+			NOT = {
+				has_valid_civic = civic_machine_servitor
+			}
 		}
 	}
 	destroy_trigger = {
@@ -99,7 +108,9 @@ hfe_building_terraformer_machine_rogue_servitor = {
 	}
 	potential = {
 		exists = owner
-		planet = { has_planet_flag = hfe_home_of_light }
+		planet = {
+			has_planet_flag = hfe_home_of_light
+		}
 		owner = {
 			is_machine_empire = yes
 			has_valid_civic = civic_machine_servitor
@@ -140,7 +151,9 @@ hfe_building_terraformer_hive_mind = {
 	}
 	potential = {
 		exists = owner
-		planet = { has_planet_flag = hfe_home_of_light }
+		planet = {
+			has_planet_flag = hfe_home_of_light
+		}
 		owner = {
 			is_hive_empire = yes
 		}
@@ -173,14 +186,20 @@ hfe_building_virtual = {
 	can_be_disabled = yes
 	category = amenity
 	triggered_desc = {
-		text = VIRTUAL_FUTURE
+		text = hfe_building_virtual_desc_0
 	}
 	potential = {
 		OR = {
-			owner = { has_country_flag = hfe_future }
-			planet = { has_planet_flag = hfe_future_capital }
-			planet = { has_planet_flag = hfe_future_planet }
-			planet = { has_building = hfe_building_virtual } # Once it's built, it stays
+			owner = {
+				has_country_flag = hfe_future
+			}
+			planet = {
+				has_planet_flag = hfe_future_planet
+			}
+			planet = {
+				has_building = hfe_building_virtual
+			}
+			# Once it's built, it stays
 		}
 	}
 	planet_modifier = {
@@ -227,18 +246,6 @@ hfe_building_virtual = {
 			}
 		}
 	}
-	ai_resource_production = {
-		trigger = {
-			owner = {
-				OR = {
-					is_fallen_empire = yes
-					has_country_flag = hfe_future
-					is_country_type = human_fallen_empire
-				}
-			}
-		}
-		sr_dark_matter = 1
-	}
 }
 
 # hfe_building_assimilator = {
@@ -257,7 +264,6 @@ hfe_building_virtual = {
 # 		hfe_trigger_assimilator_pop_valid_with_ai_block = yes
 # 	}
 # }
-
 # hfe_building_crio = {
 # 	icon = hfe_thoth_module_science
 # 	base_buildtime = @fetime	# For repair
@@ -282,7 +288,6 @@ hfe_building_virtual = {
 # 		}
 # 	}
 # }
-
 hfe_building_thoth_module_energy = {
 	icon = hfe_building_thoth_module_energy
 	can_be_ruined = no
@@ -534,1070 +539,203 @@ hfe_building_thoth_module_industry = {
 	}
 }
 
-hfe_building_high_mechanicus_godforge = {
+# varelse primitive buildings, godforge tag
+hfe_building_godforge_main = {
 	icon = building_nano_forge
-	base_cap_amount = 1
-	base_buildtime = @fetime
 	can_build = no
-	can_be_disabled = no
 	can_demolish = no
 	can_be_ruined = no
-	add_to_first_building_slot = yes
+	can_be_disabled = no
 	planetary_ftl_inhibitor = yes
 	category = manufacturing
-	
-	potential = {
-#		planet = {
-#			OR = {
-#				has_planet_flag = hfe_varelse_colony
-#				has_planet_flag = hfe_colony_beta
-#			}
-#		}
-		owner = {
-			OR = {
-				has_country_flag = hfe_varelse
-				has_country_flag = hfe_varelse_primitive_0
-				has_country_flag = hfe_high_mechanicus_retained
-				has_country_flag = hfe_varelse_fedora_governance
-				has_civic = hfe_civic_high_mechanicus
-				has_civic = hfe_civic_overthrown_mechanicus
-			}
+	resources = {
+		category = planet_buildings
+		upkeep = {
+			energy = -4
+			society_research = -4
 		}
 	}
-
-	allow = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-		owner = {
-			OR = {
-				has_country_flag = hfe_varelse_primitive_0
-				has_country_flag = hfe_high_mechanicus_retained
-				has_country_flag = hfe_varelse_fedora_governance
-			}
-		}
-#		owner = { is_country_type = primitive }
-	}
-
-	country_modifier = {
-		armies_alloys_upkeep_mult = -0.05
-		armies_alloys_cost_mult = -0.05
-	}
-
 	planet_modifier = {
-		armies_alloys_cost_mult = -1
-		armies_alloys_upkeep_mult = -1
-		armies_energy_upkeep_mult = -0.5
-		armies_consumer_goods_cost_mult = -0.9
+		job_hfe_job_godforge_main_add = 1
+		job_hfe_job_godforge_temple_add = 3
 		planet_pop_assembly_add = 1
+		planet_pops_robotics_upkeep_mult = -0.1
 	}
-	
 	triggered_planet_modifier = {
 		potential = {
-			owner = { is_country_type = primitive }
+			exists = owner
 			owner = {
-				OR = {
-					has_country_flag = hfe_varelse_primitive_0
-					has_country_flag = hfe_high_mechanicus_retained
-					has_country_flag = hfe_varelse_fedora_governance
-#					has_government = hfe_gov_high_mechanicus
-				}
-			}
-			NOT = {
-				owner = { has_ethic = ethic_gestalt_consciousness }
+				is_country_type = primitive
 			}
 		}
 		modifier = {
-			job_hfe_job_godforge_primitive_add = 1
 			job_primitive_laborer_add = 5
 			job_primitive_priest_2_add = 1
-			job_researcher_add = -4 # Negating the Relic stuff
-			job_soldier_add = -1
 		}
 	}
-
 	triggered_planet_modifier = {
 		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
+			exists = owner
 			owner = {
-				OR = {
-					has_civic = hfe_civic_high_mechanicus
-					is_spiritualist = yes
-				}
-				NOT = { has_civic = civic_barbaric_despoilers }
-			}
-		}
-		modifier = {
-			job_noble_add = 1
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-		}
-		modifier = {
-			planet_metallurgists_minerals_upkeep_mult = -0.5
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { is_ai = yes }
-		}
-		planet_districts_upkeep_mult = -0.75
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				NOT = {
+				not = {
 					is_country_type = primitive
-					is_primitive = yes
-					has_ethic = ethic_gestalt_consciousness
 				}
+				is_gestalt = no
 			}
-#			OR = {
-#				owner = { has_country_flag = hfe_varelse_primitive_0 }
-#				owner = { has_country_flag = hfe_high_mechanicus_retained }
-#				owner = { has_country_flag = hfe_varelse_fedora_governance }
-#				owner = { has_government = hfe_gov_high_mechanicus }
-#			}
 		}
-		modifier = {
-			job_hfe_job_godforge_overlord_add = 1
-		}
+		job_foundry_add = 3
+		job_miner_add = 10
 	}
-
 	triggered_planet_modifier = {
 		potential = {
-			OR = {
-				NOT = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
-				NOT = { owner = { is_country_type = primitive } }
+			exists = owner
+			owner = {
+				not = {
+					is_country_type = primitive
+				}
+				is_gestalt = yes
 			}
-			NOT = { owner = { has_ethic = ethic_gestalt_consciousness } }
-		}
-		job_foundry_per_pop = 0.1
-		job_miner_per_pop = 0.04
-		job_odd_factory_worker_add = 4
-		job_odd_factory_worker_per_pop = 0.05
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { has_ethic = ethic_gestalt_consciousness }
 		}
 		modifier = {
-			job_alloy_drone_per_pop = 0.1
-			job_artisan_drone_add = 2
-			job_mining_drone_per_pop = 0.04
-			job_odd_factory_drone_add = 4
-			job_odd_factory_drone_per_pop = 0.05
+			job_alloy_drone_add = 3
+			job_mining_drone_add = 10
 		}
 	}
-
-	resources = {
-		category = hfe_godforge
-		cost = {
-			minerals = 10000
-			alloys = 3000
-		}
-		produces = {
-			trigger = {
-				owner = {
-					OR = {
-						has_country_flag = hfe_varelse_primitive_0
-						has_country_flag = hfe_high_mechanicus_retained
-						has_country_flag = hfe_varelse_fedora_governance
-					}
-				}
-			}
-			alloys = 30
-			consumer_goods = 50
-			food = 30
-			engineering_research = 10
-		}
-		produces = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_country_type = primitive }
-			}
-			consumer_goods = 20
-			food = 50
-		}
-		produces = {
-			trigger = {
-				NOT = {
-					owner = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
-			alloys = 20 # The rest is by the Jobs
-			consumer_goods = 10
-			engineering_research = 15
-		}
-		upkeep = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_country_type = primitive }
-			}
-			alloys = 25
-			consumer_goods = 20
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					has_country_flag =  hfe_varelse_primitive_0
-					NOT = { is_country_type = primitive }
-				}
-			}
-			energy = 10
-			minerals = 10
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					is_ai = no
-				}
-				NOT = { owner = { is_country_type = primitive } }
-			}
-			minerals = 50
-			energy = 25
-		}
-	}
-
-	ai_resource_production = {
-#		# This is meant to keep the Varelse Hegemony alive
-#		# because it has many more Pops than a Primitive should
-		trigger = {
-			OR = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = { is_primitive = yes }
-				owner = { is_country_type = primitive }
-				owner = {
-					has_monthly_income = {
-						resource = food
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = energy
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = minerals
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = consumer_goods
-						value > 30
-					}
-				}
-				owner = {
-					has_monthly_income = {
-						resource = exotic_gases
-						value > 20
-					}
-				}
-			}
-		}
-		minerals = 30
-		energy = 50
-		engineering_research = 20
-		food = 30
-		consumer_goods = 25
-	}
-
 	ai_weight = {
-		factor = 999
+		factor = 1
 	}
 }
 
-hfe_building_high_mechanicus_stronghold = {
+hfe_building_godforge_stronghold = {
 	icon = building_citadel_of_faith
-	base_cap_amount = 1
-	base_buildtime = 3650
 	can_build = no
-	can_be_disabled = no
 	can_demolish = no
 	can_be_ruined = no
-	add_to_first_building_slot = yes
-	category = government
-
-	potential = {
-#		planet = {
-#			OR = {
-#				has_planet_flag = hfe_varelse_colony
-#				has_planet_flag = hfe_colony_beta
-#				is_planet = event_target:colony_beta_planet
-#			}
-#		}
-		owner = {
-			has_country_flag = hfe_varelse_primitive_0
-			OR = {
-				has_country_flag = hfe_high_mechanicus_retained
-				has_civic = hfe_civic_high_mechanicus
-				is_spiritualist = yes
-			}
-			NOT = {
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				is_materialist = yes
-				has_ethic = ethic_gestalt_consciousness
-			}
-		}
-	}
-
-	allow = {
-		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-	}
-
-	destroy_trigger = {
-		OR = {
-			planet = { has_owner = no }
-			owner = {
-	#			planet = { has_owner = yes }
-				OR = {
-					NOT = { has_country_flag = hfe_varelse_primitive_0 }
-					NOT = {
-						has_country_flag = hfe_high_mechanicus_retained
-						has_country_flag = mechanicus_befriended
-						has_civic = hfe_civic_high_mechanicus
-					}
-					AND = {
-						has_country_flag = hfe_varelse_primitive_0
-						is_materialist = yes
-					}
-					has_country_flag = hfe_varelse_fedora_governance
-					has_civic = hfe_civic_overthrown_mechanicus
-					has_ethic = ethic_gestalt_consciousness
-				}
-			}
-		}
-	}
-
-	planet_modifier = {
-		armies_energy_upkeep_mult = -0.9
-		armies_upkeep_mult = -0.5
-		planet_housing_add = 6
-		planet_pops_robotics_upkeep_mult = -0.5
-		planet_amenities_add = 50
-	}
-
-	resources = {
-		category = hfe_godforge
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-					NOT = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
-			energy = 10
-			alloys = 2
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				has_country_flag = hfe_varelse_primitive_0
-				NOT = {
-					has_country_flag = hfe_varelse_fedora_governance
-					has_civic = hfe_civic_overthrown_mechanicus
-					is_materialist = yes
-				}
-			}
-		}
-		modifier = {
-			job_hfe_job_mechanicus_bodyguard_add = 1
-			job_hfe_job_mechanicus_cultist_add = 5
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				OR = {
-					has_authority = auth_imperial
-					has_civic = civic_aristocratic_elite
-					AND = {
-						is_spiritualist = yes
-						has_country_flag = hfe_varelse_primitive_0
-					}
-				}
-			}
-		}
-		modifier = {
-			job_noble_add = 1
-		}
-	}
-
-#	triggered_planet_modifier = {
-#		potential = {
-#			owner = { has_country_flag = hfe_varelse_primitive_0 }
-#			NOT = { owner = { has_country_flag = hfe_varelse_fedora_governance } }
-#			owner = { is_country_type = primitive }
-#		}
-#		job_primitive_noble_add = 1 # Added elsewhere
-#	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { is_country_type = primitive }
-		}
-		job_primitive_bureaucrat_add = 1
-		job_primitive_warrior_2_add = 1
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				NOT = {
-					is_primitive = yes
-					is_country_type = primitive
-				}
-			}
-		}
-		job_enforcer_add = 2
-	}
-
-#	triggered_planet_modifier = {
-#		potential = {
-#			NOT = {
-#				owner = { has_country_flag = hfe_varelse_primitive_0 }
-#			}
-#		}
-#		modifier = {
-#			job_soldier_add = 1
-#			job_soldier_per_pop = 0.05
-#			job_head_researcher_add = 1
-#			job_researcher_per_pop = 0.03
-#		}
-#	}
-
-	convert_to = {
-		hfe_building_fedora_stronghold
-		hfe_building_high_mechanicus_stronghold_conquered
-		hfe_building_high_mechanicus_stronghold_gestalt
-	}
-
-	ai_resource_production = {
-#		# This is meant to keep the Varelse Hegemony alive
-#		# because it has many more Pops than a Primitive should
-		trigger = {
-			owner = {
-				OR = {
-					has_country_flag = hfe_varelse_primitive_0
-					is_primitive = yes
-					is_country_type = primitive
-					has_monthly_income = {
-						resource = food
-						value > 30
-					}
-					has_monthly_income = {
-						resource = energy
-						value > 30
-					}
-					has_monthly_income = {
-						resource = minerals
-						value > 30
-					}
-					has_monthly_income = {
-						resource = consumer_goods
-						value > 30
-					}
-					has_monthly_income = {
-						resource = exotic_gases
-						value > 20
-					}
-				}
-			}
-		}
-		minerals = 30
-		energy = 50
-		engineering_research = 20
-		food = 30
-		consumer_goods = 25
-	}
-}
-
-hfe_building_fedora_stronghold = {
-	icon = building_citadel_of_faith
-	base_cap_amount = 1
-	base_buildtime = 3650
-	can_build = no
 	can_be_disabled = no
-	can_demolish = no
-	can_be_ruined = no
-	add_to_first_building_slot = yes
 	category = government
-
-	potential = {
-#		planet = {
-#			OR = {
-#				has_planet_flag = hfe_varelse_colony
-#				has_planet_flag = hfe_colony_beta
-#				is_planet = event_target:colony_beta_planet
-#			}
-#		}
-		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		owner = {
-			OR = {
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				is_materialist = yes
-			}
-		}
-		owner = {
-			NOT = {
-				has_country_flag = hfe_high_mechanicus_befriended
-				has_country_flag = mechanicus_befriended
-				has_country_flag = hfe_high_mechanicus_retained
-				has_civic = hfe_civic_high_mechanicus
-				is_spiritualist = yes
-				has_ethic = ethic_gestalt_consciousness
-#				planet = { has_owner = yes }
-			}
-		}
-	}
-
-	allow = {
-		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-	}
-
-	destroy_trigger = {
-#		planet = { has_owner = no }
-		owner = {
-#			planet = { has_owner = yes }
-			OR = {
-				NOT = { has_country_flag = hfe_varelse_primitive_0 }
-				has_country_flag = hfe_high_mechanicus_retained
-				has_country_flag = mechanicus_befriended
-				has_civic = hfe_civic_high_mechanicus
-			}
-			NOT = {
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				has_ethic = ethic_gestalt_consciousness
-			}
-		}
-	}
-
 	resources = {
-		category = hfe_godforge
+		category = planet_buildings
 		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-					NOT = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
 			energy = -10
-		}
-		upkeep = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-			energy = -4
 			unity = -1
 		}
 	}
-
 	planet_modifier = {
-		armies_upkeep_mult = -0.9
-		planet_housing_add = 6
-		planet_pops_robotics_upkeep_mult = -0.75
-		planet_amenities_add = 25
+		job_hfe_job_godforge_stronghold_add = 5
+		planet_housing_add = 20
 	}
-
 	triggered_planet_modifier = {
 		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			OR = {
-				owner = { has_country_flag = hfe_varelse_fedora_governance }
-				owner = { has_civic = hfe_civic_overthrown_mechanicus }
-				NOT = {
-					owner = { has_country_flag = hfe_high_mechanicus_retained }
-					owner = { has_civic = hfe_civic_high_mechanicus }
-				}
-			}	
-			owner = { is_country_type = primitive }
+			exists = owner
+			owner = {
+				is_gestalt = no
+			}
+		}
+		pop_ethic_spiritualist_attraction_mult = 0.1
+	}
+	# primitive
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
 		}
 		job_primitive_researcher_2_add = 5
-		job_primitive_warrior_2_add = 1
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { is_country_type = primitive }
-		}
+		job_primitive_warrior_2_add = 2
 		job_primitive_bureaucrat_add = 1
-		job_primitive_warrior_2_add = 1
-		planet_stability_add = 10
 	}
-
+	# default
 	triggered_planet_modifier = {
 		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
+			exists = owner
 			owner = {
-				OR = {
-					has_country_flag = hfe_varelse_fedora_governance
-					has_civic = hfe_civic_overthrown_mechanicus
-					is_materialist = yes
+				NOT = {
+					is_country_type = primitive
 				}
+				is_gestalt = no
 			}
-			owner = { NOT = { is_country_type = primitive } }
 		}
 		job_head_researcher_add = 1
 		job_researcher_add = 4
-		job_roboticist_add = 2
+		job_bureaucrat_add = 1
+		job_soldier_add = 1
 	}
-
-	convert_to = {
-		hfe_building_high_mechanicus_stronghold
-		hfe_building_high_mechanicus_stronghold_conquered
-		hfe_building_high_mechanicus_stronghold_gestalt
-	}
-
-	ai_resource_production = {
-#		# This is meant to keep the Varelse Hegemony alive
-#		# because it has many more Pops than a Primitive should
-		trigger = {
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
 			owner = {
-				OR = {
-					has_country_flag = hfe_varelse_primitive_0
-					is_primitive = yes
-					is_country_type = primitive
-					has_monthly_income = {
-						resource = food
-						value > 30
-					}
-					has_monthly_income = {
-						resource = energy
-						value > 30
-					}
-					has_monthly_income = {
-						resource = minerals
-						value > 30
-					}
-					has_monthly_income = {
-						resource = consumer_goods
-						value > 30
-					}
-					has_monthly_income = {
-						resource = exotic_gases
-						value > 20
-					}
-				}
+				has_authority = auth_hive_mind
 			}
-		}
-		minerals = 30
-		energy = 50
-		engineering_research = 20
-		food = 30
-		consumer_goods = 25
-	}
-}
-
-hfe_building_high_mechanicus_stronghold_conquered = {
-	icon = building_citadel_of_faith
-	base_cap_amount = 1
-	base_buildtime = 1
-	can_build = no
-	can_be_disabled = no
-	can_demolish = no
-	can_be_ruined = no
-	add_to_first_building_slot = yes
-	category = government
-
-	potential = {
-		owner = {
-			NOT = {
-				has_country_flag = hfe_varelse_primitive_0
-				has_ethic = ethic_gestalt_consciousness
-			}
-		}
-		owner = {
-			NOT = {
-				has_country_flag = hfe_high_mechanicus_retained
-				has_civic = hfe_civic_high_mechanicus
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				has_country_flag = hfe_high_mechanicus_befriended
-			}
-		}
-	}
-
-	allow = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-	}
-
-	destroy_trigger = {
-#		planet = { has_owner = yes }
-		owner = {
-			OR = {
-				has_country_flag = hfe_varelse_primitive_0
-				has_country_flag = hfe_high_mechanicus_retained
-				has_country_flag = hfe_varelse_fedora_governance
-				has_country_flag = mechanicus_befriended
-				has_civic = hfe_civic_high_mechanicus
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_government = hfe_gov_high_mechanicus
-				has_government = hfe_gov_high_mechanicus_overthrown
-				has_ethic = ethic_gestalt_consciousness
-#				NOT = { exists = owner }
-			}
-		}
-#		NOT = { planet = { has_owner = yes } }
-	}
-
-	resources = {
-		category = hfe_godforge
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-					NOT = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
-			energy = -10
-		}
-		upkeep = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-			energy = -4
-			unity = -1
-		}
-	}
-
-	planet_modifier = {
-		armies_upkeep_mult = -0.5
-		planet_housing_add = 6
-		planet_pops_robotics_upkeep_mult = -0.25
-		planet_amenities_add = 20
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			NOT = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-		}
-		modifier = {
-			job_bureaucrat_add = 1
-			job_soldier_add = 1
-			job_soldier_per_pop = 0.05
-			job_head_researcher_add = 1
-			job_researcher_add = 2
-			job_researcher_per_pop = 0.04
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				OR = {
-					is_materialist = yes
-					is_synthetic_empire = yes
-					has_country_flag = flesh_weakened
-					has_country_flag = synthetic_empire
-					has_origin = origin_mechanists
-				}
-				NOT = {
-					has_policy_flag = robots_outlawed
-					has_authority = auth_machine_intelligence
-					has_authority = auth_ancient_machine_intelligence
-				}
-			}
-		}
-		job_roboticist_add = 1
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				has_origin = origin_mechanists
-				NOT = {
-					has_policy_flag = robots_outlawed
-					is_machine_empire = yes
-				}
-			}
-		}
-		job_roboticist_add = 1
-	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				OR = {
-#					is_machine_empire = yes
-#					is_mechanical_empire = yes
-					has_authority = auth_machine_intelligence
-					has_authority = auth_ancient_machine_intelligence
-				}
-			}
-		}
-		job_replicator_add = 2
-		job_replicator_per_pop = 0.05
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-		}
-		pop_ethic_spiritualist_attraction_mult = 0.8
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				OR = {
-					has_authority = auth_imperial
-					has_civic = civic_aristocratic_elite
-				}
-			}
-		}
-		modifier = {
-			job_noble_add = 1
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = {
-				is_spiritualist = yes
-			}
-		}
-		modifier = {
-			job_high_priest_add = 1
-			job_priest_add = 3
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			owner = { 
-				OR = {
-					has_civic = civic_byzantine_bureaucracy
-					has_civic = civic_efficient_bureaucracy
-				}
-			}
-		}
-		modifier = {
-			job_bureaucrat_add = 2
-		}
-	}
-
-	convert_to = {
-		hfe_building_high_mechanicus_stronghold
-		hfe_building_fedora_stronghold
-		hfe_building_high_mechanicus_stronghold_gestalt
-	}
-
-	ai_resource_production = {
-#		# This is meant to keep the Varelse Hegemony alive
-#		# because it has many more Pops than a Primitive should
-		trigger = {
-			always = yes
-		}
-		minerals = 30
-		energy = 50
-		engineering_research = 20
-		food = 30
-		consumer_goods = 25
-	}
-}
-
-hfe_building_high_mechanicus_stronghold_gestalt = {
-	icon = building_citadel_of_faith
-	base_cap_amount = 1
-	base_buildtime = 3650
-	can_build = no
-	can_be_disabled = no
-	can_demolish = no
-	can_be_ruined = no
-	add_to_first_building_slot = yes
-	planetary_ftl_inhibitor = yes
-	category = government
-
-	potential = {
-		owner = { NOT = { has_country_flag = hfe_varelse_primitive_0 } }
-		owner = { has_ethic = ethic_gestalt_consciousness }
-	}
-
-	allow = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-	}
-
-	destroy_trigger = {
-#		planet = { has_owner = no }
-		owner = {
-			OR = {
-				has_country_flag = hfe_varelse_primitive_0
-				has_country_flag = hfe_high_mechanicus_retained
-				has_civic = hfe_civic_high_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				has_civic = hfe_civic_overthrown_mechanicus
-				NOT = { has_ethic = ethic_gestalt_consciousness }
-			}
-		}
-	}
-
-	resources = {
-		category = hfe_godforge
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-					NOT = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
-			energy = -10
-		}
-		upkeep = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-			energy = -4
-			unity = -1
-		}
-	}
-
-	planet_modifier = {
-		armies_upkeep_mult = -0.66
-		planet_pops_robotics_upkeep_mult = -0.8
-		planet_amenities_add = 40
-	}
-
-	triggered_planet_modifier = {	
-		potential = {
-			owner = { has_authority = auth_hive_mind }
 		}
 		modifier = {
 			job_synapse_drone_add = 3
 			job_brain_drone_add = 2
-			job_brain_drone_per_pop = 0.6
 			job_warrior_drone_add = 2
-			job_warrior_drone_per_pop = 0.04
 		}
 	}
-
 	triggered_planet_modifier = {
 		potential = {
-			owner = { has_authority = auth_machine_intelligence }
+			exists = owner
+			owner = {
+				has_authority = auth_machine_intelligence
+			}
 		}
 		modifier = {
 			job_coordinator_add = 1
-			job_calculator_add =  2
-			job_calculator_per_pop = 0.04
+			job_calculator_add = 2
 			job_warrior_drone_add = 1
-			job_warrior_drone_per_pop = 0.04
-			job_replicator_add = 3
 		}
 	}
-
-	convert_to = {
-		hfe_building_high_mechanicus_stronghold
-		hfe_building_fedora_stronghold
-		hfe_building_high_mechanicus_stronghold_conquered
+	# robot produce
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				nor = {
+					is_country_type = primitive
+					has_policy_flag = robots_outlawed
+				}
+				is_gestalt = no
+			}
+		}
+		job_roboticist_add = 1
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+		job_replicator_add = 1
 	}
 }
 
-hfe_building_mechanicus_cult_temple = {
+# can be build on any planet
+hfe_building_godforge_temple = {
 	icon = building_underground_chemists
 	base_cap_amount = 1
 	base_buildtime = 180
 	can_build = yes
 	can_be_disabled = yes
-	can_demolish = no # It automatically destroys itself
-	can_be_ruined = no
+	# can_demolish = no	# It automatically destroys itself
+	# can_be_ruined = no
 	category = unity
-
 	potential = {
 		owner = {
 			has_country_flag = hfe_varelse_primitive_0
-			OR = {
-				has_civic = hfe_civic_high_mechanicus
-				has_country_flag = hfe_high_mechanicus_retained
-				is_spiritualist = yes
-			}
-			NOT = {
-				has_country_flag = hfe_varelse_fedora_governance
-				is_materialist = yes
-			}
+			is_spiritualist = yes
 		}
 	}
-
-	allow = {
-		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		planet = {
-			NOT = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-	}
-
 	destroy_trigger = {
-		OR = {
-			owner = {
-				NOT = {
-					has_country_flag = hfe_varelse_primitive_0
-					has_country_flag = hfe_high_mechanicus_retained
-					has_country_flag = hfe_high_mechanicus_befriended
-					has_country_flag = hfe_varelse_fedora_governance
-				}
+		owner = {
+			is_spiritualist = no
+			NOT = {
+				has_country_flag = hfe_varelse_primitive_0
 			}
-			planet = { has_modifier = slave_colony }
-			planet = { has_modifier = resort_colony }
 		}
 	}
-
 	convert_to = {
 		building_temple
 		building_hive_node
@@ -1605,21 +743,14 @@ hfe_building_mechanicus_cult_temple = {
 		building_corporate_monument
 		building_autochthon_monument
 	}
-
 	planet_modifier = {
 		pop_environment_tolerance = -0.1
-		job_noble_add = 1
-		job_hfe_job_mechanicus_cultist_add = 4
-		job_hfe_job_mechanicus_cultist_per_pop = 0.06
-		job_priest_add = 1
+		job_hfe_job_godforge_temple_add = 4
 		pop_ethic_spiritualist_attraction_mult = 0.33
-		planet_jobs_alloys_produces_mult = 0.1
-		planet_pops_robotics_upkeep_mult = -0.25
-		pop_assembly_speed = 0.25
+		planet_housing_add = 5
 	}
-
 	resources = {
-		category = hfe_godforge
+		category = planet_buildings
 		cost = {
 			minerals = 600
 		}
@@ -1632,7 +763,6 @@ hfe_building_mechanicus_cult_temple = {
 			energy = 5
 		}
 	}
-
 	ai_weight = {
 		weight = 999
 		modifier = {
@@ -1649,82 +779,51 @@ hfe_building_mechanicus_cult_temple = {
 			owner = {
 				has_monthly_income = {
 					resource = energy
-					value < 11
+					value < 10
 				}
 			}
 		}
-		modifier = {
-			factor = 2
-			owner = {
-				has_monthly_income = {
-					resource = alloys
-					value < 1
-				}
-			}
-		}
-		modifier = {
-			factor = 3
-			owner = {
-				has_monthly_income = {
-					resource = unity
-					value < 50
-				}
-			}
-		}
-	}
-
-	ai_resource_production = {
-		trigger = { always = yes }
-		alloys = 3
-		energy = 6
-		minerals = 10
-		unity = 3
 	}
 }
 
-hfe_building_mechanicus_pseudo_capital = {
-	capital = yes
-	icon = building_primitive_factory
-	can_build = yes
-	can_demolish = yes
-	can_be_ruined = no
-	base_cap_amount = 1
-	add_to_first_building_slot = yes
-
-	potential = {
-		exists = owner
-		owner = {
-			is_primitive = yes
-			has_country_flag = hfe_varelse_primitive_0
-		}
-	}
-
-	destroy_trigger = {
-		exists = owner
-		owner = {
-			is_primitive = no
-		}
-	}
-
-	convert_to = {
-		building_system_capital
-		building_hive_major_capital
-		building_machine_major_capital
-	}
-
-	planet_modifier = {
-		job_primitive_bureaucrat_add = 3
-		job_primitive_warrior_2_add = 1
-		job_primitive_researcher_2_add = 1
-		job_primitive_priest_2_add = 1
-		job_primitive_laborer_add = 2
-		job_primitive_technician_add = 5
-		planet_housing_add = 2
-		planet_amenities_add = 40
-		planet_crime_add = -20
-	}
-
-	ai_weight = {
-		factor = 999
-	}
-}
+# hfe_building_mechanicus_pseudo_capital = {
+# 	capital = yes
+# 	icon = building_primitive_factory
+# 	can_build = yes
+# 	can_demolish = yes
+# 	can_be_ruined = no
+# 	base_cap_amount = 1
+# 	add_to_first_building_slot = yes
+# 	potential = {
+# 		exists = owner
+# 		owner = {
+# 			is_primitive = yes
+# 			has_country_flag = hfe_varelse_primitive_0
+# 		}
+# 	}
+# 	destroy_trigger = {
+# 		exists = owner
+# 		owner = {
+# 			is_primitive = no
+# 		}
+# 	}
+# 	convert_to = {
+# 		building_system_capital
+# 		building_hive_major_capital
+# 		building_machine_major_capital
+# 	}
+# 	planet_modifier = {
+# 		job_primitive_bureaucrat_add = 3
+# 		job_primitive_warrior_2_add = 1
+# 		job_primitive_researcher_2_add = 1
+# 		job_primitive_priest_2_add = 1
+# 		job_primitive_laborer_add = 2
+# 		job_primitive_technician_add = 5
+# 		planet_housing_add = 2
+# 		planet_amenities_add = 40
+# 		planet_crime_add = -20
+# 	}
+# 	ai_weight = {
+# 		factor = 999
+# 	}
+# }

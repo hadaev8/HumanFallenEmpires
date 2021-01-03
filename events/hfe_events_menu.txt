@@ -22,7 +22,6 @@ country_event = {
 				text = hfe_menu.1.desc.2.0
 				hfe_trigger_menu_has_submenu = no
 				exists = event_target:hfe_egypt_country
-				log = "Ju Ahet successfully exists"
 			}
 			success_text = {
 				text = hfe_menu.1.desc.2.1
@@ -30,13 +29,11 @@ country_event = {
 				not = {
 					exists = event_target:hfe_egypt_country
 				}
-				log = "JU AHET HAS NOT YET SPAWNED"
 			}
 			success_text = {
 				text = hfe_menu.1.desc.3.0
 				hfe_trigger_menu_has_submenu = no
 				exists = event_target:hfe_future_country
-				log = "Kad Republic successfully exists"
 			}
 			success_text = {
 				text = hfe_menu.1.desc.3.1
@@ -44,7 +41,6 @@ country_event = {
 				not = {
 					exists = event_target:hfe_future_country
 				}
-				log = "KAD REPUBLIC HAS NOT YET SPAWNED"
 			}
 			success_text = {
 				text = hfe_menu.1.desc.4.0
@@ -70,6 +66,10 @@ country_event = {
 			success_text = {
 				text = hfe_menu.leaders.submenu.desc
 				has_country_flag = hfe_menu_have_leaders_submenu
+			}
+			success_text = {
+				text = hfe_menu.war_in_heavens.submenu.desc
+				has_country_flag = hfe_menu_have_war_in_heavens_submenu
 			}
 		}
 	}
@@ -101,7 +101,6 @@ country_event = {
 		custom_tooltip = hfe_menu.0.tooltip
 		trigger = {
 			hfe_trigger_menu_has_submenu = no
-			has_global_flag = hfe_installed
 			has_country_flag = hfe_marked_as_human
 		}
 		hidden_effect = {
@@ -111,18 +110,24 @@ country_event = {
 			every_country = {
 				limit = {
 					has_country_flag = hfe_marked_as_human
+					exists = species
+					species = {
+						not = {
+							has_species_flag = hfe_marked_as_human_species
+						}
+					}
 				}
 				species = {
-					set_species_identity = event_target:hfe_human_species
 					set_species_flag = hfe_marked_as_human_species
 				}
 			}
-			every_owned_pop_species = {
+			every_galaxy_species = {
 				limit = {
-					OR = {
+					or = {
 						species_portrait = human
 						species_portrait = hfe_portrait_future
 						species_portrait = hfe_portrait_egypt
+						has_species_flag = hfe_marked_as_human_species
 					}
 					not = {
 						is_same_species = event_target:hfe_human_species
@@ -141,14 +146,15 @@ country_event = {
 		custom_tooltip = hfe_menu.1.tooltip
 		trigger = {
 			hfe_trigger_menu_has_submenu = no
-			has_global_flag = hfe_installed
 			not = {
 				has_country_flag = hfe_marked_as_human
 			}
 		}
 		hidden_effect = {
 			set_country_flag = hfe_marked_as_human
-			species = { set_species_flag = hfe_marked_as_human_species }
+			species = {
+				set_species_flag = hfe_marked_as_human_species
+			}
 			country_event = {
 				id = hfe_menu.1
 			}
@@ -201,12 +207,6 @@ country_event = {
 				every_country = {
 					limit = {
 						is_country_type = hfe_pirate
-					}
-					every_owned_planet = {
-						limit = {
-							is_planet_class = hfe_pc_pirate_base
-						}
-						hfe_effect_convert_to_asteroid = yes
 					}
 					destroy_country = yes
 				}
@@ -279,28 +279,6 @@ country_event = {
 				country_event = {
 					id = hfe_menu.1
 				}
-			}
-		}
-	}
-	# housing procreate
-	option = {
-		name = hfe_menu.population.submenu.0.defined_text
-		custom_tooltip = hfe_menu.population.submenu.0.tooltip.defined_text
-		trigger = {
-			has_country_flag = hfe_menu_have_population_submenu
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					hfe_trigger_population_procreate_housing_block_enabled = yes
-				}
-				remove_global_flag = hfe_population_procreate_housing_block
-			}
-			else = {
-				set_global_flag = hfe_population_procreate_housing_block
-			}
-			country_event = {
-				id = hfe_menu.1
 			}
 		}
 	}
@@ -410,10 +388,10 @@ country_event = {
 				limit = {
 					hfe_trigger_leaders_traits_enabled = yes
 				}
-				remove_global_flag = hfe_leaders_traits_disable
+				set_global_flag = hfe_leaders_traits_disable
 			}
 			else = {
-				set_global_flag = hfe_leaders_traits_disable
+				remove_global_flag = hfe_leaders_traits_disable
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -473,12 +451,7 @@ country_event = {
 			remove_global_flag = hfe_plague_lvl_3
 			every_planet = {
 				limit = {
-					or = {
-						has_planet_flag = hfe_plague_planet
-						has_modifier = hfe_plague_lvl_1
-						has_modifier = hfe_plague_lvl_2
-						has_modifier = hfe_plague_lvl_3
-					}
+					has_planet_flag = hfe_plague_planet
 				}
 				hfe_effect_plague_planet_clean = yes
 			}
@@ -497,6 +470,17 @@ country_event = {
 				remove_country_flag = hfe_plague_block_planet
 				remove_country_flag = hfe_plague_block_pulse
 				end_event_chain = hfe_chain_plague_count
+			}
+			every_galaxy_pop = {
+				remove_pop_flag = hfe_plague_pop_immune
+			}
+			every_galaxy_species = {
+				limit = {
+					has_trait = hfe_species_trait_immune
+				}
+				modify_species = {
+					remove_trait = hfe_species_trait_immune
+				}
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -541,6 +525,91 @@ country_event = {
 			}
 			else = {
 				set_global_flag = hfe_global_disable
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# war in heavens alteration menu
+	option = {
+		name = hfe_menu.war_in_heavens.defined_text
+		custom_tooltip = hfe_menu.war_in_heavens.tooltip.defined_text
+		trigger = {
+			or = {
+				hfe_trigger_menu_has_submenu = no
+				has_country_flag = hfe_menu_have_war_in_heavens_submenu
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_war_in_heavens_enabled = no
+				}
+				remove_global_flag = hfe_war_in_heavens_disable
+				set_global_flag = sleepers_awake_happened
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = hfe_menu_have_war_in_heavens_submenu
+				}
+				set_global_flag = hfe_war_in_heavens_disable
+				# is it ok? What if fallen awakened?
+				remove_global_flag = sleepers_awake_happened
+				remove_country_flag = hfe_menu_have_war_in_heavens_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+			else = {
+				set_country_flag = hfe_menu_have_war_in_heavens_submenu
+				country_event = {
+					id = hfe_menu.1
+				}
+			}
+		}
+	}
+	# war in heavens custom wg
+	option = {
+		name = hfe_menu.war_in_heavens.submenu.0.defined_text
+		custom_tooltip = hfe_menu.war_in_heavens.submenu.0.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_war_in_heavens_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_war_in_heavens_custom_wg_enabled = yes
+				}
+				set_global_flag = hfe_war_in_heavens_custom_wg_disable
+			}
+			else = {
+				remove_global_flag = hfe_war_in_heavens_custom_wg_disable
+			}
+			country_event = {
+				id = hfe_menu.1
+			}
+		}
+	}
+	# war in heavens custom wg planet shift
+	option = {
+		name = hfe_menu.war_in_heavens.submenu.1.defined_text
+		custom_tooltip = hfe_menu.war_in_heavens.submenu.1.tooltip.defined_text
+		trigger = {
+			has_country_flag = hfe_menu_have_war_in_heavens_submenu
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_war_in_heavens_custom_wg_system_shift_enabled = yes
+				}
+				set_global_flag = hfe_war_in_heavens_custom_wg_system_shift_disable
+			}
+			else = {
+				remove_global_flag = hfe_war_in_heavens_custom_wg_system_shift_disable
 			}
 			country_event = {
 				id = hfe_menu.1

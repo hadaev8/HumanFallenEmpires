@@ -1,45 +1,7 @@
 # Defensive armies can't transport of the planet
 # Garrison armies are created by pops
 # Maintenance is directly scripted here. 0.25 translates to 0.25 monthly cost (excluding other upkeep modifiers)
-
-# TODO
-# hfe_elite_slave_army = {
-# 	damage = 1.3
-# 	health = 1.3
-# 	morale = 1.0
-# 	morale_damage = 1.00
-# 	collateral_damage = 1.3
-# 	war_exhaustion = 0.5
-# 	time = 90
-# 	maintenance = 0.5
-# 	icon_frame = 10
-# 	cost = {
-# 		minerals = 150
-# 	}
-# 	prerequisites = {
-# 		tech_neural_implants
-# 	}
-# 	allow = {
-# 		has_building = building_slave_processing
-# 	}
-# 	potential = {
-# 		from = {
-# 			is_sapient = yes
-# 			NOT = {
-# 				has_trait = "trait_robotic_1"
-# 				has_trait = "trait_robotic_2"
-# 				has_trait = "trait_robotic_3"
-# 				has_trait = "trait_machine_unit"
-# 			}
-# 			has_slavery_type = {
-# 				country = prev.owner
-# 				type = slavery_military
-# 			}
-# 		}
-# 	}
-# }
-
-hfe_army_high_mechanicus_bodyguards = {
+hfe_army_godforge_bodyguards = {
 	defensive = yes
 	is_pop_spawned = no
 	pop_limited = no
@@ -49,295 +11,70 @@ hfe_army_high_mechanicus_bodyguards = {
 	has_morale = yes
 	morale_damage = 1.5
 	collateral_damage = 0.9
-	war_exhaustion = 2
 	icon_frame = 5
 	has_species = yes
-
-	resources = {
-		category = armies
-		cost = {
-#			trigger = {
-#				owner = {
-#					NOT = {
-#						is_primitive = yes
-#						is_country_type = primitive
-#					}
-#				}
-#			}
-			energy = 500
-			food = 30
-			alloys = 300
-		}
-#		cost = {
-#			alloys = 100
-#		}
-		produces = {
-			unity = 1
-		}
-		upkeep = {
-			food = 2
-			alloys = 2
-			energy = 2
-			minerals = 2
-		}
-	}
-
 	potential = {
-		owner = {
-			has_country_flag = hfe_varelse_primitive_0 
-
-			OR = {
-				has_civic = hfe_civic_high_mechanicus
-				has_country_flag = hfe_high_mechanicus_retained
-				is_spiritualist = yes
-			}
-			NOT = {
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-				is_materialist = yes
-			}
-		}
-		planet = {
-			OR = {
-				has_planet_flag = hfe_colony_beta
-				is_capital = yes
-			}
-		}
+		always = no
 	}
 	allow = {
-		planet = {
-			NOT = { # Only one can exist on a planet
-				any_planet_army = {
-					army_type = hfe_army_high_mechanicus_bodyguards
-				}
-			}
-		}
-		OR = {
-			FROM = {
-				OR = {
-					has_trait = trait_mechanical
-					has_trait = trait_machine_unit
-					is_robotic = yes
-				}
-			}
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-		}
-		OR = {
-			FROM = {
-				OR = {
-					has_citizenship_rights = yes
-					has_citizenship_type = { type = citizenship_full }
-					is_same_species = owner
-					is_same_species = event_target:hfe_varelse_species
-				}
-			}
-			owner = { is_primitive = yes }
-			owner = { is_country_type = primitive }
-		}
-		owner = { # Can only be re-spawned in peacetime
-			is_at_war = no
-		}
+		always = no
 	}
 }
 
-hfe_army_high_mechanicus_zealots = {
+hfe_army_godforge_zealots = {
 	defensive = yes
-	damage = 0.3
+	is_pop_spawned = no
+	pop_limited = no
 	health = 0.4
+	damage = 0.3
 	morale = 5
-	collateral_damage = 0.5
+	has_morale = yes
 	morale_damage = 1.5
+	collateral_damage = 0.5
 	icon_frame = 3
 	has_species = yes
-	is_pop_spawned = no
-	pop_limited = yes
-	war_exhaustion = 0.1
-	time = 20
-
-	resources = {
-		category = armies
-		cost = {
-			food = 200
-		}
-		produces = {
-			unity = 1
-		}
-		upkeep = {
-			food = 0.5
-			alloys = 0.2
-			energy = 0.1
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-			}
-			minerals = 0.1
-			food = 0.5
-		}
-	}
-
 	potential = {
-		owner = {
-			has_country_flag = hfe_varelse_primitive_0 
-
-			OR = {
-				has_civic = hfe_civic_high_mechanicus
-				has_country_flag = hfe_high_mechanicus_retained
-			}
-		}
+		always = no
 	}
 	allow = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_colony_beta
-				has_building = hfe_building_mechanicus_cult_temple
-			}
-		}
-		OR = {
-			FROM = {
-				OR = {
-					has_citizenship_rights = yes
-					has_citizenship_type = { type = citizenship_full }
-					is_same_species = owner
-				}
-			}
-			owner = { is_primitive = yes }
-			owner = { is_country_type = primitive }
-		}
+		always = no
 	}
 }
 
-hfe_army_mechanicus_godforge_drones = {
+hfe_army_godforge_drones = {
 	defensive = yes
 	is_pop_spawned = no
-	damage = 1.00
-	health = 1.00
-	morale_damage = 1.00
+	pop_limited = no
+	health = 1
+	damage = 1
+	morale_damage = 1
 	collateral_damage = 0.1
-	war_exhaustion = 0
 	has_morale = no
 	icon_frame = 11
-	time = 200
-	pop_limited = no
 	has_species = no
-
-#	potential = {
-#		from = { 
-#			has_trait = "trait_mechanical"
-#		}
-#		owner = {
-#			NOT = { has_authority = auth_machine_intelligence }
-#		}
-#	}
-
-	resources = {
-		category = armies
-		cost = {
-			alloys = 100
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-						has_country_flag = hfe_varelse_primitive_0
-					}
-				}
-			}
-			energy = 2.5
-		}
-		produces = {
-			alloys = 0.05
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-			}
-			energy = 1
-			minerals = 1
-		}
-	}
-
 	potential = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_colony_beta
-				has_building = hfe_building_high_mechanicus_godforge
-			}
-		}
+		always = no
 	}
-
-	allow = { owner = { NOT = { has_policy_flag = robots_outlawed } } }
+	allow = {
+		always = no
+	}
 }
 
 hfe_army_godforge_core_watch = {
 	defensive = yes
-	damage = 1.5
+	is_pop_spawned = no
+	pop_limited = no
 	health = 2.5
-	has_morale = no
+	damage = 1.5
 	morale_damage = 1.5
 	collateral_damage = 0.1
-	war_exhaustion = 0.3
-	time = 90
-	pop_limited = yes
-	has_species = yes
-
+	has_morale = no
 	icon_frame = 11
-
-	resources = {
-		category = armies
-		cost = {
-			trigger = {
-				NOT = { owner = { has_country_flag = hfe_varelse_primitive_0 } }
-			}
-			alloys = 100
-		}
-
-		cost = {
-			energy = 250
-			minerals = 250
-			alloys = 100
-		}
-
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						has_country_flag = hfe_varelse_primitive_0
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-			}
-			energy = 3
-		}
-	}
-
+	has_species = no
 	potential = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_colony_beta
-				has_building = hfe_building_high_mechanicus_godforge
-			}
-		}
+		always = no
 	}
 	allow = {
-		OR = {
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			FROM = { has_trait = trait_mechanical }
-			FROM = { has_trait = trait_machine_unit }
-		}
-		owner = { NOT = { has_policy_flag = robots_outlawed } }
+		always = no
 	}
 }

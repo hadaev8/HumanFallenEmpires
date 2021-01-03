@@ -74,7 +74,12 @@ hfe_effect_leaders_add_random_trait = {
 								}
 								exists = owner
 								owner = {
-									has_valid_civic = civic_cutthroat_politics
+									OR = {
+										has_civic = civic_cutthroat_politics
+										has_civic = hfe_civic_godforge
+										has_civic = hfe_civic_godforge_mat
+										has_civic = civic_criminal_heritage
+									}
 									is_gestalt = no
 								}
 							}
@@ -96,10 +101,17 @@ hfe_effect_leaders_add_random_trait = {
 									has_trait = hfe_ruler_trait_puppet
 								}
 								exists = owner
+								NOT = {
+									has_trait = trait_erudite
+								}
 								owner = {
-									has_valid_civic = civic_shadow_council
+									OR = {
+										has_valid_civic = civic_shadow_council
+										has_civic = civic_meritocracy
+										is_country_type = primitive
+										is_subject = yes
+									}
 									is_gestalt = no
-									years_passed > 0
 								}
 							}
 							add_trait = hfe_ruler_trait_puppet
@@ -143,8 +155,22 @@ hfe_effect_leaders_add_random_trait = {
 								}
 								exists = owner
 								owner = {
+									hfe_trigger_is_fallen = no
 									is_gestalt = no
-									years_passed > 0
+								}
+								exists = species
+								species = {
+									nor = {
+										has_trait = trait_erudite
+										has_trait = trait_charismatic
+										has_trait = trait_intelligent
+										has_trait = trait_enigmatic_intelligence
+										has_trait = trait_enigmatic_intelligence_poor
+										has_trait = hfe_species_trait_clever_beast
+										has_trait = hfe_species_trait_clever_beast_presapient_spawn
+										has_trait = trait_presapient_natural_intellectuals
+										has_trait = leader_trait_intellectual
+									}
 								}
 							}
 							add_trait = hfe_ruler_trait_lovable_buffoon
@@ -234,9 +260,8 @@ hfe_effect_leaders_add_random_trait = {
 								}
 								exists = owner
 								owner = {
-									num_communications > 3
 									is_militarist = yes
-									is_gestalt = no
+									num_communications > 3
 								}
 							}
 							add_trait = hfe_ruler_trait_army_lover
@@ -272,6 +297,28 @@ hfe_effect_leaders_add_random_trait = {
 							}
 						}
 					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_ruler_trait_warcrime_tourism
+								}
+								exists = owner
+								owner = {
+									has_valid_civic = hfe_civic_features_aggressive_diplomacy
+								}
+							}
+							add_trait = hfe_ruler_trait_warcrime_tourism
+							set_timed_leader_flag = {
+								flag = hfe_ruler_trait_warcrime_tourism_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 				}
 			}
 		}
@@ -286,6 +333,28 @@ hfe_effect_leaders_add_random_trait = {
 					}
 				}
 				random_list = {
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_ruler_trait_greedy
+								}
+								exists = owner
+								owner = {
+									is_gestalt = no
+								}
+							}
+							add_trait = hfe_ruler_trait_greedy
+							set_timed_leader_flag = {
+								flag = hfe_ruler_trait_greedy_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 					5 = {
 						if = {
 							limit = {
@@ -394,6 +463,30 @@ hfe_effect_leaders_add_random_trait = {
 							}
 						}
 					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_governor_trait_satanist
+								}
+								hfe_trigger_is_psionic_species = yes
+								exists = owner
+								owner = {
+									has_country_flag = has_shroud_patron
+									is_gestalt = no
+								}
+							}
+							add_trait = hfe_governor_trait_satanist
+							set_timed_leader_flag = {
+								flag = hfe_governor_trait_satanist_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 				}
 			}
 		}
@@ -408,24 +501,6 @@ hfe_effect_leaders_add_random_trait = {
 					}
 				}
 				random_list = {
-					5 = {
-						if = {
-							limit = {
-								not = {
-									has_trait = hfe_scientist_trait_diligent
-								}
-							}
-							add_trait = hfe_scientist_trait_diligent
-							set_timed_leader_flag = {
-								flag = hfe_scientist_trait_diligent_gained
-								days = 7
-							}
-							set_timed_leader_flag = {
-								flag = has_gained_trait
-								days = 7
-							}
-						}
-					}
 					5 = {
 						if = {
 							limit = {
@@ -454,6 +529,30 @@ hfe_effect_leaders_add_random_trait = {
 							add_trait = hfe_scientist_trait_wary
 							set_timed_leader_flag = {
 								flag = hfe_scientist_trait_wary_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_scientist_trait_satanist
+								}
+								hfe_trigger_is_psionic_species = yes
+								exists = owner
+								owner = {
+									has_country_flag = has_shroud_patron
+									is_gestalt = no
+								}
+							}
+							add_trait = hfe_scientist_trait_satanist
+							set_timed_leader_flag = {
+								flag = hfe_scientist_trait_satanist_gained
 								days = 7
 							}
 							set_timed_leader_flag = {
@@ -631,6 +730,52 @@ hfe_effect_leaders_add_random_trait = {
 							}
 						}
 					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_admiral_trait_satanist
+								}
+								hfe_trigger_is_psionic_species = yes
+								exists = owner
+								owner = {
+									has_country_flag = has_shroud_patron
+									is_gestalt = no
+								}
+							}
+							add_trait = hfe_admiral_trait_satanist
+							set_timed_leader_flag = {
+								flag = hfe_admiral_trait_satanist_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_admiral_trait_melee
+								}
+								exists = owner
+								owner = {
+									hfe_trigger_insane_admiral_trait = yes
+								}
+							}
+							add_trait = hfe_admiral_trait_melee
+							set_timed_leader_flag = {
+								flag = hfe_admiral_trait_melee_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 				}
 			}
 		}
@@ -695,6 +840,48 @@ hfe_effect_leaders_add_random_trait = {
 							add_trait = hfe_general_trait_elite_ops
 							set_timed_leader_flag = {
 								flag = hfe_general_trait_elite_ops_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_general_trait_satanist
+								}
+								hfe_trigger_is_psionic_species = yes
+								exists = owner
+								owner = {
+									has_country_flag = has_shroud_patron
+									is_gestalt = no
+								}
+							}
+							add_trait = hfe_general_trait_satanist
+							set_timed_leader_flag = {
+								flag = hfe_general_trait_satanist_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_general_trait_tactician
+								}
+							}
+							add_trait = hfe_general_trait_tactician
+							set_timed_leader_flag = {
+								flag = hfe_general_trait_tactician_gained
 								days = 7
 							}
 							set_timed_leader_flag = {

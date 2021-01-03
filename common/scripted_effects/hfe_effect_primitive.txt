@@ -1,5 +1,4 @@
 #
-
 # for country
 hfe_effect_primitive_down = {
 	switch = {
@@ -42,7 +41,9 @@ hfe_effect_primitive_down = {
 		}
 	}
 	hfe_effect_primitive_down_civics = yes
-	hfe_effect_primitive_remove_pops = yes
+	capital_scope = {
+		hfe_effect_primitive_remove_pops = yes
+	}
 }
 
 hfe_effect_primitive_up = {
@@ -90,71 +91,40 @@ hfe_effect_primitive_up = {
 		}
 	}
 	hfe_effect_primitive_up_civics = yes
-	hfe_effect_primitive_add_pops = yes
+	capital_scope = {
+		hfe_effect_primitive_add_pops = yes
+	}
 }
 
 hfe_effect_primitive_down_civics = {
-	if = {
-		limit = {
-			hfe_trigger_primitive_has_special_civic = no
-			is_country_type = primitive
-		}
-		change_government = {
-			authority = random
-			civics = {
-				civic = hfe_civic_primitive_degraded_tech
-				civic = hfe_civic_primitive_degraded_society
-			}
-		}
-	}
+	force_remove_civic = hfe_civic_primitive_new_tech
+	force_remove_civic = hfe_civic_primitive_unstable_society
+	force_add_civic = hfe_civic_primitive_degraded_tech
+	force_add_civic = hfe_civic_primitive_degraded_society
 }
 
 hfe_effect_primitive_up_civics = {
-	if = {
-		limit = {
-			hfe_trigger_primitive_has_special_civic = no
-			is_country_type = primitive
-		}
-		change_government = {
-			authority = random
-			civics = {
-				civic = hfe_civic_primitive_new_tech
-				civic = hfe_civic_primitive_unstable_society
-			}
-		}
-	}
+	force_remove_civic = hfe_civic_primitive_degraded_tech
+	force_remove_civic = hfe_civic_primitive_degraded_society
+	force_add_civic = hfe_civic_primitive_new_tech
+	force_add_civic = hfe_civic_primitive_unstable_society
 }
 
 hfe_effect_primitive_was_fallen_civics = {
-	if = {
-		limit = {
-			hfe_trigger_primitive_has_special_civic = no
-			is_country_type = primitive
-		}
-		change_government = {
-			authority = random
-			civics = {
-				civic = hfe_civic_primitive_was_fallen
-				civic = hfe_civic_primitive_unstable_society
-			}
-		}
-	}
+	force_add_civic = hfe_civic_primitive_was_fallen
 }
 
 hfe_effect_primitive_was_default_civics = {
-	if = {
-		limit = {
-			hfe_trigger_primitive_has_special_civic = no
-			is_country_type = primitive
-		}
-		change_government = {
-			authority = random
-			civics = {
-				civic = hfe_civic_primitive_was_default
-				civic = hfe_civic_primitive_unstable_society
-			}
-		}
-	}
+	force_add_civic = hfe_civic_primitive_was_default
+}
+
+hfe_effect_primitive_remove_mod_civics = {
+	force_remove_civic = hfe_civic_primitive_degraded_tech
+	force_remove_civic = hfe_civic_primitive_degraded_society
+	force_remove_civic = hfe_civic_primitive_new_tech
+	force_remove_civic = hfe_civic_primitive_unstable_society
+	force_remove_civic = hfe_civic_primitive_was_fallen
+	force_remove_civic = hfe_civic_primitive_was_default
 }
 
 hfe_effect_primitive_set_stone_age = {
@@ -380,34 +350,34 @@ hfe_effect_primitive_set_early_space_age = {
 
 hfe_effect_primitive_set_random_age = {
 	random_list = {
-#		10 = {
-#			hfe_effect_primitive_set_stone_age = yes
-#		}
-#		10 = {
-#			hfe_effect_primitive_set_bronze_age = yes
-#		}
-#		10 = {
-#			hfe_effect_primitive_set_iron_age = yes
-#		}
-#		10 = {
-#			hfe_effect_primitive_set_late_medieval_age = yes
-#		}
-		5 = {
+		10 = {
+			hfe_effect_primitive_set_stone_age = yes
+		}
+		10 = {
+			hfe_effect_primitive_set_bronze_age = yes
+		}
+		10 = {
+			hfe_effect_primitive_set_iron_age = yes
+		}
+		10 = {
+			hfe_effect_primitive_set_late_medieval_age = yes
+		}
+		10 = {
 			hfe_effect_primitive_set_renaissance_age = yes
 		}
-		40 = {
+		10 = {
 			hfe_effect_primitive_set_steam_age = yes
 		}
-		35 = {
+		10 = {
 			hfe_effect_primitive_set_industrial_age = yes
 		}
-		30 = {
+		10 = {
 			hfe_effect_primitive_set_machine_age = yes
 		}
-		10= {
+		10 = {
 			hfe_effect_primitive_set_atomic_age = yes
 		}
-		5 = {
+		10 = {
 			hfe_effect_primitive_set_early_space_age = yes
 		}
 	}
@@ -419,61 +389,73 @@ hfe_effect_primitive_set_default = {
 	set_country_type = default
 	change_country_flag = random
 	if = {
-		limit = { is_species_class = MAM }
+		limit = {
+			is_species_class = MAM
+		}
 		set_graphical_culture = mammalian_01
 	}
 	else_if = {
-		limit = { is_species_class = REP }
+		limit = {
+			is_species_class = REP
+		}
 		set_graphical_culture = reptilian_01
 	}
 	else_if = {
-		limit = { is_species_class = AVI }
+		limit = {
+			is_species_class = AVI
+		}
 		set_graphical_culture = avian_01
 	}
 	else_if = {
-		limit = { is_species_class = ART }
+		limit = {
+			is_species_class = ART
+		}
 		set_graphical_culture = arthropoid_01
 	}
 	else_if = {
-		limit = { is_species_class = MOL }
+		limit = {
+			is_species_class = MOL
+		}
 		set_graphical_culture = molluscoid_01
 	}
 	else_if = {
-		limit = { is_species_class = FUN }
+		limit = {
+			is_species_class = FUN
+		}
 		set_graphical_culture = fungoid_01
 	}
 	else_if = {
-		limit = { is_species_class = PLANT }
+		limit = {
+			is_species_class = PLANT
+		}
 		set_graphical_culture = plantoid_01
 	}
 	else = {
 		set_graphical_culture = mammalian_01
 	}
-	change_government = {
-		authority = random
-		civics = random
-	}
+	# change_government = {
+	# 	authority = random
+	# 	civics = random
+	# }
 	set_name = random
 	if = {
 		limit = {
-			home_planet = {
+			exists = capital_scope
+			capital_scope = {
 				has_observation_outpost = yes
 			}
 		}
-		home_planet = {
+		capital_scope = {
 			observation_outpost_owner = {
-				country_event = { id = primitive.17 }
+				country_event = {
+					id = primitive.17
+				}
 			}
 		}
 	}
-	add_resource = {
-		energy = 2000
-		minerals = 2000 # enough for a spaceport and then some
-		food = 2000
-	}
-	add_resource = { influence = 300 }
+	hfe_effect_resource_bonus = yes
 	capital_scope = {
-		clear_blockers = yes
+		# clear_blockers = yes
 		while = {
 			limit = {
 				num_pops < 8
@@ -482,34 +464,38 @@ hfe_effect_primitive_set_default = {
 				species = owner
 			}
 		}
-		remove_building = building_primitive_farm
-		remove_building = building_primitive_factory
-		remove_building = building_primitive_capital
-		remove_building = building_urban_dwellings
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_farming
-		add_district = district_farming
-		add_district = district_farming
-		add_district = district_farming
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_building = building_capital
-		add_building = building_research_lab_1
-		add_building = building_foundry_1
-		add_building = building_factory_1
-
-		remove_all_armies = yes
+		add_modifier = {
+			modifier = hfe_idustrial_boom
+			years = 3
+		}
+		# remove_building = building_primitive_farm
+		# remove_building = building_primitive_factory
+		# remove_building = building_primitive_capital
+		# remove_building = building_urban_dwellings
+		# add_district = district_city
+		# add_district = district_city
+		# add_district = district_city
+		# add_district = district_city
+		# add_district = district_farming
+		# add_district = district_farming
+		# add_district = district_farming
+		# add_district = district_farming
+		# add_district = district_mining
+		# add_district = district_mining
+		# add_district = district_mining
+		# add_district = district_generator
+		# add_district = district_generator
+		# add_district = district_generator
+		# add_building = building_capital
+		# add_building = building_research_lab_1
+		# add_building = building_foundry_1
+		# add_building = building_factory_1
 		solar_system = {
 			if = {
 				limit = {
-					NOT = { exists = starbase }
+					NOT = {
+						exists = starbase
+					}
 				}
 				create_starbase = {
 					size = starbase_outpost
@@ -519,18 +505,31 @@ hfe_effect_primitive_set_default = {
 			else_if = {
 				limit = {
 					starbase = {
-						NOT = { owner = { is_same_value = root } }
+						NOT = {
+							owner = {
+								is_same_value = root
+							}
+						}
 					}
 				}
 				starbase = {
-					owner = { country_event = { id = primitive.180 days = 10 } }
+					owner = {
+						country_event = {
+							id = primitive.180
+							days = 10
+						}
+					}
 				}
 			}
 		}
 	}
 	random_owned_ship = {
-		limit = { is_ship_size = primitive_space_station }
-		fleet = { destroy_fleet = THIS }
+		limit = {
+			is_ship_size = primitive_space_station
+		}
+		fleet = {
+			delete_fleet = THIS
+		}
 	}
 }
 
@@ -578,29 +577,7 @@ hfe_effect_primitive_make_primitive = {
 			}
 		}
 	}
-
 	hfe_effect_primitive_add_buildings = yes
-
-	# TODO idk about buildings, need to think
-	# every_tile = {
-	# 	limit = {
-	# 		has_building = yes
-	# 	}
-	# 	random_list = {
-	# 		95 = {
-	# 			remove_building = yes
-	# 		}
-	# 		5 = {
-	# 		}
-	# 	}
-	# }
-	# every_tile = {
-	# 	limit = {
-	# 		has_building = no
-	# 		exists = pop
-	# 	}
-	# 	kill_pop = yes
-	# }
 }
 
 hfe_effect_primitive_add_buildings = {
@@ -608,35 +585,35 @@ hfe_effect_primitive_add_buildings = {
 	remove_building = building_colony_shelter
 	owner = {
 		if = {
-			limit = { has_country_flag = stone_age }
+			limit = {
+				has_country_flag = stone_age
+			}
 			prev = {
 				add_building = building_crude_huts
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = bronze_age }
+			limit = {
+				has_country_flag = bronze_age
+			}
 			prev = {
 				add_building = building_primitive_dwellings
 				add_building = building_stone_palace
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = iron_age }
+			limit = {
+				has_country_flag = iron_age
+			}
 			prev = {
 				add_building = building_primitive_dwellings
 				add_building = building_stone_palace
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = late_medieval_age }
-			prev = {
-				add_building = building_primitive_dwellings
-				add_building = building_primitive_dwellings
-				add_building = building_stone_palace
+			limit = {
+				has_country_flag = late_medieval_age
 			}
-		}
-		else_if = {
-			limit = { has_country_flag = renaissance_age }
 			prev = {
 				add_building = building_primitive_dwellings
 				add_building = building_primitive_dwellings
@@ -644,7 +621,19 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = steam_age }
+			limit = {
+				has_country_flag = renaissance_age
+			}
+			prev = {
+				add_building = building_primitive_dwellings
+				add_building = building_primitive_dwellings
+				add_building = building_stone_palace
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steam_age
+			}
 			prev = {
 				add_building = building_urban_dwellings
 				add_building = building_primitive_factory
@@ -653,7 +642,9 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = industrial_age }
+			limit = {
+				has_country_flag = industrial_age
+			}
 			prev = {
 				add_building = building_primitive_farm
 				add_building = building_primitive_factory
@@ -664,7 +655,9 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = machine_age }
+			limit = {
+				has_country_flag = machine_age
+			}
 			prev = {
 				add_building = building_primitive_farm
 				add_building = building_primitive_factory
@@ -675,7 +668,9 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = atomic_age }
+			limit = {
+				has_country_flag = atomic_age
+			}
 			prev = {
 				add_building = building_primitive_farm
 				add_building = building_primitive_factory
@@ -686,7 +681,9 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = early_space_age }
+			limit = {
+				has_country_flag = early_space_age
+			}
 			prev = {
 				add_building = building_primitive_farm
 				add_building = building_primitive_factory
@@ -697,24 +694,26 @@ hfe_effect_primitive_add_buildings = {
 			}
 		}
 	}
-	if = {
-		limit = {
-			owner = {
-				OR = {
-					has_country_flag = machine_age
-					has_country_flag = atomic_age
-					has_country_flag = early_space_age
-				}
-			}
-		}
-#		create_primitive_blockers = yes
-	}
+	# if = {
+	# 	limit = {
+	# 		owner = {
+	# 			OR = {
+	# 				has_country_flag = machine_age
+	# 				has_country_flag = atomic_age
+	# 				has_country_flag = early_space_age
+	# 			}
+	# 		}
+	# 	}
+	# 	create_primitive_blockers = yes
+	# }
 }
 
 hfe_effect_primitive_add_pops = {
 	owner = {
 		if = {
-			limit = { has_country_flag = stone_age }
+			limit = {
+				has_country_flag = stone_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -727,7 +726,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = bronze_age }
+			limit = {
+				has_country_flag = bronze_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -740,7 +741,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = iron_age }
+			limit = {
+				has_country_flag = iron_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -753,7 +756,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = late_medieval_age }
+			limit = {
+				has_country_flag = late_medieval_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -766,7 +771,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = renaissance_age }
+			limit = {
+				has_country_flag = renaissance_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -779,7 +786,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = steam_age }
+			limit = {
+				has_country_flag = steam_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -792,7 +801,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = industrial_age }
+			limit = {
+				has_country_flag = industrial_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -805,7 +816,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = machine_age }
+			limit = {
+				has_country_flag = machine_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -818,7 +831,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = atomic_age }
+			limit = {
+				has_country_flag = atomic_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -831,7 +846,9 @@ hfe_effect_primitive_add_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = early_space_age }
+			limit = {
+				has_country_flag = early_space_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -849,7 +866,9 @@ hfe_effect_primitive_add_pops = {
 hfe_effect_primitive_remove_pops = {
 	owner = {
 		if = {
-			limit = { has_country_flag = stone_age }
+			limit = {
+				has_country_flag = stone_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -862,7 +881,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = bronze_age }
+			limit = {
+				has_country_flag = bronze_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -875,7 +896,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = iron_age }
+			limit = {
+				has_country_flag = iron_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -888,7 +911,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = late_medieval_age }
+			limit = {
+				has_country_flag = late_medieval_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -901,7 +926,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = renaissance_age }
+			limit = {
+				has_country_flag = renaissance_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -914,7 +941,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = steam_age }
+			limit = {
+				has_country_flag = steam_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -927,7 +956,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = industrial_age }
+			limit = {
+				has_country_flag = industrial_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -940,7 +971,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = machine_age }
+			limit = {
+				has_country_flag = machine_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -953,7 +986,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = atomic_age }
+			limit = {
+				has_country_flag = atomic_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -966,7 +1001,9 @@ hfe_effect_primitive_remove_pops = {
 			}
 		}
 		else_if = {
-			limit = { has_country_flag = early_space_age }
+			limit = {
+				has_country_flag = early_space_age
+			}
 			prev = {
 				while = {
 					limit = {
@@ -976,182 +1013,6 @@ hfe_effect_primitive_remove_pops = {
 						kill_pop = yes
 					}
 				}
-			}
-		}
-	}
-}
-
-hfe_effect_mechanicus_level_up = {
-	event_target:hfe_varelse_colony_country = {
-		set_built_species = event_target:hfe_varelse_leftover_robots
-	}
-	capital_scope = {
-#		Fixes known bug (which I saw) where every Deposit is blanked
-		clear_blockers = yes
-		clear_deposits = yes
-
-		add_deposit = d_ruined_arcology
-		add_deposit = d_ruined_arcology
-		add_deposit = d_ruined_arcology
-		add_deposit = d_bomb_crater
-		add_deposit = d_decrepit_dwellings
-		add_deposit = d_decrepit_dwellings
-		add_deposit = d_decrepit_dwellings
-		add_deposit = d_dust_caverns
-		add_deposit = d_dust_caverns
-		add_deposit = d_geothermal_vent
-		add_deposit = d_geothermal_vent
-		add_deposit = d_ore_rich_caverns
-		add_deposit = d_veiny_cliffs
-		add_deposit = d_rich_mountain
-		add_deposit = d_fungal_caves
-		add_deposit = d_fungal_caves
-		add_deposit = d_fungal_caves
-#		add_deposit = d_odd_factory
-		add_deposit = d_relic_metal_boneyard
-		add_deposit = hfe_deposit_mechanicus_farm_spire
-		add_deposit = d_ancient_bombardment_craters
-		add_random_non_blocker_deposit = yes
-		add_random_non_blocker_deposit = yes
-		add_random_non_blocker_deposit = yes
-	}
-	capital_scope = {
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_city
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_generator
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-		add_district = district_mining
-#		add_district = district_farming
-#		add_district = district_farming
-#		add_district = district_farming
-#		add_district = district_farming
-#		add_district = district_farming
-#		add_district = district_farming
-	}
-	capital_scope = {
-		if = {
-			limit = { NOT = { has_building = hfe_building_high_mechanicus_stronghold } }
-			add_building = hfe_building_high_mechanicus_stronghold
-		}
-	}
-	capital_scope = {
-		hfe_effect_exodus_reset_capital = yes
-		add_building = building_system_capital
-		add_building = building_precinct_house
-		add_building = building_production_center
-		add_building = building_hydroponics_farm
-		add_building = building_mote_harvesters
-	}
-	capital_scope = {
-		while = {
-			count = 10
-			create_pop = {
-				species = event_target:hfe_varelse_leftover_robots
-			}
-		}
-	}
-	add_resource = { # Changing the country type blanks everything
-		energy = 10000
-		minerals = 30000
-		food = 20000
-		alloys = 50000
-		consumer_goods = 2000
-		influence = 1000
-		minor_artifacts = 12
-		society_research = 500
-		engineering_research = 2500
-		physics_research = 100
-		volatile_motes = 100
-	}
-	capital_scope = {
-		hfe_effect_create_starbase_starhold_from_planet = yes
-		starbase = {
-			set_starbase_module = {
-				slot = 0
-				module = shipyard
-			}
-			set_starbase_module = {
-				slot = 1
-				module = trading_hub
-			}
-			set_starbase_building = {
-				slot = 0
-				building = hydroponics_bay
-			}
-			set_starbase_building = {
-				slot = 1
-				building = crew_quarters
-			}
-		}
-	}
-	capital_scope = {
-		remove_all_armies = yes
-	}
-	if = {
-		limit = {
-			OR = {
-				has_country_flag = hfe_mechanicus_plundered_by_xenoes
-				has_civic = civic_barbaric_despoilers
-			}
-		}
-		create_leader = {
-			name = "Damaged Godforge Core"
-			class = general
-			event_leader = yes
-			species = event_target:hfe_varelse_leftover_robots
-			immortal = yes
-			skill = 4
-			set_age = 0
-			traits = {
-				add_trait = leader_trait_general_synthetic
-				add_trait = hfe_general_trait_engineer
-				add_trait = leader_trait_restrained
-				add_trait = leader_trait_erratic_morality_core
-				add_trait = leader_trait_arrested_development
-			}
-		}
-		last_created_leader = {
-			set_leader_flag = godforge_engine_primitive
-			save_global_event_target_as = broken_godforge_general
-		}
-	}
-	else = {
-		create_leader = {
-			name = "Godforge Core"
-			class = general
-			event_leader = yes
-			species = event_target:hfe_varelse_leftover_robots
-			immortal = yes
-			skill = 10
-			set_age = 0
-			traits = {
-				add_trait = leader_trait_general_synthetic
-				add_trait = leader_trait_butcher
-				add_trait = leader_trait_parts_cannibalizer
-				add_trait = leader_trait_rigid_programming
-			}
-			effect = {
-				set_leader_flag = godforge_engine
 			}
 		}
 	}

@@ -1,0 +1,199 @@
+# considered as part of mai storyline, but have its own file
+namespace = hfe_xl_cluster
+# spawn gates, intro events section
+# spawn cluster itself
+country_event = {
+	id = hfe_xl_cluster.100
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_system = {
+			set_star_flag = hfe_non_xl_cluster_star_flag
+		}
+		set_spawn_system_batch = begin
+		no_scope = {
+			hfe_effect_test_0 = yes
+		}
+		every_system = {
+			limit = {
+				not = {
+					has_star_flag = hfe_non_xl_cluster_star_flag
+				}
+			}
+			set_star_flag = hfe_xl_cluster_star_flag
+			every_neighbor_system = {
+				limit = {
+					has_star_flag = hfe_non_xl_cluster_star_flag
+				}
+				remove_hyperlane = {
+					from = this
+					to = prev
+				}
+			}
+			while = {
+				count = 2
+				limit = {
+					count_system = {
+						count < 3
+						limit = {
+							has_hyperlane_to = prev
+						}
+					}
+				}
+				random_neighbor_system = {
+					ignore_hyperlanes = yes
+					limit = {
+						has_star_flag = hfe_xl_cluster_star_flag
+						nor = {
+							has_hyperlane_to = prev
+							is_same_value = prev
+						}
+						# distance = {
+						# 	source = prev
+						# 	type = euclidean
+						# 	min_distance >= 0
+						# 	max_distance <= 50
+						# 	use_bypasses = no
+						# }
+					}
+					# weights = {
+					# 	base = 1
+					# 	modifier = {
+					# 		mult = 10
+					# 		distance = {
+					# 			source = prev
+					# 			type = euclidean
+					# 			min_distance >= 0
+					# 			max_distance <= 10
+					# 			use_bypasses = no
+					# 		}
+					# 	}
+					# 	modifier = {
+					# 		mult = 10
+					# 		distance = {
+					# 			source = prev
+					# 			type = euclidean
+					# 			min_distance >= 0
+					# 			max_distance <= 20
+					# 			use_bypasses = no
+					# 		}
+					# 	}
+					# 	modifier = {
+					# 		mult = 10
+					# 		distance = {
+					# 			source = prev
+					# 			type = euclidean
+					# 			min_distance >= 0
+					# 			max_distance <= 30
+					# 			use_bypasses = no
+					# 		}
+					# 	}
+					# }
+					add_hyperlane = {
+						from = prev
+						to = this
+					}
+				}
+			}
+		}
+		set_spawn_system_batch = end
+	}
+}
+
+# spawn empires in cluster
+country_event = {
+	id = hfe_xl_cluster.101
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = hfe_xl_cluster_star_flag
+				any_system_planet = {
+					habitable_planet = yes
+					not = {
+						exists = owner
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					habitable_planet = yes
+					not = {
+						exists = owner
+					}
+				}
+				create_species = {
+					class = random_non_machine
+					homeworld = this
+					effect = {
+						save_event_target_as = hfe_cluster_species
+					}
+				}
+				create_country = {
+					type = default
+					species = event_target:hfe_cluster_species
+					origin = origin_default
+					effect = {
+						add_modifier = {
+							modifier = hfe_colonisation_cheat
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_free_build_planet
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_free_build_starbase
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_fast_build
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_pop_per_month
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_fast_science_ships
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_fast_expanding
+							years = 10
+						}
+						add_modifier = {
+							modifier = hfe_very_fast_development
+							years = 10
+						}
+						hfe_effect_init_give_tech_t3 = yes
+						add_resource = {
+							alloys = 10000
+						}
+						save_event_target_as = hfe_cluster_country
+					}
+				}
+				create_colony = {
+					owner = event_target:hfe_cluster_country
+				}
+				every_owned_pop = {
+					change_species = owner
+				}
+				every_deposit = {
+					limit = {
+						is_blocker = yes
+					}
+					clear_blocker = yes
+				}
+				set_planet_size = 20
+				log = "[this.GetName]"
+			}
+			log = "[this.GetName]"
+		}
+		# get_galaxy_setup_value = {
+		# 	setting = num_stars
+		# 	which = hfe_num_stars
+		# }
+	}
+}

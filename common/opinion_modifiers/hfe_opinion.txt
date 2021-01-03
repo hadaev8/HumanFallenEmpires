@@ -1,7 +1,5 @@
 #
-
 # ???? ? ???? ???-?? ????. ?? ?? ????????? ? ???? ???-??
-
 # egypt
 # dont like varelse
 hfe_opinion_egypt_vs_varelse = {
@@ -22,7 +20,7 @@ hfe_opinion_egypt_vs_varelse = {
 		}
 	}
 	opinion = {
-		base = -999
+		base = -1000
 	}
 }
 
@@ -61,7 +59,9 @@ hfe_opinion_egypt_vs_neighbor = {
 		hfe_trigger_is_awake = yes
 		is_neighbor_of = from
 		from = {
-			NOT = { is_subject_type = hfe_vassal_egypt }
+			NOT = {
+				is_subject_type = hfe_vassal_egypt
+			}
 		}
 	}
 	opinion = {
@@ -75,7 +75,7 @@ hfe_opinion_egypt_vs_good_pop = {
 		has_country_flag = hfe_egypt
 		hfe_trigger_is_awake = yes
 		from = {
-			any_owned_pop_species = {
+			any_owned_species = {
 				num_trait_points > 6
 			}
 		}
@@ -83,36 +83,12 @@ hfe_opinion_egypt_vs_good_pop = {
 	opinion = {
 		base = -30
 	}
-#	accumulative = yes
-}
-
-hfe_opinion_egypt_vs_varelse = {
-	trigger = {
-		OR = {
-			AND = {
-				has_country_flag = hfe_egypt
-				from = {
-					is_same_species = event_target:hfe_varelse_species
-				}
-			}
-			AND = {
-				from = {
-					has_country_flag = hfe_egypt
-				}
-				is_same_species = event_target:hfe_varelse_species
-			}
-		}
-	}
-	opinion = {
-		base = -999
-	}
 }
 
 hfe_opinion_egypt_first_contact_bad = {
 	opinion = {
-		base = -50
+		base = -100
 	}
-	accumulative = no
 	decay = {
 		base = 1
 	}
@@ -120,7 +96,10 @@ hfe_opinion_egypt_first_contact_bad = {
 
 hfe_opinion_egypt_first_contact_outraged = {
 	opinion = {
-		base = -100
+		base = -150
+	}
+	decay = {
+		base = 1
 	}
 }
 
@@ -148,21 +127,25 @@ hfe_opinion_future_vs_bad = {
 	trigger = {
 		OR = {
 			has_country_flag = hfe_future
-			AND = {
-				NOT = { has_global_flag = hfe_features_opinion_disable }
-				is_fallen_empire_xenophile = yes
-			}
+			# decided to remove it
+			# AND = {
+			# 	NOT = {
+			# 		has_global_flag = hfe_features_opinion_disable
+			# 	}
+			# 	is_fallen_empire_xenophile = yes
+			# }
 		}
 		FROM = {
+			# nobody like this guys anyway
+			is_homicidal = no
+			# all bad stuff
 			OR = {
 				allows_slavery = yes
 				allows_purge = yes
 				has_policy_flag = orbital_bombardment_armageddon
-				is_homicidal = yes
 				hfe_trigger_is_assimilator = yes
 			}
 		}
-		NOT = {	FROM = { has_civic = civic_machine_servitor } }
 	}
 	opinion = {
 		base = -30
@@ -172,26 +155,19 @@ hfe_opinion_future_vs_bad = {
 				allows_slavery = yes
 				allows_purge = yes
 			}
-			NOT = {	is_gestalt = yes } # No choice
+			# No choice
+			is_gestalt = no
 		}
 		modifier = {
 			add = -10
-			FROM = { hfe_trigger_is_assimilator = yes }
+			FROM = {
+				hfe_trigger_is_assimilator = yes
+			}
 		}
 		modifier = {
 			add = -20
-			FROM = { has_policy_flag = orbital_bombardment_armageddon }
-		}
-		modifier = {
-			factor = -100
 			FROM = {
-				OR = {
-					is_homicidal = yes
-					has_civic = civic_fanatic_purifiers
-					has_civic = civic_hive_devouring_swarm
-					has_civic = civic_machine_terminator
-					has_civic = hfe_civic_blight
-				}
+				has_policy_flag = orbital_bombardment_armageddon
 			}
 		}
 	}
@@ -202,70 +178,49 @@ hfe_opinion_protector_innocent = {
 		OR = {
 			has_country_flag = hfe_future
 			AND = {
-				NOT = { has_global_flag = hfe_features_opinion_disable }
+				NOT = {
+					has_global_flag = hfe_features_opinion_disable
+				}
 				is_fallen_empire_xenophile = yes
 			}
 		}
 		FROM = {
+			is_country_type = default
+			is_homicidal = no
+			allows_slavery = no
+			allows_purge = no
+			hfe_trigger_is_assimilator = no
 			OR = {
 				has_civic = civic_machine_servitor
 				is_xenophile = yes
-				AND = {
-					has_ethic = ethic_fanatic_egalitarian
-					NOT = {
-						is_xenophobe = yes
-						is_homicidal = yes
-					}
-				}
+				is_egalitarian = yes
 			}
-		}
-		FROM = {
-			NOT = { is_homicidal = yes }
-			NOT = {
-				allows_slavery = yes
-				allows_purge = yes
+			not = {
 				has_policy_flag = orbital_bombardment_armageddon
-				is_homicidal = yes
-				hfe_trigger_is_assimilator = yes
 			}
 		}
 	}
 	opinion = {
-		base = 0
-		modifier = {
-			add = 10
-			FROM = { is_xenophile = yes }
-		}
-		modifier = {
-			add = 10
-			FROM = { has_ethic = ethic_fanatic_xenophile }
-		}
+		base = 5
 		modifier = {
 			add = 5
 			FROM = {
 				is_xenophile = yes
+			}
+		}
+		modifier = {
+			add = 5
+			FROM = {
 				is_egalitarian = yes
 			}
-			NOT = {
-				is_fallen_empire_xenophile = yes # Too OP
-			}
 		}
 		modifier = {
-			factor = 5
+			add = 10
 			FROM = {
-				is_xenophile = yes
-				is_pacifist = yes
-			}
-			NOT = {
-				is_fallen_empire_xenophile = yes # Too OP
-			}
-		}
-		modifier = {
-			factor = 20
-			FROM = {
-				has_ethic = ethic_egalitarian
-				has_ethic = ethic_pacifist
-				has_ethic = ethic_xenophile
+				or = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_egalitarian
+				}
 			}
 		}
 	}
@@ -274,37 +229,24 @@ hfe_opinion_protector_innocent = {
 hfe_opinion_forsaken = {
 	trigger = {
 		has_country_flag = hfe_forsaken
-		FROM = {
-			NOT = { has_country_flag = hfe_forsaken }
-		}
 	}
 	opinion = {
-		base = -999
+		base = -100
 	}
 }
 
 hfe_opinion_high_mechanicus_to_materialist = {
 	trigger = {
 		has_country_flag = hfe_varelse_primitive_0
-		OR = {
-			has_government = hfe_gov_high_mechanicus
-			has_civic = hfe_civic_high_mechanicus
-			has_country_flag = hfe_high_mechanicus_retained
-			has_country_flag = hfe_high_mechanicus_befriended
-			has_country_flag = high_mechanicus_can_into_space
-			is_spiritualist = yes
-		}
-		NOT = {
-			has_government = hfe_gov_high_mechanicus_overthrown
-			has_country_flag = hfe_varelse_fedora_governance
-			has_civic = hfe_civic_overthrown_mechanicus
-			is_materialist = yes
-			is_homicidal = yes
-		}
+		is_country_type = default
+		is_homicidal = no
+		is_spiritualist = yes
 		FROM = {
+			is_homicidal = no
 			OR = {
 				is_materialist = yes
-				hfe_trigger_is_assimilator = yes
+				is_robot_empire = yes
+				has_policy_flag = ai_full_rights
 			}
 		}
 	}
@@ -316,37 +258,7 @@ hfe_opinion_high_mechanicus_to_materialist = {
 		}
 		modifier = {
 			factor = -30
-			hfe_trigger_is_assimilator = yes
-		}
-	}
-}
-
-hfe_opinion_fedora_to_spiritualist = {
-	trigger = {
-		has_country_flag = hfe_varelse_primitive_0
-		NOT = {
-			has_government = hfe_gov_high_mechanicus
-			has_civic = hfe_civic_high_mechanicus
-			has_country_flag = hfe_high_mechanicus_retained
-		}
-		OR = {
-			has_government = hfe_gov_high_mechanicus_overthrown
-			has_civic = hfe_civic_overthrown_mechanicus
-			has_country_flag = hfe_varelse_fedora_governance
-		}
-		FROM = {
-			is_spiritualist = yes
-		}
-	}
-	opinion = {
-		base = -100
-		modifier = {
-			add = 30
-			FROM = { has_country_flag = flesh_weakened }
-		}
-		modifier = {
-			add = 40
-			FROM = { has_country_flag = synthetic_empire }
+			is_robot_empire = yes
 		}
 	}
 }
@@ -354,189 +266,69 @@ hfe_opinion_fedora_to_spiritualist = {
 hfe_opinion_high_mechanicus_forgetness = {
 	trigger = {
 		has_country_flag = hfe_varelse_primitive_0
-		OR = {
-			has_government = hfe_gov_high_mechanicus
-			has_civic = hfe_civic_high_mechanicus
-			has_country_flag = hfe_high_mechanicus_retained
-		}
-		NOT = {
-			has_government = hfe_gov_high_mechanicus_overthrown
-			has_country_flag = hfe_varelse_fedora_governance
-			has_civic = hfe_civic_overthrown_mechanicus
-		}
+		is_country_type = default
+		is_homicidal = no
+		is_spiritualist = yes
 		FROM = {
+			is_homicidal = no
+			is_materialist = no
+			is_robot_empire = no
 			OR = {
-				AND = {
-					is_authoritarian = yes
-					NOT = { is_materialist = yes }
-				}
-				any_owned_pop = {
-					has_stratified_living_standard_type = yes
-				}
-				any_owned_pop = {
-					NOT = { has_academic_living_standard_type = yes }
-				}
-				has_ethic = ethic_spiritualist
-				has_ethic = ethic_fanatic_spiritualist
-				has_policy_flag = ai_outlawed
-				has_policy_flag = robots_outlawed
-			}
-		}
-		FROM = {
-			NOT = {
-#				has_policy_flag = ai_full_rights
-				is_homicidal = yes
-				hfe_trigger_is_assimilator = yes
-				has_country_flag = flesh_weakened # For the malus, not a bonus
-				has_country_flag = synthetic_empire # This is a malus, not a bonus
-				is_materialist = yes
+				is_authoritarian = yes
+				is_spiritualist = yes
 			}
 		}
 	}
 	opinion = {
-		base = 0
+		base = 10
 		modifier = {
 			add = 10
 			FROM = {
-				is_authoritarian = yes
-				NOT = { is_materialist = yes }
+				has_ethic = ethic_spiritualist
 			}
 		}
 		modifier = {
-			add = 10
+			add = 5
 			FROM = {
-				any_owned_pop_species = {
-					has_stratified_living_standard_type = yes
-				}
+				has_ethic = ethic_fanatic_spiritualist
 			}
 		}
 		modifier = {
-			add = 10
-			FROM = {
-				any_owned_pop_species = {
-					NOT = { has_academic_living_standard_type = yes }
-				}
-			}
+			add = 5
+			is_authoritarian = yes
 		}
-		modifier = {
-			add = -10
-			FROM = {
-				any_owned_pop_species = {
-					has_academic_living_standard_type = yes
-				}
-			}
+	}
+}
+
+hfe_opinion_fedora_to_spiritualist = {
+	trigger = {
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_materialist = yes
+		FROM = {
+			is_homicidal = no
+			is_spiritualist = yes
+			is_robot_empire = no
 		}
-		modifier = {
-			add = 10
-			FROM = { has_ethic = ethic_spiritualist }
-			NOT = { FROM = { has_ethic = ethic_fanatic_spiritualist } }
-		}
-		modifier = {
-			add = 15
-			FROM = { has_ethic = ethic_fanatic_spiritualist }
-			NOT = { FROM = { has_ethic = ethic_spiritualist } }
-		}
-		modifier = {
-			add = 10
-			FROM = { has_policy_flag = ai_outlawed }
-		}
-		modifier = {
-			add = -10
-			FROM = { has_policy_flag = ai_servitude }
-		}
-		modifier = {
-			add = -40
-			FROM = { has_policy_flag = ai_full_rights }
-		}
-		modifier = {
-			factor = 0
-			FROM = {
-				OR = {
-					has_country_flag = flesh_weakened # For the malus, not a bonus
-					has_country_flag = synthetic_empire # This is a malus, not a bonus
-				}
-			}
-		}
+	}
+	opinion = {
+		base = -50
 	}
 }
 
 hfe_opinion_fedora_i_like_big_bots_and_i_cannot_lie = {
 	trigger = {
-		OR = {
-			AND = {
-				has_country_flag = hfe_varelse_primitive_0
-				OR = {
-					has_country_flag = hfe_varelse_fedora_governance
-					is_materialist = yes
-				}
-			}
-			AND = {
-				has_ai_personality = metalhead
-				NOT = { has_global_flag = hfe_features_opinion_disable }
-			}
-			AND = {
-				has_origin = origin_mechanists
-				NOT = { has_global_flag = hfe_features_opinion_disable }
-			}
-			AND = {
-				has_country_flag = synthetic_empire
-				NOT = { has_global_flag = hfe_features_opinion_disable }
-			}
-			AND = {
-				OR = {
-					is_materialist = yes
-					has_policy_flag = ai_full_rights
-					AND = {
-						has_ai_personality_behaviour = robot_liberator
-						is_ai = yes
-					}
-				}
-				NOT = { has_global_flag = hfe_features_opinion_disable }
-			}
-		}
-		OR = {
-			is_materialist = yes
-			has_origin = origin_mechanists
-			has_ai_personality = metalhead
-			has_policy_flag = ai_full_rights
-			has_country_flag = flesh_weakened
-			has_country_flag = synthetic_empire
-			has_ai_personality_behaviour = robot_liberator
-			has_government = hfe_gov_high_mechanicus_overthrown
-			has_civic = hfe_civic_overthrown_mechanicus
-			has_country_flag = hfe_varelse_fedora_governance
-			has_authority = auth_machine_intelligence
-			has_authority = auth_ancient_machine_intelligence
-		}
+		has_country_flag = hfe_varelse_primitive_0
+		is_country_type = default
+		is_homicidal = no
+		is_materialist = yes
 		FROM = {
+			is_homicidal = no
 			OR = {
+				is_materialist = yes
+				is_robot_empire = yes
 				has_policy_flag = ai_full_rights
-				has_country_flag = flesh_weakened
-				has_country_flag = synthetic_empire
-				is_synthetic_empire = yes
-				has_origin = origin_mechanists
-				AND = {
-					has_ai_personality_behaviour = robot_liberator
-					is_ai = yes
-				}
-				has_ai_personality = metalhead
-				has_authority = auth_machine_intelligence
-				has_authority = auth_ancient_machine_intelligence
-				has_government = hfe_gov_high_mechanicus_overthrown
-				has_civic = hfe_civic_overthrown_mechanicus
-				has_country_flag = hfe_varelse_fedora_governance
-			}
-		}
-		FROM = { 
-			NOT = {
-				has_government = hfe_gov_high_mechanicus
-				has_civic = hfe_civic_high_mechanicus
-				has_country_flag = hfe_high_mechanicus_retained
-				has_policy_flag = robots_outlawed
-				has_policy_flag = ai_outlawed
-				is_spiritualist = yes
-				is_homicidal = yes
-				is_at_war_with = ROOT
 			}
 		}
 	}
@@ -544,52 +336,14 @@ hfe_opinion_fedora_i_like_big_bots_and_i_cannot_lie = {
 		base = 5
 		modifier = {
 			add = 10
-			FROM = { has_policy_flag = ai_full_rights }
-		}
-		modifier = {
-			add = 10
-			FROM = { has_country_flag = flesh_weakened }
+			FROM = {
+				has_policy_flag = ai_full_rights
+			}
 		}
 		modifier = {
 			add = 30
 			FROM = {
-				OR = {
-					has_country_flag = synthetic_empire
-					is_synthetic_empire = yes
-				}
-			}
-		}
-		modifier = {
-			add = 10
-			FROM = {
-				has_origin = origin_mechanists
-			}
-		}
-		modifier = {
-			add = 10
-			FROM = {
-				OR = {
-					has_ai_personality = metalhead
-					has_ai_personality_behaviour = robot_liberator
-				}
-				is_ai = yes
-			}
-		}
-		modifier = {
-			factor = 5
-			FROM = {
-				OR = {
-					has_authority = auth_ancient_machine_intelligence
-					has_authority = auth_ancient_machine_intelligence
-				}
-				NOT = {
-					has_civic = civic_machine_terminator
-					has_civic = civic_machine_assimilator
-				}
-			}
-			NOT = { # Same Species Class deals with this, robots should not like other robots at all times
-				has_authority = auth_ancient_machine_intelligence
-				has_authority = auth_ancient_machine_intelligence			
+				is_robot_empire = yes
 			}
 		}
 	}
@@ -597,28 +351,7 @@ hfe_opinion_fedora_i_like_big_bots_and_i_cannot_lie = {
 
 hfe_opinion_high_mechanicus_friendship = {
 	trigger = {
-		OR = {
-			AND = {
-				has_country_flag = hfe_varelse_primitive_0
-				has_country_flag = hfe_high_mechanicus_befriended
-			}
-			has_country_flag = hfe_mechanicus_loves_me
-		}
-		OR = {
-			FROM = { has_country_flag = hfe_mechanicus_loves_me }
-			FROM = {
-				AND = {
-					has_country_flag = hfe_varelse_fedora_governance
-					has_country_flag = hfe_high_mechanicus_befriended
-				}
-			}
-		}
-		
-		NOT = {
-			has_country_flag = hfe_varelse_fedora_governance
-			has_country_flag = hfe_mechanicus_plundered_by_xenoes
-			FROM = { has_country_flag = hfe_plundered_godforge }
-		}
+		has_country_flag = hfe_high_mechanicus_befriended@root
 	}
 	opinion = {
 		base = 50
@@ -627,12 +360,18 @@ hfe_opinion_high_mechanicus_friendship = {
 
 hfe_opinion_high_mechanicus_versus_plunder = {
 	trigger = {
-		has_country_flag = hfe_varelse_primitive_0
-		has_country_flag = hfe_mechanicus_plundered_by_xenoes
-		FROM = { has_country_flag = hfe_plundered_godforge }
+		has_country_flag = hfe_mechanicus_plundered@from
 	}
 	opinion = {
 		base = -999
 	}
 }
 
+hfe_opinion_varelse_saved_from_time_trap = {
+	opinion = {
+		base = 100
+	}
+	decay = {
+		base = 1
+	}
+}

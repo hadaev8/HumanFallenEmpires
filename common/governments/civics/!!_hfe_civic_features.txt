@@ -1,0 +1,427 @@
+#
+# starting civics
+hfe_civic_features_exodus = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_exodus_origin_icon.dds"
+	picture = "GFX_HFE_TSP_exodus_origin"
+	non_colonizable_planet_class_neighbor = yes
+	max_once_global = yes
+	potential = {
+		always = yes
+	}
+	possible = {
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	random_weight = {
+		base = -1
+	}
+	description = hfe_civic_features_exodus.tooltip
+	modifier = {
+		country_starbase_influence_cost_mult = -0.1
+	}
+}
+
+hfe_civic_features_early_colonisation = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_early_colonization_origin_icon.dds"
+	picture = "GFX_HFE_TSP_early_colonization_origin"
+	potential = {
+		always = yes
+	}
+	possible = {
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	random_weight = {
+		base = 1
+		modifier = {
+			# civic has no effect after galaxy generation, disable for random generation
+			factor = 0
+			has_global_flag = game_started
+		}
+	}
+	description = hfe_civic_features_early_colonisation.tooltip
+	modifier = {
+		planet_colony_development_speed_mult = 0.1
+		pop_growth_from_immigration = 0.05
+		pop_resettlement_cost_mult = -0.05
+	}
+}
+
+hfe_civic_features_early_contact = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_alien_contact_origin_icon.dds"
+	picture = "GFX_HFE_TSP_early_contact_origin"
+	potential = {
+		always = yes
+	}
+	possible = {
+		ethics = {
+			nor = {
+				value = ethic_xenophobe
+				value = ethic_fanatic_xenophobe
+			}
+			OR = {
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+				value = ethic_egalitarian
+				value = ethic_fanatic_egalitarian
+			}
+		}
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	random_weight = {
+		base = 1
+		modifier = {
+			# civic has no effect after galaxy generation, disable for random generation
+			factor = 0
+			has_global_flag = game_started
+		}
+	}
+	description = hfe_civic_features_early_contact.tooltip
+	modifier = {
+		science_ship_survey_speed = 0.05
+		ship_colonizer_cost_mult = -0.05
+	}
+}
+
+hfe_civic_features_spiral_of_death = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_spiral_of_death_origin_icon.dds"
+	picture = "GFX_HFE_TSP_exodus_zelda_moon_origin"
+	non_colonizable_planet_class_neighbor = yes
+	potential = {
+		always = yes
+	}
+	possible = {
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	random_weight = {
+		base = -1
+	}
+	modifier = {
+		ship_base_speed_mult = 0.1
+		shipclass_colonizer_build_speed_mult = 0.33
+		shipclass_colonizer_build_cost_mult = -0.33
+	}
+	description = hfe_civic_features_spiral_of_death.tooltip
+}
+
+hfe_civic_features_sanctuary = {
+	is_origin = yes
+	icon = "gfx/event_pictures/origins/TSP_sanctuary_origin_icon.dds"
+	picture = "GFX_HFE_TSP_sanctuary_origin"
+	preferred_planet_class_neighbor = no
+	potential = {
+		always = yes
+	}
+	possible = {
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	random_weight = {
+		base = -1
+	}
+	modifier = {
+		planet_stability_add = 5
+	}
+	description = hfe_civic_features_sanctuary.tooltip
+}
+
+# hfe_origin_features_ringworld = {
+# 	is_origin = yes
+# 	icon = "gfx/interface/icons/origins/origins_shattered_ring.dds"
+# 	picture = GFX_origin_shattered_ring
+# 	starting_colony = pc_ringworld_habitable
+# 	potential = {
+# 		always = no
+# 	}
+# 	initializers = {
+# 		hfe_initializer_features_ringworld
+# 	}
+# 	max_once_global = yes
+# 	flags = {
+# 		custom_start_screen
+# 	}
+# 	advanced_start = yes
+# 	random_weight = {
+# 		base = -1
+# 	}
+# }
+# civics
+# other
+hfe_civic_features_aggressive_diplomacy = {
+	potential = {
+		ethics = {
+			NOT = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_xenophile
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+			}
+			OR = {
+				text = civic_tooltip_militarist
+				value = ethic_militarist
+				value = ethic_fanatic_militarist
+			}
+		}
+	}
+	random_weight = {
+		base = 1
+	}
+	description = hfe_civic_features_aggressive_diplomacy.tooltip
+	modifier = {
+		ship_experience_gain_mult = 0.1
+	}
+}
+
+hfe_civic_features_fanatic_isolationist = {
+	modification = no
+	potential = {
+		ethics = {
+			NOT = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+		authority = {
+			NOT = {
+				value = hfe_auth_brainworm
+			}
+		}
+	}
+	possible = {
+		ethics = {
+			value = ethic_pacifist
+			value = ethic_fanatic_xenophobe
+		}
+	}
+	random_weight = {
+		base = 4
+	}
+	modifier = {
+		starbase_defensive_war_ship_build_speed_mult = 1
+		ship_home_territory_fire_rate_mult = 1
+		country_starbase_influence_cost_mult = 0.8
+		country_claim_influence_cost_mult = 0.8
+	}
+	description = hfe_civic_features_fanatic_isolationist.tooltip
+}
+
+hfe_civic_features_designed_aristocracy = {
+	potential = {
+		ethics = {
+			NOT = {
+				value = ethic_gestalt_consciousness
+			}
+		}
+	}
+	possible = {
+		civics = {
+			value = civic_aristocratic_elite
+		}
+		ethics = {
+			or = {
+				text = civic_tooltip_materialist
+				value = ethic_materialist
+				value = ethic_fanatic_materialist
+			}
+		}
+	}
+	random_weight = {
+		base = 10
+	}
+	description = hfe_civic_features_designed_aristocracy.tooltip
+}
+
+@hfe_advanced_civic_weight = 100
+hfe_civic_features_perfect_aristocracy = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = hfe_civic_features_designed_aristocracy
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+	}
+	modifier = {
+		modify_species_cost_mult = -0.2
+		job_hfe_job_features_perfect_aristocrat_add = 1
+	}
+}
+
+hfe_civic_features_trade_licensing = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = civic_merchant_guilds
+			value = civic_byzantine_bureaucracy
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+	}
+	modifier = {
+		trade_value_add = 5
+		job_merchant_add = 1
+	}
+}
+
+hfe_civic_features_ascended_bureaucracy = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = civic_efficient_bureaucracy
+			value = civic_byzantine_bureaucracy
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+	}
+	modifier = {
+		planet_max_districts_add = 2
+		planet_bureaucrats_upkeep_mult = -0.5
+	}
+}
+
+hfe_civic_features_millennial_reich = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = civic_nationalistic_zeal
+			or = {
+				value = civic_distinguished_admiralty
+				value = civic_imperial_cult
+			}
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+	}
+	modifier = {
+		country_claim_influence_cost_mult = -0.2
+		planet_jobs_alloys_produces_mult = 0.2
+	}
+	description = hfe_civic_features_millennial_reich.tooltip
+}
+
+hfe_civic_features_time_proven = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = civic_functional_architecture
+			# maybe replace to some other civic
+			value = civic_citizen_service
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+	}
+	modifier = {
+		planet_buildings_cost_mult = 0.2
+		planet_buildings_upkeep_mult = -0.4
+	}
+}
+
+# hfe_civic_features_post_mortem_service = {
+# 	pickable_at_start = no
+# 	potential = {
+# 		authority = {
+# 			not = {
+# 				value = auth_oligarchic
+# 			}
+# 		}
+# 		civics = {
+# 			value = civic_technocracy
+# 			value = civic_shadow_council
+# 		}
+# 	}
+# 	random_weight = {
+# 		base = @hfe_advanced_civic_weight
+# 	}
+# 	modifier = {
+# 		# TODO effect
+# 		# Всем правителям добавляется трейт с одноименным названием который даёт +20 к сроку жизни и после того как они умирают половина их уровня передаётся их потомку
+# 	}
+# }
+hfe_civic_features_power_in_low_numbers = {
+	pickable_at_start = no
+	potential = {
+		civics = {
+			value = civic_inwards_perfection
+			value = hfe_civic_features_fanatic_isolationist
+		}
+	}
+	random_weight = {
+		base = @hfe_advanced_civic_weight
+		# this weights doesnt work lul
+		# modifier = {
+		# 	factor = 0.2
+		# 	num_owned_planets > 2
+		# }
+		# modifier = {
+		# 	factor = 0.2
+		# 	num_owned_planets > 4
+		# }
+		# modifier = {
+		# 	factor = 0.2
+		# 	num_owned_planets > 6
+		# }
+		# modifier = {
+		# 	factor = 0.2
+		# 	num_owned_planets > 8
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	num_owned_planets > 10
+		# }
+	}
+	description = hfe_civic_features_power_in_low_numbers.tooltip
+}
+
+# hfe_civic_features_bloody_rites = {
+# 	pickable_at_start = no
+# 	potential = {
+# 		civics = {
+# 			value = civic_barbaric_despoilers
+# 			value = civic_warrior_culture
+# 		}
+# 	}
+# 	random_weight = {
+# 		base = @hfe_advanced_civic_weight
+# 	}
+# 	modifier = {
+# 		# TODO effect
+# 		# открывает эн эдиктов на техи, войну, стабу и тд, эдикты убивают 5% населения при активации
+# 	}
+# }
+# TODO защитники нашей свободы и психоанархизм

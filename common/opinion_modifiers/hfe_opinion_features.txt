@@ -1,27 +1,28 @@
 #
-
 # same class
-#hfe_opinion_features_same_species_class = {
-#	trigger = {
-#		hfe_trigger_features_opinion_enabled = yes
-#		FROM = { is_same_species_class = ROOT }
-#		is_homicidal = no
-#		from = {
-#			is_homicidal = no
-#		}
-#		not = {
-#			is_same_species = from
-#		}
-#	}
-#	opinion = {
-#		base = 5
-#	}
-#}
+hfe_opinion_features_same_species_class = {
+	trigger = {
+		hfe_trigger_features_opinion_enabled = yes
+		exists = from
+		is_same_species_class = from
+		is_homicidal = no
+		from = {
+			is_homicidal = no
+		}
+		not = {
+			is_same_species = from
+		}
+	}
+	opinion = {
+		base = 5
+	}
+}
 
 # same species
 hfe_opinion_features_same_species = {
 	trigger = {
 		hfe_trigger_features_opinion_enabled = yes
+		exists = from
 		is_same_species = from
 	}
 	opinion = {
@@ -41,6 +42,7 @@ hfe_opinion_features_same_enemy = {
 	trigger = {
 		hfe_trigger_features_opinion_enabled = yes
 		is_homicidal = no
+		exists = from
 		from = {
 			is_homicidal = no
 		}
@@ -67,9 +69,11 @@ hfe_opinion_features_save_from_slavery = {
 		hfe_trigger_features_opinion_enabled = yes
 		is_egalitarian = yes
 		is_homicidal = no
+		exists = from
 		from = {
 			is_homicidal = no
 			allows_slavery = no
+			# bad to use any owned pop here
 			any_owned_pop = {
 				has_modifier = pop_saved_from_slavery
 			}
@@ -86,6 +90,7 @@ hfe_opinion_features_hate_our_species = {
 		hfe_trigger_features_opinion_enabled = yes
 		is_country_type = default
 		is_homicidal = no
+		exists = from
 		from = {
 			is_gestalt = no
 			is_homicidal = no
@@ -111,6 +116,7 @@ hfe_opinion_features_warriror_honor = {
 	trigger = {
 		has_militarist_government = yes
 		is_homicidal = no
+		exists = from
 		from = {
 			exists = ruler
 			ruler = {
@@ -128,6 +134,7 @@ hfe_opinion_features_manipulative = {
 	trigger = {
 		is_country_type = default
 		is_homicidal = no
+		exists = from
 		from = {
 			exists = ruler
 			ruler = {
@@ -148,6 +155,7 @@ hfe_opinion_features_manipulative_rival = {
 	trigger = {
 		is_country_type = default
 		is_homicidal = no
+		exists = from
 		from = {
 			any_relation = {
 				exists = ruler
@@ -168,6 +176,7 @@ hfe_opinion_features_puppet = {
 	trigger = {
 		is_country_type = default
 		is_homicidal = no
+		exists = from
 		from = {
 			exists = ruler
 			ruler = {
@@ -186,4 +195,24 @@ hfe_opinion_features_imperialist = {
 		base = -0.3
 	}
 	accumulative = yes
+}
+
+hfe_opinion_features_millennial_reich = {
+	trigger = {
+		is_country_type = default
+		is_homicidal = no
+		exists = from
+		from = {
+			is_homicidal = no
+		}
+		or = {
+			has_valid_civic = hfe_civic_features_millennial_reich
+			from = {
+				has_valid_civic = hfe_civic_features_millennial_reich
+			}
+		}
+	}
+	opinion = {
+		base = -30
+	}
 }

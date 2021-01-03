@@ -1,5 +1,4 @@
 #
-
 # total war cb, need 2 event targets
 hfe_effect_total_war_declare = {
 	if = {
@@ -10,10 +9,32 @@ hfe_effect_total_war_declare = {
 				}
 			}
 		}
-		event_target:hfe_total_war_attaker = {
-			declare_war = {
-				target = event_target:hfe_total_war_defender
-				attacker_war_goal = hfe_wg_total_war
+		if = {
+			limit = {
+				hfe_trigger_war_in_heavens_custom_wg_enabled = yes
+			}
+			event_target:hfe_total_war_attaker = {
+				declare_war = {
+					target = event_target:hfe_total_war_defender
+					attacker_war_goal = hfe_wg_total_war
+				}
+			}
+		}
+		else = {
+			event_target:hfe_total_war_attaker = {
+				declare_war = {
+					target = event_target:hfe_total_war_defender
+					name = NAME_The_War_in_Heaven
+					attacker_war_goal = wg_war_in_heaven
+				}
+				every_subject = {
+					join_war = prev
+				}
+			}
+			event_target:hfe_total_war_defender = {
+				every_subject = {
+					join_war = prev
+				}
 			}
 		}
 	}
@@ -23,7 +44,7 @@ hfe_effect_create_vassal = {
 	every_owned_planet = {
 		add_threat = {
 			who = root
-			amount = 1 # scales to pops
+			amount = 1			# scales to pops
 		}
 	}
 	while = {
@@ -52,7 +73,6 @@ hfe_effect_create_vassal = {
 				day_zero_contact = no
 				ignore_initial_colony_error = yes
 				effect = {
-					hfe_effect_gov_fix = yes
 					save_global_event_target_as = hfe_total_war_new_country
 					set_timed_country_flag = {
 						flag = hfe_total_war_new_country
@@ -126,5 +146,76 @@ hfe_effect_create_vassal = {
 	}
 	every_owned_starbase = {
 		delete_fleet = fleet
+	}
+}
+
+hfe_effect_total_war_non_aligned_league_exp_boost = {
+	add_federation_experience = 100
+	if = {
+		limit = {
+			has_federation_perk = cohesion_join_1
+		}
+		add_cohesion = 50
+	}
+	else = {
+		add_cohesion = 100
+	}
+}
+
+hfe_effect_total_war_end_wars = {
+	if = {
+		#end non-federation-sanctioned wars
+		limit = {
+			is_at_war = yes
+		}
+		every_war = {
+			remove_war_participant = prev
+		}
+		every_subject = {
+			every_war = {
+				remove_war_participant = prev
+			}
+		}
+	}
+}
+
+# federation scope
+hfe_effect_total_war_add_non_aligned_league_opinions = {
+	hidden_effect = {
+		federation = {
+			every_member = {
+				prev = {
+					every_member = {
+						limit = {
+							not = {
+								has_opinion_modifier = {
+									who = prevprev
+									modifier = opinion_non_aligned_league
+								}
+							}
+						}
+						add_opinion_modifier = {
+							who = prevprev
+							modifier = opinion_non_aligned_league
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						is_country_type = awakened_fallen_empire
+					}
+					add_opinion_modifier = {
+						who = prev
+						modifier = opinion_non_aligned_league_fe
+					}
+					prev = {
+						add_opinion_modifier = {
+							who = prev
+							modifier = opinion_non_aligned_league_fe
+						}
+					}
+				}
+			}
+		}
 	}
 }

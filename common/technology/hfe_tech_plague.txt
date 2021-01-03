@@ -1,10 +1,8 @@
 #
-
 hfe_tech_plague_study = {
 	area = society
 	cost = @tier2cost2
 	tier = 2
-	#gateway = hfe_plague
 	category = {
 		biology
 	}
@@ -24,9 +22,9 @@ hfe_tech_plague_study = {
 
 hfe_tech_plague_immune = {
 	area = society
-	cost = @tier3cost3
+	cost = @tier3cost2
 	tier = 3
-	#gateway = hfe_plague
+	is_rare = yes
 	category = {
 		biology
 	}
@@ -35,24 +33,23 @@ hfe_tech_plague_immune = {
 	}
 	prereqfor_desc = {
 		custom = {
-			title = hfe_tech_unlock_plague_immune
-			desc = hfe_tech_unlock_plague_immune_desc
+			title = hfe_tech_plague_immune_prereqfor
+			desc = hfe_tech_plague_immune_prereqfor_desc
 		}
 	}
 	weight = @tier3weight3
 	weight_modifier = {
 		modifier = {
-			factor = 0
-			nor = {
-				any_neighbor_country = {
-					is_country_type = default
+			factor = @ap_technological_ascendancy_rare_tech
+			has_ascension_perk = ap_technological_ascendancy
+		}
+		modifier = {
+			factor = @federation_perk_factor
+			has_federation = yes
+			federation = {
+				has_federation_perk = rare_tech_boost
+				any_member = {
 					has_technology = hfe_tech_plague_immune
-				}
-				# ai cheat
-				and = {
-					is_ai = yes
-					has_global_flag = hfe_plague_lvl_2
-					is_difficulty > 0
 				}
 			}
 		}
@@ -61,6 +58,89 @@ hfe_tech_plague_immune = {
 			research_leader = {
 				area = society
 				has_trait = leader_trait_expertise_biology
+			}
+		}
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+hfe_tech_plague_immune_2 = {
+	area = society
+	cost = @tier4cost2
+	tier = 4
+	is_rare = yes
+	category = {
+		biology
+	}
+	prerequisites = {
+		hfe_tech_plague_immune
+	}
+	prereqfor_desc = {
+		custom = {
+			title = hfe_tech_plague_immune_2_prereqfor
+			desc = hfe_tech_plague_immune_2_prereqfor_desc
+		}
+	}
+	weight = @tier3weight3
+	weight_modifier = {
+		modifier = {
+			factor = @ap_technological_ascendancy_rare_tech
+			has_ascension_perk = ap_technological_ascendancy
+		}
+		modifier = {
+			factor = @federation_perk_factor
+			has_federation = yes
+			federation = {
+				has_federation_perk = rare_tech_boost
+				any_member = {
+					has_technology = hfe_tech_plague_immune
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			research_leader = {
+				area = society
+				has_trait = leader_trait_expertise_biology
+			}
+		}
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+hfe_tech_plague_anti_zombie = {
+	area = society
+	cost = @tier3cost2
+	tier = 3
+	category = {
+		biology
+	}
+	prerequisites = {
+		hfe_tech_plague_study
+	}
+	prereqfor_desc = {
+		custom = {
+			title = hfe_tech_plague_anti_zombie_prereqfor
+			desc = hfe_tech_plague_anti_zombie_prereqfor_desc
+		}
+	}
+	weight = @tier3weight3
+	weight_modifier = {
+		modifier = {
+			factor = 1.25
+			research_leader = {
+				area = society
+				has_trait = leader_trait_expertise_biology
+			}
+		}
+		modifier = {
+			factor = 0
+			not = {
+				has_global_flag = hfe_plague_lvl_3
 			}
 		}
 	}
@@ -82,8 +162,8 @@ hfe_tech_plague_spread = {
 	}
 	prereqfor_desc = {
 		custom = {
-			title = hfe_tech_unlock_plague_spread
-			desc = hfe_tech_unlock_plague_spread_desc
+			title = hfe_tech_plague_spread_prereqfor
+			desc = hfe_tech_plague_spread_prereqfor_desc
 		}
 	}
 	weight = @tier2weight2

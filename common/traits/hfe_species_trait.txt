@@ -1,5 +1,4 @@
 #
-
 hfe_species_trait_hucksters = {
 	cost = 1
 	initial = no
@@ -10,19 +9,21 @@ hfe_species_trait_hucksters = {
 	potential_crossbreeding_chance = 0.5
 	icon = gfx/interface/icons/other/hfe_hucksters.dds
 	allowed_archetypes = {
-		BIOLOGICAL LITHOID PRESAPIENT
+		BIOLOGICAL
+		LITHOID
+		PRESAPIENT
+	}
+	modifier = {
+		# TODO test
+		trade_value_add = 2
+		planet_amenities_add = 2
+		pop_political_power = 0.1
 	}
 	ai_weight = {
 		weight = 100
 	}
-	modifier = {
-		# TODO test
-		# hfe_planet_jobs_specialist_energy_produces_add = 3
-		# planet_jobs_energy_produces_add = 1
-		# district_generator_max = 1
-		trade_value_add = 1
-		planet_amenities_add = 1
-		pop_political_power = 0.25
+	slave_cost = {
+		energy = 100
 	}
 }
 
@@ -36,24 +37,29 @@ hfe_species_trait_war_fans = {
 	icon = gfx/interface/icons/other/hfe_war_fans.dds
 	potential_crossbreeding_chance = 0
 	allowed_archetypes = {
-		BIOLOGICAL LITHOID
-	}
-	ai_weight = {
-		weight = 100
+		BIOLOGICAL
+		LITHOID
 	}
 	modifier = {
 		admiral_skill_levels = 1
 		general_skill_levels = 1
+		# TODO test it
+		hfe_planet_jobs_war_produces_mult = 0.3
 		pop_ethic_authoritarian_attraction_mult = 1
 		pop_ethic_militarist_attraction_mult = 0.5
 		pop_ethic_xenophile_attraction_mult = 0.3
-#		hfe_planet_jobs_war_produces_mult = 0.3
 		army_morale = 0.25
+	}
+	ai_weight = {
+		weight = 100
+	}
+	slave_cost = {
+		energy = 100
 	}
 }
 
 hfe_species_trait_error = {
-	cost = -3 # The penalties here are some of the worst in the game
+	cost = -3	# The penalties here are some of the worst in the game
 	initial = no
 	randomized = no
 	modification = no
@@ -61,17 +67,12 @@ hfe_species_trait_error = {
 	leader_age_min = 10
 	icon = gfx/interface/icons/other/hfe_error.dds
 	potential_crossbreeding_chance = 1
-	slave_cost = {
-		energy = -500
-	}
 	allowed_archetypes = {
-		BIOLOGICAL LITHOID
+		BIOLOGICAL
+		LITHOID
 	}
 	species_possible_remove = {
-		FROM = {
-			has_ascension_perk = ap_evolutionary_mastery
-			has_technology = tech_genetic_resequencing
-		}
+		always = no
 	}
 	opposites = {
 		trait_intelligent
@@ -87,7 +88,7 @@ hfe_species_trait_error = {
 		trait_uplifted
 	}
 	ai_weight = {
-		weight = 0 # This is a bad Trait!
+		weight = 0		# This is a bad Trait!
 	}
 	modifier = {
 		pop_growth_speed = 0.5
@@ -95,9 +96,16 @@ hfe_species_trait_error = {
 		planet_jobs_physics_research_produces_mult = -0.5
 		planet_jobs_society_research_produces_mult = -0.5
 		planet_jobs_energy_produces_mult = -0.5
-		pop_amenities_usage_add = 1 # More medicine
+		planet_jobs_unity_produces_mult = -0.5
+		planet_jobs_minerals_produces_mult = -0.1
+		planet_jobs_food_produces_mult = -0.1
+		# More medicine
+		pop_amenities_usage_add = 1
 		pop_cat_bio_trophy_happiness = 0.5
 		leader_age = -40
+	}
+	slave_cost = {
+		energy = -600
 	}
 }
 
@@ -105,36 +113,16 @@ hfe_species_trait_happy_slave = {
 	cost = 0
 	initial = no
 	randomized = no
-	modification = yes # Only for Ju Ahets
+	modification = no
 	sorting_priority = 25
 	advanced_trait = yes
-#	forced_happiness = yes
+	#	forced_happiness = yes
 	potential_crossbreeding_chance = 1
-
-	species_potential_add = {
-		FROM = {
-			has_country_flag = hfe_egypt
-			hfe_trigger_is_awake = yes
-		}
-#		FROM = { is_ai = yes }
-		NOT =  {
-			is_same_species = event_target:hfe_egypt_species
-			species_portrait = hfe_portrait_egypt
-			species_portrait = human
-			has_species_flag = hfe_marked_as_human_species
-			has_citizenship_rights = yes
-			has_citizenship_type = {
-				type = citizenship_full
-			}
-		}
-	}
-
 	species_possible_remove = {
 		always = no
 	}
-
 	opposites = {
-#		# not really clever
+		#		# not really clever
 		trait_intelligent
 		trait_natural_engineers
 		trait_natural_physicists
@@ -146,46 +134,42 @@ hfe_species_trait_happy_slave = {
 		trait_enigmatic_intelligence
 		trait_enigmatic_intelligence_poor
 		trait_uplifted
-#		# not really annoyed
+		#		# not really annoyed
 		trait_deviants
 		trait_quarrelsome
 		trait_unruly
-#		# not really no mind
+		#		# not really no mind
 		trait_hive_mind
 		trait_nerve_stapled
 		hfe_species_trait_brainworm
-#		# not sure about this
-#		# hfe_species_trait_hucksters
+		#		# not sure about this
+		#		# hfe_species_trait_hucksters
 	}
 	icon = gfx/interface/icons/other/hfe_happy_slave.dds
 	allowed_archetypes = {
-		BIOLOGICAL LITHOID
+		BIOLOGICAL
+		LITHOID
 	}
-
 	modifier = {
+		# need to test if it work
 		planet_jobs_ruler_produces_mult = -0.9
 		planet_jobs_specialist_produces_mult = -0.2
 		pop_amenities_usage_mult = -0.9
 		pop_government_ethic_attraction = 2
 		pop_cat_worker_happiness = 0.5
 		pop_cat_slave_happiness = 1
-		pop_cat_purge_happiness = 0.2 # Have no value of their own individuality
+		# Have no value of their own individuality
+		pop_cat_purge_happiness = 0.2
 		pop_cat_assimilation_happiness = 1
-		pop_political_power = -1 # The Pop itself, not the country
+		pop_political_power = -1		# The Pop itself, not the country
 		pop_demotion_time_mult = -0.99
 		# TODO pop_other_species_happiness = 0.05
 	}
-
 	ai_weight = {
-		weight = 999
-#		modifier = {
-#			factor = 0
-#			NOT = { has_country_flag = hfe_egypt }
-#		}
+		weight = 100
 	}
-
 	slave_cost = {
-		energy = 2000
+		energy = 100
 	}
 }
 
@@ -197,13 +181,14 @@ hfe_species_trait_clever_beast = {
 	sorting_priority = 25
 	leader_age_min = 10
 	icon = gfx/interface/icons/other/hfe_clever_beast.dds
-	allowed_archetypes = { BIOLOGICAL LITHOID }
+	allowed_archetypes = {
+		BIOLOGICAL
+		LITHOID
+	}
 	potential_crossbreeding_chance = 0.15
-	
 	opposites = {
 		hfe_species_trait_clever_beast_presapient_spawn
 	}
-
 	modifier = {
 		planet_jobs_physics_research_produces_mult = 0.5
 		planet_jobs_engineering_research_produces_mult = 0.05
@@ -213,9 +198,11 @@ hfe_species_trait_clever_beast = {
 		planet_jobs_food_produces_mult = -0.15
 		leader_age = 5
 	}
-
 	ai_weight = {
 		weight = 100
+	}
+	slave_cost = {
+		energy = 100
 	}
 }
 
@@ -227,9 +214,10 @@ hfe_species_trait_clever_beast_presapient_spawn = {
 	sorting_priority = 25
 	leader_age_min = 10
 	icon = gfx/interface/icons/other/hfe_clever_beast.dds
-	allowed_archetypes = { PRESAPIENT }
+	allowed_archetypes = {
+		PRESAPIENT
+	}
 	potential_crossbreeding_chance = 0.3
-
 	opposites = {
 		hfe_species_trait_clever_beast
 		trait_presapient_docile_livestock
@@ -240,7 +228,6 @@ hfe_species_trait_clever_beast_presapient_spawn = {
 		trait_presapient_proles
 		trait_presapient_starborn
 	}
-
 	modifier = {
 		planet_jobs_physics_research_produces_mult = 0.25
 		planet_jobs_engineering_research_produces_mult = 0.04
@@ -250,12 +237,43 @@ hfe_species_trait_clever_beast_presapient_spawn = {
 		planet_jobs_food_produces_mult = -0.1
 		leader_age = 4
 	}
-
 	ai_weight = {
 		weight = 100
 	}
+	slave_cost = {
+		energy = 100
+	}
 }
 
+hfe_species_trait_tough = {
+	cost = 0
+	initial = no
+	randomized = no
+	modification = no
+	sorting_priority = 25
+	icon = gfx/interface/icons/other/hfe_clever_beast.dds
+	allowed_archetypes = {
+		BIOLOGICAL
+		LITHOID
+	}
+	potential_crossbreeding_chance = 0.15
+	modifier = {
+		leader_age = 20
+		pop_government_ethic_attraction = -0.5
+		pop_political_power = 0.2
+		pop_environment_tolerance = 0.1
+		army_health = 0.5
+		army_disengage_chance_mult = 0.5
+	}
+	ai_weight = {
+		weight = 100
+	}
+	slave_cost = {
+		energy = 100
+	}
+}
+
+# event
 hfe_species_trait_dolphin = {
 	cost = 0
 	initial = no
@@ -270,9 +288,6 @@ hfe_species_trait_dolphin = {
 		BIOLOGICAL
 		PRESAPIENT
 	}
-	ai_weight = {
-		weight = 100
-	}
 	modifier = {
 		hfe_planet_pops_ocean_upkeep_mult = -0.5
 		hfe_planet_jobs_ocean_produces_mult = 0.5
@@ -281,5 +296,10 @@ hfe_species_trait_dolphin = {
 		army_morale = 0.1
 		pop_growth_speed = 0.05
 	}
+	ai_weight = {
+		weight = 100
+	}
+	slave_cost = {
+		energy = 100
+	}
 }
-

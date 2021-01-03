@@ -1,5 +1,4 @@
 namespace = hfe_brainworm
-
 # start by civic 0 empire_init_capital_planet
 # Called during empire initialization when starting a new game if has_secondary_species game rule is true.
 # Called before empire_init_create_capital_pops.
@@ -10,14 +9,12 @@ planet_event = {
 	id = hfe_brainworm.0
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
 			has_authority = hfe_auth_brainworm
 		}
 	}
-
 	immediate = {
 		owner = {
 			set_country_flag = custom_start_screen
@@ -28,7 +25,6 @@ planet_event = {
 					has_valid_civic = hfe_civic_brainworm_syncretic
 				}
 			}
-			log = "[from.GetName]"
 			last_created_species = {
 				set_citizenship_type = {
 					country = root.owner
@@ -120,41 +116,18 @@ planet_event = {
 			}
 		}
 		# secondary civics
-
-	}
-}
-
-# functional events 1 - 50
-# kick events by pop by on_pop_resettled
-pop_event = {
-	id = hfe_brainworm.1
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		exists = planet
-	}
-
-	immediate = {
-		log = "is this work?"
-		# planet = {
-		# 	planet_event = {
-		# 		id = hfe_brainworm.2
-		# 	}
-		# }
 	}
 }
 
 # planet assimilation event for brainworm owner 2
 # on_pop_grown
-@hfe_brainworm_assimilation_block_evil = 90
-@hfe_brainworm_assimilation_block_good = 1800
-@hfe_brainworm_assimilation_block_paternalist = 365
+@hfe_brainworm_assimilation_block_evil = 180
+@hfe_brainworm_assimilation_block_good = 3600
+@hfe_brainworm_assimilation_block_paternalist = 1800
 planet_event = {
 	id = hfe_brainworm.2
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		not = {
 			has_planet_flag = hfe_brainworm_assimilation_block
@@ -164,16 +137,15 @@ planet_event = {
 			owner = {
 				hfe_trigger_brainworm_country = yes
 			}
-			any_owned_pop = {
+			any_owned_species = {
 				has_trait = hfe_species_trait_brainworm
 			}
 		}
 	}
-
 	immediate = {
+		# worm on planet, but owner is not worm
 		if = {
 			limit = {
-				always = no
 				owner = {
 					hfe_trigger_brainworm_country = no
 				}
@@ -207,16 +179,9 @@ planet_event = {
 					}
 				}
 			}
-			# still have no flag
-			# if = {
-			# 	limit = {
-			# 		not = {
-			# 			has_planet_flag = hfe_brainworm_infect
-			# 		}
-			# 	}
-			# }
 		}
-		else_if = {
+		# elite
+		if = {
 			limit = {
 				owner = {
 					has_valid_civic = hfe_civic_brainworm_elite
@@ -227,16 +192,18 @@ planet_event = {
 					is_pop_category = ruler
 					hfe_trigger_can_be_brainworm = yes
 				}
-				modify_species = {
-					add_trait = hfe_species_trait_brainworm
-				}
-				remove_modifier = pop_recently_conquered
+				hfe_effect_brainworm_assimilate = yes
 			}
 		}
+		# evil
 		else_if = {
 			limit = {
-				owner = {
-					has_valid_civic = hfe_civic_brainworm_evil
+				# non worm planet assimilated as fast as possible
+				or = {
+					has_planet_flag = hfe_brainworm_infect
+					owner = {
+						has_valid_civic = hfe_civic_brainworm_evil
+					}
 				}
 			}
 			random_owned_pop = {
@@ -246,10 +213,7 @@ planet_event = {
 						has_job = hfe_job_brainworm_reservation_evil_target
 					}
 				}
-				modify_species = {
-					add_trait = hfe_species_trait_brainworm
-				}
-				remove_modifier = pop_recently_conquered
+				hfe_effect_brainworm_assimilate = yes
 			}
 			set_timed_planet_flag = {
 				flag = hfe_brainworm_assimilation_block
@@ -260,6 +224,7 @@ planet_event = {
 				days = @hfe_brainworm_assimilation_block_evil
 			}
 		}
+		# good
 		else_if = {
 			limit = {
 				owner = {
@@ -276,10 +241,7 @@ planet_event = {
 				limit = {
 					hfe_trigger_can_be_brainworm = yes
 				}
-				modify_species = {
-					add_trait = hfe_species_trait_brainworm
-				}
-				remove_modifier = pop_recently_conquered
+				hfe_effect_brainworm_assimilate = yes
 			}
 			set_timed_planet_flag = {
 				flag = hfe_brainworm_assimilation_block
@@ -290,6 +252,7 @@ planet_event = {
 				days = @hfe_brainworm_assimilation_block_good
 			}
 		}
+		# paternalist
 		else_if = {
 			limit = {
 				owner = {
@@ -306,10 +269,7 @@ planet_event = {
 				limit = {
 					hfe_trigger_can_be_brainworm = yes
 				}
-				modify_species = {
-					add_trait = hfe_species_trait_brainworm
-				}
-				remove_modifier = pop_recently_conquered
+				hfe_effect_brainworm_assimilate = yes
 			}
 			set_timed_planet_flag = {
 				flag = hfe_brainworm_assimilation_block
@@ -328,7 +288,6 @@ planet_event = {
 	id = hfe_brainworm.5
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
@@ -337,8 +296,9 @@ planet_event = {
 				is_country_type = hfe_pirate
 			}
 		}
-		any_owned_pop = {
-			hfe_trigger_is_brainworm = yes
+		# species check for performance
+		any_owned_species = {
+			hfe_trigger_is_brainworm_species = yes
 		}
 		pop_percentage = {
 			percentage > 0.8
@@ -350,33 +310,32 @@ planet_event = {
 			}
 		}
 	}
-
 	immediate = {
 		log = "worm gain planet [this.GetName] in [solar_system.GetName]"
+		random_playable_country = {
+			limit = {
+				root = {
+					has_planet_flag = hfe_brainworm_infect@prev
+				}
+			}
+			save_event_target_as = hfe_brainworm_country
+		}
 		if = {
 			limit = {
-				any_playable_country = {
-					hfe_trigger_brainworm_country = yes
+				not = {
+					exists = event_target:hfe_brainworm_country
 				}
 			}
-			# ????? ???? ????? ?????? ????????? ???????
-			random_playable_country = {
-				limit = {
-					hfe_trigger_brainworm_country = yes
-				}
-				save_event_target_as = hfe_brainworm_country
-			}
-		}
-		else = {
 			random_owned_pop = {
 				limit = {
 					hfe_trigger_is_brainworm_species = yes
 				}
 				create_country = {
 					type = default
-					species = species #check it
+					# check it
+					species = species
+					authority = hfe_auth_brainworm
 					effect = {
-						hfe_effect_gov_fix = yes
 						save_event_target_as = hfe_brainworm_country
 					}
 				}
@@ -396,7 +355,6 @@ planet_event = {
 			}
 		}
 		set_owner = event_target:hfe_brainworm_country
-		#set_controller = event_target:hfe_brainworm_country
 		# notification for new owner
 		planet_event = {
 			id = hfe_brainworm.54
@@ -409,7 +367,6 @@ country_event = {
 	id = hfe_brainworm.6
 	hide_window = yes
 	is_triggered_only = yes
-
 	trigger = {
 		hfe_trigger_brainworm_country = yes
 		exists = from.species
@@ -417,7 +374,6 @@ country_event = {
 			hfe_trigger_non_brainworm_species = yes
 		}
 	}
-
 	immediate = {
 		from = {
 			change_species = root
@@ -434,11 +390,9 @@ country_event = {
 	picture = GFX_evt_hfe_brainworm
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 	}
-
 	option = {
 		name = hfe_brainworm.50.0
 	}
@@ -452,11 +406,9 @@ country_event = {
 	picture = GFX_evt_hfe_brainworm
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 	}
-
 	option = {
 		name = hfe_brainworm.51.0
 	}
@@ -483,11 +435,9 @@ country_event = {
 	picture = GFX_evt_hfe_brainworm
 	location = from
 	is_triggered_only = yes
-
 	trigger = {
 		is_ai = no
 	}
-
 	option = {
 		name = hfe_brainworm.52.0
 	}
@@ -501,14 +451,12 @@ planet_event = {
 	picture = GFX_evt_hfe_brainworm
 	location = root
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 		owner = {
 			is_ai = no
 		}
 	}
-
 	option = {
 		name = hfe_brainworm.53.0
 	}
@@ -522,11 +470,9 @@ planet_event = {
 	picture = GFX_evt_hfe_brainworm
 	location = root
 	is_triggered_only = yes
-
 	trigger = {
 		exists = owner
 	}
-
 	option = {
 		name = hfe_brainworm.54.0
 		owner = {

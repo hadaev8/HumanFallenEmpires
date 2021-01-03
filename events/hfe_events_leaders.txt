@@ -912,6 +912,7 @@ country_event = {
 		from = {
 			if = {
 				limit = {
+					leader_class = admiral
 					species = {
 						has_trait = hfe_species_trait_dolphin
 					}
@@ -920,6 +921,7 @@ country_event = {
 			}
 			if = {
 				limit = {
+					leader_class = admiral
 					root = {
 						or = {
 							has_country_flag = hfe_future
@@ -931,6 +933,15 @@ country_event = {
 					}
 				}
 				add_trait = hfe_admiral_trait_future_train
+			}
+		}
+		# civic bonus
+		if = {
+			limit = {
+				has_valid_civic = hfe_civic_features_designed_aristocracy
+			}
+			from = {
+				hfe_effect_features_designed_aristocracy = yes
 			}
 		}
 	}
@@ -1135,6 +1146,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_10
+					years = 5
 				}
 			}
 			else_if = {
@@ -1146,6 +1158,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_9
+					years = 5
 				}
 			}
 			else_if = {
@@ -1157,6 +1170,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_8
+					years = 5
 				}
 			}
 			else_if = {
@@ -1168,6 +1182,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_7
+					years = 5
 				}
 			}
 			else_if = {
@@ -1179,6 +1194,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_6
+					years = 5
 				}
 			}
 			else_if = {
@@ -1190,6 +1206,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_5
+					years = 5
 				}
 			}
 			else_if = {
@@ -1201,6 +1218,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_4
+					years = 5
 				}
 			}
 			else_if = {
@@ -1212,6 +1230,7 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_3
+					years = 5
 				}
 			}
 			else_if = {
@@ -1223,11 +1242,13 @@ country_event = {
 				}
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_2
+					years = 5
 				}
 			}
 			else = {
 				add_modifier = {
 					modifier = hfe_leaders_warcrime_tourism_1
+					years = 5
 				}
 			}
 		}
@@ -1256,13 +1277,14 @@ country_event = {
 	}
 }
 
+# refuge leaders
 country_event = {
 	id = hfe_leaders.110
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		hfe_trigger_leaders_enabled = yes
-#		is_country_type = default
+		#		is_country_type = default
 		is_gestalt = no
 	}
 	immediate = {
@@ -1270,10 +1292,11 @@ country_event = {
 		every_owned_leader = {
 			random_list = {
 				# nothing
-				10 = {}
+				10 = {
+				}
 				# flee to friend
 				10 = {
-					save_event_target_as = hfe_effect_clone_leader_target
+					save_event_target_as = hfe_leaders_refuge
 					root = {
 						random_relation = {
 							limit = {
@@ -1286,7 +1309,8 @@ country_event = {
 											value >= 5
 										}
 									}
-									has_country_flag = hfe_leaders_refuge@root
+									# comment out for now, used in pirate branch
+									# has_country_flag = hfe_leaders_refuge@root
 								}
 							}
 							weights = {
@@ -1301,7 +1325,7 @@ country_event = {
 								}
 								modifier = {
 									mult = 2
-									is_same_species = event_target:hfe_effect_clone_leader_target
+									is_same_species = event_target:hfe_leaders_refuge
 								}
 								modifier = {
 									mult = 2
@@ -1340,9 +1364,8 @@ country_event = {
 									}
 								}
 							}
-							save_event_target_as = hfe_effect_clone_leader_new_owner
-							hfe_effect_clone_leader = yes
-							last_created_leader = {
+							event_target:hfe_leaders_refuge = {
+								set_owner = prev
 								set_timed_leader_flag = {
 									flag = hfe_leaders_refuge
 									days = 1
@@ -1359,42 +1382,42 @@ country_event = {
 						}
 					}
 				}
-#				# case CTD
-#				# form pirate nation
-#				10 = {
-#					modifier = {
-#				 		factor = 0
-#				 		hfe_trigger_pirate_enabled = no
-#				 	}
-#				 	modifier = {
-#				 		factor = 0
-#				 		root = {
-#				 			has_country_flag = hfe_pirate_spawned
-#				 		}
-#				 	}
-#				 	modifier = {
-#				 		factor = 0.5
-#				 		root = {
-#				 			is_pacifist = yes
-#				 		}
-#				 	}
-#				 	modifier = {
-#				 		factor = 2
-#				 		root = {
-#				 			is_militarist = yes
-#				 		}
-#				 	}
-#				 	root = {
-#				 		hfe_effect_pirate_init = yes
-#				 	}
-#				 	event_target:hfe_pirate_clan = {
-#				 		set_graphical_culture = root
-#				 		set_country_flag = hfe_leaders_refuge@root
-#				 		assign_leader = prev
-#				 		#set_name = "[root.species.GetName] Remnants"
-#				 		hfe_effect_transfer_resources_from_root_to_this = yes
-#				 	}
-#				 }
+				#				# case CTD
+				#				# form pirate nation
+				#				10 = {
+				#					modifier = {
+				#				 		factor = 0
+				#				 		hfe_trigger_pirate_enabled = no
+				#				 	}
+				#				 	modifier = {
+				#				 		factor = 0
+				#				 		root = {
+				#				 			has_country_flag = hfe_pirate_spawned
+				#				 		}
+				#				 	}
+				#				 	modifier = {
+				#				 		factor = 0.5
+				#				 		root = {
+				#				 			is_pacifist = yes
+				#				 		}
+				#				 	}
+				#				 	modifier = {
+				#				 		factor = 2
+				#				 		root = {
+				#				 			is_militarist = yes
+				#				 		}
+				#				 	}
+				#				 	root = {
+				#				 		hfe_effect_pirate_init = yes
+				#				 	}
+				#				 	event_target:hfe_pirate_clan = {
+				#				 		set_graphical_culture = root
+				#				 		set_country_flag = hfe_leaders_refuge@root
+				#				 		assign_leader = prev
+				#				 		#set_name = "[root.species.GetName] Remnants"
+				#				 		hfe_effect_transfer_resources_from_root_to_this = yes
+				#				 	}
+				#				 }
 			}
 		}
 		every_country = {
@@ -1406,6 +1429,7 @@ country_event = {
 	}
 }
 
+# refuge leaders notification
 country_event = {
 	id = hfe_leaders.111
 	title = hfe_leaders.111.name

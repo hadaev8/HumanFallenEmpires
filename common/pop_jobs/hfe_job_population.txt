@@ -1,62 +1,35 @@
 #
-
 hfe_job_population_navigator.0 = {
 	category = specialist
 	is_capped_by_modifier = yes
 	building_icon = building_psi_corps
 	clothes_texture_index = 4
 	possible_pre_triggers = {
-		is_enslaved = no # The Navigator Academy is an elite institution, it will not admit lowly slaves
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
 	}
 	possible = {
-#		or = {
-#			has_job = hfe_job_population_navigator.0
-#			hfe_trigger_uncapped_job = yes
-#		}
-		exists = owner
-#		hfe_trigger_is_psionic = yes # Anyone can use Zro
-		OR = {
-			complex_specialist_job_check_trigger = yes
-			hfe_trigger_is_psionic_species = yes
-		}
-		NOR = { # Per Had's request, must be organic
-			has_trait = trait_mechanical
-			has_trait = trait_machine_unit
-		}
+		hfe_trigger_is_psionic = yes
+		specialist_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_population_navigators
+		category = hfe_job_population_navigator
 		upkeep = {
 			society_research = 8
 			consumer_goods = 3
 		}
 	}
 	country_modifier = {
+		ship_speed_mult = 0.01
 		country_admin_cap_add = 5
-	}	
-	triggered_planet_modifier = {
-		potential ={
-			OR = {
-				hfe_trigger_is_psionic = yes
-				hfe_trigger_is_psionic_species = yes
-			}
-		}
-		hfe_planet_jobs_psionic_produces_mult = 0.75
+	}
+	planet_modifier = {
+		hfe_planet_jobs_psionic_produces_mult = 0.1
 	}
 	weight = {
 		weight = @specialist_job_weight
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		modifier = {
-			factor = 10
-			hfe_trigger_is_psionic = yes # Always prefer psychic Pops
-		}
-		modifier = {
-			factor = 3
-			has_job = hfe_job_population_navigator.0
-		}
 		# crisis purge
 		modifier = {
 			factor = 0.01
@@ -78,48 +51,22 @@ hfe_job_population_navigator.1 = {
 	icon = hfe_job_population_navigator.0
 	possible_pre_triggers = {
 		is_enslaved = no
-#		The Navigator Academy is an elite institution, it will not admit lowly slaves
+		#		The Navigator Academy is an elite institution, it will not admit lowly slaves
 	}
 	possible = {
-#		or = {
-#			has_job = hfe_job_population_navigator.1
-#			hfe_trigger_uncapped_job = yes
-#		}
 		exists = owner
-#		hfe_trigger_is_psionic = yes
-		complex_worker_job_check_trigger = yes
-		NOR = { # Per Had's request, must be organic
-			has_trait = trait_mechanical
-			has_trait = trait_machine_unit
-		}
+		hfe_trigger_is_psionic = yes
+		worker_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_population_navigators
+		category = hfe_job_population_navigator
 	}
-	country_modifier = {
-		ship_speed_mult = 0.01
-		science_ship_survey_speed = 0.02
-	}
-
 	planet_modifier = {
 		trade_value_mult = 0.05
 		trade_value_add = 2
 	}
-
 	weight = {
 		weight = @worker_job_weight
-		modifier = {
-			factor = 3
-			has_job = hfe_job_population_navigator.1
-		}
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		modifier = {
-			factor = 20
-			hfe_trigger_is_psionic = yes # Always prefer psychic Pops
-		}
 		# crisis purge
 		modifier = {
 			factor = 0.01

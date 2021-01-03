@@ -4,9 +4,7 @@
 # resources, resource and amount
 # station = station class in orbit to gather
 # if you mix resources that are not supposed to be collected by an orbital station remember to put is_orbital_slot = no
-
 # Robot "Ecosystem"
-
 hfe_deposit_necrotic_autoevolution_0 = {
 	station = shipclass_research_station
 	is_for_colonizeable = no
@@ -15,6 +13,9 @@ hfe_deposit_necrotic_autoevolution_0 = {
 		produces = {
 			engineering_research = 8
 		}
+	}
+	potential = {
+		always = no
 	}
 	drop_weight = {
 		weight = 0
@@ -28,19 +29,75 @@ hfe_deposit_necrotic_autoevolution_1 = {
 		category = orbital_mining_deposits
 		produces = {
 			engineering_research = 30
-#			hfe_sr_micro_robots = 1
+			#			hfe_sr_micro_robots = 1
 		}
+	}
+	potential = {
+		always = no
 	}
 	drop_weight = {
 		weight = 0
 	}
 }
 
-####################################
+# egypt planet
+hfe_deposit_egypt_0 = {
+	icon = d_city
+	is_for_colonizeable = yes
+	use_for_min_max_adjustments = no
+	# use_weights_for_terraforming_swap_types = yes
+	should_swap_deposit_on_terraforming = no
+	category = deposit_cat_rare
+	planet_modifier = {
+		planet_housing_add = 50
+	}
+	potential = {
+		always = no
+	}
+	drop_weight = {
+		weight = 0
+	}
+}
+
+hfe_deposit_egypt_1 = {
+	icon = d_crater
+	is_for_colonizeable = yes
+	use_for_min_max_adjustments = no
+	# use_weights_for_terraforming_swap_types = yes
+	should_swap_deposit_on_terraforming = no
+	category = deposit_cat_energy
+	potential = {
+		always = no
+	}
+	drop_weight = {
+		weight = 0
+	}
+}
+
+hfe_deposit_egypt_2 = {
+	icon = d_tribal_settlement
+	is_for_colonizeable = yes
+	use_for_min_max_adjustments = no
+	# use_weights_for_terraforming_swap_types = yes
+	should_swap_deposit_on_terraforming = no
+	category = deposit_cat_energy
+	planet_modifier = {
+		planet_jobs_society_research_produces_mult = 0.05
+	}
+	potential = {
+		always = no
+	}
+	drop_weight = {
+		weight = 0
+	}
+}
 
 # memorial
-
-
+# overweight vanilla blockers
+@high = 1600
+@med = 800
+@low = 400
+@very_low = 100
 hfe_deposit_memorial_0_0 = {
 	is_for_colonizeable = yes
 	use_for_min_max_adjustments = yes
@@ -48,31 +105,25 @@ hfe_deposit_memorial_0_0 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_rare
 	planet_modifier = {
-		hfe_district_memorial_scavenger_max = 5
+		hfe_district_memorial_cataloger_max = 4
 	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
 		}
 		job_head_researcher_add = 1
-		job_head_researcher_per_pop = 0.02
 	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
 		}
 		job_synapse_drone_add = 1
-		job_synapse_drone_add = 0.02
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
-		modifier = {
-			factor = 0
-			has_deposit = hfe_deposit_memorial_0_0
-		}
+		weight = @low
 	}
 }
 
@@ -83,25 +134,14 @@ hfe_deposit_memorial_0_1 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_rare
 	planet_modifier = {
-		hfe_district_memorial_scavenger_max = 3
+		hfe_district_memorial_cataloger_max = 3
 		planet_jobs_society_research_produces_mult = 0.05
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
-		modifier = {
-			factor = 0
-			#has_deposit = hfe_deposit_memorial_0_1
-			count_deposits = {
-				count > 2
-				type = hfe_deposit_memorial_0_1
-				# limit = {
-					# is_deposit_type = hfe_deposit_memorial_0_1
-				# }
-			}
-		}
+		weight = @low
 	}
 }
 
@@ -111,6 +151,9 @@ hfe_deposit_memorial_0_2 = {
 	# use_weights_for_terraforming_swap_types = yes
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_minerals
+	planet_modifier = {
+		hfe_district_memorial_recycler_max = 2
+	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
@@ -119,38 +162,11 @@ hfe_deposit_memorial_0_2 = {
 		planet_crime_add = 5
 		planet_migration_all_mult = 0.1
 	}
-	triggered_planet_modifier = {
-		potential = {
-			hfe_trigger_owner_is_gestalt = no
-		}
-		job_hfe_job_recycler_add = 2
-		job_hfe_job_recycler_per_pop = 0.05
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				is_machine_empire = yes
-			}
-		}
-		job_hfe_job_recycler_machine_add = 2
-		job_hfe_job_recycler_machine_per_pop = 0.05
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				is_hive_empire = yes
-			}
-		}
-		job_hfe_job_recycler_hive_mind_add = 2
-		job_hfe_job_recycler_hive_mind_per_pop = 0.05
-	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 500
+		weight = @med
 	}
 }
 
@@ -162,7 +178,6 @@ hfe_deposit_memorial_0_3 = {
 	category = deposit_cat_rare
 	planet_modifier = {
 		planet_jobs_consumer_goods_produces_mult = 0.1
-		hfe_job_recyclers_food_produces_add = 0.5
 	}
 	# normie
 	triggered_planet_modifier = {
@@ -173,28 +188,20 @@ hfe_deposit_memorial_0_3 = {
 		planet_crime_add = 5
 		planet_migration_all_mult = 0.1
 	}
-	# hive need food
+	# if need food - get food
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
 			owner = {
-				or = {
-					is_hive_empire = yes
-					has_valid_civic = civic_machine_servitor
-				}
+				country_uses_food = yes
 			}
 		}
 		job_agri_drone_add = 2
 	}
-	# robots
+	# if dont need food, get some food anyway
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
-			owner = {
-				not = {
-					has_valid_civic = civic_machine_servitor
-				}
-			}
 		}
 		job_agri_drone_add = 1
 	}
@@ -202,7 +209,7 @@ hfe_deposit_memorial_0_3 = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
+		weight = @low
 	}
 }
 
@@ -214,13 +221,14 @@ hfe_deposit_memorial_1_0 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_energy
 	planet_modifier = {
-		district_generator_max = 3
+		hfe_district_memorial_cataloger_max = 1
+		hfe_district_memorial_recycler_max = 1
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 500
+		weight = @med
 	}
 }
 
@@ -231,13 +239,14 @@ hfe_deposit_memorial_1_1 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_energy
 	planet_modifier = {
-		district_generator_max = 4
+		hfe_district_memorial_cataloger_max = 1
+		hfe_district_memorial_recycler_max = 3
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 500
+		weight = @med
 		modifier = {
 			factor = 0
 			num_moons < 1
@@ -252,13 +261,13 @@ hfe_deposit_memorial_1_2 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_energy
 	planet_modifier = {
-		district_generator_max = 2
+		hfe_district_memorial_recycler_max = 3
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
+		weight = @high
 	}
 }
 
@@ -270,13 +279,14 @@ hfe_deposit_memorial_2_0 = {
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_minerals
 	planet_modifier = {
-		district_mining_max = 3
+		hfe_district_memorial_cataloger_max = 2
+		hfe_district_memorial_recycler_max = 2
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
+		weight = @high
 	}
 }
 
@@ -287,32 +297,26 @@ hfe_deposit_memorial_3_0 = {
 	# use_weights_for_terraforming_swap_types = yes
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_food
+	planet_modifier = {
+		hfe_district_memorial_recycler_max = 1
+	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
 		}
-		job_farmer_add = 1
-		job_farmer_per_pop = 0.1
+		job_farmer_add = 3
 	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
 		}
-		job_agri_drone_add = 1
-		job_agri_drone_per_pop = 0.1
+		job_agri_drone_add = 3
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
-		modifier = {
-			factor = 0
-			OR = {
-				has_deposit = hfe_deposit_memorial_3_0
-				has_deposit = hfe_deposit_memorial_3_1
-			}
-		}
+		weight = @low
 	}
 }
 
@@ -322,32 +326,26 @@ hfe_deposit_memorial_3_1 = {
 	# use_weights_for_terraforming_swap_types = yes
 	should_swap_deposit_on_terraforming = no
 	category = deposit_cat_food
+	planet_modifier = {
+		hfe_district_memorial_recycler_max = 1
+	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = no
 		}
 		job_farmer_add = 2
-		job_farmer_per_pop = 0.05
 	}
 	triggered_planet_modifier = {
 		potential = {
 			hfe_trigger_owner_is_gestalt = yes
 		}
 		job_agri_drone_add = 2
-		job_agri_drone_per_pop = 0.05
 	}
 	potential = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 1000
-		modifier = {
-			factor = 0
-			OR = {
-				has_deposit = hfe_deposit_memorial_3_0
-				has_deposit = hfe_deposit_memorial_3_1
-			}
-		}
+		weight = @low
 	}
 }
 
@@ -361,7 +359,7 @@ hfe_deposit_memorial_4_0 = {
 		is_planet_class = hfe_pc_memorial
 	}
 	drop_weight = {
-		weight = 200
+		weight = @very_low
 		modifier = {
 			factor = 0
 			has_deposit = hfe_deposit_memorial_4_0
@@ -369,213 +367,101 @@ hfe_deposit_memorial_4_0 = {
 	}
 }
 
-###################################################
-
-#	VARELSE		#
-
-hfe_deposit_mechanicus_farm_spire = {
+# VARELSE
+hfe_deposit_godforge_farm = {
 	icon = d_broken_spire
 	is_for_colonizeable = yes
 	category = deposit_cat_food
 	use_for_min_max_adjustments = no
 	use_weights_for_terraforming_swap_types = no
 	should_swap_deposit_on_terraforming = no
-
-	potential = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_colony_beta
-				has_planet_flag = hfe_varelse_colony
-				AND = {
-					exists = owner
-					owner = { has_country_flag = hfe_varelse_primitive_0 }
-				}
-			}
-		}
-	}
-
-	resources = {
-		category = hfe_godforge
-		produces = {
-			trigger = {
-				planet = {
-					exists = owner
-					owner = {
-						OR = {
-							has_country_flag = hfe_varelse_primitive_0
-							is_primitive = yes
-							is_country_type = primitive
-						}
-					}
-				}
-			}
-			food = 100
-		}
-		produces = {
-			trigger = {
-				planet = { exists = owner }
-				planet = {
-					NOT = {
-						owner = { has_country_flag = hfe_varelse_primitive_0 }
-					}
-				}
-			}
-			food = 50
-		}
-		upkeep = {
-			trigger = {
-				planet = {
-					exists = owner
-					owner = { is_ai = no }
-					owner = {
-						NOT = {
-							is_lithoid_empire = yes
-							has_technology = tech_mine_volatile_motes
-						}
-					}
-					owner = {
-						has_monthly_income = {
-							resource = energy
-							value > 20
-						}
-					}
-				}
-			}
-			energy = 20
-		}
-		upkeep = {
-			trigger = {
-				planet = {
-					exists = owner
-					owner = {
-						is_ai = no
-						has_technology = tech_mine_volatile_motes
-						NOT = { has_country_flag = hfe_varelse_primitive_0 }
-					}
-				}
-			}
-			volatile_motes = 5
-		}
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-		}
-		planet_pops_food_upkeep_mult = -0.2
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				owner = {
-					OR = {
-						is_ai = yes
-						AND = {
-							NOT = { has_deficit = energy }
-							NOT = { has_technology = tech_mine_volatile_motes }
-						}
-						AND = {
-							has_technology = tech_mine_volatile_motes
-							NOT = { has_deficit = volatile_motes }
-						}
-					}
-				}
-			}
-		}
-		planet_pops_food_upkeep_mult = -0.05
-		planet_buildings_food_cost_mult = -0.2
-		planet_farmers_food_produces_mult = 0.1
-	}
-
 	planet_modifier = {
-		planet_housing_add = 5
 		district_farming_max = -5
 	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				hfe_trigger_owner_is_gestalt = yes
-			}
-		}
-		job_agri_drone_add = 12
-	}
-
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
 				exists = owner
 				owner = {
-					NOT = {
-						is_gestalt = yes
-						has_ethic = ethic_gestalt_consciousness
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-				NOT = {	owner = { has_country_flag = hfe_varelse_primitive_0 } }
-			}
-		}
-		job_farmer_add = 10
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-		}
-		job_farmer_add = 1
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				owner = { is_ai = yes }
-			}
-		}
-		planet_farmers_food_produces_mult = 0.25 # Counteracts the Bleak modifier
-	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				exists = owner
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = {
-					NOT = {
-						is_country_type = primitive
-						is_primitive = yes
-					}
+					is_gestalt = yes
 				}
 			}
 		}
-		job_farmer_add = 1
+		job_agri_drone_add = 5
 	}
-
 	triggered_planet_modifier = {
 		potential = {
 			planet = {
 				exists = owner
 				owner = {
-					OR = {
-						is_primitive = yes
+					is_gestalt = no
+					not = {
 						is_country_type = primitive
 					}
 				}
 			}
 		}
-		job_primitive_farmer_add = 20
+		job_farmer_add = 5
 	}
+	triggered_planet_modifier = {
+		potential = {
+			planet = {
+				exists = owner
+				owner = {
+					is_country_type = primitive
+				}
+			}
+		}
+		job_primitive_farmer_add = 5
+	}
+	potential = {
+		always = no
+	}
+	drop_weight = {
+		weight = 0
+	}
+}
 
+# drone
+hfe_deposit_drone_treasure = {
+	station = shipclass_mining_station
+	is_for_colonizeable = no
+	resources = {
+		category = orbital_mining_deposits
+		produces = {
+			minerals = 10
+			energy = 10
+		}
+	}
+	planet_modifier = {
+		trade_value_add = 100
+	}
+	potential = {
+		always = no
+	}
+	drop_weight = {
+		weight = 0
+	}
+}
+
+# stargate impact
+hfe_deposit_stargate_impact = {
+	icon = d_crater
+	is_for_colonizeable = yes
+	category = deposit_cat_minerals
+	use_for_min_max_adjustments = yes
+	use_weights_for_terraforming_swap_types = no
+	should_swap_deposit_on_terraforming = no
+	planet_modifier = {
+		district_mining_max = 2
+	}
+	planet_modifier = {
+		job_soldier_add = 3
+		army_starting_experience_add = 500
+	}
+	potential = {
+		always = no
+	}
 	drop_weight = {
 		weight = 0
 	}

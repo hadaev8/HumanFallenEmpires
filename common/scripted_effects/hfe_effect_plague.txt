@@ -1,14 +1,13 @@
 #
-
 # for planet
 hfe_effect_plague_planet_clean = {
 	remove_planet_flag = hfe_plague_planet
 	remove_modifier = hfe_plague_lvl_1
 	remove_modifier = hfe_plague_lvl_2
 	remove_modifier = hfe_plague_lvl_3
-	every_owned_pop = {
-		remove_pop_flag = hfe_plague_pop
-	}
+	# every_owned_pop = {
+	# 	remove_pop_flag = hfe_plague_pop
+	# }
 	if = {
 		limit = {
 			exists = owner
@@ -36,47 +35,25 @@ hfe_effect_plague_planet_clean = {
 	}
 }
 
-#hfe_plague_get_zombie = {
-#	if = {
-#		limit = {
-#			not = {
-#				exists = event_target:hfe_plague_zombie_country
-#			}
-#		}
-#		log = "plague country ton exists"
-#		random_country = {
-#			limit = {
-#				is_country_type = hfe_plague_zombie
-#			}
-#			save_event_target_as = hfe_plague_zombie_country
-#		}
-#	}
-#}
-
-hfe_effect_plague_give_immune_option = {
+# for country
+hfe_effect_plague_give_immune_tech_boost = {
 	if = {
 		limit = {
-			has_global_flag = hfe_plague_started
-			nor = {
-				has_technology = hfe_tech_plague_immune
+			has_technology = hfe_tech_plague_immune
+		}
+	}
+	else_if = {
+		limit = {
+			not = {
 				has_tech_option = hfe_tech_plague_immune
 			}
 		}
 		add_research_option = hfe_tech_plague_immune
 	}
-}
-
-hfe_effect_plague_give_immune_tech = {
-	if = {
-		limit = {
-			has_global_flag = hfe_plague_started
-			not = {
-				has_technology = hfe_tech_plague_immune
-			}
-		}
-		give_technology = {
+	else = {
+		add_tech_progress = {
 			tech = hfe_tech_plague_immune
-			message = yes
+			progress = 0.05
 		}
 	}
 }

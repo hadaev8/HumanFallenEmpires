@@ -11,16 +11,15 @@ country_event = {
 			limit = {
 				is_country_type = hfe_pirate
 			}
-			count < 26
+			count <= 25
 		}
 	}
 	immediate = {
-#		save_event_target_as = hfe_pirate_target
 		hfe_effect_pirate_init = yes
 	}
 }
 
-# birth of piracy info event
+# birth of piracy info event 1
 country_event = {
 	id = hfe_pirate.1
 	title = pirate.1.name
@@ -183,7 +182,7 @@ country_event = {
 	}
 }
 
-# pirate life simulation
+# pirate life simulation 2
 country_event = {
 	id = hfe_pirate.2
 	hide_window = yes
@@ -240,7 +239,7 @@ country_event = {
 			limit = {
 				is_asteroid = yes
 			}
-			log = "fixing planet class for [this.GetName], owner: [owner.GetName]"
+			log = "fixing planet class for [this.GetName] solar system [solar_system.GetName] owner [owner.GetName]"
 			hfe_effect_pirate_change_to_pc_pirate_base = yes
 		}
 		# move capital if have normal planet
@@ -356,7 +355,7 @@ country_event = {
 	}
 }
 
-# pirate build new base
+# pirate build new base 3
 country_event = {
 	id = hfe_pirate.3
 	hide_window = yes
@@ -390,7 +389,7 @@ country_event = {
 	}
 }
 
-# pirate fleet logic set by ship build on action
+# pirate fleet logic set by ship build on action 4
 ship_event = {
 	id = hfe_pirate.4
 	hide_window = yes
@@ -414,7 +413,7 @@ ship_event = {
 	}
 }
 
-# send pirate fleet to hunt by pulse
+# send pirate fleet to hunt by pulse 5
 country_event = {
 	id = hfe_pirate.5
 	hide_window = yes
@@ -435,7 +434,7 @@ country_event = {
 	}
 }
 
-# info event
+# spawn info event 7
 country_event = {
 	id = hfe_pirate.7
 	title = pirate.50.name
@@ -503,18 +502,15 @@ country_event = {
 }
 
 # pirate diplo simulation
-# sell slaves
+# sell slaves 10
 country_event = {
 	id = hfe_pirate.10
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		num_pops > 0
-		or = {
-			num_pops > 1
-			any_owned_planet = {
-				free_housing < 0
-			}
+		any_owned_planet = {
+			free_housing < 0
 		}
 	}
 	immediate = {
@@ -567,7 +563,7 @@ country_event = {
 	}
 }
 
-# sell energy
+# sell energy 11
 country_event = {
 	id = hfe_pirate.11
 	hide_window = yes
@@ -638,7 +634,7 @@ country_event = {
 	}
 }
 
-# pirate gain resources after kill station
+# pirate gain resources after kill station 52
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
@@ -688,7 +684,8 @@ country_event = {
 	}
 }
 
-# pirate bombard colony by on_planet_bombarded
+# pirate bombard colony 53
+# on_planet_bombarded
 # Planet has taken damage from orbital bombardment
 # This = Planet
 # From = Bombarder
@@ -729,7 +726,7 @@ planet_event = {
 	}
 }
 
-# clear system if someone killed pirate starbase
+# clear system if someone killed pirate starbase 54
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
@@ -762,13 +759,13 @@ country_event = {
 					hfe_effect_refuge_or_die = yes
 				}
 				destroy_colony = yes
-				#hfe_effect_convert_to_asteroid = yes
 			}
 		}
 	}
 }
 
-# add pirate trait to admiral 55 on_leader_spawned
+# add pirate trait to admiral 55
+# on_leader_spawned
 country_event = {
 	id = hfe_pirate.55
 	hide_window = yes
@@ -793,9 +790,10 @@ country_event = {
 	}
 }
 
+# take starbases of pirate 56
+# on_ship_disabled
 # This = Ship
 # From = Disabler Ship
-# take starbases of pirate on_ship_disabled
 ship_event = {
 	id = hfe_pirate.56
 	hide_window = yes
@@ -806,12 +804,6 @@ ship_event = {
 		exists = from.owner
 		exists = fleet
 		exists = solar_system
-		# from.owner = {
-		# 	is_country_type = hfe_pirate
-		# }
-		# owner = {
-		# 	is_country_type = hfe_pirate
-		# }
 		is_ship_class = shipclass_starbase
 	}
 	immediate = {
@@ -967,7 +959,7 @@ ship_event = {
 							add_claims = {
 								who = event_target:hfe_pirate_starbase_def
 								num_of_claims = 1
-								show_notification = no
+								show_notification = yes
 							}
 						}
 					}
@@ -990,11 +982,49 @@ ship_event = {
 				}
 				log = "[hfe_pirate_starbase_def.GetName] pirate lost system to default country type [hfe_pirate_starbase_att.GetName] system: [solar_system.GetName]"
 			}
+			if = {
+				limit = {
+					starbase = {
+						has_starbase_size >= starbase_starport
+					}
+				}
+				from = {
+					save_event_target_as = pirate_slayers
+				}
+				event_target:hfe_pirate_starbase_att = {
+					if = {
+						limit = {
+							has_event_chain = l_cluster_chain
+						}
+						random_list = {
+							85 = {
+								country_event = {
+									id = pirate.25
+								}
+							}
+							15 = {
+								country_event = {
+									id = pirate.26
+								}
+							}
+						}
+					}
+					else = {
+						country_event = {
+							id = pirate.25
+						}
+					}
+				}
+			}
 			solar_system = {
 				every_system_planet = {
 					limit = {
 						is_owned_by = event_target:hfe_pirate_starbase_def
-						is_planet_class = hfe_pc_pirate_base
+						# pirate base or every normal planet with zero pops
+						or = {
+							is_planet_class = hfe_pc_pirate_base
+							num_pops = 0
+						}
 					}
 					event_target:hfe_pirate_starbase_att = {
 						set_timed_country_flag = {
@@ -1005,28 +1035,50 @@ ship_event = {
 					every_owned_pop = {
 						hfe_effect_refuge_or_die = yes
 					}
-					hfe_effect_convert_to_asteroid = yes
+					destroy_colony = yes
 				}
+				# switch to ally if have no claim
 				if = {
 					limit = {
-						any_neighbor_system = {
-							ignore_hyperlanes = no
-							exists = owner
-							owner = {
-								is_country = event_target:hfe_pirate_starbase_att
+						not = {
+							event_target:hfe_pirate_starbase_att = {
+								has_claim = prev
 							}
+						}
+						event_target:hfe_pirate_starbase_att = {
+							any_federation_ally = {
+								has_claim = prevprev
+							}
+						}
+					}
+					event_target:hfe_pirate_starbase_att = {
+						random_federation_ally = {
+							limit = {
+								has_claim = prevprev
+							}
+							save_event_target_as = hfe_pirate_starbase_att
+						}
+					}
+				}
+				# get system if has claim
+				if = {
+					limit = {
+						event_target:hfe_pirate_starbase_att = {
+							has_claim = prev
 						}
 					}
 					every_system_planet = {
 						limit = {
 							is_owned_by = event_target:hfe_pirate_starbase_def
-							not = {
-								is_planet_class = hfe_pc_pirate_base
-							}
-							num_pops > 0
+							# bad colonies should be killed by code above TODO check if it is fine
+							# not = {
+							# 	is_planet_class = hfe_pc_pirate_base
+							# }
+							# num_pops > 0
 						}
 						set_owner = event_target:hfe_pirate_starbase_att
 					}
+					# replace starbase with outpost
 					starbase = {
 						destroy_fleet = fleet
 						#set_owner = event_target:hfe_pirate_starbase_att
@@ -1052,17 +1104,20 @@ ship_event = {
 					every_system_planet = {
 						limit = {
 							is_owned_by = event_target:hfe_pirate_starbase_def
-							not = {
-								is_planet_class = hfe_pc_pirate_base
-							}
+							# bad colonies should be killed by code above TODO check if it is fine
+							# not = {
+							# 	is_planet_class = hfe_pc_pirate_base
+							# }
 							num_pops > 0
 						}
+						log = "creating new country from pirate planet [this.GetName] solar system [solar_system.GetName]"
 						random_owned_pop = {
 							create_country = {
 								type = default
 								species = this.species
+								origin = origin_separatists
+								released_from_country = event_target:hfe_pirate_starbase_def
 								effect = {
-									hfe_effect_gov_fix = yes
 									prevprev = {
 										set_owner = prev
 									}
@@ -1070,6 +1125,7 @@ ship_event = {
 							}
 						}
 					}
+					# should spawn outpost by vanilla event
 					starbase = {
 						destroy_fleet = fleet
 					}
@@ -1103,7 +1159,6 @@ ship_event = {
 						hfe_effect_refuge_or_die = yes
 					}
 					destroy_colony = yes
-					#hfe_effect_convert_to_asteroid = yes
 				}
 			}
 			starbase = {
@@ -1113,14 +1168,17 @@ ship_event = {
 	}
 }
 
-# fix pirate planet class ownerless on_planet_ownerless on_planet_transfer
+# fix pirate planet class ownerless 57
+# on_planet_ownerless on_planet_transfer on_planet_bombarded
 planet_event = {
 	id = hfe_pirate.57
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
 		is_planet_class = hfe_pc_pirate_base
-		NOT = { has_planet_flag = hfe_permanent_pirate_hall }
+		# NOT = {
+		# 	has_planet_flag = hfe_permanent_pirate_hall
+		# }
 		nand = {
 			exists = owner
 			owner = {
@@ -1129,18 +1187,24 @@ planet_event = {
 		}
 	}
 	immediate = {
-		if = {
-			limit = { NOT = { has_planet_flag = hfe_permanent_pirate_hall } }
-			hfe_effect_convert_to_asteroid = yes
-		}
-		else = {
-			set_planet_flag = hfe_permanent_pirate_hall
-		}
+		log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_transfer on_planet_bombarded"
+		hfe_effect_pirate_change_to_pc_asteroid = yes
+		# if = {
+		# 	limit = {
+		# 		NOT = {
+		# 			has_planet_flag = hfe_permanent_pirate_hall
+		# 		}
+		# 	}
+		# }
+		# else = {
+		# 	set_planet_flag = hfe_permanent_pirate_hall
+		# }
 	}
 }
 
-# send default or pirate country fleets before get destroyed on_country_destroyed
-# looks like not worked
+# send default or pirate country fleets before get destroyed 58
+# looks like not worked for default country type
+# on_country_destroyed
 country_event = {
 	id = hfe_pirate.58
 	hide_window = yes
@@ -1164,11 +1228,12 @@ country_event = {
 	}
 }
 
+# for hfe_chain_pirate_count counters 60
+# on_ship_destroyed_perp
 # This = owner of ship 1 (combatant)
 # From = owner of ship 2 (destroyed)
 # FromFrom = ship 1
 # FromFromFrom = ship 2
-# for hfe_chain_pirate_count counters on_ship_destroyed_perp
 country_event = {
 	id = hfe_pirate.60
 	hide_window = yes
@@ -1215,11 +1280,12 @@ country_event = {
 	}
 }
 
+# fix pirate non hostile then attacked by player 61
+# on_entering_battle
 # This = owner of fleet 1
 # From = owner of fleet 2
 # FromFrom = fleet 1
 # FromFromFrom = fleet 2
-# fix pirate non hostile then attacked by player on_entering_battle
 country_event = {
 	id = hfe_pirate.61
 	hide_window = yes
@@ -1244,15 +1310,16 @@ country_event = {
 	}
 }
 
+# get disabled starbase 62
 # A fleet has entered a system
 # Scope = Fleet
 # From = System
-# get disabled starbase
 fleet_event = {
 	id = hfe_pirate.62
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		always = no
 		exists = solar_system.starbase
 		exists = owner
 		owner = {
@@ -1291,6 +1358,7 @@ fleet_event = {
 	}
 }
 
+# observation outpost mission 63
 country_event = {
 	id = hfe_pirate.63
 	hide_window = yes
@@ -1319,6 +1387,7 @@ country_event = {
 	}
 }
 
+# observation outpost mission reset after compliting 64
 planet_event = {
 	id = hfe_pirate.64
 	hide_window = yes
@@ -1333,7 +1402,7 @@ planet_event = {
 }
 
 # pirate diplomacy 100-150
-# start event diplomacy
+# start event diplomacy 100
 country_event = {
 	id = hfe_pirate.100
 	hide_window = yes
@@ -1362,13 +1431,11 @@ country_event = {
 	}
 }
 
-# pirate diplomacy main menu
+# pirate diplomacy main menu 101
 country_event = {
 	id = hfe_pirate.101
 	title = hfe_nothing
-
 	#message_desc = hfe_pirate.101.desc.0 # do not work
-
 	desc = {
 		trigger = {
 			# start
@@ -1428,23 +1495,27 @@ country_event = {
 					value = 0
 				}
 			}
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.1
-			# 	has_country_flag = hfe_pirate.101.psi_test_menu
-			# 	check_variable = {
-			# 		which = take_place_1
-			# 		value = 1
-			# 	}
-			# }
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.1
+				has_country_flag = hfe_pirate.101.psi_test_menu
+				nor = {
+					has_country_flag = hfe_pirate.101.psi_test_end_lose
+					has_country_flag = hfe_pirate.101.psi_test_end_win
+				}
+				check_variable = {
+					which = take_place_1
+					value = 1
+				}
+			}
 			# psi test end
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.2
-			# 	has_country_flag = hfe_pirate.101.psi_test_end_lose
-			# }
-			# success_text = {
-			# 	text = hfe_pirate.101.psi_test_menu.desc.3
-			# 	has_country_flag = hfe_pirate.101.psi_test_end_win
-			# }
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.2
+				has_country_flag = hfe_pirate.101.psi_test_end_lose
+			}
+			success_text = {
+				text = hfe_pirate.101.psi_test_menu.desc.3
+				has_country_flag = hfe_pirate.101.psi_test_end_win
+			}
 			# casino
 			success_text = {
 				text = hfe_pirate.101.casino_menu.desc.0
@@ -1452,6 +1523,7 @@ country_event = {
 			}
 		}
 	}
+	location = event_target:hfe_pirate_country.capital_scope
 	diplomatic = yes
 	is_triggered_only = yes
 	force_open = yes
@@ -1463,7 +1535,6 @@ country_event = {
 		if = {
 			limit = {
 				is_country = event_target:hfe_pirate_country
-				has_global_flag = hfe_pirate_logs
 			}
 			log = "WARNING PIRATE CONTACT WITH ITSELF"
 		}
@@ -1478,6 +1549,10 @@ country_event = {
 			custom_tooltip = {
 				fail_text = hfe_pirate.101.0.tooltip_fail.0
 				is_hostile = event_target:hfe_pirate_country
+				# fix for applying only on next day
+				not = {
+					has_country_flag = hfe_pirate_protected@event_target:hfe_pirate_country
+				}
 			}
 			custom_tooltip = {
 				fail_text = hfe_pirate.101.0.tooltip_fail.1
@@ -1489,18 +1564,17 @@ country_event = {
 		response_text = hfe_pirate.101.0.response
 		hfe_effect_pirate_protect_cost_shift = yes
 		hidden_effect = {
+			# i hope its temporal fix
+			set_timed_country_flag = {
+				flag = hfe_pirate_protected@event_target:hfe_pirate_country
+				days = 1
+			}
 			# event to return hostile
 			country_event = {
 				id = hfe_pirate.200
 				days = @hfe_pirate_protect_days
 			}
 			event_target:hfe_pirate_country = {
-				every_owned_fleet = {
-					limit = {
-						has_fleet_flag = hfe_pirate_fleet_has_target
-					}
-					hfe_effect_pirate_path_fleet_reset = yes
-				}
 				set_faction_hostility = {
 					target = root
 					set_hostile = no
@@ -1510,6 +1584,12 @@ country_event = {
 				add_opinion_modifier = {
 					who = root
 					modifier = hfe_opinion_pirate_pay_for_protect
+				}
+				every_owned_fleet = {
+					limit = {
+						has_fleet_flag = hfe_pirate_fleet_has_target
+					}
+					hfe_effect_pirate_path_fleet_reset = yes
 				}
 			}
 		}
@@ -1523,14 +1603,9 @@ country_event = {
 		hidden_effect = {
 			every_relation = {
 				limit = {
-					hfe_trigger_pirate_raid_distance_check = yes
+					hfe_trigger_pirate_raid_country_check = yes
 					is_country_type = default
-					or = {
-						is_at_war_with = root
-						is_hostile = root
-					}
-					is_hostile = event_target:hfe_pirate_country
-					hfe_trigger_pirate_raid_have_flag = no
+					is_hostile = root
 				}
 				hfe_effect_save_event_target = yes
 			}
@@ -1540,11 +1615,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_rival = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1555,11 +1628,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_hostile_to = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1570,11 +1641,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_unfriendly_to = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1585,11 +1654,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_domineering_to = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1600,11 +1667,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_threatened_to = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1615,11 +1680,9 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
 						is_dismissive_to = root
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1630,10 +1693,8 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -1644,10 +1705,8 @@ country_event = {
 				}
 				every_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_distance_check = yes
+						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = hfe_pirate
-						is_hostile = event_target:hfe_pirate_country
-						hfe_trigger_pirate_raid_have_flag = no
 					}
 					hfe_effect_save_event_target = yes
 				}
@@ -2017,7 +2076,7 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
+			modifier = {
 				factor = 2
 				is_xenophile = yes
 			}
@@ -2085,6 +2144,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_0
 					}
 				}
@@ -2175,6 +2235,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_1
 					}
 				}
@@ -2223,10 +2284,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2265,6 +2326,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_2
 					}
 				}
@@ -2313,10 +2375,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2355,6 +2417,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_3
 					}
 				}
@@ -2403,10 +2466,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2445,6 +2508,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_4
 					}
 				}
@@ -2493,10 +2557,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 2
 				allows_slavery = yes
@@ -2535,6 +2599,7 @@ country_event = {
 				text = hfe_pirate.101.slave_menu.fail_havent_slave
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
+						count > 1
 						is_exact_same_species = event_target:hfe_slave_target_5
 					}
 				}
@@ -2583,10 +2648,10 @@ country_event = {
 				factor = 2
 				is_authoritarian = yes
 			}
-      modifier = {
-        factor = 2
-        is_xenophile = yes
-      }
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
 			modifier = {
 				factor = 3
 				allows_slavery = yes
@@ -2633,11 +2698,15 @@ country_event = {
 	option = {
 		name = hfe_pirate.101.psi_test_menu
 		trigger = {
-			always = no
 			has_country_flag = hfe_pirate.101.service_menu
 			exists = ruler
 			event_target:hfe_pirate_country = {
 				is_spiritualist = no
+				# TODO check if any pirate really can have what ammount of energy because it can waste energy on trade
+				# resource_stockpile_compare = {
+				# 	resource = energy
+				# 	value > 10000
+				# }
 			}
 		}
 		add_resource = {
@@ -2732,14 +2801,9 @@ country_event = {
 			has_country_flag = hfe_pirate.101.psi_test_end_lose
 		}
 		hidden_effect = {
-			remove_country_flag = hfe_pirate.101.psi_test_end
-			remove_country_flag = hfe_pirate.101.psi_test_end_lose
-			remove_country_flag = hfe_pirate.101.psi_test_menu
-			hfe_effect_cards_clean_all = yes
-			set_variable = {
-				which = hfe_pirate_psi_test_score
-				value = 0
-			}
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.psi_test_menu
+			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
 				id = hfe_pirate.101
 			}
@@ -2751,6 +2815,20 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.psi_test_end_win
 		}
+		if = {
+			limit = {
+				exists = ruler
+				ruler = {
+					nor = {
+						has_ruler_trait = leader_trait_ruler_psionic
+						has_ruler_trait = leader_trait_ruler_chosen
+					}
+				}
+			}
+			ruler = {
+				add_ruler_trait = leader_trait_ruler_psionic
+			}
+		}
 		add_resource = {
 			energy = 10000
 		}
@@ -2760,14 +2838,9 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_country_flag = hfe_pirate.101.psi_test_end
-			remove_country_flag = hfe_pirate.101.psi_test_end_win
-			remove_country_flag = hfe_pirate.101.psi_test_menu
-			hfe_effect_cards_clean_all = yes
-			set_variable = {
-				which = hfe_pirate_psi_test_score
-				value = 0
-			}
+			hfe_effect_pirate_diplomacy_remove_flags = yes
+			set_country_flag = hfe_pirate.101.psi_test_menu
+			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
 				id = hfe_pirate.101
 			}
@@ -3140,7 +3213,7 @@ country_event = {
 }
 
 # blackjack event 150 - 200
-# main blackjack event
+# main blackjack event 150
 country_event = {
 	id = hfe_pirate.150
 	title = TRANSMISSION
@@ -3277,7 +3350,7 @@ country_event = {
 	}
 }
 
-# blackjack challenge
+# blackjack challenge 151
 country_event = {
 	id = hfe_pirate.151
 	title = TRANSMISSION
@@ -3320,7 +3393,7 @@ country_event = {
 }
 
 # other pirate related diplo events 200 - 250
-# offer protection and extend protection later
+# offer protection and extend protection later 200
 country_event = {
 	id = hfe_pirate.200
 	title = TRANSMISSION
@@ -3534,8 +3607,8 @@ country_event = {
 	}
 }
 
-# pirate fleet ai 300
-# trigger gateway
+# pirate fleet ai
+# trigger gateway 300
 fleet_event = {
 	id = hfe_pirate.300
 	hide_window = yes
@@ -3580,7 +3653,7 @@ fleet_event = {
 	}
 }
 
-# select target
+# select target 301
 fleet_event = {
 	id = hfe_pirate.301
 	hide_window = yes
@@ -3614,6 +3687,7 @@ fleet_event = {
 	}
 }
 
+# assign select target event 302
 # on_entering_system_fleet
 fleet_event = {
 	id = hfe_pirate.302
@@ -3643,6 +3717,7 @@ fleet_event = {
 	}
 }
 
+# if enemy fleet enter system 303
 # on_entering_system_fleet
 fleet_event = {
 	id = hfe_pirate.303
@@ -3675,6 +3750,7 @@ fleet_event = {
 	}
 }
 
+# assign select target event 305
 # on_space_battle_won
 country_event = {
 	id = hfe_pirate.305
@@ -3696,7 +3772,7 @@ country_event = {
 	}
 }
 
-# clean fleet actions after emercy ftl
+# clean fleet actions after emercy ftl 306
 fleet_event = {
 	id = hfe_pirate.306
 	hide_window = yes
@@ -3716,221 +3792,219 @@ fleet_event = {
 }
 
 # Convert Pirate to Default Type, test
-country_event = {
-	id = hfe_pirate.307
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		is_country_type = hfe_pirate
-	}
-	immediate = {
-		if = {
-			limit = { has_civic = hfe_civic_pirate_rat_king }
-			set_country_flag = hfe_pirate_is_rat_king
-		}
-		if = {
-			limit = { is_spiritualist = yes }
-			set_country_flag = hfe_pirate_sedentary_spiritualist
-		}
-		if = {
-			limit = { is_materialist = yes }
-			set_country_flag = hfe_pirate_sendentary_materialist
-		}
-		if = {
-			limit = { is_xenophobe = yes }
-			set_country_flag = hfe_pirate_sedentary_xenophobe
-		}
-		give_technology = {
-			tech = tech_hydroponics
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_rare_crystals
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_volatile_motes
-			message = no
-		}
-		give_technology = {
-			tech = tech_mine_exotic_gases
-			message = no
-		}
-		set_country_type = default
-		hfe_effect_cleanse_ethics = yes
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sedentary_spiritualist
-				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
-			}
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_materialist
-				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
-			}
-			country_add_ethic = ethic_materialist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_materialist
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-			}
-			country_add_ethic = ethic_materialist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_xenophobe
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sendentary_spiritualist
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-			}
-			country_add_ethic = ethic_spiritualist
-			country_add_ethic = ethic_militarist
-			country_add_ethic = ethic_xenophobe
-		}
-		if = {
-			limit = {
-				has_country_flag = hfe_pirate_sedentary_xenophobe
-				NOT = {
-					has_country_flag = hfe_pirate_sendentary_materialist
-					has_country_flag = hfe_pirate_sendentary_spiritualist
-				}
-			}
-			country_add_ethic = ethic_xenophobe
-			country_add_ethic = ethic_authoritarian
-			country_add_ethic = ethic_militarist
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = hfe_pirate_sendentary_materialist
-					has_country_flag = hfe_pirate_sedentary_xenophobe
-					has_country_flag = hfe_pirate_sendentary_spiritualist
-				}
-			}
-			country_add_ethic = ethic_fanatic_militarist
-			country_add_ethic = ethic_authoritarian
-		}
-		if = {
-			limit = {
-				NOT = { has_country_flag = hfe_pirate_is_rat_king }
-			}
-			change_government = {
-				authority = auth_oligarchic
-				civics = {
-					civic = civic_barbaric_despoilers
-					civic = civic_slaver_guilds
-				}
-			}
-		}
-		else_if = {
-			limit = { has_country_flag = hfe_pirate_is_rat_king }
-			change_government = {
-				authority = auth_imperial
-				civics = {
-					civic = civic_barbaric_despoilers
-					civic = civic_distinguished_admiralty
-				}
-			}
-		}
-		capital_scope = {
-			while = {
-				count = 26
-				create_pop = {
-					species = owner_species
-				}
-			}
-		}
-		every_owned_planet = {
-			limit = {
-				OR = {
-					is_planet_class = hfe_pc_pirate_base
-					habitable_structure = yes
-				}
-			}
-#			add_deposit = hfe_reformed_pirate_treasure
-			add_deposit = hfe_reformed_pirate_hall
-			set_planet_flag = hfe_permanent_pirate_hall
-		}
-		capital_scope = {
-			add_deposit = hfe_reformed_pirate_treasure
-			add_building = building_major_capital
-			add_building = building_foundry_1
-			add_building = building_factory_1
-			add_building = building_research_lab_1
-			add_building = building_hydroponics_farm
-			add_building = building_hydroponics_farm
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_energy
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_minerals
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_food
-			add_district = hfe_district_pirate_alloys
-			add_district = hfe_district_pirate_alloys
-		}
-
-		every_owned_planet = {
-			limit = {
-				NOT = { is_capital = yes }
-			}
-			set_planet_flag = hfe_permanent_pirate_hall
-			hfe_effect_exodus_reset_capital = yes
-			add_building = building_major_capital
-			while = {
-				count = 7
-				create_pop = {
-					species = owner_species
-				}
-			}
-			if = {
-				limit = {
-					NOT = { is_capital = yes }
-					is_planet_class = hfe_pc_pirate_base
-				}
-				add_district = hfe_district_pirate_energy
-				add_district = hfe_district_pirate_minerals
-				add_district = hfe_district_pirate_food
-				add_district = hfe_district_pirate_alloys
-			}
-			else_if = {
-				limit = { habitable_structure = no }
-				add_district = district_city
-				add_district = district_generator
-				add_district = district_mining
-				add_district = district_farming
-			}
-			if = {
-				limit = {
-					OR = {
-						has_global_flag = hfe_pirate_logs
-						has_global_flag = HFE_TSP_spawn_test
-					}
-				}
-				log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
-			}
-		}
-
-		if = {
-			limit = {
-				OR = {
-					has_global_flag = hfe_pirate_logs
-					has_global_flag = HFE_TSP_spawn_test
-				}
-			}
-			log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
-		}
-	}
-}
+# country_event = {
+# 	id = hfe_pirate.307
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	trigger = {
+# 		is_country_type = hfe_pirate
+# 	}
+# 	immediate = {
+# 		if = {
+# 			limit = { has_civic = hfe_civic_pirate_rat_king }
+# 			set_country_flag = hfe_pirate_is_rat_king
+# 		}
+# 		if = {
+# 			limit = { is_spiritualist = yes }
+# 			set_country_flag = hfe_pirate_sedentary_spiritualist
+# 		}
+# 		if = {
+# 			limit = { is_materialist = yes }
+# 			set_country_flag = hfe_pirate_sendentary_materialist
+# 		}
+# 		if = {
+# 			limit = { is_xenophobe = yes }
+# 			set_country_flag = hfe_pirate_sedentary_xenophobe
+# 		}
+# 		give_technology = {
+# 			tech = tech_hydroponics
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_rare_crystals
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_volatile_motes
+# 			message = no
+# 		}
+# 		give_technology = {
+# 			tech = tech_mine_exotic_gases
+# 			message = no
+# 		}
+# 		set_country_type = default
+# 		hfe_effect_cleanse_ethics = yes
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sedentary_spiritualist
+# 				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
+# 			}
+# 			country_add_ethic = ethic_spiritualist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_materialist
+# 				NOT = { has_country_flag = hfe_pirate_sedentary_xenophobe }
+# 			}
+# 			country_add_ethic = ethic_materialist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_materialist
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 			}
+# 			country_add_ethic = ethic_materialist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_xenophobe
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 			}
+# 			country_add_ethic = ethic_spiritualist
+# 			country_add_ethic = ethic_militarist
+# 			country_add_ethic = ethic_xenophobe
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_country_flag = hfe_pirate_sedentary_xenophobe
+# 				NOT = {
+# 					has_country_flag = hfe_pirate_sendentary_materialist
+# 					has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				}
+# 			}
+# 			country_add_ethic = ethic_xenophobe
+# 			country_add_ethic = ethic_authoritarian
+# 			country_add_ethic = ethic_militarist
+# 		}
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = hfe_pirate_sendentary_materialist
+# 					has_country_flag = hfe_pirate_sedentary_xenophobe
+# 					has_country_flag = hfe_pirate_sendentary_spiritualist
+# 				}
+# 			}
+# 			country_add_ethic = ethic_fanatic_militarist
+# 			country_add_ethic = ethic_authoritarian
+# 		}
+# 		if = {
+# 			limit = {
+# 				NOT = { has_country_flag = hfe_pirate_is_rat_king }
+# 			}
+# 			change_government = {
+# 				authority = auth_oligarchic
+# 				civics = {
+# 					civic = civic_barbaric_despoilers
+# 					civic = civic_slaver_guilds
+# 				}
+# 			}
+# 		}
+# 		else_if = {
+# 			limit = { has_country_flag = hfe_pirate_is_rat_king }
+# 			change_government = {
+# 				authority = auth_imperial
+# 				civics = {
+# 					civic = civic_barbaric_despoilers
+# 					civic = civic_distinguished_admiralty
+# 				}
+# 			}
+# 		}
+# 		capital_scope = {
+# 			while = {
+# 				count = 26
+# 				create_pop = {
+# 					species = owner_species
+# 				}
+# 			}
+# 		}
+# 		every_owned_planet = {
+# 			limit = {
+# 				OR = {
+# 					is_planet_class = hfe_pc_pirate_base
+# 					habitable_structure = yes
+# 				}
+# 			}
+# #			add_deposit = hfe_reformed_pirate_treasure
+# 			add_deposit = hfe_reformed_pirate_hall
+# 			set_planet_flag = hfe_permanent_pirate_hall
+# 		}
+# 		capital_scope = {
+# 			add_deposit = hfe_reformed_pirate_treasure
+# 			add_building = building_major_capital
+# 			add_building = building_foundry_1
+# 			add_building = building_factory_1
+# 			add_building = building_research_lab_1
+# 			add_building = building_hydroponics_farm
+# 			add_building = building_hydroponics_farm
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_energy
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_minerals
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_food
+# 			add_district = hfe_district_pirate_alloys
+# 			add_district = hfe_district_pirate_alloys
+# 		}
+# 		every_owned_planet = {
+# 			limit = {
+# 				NOT = { is_capital = yes }
+# 			}
+# 			set_planet_flag = hfe_permanent_pirate_hall
+# 			hfe_effect_exodus_reset_capital = yes
+# 			add_building = building_major_capital
+# 			while = {
+# 				count = 7
+# 				create_pop = {
+# 					species = owner_species
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					NOT = { is_capital = yes }
+# 					is_planet_class = hfe_pc_pirate_base
+# 				}
+# 				add_district = hfe_district_pirate_energy
+# 				add_district = hfe_district_pirate_minerals
+# 				add_district = hfe_district_pirate_food
+# 				add_district = hfe_district_pirate_alloys
+# 			}
+# 			else_if = {
+# 				limit = { habitable_structure = no }
+# 				add_district = district_city
+# 				add_district = district_generator
+# 				add_district = district_mining
+# 				add_district = district_farming
+# 			}
+# 			if = {
+# 				limit = {
+# 					OR = {
+# 						has_global_flag = hfe_pirate_logs
+# 						has_global_flag = HFE_TSP_spawn_test
+# 					}
+# 				}
+# 				log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
+# 			}
+# 		}
+# 		if = {
+# 			limit = {
+# 				OR = {
+# 					has_global_flag = hfe_pirate_logs
+# 					has_global_flag = HFE_TSP_spawn_test
+# 				}
+# 			}
+# 			log = "PIRATE [this.GetName] in [solar_system.GetName] settles down"
+# 		}
+# 	}
+# }

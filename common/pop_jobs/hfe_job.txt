@@ -1,39 +1,25 @@
 #
-
 hfe_job_egypt_ruler_0 = {
 	category = ruler
 	condition_string = RULER_JOB_TRIGGER
 	building_icon = building_great_pyramid
 	clothes_texture_index = 1
 	icon = fe_archivist
-
-#	possible_pre_triggers = {
-#		exists = owner
-#		exists = planet		
-#	}
-
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		exists = planet
-		OR = {
-			is_species = event_target:hfe_egypt_species
-			is_same_species = owner
-			NOT = { owner = { has_country_flag = hfe_egypt } }
-		}
-		OR = {
-			owner = { has_civic = hfe_civic_egypt_rulers }
-			owner = { has_origin = hfe_civic_egypt_rulers_origin }
-		}
 		planet = {
 			has_upgraded_capital = yes
 		}
 		ruler_job_check_trigger = yes
 	}
-
 	resources = {
-		category = hfe_job_egypt_rulers
+		category = planet_administrators
 	}
-
 	# this job scales by planet capital
 	# t1 capital
 	planet_modifier = {
@@ -145,21 +131,29 @@ hfe_job_egypt_ruler_0 = {
 	}
 	weight = {
 		weight = @ruler_job_weight
-		# amenities weights
+		# amenities auto generated weights
 		modifier = {
 			factor = 1.5
 			OR = {
-				has_trait = trait_robot_domestic_protocols
 				has_trait = trait_charismatic
+				has_trait = trait_robot_emotion_emulators
 			}
 		}
 		modifier = {
 			factor = 0.5
-			has_trait = trait_repugnant
+			OR = {
+				has_trait = trait_repugnant
+				has_trait = trait_robot_uncanny
+			}
 		}
-		# crisis purge
+		# tail auto generated weights
 		modifier = {
-			factor = 0.01
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -176,14 +170,32 @@ hfe_job_egypt_ruler_1 = {
 	building_icon = building_stone_palace
 	clothes_texture_index = 1
 	icon = fe_archivist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		is_same_species = owner
-		exists = planet
+		planet = {
+			has_upgraded_capital = yes
+		}
 		ruler_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_egypt_rulers
+		category = planet_priests
+		produces = {
+			unity = 5
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_valid_civic = civic_exalted_priesthood
+				}
+			}
+			unity = 1
+		}
 	}
 	# this job scales by planet capital
 	# t1 capital
@@ -215,7 +227,7 @@ hfe_job_egypt_ruler_1 = {
 	}
 	weight = {
 		weight = @ruler_job_weight
-		# unity weights
+		# unity auto generated weights
 		modifier = {
 			factor = 1.1
 			has_trait = trait_presapient_natural_intellectuals
@@ -240,9 +252,43 @@ hfe_job_egypt_ruler_1 = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_necrophage
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = hfe_species_trait_happy_slave
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -259,14 +305,23 @@ hfe_job_egypt_ruler_2 = {
 	building_icon = building_great_pyramid
 	clothes_texture_index = 4
 	icon = fe_archivist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		is_same_species = owner
-		exists = planet
+		planet = {
+			has_upgraded_capital = yes
+		}
 		ruler_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_egypt_rulers
+		category = planet_nobles
+		produces = {
+			unity = 3
+		}
 	}
 	# this job scales by planet capital
 	# t1 capital
@@ -298,7 +353,7 @@ hfe_job_egypt_ruler_2 = {
 	}
 	weight = {
 		weight = @ruler_job_weight
-		# unity weights
+		# unity auto generated weights
 		modifier = {
 			factor = 1.1
 			has_trait = trait_presapient_natural_intellectuals
@@ -323,9 +378,43 @@ hfe_job_egypt_ruler_2 = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_necrophage
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = hfe_species_trait_happy_slave
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -342,13 +431,17 @@ hfe_job_terraformer = {
 	building_icon = building_great_pyramid
 	clothes_texture_index = 3
 	icon = chemist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		exists = planet
-		complex_specialist_job_check_trigger = yes
+		specialist_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_pyramid_terraformers
+		category = hfe_job_terraformer
 		upkeep = {
 			energy = 2
 			consumer_goods = 2
@@ -362,22 +455,26 @@ hfe_job_terraformer = {
 	}
 	weight = {
 		weight = @specialist_job_weight
-		modifier = {
-			factor = 0.9
-			has_citizenship_rights = no
-		}
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -389,36 +486,69 @@ hfe_job_terraformer = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 0.7
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_presapient_docile_livestock
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# engineering_research weight
+		modifier = {
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_necrophage
+		}
 		modifier = {
 			factor = 1.3
-			has_trait = trait_natural_engineers
+			has_trait = trait_void_dweller_1
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 0.6
+			has_trait = hfe_species_trait_happy_slave
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -435,13 +565,17 @@ hfe_job_terraformer_machine = {
 	building_icon = building_great_pyramid
 	clothes_texture_index = 3
 	icon = chemist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		exists = planet
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_pyramid_terraformers
+		category = hfe_job_terraformer
 		upkeep = {
 			energy = 2
 			consumer_goods = 2
@@ -455,22 +589,26 @@ hfe_job_terraformer_machine = {
 	}
 	weight = {
 		weight = @specialist_job_weight
-		modifier = {
-			factor = 0.01
-			has_citizenship_rights = no
-		}
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -482,36 +620,56 @@ hfe_job_terraformer_machine = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 0.7
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_presapient_docile_livestock
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# engineering_research weight
 		modifier = {
-			factor = 1.3
-			has_trait = trait_natural_engineers
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -528,14 +686,20 @@ hfe_job_terraformer_machine_rogue_servitor = {
 	building_icon = building_great_pyramid
 	clothes_texture_index = 3
 	icon = chemist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		exists = planet
-		owner = { has_valid_civic = civic_machine_servitor }
+		owner = {
+			has_valid_civic = civic_machine_servitor
+		}
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_pyramid_terraformers
+		category = hfe_job_terraformer
 		upkeep = {
 			energy = 2
 			consumer_goods = 2
@@ -549,22 +713,26 @@ hfe_job_terraformer_machine_rogue_servitor = {
 	}
 	weight = {
 		weight = @specialist_job_weight
-		modifier = {
-			factor = 0.01
-			has_citizenship_rights = no
-		}
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -576,36 +744,56 @@ hfe_job_terraformer_machine_rogue_servitor = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 0.7
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_presapient_docile_livestock
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# engineering_research weight
 		modifier = {
-			factor = 1.3
-			has_trait = trait_natural_engineers
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -622,13 +810,17 @@ hfe_job_terraformer_hive_mind = {
 	building_icon = building_great_pyramid
 	clothes_texture_index = 3
 	icon = chemist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
-		exists = owner
-		exists = planet
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_pyramid_terraformers
+		category = hfe_job_terraformer
 		upkeep = {
 			energy = 2
 			consumer_goods = 2
@@ -642,22 +834,26 @@ hfe_job_terraformer_hive_mind = {
 	}
 	weight = {
 		weight = @specialist_job_weight
-		modifier = {
-			factor = 0.01
-			has_citizenship_rights = no
-		}
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -669,36 +865,56 @@ hfe_job_terraformer_hive_mind = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 0.7
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_presapient_docile_livestock
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# engineering_research weight
 		modifier = {
-			factor = 1.3
-			has_trait = trait_natural_engineers
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -715,37 +931,22 @@ hfe_job_egypt_workless = {
 	building_icon = building_organic_paradise
 	clothes_texture_index = 3
 	icon = entertainer
-
 	possible_pre_triggers = {
-		is_enslaved = no # Must be a freeman to enjoy the opulence and privilege of a Citizen
+		has_owner = yes
+		is_enslaved = no
 		is_being_purged = no
 		is_being_assimilated = no
 	}
-
 	possible = {
 		exists = owner
-		OR = {
-			has_citizenship_rights = yes
-			has_citizenship_type = { type = citizenship_full }
-			owner = { is_xenophile = yes }
+		owner = {
+			has_origin = hfe_civic_egypt_rulers_origin
 		}
-		OR = {
-			owner = { NOT = { is_xenophobe = yes } }
-			is_same_species = owner
-		}
-#		NOT = { is_enslaved = yes } # Must be a freeman to enjoy the opulence and privilege of a Citizen
 		NOT = {
 			has_trait = trait_mechanical
 			has_trait = trait_machine_unit
 			is_shackled_robot = yes
 			is_non_sapient_robot = yes
-		}
-		owner = {
-			OR = {
-				has_origin = hfe_civic_egypt_rulers_origin
-				has_valid_civic = hfe_civic_egypt_genetic
-				has_country_flag = hfe_egypt
-			}
 		}
 	}
 	pop_modifier = {
@@ -767,6 +968,7 @@ hfe_job_future_workless = {
 	clothes_texture_index = 3
 	icon = fe_hedonist
 	possible_pre_triggers = {
+		has_owner = yes
 		is_enslaved = no
 		is_being_purged = no
 		is_being_assimilated = no
@@ -775,11 +977,19 @@ hfe_job_future_workless = {
 		exists = owner
 		exists = planet
 		OR = {
-			planet = { has_building = hfe_building_virtual }
-			owner = { has_country_flag = hfe_future }
+			planet = {
+				has_building = hfe_building_virtual
+			}
+			owner = {
+				has_country_flag = hfe_future
+			}
 		}
 		OR = {
-			owner = { NOT = { is_xenophobe = yes } }
+			owner = {
+				NOT = {
+					is_xenophobe = yes
+				}
+			}
 			is_same_species = owner
 		}
 	}
@@ -803,55 +1013,44 @@ hfe_job_cataloger = {
 	clothes_texture_index = 3
 	icon = maintenance_drone
 	possible_pre_triggers = {
+		has_owner = yes
 		is_being_purged = no
 		is_being_assimilated = no
 	}
 	possible = {
-		worker_job_check_trigger = yes # Cataloging, gathering, sorting, and inventorying are all considered entry-level jobs in RL, thus not complex
+		worker_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_catalogers
+		category = hfe_job_cataloger
 		produces = {
-			alloys = 2
-			engineering_research = 2
-			consumer_goods = 1
+			engineering_research = 8
 		}
+	}
+	planet_modifier = {
+		planet_crime_add = 4
 	}
 	weight = {
 		weight = @worker_job_weight
-		modifier = {
-			factor = 0.1
-			can_take_servant_job = yes
-		}
-		# worker weights
-		modifier = {
-			factor = 10
-			OR = {
-				is_enslaved = yes
-				is_non_sapient_robot = yes
-				is_shackled_robot = yes
-			}
-		}
-		modifier = {
-			factor = 1.2
-			has_trait = trait_very_strong
-		}
-		modifier = {
-			factor = 1.05
-			has_trait = trait_strong
-		}
-		modifier = {
-			factor = 0.95
-			has_trait = trait_weak
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -863,40 +1062,82 @@ hfe_job_cataloger = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 0.7
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
+		}
+		modifier = {
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.2
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_normal }
+		}
+		modifier = {
+			factor = 0.8
+			has_trait = trait_necrophage
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_very_strong
 		}
 		modifier = {
 			factor = 1.05
-			has_trait = trait_presapient_docile_livestock
+			has_trait = trait_strong
 		}
 		modifier = {
-			factor = 5
-			has_job = hfe_job_cataloger
+			factor = 0.95
+			has_trait = trait_weak
 		}
-		# engineering_research weight
 		modifier = {
-			factor = 2
-			has_trait = trait_natural_engineers
+			factor = 1.3
+			has_trait = trait_void_dweller_1
 		}
-		# crisis purge
+		# tail auto generated weights
 		modifier = {
-			factor = 0
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -913,53 +1154,43 @@ hfe_job_cataloger_gestalt = {
 	building_icon = building_junkheap
 	clothes_texture_index = 3
 	icon = maintenance_drone
-
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
 	possible = {
 		drone_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_catalogers
+		category = hfe_job_cataloger
 		produces = {
-			alloys = 2
-			consumer_goods = 0.5
-			engineering_research = 2
+			engineering_research = 8
 		}
 	}
 	weight = {
 		weight = @worker_job_weight
-		modifier = {
-			factor = 0.05
-			can_take_servant_job = yes
-		}
-		# worker weights
-		modifier = {
-			factor = 10
-			or = {
-				is_enslaved = yes
-				is_non_sapient_robot = yes
-				is_shackled_robot = yes
-			}
-		}
-		modifier = {
-			factor = 1.1
-			has_trait = trait_very_strong
-		}
-		modifier = {
-			factor = 1.05
-			has_trait = trait_strong
-		}
-		modifier = {
-			factor = 0.95
-			has_trait = trait_weak
-		}
-		# science weights
-		modifier = {
-			factor = 1.2
-			has_trait = trait_robot_logic_engines
-		}
+		# engineering_research auto generated weights
 		modifier = {
 			factor = 1.2
 			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 0.7
+			has_trait = trait_presapient_proles
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_natural_engineers
 		}
 		modifier = {
 			factor = 1.1
@@ -971,61 +1202,56 @@ hfe_job_cataloger_gestalt = {
 		}
 		modifier = {
 			factor = 1.2
-			has_trait = trait_intelligent
-		}
-		modifier = {
-			factor = 1.2
 			has_trait = trait_enigmatic_intelligence_poor
 		}
 		modifier = {
-			factor = 3
-			has_trait = trait_presapient_proles
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
 		}
 		modifier = {
 			factor = 1.2
 			has_trait = trait_brainslug
 		}
 		modifier = {
-			factor = 0.01
-			has_trait = trait_enigmatic_intelligence_failed
+			factor = 0.001
+			has_trait = hfe_species_trait_error
 		}
-		modifier = {
-			factor = 0.01
-			has_trait = trait_presapient_docile_livestock
-		}
-		# engineering_research weight
-		modifier = {
-			factor = 1.3
-			has_trait = trait_natural_engineers
-		}
-		# worker strata weight
 		modifier = {
 			factor = 1.1
-			has_trait = trait_very_strong
+			has_trait = hfe_species_trait_clever_beast
 		}
 		modifier = {
-			factor = 1.05
-			has_trait = trait_strong
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
 		}
 		modifier = {
-			factor = 0.95
-			has_trait = trait_weak
+			factor = 1.2
+			has_trait = trait_syncretic_proles
 		}
 		modifier = {
-			factor = 2
-			has_trait = trait_industrious
+			factor = 1.1
+			has_trait = trait_nerve_stapled
 		}
 		modifier = {
-			factor = 3
-			has_trait = trait_robot_power_drills
+			factor = 1.1
+			has_trait = trait_robust
 		}
 		modifier = {
-			factor = 4
-			has_job = hfe_job_cataloger_gestalt
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
 		}
-		# crisis purge
+		# tail auto generated weights
 		modifier = {
-			factor = 0.01
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1042,124 +1268,28 @@ hfe_job_recycler = {
 	building_icon = building_junkheap
 	clothes_texture_index = 3
 	icon = maintenance_drone
-
 	possible_pre_triggers = {
-		is_being_assimilated = no
+		has_owner = yes
 		is_being_purged = no
+		is_being_assimilated = no
 	}
 	possible = {
 		worker_job_check_trigger = yes
 	}
 	resources = {
-		category = hfe_job_recyclers
+		category = hfe_job_recycler
 		produces = {
 			minerals = 3
 			consumer_goods = 2
 			alloys = 1
 		}
 	}
-	weight = {
-		weight = @worker_job_weight
-		modifier = {
-			factor = 0.05
-			can_take_servant_job = yes
-		}
-		# worker weights
-		modifier = {
-			factor = 10
-			or = {
-				is_enslaved = yes
-				is_non_sapient_robot = yes
-				is_shackled_robot = yes
-			}
-		}
-		modifier = {
-			factor = 1.1
-			has_trait = trait_very_strong
-		}
-		modifier = {
-			factor = 1.05
-			has_trait = trait_strong
-		}
-		modifier = {
-			factor = 0.95
-			has_trait = trait_weak
-		}
-		# minerals weight
-		modifier = {
-			factor = 3
-			has_trait = trait_presapient_proles
-		}
-		modifier = {
-			factor = 2
-			has_trait = trait_industrious
-		}
-		modifier = {
-			factor = 3
-			has_trait = trait_robot_power_drills
-		}
-		modifier = {
-			factor = 5
-			has_job = hfe_job_recycler
-		}
-		# crisis purge
-		modifier = {
-			factor = 0.01
-			planet.controller = {
-				OR = {
-					is_country_type = swarm
-					is_country_type = ai_empire
-				}
-			}
-		}
-	}
-}
-
-hfe_job_recycler_machine = {
-	category = simple_drone
-	is_capped_by_modifier = yes
-	building_icon = building_junkheap
-	clothes_texture_index = 3
-	icon = chemist
-	possible = {
-		drone_job_check_trigger = yes
-	}
-	resources = {
-		category = hfe_job_recyclers
-		produces = {
-			minerals = 3
-			alloys = 2
-			consumer_goods = 1
-		}
+	planet_modifier = {
+		planet_crime_add = 4
 	}
 	weight = {
 		weight = @worker_job_weight
-		modifier = {
-			factor = 0.05
-			can_take_servant_job = yes
-		}
-		# worker weights
-		modifier = {
-			factor = 10
-			or = {
-				is_enslaved = yes
-				is_non_sapient_robot = yes
-				is_shackled_robot = yes
-			}
-		}
-		modifier = {
-			factor = 1.1
-			has_trait = trait_very_strong
-		}
-		modifier = {
-			factor = 1.05
-			has_trait = trait_strong
-		}
-		modifier = {
-			factor = 0.95
-			has_trait = trait_weak
-		}
-		# minerals weight
+		# minerals auto generated weights
 		modifier = {
 			factor = 0.8
 			has_trait = trait_presapient_natural_intellectuals
@@ -1173,58 +1303,44 @@ hfe_job_recycler_machine = {
 			has_trait = trait_industrious
 		}
 		modifier = {
-			factor = 1.3
-			has_trait = trait_robot_power_drills
+			factor = 0.8
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 3
-			has_job = hfe_job_recycler_machine
+			factor = 0.7
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
-			planet.controller = {
-				OR = {
-					is_country_type = swarm
-					is_country_type = ai_empire
-				}
-			}
+			factor = 0.8
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
 		}
-	}
-}
-
-hfe_job_recycler_hive_mind = {
-	category = simple_drone
-	is_capped_by_modifier = yes
-	building_icon = building_junkheap
-	clothes_texture_index = 3
-	icon = chemist
-	possible = {
-		drone_job_check_trigger = yes
-	}
-	resources = {
-		category = hfe_job_recyclers
-		produces = {
-			minerals = 2
-			alloys = 2
-			consumer_goods = 1
-			food = 1
-		}
-	}
-	weight = {
-		weight = @worker_job_weight
+		# alloys auto generated weights
+		# consumer_goods auto generated weights
 		modifier = {
-			factor = 0.05
-			can_take_servant_job = yes
+			factor = 1.2
+			has_trait = trait_syncretic_proles
 		}
-		# worker weights
 		modifier = {
-			factor = 10
-			or = {
-				is_enslaved = yes
-				is_non_sapient_robot = yes
-				is_shackled_robot = yes
-			}
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.2
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_normal }
+		}
+		modifier = {
+			factor = 0.8
+			has_trait = trait_necrophage
 		}
 		modifier = {
 			factor = 1.1
@@ -1238,9 +1354,95 @@ hfe_job_recycler_hive_mind = {
 			factor = 0.95
 			has_trait = trait_weak
 		}
-		# minerals weight
 		modifier = {
-			factor = 3
+			factor = 1.3
+			has_trait = trait_void_dweller_1
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
+			planet.controller = {
+				OR = {
+					is_country_type = swarm
+					is_country_type = ai_empire
+				}
+			}
+		}
+	}
+}
+
+hfe_job_recycler_gestalt = {
+	category = simple_drone
+	is_capped_by_modifier = yes
+	building_icon = building_junkheap
+	clothes_texture_index = 3
+	icon = chemist
+	possible_pre_triggers = {
+		has_owner = yes
+		is_enslaved = no
+		is_being_purged = no
+		is_being_assimilated = no
+	}
+	possible = {
+		drone_job_check_trigger = yes
+	}
+	resources = {
+		category = hfe_job_recycler
+		produces = {
+			minerals = 3
+			alloys = 2
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+			alloys = 1
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					country_uses_consumer_goods = yes
+				}
+			}
+			consumer_goods = 1
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					country_uses_food = yes
+				}
+			}
+			food = 1
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					country_uses_food = no
+				}
+			}
+			minerals = 1
+		}
+	}
+	weight = {
+		weight = @worker_job_weight
+		# minerals auto generated weights
+		modifier = {
+			factor = 0.8
+			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 1.2
 			has_trait = trait_presapient_proles
 		}
 		modifier = {
@@ -1248,16 +1450,42 @@ hfe_job_recycler_hive_mind = {
 			has_trait = trait_industrious
 		}
 		modifier = {
-			factor = 2
-			has_trait = trait_natural_engineers
+			factor = 0.8
+			has_trait = hfe_species_trait_error
 		}
 		modifier = {
-			factor = 3
-			has_job = hfe_job_recycler_hive_mind
+			factor = 0.7
+			has_trait = hfe_species_trait_clever_beast
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 0.8
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
+		}
+		# alloys auto generated weights
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1268,83 +1496,69 @@ hfe_job_recycler_hive_mind = {
 	}
 }
 
-hfe_job_godforge_primitive = {
-	can_set_priority = no
-	category = ruler
+hfe_job_criminal_entertainer = {
+	category = specialist
+	condition_string = SPECIALIST_JOB_TRIGGER
 	is_capped_by_modifier = yes
-	building_icon = building_nano_forge
+	building_icon = building_underground_clubs
 	clothes_texture_index = 3
-	icon = replicator
-
+	icon = entertainer
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
 		is_being_assimilated = no
-		is_enslaved = no
 	}
-
 	possible = {
-		owner = {
-			OR = {
-				is_country_type = primitive
-				is_primitive = yes
-			}
-		}
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = high_mechanicus_planet
-				has_planet_flag = hfe_colony_beta
-			}
-		}
+		entertainer_job_check_trigger = yes
 	}
-
 	planet_modifier = {
-		planet_stability_add = 5
+		planet_amenities_add = 10
+		planet_crime_add = 2
 	}
-
-	pop_modifier = {
-		pop_political_power = 1
-	}
-
-	resources = {
-		category = hfe_godforge
-		produces = {
-			alloys = 3
-			minerals = 3
-			influence = 1
-			unity = 3
+	triggered_planet_modifier = {
+		potential = {
+			OR = {
+				has_trait = trait_robot_domestic_protocols
+				has_trait = trait_charismatic
+			}
 		}
-#		# No upkeep to prevent primitive economic spiral of death
-	}
-
-	weight = {
-		weight = @ruler_job_weight
 		modifier = {
-			factor = 2
-			owner = {
-				has_country_flag = hfe_varelse_primitive_0
+			planet_amenities_add = 2
+		}
+	}
+	triggered_planet_modifier = {
+		potential = {
+			has_trait = trait_repugnant
+		}
+		modifier = {
+			planet_amenities_add = -2
+		}
+	}
+	weight = {
+		weight = @specialist_job_weight
+		# amenities auto generated weights
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_trait = trait_charismatic
+				has_trait = trait_robot_emotion_emulators
 			}
 		}
 		modifier = {
 			factor = 0.5
-			NOT = { is_exact_same_species = owner }
+			OR = {
+				has_trait = trait_repugnant
+				has_trait = trait_robot_uncanny
+			}
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
 		}
 		modifier = {
-			factor = 5
-			is_same_species = owner
-		}
-		modifier = {
-			factor = 2
-			is_exact_same_species = owner
-		}
-		modifier = {
-			factor = 2
-			has_trait = trait_industrious
-		}
-		# crisis purge
-		modifier = {
-			factor = 0.01
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1355,127 +1569,105 @@ hfe_job_godforge_primitive = {
 	}
 }
 
-
-hfe_job_godforge_overlord = {
-	can_set_priority = no
+hfe_job_godforge_main = {
 	category = ruler
 	is_capped_by_modifier = yes
 	building_icon = building_nano_forge
 	clothes_texture_index = 4
 	icon = replicator
-
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
 		is_being_assimilated = no
-		is_enslaved = no
 	}
-
 	possible = {
-		owner = {
-			NOT = {
-				is_country_type = primitive
-				is_primitive = yes
-				is_gestalt = yes
-			}
-		}
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = high_mechanicus_planet
-				has_planet_flag = hfe_colony_beta
-			}
-		}
-		OR = {
-			is_same_species = owner
-			has_citizenship_rights = yes
-			has_citizenship_type = {
-				type = citizenship_full
-			}
-			owner = { is_xenophile = yes }
-		}
+		ruler_job_check_trigger = yes
 	}
-
 	planet_modifier = {
-		planet_stability_add = 5
-		planet_amenities_add = -5
-		planet_orbital_bombardment_damage = 0.05
+		planet_orbital_bombardment_damage = -0.05
 	}
-
-	pop_modifier = {
-		pop_political_power = 1
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+			}
+		}
+		pop_government_ethic_attraction = 0.1
+		pop_cat_specialist_political_power = -0.1
 	}
-
 	resources = {
-		category = hfe_godforge
+		category = planet_jobs
 		produces = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-			}
-			influence = 0.25
-			minor_artifacts = 0.25
-			unity = 5
-		}
-		produces = { unity = 10 }
-		produces = {
-			trigger = {
-				has_trait = trait_repugnant
-				has_trait = trait_robot_uncanny
-			}
-			unity = -4
-		}
-		upkeep = {
-			trigger = {
-				owner = { has_country_flag = hfe_varelse_primitive_0 }
-				owner = {
-					NOT = {
-						is_country_type = primitive
-						is_primitive = yes
-					}
-				}
-			}
-			minerals = 4
-			food = 2
-			energy = 4
-			consumer_goods = 2
-		}
-		upkeep = {
-			trigger = {
-				owner = { NOT = { has_country_flag = hfe_varelse_primitive_0 } }
-			}
-			minerals = 6
-			energy = 5
-			consumer_goods = 4
+			minor_artifacts = 0.01
+			unity = 20
 		}
 	}
-
 	weight = {
 		weight = @ruler_job_weight
+		# unity auto generated weights
 		modifier = {
-			factor = 2
-			owner = {
-				has_country_flag = hfe_varelse_primitive_0
-			}
-		}
-#		modifier = {
-#			factor = 0.5
-#			NOT = { is_exact_same_species = owner_main_species }
-#		}
-		modifier = {
-			factor = 5
-			is_same_species = owner
+			factor = 1.1
+			has_trait = trait_presapient_natural_intellectuals
 		}
 		modifier = {
-			factor = 2
-			is_exact_same_species = owner
+			factor = 1.2
+			has_trait = trait_presapient_docile_livestock
 		}
 		modifier = {
-			factor = 2
-			has_trait = trait_industrious
+			factor = 1.2
+			has_trait = trait_traditional
 		}
-		# crisis purge
 		modifier = {
-			factor = 0.01
+			factor = 0.8
+			has_trait = trait_quarrelsome
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_robot_propaganda_machines
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_brainslug
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		# minor_artifacts auto generated weights
+		modifier = {
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robust
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_necrophage
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = hfe_species_trait_happy_slave
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1486,128 +1678,94 @@ hfe_job_godforge_overlord = {
 	}
 }
 
-hfe_job_mechanicus_bodyguard = {
-	category = ruler
-	can_set_priority = no
+hfe_job_godforge_stronghold = {
+	category = specialist
 	is_capped_by_modifier = yes
 	icon = duelist
 	clothes_texture_index = 4
 	building_icon = building_nano_forge
-
 	possible_pre_triggers = {
 		has_owner = yes
+		is_enslaved = no
 		is_being_purged = no
 		is_being_assimilated = no
-		is_enslaved = no
 	}
-
 	possible = {
-		owner = { has_country_flag = hfe_varelse_primitive_0 }
-		owner = {
-			NOT = {
-				has_country_flag = hfe_varelse_fedora_governance
-				has_civic = hfe_civic_overthrown_mechanicus
-				is_materialist = yes
-			}
-		}
-		OR = {
-			has_citizenship_rights = yes
-			has_citizenship_type = {
-				type = citizenship_full
-			}
-			owner = { is_country_type = primitive }
-			owner = { is_primitive = yes }
-			is_same_species = owner
-		}
+		specialist_job_check_trigger = yes
 	}
-
 	resources = {
-		category = hfe_godforge
+		category = planet_jobs
 		produces = {
-			alloys = 1
-			unity = 15
-		}
-		upkeep = {
 			trigger = {
-				OR = {
-					owner = { NOT = { has_country_flag = hfe_varelse_primitive_0 } }
-					owner = {
-						NOT = {
-							is_country_type = primitive
-							is_primitive = yes
-						}
-					}
+				exists = owner
+				owner = {
+					has_valid_civic = civic_citizen_service
 				}
 			}
-			food = 3
-			energy = 2
+			unity = 2
 		}
 	}
-
-#	country_modifier = {
-#		category_military_theory_research_speed_mult = 0.25
-#		category_materials_research_speed_mult = 0.1
-#		# As opposed to the High Mechanicus himself being a Job
-#		# Unfortunately, the game does not calculate Armies
-#		diplo_weight_pops_mult = 0.05
-#	}
-
 	planet_modifier = {
-#		army_collateral_damage_mult = 0.2
-#		army_health = 0.03
-#		army_morale = 0.25
-		planet_crime_add = -25
-		pop_defense_armies_add = 1
+		pop_defense_armies_add = 5
+		planet_crime_add = -3
 	}
-
 	triggered_planet_modifier = {
 		potential = {
+			exists = owner
 			owner = {
-				has_country_flag = hfe_varelse_primitive_0
-				NOT = {
-					is_primitive = yes
-					is_country_type = primitive
-				}
+				is_gestalt = no
 			}
 		}
-		pop_defense_armies_add = 1
+		pop_cat_worker_political_power = -0.03
 	}
-
-	pop_modifier = {
-		pop_political_power = 0.5
-	}
-
 	weight = {
-		weight = 5
+		weight = @specialist_job_weight
+		# army auto generated weights
 		modifier = {
-			factor = 0.01
-			AND = {
-				NOT = {	is_same_species = owner }
-				owner = {
-					NOT = {
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-				owner = {
-					NOT = {
-						is_xenophile = yes
-						is_egalitarian = yes
-					}
-				}
-			}
+			factor = 2.0
+			has_trait = trait_presapient_earthbound
 		}
 		modifier = {
-			factor = 20
-			is_exact_same_species = owner
+			factor = 1.2
+			has_trait = trait_presapient_proles
 		}
 		modifier = {
-			factor = 10
-			is_same_species = owner
+			factor = 1.8
+			has_trait = trait_very_strong
 		}
-		# crisis purge
 		modifier = {
-			factor = 0
+			factor = 1.4
+			has_trait = trait_strong
+		}
+		modifier = {
+			factor = 0.6
+			has_trait = trait_weak
+		}
+		modifier = {
+			factor = 2.0
+			has_trait = trait_resilient
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_cybernetic
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_limited_regeneration
+		}
+		modifier = {
+			factor = 1.4
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_military }
+		}
+		# tail auto generated weights
+		modifier = {
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1618,59 +1776,23 @@ hfe_job_mechanicus_bodyguard = {
 	}
 }
 
-hfe_job_mechanicus_cultist = {
-	category = worker
+hfe_job_godforge_temple = {
+	category = specialist
 	building_icon = building_underground_chemists
 	icon = organic_battery
 	can_set_priority = no
 	clothes_texture_index = 6
 	is_capped_by_modifier = yes
-
 	possible_pre_triggers = {
 		has_owner = yes
-		is_enslaved = no
 		is_being_purged = no
 		is_being_assimilated = no
 	}
-
 	possible = {
-		OR = {
-			planet = { has_building = hfe_building_mechanicus_cult_temple }
-			planet = { has_planet_flag = hfe_colony_beta }
-			owner = { has_country_flag = hfe_varelse_primitive_0 }
-			owner = { is_primitive = yes }
-			owner = { is_country_type = primitive }
-		}
-		OR = {
-			has_citizenship_type = {
-				type = citizenship_full
-			}
-			is_same_species = owner_species
-			owner = { has_civic = hfe_civic_high_mechanicus }
-			owner = { is_country_type = primitive }
-			owner = { is_primitive = yes }
-		}
-		owner = {
-			OR = {
-				NOT = { is_xenophobe = yes }
-				is_same_species = owner
-			}
-		}
-		OR = {
-			NOT = {
-				has_trait = trait_mechanical
-				has_trait = trait_machine_unit
-				is_robot_pop = yes
-#				is_robotic = yes
-				is_free_robot_species_rights = yes
-			}
-			owner = { has_country_flag = synthetic_empire }
-			owner = { has_country_flag = flesh_weakened }
-		}
+		specialist_job_check_trigger = yes
 	}
-
 	resources = {
-		category = hfe_godforge
+		category = planet_jobs
 		produces = {
 			unity = 5
 			alloys = 3
@@ -1682,25 +1804,11 @@ hfe_job_mechanicus_cultist = {
 			food = 0.1
 		}
 	}
-	
 	planet_modifier = {
-		planet_amenities_add = 4
+		planet_amenities_add = 5
 		planet_crime_add = -2
 		planet_stability_add = 2
 	}
-
-	triggered_planet_modifier = {
-		potential = {
-			planet = {
-				NOT = {
-					has_planet_flag = hfe_colony_beta
-					has_planet_flag = high_mechanicus_planet
-				}
-			}
-		}
-		pop_environment_tolerance = -0.01
-	}
-	
 	triggered_planet_modifier = {
 		potential = {
 			OR = {
@@ -1712,83 +1820,147 @@ hfe_job_mechanicus_cultist = {
 			planet_amenities_add = 1
 		}
 	}
-
-	pop_modifier = {
-		pop_political_power = 0.5
-	}
-	
 	weight = {
-		weight = @worker_job_weight	
+		weight = @specialist_job_weight
+		# engineering_research auto generated weights
 		modifier = {
-			factor = 0.5
-			has_citizenship_rights = no
-			NOT = {
-				is_same_species = owner
-				owner = { is_xenophile = yes }
-				owner = { is_egalitarian = yes }
-				owner = { is_primitive = yes }
-				owner = { is_country_type = primitive }
-			}
+			factor = 1.2
+			has_trait = trait_presapient_natural_intellectuals
 		}
 		modifier = {
-			factor = 2
-			is_same_species = owner
+			factor = 0.7
+			has_trait = trait_presapient_proles
 		}
 		modifier = {
-			factor = 1.25
-			has_trait = trait_charismatic
+			factor = 0.001
+			has_trait = trait_presapient_docile_livestock
 		}
 		modifier = {
-			factor = 0.75
-			has_trait = trait_repugnant
-		}	
+			factor = 1.2
+			has_trait = trait_intelligent
+		}
 		modifier = {
-			factor = 1.5
+			factor = 1.3
+			has_trait = trait_natural_engineers
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_latent_psionic
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_psionic
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_enigmatic_intelligence_poor
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = trait_enigmatic_intelligence_failed
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_robot_logic_engines
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_brainslug
+		}
+		modifier = {
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = hfe_species_trait_clever_beast
+		}
+		modifier = {
+			factor = 1.08
+			has_trait = hfe_species_trait_clever_beast_presapient_spawn
+		}
+		# unity auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_presapient_natural_intellectuals
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = trait_presapient_docile_livestock
+		}
+		modifier = {
+			factor = 1.2
 			has_trait = trait_traditional
 		}
 		modifier = {
-			factor = 0.5
+			factor = 0.8
 			has_trait = trait_quarrelsome
-		}	
-		modifier = {
-			factor = 1.25
-			has_ethic = ethic_spiritualist
-		}	
-		modifier = {
-			factor = 1.2
-			has_ethic = ethic_materialist
 		}
 		modifier = {
-			factor = 1.5
+			factor = 1.3
+			has_trait = trait_robot_propaganda_machines
+		}
+		modifier = {
+			factor = 1.2
 			has_trait = trait_brainslug
-		}	
+		}
 		modifier = {
-			factor = 1.25
-			has_trait = trait_presapient_natural_intellectuals
-		}	
+			factor = 0.001
+			has_trait = hfe_species_trait_error
+		}
+		# alloys auto generated weights
 		modifier = {
-			factor = 1.25
+			factor = 1.2
+			has_trait = trait_syncretic_proles
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = trait_nerve_stapled
+		}
+		modifier = {
+			factor = 1.1
 			has_trait = trait_robust
 		}
 		modifier = {
-			factor = 0
+			factor = 1.1
+			has_trait = trait_robot_efficient_processors
+		}
+		# strata auto generated weights
+		modifier = {
+			factor = 1.1
+			has_trait = trait_necrophage
+		}
+		modifier = {
+			factor = 1.3
+			has_trait = trait_void_dweller_1
+		}
+		modifier = {
+			factor = 0.6
+			has_trait = hfe_species_trait_happy_slave
+		}
+		# amenities auto generated weights
+		modifier = {
+			factor = 1.5
 			OR = {
-				has_trait = trait_mechanical
-				has_trait = trait_machine_unit
+				has_trait = trait_charismatic
+				has_trait = trait_robot_emotion_emulators
 			}
 		}
 		modifier = {
 			factor = 0.5
-			owner = {
-				has_monthly_income = {
-					resource = food
-					value < 10
-				}
+			OR = {
+				has_trait = trait_repugnant
+				has_trait = trait_robot_uncanny
 			}
 		}
-		# crisis purge
+		# tail auto generated weights
 		modifier = {
-			factor = 0
+			factor = 0.79
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 0.001
+			exists = planet.controller
 			planet.controller = {
 				OR = {
 					is_country_type = swarm
@@ -1796,162 +1968,5 @@ hfe_job_mechanicus_cultist = {
 				}
 			}
 		}
-	}
-}
-
-hfe_job_godforge_fulfilment_center = {
-	category = worker
-	icon = odd_factory_worker
-	building_icon = building_nano_forge
-	is_capped_by_modifier = no
-	can_set_priority = no
-	clothes_texture_index = 2
-	contributes_to_diplo_weight = no # For balance's sake
-
-	possible_pre_triggers = {
-		has_owner = yes
-		is_being_purged = no
-		is_being_assimilated = no
-	}
-
-	possible = {
-		planet = {
-			OR = {
-				has_planet_flag = hfe_varelse_colony
-				has_planet_flag = hfe_colony_beta
-				has_planet_flag = high_mechanicus_planet
-			}
-		}
-		OR = {
-			is_unemployed = yes
-			has_job = no
-			hfe_trigger_uncapped_job = yes
-			is_shackled_robot = yes # Catch-all
-		}
-	}
-
-	planet_modifier = {
-		planet_amenities_add = 1
-	}
-
-	pop_modifier = {
-		pop_happiness = -0.30
-		pop_political_power = -0.25
-	}
-
-#	triggered_pop_modifier = {
-#		potential = {
-#			owner = { NOT = { is_materialist = yes } }
-#		}
-#		pop_ethic_spiritualist_attraction_mult = 0.1
-#	}
-#
-#	triggered_pop_modifier = {
-#		potential = {
-#			owner = { NOT = { is_spiritualist = yes } }
-#		}	
-#		pop_ethic_materialist_attraction_mult = 0.05
-#	}
-
-	resources = {
-		category = hfe_godforge
-		produces = {
-			engineering_research = 0.5
-			alloys = 0.2
-			consumer_goods = 0.2
-			food = 1
-		}
-		upkeep = {
-			trigger = {
-				owner = {
-					NOT = {
-						has_country_flag = hfe_varelse_primitive_0
-						is_primitive = yes
-						is_country_type = primitive
-					}
-				}
-			}
-			energy = 0.25
-			minerals = 0.2
-		}
-		upkeep = {
-			trigger = {
-				OR = {
-					is_lithoid = yes
-					has_trait = trait_lithoid
-					has_trait = trait_mechanical
-					has_trait = trait_machine_unit
-					is_robot_pop = yes
-				}
-			}
-			energy = 0.2
-		}
-		upkeep = {
-			trigger = {
-				NOT = {
-					is_lithoid = yes
-					has_trait = trait_lithoid
-				}
-				NOT = {
-					is_robot_pop = yes
-					has_trait = trait_mechanical
-					has_trait = trait_machine_unit
-				}
-			}
-			minerals = 0.25
-		}
-		upkeep = {
-			trigger = {
-				NOT = {
-					owner = {
-						has_country_flag = hfe_varelse_primitive_0
-					}
-				}
-			}
-			unity = 2
-		}
-	}
-
-	weight = {
-		weight = @special_job_weight
-#		modifier = {
-#			factor = 0
-#			planet = {
-#				OR = {
-#					has_available_jobs = farmer
-#					has_available_jobs = miner
-#					has_available_jobs = technician
-#				}
-#			}
-#		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_job = farmer
-				has_job = primitive_farmer
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_job = technician
-				has_job = primitive_technician
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_job = miner
-				has_job = primitive_miner
-			}
-		}
-		modifier = {
-			factor = 10
-			has_job = no
-		}
-#		modifier = {
-#			factor = 1
-#			is_enslaved = yes
-#		}
 	}
 }

@@ -1,14 +1,16 @@
 #
 namespace = hfe_test
-# country_event = {
-# 	id = hfe_test.0
-# 	title = _hfe_scripted_loc_test_
-# 	desc = _hfe_scripted_loc_test_
-# 	is_triggered_only = yes
-# 	option = {
-# 		name = _hfe_scripted_loc_test_
-# 	}
-# }
+country_event = {
+	id = hfe_test.0
+	title = _hfe_scripted_loc_test_
+	desc = _hfe_scripted_loc_test_
+	picture = GFX_evt_glitchy_matrix
+	is_triggered_only = yes
+	option = {
+		name = hfe_population_disaster
+	}
+}
+
 country_event = {
 	id = hfe_test.1
 	hide_window = yes
@@ -361,6 +363,7 @@ country_event = {
 	}
 }
 
+# find memorial planets
 country_event = {
 	id = hfe_test.13
 	hide_window = yes
@@ -488,6 +491,8 @@ country_event = {
 	immediate = {
 		set_global_flag = hfe_pirate_logs
 		set_global_flag = hfe_plague_logs
+		set_global_flag = hfe_general_logs
+		set_global_flag = HFE_TSP_spawn_test
 		every_country = {
 			limit = {
 				is_country_type = hfe_pirate
@@ -579,13 +584,17 @@ ship_event = {
 	immediate = {
 		if = {
 			limit = {
+				has_global_flag = hfe_pirate_logs
 				owner = {
 					is_country_type = hfe_pirate
 				}
 			}
 			log = "pirate ship upgraded [fleet.GetName] [owner.GetName]"
 		}
-		else = {
+		else_if = {
+			limit = {
+				has_global_flag = hfe_general_logs
+			}
 			log = "drone ship upgraded [fleet.GetName] [owner.GetName]"
 		}
 	}
@@ -660,7 +669,6 @@ country_event = {
 #		}
 #	}
 #}
-
 country_event = {
 	id = hfe_test.24
 	hide_window = yes
@@ -730,108 +738,157 @@ planet_event = {
 	}
 }
 
-country_event = { # Only called by Console Command cheat codes
+country_event = {
 	id = hfe_test.28
-	title = "HFE_INIT_SPAWN_LOG_TSP"
-	desc = "HFE_INIT_SPAWN_LOG_TSP_DESC"
-	picture = GFX_evt_hfe_fallen_2
+	hide_window = yes
 	is_triggered_only = yes
-
-	option = {
-		allow = {
-			custom_tooltip = {
-				fail_text = "HFE_TSP_SPAWN_TEST_ALREADY_ENABLED"
-				NOT = { has_global_flag = HFE_TSP_spawn_test }
+	immediate = {
+		random_owned_pop = {
+			create_country = {
+				type = default
+				effect = {
+					root.capital_scope = {
+						set_owner = prev
+					}
+					set_player = root
+				}
 			}
 		}
-		name = "HFE_TSP_spawn_test_yes"
-		set_global_flag = HFE_TSP_spawn_test
-		custom_tooltip = HFE_TSP_SPAWN_TEST_GLOBAL_FLAG_TOOLTIP
 	}
+}
 
-	option = {
-		name = hfe_not_interested
-		remove_global_flag = HFE_TSP_spawn_test
-		custom_tooltip = HFE_TSP_SPAWN_TEST_GLOBAL_FLAG_TOOLTIP_REMOVE
+planet_event = {
+	id = hfe_test.29
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		planet_event = {
+			id = hfe_test.30
+			days = 1
+		}
+	}
+}
+
+planet_event = {
+	id = hfe_test.30
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_owned_species = {
+			always = yes
+		}
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				minerals = 10000
+			}
+		}
 	}
 }
 
 country_event = {
-	id = hfe_test.120
+	id = hfe_test.31
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		every_system = {
-			set_timed_star_flag = {
-				flag = hfe_test_star_flag
-				days = 10
+		every_owned_species = {
+			limit = {
+				has_citizenship_type = {
+					country = root
+					type = citizenship_full_machine
+				}
+			}
+			set_military_service_type = {
+				country = root
+				type = military_service_full
+				cooldown = yes
+			}
+			set_migration_controls = {
+				country = root
+				type = no
 			}
 		}
-		set_spawn_system_batch = begin
-		no_scope = {
-			# spawn_system = {
-			# min_distance >= 320
-			# max_distance <= 321
-			# min_orientation_angle = 330
-			# max_orientation_angle = 330.1
-			# initializer = hfe_initializer_test_0
-			# }
-			hfe_effect_test_1 = yes
-		}
-		# every_system = {
-		# limit = {
-		# not = {
-		# has_star_flag = hfe_test_star_flag
-		# }
-		# }
-		# hfe_effect_add_hyperlanes = yes
-		# }
-		# event_target:hfe_initializer_test_0 = {
-		# hfe_effect_test_0 = yes
-		# }
-		# every_system = {
-		# limit = {
-		# has_star_flag = hfe_test_star_flag
-		# }
-		# every_system = {
-		# limit = {
-		# not = {
-		# has_star_flag = hfe_test_star_flag
-		# }
-		# has_hyperlane_to = prev
-		# }
-		# remove_hyperlane = {
-		# from = this
-		# to = prev
-		# }
-		# }
-		# }
-		# every_system = {
-		# limit = {
-		# not = {
-		# has_star_flag = hfe_test_star_flag
-		# }
-		# }
-		# every_system = {
-		# limit = {
-		# has_hyperlane_to = prev
-		# not = {
-		# has_star_flag = hfe_test_star_flag
-		# }
-		# distance = {
-		# source = prev
-		# min_distance >= 100
-		# type = euclidean
-		# #uses_bypass = no
-		# }
-		# }
-		# log = "removed [prev.GetName] [this.GetName]"
-		# remove_hyperlane = {
-		# from = this
-		# to = prev
-		# }
-		# }
-		# }
-		set_spawn_system_batch = end
 	}
 }
+
+country_event = {
+	id = hfe_test.32
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_federation = {
+			if = {
+				limit = {
+					relative_power = {
+						who = root
+						value = superior
+					}
+				}
+				root = {
+					add_resource = {
+						minerals = 100
+					}
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+				exists = federation
+			}
+			if = {
+				limit = {
+					relative_power = {
+						who = root
+						value = superior
+					}
+				}
+				root = {
+					add_resource = {
+						energy = 100
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.33
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				hfe_trigger_is_robot = yes
+			}
+			change_species = root
+		}
+	}
+}
+
+# country_event = { # Only called by Console Command cheat codes
+# 	id = hfe_test.28
+# 	title = "HFE_INIT_SPAWN_LOG_TSP"
+# 	desc = "HFE_INIT_SPAWN_LOG_TSP_DESC"
+# 	picture = GFX_evt_hfe_fallen_2
+# 	is_triggered_only = yes
+# 	option = {
+# 		allow = {
+# 			custom_tooltip = {
+# 				fail_text = "HFE_TSP_SPAWN_TEST_ALREADY_ENABLED"
+# 				NOT = { has_global_flag = HFE_TSP_spawn_test }
+# 			}
+# 		}
+# 		name = "HFE_TSP_spawn_test_yes"
+# 		set_global_flag = HFE_TSP_spawn_test
+# 		custom_tooltip = HFE_TSP_SPAWN_TEST_GLOBAL_FLAG_TOOLTIP
+# 	}
+# 	option = {
+# 		name = hfe_not_interested
+# 		remove_global_flag = HFE_TSP_spawn_test
+# 		custom_tooltip = HFE_TSP_SPAWN_TEST_GLOBAL_FLAG_TOOLTIP_REMOVE
+# 	}
+# }

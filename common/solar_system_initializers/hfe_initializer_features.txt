@@ -1,5 +1,4 @@
 #
-
 hfe_init_features_sanctuary_0 = {
 	class = rl_trinary_stars
 	flags = {
@@ -23,7 +22,7 @@ hfe_init_features_sanctuary_0 = {
 		planet = {
 			count = {
 				min = 1
-				max = 7
+				max = 3
 			}
 			orbit_angle = random
 			class = random_non_colonizable
@@ -35,7 +34,7 @@ hfe_init_features_sanctuary_0 = {
 					min = 0
 					max = 1
 				}
-				class = random
+				class = random_non_colonizable
 				orbit_angle = {
 					min = 90
 					max = 270
@@ -58,34 +57,39 @@ hfe_init_features_sanctuary_0 = {
 			satellite_naming_policy = lower_case_latin_letters
 			change_orbit = @base_moon_distance
 			moon = {
-				orbit_angle = random
 				class = pc_habitat
-				size = { min = 6 max = 10 }
-				orbit_distance = 2
+				orbit_angle = {
+					min = 90
+					max = 270
+				}
+				orbit_distance = 5
+				size = 6
+				flags = {
+					megastructure
+					habitat
+					mining_habitat
+				}
+				deposit_blockers = none
 			}
 		}
 		planet = {
 			count = {
-				min = 1
+				min = 0
 				max = 2
 			}
 			orbit_angle = random
 			class = random_non_colonizable
 			orbit_distance = 25
 			satellite_naming_policy = lower_case_latin_letters
-			change_orbit = 6
-			moon = {
-				count = {
-					min = 0
-					max = 1
-				}
-				class = random_non_colonizable
-			}
+			change_orbit = @base_moon_distance
 		}
 	}
 	change_orbit = -210
 	planet = {
-		count = 2
+		count = {
+			min = 1
+			max = 2
+		}
 		orbit_distance = 15
 		class = random_non_colonizable
 		orbit_angle = random
@@ -93,79 +97,49 @@ hfe_init_features_sanctuary_0 = {
 	planet = {
 		count = 1
 		orbit_distance = 20
-		class = pc_gas_giant
+		class = random_colonizable
 		orbit_angle = random
-		size = 37
+		size = {
+			min = 16
+			max = 20
+		}
+		deposit_blockers = none
 		modifiers = none
-#		change_orbit = @base_moon_distance
-		moon = {
-			class = random
-			orbit_angle = random
-			orbit_distance = 4
-			size = 17
+		init_effect = {
+			save_event_target_as = hfe_features_sanctuary_planet
 		}
-		moon = {
-			class = random_colonizable
-			deposit_blockers = none
-			size = 25
-#			modifiers = none
-			init_effect = {
-				save_event_target_as = hfe_features_sanctuary_planet
-			}
-			orbit_distance = 3.5
-		}
+		change_orbit = @base_moon_distance
 		moon = {
 			count = {
-				min = 1
-				max = 3
-			}
-			size = {
-				min = 9
-				max = 14
+				min = 0
+				max = 1
 			}
 			class = random_non_colonizable
-			orbit_distance = 3.5
+			orbit_angle = random
+			orbit_distance = 5
 		}
 	}
 	planet = {
-		count = 1
+		count = {
+			min = 1
+			max = 2
+		}
 		orbit_distance = 20
 		class = pc_gas_giant
 		orbit_angle = random
-		change_orbit = 3
+		change_orbit = @base_moon_distance
 		moon = {
 			count = {
-				min = 3
-				max = 6
+				min = 1
+				max = 2
 			}
-			class = random
+			class = random_non_colonizable
 			orbit_angle = random
-			orbit_distance = 3
-			init_effect = {
-				if = {
-					limit = {
-						NOT = { has_global_flag = hfe_hardcore_disable }
-					}
-					random_list = {
-						25 = { change_pc = pc_frozen }
-						25 = { change_pc = pc_barren }
-						25 = { change_pc = pc_barren_cold }
-						25 = { change_pc = pc_toxic }
-						25 = { change_pc = pc_molten }
-						10 = { change_pc = pc_shrouded }
-						10 = { change_pc = pc_shielded }
-					}
-					reroll_planet = yes
-				}
-			}
+			orbit_distance = 5
 		}
 	}
 	init_effect = {
 		generate_home_system_resources = yes
-		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
-			log = "Sanctuary Core spawned"
-		}
 	}
 }
 
@@ -200,15 +174,14 @@ hfe_init_features_sanctuary_1 = {
 		size = 30
 		init_effect = {
 			create_country = {
-				name = "Sanctuary Quarantine"
+				name = "Quarantine"
 				type = faction
 				name_list = AI
 				effect = {
 					create_fleet = {
-						name = "Quarantine Squad"
+						name = "Quarantine squad"
 						settings = {
-							spawn_debris = yes
-							can_disband = no
+							spawn_debris = no
 						}
 						effect = {
 							set_owner = prev
@@ -223,8 +196,6 @@ hfe_init_features_sanctuary_1 = {
 					}
 				}
 			}
-			set_name = "Sanctuary"
-			reroll_planet = yes
 		}
 		change_orbit = @base_moon_distance
 		moon = {
@@ -249,7 +220,7 @@ hfe_init_features_sanctuary_1 = {
 		moon = {
 			count = {
 				min = 0
-				max = 4
+				max = 2
 			}
 			class = random_non_colonizable
 			orbit_angle = random
@@ -283,7 +254,7 @@ hfe_init_features_sanctuary_2 = {
 	planet = {
 		count = {
 			min = 3
-			max = 8
+			max = 4
 		}
 		class = pc_asteroid
 		orbit_angle = random
@@ -293,7 +264,7 @@ hfe_init_features_sanctuary_2 = {
 	planet = {
 		count = {
 			min = 3
-			max = 8
+			max = 4
 		}
 		class = pc_asteroid
 		orbit_angle = random
@@ -311,33 +282,12 @@ hfe_init_features_sanctuary_2 = {
 		change_orbit = @base_moon_distance
 		moon = {
 			count = {
-				min = 3
-				max = 6
+				min = 1
+				max = 2
 			}
-			class = random
+			class = random_non_colonizable
 			orbit_angle = random
-			orbit_distance = 3
-			size = {
-				min = 9
-				max = 20
-			}
-			init_effect = {
-				if = {
-					limit = {
-						NOT = { has_global_flag = hfe_hardcore_disable }
-					}
-					random_list = {
-						25 = { change_pc = pc_frozen }
-						25 = { change_pc = pc_barren }
-						25 = { change_pc = pc_barren_cold }
-						25 = { change_pc = pc_toxic }
-						25 = { change_pc = pc_molten }
-						10 = { change_pc = pc_shrouded }
-						10 = { change_pc = pc_shielded }
-					}
-					reroll_planet = yes
-				}
-			}
+			orbit_distance = 5
 		}
 	}
 	init_effect = {
@@ -345,10 +295,6 @@ hfe_init_features_sanctuary_2 = {
 			type = gateway_ruined
 			random_pos = yes
 			orbit_angle = 360
-		}
-		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
-			log = "Sanctuary exit spawned"
 		}
 	}
 }

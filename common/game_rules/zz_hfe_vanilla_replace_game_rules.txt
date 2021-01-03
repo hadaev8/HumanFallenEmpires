@@ -1,27 +1,4 @@
 #
-
-# #Root = target country
-# #This = country
-# is_valid_rival = {
-# 	custom_tooltip = {
-# 		fail_text = INVALID_RIVAL_DESC
-# 		root = {
-# 			OR = {
-# 				prev = { NOT = { is_country_type = default } }
-# 				AND = {
-# 					or = {
-# 						is_neighbor_of = prev
-# 						has_technology = hfe_tech_total_war
-# 						num_owned_planets = 0
-# 					}
-# 					relative_power = { who = prev value >= inferior }
-# 					#relative_power = { who = prev value <= superior }
-# 				}
-# 			}
-# 		}
-# 	}
-# }
-
 #This rule is a condition for bombarding planets
 #Root = fleet, potential attacker
 #From = planet, potential target
@@ -36,7 +13,9 @@ can_orbital_bombard = {
 	exists = ROOT.OWNER
 	exists = FROM.CONTROLLER
 	or = {
-		ROOT.OWNER = { is_hostile = FROM.CONTROLLER }
+		ROOT.OWNER = {
+			is_hostile = FROM.CONTROLLER
+		}
 		AND = {
 			ROOT.OWNER = {
 				NOR = {
@@ -44,38 +23,9 @@ can_orbital_bombard = {
 					has_policy_flag = interference_active
 				}
 			}
-			FROM.OWNER = { is_country_type = primitive }
-		}
-	}
-}
-
-#Root = planet
-#This = species
-species_can_live_on_planet = {
-	NAND = {
-		root = { is_planet_class = pc_machine }
-		NOR = {
-			has_trait = trait_machine_unit
-			has_trait = trait_mechanical
-			AND = {
-				has_trait = trait_cybernetic
-				exists = root.owner
-				root.owner = {
-					has_authority = auth_machine_intelligence
-					has_civic = civic_machine_assimilator # Assimilator empire
-				}
+			FROM.OWNER = {
+				is_country_type = primitive
 			}
-		}
-	}
-	NAND = {
-		root = { is_planet_class = pc_hive }
-		NOT = { has_trait = trait_hive_mind }
-	}
-	# mod
-	NAND = {
-		exists = root.controller
-		root.controller = {
-			is_country_type = hfe_plague_zombie
 		}
 	}
 }
@@ -90,18 +40,19 @@ can_species_procreate = {
 		has_trait = trait_mechanical
 	}
 	NAND = {
-		root = { has_modifier = slave_colony }
-		NOT = { has_citizenship_type = { type = citizenship_slavery country = root.owner } }
+		root = {
+			has_modifier = slave_colony
+		}
+		NOT = {
+			has_citizenship_type = {
+				type = citizenship_slavery
+				country = root.owner
+			}
+		}
 	}
 	# mod
 	not = {
 		has_trait = hfe_species_trait_brainworm
-	}
-	nand = {
-		hfe_trigger_population_procreate_housing_block_enabled = yes
-		root = {
-			free_housing <= -1
-		}
 	}
 }
 
@@ -109,7 +60,9 @@ can_species_procreate = {
 #This = planet
 can_colonize_outside_borders = {
 	exists = root
-	root = { is_country_type = hfe_features_exodus }
+	root = {
+		is_country_type = hfe_features_exodus
+	}
 	exists = solar_system
 	solar_system = {
 		not = {
@@ -117,17 +70,6 @@ can_colonize_outside_borders = {
 		}
 	}
 }
-
-# This = country
-#can_use_galactic_market = {
-#	or = {
-#		is_country_type = default
-#		is_country_type = hfe_pirate
-#		is_country_type = hfe_drone
-#		is_country_type = drone # As the Ancient Mining Drones are part of the Harvesting Marvel
-#	}
-#	NOR = { is_homicidal = yes }
-#}
 
 # This = planet
 # Root = country
@@ -138,7 +80,9 @@ can_build_branch_office_on_planet = {
 		owner = {
 			OR = {
 				is_same_species = root
-				NOT = { has_civic = civic_fanatic_purifiers }
+				NOT = {
+					has_civic = civic_fanatic_purifiers
+				}
 			}
 		}
 	}
@@ -146,20 +90,29 @@ can_build_branch_office_on_planet = {
 		fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
 		exists = owner
 		OR = {
-			root = { is_criminal_syndicate = yes }
-			owner = { has_commercial_pact = root }
-			owner = { is_in_federation_with = root }
-
+			root = {
+				is_criminal_syndicate = yes
+			}
+			owner = {
+				has_commercial_pact = root
+			}
+			owner = {
+				is_in_federation_with = root
+			}
 			# allow branch offices in subsidiaries and vice versa
 			root = {
 				is_subject = yes
 				is_subject_type = subsidiary
-				overlord = { is_same_value = owner }
+				overlord = {
+					is_same_value = owner
+				}
 			}
 			owner = {
 				is_subject = yes
 				is_subject_type = subsidiary
-				overlord = { is_same_value = root }
+				overlord = {
+					is_same_value = root
+				}
 			}
 			# mod
 			root = {
@@ -174,7 +127,9 @@ can_build_branch_office_on_planet = {
 		fail_text = BRANCH_OFFICE_CRIMINAL_HERITAGE_HAS_TRUCE
 		exists = owner
 		OR = {
-			root = { is_criminal_syndicate = no }
+			root = {
+				is_criminal_syndicate = no
+			}
 			owner = {
 				NOR = {
 					has_truce = root
@@ -187,91 +142,17 @@ can_build_branch_office_on_planet = {
 		fail_text = BRANCH_OFFICE_CRIMINAL_COOLDOWN
 		exists = owner
 		OR = {
-			root = { is_criminal_syndicate = no }
+			root = {
+				is_criminal_syndicate = no
+			}
 			AND = {
-				root = { is_criminal_syndicate = yes }
-				NOT = { has_planet_flag = criminal_branch_closed_cooldown_planet@root }
+				root = {
+					is_criminal_syndicate = yes
+				}
+				NOT = {
+					has_planet_flag = criminal_branch_closed_cooldown_planet@root
+				}
 			}
 		}
 	}
 }
-
-
-# This = country
-can_be_part_of_galactic_council = {
-	OR = {
-		is_ai = no
-		is_country_type = default
-#		is_country_type = hfe_thoth
-		is_country_type = hfe_features_exodus
-#		AND = {
-#			has_country_flag = hfe_future
-#			has_global_flag = hfe_future_in_expansion
-#		}
-	}
-	NOR = {
-		has_civic = civic_fanatic_purifiers
-		has_civic = civic_hive_devouring_swarm
-		has_civic = civic_machine_terminator
-		has_country_flag = hfe_egypt
-	}
-}
-
-#Root = country
-#This = species
-# can_colonize_with_species = {
-# 	has_colonization_control = {
-# 		value = no
-# 		country = root
-# 	}
-# 	OR = {
-# 		NOT = { has_trait = trait_self_modified }
-# 		is_same_species = root
-# 	}
-# 	if = {
-# 		limit = {
-# 			or = {
-# 				is_sapient = no
-# 				and = {
-# 					root = {
-#
-# 					}
-# 				}
-# 			}
-#
-#
-# 		}
-# 		custom_tooltip = {
-# 			always = no
-# 		}
-# 	}
-# 	else = {
-# 		always = yes
-# 	}
-# }
-#
-# # this = country
-# can_have_piracy_risk = {
-# 	years_passed > 10
-# 	is_country_type = default
-# 	or = {
-# 		and = {
-# 			nor = {
-# 				has_global_flag = hfe_pirate_disable
-# 				has_country_flag = hfe_pirate_spawned
-# 			}
-# 			hfe_trigger_is_human_fallen = no
-# 			is_gestalt = no
-# 		}
-# 		and = {
-# 			has_global_flag = hfe_pirate_disable
-# 			# vanilla
-# 			has_country_flag = birth_of_piracy
-# 			NOT = { has_country_flag = had_pirates_spawn }
-# 			OR = {
-# 				has_isolated_system = yes
-# 				has_bordering_system = yes
-# 			}
-# 		}
-# 	}
-# }

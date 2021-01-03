@@ -1,4 +1,113 @@
-#
+# show in tootips how 
+hfe_decision_plague_test_fraction_of_immune = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	resources = {
+		category = decisions
+		cost = {
+			energy = 20
+		}
+	}
+	potential = {
+		exists = owner
+		owner = {
+			has_technology = hfe_tech_plague_study
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = hfe_decision_plague_fail
+			has_planet_flag = hfe_plague_planet
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				check_variable = {
+					which = hfe_plague_all_pops
+					value > 0
+				}
+			}
+			custom_tooltip = hfe_decision_plague_test_fraction_of_immune_tooltip
+		}
+		hidden_effect = {
+			set_variable = {
+				which = hfe_plague_all_pops
+				value = 0
+			}
+			set_variable = {
+				which = hfe_plague_natural_immune_pops
+				value = 0
+			}
+			set_variable = {
+				which = hfe_plague_immune_pops
+				value = 0
+			}
+			every_owned_pop = {
+				prev = {
+					change_variable = {
+						which = hfe_plague_all_pops
+						value = 1
+					}
+				}
+				if = {
+					limit = {
+						hfe_trigger_plague_is_immune = yes
+						not = {
+							has_pop_flag = hfe_plague_pop_immune
+						}
+					}
+					prev = {
+						change_variable = {
+							which = hfe_plague_natural_immune_pops
+							value = 1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						hfe_trigger_plague_is_immune = yes
+					}
+					prev = {
+						change_variable = {
+							which = hfe_plague_immune_pops
+							value = 1
+						}
+					}
+				}
+			}
+			divide_variable = {
+				which = hfe_plague_natural_immune_pops
+				value = hfe_plague_all_pops
+			}
+			# rounding it
+			divide_variable = {
+				which = hfe_plague_natural_immune_pops
+				value = 10
+			}
+			multiply_variable = {
+				which = hfe_plague_natural_immune_pops
+				value = 1000
+			}
+			divide_variable = {
+				which = hfe_plague_immune_pops
+				value = hfe_plague_all_pops
+			}
+			# rounding it
+			divide_variable = {
+				which = hfe_plague_immune_pops
+				value = 10
+			}
+			multiply_variable = {
+				which = hfe_plague_immune_pops
+				value = 1000
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
 
 # for psionic
 hfe_decision_plague_psi_clear = {
@@ -8,30 +117,38 @@ hfe_decision_plague_psi_clear = {
 	resources = {
 		category = decisions
 		cost = {
-			energy = 254
+			energy = 200
 			influence = 25
 		}
 	}
 	potential = {
 		exists = owner
 		owner = {
-			OR = {
-				has_ascension_perk = ap_transcendence
-				hfe_trigger_is_psionic_species = yes
-			}
+			has_ascension_perk = ap_transcendence
 			has_technology = hfe_tech_plague_study
 		}
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = hfe_plague_clear_fail
+			fail_text = hfe_decision_plague_fail
 			has_planet_flag = hfe_plague_planet
 		}
 	}
 	effect = {
 		hidden_effect = {
 			hfe_effect_plague_planet_clean = yes
-			play_sound = event_life_support_fail
+			every_owned_pop = {
+				limit = {
+					hfe_trigger_plague_is_immune = no
+				}
+				random_list = {
+					1 = {
+						set_pop_flag = hfe_plague_pop_immune
+					}
+					9 = {
+					}
+				}
+			}
 		}
 	}
 	ai_weight = {
@@ -60,10 +177,12 @@ hfe_decision_plague_planet_bombardment = {
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = hfe_plague_clear_fail
+			fail_text = hfe_decision_plague_fail
 			has_planet_flag = hfe_plague_planet
 		}
-		owner = { allows_purge = yes }
+		owner = {
+			allows_purge = yes
+		}
 	}
 	effect = {
 		save_event_target_as = hfe_project_plague_planet_bombardment_target

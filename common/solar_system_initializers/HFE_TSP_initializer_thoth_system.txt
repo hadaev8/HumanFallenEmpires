@@ -1,5 +1,4 @@
 #
-
 ####################################################
 ##### Stellaris Tools - System Builder Mod     #####
 ##### Paste your configuration below this line #####
@@ -9,24 +8,17 @@
 #Description #
 # Use this mod as a base to add your own systems to the game. #
 # You can find a full tutorial on the "http://www.stellaristools.com" website. #
-
 hfe_tsp_ssb_thoth_system_initializer = {
-	usage = fallen_empire_init
-	usage_odds = 0
+	prevent_anomalies = yes
 	name = "Duat"
 	class = "sc_binary_1"
-#	asteroids_distance = 115
-
 	flags = {
 		hfe_thoth_system
-		hfe_thoth_was_here
 	}
-
 	asteroid_belt = {
 		type = crystal_asteroid_belt
 		radius = 100
 	}
-
 	planet = {
 		name = "Duat"
 		class = "pc_pulsar"
@@ -35,43 +27,38 @@ hfe_tsp_ssb_thoth_system_initializer = {
 		size = 14
 		has_ring = no
 		satellite_naming_policy = upper_case_roman_numerals
-		init_effect = {
-			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
-				log = "First Thoth star spawned"
-			}
-		}
 	}
-
 	planet = {
 		name = "Bubba Hotep"
 		count = 1
 		class = "pc_t_star"
 		orbit_distance = 25
 		orbit_angle = 0
-		size = { min = 30 max = 35 }
+		size = {
+			min = 30
+			max = 35
+		}
 		has_ring = no
 		satellite_naming_policy = upper_case_roman_numerals
-		init_effect = {
-			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
-				log = "Second Thoth star spawned"
-			}
-		}
 	}
-
 	planet = {
 		name = "Alexandria"
 		class = "pc_frozen"
 		orbit_distance = 50
-		orbit_angle = { min = 90 max = 270 }
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
 		size = 18
 		has_ring = no
 		moon = {
 			name = "Aleks"
 			class = "pc_frozen"
 			orbit_distance = 8
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 8
 		}
 	}
@@ -99,48 +86,31 @@ hfe_tsp_ssb_thoth_system_initializer = {
 		orbit_angle = random
 		size = 5
 		has_ring = no
-		init_effect = {
-			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
-				log = "Thoth inner planets and asteroids spawned"
-			}
-		}
 	}
 	change_orbit = 30
 	planet = {
 		name = "Ankh"
-		class = "pc_shrouded"
+		class = pc_barren_cold
 		orbit_distance = 5
-		orbit_angle = { min = 90 max = 270 }
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
 		size = 36
 		has_ring = yes
-#		change_orbit = 5
 		init_effect = {
-			save_global_event_target_as = hfe_thoth_location
-			set_planet_flag = thoth_was_here
-			set_planet_flag = call_thoth
-			if = {
-				limit = { has_global_flag = HFE_TSP_spawn_test }
-				log = "Thoth hiding spot planet spawned"
-			}
-			prevent_anomaly = yes
+			save_event_target_as = hfe_thoth_location
 			create_country = {
 				name = "Station (Probably Gigantic) AI"
 				type = hfe_thoth
 				name_list = cybrxkhan_fantasy_egyptian
-				released_from_country = event_target:hfe_egypt_country
 				authority = auth_dictatorial
 				ethos = {
 					ethic = ethic_pacifist
 					ethic = ethic_spiritualist
 					ethic = ethic_xenophile
 				}
-				civics = {
-					civic = civic_free_haven
-					civic = civic_ancient_machine_intelligence
-#					civic = civic_military_order
-				}
-				origin = hfe_civic_egypt_rulers_origin
+				civics = random
 				flag = {
 					background = {
 						category = backgrounds
@@ -158,7 +128,7 @@ hfe_tsp_ssb_thoth_system_initializer = {
 					}
 				}
 				ignore_initial_colony_error = yes
-				species = event_target:hfe_egypt_species # As Thoth was once a Ju Ahet
+				species = event_target:hfe_egypt_species				# As Thoth was once a Ju Ahet
 				day_zero_contact = no
 				effect = {
 					kill_leader = {
@@ -168,9 +138,8 @@ hfe_tsp_ssb_thoth_system_initializer = {
 						name = "Thoth"
 						set_age = 3096
 						class = scientist
-						sub_type = society # Military theory
+						sub_type = society
 						species = event_target:hfe_egypt_species
-						event_leader = yes
 						gender = indeterminable
 						immortal = yes
 						skill = 10
@@ -180,32 +149,9 @@ hfe_tsp_ssb_thoth_system_initializer = {
 							trait = leader_trait_expertise_military_theory
 							trait = leader_trait_fleet_logistician
 							trait = leader_trait_cataloger
-#							trait = hfe_scientist_trait_wary
 						}
 					}
 					assign_leader = last_created_leader
-					if = {
-						limit = { has_global_flag = HFE_TSP_spawn_test }
-						log = "Thoth country initialized"
-					}
-#					give_technology = { message = no tech = tech_jump_drive_1 }
-					give_technology = { message = no tech = tech_sapient_ai	}
-					give_technology = { message = no tech = tech_synthetic_leaders }
-					give_technology = { message = no tech = tech_powered_exoskeletons }
-					give_technology = { message = no tech = tech_robotic_workers }
-					give_technology = { message = no tech = tech_droid_workers }
-					give_technology = { message = no tech = tech_synthetic_workers }
-					give_technology = { message = no tech = tech_robomodding }
-					give_technology = { message = no tech = tech_robomodding_points_1 }
-					give_technology = { message = no tech = tech_robomodding_points_2 }
-					give_technology = { message = no tech = tech_psionic_theory }
-					give_technology = { message = no tech = tech_telepathy }
-					hfe_effect_init_give_tech_t5 = yes
-					give_fe_tech = yes
-					if = {
-						limit = { has_global_flag = HFE_TSP_spawn_test }
-						log = "Thoth has his technology"
-					}
 					set_country_flag = Story7
 					set_country_flag = has_encountered_other_empire
 					set_country_flag = first_alien_life
@@ -219,11 +165,10 @@ hfe_tsp_ssb_thoth_system_initializer = {
 					# Weakens Thoth's huge diplomacy power until other nations can compete
 					add_modifier = {
 						modifier = hfe_tsp_thoth_early_diplomacy_unkeep
-						months = 840 # Seventy years
+						years = 70
 					}
 					create_fleet = {
-						name = "Gentleman Computer"
-						set_take_point = no
+						name = "Gentle Computer"
 						settings = {
 							spawn_debris = yes
 							can_disband = no
@@ -232,7 +177,7 @@ hfe_tsp_ssb_thoth_system_initializer = {
 						effect = {
 							set_owner = prev
 							create_ship = {
-								name = "Gentleman Core"
+								name = "Core"
 								design = "NAME_Artist_Enclave_Station"
 								graphical_culture = mammalian_01
 								effect = {
@@ -244,127 +189,84 @@ hfe_tsp_ssb_thoth_system_initializer = {
 								distance = 10
 							}
 							set_fleet_flag = hfe_thoth_station
-							if = {
-								limit = { has_global_flag = HFE_TSP_spawn_test }
-								log = "Thoth station spawned"
-							}
 							save_global_event_target_as = hfe_thoth_station
 							hfe_effect_create_signal_object = yes
-							enable_special_project = {
-								name = hfe_project_thoth_contact
-								location = event_target:hfe_thoth_station
-								owner = event_target:empire_that_met_thoth
-							}
-							if = {
-								limit = { has_global_flag = HFE_TSP_spawn_test }
-								log = "Thoth Special Project assigned"
-							}
-						}
-					}
-					create_fleet = {
-						name = "Gentleman Computer"
-						settings = {
-							spawn_debris = no
-							can_change_composition = no
-							uses_naval_capacity = no
-							can_upgrade = no
-							can_disband = no
-						}
-						effect = {
-							if = {
-								limit = { has_global_flag = HFE_TSP_spawn_test }
-								log = "Begin Thoth Juggernaut spawn"
-							}
-							create_ship = {
-								name = "Gentleman Computer"
-								random_existing_design = "juggernaut" # LOOKS REALLY COOL
-								effect = {
-									set_ship_flag = hfe_thoth_war_computer
-								}
-							}
-							set_location = {
-								target = event_target:hfe_thoth_location
-								distance = 9
-							}
-							set_fleet_flag = hfe_thoth_war_computer
-							save_global_event_target_as = hfe_thoth_war_computer
-							if = {
-								limit = { has_global_flag = HFE_TSP_spawn_test }
-								log = "Thoth juggernaut spawned!"
-							}
 						}
 					}
 					set_custom_capital_location = event_target:hfe_thoth_station
-					if = {
-						limit = { has_global_flag = HFE_TSP_spawn_test }
-						log = "Thoth successfully spawned!"
-					}
 				}
 			}
-#			enable_special_project = {
-#				name = hfe_project_thoth_contact
-#				location = event_target:hfe_thoth_location
-#				owner = event_target:empire_that_met_thoth
-#			}
 		}
 	}
 	planet = {
 		name = "Thoth"
 		class = "pc_gas_giant"
 		orbit_distance = 35
-		orbit_angle = { min = 90 max = 270 }
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
 		size = 28
-#		change_orbit = 8
+		#		change_orbit = 8
 		has_ring = yes
 		change_orbit = 5
 		moon = {
 			name = "Anubis Major"
 			class = "pc_barren_cold"
 			orbit_distance = 12
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 12
 		}
 		moon = {
 			name = "Hotep"
 			class = "pc_frozen"
 			orbit_distance = 5
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 12
 		}
 		moon = {
 			name = "Kangz"
 			class = "pc_toxic"
 			orbit_distance = 5
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 19
 		}
 		moon = {
 			name = "Wuz"
 			class = "pc_frozen"
 			orbit_distance = 5
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 9
 		}
 		moon = {
 			name = "Anubis Minor"
 			class = "pc_toxic"
 			orbit_distance = 5
-			orbit_angle = { min = 90 max = 270 }
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
 			size = 6
 		}
 	}
 	init_effect = {
-		set_global_flag = thoth_spawned
 		if = {
-			limit = { has_global_flag = HFE_TSP_spawn_test }
+			limit = {
+				has_global_flag = HFE_TSP_spawn_test
+			}
 			log = "Thoth system complete!"
 		}
-		event_target:hfe_thoth_war_computer = {
-			set_location = {
-				target = event_target:hfe_thoth_location
-				distance = 9
-			}
-		}
-		hfe_effect_add_hyperlanes = yes
 	}
 }
