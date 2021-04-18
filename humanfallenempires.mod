@@ -11,6 +11,6 @@ tags={
 }
 name="Human Fallen Empires"
 picture="thumbnail.jpg"
-supported_version="2.8.*"
+supported_version="3.0.*"
 path="C:/Users/Andrey/Documents/Paradox Interactive/Stellaris/mod/humanfallenempires"
 remote_file_id="901039859"
