@@ -889,7 +889,7 @@ country_event = {
 			adjective = "Ju Ahetese"
 			class = HUM
 			portrait = hfe_portrait_egypt
-			name_list = cybrxkhan_fantasy_egyptian
+			namelist = cybrxkhan_fantasy_egyptian
 			extra_trait_points = 10
 			can_be_modified = no
 			traits = {
@@ -931,7 +931,7 @@ country_event = {
 			adjective = Ahetese
 			class = REP
 			portrait = rep12
-			name_list = ART4
+			namelist = ART4
 			species_bio = "The Ahets are the reptilian species that enslaved the Ju Ahet. They once held the technology of a Fallen Empire. When the Ju Ahets staged a rebellion and took over, they were slaughtered en masse. Four great battles ended them on four of their five core worlds. These graveyard planets of billions of bones are rumored to still exist.  Now, the only known Ahets are in a primitive state, desparately clinging to survival."
 			traits = {
 				ideal_planet_class = pc_tropical
@@ -1244,27 +1244,8 @@ country_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	immediate = {
-		if = {
-			limit = {
-				exists = event_target:hfe_egypt_country
-			}
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Ju Ahet located, begin HFE spawn batch command"
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					exists = event_target:hfe_egypt_country
-				}
-				has_global_flag = HFE_TSP_spawn_test
-			}
-			log = "Dude, where's my pyramids?"
-		}
 		set_spawn_system_batch = begin
+		# egypt country spawn
 		random_system = {
 			limit = {
 				hfe_trigger_system_in_free_space = yes
@@ -1352,12 +1333,12 @@ country_event = {
 						hyperlane = no
 						initializer = hfe_initializer_egypt_col_1
 					}
-				}
-				if = {
-					limit = {
-						has_global_flag = HFE_TSP_spawn_test
+					if = {
+						limit = {
+							has_global_flag = HFE_TSP_spawn_test
+						}
+						log = "Second Ju Ahet Colony called by HFE INIT 111"
 					}
-					log = "Second Ju Ahet Colony called by HFE INIT 111"
 				}
 			}
 		}
@@ -1365,7 +1346,15 @@ country_event = {
 			limit = {
 				has_global_flag = HFE_TSP_spawn_test
 			}
-			log = "Ju Ahet colonies successfully spawned by HFE INIT 111"
+			if = {
+				limit = {
+					exists = event_target:hfe_egypt_country
+				}
+				log = "Ju Ahet located, begin HFE spawn batch command"
+			}
+			else = {
+				log = "Dude, where's my pyramids?"
+			}
 		}
 		# some other systems
 		random_system = {
@@ -1419,6 +1408,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_memorial_0
 			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "memorial planet 1 called by HFE INIT 111"
+			}
 		}
 		random_system = {
 			limit = {
@@ -1470,6 +1465,12 @@ country_event = {
 				max_distance = 40
 				hyperlane = no
 				initializer = hfe_initializer_memorial_1
+			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "memorial planet 2 called by HFE INIT 111"
 			}
 		}
 		random_system = {
@@ -1523,6 +1524,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_memorial_2
 			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "memorial planet 3 called by HFE INIT 111"
+			}
 		}
 		random_system = {
 			limit = {
@@ -1575,12 +1582,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_memorial_3
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "memorial planet 4 called by HFE INIT 111"
 			}
-			log = "All four Memorial Worlds put in place by HFE INIT 111"
 		}
 		random_system = {
 			limit = {
@@ -1594,12 +1601,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_varelse
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Colony Beta called by HFE EVENT INIT 111"
 			}
-			log = "Colony Beta called by HFE EVENT INIT 111"
 		}
 		random_system = {
 			limit = {
@@ -1613,12 +1620,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_ahet_0
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "First Ahet planet called in HFE EVENT INIT 111"
 			}
-			log = "First Ahet planet called in HFE EVENT INIT 111"
 		}
 		random_system = {
 			limit = {
@@ -1632,12 +1639,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_ahet_1
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Second Ahet Planet called in HFE EVENT INIT 111"
 			}
-			log = "Second Ahet Planet called in HFE EVENT INIT 111"
 		}
 		random_system = {
 			limit = {
@@ -1651,12 +1658,12 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_ahet_home
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Ahet Happy Ending called in HFE EVENT INIT 111"
 			}
-			log = "Ahet Happy Ending called in HFE EVENT INIT 111"
 		}
 		random_system = {
 			limit = {
@@ -1670,20 +1677,14 @@ country_event = {
 				hyperlane = no
 				initializer = hfe_initializer_copernicus
 			}
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Ptolemy of Alexandria proven right by HFE EVENT INIT 111"
 			}
-			log = "Ptolemy of Alexandria proven right by HFE EVENT INIT 111"
 		}
 		set_spawn_system_batch = end
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
-			}
-			log = "All HFE Story Planets successfully spawned!"
-		}
 		# expand borders and develop
 		if = {
 			limit = {
@@ -1702,9 +1703,6 @@ country_event = {
 				}
 			}
 		}
-		else = {
-			log = "Ju Ahet not spawned"
-		}
 		country_event = {
 			id = hfe_init.112
 			days = 1
@@ -1713,7 +1711,7 @@ country_event = {
 			limit = {
 				has_global_flag = HFE_TSP_spawn_test
 			}
-			log = "Ju Ahet clay acquired"
+			log = "HFE EVENT INIT 111 done"
 		}
 	}
 }

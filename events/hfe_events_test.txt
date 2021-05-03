@@ -869,6 +869,71 @@ country_event = {
 	}
 }
 
+country_event = {
+	id = hfe_test.34
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = {
+			which = max_count
+			value = 0
+		}
+		every_system_within_border = {
+			limit = {
+				any_system_planet = {
+					habitable_planet = yes
+				}
+			}
+			root = {
+				set_variable = {
+					which = current_count
+					value = 0
+				}
+			}
+			every_system_planet = {
+				limit = {
+					NOR = {
+						is_planet_class = pc_gas_giant
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_ringworld_habitable_damaged
+						is_planet_class = pc_ringworld_tech
+						is_planet_class = pc_ringworld_tech_damaged
+						is_planet_class = pc_ringworld_seam
+						is_planet_class = pc_ringworld_seam_damaged
+						is_planet_class = pc_habitat
+						is_planet_class = pc_asteroid
+						is_planet_class = pc_ice_asteroid
+						is_planet_class = pc_city
+						is_planet_class = pc_relic
+						is_star = yes
+					}
+				}
+				root = {
+					change_variable = {
+						which = current_count
+						value = 1
+					}
+				}
+			}
+			root = {
+				if = {
+					limit = {
+						check_variable = {
+							which = current_count
+							value >= max_count
+						}
+					}
+					set_variable = {
+						which = max_count
+						value = current_count
+					}
+					log = "[root.current_count] planets in system [prev.GetName]"
+				}
+			}
+		}
+	}
+}
+
 # country_event = { # Only called by Console Command cheat codes
 # 	id = hfe_test.28
 # 	title = "HFE_INIT_SPAWN_LOG_TSP"
