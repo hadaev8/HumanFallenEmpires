@@ -1,5 +1,4 @@
 #
-# This is gay, this is stupid, and this is bad. You should feel bad. -TurtleShroom
 planet_pops = {
 	parent = planets
 	generate_mult_modifiers = {
@@ -29,7 +28,7 @@ planet_pops = {
 			add
 		}
 		trigger = {
-			has_job = unemployed
+			is_unemployed = yes
 		}
 	}
 	# mod
@@ -74,6 +73,7 @@ planet_jobs = {
 		}
 		trigger = {
 			is_pop_category = slave
+			has_job_category = worker
 		}
 	}
 	triggered_produces_modifier = {
@@ -84,7 +84,10 @@ planet_jobs = {
 		trigger = {
 			OR = {
 				is_pop_category = worker
-				is_pop_category = slave				# Yes, slave should count towards both worker and slave
+				AND = {
+					is_pop_category = slave					# Yes, slave should count towards both worker and slave
+					has_job_category = worker
+				}
 				is_pop_category = simple_drone
 			}
 		}
@@ -98,6 +101,10 @@ planet_jobs = {
 			OR = {
 				is_pop_category = specialist
 				is_pop_category = complex_drone				#should use planet_jobs_complex_drone wherever possible, this is just for cases like species traits
+				AND = {
+					is_pop_category = slave
+					has_job_category = specialist
+				}
 			}
 		}
 	}
@@ -138,9 +145,6 @@ planet_jobs = {
 		}
 	}
 	# mod
-	# generate_add_modifiers = {
-	# 	produces
-	# }
 	triggered_produces_modifier = {
 		key = hfe_planet_jobs_psionic
 		modifier_types = {
