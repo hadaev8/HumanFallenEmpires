@@ -6449,6 +6449,34 @@ country_event = {
 }
 
 # friendly ai vol 1 thoth
+first_contact_event = {
+	id = hfe.698
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		contact_country = {
+			is_country_type = hfe_thoth
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_thoth_awaked
+			}
+			finish_first_contact = yes
+			owner = {
+				establish_communications = event_target:hfe_thoth
+				country_event = {
+					id = hfe.705
+				}
+			}
+		}
+		else = {
+			set_first_contact_stage = hfe_first_contact_thoth_1
+		}
+	}
+}
+
 # start event, spawn, enable project
 # Scope = Ship
 # From = System
@@ -6466,10 +6494,11 @@ ship_event = {
 		owner = {
 			is_ai = no
 		}
+		exists = from
 	}
 	immediate = {
 		set_global_flag = hfe_has_event.699
-		FROM = {
+		from = {
 			spawn_system = {
 				min_distance >= 3
 				max_distance <= 10
@@ -6482,84 +6511,52 @@ ship_event = {
 	}
 }
 
-fleet_event = {
+# Scopes:
+# - Root = first contact site
+# - Root.Owner = your country (i.e. you should be able to scope from first contact scope to the owner via eventtarget.cpp)
+# - From = other country
+first_contact_event = {
 	id = hfe.700
 	title = hfe.700.name
 	desc = hfe.700.desc
 	picture = GFX_evt_hfe_thoth
 	show_sound = event_ship_thrusters
-	location = root
-	trackable = yes
+	first_contact = yes
+	location = solar_system
 	is_triggered_only = yes
-	trigger = {
-		has_global_flag = hfe_has_event.699
-		not = {
-			has_global_flag = hfe_thoth_awaked
-		}
-		exists = event_target:hfe_thoth
-		from = {
-			any_fleet_in_system = {
-				has_fleet_flag = hfe_thoth_station
-			}
-		}
-	}
 	immediate = {
-		enable_special_project = {
-			name = hfe_project_thoth_contact
-			location = event_target:hfe_thoth_station
-			owner = root.owner
-		}
+		set_site_progress_locked = yes
+	}
+	after = {
+		set_site_progress_locked = no
 	}
 	option = {
 		name = hfe.700.0
-		trigger = {
-			root = {
-				exists = leader
-				leader = {
-					leader_class = scientist
-					has_skill > 3
-				}
-			}
-		}
-		# hidden_effect = {
-		# 	clear_fleet_actions = root
-		# }
-		# fleet_action_research_special_project = {
-		# 	special_project = hfe_project_thoth_contact
-		# 	target = event_target:hfe_thoth_station
-		# }
-	}
-	option = {
-		name = hfe.700.1
+		set_first_contact_stage = hfe_first_contact_thoth_2
 	}
 }
 
-# project complete
-ship_event = {
+first_contact_event = {
 	id = hfe.701
 	title = hfe.701.name
 	desc = hfe.701.desc
 	picture = GFX_evt_hfe_thoth
 	show_sound = event_ship_thrusters
-	location = root
+	first_contact = yes
+	location = solar_system
 	is_triggered_only = yes
-	trigger = {
-		exists = event_target:hfe_thoth_station
-	}
 	immediate = {
+		set_site_progress_locked = yes
 		event_target:hfe_thoth_station = {
 			hfe_effect_remove_signal_object_from_this = yes
 		}
 		set_global_flag = hfe_thoth_awaked
-		event_target:hfe_thoth = {
-			add_modifier = {
-				modifier = hfe_discovery_translator
-			}
-		}
+	}
+	after = {
+		set_site_progress_locked = no
 	}
 	option = {
 		name = hfe_at_the_sreen
-		hfe_effect_leader_add_exp_100 = yes
 		hidden_effect = {
 			owner = {
 				establish_communications = event_target:hfe_thoth
@@ -6568,6 +6565,7 @@ ship_event = {
 					id = hfe.702
 				}
 			}
+			finish_first_contact = yes
 		}
 	}
 }
@@ -6783,7 +6781,7 @@ country_event = {
 	# step 5 ju ahet coming
 	option = {
 		name = hfe.702.5.0
-		exclusive_trigger = {
+		trigger = {
 			has_country_flag = hfe.702.5
 			exists = event_target:hfe_egypt_country
 			event_target:hfe_egypt_country = {
@@ -6830,6 +6828,7 @@ country_event = {
 				exists = event_target:hfe_egypt_country
 				event_target:hfe_egypt_country = {
 					any_owned_fleet = {
+						is_ship_class = shipclass_military
 						fleet_power > 10000
 					}
 				}
@@ -7090,12 +7089,16 @@ country_event = {
 	desc = hfe.705.desc
 	is_triggered_only = yes
 	diplomatic = yes
+	location = solar_system
 	picture_event_data = {
 		portrait = hfe_portrait_diplo_thoth
 		room = hfe_thoth_room
 	}
 	trigger = {
-		is_ai = no
+		has_global_flag = hfe_thoth_awaked
+		from = {
+			is_country_type = hfe_thoth
+		}
 	}
 	option = {
 		name = hfe.705.0

@@ -37,7 +37,6 @@ country_event = {
 			}
 			# TODO
 			# set blockers
-			# hfe_effect_remove_prescripted_ideal = yes
 			every_moon = {
 				remove_planet = yes
 			}
@@ -165,7 +164,7 @@ country_event = {
 		country_event = {
 			id = hfe_features_spiral_of_death.50
 			days = 365
-			random = 2860
+			random = 1460
 		}
 		# event before planet killed
 		country_event = {
@@ -298,15 +297,12 @@ country_event = {
 	}
 	option = {
 		name = hfe_features_spiral_of_death.10.0
-		trigger = {
+		exclusive_trigger = {
 			is_gestalt = no
 		}
 	}
 	option = {
 		name = hfe_features_spiral_of_death.10.1
-		trigger = {
-			is_gestalt = yes
-		}
 	}
 }
 
@@ -387,12 +383,20 @@ country_event = {
 							resource = energy
 							value > 100
 						}
+						resource_stockpile_compare = {
+							resource = influence
+							value > 15
+						}
 					}
 					modifier = {
 						factor = 2
 						resource_stockpile_compare = {
 							resource = energy
 							value > 200
+						}
+						resource_stockpile_compare = {
+							resource = influence
+							value > 30
 						}
 					}
 					modifier = {
@@ -401,12 +405,20 @@ country_event = {
 							resource = energy
 							value > 300
 						}
+						resource_stockpile_compare = {
+							resource = influence
+							value > 45
+						}
 					}
 					modifier = {
 						factor = 2
 						resource_stockpile_compare = {
 							resource = energy
 							value > 400
+						}
+						resource_stockpile_compare = {
+							resource = influence
+							value > 60
 						}
 					}
 					country_event = {
@@ -676,14 +688,14 @@ ship_event = {
 				is_gestalt = no
 			}
 		}
-		owner = {
-			hfe_effect_add_unity.1 = yes
-		}
 	}
 	option = {
 		name = hfe_features_spiral_of_death.12.1
+	}
+	after = {
 		owner = {
-			hfe_effect_add_unity.1 = yes
+			hfe_effect_add_unity.2 = yes
+			hfe_effect_add_influence.2 = yes
 		}
 	}
 }
@@ -726,24 +738,19 @@ planet_event = {
 	}
 	option = {
 		name = hfe_features_spiral_of_death.13.0
-		trigger = {
+		exclusive_trigger = {
 			owner = {
 				is_gestalt = no
 			}
 		}
-		owner = {
-			hfe_effect_add_unity.1 = yes
-		}
 	}
 	option = {
 		name = hfe_features_spiral_of_death.13.1
-		trigger = {
-			owner = {
-				is_gestalt = yes
-			}
-		}
+	}
+	after = {
 		owner = {
-			hfe_effect_add_unity.1 = yes
+			hfe_effect_add_unity.2 = yes
+			hfe_effect_add_influence.3 = yes
 		}
 	}
 }
@@ -768,6 +775,7 @@ country_event = {
 			}
 		}
 		hfe_effect_add_unity.2 = yes
+		hfe_effect_add_influence.2 = yes
 	}
 }
 
@@ -814,7 +822,7 @@ country_event = {
 	}
 	option = {
 		name = hfe_features_spiral_of_death.50.0
-		trigger = {
+		exclusive_trigger = {
 			is_gestalt = no
 		}
 		event_target:hfe_features_spiral_of_death_50_leader = {
@@ -824,14 +832,17 @@ country_event = {
 		}
 	}
 	option = {
-		name = hfe_features_spiral_of_death.50.0
-		trigger = {
-			is_gestalt = yes
-		}
+		name = hfe_features_spiral_of_death.50.1
+	}
+	after = {
 		event_target:hfe_features_spiral_of_death_50_leader = {
 			kill_leader = {
 				show_notification = no
 			}
+		}
+		owner = {
+			hfe_effect_add_unity.2 = yes
+			hfe_effect_add_influence.2 = yes
 		}
 	}
 }
