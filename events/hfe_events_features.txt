@@ -207,7 +207,7 @@ planet_event = {
 	}
 }
 
-# exodus start origin feature 4
+# exodus start origin 4
 country_event = {
 	id = hfe_features.4
 	hide_window = yes
@@ -483,32 +483,110 @@ country_event = {
 	}
 }
 
-# disband federation 6
+# aftermatch origin feature 5
 country_event = {
-	id = hfe_features.6
+	id = hfe_features.5
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		has_federation = yes
+		has_origin = hfe_origin_features_aftermatch
+		exists = capital_scope
 	}
 	immediate = {
 		if = {
 			limit = {
-				is_at_war = yes
+				count_country = {
+					count = 0
+					limit = {
+						is_ai = no
+						not = {
+							has_origin = hfe_origin_features_aftermatch
+						}
+					}
+				}
 			}
-			country_event = {
-				id = hfe_features.6
-				days = 365
+			set_country_flag = custom_start_screen
+			if = {
+				limit = {
+					not = {
+						has_global_flag = hfe_origin_features_aftermatch_init
+					}
+				}
+				set_global_flag = hfe_origin_features_aftermatch_init
+				set_update_modifiers_batch = begin
+				every_system = {
+					destroy_star_system = yes
+				}
+				set_update_modifiers_batch = end
+			}
+			capital_scope.solar_system = {
+				spawn_planet = {
+					class = "pc_habitat"
+					# location = fromfrom.planet
+					# orbit_location = yes
+					# orbit_angle_offset = 45
+					# orbit_distance_offset = 9.899
+					size = 4
+					# has_ring = no
+					init_effect = {
+						set_planet_entity = {
+							entity = "habitat_phase_01_entity"
+							graphical_culture = root
+						}
+						set_planet_flag = megastructure
+						set_planet_flag = habitat
+						create_colony = {
+							owner = root
+						}
+						set_capital = yes
+					}
+				}
 			}
 		}
 		else = {
-			leave_alliance = {
-				override_requirements = yes
+			country_event = {
+				id = hfe_features.6
 			}
 		}
 	}
 }
 
+# notification for mp everyone should have origin
+country_event = {
+	id = hfe_features.6
+	title = RT_ERROR
+	desc = hfe_features.6.desc
+	is_triggered_only = yes
+	option = {
+		name = RT_ERROR
+	}
+}
+
+# disband federation 6
+# country_event = {
+# 	id = hfe_features.6
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	trigger = {
+# 		has_federation = yes
+# 	}
+# 	immediate = {
+# 		if = {
+# 			limit = {
+# 				is_at_war = yes
+# 			}
+# 			country_event = {
+# 				id = hfe_features.6
+# 				days = 365
+# 			}
+# 		}
+# 		else = {
+# 			leave_alliance = {
+# 				override_requirements = yes
+# 			}
+# 		}
+# 	}
+# }
 # aggressive diplomacy civic 7
 # by ship on_ship_destroyed_perp
 country_event = {
