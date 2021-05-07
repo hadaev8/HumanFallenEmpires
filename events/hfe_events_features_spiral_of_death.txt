@@ -18,6 +18,11 @@ country_event = {
 		set_country_flag = custom_start_screen
 		set_country_flag = first_colony
 		set_country_flag = Story7
+		# maybe add specific ai budgets in future
+		# set_timed_country_flag = {
+		# 	flag = hfe_features_spiral_of_death_counter
+		# 	days = 3230
+		# }
 		capital_scope = {
 			set_ring = no
 			add_modifier = {
@@ -43,7 +48,7 @@ country_event = {
 			save_event_target_as = hfe_features_spiral_of_death_falling_moon_target
 			create_country = {
 				name = "Falling Moon"
-				type = portal_holder
+				type = faction
 				species = root
 				flag = {
 					icon = {
@@ -83,6 +88,9 @@ country_event = {
 						establish_communications_no_message = prev
 					}
 				}
+			}
+			planet_event = {
+				id = hfe_features_spiral_of_death.100
 			}
 			planet_event = {
 				id = hfe_features_spiral_of_death.1
@@ -188,57 +196,82 @@ planet_event = {
 		set_ring = yes
 		if = {
 			limit = {
-				any_owned_pop = {
-					exists = owner
-					or = {
-						has_citizenship_type = {
-							type = citizenship_full
+				exists = owner
+			}
+			# ai help
+			if = {
+				limit = {
+					owner = {
+						is_ai = yes
+						num_owned_planets > 1
+					}
+				}
+				set_timed_planet_flag = {
+					flag = hfe_settle_pop_block
+					days = 2
+				}
+				every_owned_pop = {
+					limit = {
+						exists = owner
+					}
+					save_event_target_as = hfe_settle_pop_target
+					owner = {
+						hfe_effect_settle_pop = yes
+					}
+					#				custom_tooltip = hfe_newline
+				}
+			}
+			if = {
+				limit = {
+					any_owned_pop = {
+						or = {
+							has_citizenship_type = {
+								type = citizenship_full
+							}
+							has_citizenship_type = {
+								type = citizenship_caste_system
+							}
+							has_citizenship_type = {
+								type = citizenship_organic_trophy
+							}
 						}
-						has_citizenship_type = {
-							type = citizenship_caste_system
-						}
+					}
+				}
+				owner = {
+					set_country_flag = hfe_features_spiral_of_death_left_pop_citizen
+				}
+			}
+			if = {
+				limit = {
+					any_owned_pop = {
 						has_citizenship_type = {
 							type = citizenship_organic_trophy
 						}
 					}
 				}
-			}
-			owner = {
-				set_country_flag = hfe_features_spiral_of_death_left_pop_citizen
-			}
-		}
-		if = {
-			limit = {
-				any_owned_pop = {
-					exists = owner
-					has_citizenship_type = {
-						type = citizenship_organic_trophy
-					}
+				owner = {
+					set_country_flag = hfe_features_spiral_of_death_left_pop_citizen_organic_trophy
 				}
 			}
-			owner = {
-				set_country_flag = hfe_features_spiral_of_death_left_pop_citizen_organic_trophy
-			}
-		}
-		if = {
-			limit = {
-				any_owned_pop = {
-					exists = owner
-					nor = {
-						has_citizenship_type = {
-							type = citizenship_full
-						}
-						has_citizenship_type = {
-							type = citizenship_caste_system
-						}
-						has_citizenship_type = {
-							type = citizenship_organic_trophy
+			if = {
+				limit = {
+					any_owned_pop = {
+						nor = {
+							has_citizenship_type = {
+								type = citizenship_full
+							}
+							has_citizenship_type = {
+								type = citizenship_caste_system
+							}
+							has_citizenship_type = {
+								type = citizenship_organic_trophy
+							}
 						}
 					}
 				}
-			}
-			owner = {
-				set_country_flag = hfe_features_spiral_of_death_left_pop
+				owner = {
+					set_country_flag = hfe_features_spiral_of_death_left_pop
+				}
 			}
 		}
 		# create_ambient_object = {

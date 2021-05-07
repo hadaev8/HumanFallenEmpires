@@ -235,6 +235,7 @@ hfe_effect_init_set_all_districs = {
 		}
 		count = 100
 		random_list = {
+			# city
 			10 = {
 				modifier = {
 					factor = 0
@@ -244,11 +245,100 @@ hfe_effect_init_set_all_districs = {
 					}
 				}
 				modifier = {
+					factor = 0
+					nand = {
+						owner = {
+							is_regular_empire = yes
+						}
+						OR = {
+							uses_district_set = standard
+							uses_district_set = hive_world
+							uses_district_set = machine_world
+						}
+					}
+				}
+				modifier = {
 					factor = 2
 					is_capital = yes
 				}
 				add_district = district_city
 			}
+			# hive
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_hive
+						value = 0
+					}
+				}
+				modifier = {
+					factor = 0
+					nand = {
+						owner = {
+							is_hive_empire = yes
+						}
+						OR = {
+							uses_district_set = standard
+							uses_district_set = hive_world
+							uses_district_set = machine_world
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					is_capital = yes
+				}
+				add_district = district_hive
+			}
+			# nexus
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_nexus
+						value = 0
+					}
+				}
+				modifier = {
+					factor = 0
+					nand = {
+						owner = {
+							is_machine_empire = yes
+						}
+						OR = {
+							uses_district_set = standard
+							uses_district_set = hive_world
+							uses_district_set = machine_world
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					is_capital = yes
+				}
+				add_district = district_nexus
+			}
+			# industrial
+			10 = {
+				modifier = {
+					factor = 0
+					num_free_districts = {
+						type = district_industrial
+						value = 0
+					}
+				}
+				modifier = {
+					factor = 0
+					uses_district_industrial = no
+				}
+				modifier = {
+					factor = 2
+					is_capital = yes
+				}
+				add_district = district_industrial
+			}
+			# district_generator
 			10 = {
 				modifier = {
 					factor = 0
@@ -257,8 +347,15 @@ hfe_effect_init_set_all_districs = {
 						value = 0
 					}
 				}
+				modifier = {
+					factor = 0
+					not = {
+						uses_district_set = standard
+					}
+				}
 				add_district = district_generator
 			}
+			# district_mining
 			10 = {
 				modifier = {
 					factor = 0
@@ -267,14 +364,27 @@ hfe_effect_init_set_all_districs = {
 						value = 0
 					}
 				}
+				modifier = {
+					factor = 0
+					not = {
+						uses_district_set = standard
+					}
+				}
 				add_district = district_mining
 			}
+			# district_farming
 			10 = {
 				modifier = {
 					factor = 0
 					num_free_districts = {
 						type = district_farming
 						value = 0
+					}
+				}
+				modifier = {
+					factor = 0
+					not = {
+						uses_district_set = standard
 					}
 				}
 				add_district = district_farming
@@ -311,7 +421,7 @@ hfe_effect_init_set_all_buildings = {
 hfe_effect_init_develop_planet = {
 	hfe_effect_init_set_pops_50 = yes
 	hfe_effect_init_set_starbase = yes
-	hfe_effect_init_set_all_buildings = yes
+	# hfe_effect_init_set_all_buildings = yes
 	hfe_effect_init_set_all_districs = yes
 }
 
