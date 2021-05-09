@@ -1187,18 +1187,13 @@ planet_event = {
 		}
 	}
 	immediate = {
-		log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_transfer on_planet_bombarded"
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_transfer on_planet_bombarded"
+		}
 		hfe_effect_pirate_change_to_pc_asteroid = yes
-		# if = {
-		# 	limit = {
-		# 		NOT = {
-		# 			has_planet_flag = hfe_permanent_pirate_hall
-		# 		}
-		# 	}
-		# }
-		# else = {
-		# 	set_planet_flag = hfe_permanent_pirate_hall
-		# }
 	}
 }
 
@@ -1369,7 +1364,13 @@ country_event = {
 	immediate = {
 		fromfrom = {
 			random_owned_pop = {
-				save_event_target_as = hfe_pirate_63_kidnap_pop_species
+				root = {
+					random_owned_planet = {
+						create_pop = {
+							species = prevprev
+						}
+					}
+				}
 			}
 			observation_outpost = {
 				add_mission_progress = -1
@@ -1377,11 +1378,6 @@ country_event = {
 			planet_event = {
 				id = hfe_pirate.64
 				days = 1
-			}
-		}
-		random_owned_planet = {
-			create_pop = {
-				species = event_target:hfe_pirate_63_kidnap_pop_species
 			}
 		}
 	}
