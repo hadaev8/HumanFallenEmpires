@@ -95,7 +95,7 @@ hfe_initializer_egypt_main = {
 					# Light blue/red/yellow
 					set_city_graphical_culture = fallen_empire_03
 					set_country_flag = hfe_egypt
-					set_country_flag = hfe_assimilator_discovered
+					set_country_flag = hfe_extractor_discovered
 					set_country_flag = hfe_marked_as_human
 					hfe_effect_create_fleet = yes
 					kill_leader = {
@@ -152,8 +152,9 @@ hfe_initializer_egypt_main = {
 					trait = trait_strong
 				}
 				effect = {
-					set_species_identity = event_target:hfe_ahet_species
 					save_event_target_as = hfe_ahet_servant_species
+					set_species_identity = event_target:hfe_ahet_species
+					set_species_flag = hfe_extractor_exception@event_target:hfe_egypt_country
 				}
 			}
 			# Generate Delicious Ahets
@@ -179,9 +180,10 @@ hfe_initializer_egypt_main = {
 					trait = trait_delicious
 				}
 				effect = {
+					save_event_target_as = hfe_ahet_delicious_species
 					set_species_identity = event_target:hfe_ahet_species
 					set_species_flag = hfe_forever_slave
-					save_event_target_as = hfe_ahet_delicious_species
+					set_species_flag = hfe_extractor_exception@event_target:hfe_egypt_country
 				}
 			}
 			# every_owned_pop = {
@@ -457,45 +459,34 @@ hfe_initializer_egypt_col_0 = {
 			min = 90
 			max = 270
 		}
-		#	 	change_orbit = @base_moon_distance
-		# 		moon = {
-		#	 		name = "Assimilation Zone"
-		# 			class = pc_habitat
-		# 			size = 20
-		#	 		orbit_angle = {
-		# 				min = 90
-		# 				max = 270
-		#	 		}
-		# 			orbit_distance = 5
-		# 			deposit_blockers = none
-		#	 		init_effect = {
-		# 				set_owner = event_target:hfe_egypt_country
-		#	 			# TODO
-		# 				add_building = building_system_capital
-		# 				add_building = building_master_archive
-		# 				add_building = building_fe_stronghold
-		#	 			add_building = building_fe_dome
-		# 				add_building = building_fe_dome
-		#				add_building = building_fe_dome
-		# 				add_building = building_class_4_singularity
-		# 				add_building = building_class_4_singularity
-		#	 			add_building = building_affluence_center
-		# 				add_building = building_affluence_center
-		# 				add_building = building_nourishment_center
-		# 				add_building = building_nourishment_center
-		#	 			add_building = building_dimensional_fabricator
-		# 				add_building = building_dimensional_fabricator
-		# 				add_building = building_nano_forge
-		# 				add_building = building_nano_forge
-		#	 			hfe_effect_init_set_pops_50 = yes
-		# 				while = {
-		# 					count = 25
-		#	 				create_pop = {
-		# 						species = event_target:hfe_ahet_servant_species
-		# 					}
-		# 				}
-		# 			}
-		#	 	}
+		change_orbit = @base_moon_distance
+		moon = {
+			name = "Extraction Zone"
+			class = pc_habitat
+			size = 7
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 5
+			flags = {
+				megastructure
+				habitat
+				research_habitat
+			}
+			deposit_blockers = none
+			init_effect = {
+				set_owner = event_target:hfe_egypt_country
+				set_planet_entity = {
+					entity = "habitat_phase_01_entity"
+					graphical_culture = owner
+				}
+				add_deposit = hfe_deposit_extractor
+				add_building = building_hab_capital
+				add_building = hfe_building_extractor
+				hfe_effect_init_set_pops_10 = yes
+			}
+		}
 	}
 	planet = {
 		orbit_distance = 20

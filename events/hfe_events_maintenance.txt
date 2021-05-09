@@ -209,150 +209,135 @@ pop_event = {
 	}
 }
 
-# building_assimilator feature
-# TODO
+# building_extractor feature 10-11
+# extractor auto resettle 10
+country_event = {
+	id = hfe_maintenance.10
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_policy_flag = hfe_policies_extractor_base.0
+	}
+	immediate = {
+		if = {
+			limit = {
+				not = {
+					exists = event_target:hfe_extractor_planet
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					has_available_jobs = hfe_job_extractor_target
+				}
+				save_event_target_as = hfe_extractor_planet
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:hfe_extractor_planet
+			}
+			# check vassal first
+			if = {
+				limit = {
+					is_overlord = yes
+				}
+				random_subject = {
+					limit = {
+						any_owned_pop = {
+							hfe_trigger_job_extractor_target = {
+								hfe_country = root
+							}
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							hfe_trigger_job_extractor_target = {
+								hfe_country = root
+							}
+						}
+						weights = {
+							base = 1
+							modifier = {
+								mult = 1000
+								is_being_purged = yes
+							}
+							modifier = {
+								mult = 5
+								is_unemployed = yes
+							}
+						}
+						save_event_target_as = hfe_extractor_pop_target
+					}
+				}
+			}
+			# check own planet later
+			if = {
+				limit = {
+					has_policy_flag = hfe_policies_extractor_vassal.0
+					not = {
+						exists = event_target:hfe_extractor_pop_target
+					}
+				}
+				random_owned_pop = {
+					limit = {
+						# already in place
+						not = {
+							has_job = hfe_job_extractor_target
+						}
+						hfe_trigger_job_extractor_target = {
+							hfe_country = root
+						}
+					}
+					weights = {
+						base = 1
+						modifier = {
+							mult = 1000
+							is_being_purged = yes
+						}
+						modifier = {
+							mult = 5
+							is_unemployed = yes
+						}
+					}
+					save_event_target_as = hfe_extractor_pop_target
+				}
+			}
+			if = {
+				limit = {
+					exists = event_target:hfe_extractor_pop_target
+				}
+				event_target:hfe_extractor_pop_target = {
+					clear_pop_category = yes
+				}
+				resettle_pop = {
+					pop = event_target:hfe_extractor_pop_target
+					planet = event_target:hfe_extractor_planet
+				}
+			}
+		}
+	}
+}
+
+# find new pop for extractor after purge complited 11
 # on_purge_complete
-# planet_event = {
-# 	id = hfe_maintenance.10
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		any_owned_pop = {
-# 			has_pop_flag = hfe_building_assimilator
-# 			is_being_force_purged = yes
-# 			hfe_trigger_assimilator_on_tile = yes
-# 		}
-# 	}
-# 	immediate = {
-# 		random_tile = {
-# 			limit = {
-# 				has_building = hfe_building_assimilator
-# 				is_ruined = no
-# 				not = {
-# 					exists = pop
-# 				}
-# 			}
-# 			#log = "assimilator tile saved"
-# 			save_event_target_as = hfe_assimilator_tile_target
-# 		}
-# 		owner = {
-# 			country_event = {
-# 				id = hfe_maintenance.14
-# 				days = 1
-# 			}
-# 			hfe_effect_add_unity.1 = yes
-# 			hfe_effect_add_society_research.2 = yes
-# 		}
-# 	}
-# }
-# # on_pop_migration_end on_pop_moved on_pop_resettled
-# pop_event = {
-# 	id = hfe_maintenance.11
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		hfe_trigger_assimilator_pop_valid_with_ai_block = yes
-# 		hfe_trigger_assimilator_on_tile = yes
-# 	}
-# 	immediate = {
-# 		set_pop_flag = hfe_building_assimilator
-# 		purge = yes
-# 	}
-# }
-# # on_pop_migration_end on_pop_moved on_pop_resettled
-# pop_event = {
-# 	id = hfe_maintenance.12
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		has_pop_flag = hfe_building_assimilator
-# 		is_being_force_purged = yes
-# 		hfe_trigger_assimilator_on_tile = no
-# 	}
-# planet_event = {
-# 	id = hfe_maintenance.13
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	immediate = {
-# 		every_owned_pop = {
-# 			pop_event = {
-# 				id = hfe_maintenance.12
-# 			}
-# 		}
-# 	}
-# }
-# assimilator auto resettle
-# country_event = {
-# 	id = hfe_maintenance.14
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		has_country_flag = hfe_assimilator_discovered
-# 		not = {
-# 			has_policy_flag = hfe_policies_assimilator.7
-# 		}
-# 		or = {
-# 			has_policy_flag = hfe_policies_assimilator.0
-# 			has_policy_flag = hfe_policies_assimilator.1
-# 			has_policy_flag = hfe_policies_assimilator.2
-# 			has_policy_flag = hfe_policies_assimilator.3
-# 			has_policy_flag = hfe_policies_assimilator.4
-# 			has_policy_flag = hfe_policies_assimilator.5
-# 			has_policy_flag = hfe_policies_assimilator.6
-# 		}
-# 	}
-# 	immediate = {
-# 		if = {
-# 			limit = {
-# 				not = {
-# 					exists = event_target:hfe_assimilator_tile_target
-# 				}
-# 			}
-# 			random_owned_planet = {
-# 				limit = {
-# 					any_tile = {
-# 						has_building = hfe_building_assimilator
-# 						is_ruined = no
-# 						not = {
-# 							exists = pop
-# 						}
-# 					}
-# 				}
-# 				random_tile = {
-# 					limit = {
-# 						has_building = hfe_building_assimilator
-# 						is_ruined = no
-# 						not = {
-# 							exists = pop
-# 						}
-# 					}
-# 					save_event_target_as = hfe_assimilator_tile_target
-# 				}
-# 			}
-# 		}
-# 		if = {
-# 			limit = {
-# 				exists = event_target:hfe_assimilator_tile_target
-# 			}
-# 			hfe_effect_assimilator_find_pop = yes
-# 			if = {
-# 				limit = {
-# 					exists = event_target:hfe_assimilator_pop_target
-# 				}
-# 				resettle_pop = {
-# 					pop = event_target:hfe_assimilator_pop_target
-# 					planet = event_target:hfe_assimilator_tile_target.planet
-# 					tile = event_target:hfe_assimilator_tile_target
-# 				}
-# 				event_target:hfe_assimilator_pop_target = {
-# 					pop_event = {
-# 						id = hfe_maintenance.11
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-# }
+planet_event = {
+	id = hfe_maintenance.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_available_jobs = hfe_job_extractor_target
+		exists = owner
+	}
+	immediate = {
+		save_event_target_as = hfe_extractor_planet
+		owner = {
+			country_event = {
+				id = hfe_maintenance.10
+			}
+		}
+	}
+}
+
 # change subject type for egypt/future
 # on_becoming_subject
 # This = subject

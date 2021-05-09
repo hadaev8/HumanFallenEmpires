@@ -7,223 +7,184 @@
 # Base AI-weight is 100, if unchanged
 # AI will grab whatever policy-option has the highest weight
 #
-# #####
-#
-##########################################################################
+# 
+# extractor policy settings
+# yes/no basic options
+hfe_policies_extractor_base = {
+	potential = {
+		has_country_flag = hfe_extractor_discovered
+		any_owned_planet = {
+			has_building = hfe_building_extractor
+		}
+	}
+	# yes
+	option = {
+		name = hfe_policies_extractor_base.0
+		policy_flags = {
+			hfe_policies_extractor_base.0
+		}
+		ai_weight = {
+			factor = 10
+			modifier = {
+				factor = 0
+				is_pacifist = yes
+			}
+		}
+	}
+	# no
+	option = {
+		name = hfe_policies_extractor_base.1
+		policy_flags = {
+			hfe_policies_extractor_base.1
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+}
 
-# hfe_policies_assimilator = {
-# 	potential = {
-# 		or = {
-# 			and = {
-# 				#allows_purge = yes
-# 				#hfe_trigger_is_awake = yes
-# 				has_country_flag = hfe_assimilator_discovered
-# 				any_owned_planet = {
-# 					has_building = hfe_building_assimilator
-# 				}
-# 			}
-# 			and = {
-# 				exists = overlord
-# 				overlord = {
-# 					has_country_flag = hfe_assimilator_discovered
-# 					or = {
-# 						has_policy_flag = hfe_policies_assimilator.0
-# 						has_policy_flag = hfe_policies_assimilator.1
-# 						has_policy_flag = hfe_policies_assimilator.2
-# 						has_policy_flag = hfe_policies_assimilator.3
-# 						has_policy_flag = hfe_policies_assimilator.4
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-# 	# priority options
-# 	# any, try vassal then slave then xenos then non sitizien then any
-# 	option = {
-# 		name = hfe_policies_assimilator.0
-# 		policy_flags = {
-# 			hfe_policies_assimilator.0
-# 		}
-# 		valid = {
-# 			is_xenophobe = no
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 0
-# 		}
-# 	}
-# 	# not sitizien, try vassal then slave then xenos then non sitizien
-# 	option = {
-# 		name = hfe_policies_assimilator.1
-# 		policy_flags = {
-# 			hfe_policies_assimilator.1
-# 		}
-# 		valid = {
-# 			is_egalitarian = no
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 2
-# 		}
-# 	}
-# 	# xenos, try vassal then slave then xenos
-# 	option = {
-# 		name = hfe_policies_assimilator.2
-# 		policy_flags = {
-# 			hfe_policies_assimilator.2
-# 		}
-# 		valid = {
-# 			is_xenophobe = yes
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 3
-# 		}
-# 	}
-# 	# slave, try vassal then slave
-# 	option = {
-# 		name = hfe_policies_assimilator.3
-# 		policy_flags = {
-# 			hfe_policies_assimilator.3
-# 		}
-# 		valid = {
-# 			allows_slavery = yes
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 4
-# 		}
-# 	}
-# 	# only vassal
-# 	option = {
-# 		name = hfe_policies_assimilator.4
-# 		policy_flags = {
-# 			hfe_policies_assimilator.4
-# 		}
-# 		valid = {
-# 			is_overlord = yes
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 10
-# 			modifier = {
-# 				factor = 0
-# 				hfe_trigger_is_fallen = no
-# 			}
-# 		}
-# 	}
-# 	# only xenos
-# 	option = {
-# 		name = hfe_policies_assimilator.5
-# 		policy_flags = {
-# 			hfe_policies_assimilator.5
-# 		}
-# 		valid = {
-# 			is_xenophobe = yes
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 0
-# 		}
-# 	}
-# 	# only slave
-# 	option = {
-# 		name = hfe_policies_assimilator.6
-# 		policy_flags = {
-# 			hfe_policies_assimilator.6
-# 		}
-# 		valid = {
-# 			allows_slavery = yes
-# 			is_subject = no
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe_maintenance.14
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 0
-# 		}
-# 	}
-# 	# nobody
-# 	option = {
-# 		name = hfe_policies_assimilator.7
-# 		policy_flags = {
-# 			hfe_policies_assimilator.7
-# 		}
-# 		valid = {
-# 			is_subject = no
-# 		}
-# 		ai_weight = {
-# 			factor = 1
-# 			modifier = {
-# 				factor = 9
-# 				hfe_trigger_is_fallen = yes
-# 			}
-# 		}
-# 	}
-# 	option = {
-# 		name = hfe_policies_assimilator.8
-# 		policy_flags = {
-# 			hfe_policies_assimilator.8
-# 		}
-# 		valid = {
-# 			is_subject = yes
-# 		}
-# 		on_enabled = {
-# 			hidden_effect = {
-# 				country_event = {
-# 					id = hfe.10
-# 				}
-# 			}
-# 		}
-# 		ai_weight = {
-# 			factor = 1
-# 		}
-# 	}
-# }
+hfe_policies_extractor_citizen = {
+	potential = {
+		has_policy_flag = hfe_policies_extractor_base.0
+	}
+	# priority options
+	# allow citizen
+	option = {
+		name = hfe_policies_extractor_citizen.0
+		policy_flags = {
+			hfe_policies_extractor_citizen.0
+		}
+		modifier = {
+			pop_ethic_egalitarian_attraction_mult = 0.1
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+	# only non citizen
+	option = {
+		name = hfe_policies_extractor_citizen.1
+		policy_flags = {
+			hfe_policies_extractor_citizen.1
+		}
+		valid = {
+			is_egalitarian = no
+		}
+		ai_weight = {
+			factor = 10
+		}
+	}
+}
 
+hfe_policies_extractor_xenos = {
+	potential = {
+		has_policy_flag = hfe_policies_extractor_base.0
+	}
+	# any
+	option = {
+		name = hfe_policies_extractor_xenos.0
+		policy_flags = {
+			hfe_policies_extractor_xenos.0
+		}
+		valid = {
+			is_xenophobe = no
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+	# only xenos
+	option = {
+		name = hfe_policies_extractor_xenos.1
+		policy_flags = {
+			hfe_policies_extractor_xenos.1
+		}
+		modifier = {
+			pop_ethic_xenophobe_attraction_mult = 0.1
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+}
+
+hfe_policies_extractor_slave = {
+	potential = {
+		has_policy_flag = hfe_policies_extractor_base.0
+	}
+	# any
+	option = {
+		name = hfe_policies_extractor_slave.0
+		policy_flags = {
+			hfe_policies_extractor_slave.0
+		}
+		ai_weight = {
+			factor = 0
+		}
+	}
+	# only slave
+	option = {
+		name = hfe_policies_extractor_slave.1
+		policy_flags = {
+			hfe_policies_extractor_slave.1
+		}
+		valid = {
+			allows_slavery = yes
+		}
+		modifier = {
+			pop_ethic_authoritarian_attraction_mult = 0.1
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+}
+
+hfe_policies_extractor_vassal = {
+	potential = {
+		has_policy_flag = hfe_policies_extractor_base.0
+	}
+	# all planets
+	option = {
+		name = hfe_policies_extractor_vassal.0
+		policy_flags = {
+			hfe_policies_extractor_vassal.0
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+	# only vassal
+	option = {
+		name = hfe_policies_extractor_vassal.1
+		policy_flags = {
+			hfe_policies_extractor_vassal.1
+		}
+		valid = {
+			is_overlord = yes
+		}
+		ai_weight = {
+			factor = 10
+		}
+	}
+}
+
+# we are vassal, for notification
+# TODO notification event
+hfe_policies_extractor_vassal_recipient = {
+	potential = {
+		exists = overlord
+		overlord = {
+			has_policy_flag = hfe_policies_extractor_base.0
+		}
+	}
+	option = {
+		name = hfe_policies_extractor_vassal_recipient.0
+		policy_flags = {
+			hfe_policies_extractor_vassal_recipient.0
+		}
+		ai_weight = {
+			factor = 1
+		}
+	}
+}

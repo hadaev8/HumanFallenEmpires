@@ -342,15 +342,8 @@ country_event = {
 		else_if = {
 			limit = {
 				event_target:hfe_population_species = {
-					or = {
-						has_citizenship_type = {
-							type = citizenship_full
-							country = prev
-						}
-						has_citizenship_type = {
-							type = citizenship_caste_system
-							country = prev
-						}
+					hfe_trigger_is_citizen = {
+						hfe_country = prev
 					}
 				}
 			}
@@ -514,7 +507,9 @@ country_event = {
 				text = hfe_population.52.desc.1.0.0
 				is_country = from
 				has_country_flag = hfe_population.50_citizenship_full
-				not = {
+				nor = {
+					# bio tropy is also citizen
+					has_country_flag = hfe_population.50_was_servitor
 					has_trait = trait_mechanical
 				}
 			}
@@ -531,7 +526,8 @@ country_event = {
 				}
 				from = {
 					has_country_flag = hfe_population.50_citizenship_full
-					not = {
+					nor = {
+						has_country_flag = hfe_population.50_was_servitor
 						has_trait = trait_mechanical
 					}
 				}

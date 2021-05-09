@@ -263,38 +263,71 @@ hfe_trigger_war_in_heavens_custom_wg_system_shift_enabled = {
 }
 
 # for pop
-# hfe_trigger_assimilator_pop_valid = {
-# 	#exists = owner
-# 	is_growing = no
-# 	hfe_trigger_is_robot = no
-# }
-# hfe_trigger_assimilator_on_tile = {
-# 	exists = tile
-# 	tile = {
-# 		has_building = hfe_building_assimilator
-# 		is_ruined = no
-# 	}
-# }
-# hfe_trigger_assimilator_pop_to_move = {
-# 	hfe_trigger_assimilator_on_tile = no
-# 	hfe_trigger_assimilator_pop_valid = yes
-# }
-# hfe_trigger_assimilator_pop_valid_with_ai_block = {
-# 	hfe_trigger_assimilator_pop_valid = yes
-# 	or = {
-# 		and = {
-# 			exists = owner
-# 			owner = {
-# 				is_ai = no
-# 			}
-# 		}
-# 		nor = {
-# 			is_same_species = owner
-# 			is_same_species = event_target:hfe_varelse_species
-# 			is_same_species = event_target:hfe_ahet_species
-# 		}
-# 	}
-# }
+# need $hfe_country$
+hfe_trigger_is_citizen = {
+	or = {
+		has_citizenship_type = {
+			type = citizenship_full
+			country = $hfe_country$
+		}
+		has_citizenship_type = {
+			type = citizenship_caste_system
+			country = $hfe_country$
+		}
+		has_citizenship_type = {
+			type = citizenship_organic_trophy
+			country = $hfe_country$
+		}
+	}
+}
+
+# need $hfe_country$
+hfe_trigger_job_extractor_target = {
+	hfe_trigger_is_robot = no
+	species = {
+		not = {
+			has_species_flag = hfe_extractor_exception@$hfe_country$
+		}
+	}
+	# trigger by country policy
+	$hfe_country$ = {
+		# first check if policy exists
+		has_policy_flag = hfe_policies_extractor_base.0
+		or = {
+			# citizen
+			or = {
+				has_policy_flag = hfe_policies_extractor_citizen.0
+				not = {
+					prev = {
+						hfe_trigger_is_citizen = {
+							hfe_country = prev
+						}
+					}
+				}
+			}
+			# xenos
+			or = {
+				has_policy_flag = hfe_policies_extractor_xenos.0
+				not = {
+					prev = {
+						is_same_species = prev
+					}
+				}
+			}
+			# slave
+			or = {
+				has_policy_flag = hfe_policies_extractor_slave.0
+				prev = {
+					has_citizenship_type = {
+						type = citizenship_slavery
+						country = prev
+					}
+				}
+			}
+		}
+	}
+}
+
 hfe_trigger_system_in_free_space = {
 	hfe_trigger_system_in_someones_space = no
 	any_system = {
@@ -527,5 +560,14 @@ hfe_trigger_human_fallen_awake = {
 		is_at_war = yes
 		recently_lost_war = yes
 		hfe_trigger_fallen_awake_playable_country_power = yes
+	}
+}
+
+hfe_trigger_unemployed_auto_migrate = {
+	or = {
+		has_job = hfe_job_egypt_workless
+		has_job = hfe_job_future_workless
+		has_job = hfe_job_pirate_slave
+		has_job = slave_toiler
 	}
 }
