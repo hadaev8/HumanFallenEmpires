@@ -9,7 +9,7 @@ tags={
 	"Human Fallen Empires"
 	"Mod Pharaoh"
 }
-name="Human Fallen Empires"
+name="Human Fallen Empires Dev"
 picture="thumbnail.jpg"
 supported_version="3.0.*"
 remote_file_id="901039859"
