@@ -146,6 +146,18 @@ country_event = {
 			else = {
 				set_global_flag = hfe_init_fast_start
 			}
+			set_variable = {
+				which = hfe_init_fast_start_colony_num
+				value = 0
+			}
+			set_variable = {
+				which = hfe_init_fast_start_fleet_num
+				value = 0
+			}
+			set_variable = {
+				which = hfe_init_fast_start_pirate_num
+				value = 0
+			}
 			country_event = {
 				id = hfe_init.50
 			}
@@ -187,34 +199,10 @@ country_event = {
 	}
 	# switch colony number
 	option = {
-		name = hfe_init.50.1.2.0
+		name = hfe_init.50.1.2
 		custom_tooltip = hfe_init.50.1.2.tooltip
 		trigger = {
 			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_colony_num
-				value = 0
-			}
-		}
-		hidden_effect = {
-			change_variable = {
-				which = hfe_init_fast_start_colony_num
-				value = 5
-			}
-			country_event = {
-				id = hfe_init.50
-			}
-		}
-	}
-	option = {
-		name = hfe_init.50.1.2.1
-		custom_tooltip = hfe_init.50.1.2.tooltip
-		trigger = {
-			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_colony_num
-				value > 0
-			}
 		}
 		hidden_effect = {
 			if = {
@@ -242,34 +230,10 @@ country_event = {
 	}
 	# fleet number
 	option = {
-		name = hfe_init.50.1.3.0
+		name = hfe_init.50.1.3
 		custom_tooltip = hfe_init.50.1.3.tooltip
 		trigger = {
 			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_fleet_num
-				value = 0
-			}
-		}
-		hidden_effect = {
-			change_variable = {
-				which = hfe_init_fast_start_fleet_num
-				value = 1
-			}
-			country_event = {
-				id = hfe_init.50
-			}
-		}
-	}
-	option = {
-		name = hfe_init.50.1.3.1
-		custom_tooltip = hfe_init.50.1.3.tooltip
-		trigger = {
-			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_fleet_num
-				value > 0
-			}
 		}
 		hidden_effect = {
 			if = {
@@ -297,34 +261,10 @@ country_event = {
 	}
 	# pirate number
 	option = {
-		name = hfe_init.50.1.4.0
+		name = hfe_init.50.1.4
 		custom_tooltip = hfe_init.50.1.4.tooltip
 		trigger = {
 			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_pirate_num
-				value = 0
-			}
-		}
-		hidden_effect = {
-			change_variable = {
-				which = hfe_init_fast_start_pirate_num
-				value = 5
-			}
-			country_event = {
-				id = hfe_init.50
-			}
-		}
-	}
-	option = {
-		name = hfe_init.50.1.4.1
-		custom_tooltip = hfe_init.50.1.4.tooltip
-		trigger = {
-			hfe_trigger_fast_start_enabled = yes
-			check_variable = {
-				which = hfe_init_fast_start_pirate_num
-				value > 0
-			}
 		}
 		hidden_effect = {
 			if = {
@@ -532,32 +472,32 @@ country_event = {
 	immediate = {
 		# init options
 		# more colony
-		if = {
-			limit = {
-				is_variable_set = hfe_init_fast_start_colony_num
-			}
-			while = {
-				count = hfe_init_fast_start_colony_num
-				every_playable_country = {
-					limit = {
-						num_pops > 0
-					}
-					random_list = {
-						10 = {
-							modifier = {
-								factor = 0
-								not = {
-									has_global_flag = hfe_init_random
-								}
+		# if = {
+		# 	limit = {
+		# 		is_variable_set = hfe_init_fast_start_colony_num
+		# 	}
+		while = {
+			count = hfe_init_fast_start_colony_num
+			every_playable_country = {
+				limit = {
+					num_pops > 0
+				}
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							not = {
+								has_global_flag = hfe_init_random
 							}
 						}
-						10 = {
-							save_event_target_as = hfe_init_target
-							hfe_effect_init_make_colony = yes
-						}
+					}
+					10 = {
+						save_event_target_as = hfe_init_target
+						hfe_effect_init_make_colony = yes
 					}
 				}
 			}
+			# }
 		}
 		# tech and res
 		every_playable_country = {
@@ -681,27 +621,27 @@ country_event = {
 			}
 		}
 		# more fleets
-		if = {
-			limit = {
-				is_variable_set = hfe_init_fast_start_fleet_num
-			}
-			while = {
-				count = hfe_init_fast_start_fleet_num
-				random_list = {
-					10 = {
-						modifier = {
-							factor = 0
-							not = {
-								has_global_flag = hfe_init_random
-							}
-						}
-					}
-					10 = {
-						every_playable_country = {
-							hfe_effect_init_make_fleet = yes
+		# if = {
+		# 	limit = {
+		# 		is_variable_set = hfe_init_fast_start_fleet_num
+		# 	}
+		while = {
+			count = hfe_init_fast_start_fleet_num
+			random_list = {
+				10 = {
+					modifier = {
+						factor = 0
+						not = {
+							has_global_flag = hfe_init_random
 						}
 					}
 				}
+				10 = {
+					every_playable_country = {
+						hfe_effect_init_make_fleet = yes
+					}
+				}
+				# }
 			}
 		}
 		# more pirate
@@ -810,18 +750,9 @@ country_event = {
 		remove_global_flag = hfe_init_comms
 		remove_global_flag = hfe_init_survey
 		remove_global_flag = hfe_init_develop
-		set_variable = {
-			which = hfe_init_fast_start_pirate_num
-			value = 0
-		}
-		set_variable = {
-			which = hfe_init_fast_start_fleet_num
-			value = 0
-		}
-		set_variable = {
-			which = hfe_init_fast_start_colony_num
-			value = 0
-		}
+		clear_variable = hfe_init_fast_start_colony_num
+		clear_variable = hfe_init_fast_start_fleet_num
+		clear_variable = hfe_init_fast_start_pirate_num
 	}
 }
 

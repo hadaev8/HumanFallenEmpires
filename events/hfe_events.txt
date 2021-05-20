@@ -3843,7 +3843,7 @@ ship_event = {
 		exists = from
 		exists = owner
 		from = {
-			has_star_flag = hfe_ahet_home_star
+			has_star_flag = hfe_ahet_home
 		}
 		owner = {
 			is_ai = no
@@ -4781,7 +4781,8 @@ country_event = {
 				set_country_flag = hfe_auto_delete
 				set_graphical_culture = hfe_graphical_culture_pirate
 				event_target:hfe_stargate_planet = {
-					conquer = prev
+					# conquer = prev
+					set_owner = prev
 					starbase = {
 						set_owner = prevprev
 					}
@@ -9518,7 +9519,7 @@ country_event = {
 						class = ruler
 						traits = {
 							# immortal
-							trait = leader_trait_ruler_hive_mind
+							trait = leader_trait_ruler_machine_intelligence
 							trait = leader_trait_ruler_cyborg
 						}
 						effect = {
@@ -9609,15 +9610,22 @@ country_event = {
 					}
 				}
 				set_built_species = event_target:hfe_blight_machine_species
-				change_dominant_species = {
-					species = event_target:hfe_blight_remnants.species
-				}
-				if = {
-					limit = {
-						hfe_trigger_is_robot = no
-					}
-					modify_species = {
-						add_trait = trait_cybernetic
+				event_target:hfe_blight_remnants.species = {
+					if = {
+						limit = {
+							hfe_trigger_is_robot = no
+						}
+						modify_species = {
+							add_trait = trait_cybernetic
+							change_scoped_species = no
+							effect = {
+								prevprev = {
+									change_dominant_species = {
+										species = prev
+									}
+								}
+							}
+						}
 					}
 				}
 				every_owned_pop = {
@@ -9656,10 +9664,7 @@ country_event = {
 							type = ruler
 						}
 					}
-					set_variable = {
-						which = hfe_blight_counter
-						value = 0
-					}
+					clear_variable = hfe_blight_counter
 				}
 				country_event = {
 					id = hfe.5086

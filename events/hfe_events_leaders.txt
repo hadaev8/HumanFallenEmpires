@@ -1061,6 +1061,7 @@ country_event = {
 }
 
 # warcrime tourism
+# on_war_beginning on_war_ended
 country_event = {
 	id = hfe_leaders.109
 	hide_window = yes
@@ -1079,9 +1080,13 @@ country_event = {
 					num_pops > 0
 					hfe_trigger_is_awake = yes
 					is_at_war = no
-					trust = {
-						who = root
-						value >= 50
+					or = {
+						trust = {
+							who = root
+							value >= 50
+						}
+						# should be pirate
+						is_forced_friendly = root
 					}
 				}
 				if = {
@@ -1127,152 +1132,16 @@ country_event = {
 					}
 				}
 			}
-			remove_modifier = hfe_leaders_warcrime_tourism_10
-			remove_modifier = hfe_leaders_warcrime_tourism_9
-			remove_modifier = hfe_leaders_warcrime_tourism_8
-			remove_modifier = hfe_leaders_warcrime_tourism_7
-			remove_modifier = hfe_leaders_warcrime_tourism_6
-			remove_modifier = hfe_leaders_warcrime_tourism_5
-			remove_modifier = hfe_leaders_warcrime_tourism_4
-			remove_modifier = hfe_leaders_warcrime_tourism_3
-			remove_modifier = hfe_leaders_warcrime_tourism_2
-			remove_modifier = hfe_leaders_warcrime_tourism_1
-			if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 10
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_10
-					years = 5
-				}
+			# remove_modifier = hfe_leaders_warcrime_tourism
+			add_modifier = {
+				modifier = hfe_leaders_warcrime_tourism
+				multiplier = hfe_leaders_warcrime_tourism
+				years = 5
 			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 9
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_9
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 8
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_8
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 7
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_7
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 6
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_6
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 5
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_5
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 4
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_4
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 3
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_3
-					years = 5
-				}
-			}
-			else_if = {
-				limit = {
-					check_variable = {
-						which = hfe_leaders_warcrime_tourism
-						value >= 2
-					}
-				}
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_2
-					years = 5
-				}
-			}
-			else = {
-				add_modifier = {
-					modifier = hfe_leaders_warcrime_tourism_1
-					years = 5
-				}
-			}
+			clear_variable = hfe_leaders_warcrime_tourism
 		}
-		if = {
-			limit = {
-				check_variable = {
-					which = hfe_leaders_warcrime_tourism
-					value = 0
-				}
-			}
-			remove_modifier = hfe_leaders_warcrime_tourism_10
-			remove_modifier = hfe_leaders_warcrime_tourism_9
-			remove_modifier = hfe_leaders_warcrime_tourism_8
-			remove_modifier = hfe_leaders_warcrime_tourism_7
-			remove_modifier = hfe_leaders_warcrime_tourism_6
-			remove_modifier = hfe_leaders_warcrime_tourism_5
-			remove_modifier = hfe_leaders_warcrime_tourism_4
-			remove_modifier = hfe_leaders_warcrime_tourism_3
-			remove_modifier = hfe_leaders_warcrime_tourism_2
-			remove_modifier = hfe_leaders_warcrime_tourism_1
-		}
-		set_variable = {
-			which = hfe_leaders_warcrime_tourism
-			value = 0
+		else = {
+			remove_modifier = hfe_leaders_warcrime_tourism
 		}
 	}
 }
@@ -1309,6 +1178,8 @@ country_event = {
 											value >= 5
 										}
 									}
+									# for pirate
+									is_forced_friendly = root
 									# comment out for now, used in pirate branch
 									# has_country_flag = hfe_leaders_refuge@root
 								}
@@ -1378,6 +1249,14 @@ country_event = {
 							set_timed_country_flag = {
 								flag = hfe_leaders.111
 								days = 1
+							}
+							if = {
+								limit = {
+									root = {
+										is_country_type = hfe_pirate
+									}
+								}
+								set_country_flag = hfe_leaders.111_from_pirate
 							}
 						}
 					}
@@ -1470,12 +1349,18 @@ country_event = {
 		}
 	}
 	option = {
+		name = hfe_leaders.111.1
+		exclusive_trigger = {
+			has_country_flag = hfe_leaders.111_from_pirate
+		}
+	}
+	option = {
 		name = hfe_leaders.111.0
+	}
+	after = {
 		hidden_effect = {
-			set_variable = {
-				which = hfe_leaders_refuge
-				value = 0
-			}
+			clear_variable = hfe_leaders_refuge
+			remove_country_flag = hfe_leaders.111_from_pirate
 		}
 	}
 }

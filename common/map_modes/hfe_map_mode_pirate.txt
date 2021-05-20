@@ -1,7 +1,6 @@
 #Scope layout:
 # this = the country who owns the borders we a re coloring
 # from = the country who we are coloring for, usually the player
-
 #example = {
 #	icon = "GFX_some_icon"		-- which icon to use in the main gui
 #	hardcoded_tooltip = opinion -- override tooltip generation with a hardcoded method. Currently supported: opinion
@@ -16,11 +15,10 @@
 #		}
 #	}
 #}
-
 hfe_map_mode_pirate = {
 	icon = GFX_hfe_map_mode_pirate
 	enable_terra_incognita = yes
-
+	# same country
 	color = {
 		value = country
 		condition = {
@@ -29,6 +27,7 @@ hfe_map_mode_pirate = {
 			}
 		}
 	}
+	# non pirate and non pirate
 	color = {
 		value = hsv { 0.0 0.0 0.8 0.7 }
 		condition = {
@@ -42,8 +41,9 @@ hfe_map_mode_pirate = {
 			}
 		}
 	}
+	# pirate raid target
 	color = {
-		value = rgb { 128 0 128  1 }
+		value = hsv { 0.0 1.0 0.6 1.0 }
 		custom_tooltip = hfe_map_mode_pirate_prior
 		condition = {
 			or = {
@@ -60,39 +60,48 @@ hfe_map_mode_pirate = {
 			}
 		}
 	}
+	# pirate protect
 	color = {
-		value = hsv { 0.25 1 0.6 1.0 }
+		value = hsv { 0.4 0.5 1.0 1.0 }
 		custom_tooltip = hfe_map_mode_pirate_protect
 		condition = {
 			or = {
+				is_country_type = hfe_pirate
 				from = {
-					has_opinion_modifier = {
-						who = prev
-						modifier = hfe_opinion_pirate_pay_for_protect
-					}
-				}
-				has_opinion_modifier = {
-					who = from
-					modifier = hfe_opinion_pirate_pay_for_protect
+					is_country_type = hfe_pirate
 				}
 			}
+			is_forced_neutral = from
 		}
 	}
+	# pirate investment pact
 	color = {
-		value = hsv { 0.0 0.9 0.6 1.0 }
+		value = hsv { 0.37 0.8 1.0 1.0 }
+		custom_tooltip = hfe_map_mode_pirate_investment_pact
+		condition = {
+			or = {
+				is_country_type = hfe_pirate
+				from = {
+					is_country_type = hfe_pirate
+				}
+			}
+			is_forced_friendly = from
+		}
+	}
+	# hostile
+	color = {
+		value = hsv { 0.05 0.6 0.8 1.0 }
 		custom_tooltip = hfe_map_mode_pirate_attack
 		condition = {
-			nor = {
+			or = {
+				is_country_type = hfe_pirate
 				from = {
-					has_opinion_modifier = {
-						who = prev
-						modifier = hfe_opinion_pirate_pay_for_protect
-					}
+					is_country_type = hfe_pirate
 				}
-				has_opinion_modifier = {
-					who = from
-					modifier = hfe_opinion_pirate_pay_for_protect
-				}
+			}
+			nor = {
+				is_forced_neutral = from
+				is_forced_friendly = from
 			}
 		}
 	}

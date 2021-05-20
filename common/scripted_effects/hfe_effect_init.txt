@@ -164,8 +164,9 @@ hfe_effect_init_make_colony = {
 						who = event_target:hfe_init_target.species
 						value > 0.2
 					}
-					not = {
+					nor = {
 						exists = owner
+						has_modifier = holy_planet
 					}
 				}
 			}
@@ -175,17 +176,13 @@ hfe_effect_init_make_colony = {
 						who = event_target:hfe_init_target.species
 						value > 0.2
 					}
-					not = {
+					nor = {
 						exists = owner
+						has_modifier = holy_planet
 					}
 				}
-				# seems broken
-				# create_colony = {
-				# 	owner = event_target:hfe_init_target
-				# }
-				set_owner = event_target:hfe_init_target
-				create_pop = {
-					species = owner
+				create_colony = {
+					owner = event_target:hfe_init_target
 				}
 			}
 		}
@@ -195,6 +192,15 @@ hfe_effect_init_make_colony = {
 hfe_effect_init_set_pops_10 = {
 	while = {
 		count = 10
+		create_pop = {
+			species = owner
+		}
+	}
+}
+
+hfe_effect_init_set_pops_30 = {
+	while = {
+		count = 30
 		create_pop = {
 			species = owner
 		}
@@ -449,7 +455,7 @@ hfe_effect_init_set_all_buildings = {
 }
 
 hfe_effect_init_develop_planet = {
-	hfe_effect_init_set_pops_50 = yes
+	hfe_effect_init_set_pops_30 = yes
 	hfe_effect_init_set_starbase = yes
 	# hfe_effect_init_set_all_buildings = yes
 	hfe_effect_init_set_all_districs = yes

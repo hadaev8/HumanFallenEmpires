@@ -264,7 +264,7 @@ country_event = {
 				set_capital = yes
 			}
 		}
-		# build new bases
+		# build new base planets
 		country_event = {
 			id = hfe_pirate.3
 		}
@@ -349,6 +349,12 @@ country_event = {
 		# sell energy
 		country_event = {
 			id = hfe_pirate.11
+			days = 1
+			random = 360
+		}
+		# investment pact
+		country_event = {
+			id = hfe_pirate.210
 			days = 1
 			random = 360
 		}
@@ -1275,36 +1281,6 @@ country_event = {
 	}
 }
 
-# fix pirate non hostile then attacked by player 61
-# on_entering_battle
-# This = owner of fleet 1
-# From = owner of fleet 2
-# FromFrom = fleet 1
-# FromFromFrom = fleet 2
-country_event = {
-	id = hfe_pirate.61
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = from
-		not = {
-			is_hostile = from
-		}
-	}
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "set pirate hostile then attaked"
-		}
-		set_faction_hostility = {
-			target = from
-			set_hostile = yes
-		}
-	}
-}
-
 # get disabled starbase 62
 # A fleet has entered a system
 # Scope = Fleet
@@ -1573,9 +1549,9 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				set_faction_hostility = {
 					target = root
-					set_hostile = no
+					# set_hostile = no
 					set_neutral = yes
-					set_friendly = no
+					# set_friendly = no
 				}
 				add_opinion_modifier = {
 					who = root
@@ -1913,7 +1889,7 @@ country_event = {
 			log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2009,7 +1985,7 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				resource_stockpile_compare = {
@@ -2053,7 +2029,7 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2141,6 +2117,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_0
 					}
 				}
@@ -2153,6 +2130,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_0
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2170,7 +2148,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2232,6 +2210,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_1
 					}
 				}
@@ -2244,6 +2223,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_1
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2253,7 +2233,7 @@ country_event = {
 				limit = {
 					has_global_flag = hfe_pirate_logs
 				}
-				log = "[this.GetName] buy slaves "
+				log = "[this.GetName] buy slaves 1"
 			}
 		}
 		hfe_effect_settle_pop = yes
@@ -2261,7 +2241,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2323,6 +2303,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_2
 					}
 				}
@@ -2335,6 +2316,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_2
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2352,7 +2334,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2414,6 +2396,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_3
 					}
 				}
@@ -2426,6 +2409,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_3
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2443,7 +2427,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2505,6 +2489,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_4
 					}
 				}
@@ -2517,6 +2502,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_4
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2534,7 +2520,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2596,6 +2582,7 @@ country_event = {
 				event_target:hfe_pirate_country = {
 					any_owned_pop = {
 						count > 1
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_5
 					}
 				}
@@ -2608,6 +2595,7 @@ country_event = {
 			event_target:hfe_pirate_country = {
 				random_owned_pop = {
 					limit = {
+						has_job = hfe_job_pirate_slave
 						is_exact_same_species = event_target:hfe_slave_target_5
 					}
 					save_event_target_as = hfe_settle_pop_target
@@ -2625,7 +2613,7 @@ country_event = {
 			hfe_effect_settle_pop_from_slavery_buff = yes
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				or = {
@@ -2698,11 +2686,10 @@ country_event = {
 			exists = ruler
 			event_target:hfe_pirate_country = {
 				is_spiritualist = no
-				# TODO check if any pirate really can have what ammount of energy because it can waste energy on trade
-				# resource_stockpile_compare = {
-				# 	resource = energy
-				# 	value > 10000
-				# }
+				resource_stockpile_compare = {
+					resource = energy
+					value > 10000
+				}
 			}
 		}
 		add_resource = {
@@ -2716,6 +2703,10 @@ country_event = {
 		hidden_effect = {
 			hfe_effect_pirate_diplomacy_remove_flags = yes
 			set_country_flag = hfe_pirate.101.psi_test_menu
+			set_variable = {
+				which = hfe_pirate_psi_test_score
+				value = 0
+			}
 			save_event_target_as = hfe_blackjack_target_0
 			country_event = {
 				id = hfe_pirate.101
@@ -2822,6 +2813,8 @@ country_event = {
 				}
 			}
 			ruler = {
+				# idk what effect i need
+				add_trait = leader_trait_ruler_psionic
 				add_ruler_trait = leader_trait_ruler_psionic
 			}
 		}
@@ -3202,9 +3195,6 @@ country_event = {
 				log = "exiting pirate diplo [this.GetName]"
 			}
 		}
-		ai_chance = {
-			factor = 100
-		}
 	}
 }
 
@@ -3292,7 +3282,7 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				check_variable = {
@@ -3316,7 +3306,7 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			modifier = {
 				factor = 0
 				check_variable = {
@@ -3334,9 +3324,6 @@ country_event = {
 		name = hfe_blackjack_end_game
 		trigger = {
 			has_country_flag = hfe_blackjack_end
-		}
-		ai_chance = {
-			factor = 100
 		}
 		hfe_effect_blackjack_calc_bet = yes
 		hidden_effect = {
@@ -3366,9 +3353,6 @@ country_event = {
 		hfe_effect_blackjack_remove_bet = yes
 		hidden_effect = {
 			hfe_effect_blackjack_turn_0 = yes
-		}
-		ai_chance = {
-			factor = 100
 		}
 	}
 	option = {
@@ -3416,6 +3400,11 @@ country_event = {
 	trigger = {
 		exists = event_target:hfe_pirate_country.ruler
 		hfe_trigger_pirate_raid_have_flag = no
+		event_target:hfe_pirate_country = {
+			not = {
+				is_forced_friendly = root
+			}
+		}
 	}
 	immediate = {
 		if = {
@@ -3425,6 +3414,7 @@ country_event = {
 			log = "[event_target:hfe_pirate_country.GetName] pirates offer protection for [root.GetName]"
 		}
 	}
+	# agree
 	option = {
 		name = hfe_pirate.200.0
 		allow = {
@@ -3444,9 +3434,9 @@ country_event = {
 				}
 				set_faction_hostility = {
 					target = event_target:hfe_pirate_country
-					set_hostile = no
+					# set_hostile = no
 					set_neutral = yes
-					set_friendly = no
+					# set_friendly = no
 				}
 			}
 			country_event = {
@@ -3461,7 +3451,7 @@ country_event = {
 			}
 		}
 		ai_chance = {
-			factor = 100
+			factor = 1
 			# politic situation
 			modifier = {
 				factor = 2
@@ -3578,6 +3568,7 @@ country_event = {
 			}
 		}
 	}
+	# reject
 	option = {
 		name = hfe_pirate.200.1
 		default_hide_option = yes
@@ -3595,9 +3586,200 @@ country_event = {
 			}
 			set_faction_hostility = {
 				target = event_target:hfe_pirate_country
-				set_hostile = yes
+				# set_hostile = yes
 				set_neutral = no
-				set_friendly = no
+				# set_friendly = no
+			}
+		}
+	}
+}
+
+# investment pact
+# set buildings flag loop
+country_event = {
+	id = hfe_pirate.209
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = hfe_pirate.209_loop
+	}
+	immediate = {
+		hfe_effect_pirate_set_building_flag = yes
+		if = {
+			limit = {
+				any_relation = {
+					is_country_type = hfe_pirate
+					is_forced_friendly = root
+				}
+			}
+			country_event = {
+				id = hfe_pirate.209
+				days = 30
+			}
+		}
+		else = {
+			remove_country_flag = hfe_pirate.209_loop
+		}
+	}
+}
+
+# check pirate triggers
+country_event = {
+	id = hfe_pirate.210
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		resource_stockpile_compare = {
+			resource = energy
+			value > 1000
+		}
+	}
+	immediate = {
+		random_relation = {
+			limit = {
+				is_country_type = default
+				is_forced_neutral = root
+				nor = {
+					is_forced_friendly = root
+					has_country_flag = hfe_pirate.211_block
+				}
+			}
+			root = {
+				save_event_target_as = hfe_pirate_country
+			}
+			country_event = {
+				id = hfe_pirate.211
+			}
+		}
+	}
+}
+
+# offer 211
+country_event = {
+	id = hfe_pirate.211
+	title = TRANSMISSION
+	desc = hfe_pirate.211.desc
+	diplomatic = yes
+	is_triggered_only = yes
+	force_open = yes
+	location = event_target:hfe_pirate_country.capital_scope
+	picture_event_data = {
+		portrait = event_target:hfe_pirate_country
+		room = event_target:hfe_pirate_country.ruler
+	}
+	trigger = {
+		exists = event_target:hfe_pirate_country.ruler
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[event_target:hfe_pirate_country.GetName] pirates offer investment pact for [root.GetName]"
+		}
+	}
+	# agree
+	option = {
+		name = hfe_pirate.211.0
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[root.GetName] agree for investment pact"
+		}
+		set_faction_hostility = {
+			target = event_target:hfe_pirate_country
+			set_friendly = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					not = {
+						has_country_flag = hfe_pirate.209_loop
+					}
+				}
+				set_country_flag = hfe_pirate.209_loop
+				country_event = {
+					id = hfe_pirate.209
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+			# politic situation
+			modifier = {
+				factor = 2
+				is_at_war = yes
+			}
+			# ethics
+			modifier = {
+				factor = 0.5
+				or = {
+					is_militarist = yes
+					is_xenophobe = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				is_pacifist = yes
+			}
+			# fleet power
+			modifier = {
+				factor = 0.5
+				relative_power = {
+					who = event_target:hfe_pirate_country
+					category = fleet
+					value >= overwhelming
+				}
+			}
+			modifier = {
+				factor = 0.5
+				relative_power = {
+					who = event_target:hfe_pirate_country
+					category = fleet
+					value >= superior
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:hfe_pirate_country
+					category = fleet
+					value <= equivalent
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:hfe_pirate_country
+					category = fleet
+					value <= inferior
+				}
+			}
+			modifier = {
+				factor = 2
+				relative_power = {
+					who = event_target:hfe_pirate_country
+					category = fleet
+					value <= pathetic
+				}
+			}
+		}
+	}
+	# reject
+	option = {
+		name = hfe_pirate.211.1
+		default_hide_option = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "[root.GetName] not agree for investment pact"
+		}
+		hidden_effect = {
+			set_timed_country_flag = {
+				flag = hfe_pirate.211_block
+				years = 3
 			}
 		}
 	}

@@ -71,6 +71,19 @@ can_colonize_outside_borders = {
 	}
 }
 
+# This = country
+can_build_branch_offices = {
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_MEGACORP
+		OR = {
+			has_authority = auth_corporate
+			has_civic = civic_galactic_sovereign_megacorp
+			# mod
+			is_country_type = hfe_pirate
+		}
+	}
+}
+
 # This = planet
 # Root = country
 can_build_branch_office_on_planet = {
@@ -90,6 +103,18 @@ can_build_branch_office_on_planet = {
 		fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
 		exists = owner
 		OR = {
+			# mod
+			# pirate
+			root = {
+				is_country_type = hfe_pirate
+				is_forced_friendly = prev.owner
+			}
+			root = {
+				exists = overlord
+				overlord = {
+					is_country = prevprev.owner
+				}
+			}
 			root = {
 				is_criminal_syndicate = yes
 			}
@@ -100,13 +125,14 @@ can_build_branch_office_on_planet = {
 				is_in_federation_with = root
 			}
 			# allow branch offices in subsidiaries and vice versa
-			root = {
-				is_subject = yes
-				is_subject_type = subsidiary
-				overlord = {
-					is_same_value = owner
-				}
-			}
+			# this is broken
+			# root = {
+			# 	is_subject = yes
+			# 	is_subject_type = subsidiary
+			# 	overlord = {
+			# 		is_same_value = owner
+			# 	}
+			# }
 			owner = {
 				is_subject = yes
 				is_subject_type = subsidiary
@@ -128,13 +154,6 @@ can_build_branch_office_on_planet = {
 				}
 				owner = {
 					is_galactic_community_member = yes
-				}
-			}
-			# mod
-			root = {
-				exists = overlord
-				overlord = {
-					is_country = prevprev.owner
 				}
 			}
 		}
