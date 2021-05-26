@@ -10109,6 +10109,23 @@ country_event = {
 			which = hfe_blight_counter_3
 			value = 1
 		}
+		capital_scope = {
+			save_event_target_as = hfe_capital_scope
+			set_timed_planet_flag = {
+				flag = hfe_blight_destroy_colony_exception
+				days = 10
+			}
+		}
+		every_owned_megastructure = {
+			random_list = {
+				1 = {
+				}
+				4 = {
+					hfe_effect_ruin_megastructure = yes
+				}
+			}
+		}
+		# kill pop
 		every_owned_pop = {
 			random_list = {
 				1 = {
@@ -10136,9 +10153,7 @@ country_event = {
 				}
 			}
 		}
-		capital_scope = {
-			save_event_target_as = hfe_capital_scope
-		}
+		# kill colony
 		every_owned_planet = {
 			if = {
 				limit = {
@@ -10155,6 +10170,7 @@ country_event = {
 				}
 			}
 			random_list = {
+				# kill colony
 				2 = {
 					modifier = {
 						factor = 10
@@ -10162,10 +10178,11 @@ country_event = {
 					}
 					modifier = {
 						factor = 0
-						is_capital = yes
+						has_planet_flag = hfe_blight_destroy_colony_exception
 					}
 					destroy_colony = yes
 				}
+				# make primitive
 				1 = {
 					modifier = {
 						factor = 0
@@ -10173,10 +10190,11 @@ country_event = {
 					}
 					modifier = {
 						factor = 0
-						is_capital = yes
+						has_planet_flag = hfe_blight_destroy_colony_exception
 					}
 					hfe_effect_primitive_make_primitive = yes
 				}
+				# kill habitat
 				3 = {
 					modifier = {
 						factor = 0
@@ -10186,27 +10204,48 @@ country_event = {
 					}
 					modifier = {
 						factor = 0
-						is_capital = yes
+						has_planet_flag = hfe_blight_destroy_colony_exception
 					}
 					remove_planet = yes
 				}
-				1 = {
-					modifier = {
-						factor = 0
-						not = {
-							is_planet_class = pc_ringworld_habitable
-						}
-					}
-					modifier = {
-						factor = 0
-						is_capital = yes
-					}
-					change_pc = pc_ringworld_habitable_damaged
-				}
+				# TODO kill ringworld
+				# 1 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		nor = {
+				# 			is_planet_class = pc_ringworld_habitable
+				# 			is_planet_class = pc_ringworld_tech
+				# 			is_planet_class = pc_ringworld_seam
+				# 		}
+				# 	}
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_planet_flag = hfe_blight_destroy_colony_exception
+				# 	}
+				# 	if = {
+				# 		limit = {
+				# 			is_planet_class = pc_ringworld_habitable
+				# 		}
+				# 		change_pc = pc_ringworld_habitable_damaged
+				# 	}
+				# 	else_if = {
+				# 		limit = {
+				# 			is_planet_class = pc_ringworld_tech
+				# 		}
+				# 		change_pc = pc_ringworld_tech_damaged
+				# 	}
+				# 	else_if = {
+				# 		limit = {
+				# 			is_planet_class = pc_ringworld_seam
+				# 		}
+				# 		change_pc = pc_ringworld_seam_damaged
+				# 	}
+				# }
 				7 = {
 				}
 			}
 		}
+		# make countries
 		every_system_within_border = {
 			limit = {
 				any_system_planet = {
