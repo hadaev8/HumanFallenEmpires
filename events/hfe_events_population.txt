@@ -14,10 +14,6 @@ planet_event = {
 				id = hfe_population.1
 			}
 		}
-		# TODO
-		# owner = {
-		# 	hfe_effect_population_country_set_robot_pop_identity = yes
-		# }
 	}
 }
 
@@ -36,6 +32,55 @@ pop_event = {
 	}
 	immediate = {
 		hfe_effect_population_fix_robot_pop = yes
+	}
+}
+
+# synth accention robot pop fix
+country_event = {
+	id = hfe_population.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		hfe_trigger_population_enabled = yes
+		is_mechanical_empire = yes
+		not = {
+			has_country_flag = hfe_has_event_population.2
+		}
+	}
+	immediate = {
+		set_country_flag = hfe_has_event_population.2
+		species = {
+			save_event_target_as = hfe_robot_species
+		}
+		every_owned_pop = {
+			limit = {
+				not = {
+					is_same_species = event_target:hfe_robot_species
+				}
+			}
+			pop_event = {
+				id = hfe_population.1
+			}
+		}
+	}
+}
+
+# fix robot pop by on_pop_assembled
+planet_event = {
+	id = hfe_population.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		hfe_trigger_population_enabled = yes
+		exists = fromfrom
+	}
+	immediate = {
+		fromfrom = {
+			log = "[this.GetName] [planet.GetName]"
+			pop_event = {
+				id = hfe_population.1
+			}
+		}
 	}
 }
 
