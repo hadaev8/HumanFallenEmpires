@@ -1,4 +1,53 @@
-#
+# add back some things like civics then country switched to default
+country_event = {
+	id = hfe_primitive.0
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		not = {
+			has_country_flag = hfe_primitive.0_block
+		}
+		has_country_flag = primitives_can_into_space
+		is_country_type = default
+	}
+	immediate = {
+		set_country_flag = hfe_primitive.0_block
+		if = {
+			limit = {
+				has_country_flag = acquired_tech
+			}
+			add_modifier = {
+				modifier = hfe_primitive_new_tech
+				years = 10
+			}
+			set_timed_country_flag = {
+				flag = hfe_primitive_unstable_gov
+				years = 10
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = hfe_varelse_primitive_0
+			}
+			if = {
+				limit = {
+					is_materialist = yes
+				}
+				change_government = {
+					authority = auth_oligarchic
+				}
+				force_add_civic = hfe_civic_godforge_mat
+			}
+			else = {
+				change_government = {
+					authority = auth_imperial
+				}
+				force_add_civic = hfe_civic_godforge
+			}
+		}
+	}
+}
+
 namespace = hfe_primitive
 # primitive life
 # primitive can make colony in same system 200
@@ -89,6 +138,7 @@ country_event = {
 		exists = from
 	}
 	immediate = {
+		set_country_flag = acquired_tech
 		hfe_effect_primitive_up = yes
 		add_opinion_modifier = {
 			who = from
