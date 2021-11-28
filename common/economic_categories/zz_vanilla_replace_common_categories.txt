@@ -117,6 +117,22 @@ planet_jobs = {
 		}
 	}
 	triggered_produces_modifier = {
+		#use this one if deliberately excluding worker drones
+		key = planet_jobs_worker_only
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			OR = {
+				is_pop_category = worker
+				AND = {
+					is_pop_category = slave					# Yes, slave should count towards both worker and slave
+					has_job_category = worker
+				}
+			}
+		}
+	}
+	triggered_produces_modifier = {
 		key = planet_jobs_specialist
 		modifier_types = {
 			mult
@@ -124,7 +140,23 @@ planet_jobs = {
 		trigger = {
 			OR = {
 				is_pop_category = specialist
-				is_pop_category = complex_drone				#should use planet_jobs_complex_drone wherever possible, this is just for cases like species traits
+				is_pop_category = complex_drone				#planet_jobs_complex_drone is preferable for stuff visible during galaxy setup
+				AND = {
+					is_pop_category = slave
+					has_job_category = specialist
+				}
+			}
+		}
+	}
+	triggered_produces_modifier = {
+		#use this one if deliberately excluding complex drones
+		key = planet_jobs_specialist_only
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			OR = {
+				is_pop_category = specialist
 				AND = {
 					is_pop_category = slave
 					has_job_category = specialist
