@@ -8660,7 +8660,7 @@ country_event = {
 					limit = {
 						can_be_subject = {
 							overlord = event_target:hfe_future_country
-							subject_type = hfe_vassal_future
+							preset = preset_hfe_vassal_future
 						}
 					}
 					country_event = {
@@ -8693,7 +8693,7 @@ country_event = {
 		name = hfe.5012.0
 		set_subject_of = {
 			who = event_target:hfe_future_country
-			subject_type = hfe_vassal_future
+			preset = preset_hfe_vassal_future
 		}
 		hfe_effect_advisor_future_on = yes
 		play_sound = event_celebration
@@ -8712,7 +8712,7 @@ country_event = {
 	# trigger = {
 	# 	any_subject = {
 	# 		not = {
-	# 			is_subject_type = hfe_vassal_future
+	# 			any_agreement = { agreement_preset = preset_hfe_vassal_future }
 	# 		}
 	# 	}
 	# }
@@ -8720,12 +8720,14 @@ country_event = {
 		every_subject = {
 			limit = {
 				not = {
-					is_subject_type = hfe_vassal_future
+					any_agreement = {
+						agreement_preset = preset_hfe_vassal_future
+					}
 				}
 			}
 			set_subject_of = {
 				who = root
-				subject_type = hfe_vassal_future
+				preset = preset_hfe_vassal_future
 			}
 			country_event = {
 				id = hfe.5021
@@ -9070,7 +9072,7 @@ country_event = {
 		event_target:hfe_criopods_planet.owner = {
 			set_subject_of = {
 				who = root
-				subject_type = protectorate
+				preset = preset_protectorate
 			}
 		}
 	}
@@ -10114,12 +10116,9 @@ country_event = {
 			}
 		}
 		every_owned_megastructure = {
-			random_list = {
-				1 = {
-				}
-				4 = {
-					hfe_effect_ruin_megastructure = yes
-				}
+			random = {
+				chance = 80
+				hfe_effect_ruin_megastructure = yes
 			}
 		}
 		# kill pop
@@ -10905,7 +10904,9 @@ country_event = {
 		name = hfe.5091.3.0
 		exclusive_trigger = {
 			has_country_flag = hfe.5091.step3
-			is_subject_type = hfe_vassal_future
+			any_agreement = {
+				agreement_preset = preset_hfe_vassal_future
+			}
 		}
 		default_hide_option = yes
 	}

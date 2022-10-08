@@ -194,7 +194,7 @@ pop_event = {
 			}
 			add_modifier = {
 				modifier = hfe_pirate_pop_purchased
-				days = 3650
+				years = 10
 			}
 		}
 		else_if = {
@@ -203,7 +203,7 @@ pop_event = {
 			}
 			add_modifier = {
 				modifier = pop_saved_from_slavery
-				days = 3650
+				years = 10
 			}
 		}
 	}
@@ -367,13 +367,13 @@ country_event = {
 			}
 			set_subject_of = {
 				who = from
-				subject_type = hfe_vassal_egypt
+				preset = preset_hfe_vassal_egypt
 			}
 		}
 		else = {
 			set_subject_of = {
 				who = from
-				subject_type = hfe_vassal_future
+				preset = preset_hfe_vassal_future
 			}
 		}
 	}
@@ -604,7 +604,6 @@ event = {
 		}
 		random_playable_country = {
 			limit = {
-				is_country_type = default
 				not = {
 					has_authority = auth_machine_intelligence
 				}
@@ -759,24 +758,12 @@ event = {
 					has_global_flag = hfe_future_take_robot
 				}
 				exists = event_target:hfe_future_country
-				any_country = {
-					is_ai = no
-					any_owned_species = {
-						has_trait = trait_mechanical
-					}
-					not = {
-						has_country_flag = hfe_future_try_take_robot
-					}
-					event_target:hfe_future_country = {
-						has_communications = prev
-					}
-				}
 			}
 			random_list = {
 				2 = {
 				}
 				1 = {
-					random_country = {
+					random_playable_country = {
 						limit = {
 							is_ai = no
 							any_owned_species = {
@@ -785,6 +772,7 @@ event = {
 							not = {
 								has_country_flag = hfe_future_try_take_robot
 							}
+							has_communications = event_target:hfe_future_country
 						}
 						country_event = {
 							id = hfe.5100
