@@ -129,12 +129,6 @@ can_build_branch_office_on_planet = {
 				is_forced_friendly = prev.owner
 			}
 			root = {
-				exists = overlord
-				overlord = {
-					is_country = prevprev.owner
-				}
-			}
-			root = {
 				is_criminal_syndicate = yes
 			}
 			owner = {
@@ -143,20 +137,31 @@ can_build_branch_office_on_planet = {
 			owner = {
 				is_in_federation_with = root
 			}
-			# allow branch offices in subsidiaries and vice versa
-			# this is broken
-			# root = {
-			# 	is_subject = yes
-			# 	any_agreement = { agreement_preset = preset_subsidiary }
-			# 	overlord = {
-			# 		is_same_value = owner
-			# 	}
-			# }
+			# allow branch offices in subsidiaries and vice versa (and fellow subjects)
+			root = {
+				is_subject = yes
+				OR = {
+					has_authority = auth_corporate
+					has_civic = civic_galactic_sovereign_megacorp
+				}
+				overlord = {
+					OR = {
+						is_same_value = prevprev.owner
+						is_same_value = prevprev.owner.overlord
+					}
+				}
+			}
 			owner = {
 				is_subject = yes
-				any_agreement = { agreement_preset = preset_subsidiary }
 				overlord = {
-					is_same_value = root
+					OR = {
+						is_same_value = root
+						is_same_value = root.overlord
+					}
+					OR = {
+						has_authority = auth_corporate
+						has_civic = civic_galactic_sovereign_megacorp
+					}
 				}
 			}
 			AND = {
@@ -173,6 +178,58 @@ can_build_branch_office_on_planet = {
 				}
 				owner = {
 					is_galactic_community_member = yes
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_MEGACORP_OVERLORD
+		exists = owner
+		# failure message for having a corporate overlord
+		if = {
+			limit = {
+				OR = {
+					# Not valid if you aren't a subject.
+					root = {
+						is_subject = no
+					}
+					# Or if your overlord isn't a megacorp.
+					root = {
+						is_subject = yes
+						overlord = {
+							NOR = {
+								has_authority = auth_corporate
+								has_civic = civic_galactic_sovereign_megacorp
+							}
+						}
+					}
+				}
+			}
+			always = yes
+		}
+		else = {
+			AND = {
+				root = {
+					is_subject = yes
+					overlord = {
+						OR = {
+							has_authority = auth_corporate
+							has_civic = civic_galactic_sovereign_megacorp
+						}
+					}
+				}
+				owner = {
+					OR = {
+						is_subject = no
+						AND = {
+							is_subject = yes
+							overlord = {
+								NOT = {
+									is_same_value = root.overlord
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -215,24 +272,38 @@ can_build_branch_office_on_planet = {
 # This = pop
 # Purge, Sapience, Migration Controls policy (ignored by Gestalts and Synths), and target habitability are checked in code.
 can_pop_auto_migrate = {
-	or = {
-		is_unemployed = yes
-		hfe_trigger_unemployed_auto_migrate = yes
+	# this is always true where this tooltip is called
+	hidden_trigger = {
+		or = {
+			is_unemployed = yes
+			hfe_trigger_unemployed_auto_migrate = yes
+		}
 	}
-	is_being_assimilated = no
-	OR = {
-		owner = {
-			or = {
-				is_country_type = hfe_pirate
-				hfe_trigger_is_human_fallen = yes
+	custom_tooltip = {
+		fail_text = AUTO_MIGRATE_ASSIMILATED
+		is_being_assimilated = no
+	}
+	if = {
+		limit = {
+			OR = {
+				is_shackled_robot = yes
+				is_enslaved = yes
 			}
 		}
-		AND = {
-			is_shackled_robot = no
-			is_enslaved = no
-		}
-		planet = {
-			has_building = building_slave_processing
+		custom_tooltip = {
+			fail_text = AUTO_MIGRATE_SLAVE_PROCESSING
+			OR = {
+				planet = {
+					has_building = building_slave_processing
+				}
+				solar_system = {
+					count_starbase_buildings = {
+						type = transit_hub
+						count >= 1
+						include_being_constructed = no
+					}
+				}
+			}
 		}
 	}
 }
