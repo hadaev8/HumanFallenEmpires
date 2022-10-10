@@ -1340,9 +1340,28 @@ country_event = {
 		fromfrom = {
 			random_owned_pop = {
 				root = {
-					random_owned_planet = {
-						create_pop = {
-							species = prevprev
+					if = {
+						limit = {
+							any_owned_planet = {
+								free_housing > -5
+							}
+						}
+						random_owned_planet = {
+							weights = {
+								base = 1
+								modifier = {
+									factor = 10
+									free_housing > 1
+								}
+							}
+							create_pop = {
+								species = prevprev
+							}
+						}
+					}
+					else = {
+						add_resource = {
+							energy = 1000
 						}
 					}
 				}
