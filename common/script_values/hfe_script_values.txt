@@ -1,0 +1,88 @@
+# hfe_system_fleets_power = {
+# 	base = 0
+# 	complex_trigger_modifier = {
+# 		trigger = any_fleet_in_system
+# 		trigger_scope = fleet
+# 		parameters = {
+# 			exists = owner
+# 			owner = {
+# 				is_hostile = root.owner
+# 			}
+# 		}
+# 		potential = {
+# 			solar_system = {
+# 				any_system_colony = {
+# 					NOT = {
+# 						is_same_value = prevprev
+# 					}
+# 					planet_stability >= @stabilitylevel3
+# 					num_pops > 5
+# 				}
+# 			}
+# 		}
+# 		desc = STRING_LOYAL_PLANETS_IN_SYSTEM
+# 		mode = subtract
+# 		mult = 2
+# 	}
+# 	modifier = {
+# 		set = 1
+# 		trigger:fleet_power
+# 	}
+# 	modifier = {
+# 		factor = 2
+# 		or = {
+# 			is_country_type = default
+# 			is_country_type = hfe_pirate
+# 			is_country_type = hfe_drone
+# 		}
+# 		controlled_systems > 3
+# 		years_passed < 100
+# 	}
+# }
+# planet scope
+hfe_script_value_capital_lvl = {
+	base = 0
+	modifier = {
+		add = 1
+		has_upgraded_capital = yes
+	}
+	modifier = {
+		add = 1
+		has_major_upgraded_capital = yes
+	}
+	modifier = {
+		add = 1
+		has_fully_upgraded_capital = yes
+	}
+}
+
+hfe_script_value_job_weights_triple_resources_modifier = {
+	complex_trigger_modifier = {
+		trigger = check_economic_production_modifier_for_job
+		parameters = {
+			job = $JOB$
+			resource = {
+				$RESOURCE1$ = $WEIGHT1$
+				$RESOURCE2$ = $WEIGHT2$
+				$RESOURCE3$ = $WEIGHT3$
+			}
+		}
+		mode = add
+	}
+	add = value:job_weights_manual_corrections|JOB|$JOB$|
+	add = 1
+	min = 0
+	pow = 3	#we need it to have a bit more impact
+	modifier = {
+		owner = {
+			has_deficit = $RESOURCE1$
+		}
+		mult = @\[ 10 * $WEIGHT1$ ]
+	}
+	modifier = {
+		owner = {
+			has_deficit = $RESOURCE2$
+		}
+		mult = @\[ 10 * $WEIGHT2$ ]
+	}
+}
