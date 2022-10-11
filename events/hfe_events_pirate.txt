@@ -192,6 +192,19 @@ country_event = {
 		exists = capital_scope
 	}
 	immediate = {
+		# in case some fleet stuck in garrison state, should have better script to avoid such falsecheck
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+				not = {
+					has_fleet_flag = hfe_pirate_fleet_has_target
+				}
+			}
+			set_fleet_settings = {
+				garrison = no
+				can_change_composition = yes
+			}
+		}
 		random_list = {
 			10 = {
 				set_timed_country_flag = {
@@ -239,7 +252,7 @@ country_event = {
 			limit = {
 				hfe_trigger_is_asteroid = yes
 			}
-			log = "fixing planet class for [this.GetName] solar system [solar_system.GetName] owner [owner.GetName]"
+			log = "WARNING fixing planet class for [this.GetName] solar system [solar_system.GetName] owner [owner.GetName]"
 			hfe_effect_pirate_change_to_pc_pirate_base = yes
 		}
 		# move capital if have normal planet
@@ -406,9 +419,6 @@ ship_event = {
 			is_country_type = hfe_pirate
 		}
 		exists = fleet
-		fleet = {
-			hfe_trigger_pirate_pathfind_fleet = yes
-		}
 	}
 	immediate = {
 		fleet = {

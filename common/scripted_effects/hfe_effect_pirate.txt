@@ -1125,39 +1125,44 @@ hfe_effect_pirate_path_get_next = {
 }
 
 hfe_effect_pirate_path_target_home = {
-	if = {
-		limit = {
-			solar_system = {
-				exists = owner
-				owner = {
-					not = {
-						is_country = root.owner
-					}
-				}
-			}
-		}
-		closest_system = {
-			limit = {
-				exists = owner
-				owner = {
-					is_country = root.owner
-				}
-				# heavy check to the end
-				hfe_trigger_pirate_fleet_power_in_system_check = yes
-				hfe_trigger_pirate_path_check = yes
-			}
-			root = {
-				set_timed_fleet_flag = {
-					flag = hfe_pirate_fleet_target_system@prev
-					days = 365
-				}
-				set_timed_fleet_flag = {
-					flag = hfe_pirate_fleet_has_target
-					years = 1
-				}
-			}
-		}
-	}
+	hfe_effect_pirate_path_fleet_reset = yes
+	# order_forced_return = yes
+	# if = {
+	# 	limit = {
+	# 		solar_system = {
+	# 			exists = owner
+	# 			owner = {
+	# 				not = {
+	# 					is_country = root.owner
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# 	closest_system = {
+	# 		limit = {
+	# 			exists = owner
+	# 			owner = {
+	# 				is_country = root.owner
+	# 			}
+	# 			# heavy check to the end
+	# 			hfe_trigger_pirate_fleet_power_in_system_check = yes
+	# 			root = {
+	# 				can_access_system = prev
+	# 			}
+	# 			# hfe_trigger_pirate_path_check = yes
+	# 		}
+	# 		root = {
+	# 			set_timed_fleet_flag = {
+	# 				flag = hfe_pirate_fleet_target_system@prev
+	# 				days = 365
+	# 			}
+	# 			set_timed_fleet_flag = {
+	# 				flag = hfe_pirate_fleet_has_target
+	# 				years = 1
+	# 			}
+	# 		}
+	# 	}
+	# }
 }
 
 hfe_effect_pirate_path_target_planet = {
@@ -1170,7 +1175,7 @@ hfe_effect_pirate_path_target_planet = {
 					is_hostile = root.owner
 				}
 				solar_system.starbase.fleet = {
-					has_hp_percentage > 0.9
+					has_hp_percentage > 0.1
 				}
 			}
 			root = {
@@ -1180,19 +1185,24 @@ hfe_effect_pirate_path_target_planet = {
 					}
 					log = "\\[this.GetName] will suppress starbase of \\[solar_system.GetName]"
 				}
-				set_fleet_flag = hfe_pirate_fleet_move_to_target
+				# set_fleet_flag = hfe_pirate_fleet_move_to_target
+				set_timed_fleet_flag = {
+					flag = hfe_pirate_fleet_move_to_target
+					years = 1
+				}
 				clear_fleet_actions = this
 				clear_orders = yes
 				queue_actions = {
-					find_closest_planet = {
-						trigger = {
-							id = hfe_pirate.trigger.0
-							is_same_value = prevprev.system_star
-						}
-						found_planet = {
-							move_to = this
-						}
-					}
+					move_to = prevprev.system_star
+					# find_closest_planet = {
+					# 	trigger = {
+					# 		id = hfe_pirate.trigger.0
+					# 		is_same_value = prevprev.system_star
+					# 	}
+					# 	found_planet = {
+					# 		move_to = this
+					# 	}
+					# }
 				}
 				# auto_move_to_planet = {
 				# target = prev.system_star
@@ -1234,7 +1244,11 @@ hfe_effect_pirate_path_target_planet = {
 						}
 						log = "\\[this.GetName] wants to plunder \\[prev.GetName]"
 					}
-					set_fleet_flag = hfe_pirate_fleet_move_to_target
+					# set_fleet_flag = hfe_pirate_fleet_move_to_target
+					set_timed_fleet_flag = {
+						flag = hfe_pirate_fleet_move_to_target
+						years = 1
+					}
 					clear_fleet_actions = this
 					clear_orders = yes
 					queue_actions = {
@@ -1244,7 +1258,7 @@ hfe_effect_pirate_path_target_planet = {
 								is_planet = prevprev
 							}
 							found_planet = {
-								orbit_planet = this
+								move_to = this
 								repeat = {
 									while = {
 										id = hfe_pirate.trigger.1.1
@@ -1290,10 +1304,11 @@ hfe_effect_pirate_path_target_planet = {
 	}
 }
 
+# find some system to go, pririty target, with planet, with at least something
 hfe_effect_pirate_path_target_system = {
 	random_list = {
 		# go home
-		50 = {
+		10 = {
 			modifier = {
 				factor = 0
 				has_hp_percentage > 0.95
@@ -1330,6 +1345,10 @@ hfe_effect_pirate_path_target_system = {
 				}
 				log = "\\[this.GetName] in \\[solar_system.GetName] try to find system target"
 			}
+			set_fleet_settings = {
+				garrison = yes
+				can_change_composition = no
+			}
 			closest_system = {
 				limit = {
 					exists = owner
@@ -1341,7 +1360,10 @@ hfe_effect_pirate_path_target_system = {
 					}
 					# heavy check to the end
 					hfe_trigger_pirate_fleet_power_in_system_check = yes
-					hfe_trigger_pirate_path_check = yes
+					root = {
+						can_access_system = prev
+					}
+					# hfe_trigger_pirate_path_check = yes
 				}
 				max_steps = 10
 				root = {
@@ -1353,7 +1375,7 @@ hfe_effect_pirate_path_target_system = {
 					}
 					set_timed_fleet_flag = {
 						flag = hfe_pirate_fleet_target_system@prev
-						days = 365
+						years = 1
 					}
 					set_timed_fleet_flag = {
 						flag = hfe_pirate_fleet_has_target
@@ -1381,7 +1403,10 @@ hfe_effect_pirate_path_target_system = {
 						}
 						# heavy check to the end
 						hfe_trigger_pirate_fleet_power_in_system_check = yes
-						hfe_trigger_pirate_path_check = yes
+						root = {
+							can_access_system = prev
+						}
+						# hfe_trigger_pirate_path_check = yes
 					}
 					max_steps = 10
 					root = {
@@ -1393,7 +1418,7 @@ hfe_effect_pirate_path_target_system = {
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_target_system@prev
-							days = 365
+							years = 1
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_has_target
@@ -1402,6 +1427,7 @@ hfe_effect_pirate_path_target_system = {
 					}
 				}
 			}
+			# try find any target
 			if = {
 				limit = {
 					not = {
@@ -1426,7 +1452,10 @@ hfe_effect_pirate_path_target_system = {
 						}
 						# heavy check to the end
 						hfe_trigger_pirate_fleet_power_in_system_check = yes
-						hfe_trigger_pirate_path_check = yes
+						root = {
+							can_access_system = prev
+						}
+						# hfe_trigger_pirate_path_check = yes
 					}
 					max_steps = 10
 					root = {
@@ -1438,7 +1467,7 @@ hfe_effect_pirate_path_target_system = {
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_target_system@prev
-							days = 365
+							years = 1
 						}
 						set_timed_fleet_flag = {
 							flag = hfe_pirate_fleet_has_target
@@ -1485,7 +1514,11 @@ hfe_effect_pirate_path_go_to_next = {
 			limit = {
 				exists = event_target:hfe_pirate_fleet_target_system_next
 			}
-			set_fleet_flag = hfe_pirate_fleet_move_to_target
+			# set_fleet_flag = hfe_pirate_fleet_move_to_target
+			set_timed_fleet_flag = {
+				flag = hfe_pirate_fleet_move_to_target
+				years = 1
+			}
 			if = {
 				limit = {
 					has_fleet_flag = hfe_pirate_log_fleet
@@ -1495,15 +1528,16 @@ hfe_effect_pirate_path_go_to_next = {
 			clear_fleet_actions = this
 			clear_orders = yes
 			queue_actions = {
-				find_closest_system = {
-					trigger = {
-						id = hfe_pirate.trigger.2
-						is_same_value = event_target:hfe_pirate_fleet_target_system_next
-					}
-					found_system = {
-						move_to = this
-					}
-				}
+				move_to = event_target:hfe_pirate_fleet_target_system_next
+				# find_closest_system = {
+				# 	trigger = {
+				# 		id = hfe_pirate.trigger.2
+				# 		is_same_value = event_target:hfe_pirate_fleet_target_system_next
+				# 	}
+				# 	found_system = {
+				# 		move_to = this
+				# 	}
+				# }
 			}
 			# auto_move_to_planet = {
 			# target = event_target:hfe_pirate_fleet_target_system_next.system_star
@@ -1549,6 +1583,10 @@ hfe_effect_pirate_path_fleet_reset = {
 	clear_orders = yes
 	remove_fleet_flag = hfe_pirate_fleet_move_to_target
 	remove_fleet_flag = hfe_pirate_fleet_has_target
+	set_fleet_settings = {
+		garrison = no
+		can_change_composition = yes
+	}
 	closest_system = {
 		limit = {
 			prev = {
