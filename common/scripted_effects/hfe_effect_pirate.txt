@@ -375,45 +375,17 @@ hfe_effect_pirate_init_country = {
 					set_graphical_culture = hfe_graphical_culture_pirate_full_color_5
 				}
 			}
-			# for leaders
+			# some initial boosts
 			add_resource = {
-				energy = 2000
+				minerals = 1000
+				alloys = 250
+				mult = value:hfe_script_value_years_passed_1_to_10
 			}
-			if = {
-				limit = {
-					end_game_years_passed > 0
-				}
-				add_resource = {
-					minerals = 10000
-					alloys = 2500
-				}
-				add_modifier = {
-					modifier = hfe_pirate_country_boost
-					years = 10
-				}
-			}
-			else_if = {
-				limit = {
-					mid_game_years_passed > 0
-				}
-				add_resource = {
-					minerals = 5000
-					alloys = 1250
-				}
-				add_modifier = {
-					modifier = hfe_pirate_country_boost
-					years = 5
-				}
-			}
-			else = {
-				add_resource = {
-					minerals = 1000
-					alloys = 250
-				}
-				add_modifier = {
-					modifier = hfe_pirate_country_boost
-					years = 1
-				}
+			add_modifier = {
+				modifier = hfe_pirate_country_boost
+				mult = trigger:is_difficulty
+				years = 2
+				time_multiplier = value:hfe_script_value_years_passed_1_to_10
 			}
 			set_relation_flag = {
 				who = event_target:hfe_pirate_target
@@ -421,20 +393,12 @@ hfe_effect_pirate_init_country = {
 			}
 			every_country = {
 				limit = {
-					is_country_type = primitive
+					or = {
+						is_country_type = enclave
+						is_country_type = primitive
+					}
 				}
 				establish_communications_no_message = prev
-				set_faction_hostility = {
-					target = prev
-					set_hostile = no
-					set_neutral = yes
-					set_friendly = no
-				}
-			}
-			every_country = {
-				limit = {
-					is_country_type = enclave
-				}
 				set_faction_hostility = {
 					target = prev
 					set_hostile = no
