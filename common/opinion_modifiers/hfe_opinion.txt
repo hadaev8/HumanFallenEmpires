@@ -65,9 +65,12 @@ hfe_opinion_egypt_vs_neighbor = {
 		exists = from
 		is_neighbor_of = from
 		from = {
-			NOT = {
-				any_agreement = {
-					agreement_preset = preset_hfe_vassal_egypt
+			not = {
+				from = {
+					is_subject = yes
+					overlord = {
+						is_country = root
+					}
 				}
 			}
 		}
@@ -120,11 +123,22 @@ hfe_opinion_future_vs_neighbor = {
 		hfe_trigger_is_awake = yes
 		is_subject = no
 		exists = from
-		is_neighbor_of = from
-		from = {
-			NOT = {
-				any_agreement = {
-					agreement_preset = preset_hfe_vassal_future
+		or = {
+			is_neighbor_of = from
+			and = {
+				exists = federation
+				any_federation_ally = {
+					is_neighbor_of = from
+				}
+			}
+		}
+		# TODO think about it
+		nor = {
+			is_in_federation_with = from
+			from = {
+				is_subject = yes
+				overlord = {
+					is_country = root
 				}
 			}
 		}

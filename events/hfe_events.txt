@@ -8589,13 +8589,7 @@ country_event = {
 			flag = hfe_awake_block
 			years = 10
 		}
-		change_government = {
-			civics = {
-				civic = hfe_civic_future_virtual_train
-				civic = hfe_civic_future_mobilisation
-				civic = hfe_civic_future_comand
-			}
-		}
+		set_country_type = default
 		hfe_effect_cleanse_ethics = yes
 		country_add_ethic = ethic_militarist
 		country_add_ethic = ethic_egalitarian
@@ -8603,9 +8597,9 @@ country_event = {
 		change_government = {
 			authority = auth_democratic
 			civics = {
-				civic = civic_free_haven
-				civic = civic_diplomatic_corps
-				civic = civic_idealistic_foundation
+				civic = hfe_civic_future_virtual_train
+				civic = hfe_civic_future_mobilisation
+				civic = hfe_civic_future_comand
 			}
 		}
 		every_owned_pop = {
@@ -8621,7 +8615,6 @@ country_event = {
 				}
 			}
 		}
-		set_country_type = default
 		kill_leader = {
 			type = ruler
 			show_notification = no
@@ -8639,13 +8632,8 @@ country_event = {
 		# }
 		every_playable_country = {
 			establish_communications_no_message = root
-			if = {
-				limit = {
-					is_ai = no
-				}
-				country_event = {
-					id = hfe.5011
-				}
+			country_event = {
+				id = hfe.5011
 			}
 		}
 	}
@@ -8672,18 +8660,10 @@ country_event = {
 					has_country_flag = hfe_future_contacted
 				}
 				custom_tooltip = hfe.5011.0.tooltip
-				if = {
-					limit = {
-						can_be_subject = {
-							overlord = event_target:hfe_future_country
-							preset = preset_hfe_vassal_future
-						}
-					}
-					country_event = {
-						id = hfe.5012
-						days = 10
-						random = 15
-					}
+				country_event = {
+					id = hfe.5012
+					days = 10
+					random = 25
 				}
 			}
 			else = {
@@ -8707,12 +8687,32 @@ country_event = {
 	}
 	option = {
 		name = hfe.5012.0
-		set_subject_of = {
+		join_alliance = {
 			who = event_target:hfe_future_country
-			preset = preset_hfe_vassal_future
+			name = hfe_future_federation_name
+			override_requirements = yes
 		}
 		hfe_effect_advisor_future_on = yes
 		play_sound = event_celebration
+		ai_chance = {
+			modifier = {
+				factor = 4
+				not = {
+					exists = event_target:hfe_future_country.federation
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:hfe_future_country.federation = {
+					num_members < 4
+				}
+			}
+			modifier = {
+				factor = 0
+				exists = overlord
+				is_loyal_to = overlord
+			}
+		}
 	}
 	option = {
 		name = hfe.5012.1
@@ -8721,37 +8721,36 @@ country_event = {
 }
 
 # assimilation event (turn regular subject into coalition member subject type) 5020 - 5021
-country_event = {
-	id = hfe.5020
-	hide_window = yes
-	is_triggered_only = yes
-	# trigger = {
-	# 	any_subject = {
-	# 		not = {
-	# 			any_agreement = { agreement_preset = preset_hfe_vassal_future }
-	# 		}
-	# 	}
-	# }
-	immediate = {
-		every_subject = {
-			limit = {
-				not = {
-					any_agreement = {
-						agreement_preset = preset_hfe_vassal_future
-					}
-				}
-			}
-			set_subject_of = {
-				who = root
-				preset = preset_hfe_vassal_future
-			}
-			country_event = {
-				id = hfe.5021
-			}
-		}
-	}
-}
-
+# country_event = {
+# 	id = hfe.5020
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	# trigger = {
+# 	# 	any_subject = {
+# 	# 		not = {
+# 	# 			any_agreement = { agreement_preset = preset_hfe_vassal_future }
+# 	# 		}
+# 	# 	}
+# 	# }
+# 	immediate = {
+# 		every_subject = {
+# 			limit = {
+# 				not = {
+# 					any_agreement = {
+# 						agreement_preset = preset_hfe_vassal_future
+# 					}
+# 				}
+# 			}
+# 			set_subject_of = {
+# 				who = root
+# 				preset = preset_hfe_vassal_future
+# 			}
+# 			country_event = {
+# 				id = hfe.5021
+# 			}
+# 		}
+# 	}
+# }
 # inform player
 country_event = {
 	id = hfe.5021
@@ -10920,8 +10919,9 @@ country_event = {
 		name = hfe.5091.3.0
 		exclusive_trigger = {
 			has_country_flag = hfe.5091.step3
-			any_agreement = {
-				agreement_preset = preset_hfe_vassal_future
+			exists = federation
+			federation = {
+				has_federation_flag = hfe_future_federation
 			}
 		}
 		default_hide_option = yes
