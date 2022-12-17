@@ -59,7 +59,7 @@ can_species_procreate = {
 				any_owned_species = {
 					has_population_control = {
 						country = root.owner
-						value = no
+						type = no
 					}
 					species_can_be_necrophaged = yes
 				}
@@ -272,10 +272,11 @@ can_build_branch_office_on_planet = {
 # This = pop
 # Purge, Sapience, Migration Controls policy (ignored by Gestalts and Synths), and target habitability are checked in code.
 can_pop_auto_migrate = {
-	# this is always true where this tooltip is called
+	#this is always true where this tooltip is called
 	hidden_trigger = {
 		or = {
 			is_unemployed = yes
+			# mod
 			hfe_trigger_unemployed_auto_migrate = yes
 		}
 	}
@@ -294,7 +295,18 @@ can_pop_auto_migrate = {
 			fail_text = AUTO_MIGRATE_SLAVE_PROCESSING
 			OR = {
 				planet = {
-					has_building = building_slave_processing
+					OR = {
+						has_building = building_slave_processing
+						AND = {
+							exists = orbital_defence
+							orbital_defence = {
+								exists = starbase
+								starbase = {
+									has_starbase_building = ring_slave_processing_facility
+								}
+							}
+						}
+					}
 				}
 				solar_system = {
 					count_starbase_buildings = {
