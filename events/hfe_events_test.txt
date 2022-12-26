@@ -960,35 +960,39 @@ planet_event = {
 	}
 }
 
-# planet_event = {
-# 	id = hfe_test.37
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	immediate = {
-# 		add_deposit = d_alien_pets_deposit
-# 		last_added_deposit = {
-# 			root = {
-# 				add_blocker = {
-# 					type = d_active_volcano
-# 					blocked_deposit = prev
-# 				}
-# 			}
-# 		}
-# 	}
-# }
+planet_event = {
+	id = hfe_test.37
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		from = {
+			log = "[this.GetName]"
+			save_event_target_as = hfe_blocker
+		}
+		random_deposit = {
+			limit = {
+				has_deposit_flag = hfe_connect@event_target:hfe_blocker
+			}
+			log = "[this.GetName]"
+		}
+		every_deposit = {
+			limit = {
+				has_deposit_flag = hfe_connect
+			}
+			log = "[this.GetName]"
+		}
+	}
+}
+
 planet_event = {
 	id = hfe_test.38
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		add_deposit = d_rugged_woods
-		log = "[last_added_deposit.GetName]"
-		last_added_deposit = {
-			log = "[this.GetName]"
-		}
+		add_deposit = hfe_deposit_features_human_2_extended_city_1
 		add_blocker = {
-			type = d_dense_jungle
-			blocked_deposit = last_added_deposit
+			type = hfe_blocker_features_human_2_extended_5
+			blocked_deposit = random
 		}
 	}
 }

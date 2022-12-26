@@ -39,7 +39,7 @@ event = {
 			}
 			if = {
 				limit = {
-					has_origin = hfe_civic_discovery_habitat
+					has_origin = hfe_origin_discovery_habitat
 				}
 				random_country = {
 					limit = {
@@ -92,8 +92,8 @@ country_event = {
 	}
 	# disable story
 	option = {
-		name = hfe_init.50.0.defined_text
-		custom_tooltip = hfe_init.50.0.tooltip.defined_text
+		name = hfe_init.50.0.0.defined_text
+		custom_tooltip = hfe_init.50.0.0.tooltip.defined_text
 		hidden_effect = {
 			if = {
 				limit = {
@@ -103,6 +103,30 @@ country_event = {
 			}
 			else = {
 				set_global_flag = hfe_story_disable
+			}
+			country_event = {
+				id = hfe_init.50
+			}
+		}
+	}
+	# disable human_2 extended
+	option = {
+		name = hfe_init.50.0.1.defined_text
+		custom_tooltip = hfe_init.50.0.1.tooltip.defined_text
+		trigger = {
+			any_country = {
+				has_country_flag = human_2
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					hfe_trigger_features_human_2_extended_enabled = no
+				}
+				remove_global_flag = hfe_features_human_2_extended_disable
+			}
+			else = {
+				set_global_flag = hfe_features_human_2_extended_disable
 			}
 			country_event = {
 				id = hfe_init.50
@@ -422,6 +446,10 @@ country_event = {
 		country_event = {
 			id = hfe_init.102
 		}
+		# human 2 extended installing
+		country_event = {
+			id = hfe_features.23
+		}
 		# fast start installing
 		country_event = {
 			id = hfe_init.101
@@ -728,14 +756,7 @@ country_event = {
 		# find humans
 		every_country = {
 			limit = {
-				OR = {
-					has_country_flag = hfe_marked_as_human
-					has_country_flag = human_1
-					has_country_flag = human_2
-					is_human_species = yes
-					species_portrait = hfe_portrait_future
-					species_portrait = hfe_portrait_egypt
-				}
+				hfe_trigger_is_human = yes
 				exists = species
 			}
 			set_country_flag = hfe_marked_as_human

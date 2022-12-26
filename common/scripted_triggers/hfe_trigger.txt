@@ -73,6 +73,40 @@ hfe_trigger_is_human_fallen = {
 	}
 }
 
+# species scope
+hfe_trigger_is_human_species = {
+	or = {
+		is_human_species = yes
+		species_portrait = hfe_portrait_egypt
+		species_portrait = hfe_portrait_future
+		has_species_flag = hfe_marked_as_human_species
+	}
+}
+
+# both country and species scope
+hfe_trigger_is_human = {
+	or = {
+		and = {
+			is_scope_type = species
+			hfe_trigger_is_human_species = yes
+		}
+		and = {
+			is_scope_type = country
+			or = {
+				has_country_flag = human_1
+				has_country_flag = human_2
+				has_country_flag = hfe_marked_as_human
+				and = {
+					exists = species
+					species = {
+						hfe_trigger_is_human_species = yes
+					}
+				}
+			}
+		}
+	}
+}
+
 hfe_trigger_is_fallen = {
 	or = {
 		is_fallen_empire = yes
@@ -194,6 +228,12 @@ hfe_trigger_has_starbase_t4 = {
 hfe_trigger_story_enabled = {
 	not = {
 		has_global_flag = hfe_story_disable
+	}
+}
+
+hfe_trigger_features_human_2_extended_enabled = {
+	not = {
+		has_global_flag = hfe_features_human_2_extended_disable
 	}
 }
 
@@ -573,8 +613,8 @@ hfe_trigger_human_fallen_awake = {
 
 hfe_trigger_unemployed_auto_migrate = {
 	or = {
-		has_job = hfe_job_egypt_workless
-		has_job = hfe_job_future_workless
+		# has_job = hfe_job_egypt_workless
+		# has_job = hfe_job_future_workless
 		has_job = hfe_job_pirate_slave
 		has_job = slave_toiler
 	}
