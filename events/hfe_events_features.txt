@@ -1662,6 +1662,32 @@ planet_event = {
 		}
 		# solar system flavor
 		solar_system = {
+			# energy
+			random_system_planet = {
+				limit = {
+					has_resource = {
+						type = energy
+						amount > 0
+					}
+				}
+				add_modifier = {
+					modifier = hfe_features_human_2_energy_0
+				}
+			}
+			random_system_planet = {
+				limit = {
+					has_resource = {
+						type = energy
+						amount > 0
+					}
+					not = {
+						has_modifier = hfe_features_human_2_energy_0
+					}
+				}
+				add_modifier = {
+					modifier = hfe_features_human_2_energy_1
+				}
+			}
 			# minerals
 			random_system_planet = {
 				limit = {
@@ -1687,30 +1713,18 @@ planet_event = {
 					modifier = hfe_features_human_2_minerals_1
 				}
 			}
-			# energy
+			# food
 			random_system_planet = {
 				limit = {
-					has_resource = {
-						type = energy
-						amount > 0
-					}
+					is_asteroid = yes
+					has_deposit = no
+				}
+				add_deposit = d_food_10
+				create_mining_station = {
+					owner = root.owner
 				}
 				add_modifier = {
-					modifier = hfe_features_human_2_energy_0
-				}
-			}
-			random_system_planet = {
-				limit = {
-					has_resource = {
-						type = energy
-						amount > 0
-					}
-					not = {
-						has_modifier = hfe_features_human_2_energy_0
-					}
-				}
-				add_modifier = {
-					modifier = hfe_features_human_2_energy_1
+					modifier = hfe_features_human_2_food_0
 				}
 			}
 			# science
@@ -1772,17 +1786,18 @@ planet_event = {
 		exists = solar_system
 		exists = from
 		from = {
-			hfe_trigger_is_human_fallen = no
+			hfe_trigger_is_human = no
 		}
 	}
 	immediate = {
 		remove_planet_flag = hfe_features_human_2_extended
 		solar_system = {
 			every_system_planet = {
-				remove_modifier = hfe_features_human_2_minerals_0
-				remove_modifier = hfe_features_human_2_minerals_1
 				remove_modifier = hfe_features_human_2_energy_0
 				remove_modifier = hfe_features_human_2_energy_1
+				remove_modifier = hfe_features_human_2_minerals_0
+				remove_modifier = hfe_features_human_2_minerals_1
+				remove_modifier = hfe_features_human_2_food_0
 				remove_modifier = hfe_features_human_2_science_0
 				remove_modifier = hfe_features_human_2_science_1
 			}
