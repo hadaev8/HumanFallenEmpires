@@ -128,50 +128,9 @@ hfe_effect_pirate_init = {
 					}
 				}
 			}
+			# system value
 			modifier = {
-				factor = 2
-				count_system_planet = {
-					count > 0
-					limit = {
-						has_deposit = yes
-					}
-				}
-			}
-			modifier = {
-				factor = 2
-				count_system_planet = {
-					count > 1
-					limit = {
-						has_deposit = yes
-					}
-				}
-			}
-			modifier = {
-				factor = 2
-				count_system_planet = {
-					count > 2
-					limit = {
-						has_deposit = yes
-					}
-				}
-			}
-			modifier = {
-				factor = 2
-				count_system_planet = {
-					count > 3
-					limit = {
-						has_deposit = yes
-					}
-				}
-			}
-			modifier = {
-				factor = 2
-				count_system_planet = {
-					count > 4
-					limit = {
-						has_deposit = yes
-					}
-				}
+				factor = value:hfe_script_value_pirate_count_planets
 			}
 		}
 		# for vanilla localization
@@ -211,89 +170,6 @@ hfe_effect_pirate_init = {
 			days = 1
 			random = 15
 		}
-	}
-}
-
-# for system, asteroid ideally, need event target pirate_band
-hfe_effect_pirate_init_colony = {
-	random_system_planet = {
-		limit = {
-			hfe_trigger_pirate_valid_base_planet = yes
-		}
-		weights = {
-			base = 1
-			modifier = {
-				factor = 100
-				has_deposit = no
-			}
-		}
-		hfe_effect_pirate_change_to_pc_pirate_base = yes
-		hfe_effect_pirate_set_random_pirate_base_picture = yes
-		create_colony = {
-			owner = event_target:hfe_pirate_clan
-		}
-		every_owned_pop = {
-			kill_pop = yes
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "pirate created new base \\[this.GetName] in \\[solar_system.GetName] system, owner: \\[owner.GetName]"
-		}
-		hfe_effect_create_starbase_starport_from_planet = yes
-	}
-}
-
-# for planet
-hfe_effect_pirate_change_to_pc_pirate_base = {
-	if = {
-		limit = {
-			is_planet_class = pc_ice_asteroid
-		}
-		set_planet_flag = hfe_pirate_former_pc_ice_asteroid
-	}
-	else_if = {
-		limit = {
-			is_planet_class = pc_rare_crystal_asteroid
-		}
-		set_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
-	}
-	change_pc = hfe_pc_pirate_base
-}
-
-# for planet
-hfe_effect_pirate_change_to_pc_asteroid = {
-	log = "converting to asteroid \\[this.GetName]"
-	if = {
-		limit = {
-			exists = owner
-			owner = {
-				is_country_type = hfe_pirate
-				num_owned_planets = 1
-			}
-		}
-		owner = {
-			hfe_effect_pirate_flee_fleets = yes
-		}
-	}
-	hfe_effect_clear_buildings_and_destroy_colony = yes
-	if = {
-		limit = {
-			has_planet_flag = hfe_pirate_former_pc_ice_asteroid
-		}
-		remove_planet_flag = hfe_pirate_former_pc_ice_asteroid
-		change_pc = pc_ice_asteroid
-	}
-	else_if = {
-		limit = {
-			has_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
-		}
-		remove_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
-		change_pc = pc_rare_crystal_asteroid
-	}
-	else = {
-		change_pc = pc_asteroid
 	}
 }
 
@@ -426,6 +302,96 @@ hfe_effect_pirate_init_country = {
 				log = "new pirate country spawned"
 			}
 		}
+	}
+}
+
+# for system, asteroid ideally, need event target pirate_band
+hfe_effect_pirate_init_colony = {
+	random_system_planet = {
+		limit = {
+			hfe_trigger_pirate_valid_base_planet = yes
+		}
+		weights = {
+			base = 1
+			modifier = {
+				factor = 100
+				has_deposit = no
+			}
+		}
+		hfe_effect_pirate_change_to_pc_pirate_base = yes
+		hfe_effect_pirate_set_random_pirate_base_picture = yes
+		create_colony = {
+			owner = event_target:hfe_pirate_clan
+		}
+		# set_owner = event_target:hfe_pirate_clan
+		# TODO 
+		# every_owned_pop = {
+		# 	kill_pop = yes
+		# }
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "pirate created new base \\[this.GetName] in \\[solar_system.GetName] system, owner: \\[owner.GetName]"
+		}
+		hfe_effect_create_starbase_starport_from_planet = yes
+	}
+}
+
+# for planet
+hfe_effect_pirate_change_to_pc_pirate_base = {
+	if = {
+		limit = {
+			is_planet_class = pc_ice_asteroid
+		}
+		set_planet_flag = hfe_pirate_former_pc_ice_asteroid
+	}
+	else_if = {
+		limit = {
+			is_planet_class = pc_rare_crystal_asteroid
+		}
+		set_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
+	}
+	change_pc = hfe_pc_pirate_base
+}
+
+# for planet
+hfe_effect_pirate_change_to_pc_asteroid = {
+	if = {
+		limit = {
+			has_global_flag = hfe_pirate_logs
+		}
+		log = "converting to asteroid \\[this.GetName]"
+	}
+	if = {
+		limit = {
+			exists = owner
+			owner = {
+				is_country_type = hfe_pirate
+				num_owned_planets = 1
+			}
+		}
+		owner = {
+			hfe_effect_pirate_flee_fleets = yes
+		}
+	}
+	hfe_effect_clear_buildings_and_destroy_colony = yes
+	if = {
+		limit = {
+			has_planet_flag = hfe_pirate_former_pc_ice_asteroid
+		}
+		remove_planet_flag = hfe_pirate_former_pc_ice_asteroid
+		change_pc = pc_ice_asteroid
+	}
+	else_if = {
+		limit = {
+			has_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
+		}
+		remove_planet_flag = hfe_pirate_former_pc_rare_crystal_asteroid
+		change_pc = pc_rare_crystal_asteroid
+	}
+	else = {
+		change_pc = pc_asteroid
 	}
 }
 
@@ -1279,14 +1245,6 @@ hfe_effect_pirate_path_target_system = {
 				has_hp_percentage > 0.95
 				num_ships > 5
 			}
-			modifier = {
-				factor = 2
-				has_hp_percentage < 0.9
-			}
-			modifier = {
-				factor = 2
-				has_hp_percentage < 0.8
-			}
 			if = {
 				limit = {
 					has_fleet_flag = hfe_pirate_log_fleet
@@ -1296,13 +1254,16 @@ hfe_effect_pirate_path_target_system = {
 			hfe_effect_pirate_path_target_home = yes
 		}
 		# move ahead
-		100 = {
+		50 = {
 			modifier = {
 				factor = 0
 				or = {
 					num_ships <= 5
-					has_hp_percentage < 0.7
+					has_hp_percentage < 0.5
 				}
+			}
+			modifier = {
+				factor = trigger:has_hp_percentage
 			}
 			if = {
 				limit = {

@@ -104,7 +104,7 @@ hfe_effect_refuge_or_die = {
 							hfe_trigger_planet_valid_for_settle = yes
 							habitability = {
 								who = event_target:hfe_refuge_pop_target
-								value >= 0.6
+								value >= 0.8
 							}
 						}
 					}
@@ -114,7 +114,7 @@ hfe_effect_refuge_or_die = {
 							hfe_trigger_planet_valid_for_settle = yes
 							habitability = {
 								who = event_target:hfe_refuge_pop_target
-								value >= 0.4
+								value >= 0.6
 							}
 						}
 					}
@@ -196,48 +196,6 @@ hfe_effect_settle_pop = {
 			weights = {
 				base = 10
 				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.8
-					}
-				}
-				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.7
-					}
-				}
-				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.6
-					}
-				}
-				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.5
-					}
-				}
-				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.4
-					}
-				}
-				modifier = {
-					factor = 2
-					habitability = {
-						who = event_target:hfe_settle_pop_target
-						value > 0.3
-					}
-				}
-				modifier = {
 					factor = 10
 					has_modifier = slave_colony
 					event_target:hfe_settle_pop_target = {
@@ -247,13 +205,16 @@ hfe_effect_settle_pop = {
 						}
 					}
 				}
-				modifier = {
-					factor = 2
-					free_jobs > 5
+				complex_trigger_modifier = {
+					trigger = habitability
+					parameters = {
+						who = event_target:hfe_settle_pop_target
+					}
+					# TODO check how it works is it mul to base above or some inner value?
+					mode = factor
 				}
 				modifier = {
-					factor = 2
-					free_jobs > 0
+					factor = value:hfe_script_value_free_jobs
 				}
 				modifier = {
 					factor = 0.5
