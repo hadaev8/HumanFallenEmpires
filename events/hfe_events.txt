@@ -9659,23 +9659,25 @@ country_event = {
 					name = "The Great Blight"
 				}
 				event_target:hfe_blight_remnants = {
-					random_list = {
-						75 = {
-							set_name = "[species.GetName] Remnants"
-						}
-						70 = {
-							set_name = "Final [prev.GetSpeciesNamePlural]"
-						}
-						70 = {
-							set_name = "Last of [prev.GetSpeciesNamePlural]"
-						}
-						# 70 = {
-						# 	set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders"
-						# }
-						10 = {
-							set_name = "The End"
-						}
-					}
+					set_name = "Remnants"
+					# TODO fix localisation here
+					# random_list = {
+					# 	75 = {
+					# 		set_name = "[species.GetName] Remnants"
+					# 	}
+					# 	70 = {
+					# 		set_name = "Final [prev.GetSpeciesNamePlural]"
+					# 	}
+					# 	70 = {
+					# 		set_name = "Last of [prev.GetSpeciesNamePlural]"
+					# 	}
+					# 	# 70 = {
+					# 	# 	set_name = "[prev.GetSpeciesNamePluralCompliment] the Enders"
+					# 	# }
+					# 	10 = {
+					# 		set_name = "The End"
+					# 	}
+					# }
 					if = {
 						limit = {
 							is_machine_empire = no
@@ -9935,8 +9937,38 @@ pop_event = {
 			remove_trait = trait_hive_mind
 			add_trait = trait_cybernetic
 		}
-		apply_post_assimilation_effects = yes
 		remove_modifier = pop_recently_conquered
+		# TODO better integration with vanilla scripted effects
+		# from apply_post_assimilation_effects
+		if = {
+			# assimilator empire
+			limit = {
+				root.owner = {
+					has_authority = auth_machine_intelligence
+					has_civic = civic_machine_assimilator
+					NOT = {
+						has_tradition = tr_cybernetics_assimilator_adopt
+					}
+				}
+			}
+			root.owner = {
+				generate_cyborg_treats = yes
+			}
+			# scripted effect
+		}
+		else_if = {
+			limit = {
+				root.owner = {
+					has_authority = auth_machine_intelligence
+					has_civic = civic_machine_assimilator
+					has_tradition = tr_cybernetics_assimilator_adopt
+				}
+			}
+			root.owner = {
+				generate_cyborg_extra_treats = yes
+			}
+			# scripted effect
+		}
 	}
 }
 
