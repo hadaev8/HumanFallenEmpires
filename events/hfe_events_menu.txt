@@ -101,7 +101,7 @@ country_event = {
 		custom_tooltip = hfe_menu.0.tooltip
 		trigger = {
 			hfe_trigger_menu_has_submenu = no
-			has_country_flag = hfe_marked_as_human
+			hfe_trigger_is_human = yes
 		}
 		hidden_effect = {
 			species = {
@@ -109,7 +109,7 @@ country_event = {
 			}
 			every_country = {
 				limit = {
-					has_country_flag = hfe_marked_as_human
+					hfe_trigger_is_human = yes
 					exists = species
 					species = {
 						not = {
@@ -440,12 +440,6 @@ country_event = {
 			remove_global_flag = hfe_plague_started
 			remove_global_flag = hfe_plague_lvl_2
 			remove_global_flag = hfe_plague_lvl_3
-			every_galaxy_planet = {
-				limit = {
-					has_planet_flag = hfe_plague_planet
-				}
-				hfe_effect_plague_planet_clean = yes
-			}
 			every_country = {
 				if = {
 					limit = {
@@ -453,17 +447,20 @@ country_event = {
 					}
 					destroy_country = yes
 				}
-			}
-			every_playable_country = {
-				limit = {
-					has_event_chain = hfe_chain_plague_count
+				if = {
+					limit = {
+						has_event_chain = hfe_chain_plague_count
+					}
+					remove_country_flag = hfe_plague_block_planet
+					remove_country_flag = hfe_plague_block_pulse
+					end_event_chain = hfe_chain_plague_count
 				}
-				remove_country_flag = hfe_plague_block_planet
-				remove_country_flag = hfe_plague_block_pulse
-				end_event_chain = hfe_chain_plague_count
 			}
-			every_galaxy_pop = {
-				remove_pop_flag = hfe_plague_pop_immune
+			every_galaxy_planet = {
+				limit = {
+					has_planet_flag = hfe_plague_planet
+				}
+				hfe_effect_plague_planet_clean = yes
 			}
 			every_galaxy_species = {
 				limit = {
@@ -472,6 +469,9 @@ country_event = {
 				modify_species = {
 					remove_trait = hfe_species_trait_immune
 				}
+			}
+			every_galaxy_pop = {
+				remove_pop_flag = hfe_plague_pop_immune
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -490,10 +490,10 @@ country_event = {
 				limit = {
 					hfe_trigger_features_opinion_enabled = yes
 				}
-				remove_global_flag = hfe_features_opinion_disable
+				set_global_flag = hfe_features_opinion_disable
 			}
 			else = {
-				set_global_flag = hfe_features_opinion_disable
+				remove_global_flag = hfe_features_opinion_disable
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -512,10 +512,10 @@ country_event = {
 				limit = {
 					hfe_trigger_global_enabled = yes
 				}
-				remove_global_flag = hfe_global_disable
+				set_global_flag = hfe_global_disable
 			}
 			else = {
-				set_global_flag = hfe_global_disable
+				remove_global_flag = hfe_global_disable
 			}
 			country_event = {
 				id = hfe_menu.1
@@ -548,7 +548,7 @@ country_event = {
 					has_country_flag = hfe_menu_have_war_in_heavens_submenu
 				}
 				set_global_flag = hfe_war_in_heavens_disable
-				# is it ok? What if fallen awakened?
+				# TODO is it ok? What if fallen awakened?
 				remove_global_flag = sleepers_awake_happened
 				remove_country_flag = hfe_menu_have_war_in_heavens_submenu
 				country_event = {
