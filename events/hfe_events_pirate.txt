@@ -285,6 +285,7 @@ country_event = {
 		random_relation = {
 			limit = {
 				is_country_type = hfe_pirate
+				# TODO think about it
 				or = {
 					relative_power = {
 						who = root
@@ -319,27 +320,12 @@ country_event = {
 				}
 			}
 			weights = {
-				base = 1
+				base = 10
 				modifier = {
 					factor = 10
 					has_country_flag = hfe_pirate_prior_hunting_target
 				}
-				modifier = {
-					factor = 2
-					relative_power = {
-						who = root
-						category = fleet
-						value < inferior
-					}
-				}
-				modifier = {
-					factor = 2
-					relative_power = {
-						who = root
-						category = fleet
-						value < equivalent
-					}
-				}
+				mult = value:hfe_script_value_weight_relative_fleet_power|country0|this|country1|root|
 			}
 			add_opinion_modifier = {
 				who = root
@@ -400,7 +386,8 @@ country_event = {
 				hfe_effect_pirate_init_colony = yes
 				root = {
 					add_resource = {
-						energy = @hfe_pirate_base_cost_minus
+						energy = @hfe_pirate_base_cost
+						mult = -1
 					}
 				}
 			}
@@ -886,46 +873,10 @@ ship_event = {
 				}
 				if = {
 					limit = {
-						or = {
-							check_variable = {
-								which = hfe_pirate_outpost_attack_count
-								value > 7
-							}
-							and = {
-								is_difficulty > 0
-								check_variable = {
-									which = hfe_pirate_outpost_attack_count
-									value > 6
-								}
-							}
-							and = {
-								is_difficulty > 1
-								check_variable = {
-									which = hfe_pirate_outpost_attack_count
-									value > 5
-								}
-							}
-							and = {
-								is_difficulty > 2
-								check_variable = {
-									which = hfe_pirate_outpost_attack_count
-									value > 4
-								}
-							}
-							and = {
-								is_difficulty > 3
-								check_variable = {
-									which = hfe_pirate_outpost_attack_count
-									value > 3
-								}
-							}
-							and = {
-								is_difficulty > 4
-								check_variable = {
-									which = hfe_pirate_outpost_attack_count
-									value > 2
-								}
-							}
+						check_variable_arithmetic = {
+							which = hfe_pirate_outpost_attack_count
+							add = trigger:is_difficulty
+							value > 7
 						}
 					}
 					if = {
@@ -1556,15 +1507,21 @@ country_event = {
 					has_country_flag = hfe_pirate_protected@event_target:hfe_pirate_country
 				}
 			}
-			custom_tooltip = {
-				fail_text = hfe_pirate.101.0.tooltip_fail.1
-				hfe_trigger_pirate_raid_have_flag = no
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = root
 			}
-			hfe_trigger_pirate_protect_cost = yes
+			hfe_trigger_pirate_protect_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = root
+			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.0.response
-		hfe_effect_pirate_protect_cost_shift = yes
+		hfe_effect_pirate_protect_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = root
+		}
 		hidden_effect = {
 			# i hope its temporal fix
 			set_timed_country_flag = {
@@ -1603,113 +1560,32 @@ country_event = {
 			hfe_trigger_pirate_diplomacy_any_menu = no
 		}
 		hidden_effect = {
-			every_relation = {
-				limit = {
-					hfe_trigger_pirate_raid_country_check = yes
-					is_country_type = default
-					is_hostile = root
-				}
-				hfe_effect_save_event_target = yes
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
+			while = {
+				count = 6
+				ordered_relation = {
 					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
 						is_country_type = default
-						is_rival = root
+						hfe_trigger_pirate_raid_have_no_flag = {
+							pirate = event_target:hfe_pirate_country
+							target = this
+						}
+						is_hostile = event_target:hfe_pirate_country
+						hfe_trigger_is_event_target = no
+						event_target:hfe_pirate_country = {
+							any_owned_fleet = {
+								is_ship_class = shipclass_military
+								closest_system = {
+									limit = {
+										is_owned_by = prevprev
+									}
+									max_steps = 10
+								}
+							}
+						}
 					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-						is_hostile_to = root
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-						is_unfriendly_to = root
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-						is_domineering_to = root
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-						is_threatened_to = root
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-						is_dismissive_to = root
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = default
-					}
-					hfe_effect_save_event_target = yes
-				}
-			}
-			if = {
-				limit = {
-					hfe_trigger_exists_all_event_targets = no
-				}
-				every_relation = {
-					limit = {
-						hfe_trigger_pirate_raid_country_check = yes
-						is_country_type = hfe_pirate
-					}
+					position = 0
+					order_by = value:hfe_script_value_opinion|country0|this|country1|root|
+					inverse = yes
 					hfe_effect_save_event_target = yes
 				}
 			}
@@ -1728,17 +1604,21 @@ country_event = {
 			exists = event_target:hfe_event_target_0
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_0 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_0
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_0
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.0.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_0
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_0 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -1752,17 +1632,21 @@ country_event = {
 			exists = event_target:hfe_event_target_1
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_1 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_1
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_1
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.1.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_1
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_1 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -1776,17 +1660,21 @@ country_event = {
 			exists = event_target:hfe_event_target_2
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_2 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_2
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_2
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.2.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_2
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_2 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -1800,17 +1688,21 @@ country_event = {
 			exists = event_target:hfe_event_target_3
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_3 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_3
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_3
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.3.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_3
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_3 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -1824,17 +1716,21 @@ country_event = {
 			exists = event_target:hfe_event_target_4
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_4 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_4
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_4
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.4.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_4
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_4 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -1848,17 +1744,21 @@ country_event = {
 			exists = event_target:hfe_event_target_5
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = yes
-			custom_tooltip = {
-				text = hfe_pirate.101.raid_menu.fail_prior_target
-				event_target:hfe_event_target_5 = {
-					hfe_trigger_pirate_raid_have_flag = no
-				}
+			hfe_trigger_pirate_raid_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_5
+			}
+			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_5
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.raid_menu.5.response
-		hfe_effect_pirate_raid_cost_shift = yes
+		hfe_effect_pirate_raid_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_5
+		}
 		hidden_effect = {
 			event_target:hfe_event_target_5 = {
 				hfe_effect_pirate_raid_set_flag = yes
@@ -3274,7 +3174,10 @@ country_event = {
 	}
 	trigger = {
 		exists = event_target:hfe_pirate_country.ruler
-		hfe_trigger_pirate_raid_have_flag = no
+		hfe_trigger_pirate_raid_have_no_flag = {
+			pirate = event_target:hfe_pirate_country
+			target = root
+		}
 		event_target:hfe_pirate_country = {
 			not = {
 				is_forced_friendly = root
@@ -3293,9 +3196,15 @@ country_event = {
 	option = {
 		name = hfe_pirate.200.0
 		allow = {
-			hfe_trigger_pirate_protect_cost = yes
+			hfe_trigger_pirate_protect_cost = {
+				pirate = event_target:hfe_pirate_country
+				target = root
+			}
 		}
-		hfe_effect_pirate_protect_cost_shift = yes
+		hfe_effect_pirate_protect_cost_shift = {
+			pirate = event_target:hfe_pirate_country
+			target = root
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -3345,46 +3254,7 @@ country_event = {
 				is_pacifist = yes
 			}
 			# fleet power
-			modifier = {
-				factor = 0.5
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value >= overwhelming
-				}
-			}
-			modifier = {
-				factor = 0.5
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value >= superior
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= equivalent
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= inferior
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= pathetic
-				}
-			}
+			mult = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_pirate_country|country1|root|
 			# money
 			modifier = {
 				factor = 0.5
@@ -3599,59 +3469,20 @@ country_event = {
 				is_pacifist = yes
 			}
 			# fleet power
-			modifier = {
-				factor = 0.5
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value >= overwhelming
-				}
-			}
-			modifier = {
-				factor = 0.5
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value >= superior
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= equivalent
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= inferior
-				}
-			}
-			modifier = {
-				factor = 2
-				relative_power = {
-					who = event_target:hfe_pirate_country
-					category = fleet
-					value <= pathetic
-				}
-			}
+			mult = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_pirate_country|country1|root|
 		}
 	}
 	# reject
 	option = {
 		name = hfe_pirate.211.1
 		default_hide_option = yes
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "[root.GetName] not agree for investment pact"
-		}
 		hidden_effect = {
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "[root.GetName] not agree for investment pact"
+			}
 			set_timed_country_flag = {
 				flag = hfe_pirate.211_block
 				years = 3

@@ -23,35 +23,16 @@ hfe_effect_pirate_diplomacy_remove_flags = {
 }
 
 hfe_effect_pirate_protect_cost_shift = {
-	if = {
-		limit = {
-			relative_power = {
-				who = event_target:hfe_pirate_country
-				value > superior
-				category = fleet
-			}
-		}
-		add_resource = {
-			energy = -250
-			alloys = -100
-		}
-		event_target:hfe_pirate_country = {
-			add_resource = {
-				energy = 250
-				alloys = 100
-			}
-		}
+	add_resource = {
+		energy = @hfe_pirate_protect_cost_energy_minus
+		alloys = @hfe_pirate_protect_cost_alloys_minus
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
 	}
-	else = {
+	event_target:hfe_pirate_country = {
 		add_resource = {
-			energy = -500
-			alloys = -200
-		}
-		event_target:hfe_pirate_country = {
-			add_resource = {
-				energy = 500
-				alloys = 200
-			}
+			energy = @hfe_pirate_protect_cost_energy
+			alloys = @hfe_pirate_protect_cost_alloys
+			mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
 		}
 	}
 }
@@ -60,19 +41,22 @@ hfe_effect_pirate_raid_cost_shift = {
 	add_resource = {
 		energy = @hfe_pirate_raid_cost_energy_minus
 		alloys = @hfe_pirate_raid_cost_alloys_minus
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
 	}
 	event_target:hfe_pirate_country = {
 		add_resource = {
 			energy = @hfe_pirate_raid_cost_energy
 			alloys = @hfe_pirate_raid_cost_alloys
+			mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
 		}
 	}
 }
 
 hfe_effect_pirate_slave_cost_shift = {
 	add_resource = {
-		energy = @hfe_pirate_slave_cost_energy_minus
-		alloys = @hfe_pirate_slave_cost_alloys_minus
+		energy = @hfe_pirate_slave_cost_energy
+		alloys = @hfe_pirate_slave_cost_alloys
+		mult = -1
 	}
 	event_target:hfe_pirate_country = {
 		add_resource = {
@@ -129,7 +113,7 @@ hfe_effect_pirate_init = {
 				}
 			}
 			# system value
-			mult = value:hfe_script_value_pirate_count_planets
+			mult = value:hfe_script_value_weight_num_planets_with_deposit_in_system
 		}
 		# for vanilla localization
 		save_event_target_as = pirate_system

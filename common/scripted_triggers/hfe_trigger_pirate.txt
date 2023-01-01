@@ -45,32 +45,15 @@ hfe_trigger_exists_any_slave_target = {
 }
 
 hfe_trigger_pirate_protect_cost = {
-	if = {
-		limit = {
-			relative_power = {
-				who = event_target:hfe_pirate_country
-				value > superior
-				category = fleet
-			}
-		}
-		resource_stockpile_compare = {
-			resource = energy
-			value >= 250
-		}
-		resource_stockpile_compare = {
-			resource = alloys
-			value >= 100
-		}
+	resource_stockpile_compare = {
+		resource = energy
+		value >= @hfe_pirate_protect_cost_energy
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
 	}
-	else = {
-		resource_stockpile_compare = {
-			resource = energy
-			value >= 500
-		}
-		resource_stockpile_compare = {
-			resource = alloys
-			value >= 200
-		}
+	resource_stockpile_compare = {
+		resource = alloys
+		value >= @hfe_pirate_protect_cost_alloys
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
 	}
 }
 
@@ -78,10 +61,12 @@ hfe_trigger_pirate_raid_cost = {
 	resource_stockpile_compare = {
 		resource = energy
 		value >= @hfe_pirate_raid_cost_energy
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
 	}
 	resource_stockpile_compare = {
 		resource = alloys
 		value >= @hfe_pirate_raid_cost_alloys
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
 	}
 }
 
@@ -111,30 +96,23 @@ hfe_trigger_pirate_slave_cost = {
 	}
 }
 
-hfe_trigger_pirate_raid_have_flag = {
-	has_opinion_modifier = {
-		who = event_target:hfe_pirate_country
-		modifier = hfe_opinion_pirate_prior_target
+hfe_trigger_pirate_raid_have_no_flag = {
+	not = {
+		$target$ = {
+			has_opinion_modifier = {
+				who = $pirate$
+				modifier = hfe_opinion_pirate_prior_target
+			}
+		}
 	}
 }
 
-hfe_trigger_pirate_raid_country_check = {
-	hfe_trigger_pirate_raid_distance_check = yes
-	is_hostile = event_target:hfe_pirate_country
-	hfe_trigger_pirate_raid_have_flag = no
-}
-
-hfe_trigger_pirate_raid_distance_check = {
-	event_target:hfe_pirate_country = {
-		any_owned_fleet = {
-			is_ship_class = shipclass_military
-			closest_system = {
-				limit = {
-					# prevprevprev is potential raid target
-					is_owned_by = prevprevprev
-				}
-				max_steps = 10
-			}
+hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+	custom_tooltip = {
+		fail_text = hfe_pirate.101.raid_menu.fail_prior_target
+		hfe_trigger_pirate_raid_have_no_flag = {
+			pirate = $pirate$
+			target = $target$
 		}
 	}
 }

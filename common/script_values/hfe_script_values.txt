@@ -107,6 +107,110 @@ hfe_script_value_job_weights_army_modifier = {
 	min = 1
 }
 
+hfe_script_value_weight_num_planets_with_deposit_in_system = {
+	complex_trigger_modifier = {
+		trigger = count_system_planet
+		parameters = {
+			limit = {
+				has_deposit = yes
+			}
+		}
+		mode = add
+	}
+	mult = 5
+	min = 1
+}
+
+hfe_script_value_weight_truce = {
+	complex_trigger_modifier = {
+		trigger = trust
+		parameters = {
+			who = prev
+		}
+		mode = add
+	}
+	divide = 10
+	min = 1
+}
+
+hfe_script_value_opinion = {
+	complex_trigger_modifier = {
+		trigger_scope = $country0$
+		trigger = opinion
+		parameters = {
+			who = $country1$
+		}
+		mode = add
+	}
+}
+
+hfe_script_value_pow_2 = {
+	set = 2
+	pow = $val$|
+	floor = yes
+}
+
+# less weight if country1 weakier
+hfe_script_value_weight_relative_fleet_power = {
+	set = 1
+	modifier = {
+		$country0$ = {
+			relative_power = {
+				who = $country1$
+				value = overwhelming
+				category = fleet
+			}
+		}
+		mult = 4
+	}
+	modifier = {
+		$country0$ = {
+			relative_power = {
+				who = $country1$
+				value = superior
+				category = fleet
+			}
+		}
+		mult = 2
+	}
+	modifier = {
+		$country0$ = {
+			relative_power = {
+				who = $country1$
+				value = inferior
+				category = fleet
+			}
+		}
+		divide = 2
+	}
+	modifier = {
+		$country0$ = {
+			relative_power = {
+				who = $country1$
+				value = pathetic
+				category = fleet
+			}
+		}
+		divide = 4
+	}
+}
+
+hfe_script_value_weight_opposing_ethics_divergence_reduce = {
+	set = 1
+	divide = value:hfe_script_value_weight_opposing_ethics_divergence|country|$country$|
+}
+
+hfe_script_value_weight_opposing_ethics_divergence = {
+	complex_trigger_modifier = {
+		trigger = opposing_ethics_divergence
+		parameters = {
+			who = $country$
+		}
+		mode = add
+	}
+	min = 1
+}
+
 # copy past from vanilla
 hfe_script_value_job_weights_triple_resources_modifier = {
 	complex_trigger_modifier = {
@@ -138,3 +242,13 @@ hfe_script_value_job_weights_triple_resources_modifier = {
 		mult = @\[ 10 * $WEIGHT2$ ]
 	}
 }
+
+# hfe_script_value_test = {
+# 	complex_trigger_modifier = {
+# 		trigger = opposing_ethics_divergence
+# 		parameters = {
+# 			who = event_target:hfe_event_target_0
+# 		}
+# 		mode = add
+# 	}
+# }

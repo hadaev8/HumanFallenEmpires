@@ -829,22 +829,13 @@ country_event = {
 	immediate = {
 		random_list = {
 			90 = {
+				modifier = {
+					factor = trigger:num_fallen_empires
+				}
 			}
 			10 = {
 				modifier = {
 					factor = value:hfe_script_value_difficulty_scale
-				}
-				modifier = {
-					factor = 0.5
-					num_fallen_empires > 2
-				}
-				modifier = {
-					factor = 0.5
-					num_fallen_empires > 3
-				}
-				modifier = {
-					factor = 0.5
-					num_fallen_empires > 4
 				}
 				modifier = {
 					factor = 4
@@ -1296,155 +1287,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_0
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_0 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_0|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_0
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_0
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_0|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_0
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_0
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_0
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_0
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_0
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_0
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_0
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_0
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_0|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -1486,155 +1339,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_1
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_1 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_1|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_1
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_1
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_1|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_1
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_1
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_1
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_1
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_1
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_1
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_1
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_1
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_1|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -1683,155 +1398,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_2
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_2 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_2|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_2
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_2
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_2|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_2
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_2
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_2
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_2
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_2
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_2
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_2
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_2
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_2|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -1873,155 +1450,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_3
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_3 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_3|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_3
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_3
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_3|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_3
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_3
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_3
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_3
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_3
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_3
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_3
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_3
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_3|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -2063,155 +1502,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_4
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_4 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_4|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_4
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_4
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_4|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_4
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_4
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_4
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_4
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_4
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_4
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_4
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_4
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_4|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -2253,155 +1554,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_event_target_5
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_event_target_5 = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_5|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_5
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_5
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_5|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_5
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_5
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_5
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_5
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_5
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_5
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_event_target_5
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_event_target_5
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_event_target_5|country1|root.federation|
+				exists = federation
 			}
 		}
 		hidden_effect = {
@@ -2429,7 +1592,7 @@ country_event = {
 			exists = event_target:hfe_coalition_leader
 		}
 		ai_chance = {
-			# 30 because kad have more ethics and do not participate in war
+			# 30 because kad have more ethics (wonder if it is still a thing with new ethic modifier) and do not participate in war
 			factor = 30
 			# special
 			modifier = {
@@ -2445,155 +1608,17 @@ country_event = {
 				is_neighbor_of = event_target:hfe_coalition_leader
 			}
 			# ethics
-			modifier = {
-				factor = 0.25
-				or = {
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_militarist = no
-						}
-						is_militarist = no
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_xenophile = no
-						}
-						is_xenophile = no
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_spiritualist = no
-						}
-						is_spiritualist = no
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_materialist = no
-						}
-						is_materialist = no
-					}
-					is_xenophobe = yes
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_xenophile = yes
-						}
-						is_xenophile = yes
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_militarist = yes
-						}
-						is_militarist = yes
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_spiritualist = yes
-						}
-						is_spiritualist = yes
-					}
-					and = {
-						event_target:hfe_coalition_leader = {
-							is_materialist = yes
-						}
-						is_materialist = yes
-					}
-				}
-			}
+			mult = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_coalition_leader|
 			# fleet power
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_coalition_leader
-						value >= overwhelming
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_coalition_leader
-								value = overwhelming
-							}
-						}
-					}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_coalition_leader|country1|root|
+				not = {
+					exists = federation
 				}
 			}
 			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_coalition_leader
-						value >= superior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_coalition_leader
-								value >= superior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_coalition_leader
-						value >= equivalent
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_coalition_leader
-								value >= equivalent
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				or = {
-					relative_power = {
-						who = event_target:hfe_coalition_leader
-						value >= inferior
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_coalition_leader
-								value >= inferior
-							}
-						}
-					}
-				}
-			}
-			modifier = {
-				factor = 4
-				or = {
-					relative_power = {
-						who = event_target:hfe_coalition_leader
-						value = pathetic
-					}
-					and = {
-						exists = federation
-						federation = {
-							relative_power = {
-								who = event_target:hfe_coalition_leader
-								value = pathetic
-							}
-						}
-					}
-				}
+				factor = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_coalition_leader|country1|root.federation|
+				exists = federation
 			}
 		}
 		hfe_effect_advisor_future_on = yes
