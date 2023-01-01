@@ -39,49 +39,52 @@ hfe_effect_refuge_or_die = {
 					hfe_trigger_is_awake = yes
 					any_owned_planet = {
 						hfe_trigger_planet_valid_for_settle = yes
-						habitability = {
-							who = event_target:hfe_refuge_pop_target
-							value >= 0.2
-						}
+						# habitability = {
+						# 	who = event_target:hfe_refuge_pop_target
+						# 	value >= 0.2
+						# }
 					}
 				}
 				weights = {
 					base = 10
 					modifier = {
-						factor = 0.001
-						has_policy_flag = refugees_not_allowed
-						not = {
-							is_same_species = event_target:hfe_refuge_pop_target
-						}
+						factor = 100
+						has_country_flag = hfe_refuge_country_prior@prev
 					}
+					# policy
 					modifier = {
-						factor = 0.001
-						has_policy_flag = refugees_only_citizens
-						event_target:hfe_refuge_pop_target = {
-							nor = {
-								is_same_species = prev
-								hfe_trigger_is_citizen = {
-									hfe_country = prev
+						factor = 2
+						has_policy_flag = refugees_allowed
+					}
+					# block by refugees policy
+					modifier = {
+						factor = 0.01
+						or = {
+							and = {
+								has_policy_flag = refugees_not_allowed
+								not = {
+									is_same_species = event_target:hfe_refuge_pop_target
+								}
+							}
+							and = {
+								has_policy_flag = refugees_only_citizens
+								event_target:hfe_refuge_pop_target = {
+									nor = {
+										is_same_species = prev
+										hfe_trigger_is_citizen = {
+											country = prev
+										}
+									}
 								}
 							}
 						}
 					}
-					modifier = {
-						factor = 100
-						has_country_flag = hfe_refuge_country_prior@prev
-					}
+					# citizenship type
 					modifier = {
 						factor = 8
 						event_target:hfe_refuge_pop_target = {
-							or = {
-								has_citizenship_type = {
-									type = citizenship_full
-									country = prev
-								}
-								has_citizenship_type = {
-									type = citizenship_organic_trophy
-									country = prev
-								}
+							hfe_trigger_is_citizen = {
+								country = prev
 							}
 						}
 					}
@@ -95,9 +98,24 @@ hfe_effect_refuge_or_die = {
 						}
 					}
 					modifier = {
-						factor = 2
-						has_policy_flag = refugees_allowed
+						factor = 0.5
+						event_target:hfe_refuge_pop_target = {
+							has_citizenship_type = {
+								type = citizenship_assimilation
+								country = prev
+							}
+						}
 					}
+					modifier = {
+						factor = 0.25
+						event_target:hfe_refuge_pop_target = {
+							has_citizenship_type = {
+								type = citizenship_slavery
+								country = prev
+							}
+						}
+					}
+					# habitability
 					modifier = {
 						factor = 2
 						any_owned_planet = {
@@ -125,24 +143,6 @@ hfe_effect_refuge_or_die = {
 							habitability = {
 								who = event_target:hfe_refuge_pop_target
 								value >= 0.4
-							}
-						}
-					}
-					modifier = {
-						factor = 0.5
-						event_target:hfe_refuge_pop_target = {
-							has_citizenship_type = {
-								type = citizenship_assimilation
-								country = prev
-							}
-						}
-					}
-					modifier = {
-						factor = 0.25
-						event_target:hfe_refuge_pop_target = {
-							has_citizenship_type = {
-								type = citizenship_slavery
-								country = prev
 							}
 						}
 					}
@@ -277,60 +277,60 @@ hfe_effect_add_random_trait = {
 		1 = {
 			modifier = {
 				factor = 0
-				$hfe_species$ = {
+				$species$ = {
 					has_trait = hfe_species_trait_hucksters
 				}
 			}
 			modify_species = {
-				species = $hfe_species$
+				species = $species$
 				add_trait = hfe_species_trait_hucksters
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				$hfe_species$ = {
+				$species$ = {
 					has_trait = hfe_species_trait_war_fans
 				}
 			}
 			modify_species = {
-				species = $hfe_species$
+				species = $species$
 				add_trait = hfe_species_trait_war_fans
 			}
 		}
 		2 = {
 			modifier = {
 				factor = 0
-				$hfe_species$ = {
+				$species$ = {
 					has_trait = hfe_species_trait_error
 				}
 			}
 			modify_species = {
-				species = $hfe_species$
+				species = $species$
 				add_trait = hfe_species_trait_error
 			}
 		}
 		2 = {
 			modifier = {
 				factor = 0
-				$hfe_species$ = {
+				$species$ = {
 					has_trait = hfe_species_trait_happy_slave
 				}
 			}
 			modify_species = {
-				species = $hfe_species$
+				species = $species$
 				add_trait = hfe_species_trait_happy_slave
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				$hfe_species$ = {
+				$species$ = {
 					has_trait = hfe_species_trait_clever_beast
 				}
 			}
 			modify_species = {
-				species = $hfe_species$
+				species = $species$
 				add_trait = hfe_species_trait_clever_beast
 			}
 		}
