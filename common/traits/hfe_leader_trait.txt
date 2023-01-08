@@ -15,15 +15,13 @@ hfe_ruler_trait_genomod = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
+		# exists = species
 		from = {
 			is_gestalt = no
-		}
-		exists = species
-		# TODO redo trigger to account not only main species
-		species = {
-			is_same_species = from
-			not = {
-				is_exact_same_species = from
+			any_owned_species = {
+				prevprev = {
+					is_subspecies = prev
+				}
 			}
 		}
 	}
@@ -51,14 +49,16 @@ hfe_ruler_trait_imperialist = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			is_pacifist = no
 			is_gestalt = no
+			is_pacifist = no
 		}
 	}
 	modifier = {
-		starbase_shipyard_build_cost_mult = -0.1
-		starbase_shipyard_build_speed_mult = 0.1
+		# opinion effect
 		pop_ethic_xenophobe_attraction_mult = 0.1
+		starbase_shipyard_build_cost_mult = -0.1
+		intel_encryption_add = 1
+		# rivalries_produces_mult = 0.5
 	}
 	leader_trait = {
 		ruler
@@ -66,9 +66,9 @@ hfe_ruler_trait_imperialist = {
 	leader_class = {
 		ruler
 	}
-	ai_weight = {
-		factor = 10
-	}
+	# ai_weight = {
+	# 	factor = 10
+	# }
 }
 
 hfe_ruler_trait_warriror_honor = {
@@ -87,9 +87,9 @@ hfe_ruler_trait_warriror_honor = {
 	}
 	modifier = {
 		# opinion effect
+		pop_ethic_militarist_attraction_mult = 0.1
 		max_rivalries = 1
 		hfe_planet_jobs_war_militarist_produces_mult = 0.15
-		pop_ethic_militarist_attraction_mult = 0.15
 		# TODO
 		#		rivalries_influence_produces_mult = 0.5
 	}
@@ -112,9 +112,9 @@ hfe_ruler_trait_manipulative = {
 		from = {
 			OR = {
 				has_civic = civic_cutthroat_politics
+				has_civic = civic_criminal_heritage
 				has_civic = hfe_civic_godforge
 				has_civic = hfe_civic_godforge_mat
-				has_civic = civic_criminal_heritage
 			}
 			is_gestalt = no
 		}
@@ -140,9 +140,6 @@ hfe_ruler_trait_puppet = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
-		NOT = {
-			has_trait = trait_erudite
-		}
 		from = {
 			OR = {
 				has_valid_civic = civic_shadow_council
@@ -152,6 +149,8 @@ hfe_ruler_trait_puppet = {
 			}
 			is_gestalt = no
 		}
+		# too clever to be puppet
+		hfe_trigger_is_clever_species = no
 	}
 	modifier = {
 		# opinion effect
@@ -190,6 +189,7 @@ hfe_ruler_trait_corrupted = {
 		country_base_influence_produces_add = 0.5
 		country_energy_produces_mult = -0.1
 		planet_crime_add = 10
+		job_criminal_per_crime = 0.03
 		# TODO country_piracy_risk_mult = 0.1
 	}
 	opposites = {
@@ -217,31 +217,20 @@ hfe_ruler_trait_lovable_buffoon = {
 			hfe_trigger_is_fallen = no
 			is_gestalt = no
 		}
-		exists = species
-		species = {
-			nor = {
-				has_trait = trait_erudite
-				has_trait = trait_charismatic
-				has_trait = trait_intelligent
-				has_trait = trait_enigmatic_intelligence
-				has_trait = trait_enigmatic_intelligence_poor
-				has_trait = hfe_species_trait_clever_beast
-				has_trait = hfe_species_trait_clever_beast_presapient_spawn
-				has_trait = trait_presapient_natural_intellectuals
-				has_trait = leader_trait_intellectual
-			}
-		}
+		# too clever to be buffoon
+		hfe_trigger_is_clever_species = no
 	}
 	opposites = {
 		trait_ruler_champion_of_the_people
-		hfe_ruler_trait_manipulative
-		hfe_ruler_trait_warriror_honor
+		# TODO does usual traits even work here?
 		leader_trait_bureaucrat
-		hfe_ruler_trait_bureaucrat
 		leader_trait_intellectual
 		leader_trait_ruler_great_khan
 		leader_trait_great_khan
 		leader_trait_ruler_chosen
+		hfe_ruler_trait_manipulative
+		hfe_ruler_trait_warriror_honor
+		hfe_ruler_trait_bureaucrat
 	}
 	modifier = {
 		country_base_influence_produces_add = -0.5
@@ -275,11 +264,9 @@ hfe_ruler_trait_greedy = {
 	}
 	leader_trait = {
 		ruler
-		governor
 	}
 	leader_class = {
 		ruler
-		governor
 	}
 }
 
@@ -349,10 +336,9 @@ hfe_ruler_trait_army_lover = {
 		}
 	}
 	modifier = {
+		planet_soldiers_unity_produces_add = 1
 		army_experience_gain_mult = 0.2
-		intel_encryption_add = 1
-		# TODO
-		#planet_soldiers_upkeep_mult = -0.1
+		# event effect
 	}
 	leader_trait = {
 		ruler
@@ -376,7 +362,8 @@ hfe_ruler_trait_lobby = {
 		}
 	}
 	modifier = {
-		pop_factions_influence_produces_mult = 0.2
+		pop_cat_ruler_political_power = 0.1
+		pop_factions_produces_mult = 1
 	}
 	leader_trait = {
 		ruler
@@ -401,6 +388,7 @@ hfe_ruler_trait_bureaucrat = {
 	modifier = {
 		country_admin_cap_add = 10
 		empire_size_penalty_mult = -0.1
+		# job_bureaucrat_add = 1
 	}
 	leader_trait = {
 		ruler
@@ -433,6 +421,41 @@ hfe_ruler_trait_warcrime_tourism = {
 	}
 }
 
+hfe_ruler_trait_freedom_crusader = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_freedom_crusader.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			# just in case
+			is_gestalt = no
+			is_democracy = yes
+			is_pacifist = no
+			any_relation = {
+				is_country_type = default
+				is_democracy = no
+			}
+		}
+	}
+	modifier = {
+		# opinion effect
+		pop_ethic_egalitarian_attraction_mult = 0.1
+		pop_cat_ruler_political_power = -0.1
+		planet_administrators_upkeep_mult = -0.2
+		job_criminal_per_crime = -0.03
+		hfe_planet_jobs_war_with_wg_force_ideology_produces_mult = 0.2
+	}
+	leader_trait = {
+		ruler
+	}
+	leader_class = {
+		ruler
+	}
+}
+
 # governor
 hfe_governor_trait_sympathizes_slaves = {
 	cost = 1
@@ -445,6 +468,15 @@ hfe_governor_trait_sympathizes_slaves = {
 		from = {
 			is_gestalt = no
 			allows_slavery = yes
+			or = {
+				check_modifier_value = {
+					modifier = country_pop_enslaved_mult
+					value > 0
+				}
+				count_enslaved_species = {
+					count > 0
+				}
+			}
 		}
 	}
 	modifier = {
@@ -538,8 +570,8 @@ hfe_governor_trait_xenolover = {
 		}
 	}
 	modifier = {
-		planet_immigration_pull_mult = 0.1
 		pop_ethic_xenophile_attraction_mult = 0.1
+		planet_immigration_pull_mult = 0.1
 	}
 	leader_trait = {
 		governor
@@ -553,7 +585,7 @@ hfe_governor_trait_civil_economy = {
 	cost = 1
 	initial = yes
 	randomized = yes
-	icon = gfx/interface/icons/other/hfe_xenolover.dds
+	icon = gfx/interface/icons/other/hfe_civil_economy.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
@@ -594,6 +626,7 @@ hfe_governor_trait_satanist = {
 		planet_jobs_produces_mult = 0.1
 		planet_stability_add = 10
 		planet_crime_add = 20
+		# job_telepath_per_crime = 0.05
 	}
 	leader_trait = {
 		governor
@@ -642,7 +675,7 @@ hfe_scientist_trait_thoughtful = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
 	self_modifier = {
-		species_leader_exp_gain = 0.1
+		species_leader_exp_gain = 0.2
 	}
 	modifier = {
 		ship_anomaly_research_speed_mult = -0.1
@@ -684,9 +717,9 @@ hfe_scientist_trait_wary = {
 	ai_categories = {
 		survey
 	}
-	ai_weight = {
-		weight = 100
-	}
+	# ai_weight = {
+	# 	weight = 100
+	# }
 }
 
 hfe_scientist_trait_satanist = {
@@ -812,6 +845,9 @@ hfe_admiral_trait_pirate_hunter = {
 	leader_class = {
 		admiral
 	}
+	opposites = {
+		hfe_admiral_trait_pirate
+	}
 }
 
 hfe_admiral_trait_robot_hunter = {
@@ -876,6 +912,7 @@ hfe_admiral_trait_former_fighter = {
 	modifier = {
 		weapon_type_strike_craft_weapon_fire_rate_mult = 0.1
 		weapon_type_strike_craft_weapon_damage_mult = 0.1
+		weapon_type_strike_craft_speed_mult = 0.1
 	}
 	leader_trait = {
 		admiral
@@ -1382,7 +1419,7 @@ hfe_generic_trait_noble_good = {
 
 # special event traits
 hfe_generic_trait_nightmare = {
-	cost = 1
+	cost = 0
 	initial = no
 	randomized = no
 	#not allow on lvl up
@@ -1408,7 +1445,7 @@ hfe_generic_trait_nightmare = {
 }
 
 hfe_generic_trait_jean_luc = {
-	cost = 1
+	cost = 0
 	initial = no
 	randomized = no
 	#not allow on lvl up

@@ -57,6 +57,17 @@ hfe_trigger_pirate_protect_cost = {
 	}
 }
 
+hfe_trigger_pirate_raid_buy = {
+	hfe_trigger_pirate_raid_cost = {
+		pirate = $pirate$
+		target = $target$
+	}
+	hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+		pirate = $pirate$
+		target = $target$
+	}
+}
+
 hfe_trigger_pirate_raid_cost = {
 	resource_stockpile_compare = {
 		resource = energy
@@ -67,6 +78,50 @@ hfe_trigger_pirate_raid_cost = {
 		resource = alloys
 		value >= @hfe_pirate_raid_cost_alloys
 		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
+	}
+}
+
+hfe_trigger_pirate_energy_buy = {
+	$target$ = {
+		resource_stockpile_compare = {
+			resource = minerals
+			value >= 150
+		}
+	}
+	$pirate$ = {
+		resource_stockpile_compare = {
+			resource = energy
+			value >= 100
+		}
+	}
+}
+
+hfe_trigger_pirate_admiral_buy = {
+	$target$ = {
+		resource_stockpile_compare = {
+			resource = energy
+			value >= 1000
+		}
+	}
+	custom_tooltip = {
+		text = hfe_pirate.101.traid_menu.2.fail
+		$pirate$ = {
+			any_pool_leader = {
+				leader_class = admiral
+				not = {
+					has_leader_flag = hfe_pirate_admiral_to_kill
+				}
+			}
+		}
+	}
+}
+
+hfe_trigger_pirate_slave_buy = {
+	hfe_trigger_pirate_slave_cost = yes
+	hfe_trigger_pirate_slave_have_valid_planet = yes
+	hfe_trigger_pirate_count_slave = {
+		country = $country$
+		species = $species$
 	}
 }
 

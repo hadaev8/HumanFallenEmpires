@@ -27,8 +27,8 @@ hfe_effect_leaders_add_random_trait = {
 								}
 								exists = owner
 								owner = {
-									is_pacifist = no
 									is_gestalt = no
+									is_pacifist = no
 								}
 							}
 							add_trait = hfe_ruler_trait_imperialist
@@ -76,9 +76,9 @@ hfe_effect_leaders_add_random_trait = {
 								owner = {
 									OR = {
 										has_civic = civic_cutthroat_politics
+										has_civic = civic_criminal_heritage
 										has_civic = hfe_civic_godforge
 										has_civic = hfe_civic_godforge_mat
-										has_civic = civic_criminal_heritage
 									}
 									is_gestalt = no
 								}
@@ -101,9 +101,6 @@ hfe_effect_leaders_add_random_trait = {
 									has_trait = hfe_ruler_trait_puppet
 								}
 								exists = owner
-								NOT = {
-									has_trait = trait_erudite
-								}
 								owner = {
 									OR = {
 										has_valid_civic = civic_shadow_council
@@ -113,6 +110,8 @@ hfe_effect_leaders_add_random_trait = {
 									}
 									is_gestalt = no
 								}
+								# too clever to be puppet
+								hfe_trigger_is_clever_species = no
 							}
 							add_trait = hfe_ruler_trait_puppet
 							set_timed_leader_flag = {
@@ -158,20 +157,8 @@ hfe_effect_leaders_add_random_trait = {
 									hfe_trigger_is_fallen = no
 									is_gestalt = no
 								}
-								exists = species
-								species = {
-									nor = {
-										has_trait = trait_erudite
-										has_trait = trait_charismatic
-										has_trait = trait_intelligent
-										has_trait = trait_enigmatic_intelligence
-										has_trait = trait_enigmatic_intelligence_poor
-										has_trait = hfe_species_trait_clever_beast
-										has_trait = hfe_species_trait_clever_beast_presapient_spawn
-										has_trait = trait_presapient_natural_intellectuals
-										has_trait = leader_trait_intellectual
-									}
-								}
+								# too clever to be buffoon
+								hfe_trigger_is_clever_species = no
 							}
 							add_trait = hfe_ruler_trait_lovable_buffoon
 							set_timed_leader_flag = {
@@ -319,6 +306,35 @@ hfe_effect_leaders_add_random_trait = {
 							}
 						}
 					}
+					5 = {
+						if = {
+							limit = {
+								not = {
+									has_trait = hfe_ruler_trait_freedom_crusader
+								}
+								exists = owner
+								owner = {
+									# just in case
+									is_gestalt = no
+									is_democracy = yes
+									is_pacifist = no
+									any_relation = {
+										is_country_type = default
+										is_democracy = no
+									}
+								}
+							}
+							add_trait = hfe_ruler_trait_freedom_crusader
+							set_timed_leader_flag = {
+								flag = hfe_ruler_trait_freedom_crusader_gained
+								days = 7
+							}
+							set_timed_leader_flag = {
+								flag = has_gained_trait
+								days = 7
+							}
+						}
+					}
 				}
 			}
 		}
@@ -337,34 +353,21 @@ hfe_effect_leaders_add_random_trait = {
 						if = {
 							limit = {
 								not = {
-									has_trait = hfe_ruler_trait_greedy
-								}
-								exists = owner
-								owner = {
-									is_gestalt = no
-								}
-							}
-							add_trait = hfe_ruler_trait_greedy
-							set_timed_leader_flag = {
-								flag = hfe_ruler_trait_greedy_gained
-								days = 7
-							}
-							set_timed_leader_flag = {
-								flag = has_gained_trait
-								days = 7
-							}
-						}
-					}
-					5 = {
-						if = {
-							limit = {
-								not = {
 									has_trait = hfe_governor_trait_sympathizes_slaves
 								}
 								exists = owner
 								owner = {
 									is_gestalt = no
 									allows_slavery = yes
+									or = {
+										check_modifier_value = {
+											modifier = country_pop_enslaved_mult
+											value > 0
+										}
+										count_enslaved_species = {
+											count > 0
+										}
+									}
 								}
 							}
 							add_trait = hfe_governor_trait_sympathizes_slaves
@@ -583,6 +586,7 @@ hfe_effect_leaders_add_random_trait = {
 								}
 								exists = owner
 								owner = {
+									is_fallen_empire = no
 									any_relation = {
 										is_fallen_empire = yes
 									}

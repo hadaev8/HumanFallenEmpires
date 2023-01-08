@@ -1,85 +1,4 @@
 namespace = hfe_leaders
-# calc leaders capacity
-country_event = {
-	id = hfe_leaders.0
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		hfe_trigger_leaders_recrutment_enabled = yes
-		or = {
-			is_ai = no
-			is_country_type = default
-		}
-		any_pool_leader = {
-			always = yes
-		}
-	}
-	immediate = {
-		if = {
-			limit = {
-				not = {
-					has_modifier = hfe_leaders_started
-				}
-			}
-			add_modifier = {
-				modifier = hfe_leaders_started
-			}
-		}
-		hfe_leaders_calc_leaders_capacity = yes
-		if = {
-			limit = {
-				not = {
-					any_owned_leader = {
-						leader_class = governor
-					}
-				}
-			}
-			country_event = {
-				id = hfe_leaders.50
-			}
-		}
-		if = {
-			limit = {
-				not = {
-					count_owned_leader = {
-						limit = {
-							leader_class = scientist
-						}
-						count = 4
-					}
-				}
-			}
-			country_event = {
-				id = hfe_leaders.51
-			}
-		}
-		if = {
-			limit = {
-				not = {
-					any_owned_leader = {
-						leader_class = admiral
-					}
-				}
-			}
-			country_event = {
-				id = hfe_leaders.52
-			}
-		}
-		if = {
-			limit = {
-				not = {
-					any_owned_leader = {
-						leader_class = general
-					}
-				}
-			}
-			country_event = {
-				id = hfe_leaders.53
-			}
-		}
-	}
-}
-
 # gain new trait from mod by on_leader_level_up
 country_event = {
 	id = hfe_leaders.1
@@ -114,515 +33,9 @@ country_event = {
 				hfe_effect_add_psionic_trait = yes
 			}
 			add_leader_traits_after_modification = yes
-			if = {
-				limit = {
-					num_traits < 4
-				}
-				random_list = {
-					90 = {
-					}
-					10 = {
-						modifier = {
-							factor = trigger:has_level
-						}
-						hfe_effect_leaders_add_random_trait = yes
-					}
-				}
+			hfe_effect_leader_add_trait_random = {
+				trait_effect = hfe_effect_leaders_add_random_trait
 			}
-		}
-	}
-}
-
-# on actions hucks to generate leaders 10 - 50
-# governor
-# on_building_complete # on_blocker_cleared
-planet_event = {
-	id = hfe_leaders.10
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			20 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.50
-					}
-				}
-			}
-		}
-	}
-}
-
-# on_building_upgraded
-planet_event = {
-	id = hfe_leaders.11
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			30 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.50
-					}
-				}
-			}
-		}
-	}
-}
-
-# on_colonized
-planet_event = {
-	id = hfe_leaders.12
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			10 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.50
-					}
-				}
-			}
-		}
-	}
-}
-
-# on_pop_grown on_pop_assembled
-planet_event = {
-	id = hfe_leaders.13
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			20 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.50
-					}
-				}
-			}
-		}
-	}
-}
-
-# scientist
-# on_tech_increased
-country_event = {
-	id = hfe_leaders.20
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			10 = {
-			}
-			1 = {
-				country_event = {
-					id = hfe_leaders.51
-				}
-			}
-		}
-	}
-}
-
-# on_survey
-ship_event = {
-	id = hfe_leaders.21
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			30 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.51
-					}
-				}
-			}
-		}
-	}
-}
-
-# admiral
-# on_fleet_destroyed_perp
-country_event = {
-	id = hfe_leaders.30
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		hfe_trigger_leaders_recrutment_enabled = yes
-		exists = fromfrom
-		fromfrom = {
-			is_ship_class = shipclass_military
-		}
-		exists = fromfromfrom
-		fromfromfrom = {
-			is_ship_class = shipclass_military
-		}
-	}
-	immediate = {
-		random_list = {
-			10 = {
-			}
-			1 = {
-				country_event = {
-					id = hfe_leaders.52
-				}
-			}
-		}
-	}
-}
-
-# on_ship_built
-ship_event = {
-	id = hfe_leaders.31
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		exists = owner
-		hfe_trigger_leaders_recrutment_enabled = yes
-		is_ship_class = shipclass_military
-	}
-	immediate = {
-		random_list = {
-			30 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.52
-					}
-				}
-			}
-		}
-	}
-}
-
-# gain general
-# on_planet_attackers_win on_planet_defenders_win
-country_event = {
-	id = hfe_leaders.40
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			5 = {
-			}
-			1 = {
-				country_event = {
-					id = hfe_leaders.53
-				}
-			}
-		}
-	}
-}
-
-# on_army_recruited
-planet_event = {
-	id = hfe_leaders.41
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		hfe_trigger_leaders_recrutment_enabled = yes
-	}
-	immediate = {
-		random_list = {
-			20 = {
-			}
-			1 = {
-				owner = {
-					country_event = {
-						id = hfe_leaders.53
-					}
-				}
-			}
-		}
-	}
-}
-
-# gain governor 50
-country_event = {
-	id = hfe_leaders.50
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		check_variable = {
-			which = hfe_leaders_governor_capacity
-			value > 0
-		}
-	}
-	immediate = {
-		random_pool_leader = {
-			limit = {
-				leader_class = governor
-			}
-			root = {
-				clone_leader = {
-					target = prev
-					class = governor
-				}
-			}
-			kill_leader = {
-				show_notification = no
-			}
-		}
-		change_variable = {
-			which = hfe_leaders_governor_capacity
-			value = -1
-		}
-		country_event = {
-			id = hfe_leaders.54
-		}
-	}
-}
-
-# gain scientist
-country_event = {
-	id = hfe_leaders.51
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		check_variable = {
-			which = hfe_leaders_scientist_capacity
-			value > 0
-		}
-	}
-	immediate = {
-		random_pool_leader = {
-			limit = {
-				leader_class = scientist
-			}
-			root = {
-				clone_leader = {
-					target = prev
-					class = scientist
-				}
-			}
-			kill_leader = {
-				show_notification = no
-			}
-		}
-		change_variable = {
-			which = hfe_leaders_scientist_capacity
-			value = -1
-		}
-		country_event = {
-			id = hfe_leaders.55
-		}
-	}
-}
-
-# gain admiral
-country_event = {
-	id = hfe_leaders.52
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		check_variable = {
-			which = hfe_leaders_admiral_capacity
-			value > 0
-		}
-	}
-	immediate = {
-		random_pool_leader = {
-			limit = {
-				leader_class = admiral
-			}
-			root = {
-				clone_leader = {
-					target = prev
-					class = admiral
-				}
-			}
-			kill_leader = {
-				show_notification = no
-			}
-		}
-		change_variable = {
-			which = hfe_leaders_admiral_capacity
-			value = -1
-		}
-		country_event = {
-			id = hfe_leaders.56
-		}
-	}
-}
-
-# gain general
-country_event = {
-	id = hfe_leaders.53
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		check_variable = {
-			which = hfe_leaders_general_capacity
-			value > 0
-		}
-	}
-	immediate = {
-		#log = "hfe_leaders.53"
-		random_pool_leader = {
-			limit = {
-				leader_class = general
-			}
-			root = {
-				clone_leader = {
-					target = prev
-					class = general
-				}
-			}
-			kill_leader = {
-				show_notification = no
-			}
-		}
-		change_variable = {
-			which = hfe_leaders_general_capacity
-			value = -1
-		}
-		country_event = {
-			id = hfe_leaders.57
-		}
-	}
-}
-
-# notifications
-# governor
-country_event = {
-	id = hfe_leaders.54
-	title = hfe_leaders.54.name
-	desc = hfe_leaders.54.desc
-	picture = GFX_evt_galactic_senate
-	show_sound = event_administrative_work
-	is_triggered_only = yes
-	trigger = {
-		is_ai = no
-		not = {
-			has_country_flag = hfe_leaders.54_block
-		}
-	}
-	option = {
-		name = INTERESTING
-	}
-	option = {
-		name = hfe_block
-		custom_tooltip = hfe_leaders_block.tooltip
-		hidden_effect = {
-			set_country_flag = hfe_leaders.54_block
-		}
-	}
-}
-
-# scientist
-country_event = {
-	id = hfe_leaders.55
-	title = hfe_leaders.55.name
-	desc = hfe_leaders.55.desc
-	picture = GFX_evt_galactic_senate
-	show_sound = event_administrative_work
-	is_triggered_only = yes
-	trigger = {
-		is_ai = no
-		not = {
-			has_country_flag = hfe_leaders.55_block
-		}
-	}
-	option = {
-		name = INTERESTING
-	}
-	option = {
-		name = hfe_block
-		custom_tooltip = hfe_leaders_block.tooltip
-		hidden_effect = {
-			set_country_flag = hfe_leaders.55_block
-		}
-	}
-}
-
-# admiral
-country_event = {
-	id = hfe_leaders.56
-	title = hfe_leaders.56.name
-	desc = hfe_leaders.56.desc
-	picture = GFX_evt_galactic_senate
-	show_sound = event_administrative_work
-	is_triggered_only = yes
-	trigger = {
-		is_ai = no
-		not = {
-			has_country_flag = hfe_leaders.56_block
-		}
-	}
-	option = {
-		name = INTERESTING
-	}
-	option = {
-		name = hfe_block
-		custom_tooltip = hfe_leaders_block.tooltip
-		hidden_effect = {
-			set_country_flag = hfe_leaders.56_block
-		}
-	}
-}
-
-# general
-country_event = {
-	id = hfe_leaders.57
-	title = hfe_leaders.57.name
-	desc = hfe_leaders.57.desc
-	picture = GFX_evt_galactic_senate
-	show_sound = event_administrative_work
-	is_triggered_only = yes
-	trigger = {
-		is_ai = no
-		not = {
-			has_country_flag = hfe_leaders.57_block
-		}
-	}
-	option = {
-		name = INTERESTING
-	}
-	option = {
-		name = hfe_block
-		custom_tooltip = hfe_leaders_block.tooltip
-		hidden_effect = {
-			set_country_flag = hfe_leaders.57_block
 		}
 	}
 }
@@ -937,6 +350,46 @@ country_event = {
 				hfe_effect_features_designed_aristocracy = yes
 			}
 		}
+		from = {
+			if = {
+				limit = {
+					hfe_trigger_leaders_traits_enabled = yes
+				}
+				# give num chances for new trait depend on leader lvl
+				export_trigger_value_to_variable = {
+					trigger = has_level
+					variable = hfe_leaders_init_level
+				}
+				change_variable = {
+					which = hfe_leaders_init_level
+					value = -1
+				}
+				while = {
+					count = hfe_leaders_init_level
+					hfe_effect_leader_add_trait_random = {
+						trait_effect = hfe_effect_leader_add_vanilla_or_modded_trait
+					}
+					# nice idea in general, but vanilla notification from pool leaders should be meh
+					# root = {
+					#   modded trait
+					# 	country_event = {
+					# 		id = hfe_leaders.1
+					# 		scopes = {
+					# 			from = prev
+					# 		}
+					# 	}
+					# 	# vanilla trait
+					# 	country_event = {
+					# 		id = leader.20
+					# 		scopes = {
+					# 			from = prev
+					# 		}
+					# 	}
+					# }
+				}
+				clear_variable = hfe_leaders_init_level
+			}
+		}
 	}
 }
 
@@ -1202,7 +655,7 @@ country_event = {
 									factor = 2
 									is_same_species = event_target:hfe_leaders_refuge
 								}
-								mult = value:hfe_script_value_weight_truce
+								mult = value:hfe_script_value_weight_trust
 							}
 							event_target:hfe_leaders_refuge = {
 								set_owner = prev
@@ -1303,7 +756,8 @@ country_event = {
 	picture = GFX_evt_galactic_senate
 	is_triggered_only = yes
 	trigger = {
-		is_ai = no
+		# TODO think about it, removed trigger because need to clear variables and stuff
+		# is_ai = no
 		check_variable = {
 			which = hfe_leaders_refuge
 			value > 0

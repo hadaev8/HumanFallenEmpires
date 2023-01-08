@@ -85,11 +85,12 @@ hfe_starbase_building_drone_logistics = {
 		}
 	}
 	country_modifier = {
-		country_resource_max_energy_add = 1000
-		country_resource_max_minerals_add = 1000
-		country_resource_max_alloys_add = 200
-		country_naval_cap_add = 20
+		country_resource_max_add = 1000
 		country_starbase_capacity_add = 0.75
+	}
+	triggered_country_modifier = {
+		country_naval_cap_add = 2
+		mult = value:hfe_script_value_mul_two_values|val0|owner.trigger:num_starbases|val1|value:hfe_script_value_difficulty_twice_scale|
 	}
 	ai_build_at_chokepoint = yes
 	ai_build_outside_chokepoint = yes
@@ -128,58 +129,16 @@ hfe_starbase_building_drone_alloys = {
 		upkeep = {
 			trigger = {
 				exists = owner
-				owner = {
-					resource_stockpile_compare = {
-						resource = minerals
-						value > 1000
-					}
-				}
 			}
 			minerals = 20
+			mult = owner.value:hfe_script_value_scale_for_every_thousand_in_stockpile|resource|minerals|
 		}
 		produces = {
 			trigger = {
 				exists = owner
-				owner = {
-					resource_stockpile_compare = {
-						resource = minerals
-						value > 1000
-					}
-				}
 			}
 			alloys = 10
-		}
-		upkeep = {
-			trigger = {
-				exists = owner
-				owner = {
-					resource_stockpile_compare = {
-						resource = minerals
-						value > 10000
-					}
-					resource_income_compare = {
-						resource = minerals
-						value > 20
-					}
-				}
-			}
-			minerals = 20
-		}
-		produces = {
-			trigger = {
-				exists = owner
-				owner = {
-					resource_stockpile_compare = {
-						resource = minerals
-						value > 10000
-					}
-					resource_income_compare = {
-						resource = minerals
-						value > 20
-					}
-				}
-			}
-			alloys = 10
+			mult = owner.value:hfe_script_value_scale_for_every_thousand_in_stockpile|resource|minerals|
 		}
 	}
 	ai_build_at_chokepoint = yes

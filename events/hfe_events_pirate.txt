@@ -196,14 +196,12 @@ country_event = {
 		every_owned_fleet = {
 			limit = {
 				is_ship_class = shipclass_military
-				not = {
+				nor = {
 					has_fleet_flag = hfe_pirate_fleet_has_target
+					has_fleet_flag = hfe_pirate_fleet_move_to_target
 				}
 			}
-			set_fleet_settings = {
-				garrison = no
-				can_change_composition = yes
-			}
+			hfe_effect_pirate_path_fleet_reset = yes
 		}
 		random_list = {
 			10 = {
@@ -339,23 +337,32 @@ country_event = {
 			}
 		}
 		# pirate diplo simulation
-		# sell slaves
-		country_event = {
-			id = hfe_pirate.10
-			days = 1
-			random = 360
-		}
-		# sell energy
-		country_event = {
-			id = hfe_pirate.11
-			days = 1
-			random = 360
-		}
-		# investment pact
-		country_event = {
-			id = hfe_pirate.210
-			days = 1
-			random = 360
+		# TODO make gateway with weighted random
+		random_list = {
+			1 = {
+				# sell slaves
+				country_event = {
+					id = hfe_pirate.10
+					days = 1
+					random = 360
+				}
+			}
+			1 = {
+				# sell energy
+				country_event = {
+					id = hfe_pirate.11
+					days = 1
+					random = 360
+				}
+			}
+			1 = {
+				# investment pact
+				country_event = {
+					id = hfe_pirate.210
+					days = 1
+					random = 360
+				}
+			}
 		}
 	}
 }
@@ -521,12 +528,13 @@ country_event = {
 	immediate = {
 		random_relation = {
 			limit = {
+				is_country_type = default
+				is_gestalt = no
 				nor = {
 					has_country_flag = hfe_pirate_offer_deal@root
 					has_country_flag = hfe_pirate_offer_deal
 				}
 				hfe_trigger_pirate_slave_cost = yes
-				is_country_type = default
 			}
 			weights = {
 				base = 10
@@ -551,7 +559,7 @@ country_event = {
 				limit = {
 					has_global_flag = hfe_pirate_logs
 				}
-				log = "pirate try to sell slaves to [this.GetName]"
+				log = "pirate try to sell slaves to [this.GetName]. Pirate: [root.GetName]"
 			}
 			set_timed_country_flag = {
 				flag = hfe_pirate_offer_deal@root
@@ -586,6 +594,8 @@ country_event = {
 	immediate = {
 		random_relation = {
 			limit = {
+				is_country_type = default
+				is_gestalt = no
 				nor = {
 					has_country_flag = hfe_pirate_offer_deal@root
 					has_country_flag = hfe_pirate_offer_deal
@@ -598,7 +608,6 @@ country_event = {
 					resource = energy
 					value < 10000
 				}
-				is_country_type = default
 			}
 			weights = {
 				base = 10
@@ -630,7 +639,7 @@ country_event = {
 				limit = {
 					has_global_flag = hfe_pirate_logs
 				}
-				log = "pirate try to sell energy to [this.GetName]"
+				log = "pirate try to sell energy to [this.GetName]. Pirate: [root.GetName]"
 			}
 			country_event = {
 				id = hfe_pirate.101
@@ -783,12 +792,12 @@ country_event = {
 		}
 	}
 	immediate = {
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "work event hfe_pirate.55 add pirate trait to admiral 55 on_leader_spawned"
-		}
+		# if = {
+		# 	limit = {
+		# 		has_global_flag = hfe_pirate_logs
+		# 	}
+		# 	log = "work event hfe_pirate.55 add pirate trait to admiral 55 on_leader_spawned"
+		# }
 		from = {
 			add_trait = hfe_admiral_trait_pirate
 		}
@@ -1489,7 +1498,7 @@ country_event = {
 			limit = {
 				is_country = event_target:hfe_pirate_country
 			}
-			log = "WARNING PIRATE CONTACT WITH ITSELF"
+			log = "Pirate diplo menu. WARNING PIRATE CONTACT WITH ITSELF"
 		}
 	}
 	# pay for protect
@@ -1551,6 +1560,16 @@ country_event = {
 					hfe_effect_pirate_path_fleet_reset = yes
 				}
 			}
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "Pirate diplo menu. [this.GetName] pays for protection. Pirate: [hfe_pirate_country.GetName]"
+			}
+		}
+		# ai able to pay for protection via different event
+		ai_chance = {
+			factor = 0
 		}
 	}
 	# raid menu
@@ -1558,6 +1577,7 @@ country_event = {
 		name = hfe_pirate.101.raid_menu
 		trigger = {
 			hfe_trigger_pirate_diplomacy_any_menu = no
+			hfe_trigger_pirate_pathfind_enabled = yes
 		}
 		hidden_effect = {
 			while = {
@@ -1595,6 +1615,44 @@ country_event = {
 				id = hfe_pirate.101
 			}
 		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] enters raid menu. Pirate: [hfe_pirate_country.GetName]"
+		}
+		ai_chance = {
+			factor = 1
+			# have no resources
+			modifier = {
+				factor = 0
+				or = {
+					resource_stockpile_compare = {
+						resource = energy
+						value < @hfe_pirate_raid_cost_energy
+						mult = 5
+					}
+					resource_stockpile_compare = {
+						resource = alloys
+						value < @hfe_pirate_raid_cost_alloys
+						mult = 5
+					}
+				}
+			}
+			# ethics
+			modifier = {
+				factor = 2
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0.5
+				is_pacifist = yes
+			}
+			modifier = {
+				factor = 2
+				is_xenophobe = yes
+			}
+		}
 	}
 	# select target menu
 	option = {
@@ -1602,27 +1660,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_0
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_0
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_0
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.0.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_0
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_0 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_0.GetName]. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -1630,27 +1686,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_1
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_1
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_1
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.1.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_1
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_1 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_1.GetName]. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -1658,27 +1712,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_2
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_2
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_2
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.2.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_2
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_2 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_2.GetName]. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -1686,27 +1738,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_3
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_3
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_3
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.3.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_3
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_3 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_3.GetName]. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -1714,27 +1764,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_4
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_4
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_4
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.4.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_4
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_4 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_4.GetName]. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -1742,27 +1790,194 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.raid_menu
 			exists = event_target:hfe_event_target_5
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_raid_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_5
-			}
-			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+			hfe_trigger_pirate_raid_buy = {
 				pirate = event_target:hfe_pirate_country
 				target = event_target:hfe_event_target_5
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.5.response
-		hfe_effect_pirate_raid_cost_shift = {
+		response_text = hfe_pirate.101.raid_menu.response
+		hfe_effect_pirate_raid_buy = {
 			pirate = event_target:hfe_pirate_country
 			target = event_target:hfe_event_target_5
 		}
-		hidden_effect = {
-			event_target:hfe_event_target_5 = {
-				hfe_effect_pirate_raid_set_flag = yes
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
+			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_5.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+	}
+	# copy of options above for ai, removed is_dialog_only because it zero outs ai weights, but rendering event on each click is bad for human so mess with it
+	option = {
+		name = hfe_pirate.101.raid_menu.0
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_0
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_0
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_0
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_0.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.raid_menu.1
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_1
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_1
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_1
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_1.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.raid_menu.2
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_2
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_2
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_2
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_2.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.raid_menu.3
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_3
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_3
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_3
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_3.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.raid_menu.4
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_4
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_4
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_4
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_4.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.raid_menu.5
+		trigger = {
+			has_country_flag = hfe_pirate.101.raid_menu
+			exists = event_target:hfe_event_target_5
+			is_ai = yes
+			hfe_trigger_pirate_raid_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = event_target:hfe_event_target_5
+			}
+		}
+		hfe_effect_pirate_raid_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = event_target:hfe_event_target_5
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_5.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
 		}
 	}
 	# trade menu
@@ -1778,45 +1993,65 @@ country_event = {
 				id = hfe_pirate.101
 			}
 		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] enters trade menu. Pirate: [hfe_pirate_country.GetName]"
+		}
+		ai_chance = {
+			factor = 3
+		}
 	}
 	# sell minerals
 	option = {
 		name = hfe_pirate.101.traid_menu.0
 		trigger = {
 			has_country_flag = hfe_pirate.101.traid_menu
+			is_ai = no
 		}
 		allow = {
-			resource_stockpile_compare = {
-				resource = minerals
-				value >= 150
-			}
-			custom_tooltip = {
-				text = hfe_pirate.101.traid_menu.fail
-				event_target:hfe_pirate_country = {
-					resource_stockpile_compare = {
-						resource = energy
-						value >= 100
-					}
-				}
+			hfe_trigger_pirate_energy_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = root
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.0.response
-		add_resource = {
-			energy = 100
-			minerals = -150
-		}
-		event_target:hfe_pirate_country = {
-			add_resource = {
-				energy = -100
-				minerals = 150
-			}
+		hfe_effect_pirate_energy_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = root
 		}
 		if = {
 			limit = {
 				has_global_flag = hfe_pirate_logs
 			}
-			log = "[root.GetName] sell minerals to pirate [hfe_pirate_country.GetName]"
+			log = "Pirate diplo menu. [this.GetName] non ai sell minerals to pirate [hfe_pirate_country.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+	}
+	# ai version
+	option = {
+		name = hfe_pirate.101.traid_menu.0
+		trigger = {
+			has_country_flag = hfe_pirate.101.traid_menu
+			is_ai = yes
+			hfe_trigger_pirate_energy_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = root
+			}
+		}
+		hfe_effect_pirate_energy_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = root
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai sell minerals to pirate [hfe_pirate_country.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
 		}
 		ai_chance = {
 			factor = 1
@@ -1833,6 +2068,31 @@ country_event = {
 					}
 				}
 			}
+			modifier = {
+				factor = 10
+				has_deficit = energy
+			}
+			modifier = {
+				factor = 2
+				resource_stockpile_compare = {
+					resource = energy
+					value < 100
+				}
+			}
+			modifier = {
+				factor = 2
+				resource_stockpile_compare = {
+					resource = energy
+					value < 1000
+				}
+			}
+			modifier = {
+				factor = 2
+				resource_stockpile_compare = {
+					resource = minerals
+					value > 1000
+				}
+			}
 		}
 	}
 	# hire pirate admiral
@@ -1840,88 +2100,76 @@ country_event = {
 		name = hfe_pirate.101.traid_menu.2
 		trigger = {
 			has_country_flag = hfe_pirate.101.traid_menu
+			is_ai = no
 		}
 		allow = {
-			resource_stockpile_compare = {
-				resource = energy
-				value >= 1000
-			}
-			custom_tooltip = {
-				text = hfe_pirate.101.traid_menu.2.fail
-				or = {
-					hfe_trigger_leaders_recrutment_enabled = no
-					check_variable = {
-						which = hfe_leaders_admiral_capacity
-						value > 0
-					}
-				}
-				event_target:hfe_pirate_country = {
-					any_pool_leader = {
-						leader_class = admiral
-						not = {
-							has_leader_flag = hfe_pirate_admiral_to_kill
-						}
-					}
-				}
+			hfe_trigger_pirate_admiral_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = root
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.2.response
-		add_resource = {
-			energy = -1000
+		hfe_effect_pirate_admiral_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = root
 		}
-		event_target:hfe_pirate_country = {
-			add_resource = {
-				energy = 1000
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			custom_tooltip = hfe_pirate.101.traid_menu.2.effect
-			hidden_effect = {
-				random_pool_leader = {
-					limit = {
-						leader_class = admiral
-						not = {
-							has_leader_flag = hfe_pirate_admiral_to_kill
-						}
-					}
-					root = {
-						clone_leader = {
-							target = prev
-							class = admiral
-							effect = {
-								save_event_target_as = hfe_pirate_admiral_hired
-							}
-						}
-						if = {
-							limit = {
-								hfe_trigger_leaders_recrutment_enabled = yes
-							}
-							change_variable = {
-								which = hfe_leaders_admiral_capacity
-								value = -1
-							}
-						}
-					}
-					set_leader_flag = hfe_pirate_admiral_to_kill
-					kill_leader = {
-						show_notification = no
-					}
-				}
-				if = {
-					limit = {
-						has_global_flag = hfe_pirate_logs
-					}
-					log = "pirate admiral hired by [root.GetName] from [hfe_pirate_country.GetName]"
-				}
+			log = "Pirate diplo menu. [root.GetName] non ai hires pirate admiral from [hfe_pirate_country.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+	}
+	# ai version
+	option = {
+		name = hfe_pirate.101.traid_menu.2
+		trigger = {
+			has_country_flag = hfe_pirate.101.traid_menu
+			is_ai = yes
+			hfe_trigger_pirate_admiral_buy = {
+				pirate = event_target:hfe_pirate_country
+				target = root
 			}
+		}
+		hfe_effect_pirate_admiral_buy = {
+			pirate = event_target:hfe_pirate_country
+			target = root
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [root.GetName] ai hires pirate admiral from [hfe_pirate_country.GetName]. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
 		}
 		ai_chance = {
 			factor = 1
+			# dont need more admirals
+			modifier = {
+				factor = 0
+				count_owned_leader = {
+					limit = {
+						leader_class = admiral
+						is_idle = yes
+					}
+					count > 0
+				}
+			}
+			# have no resources
 			modifier = {
 				factor = 0
 				resource_stockpile_compare = {
 					resource = energy
-					value < 1000
+					value < 2000
 				}
+			}
+			# politic situation
+			modifier = {
+				factor = 2
+				is_at_war = yes
 			}
 			# ethics
 			modifier = {
@@ -1943,10 +2191,21 @@ country_event = {
 		}
 	}
 	# buy slave
+	# enter menu
 	option = {
 		name = hfe_pirate.101.traid_menu.1
 		trigger = {
 			has_country_flag = hfe_pirate.101.traid_menu
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = hfe_pirate.101.slave_menu.fail_havent_slave
+				event_target:hfe_pirate_country = {
+					any_owned_pop = {
+						has_job = hfe_job_pirate_slave
+					}
+				}
+			}
 		}
 		hidden_effect = {
 			hfe_effect_pirate_diplomacy_remove_flags = yes
@@ -1960,6 +2219,7 @@ country_event = {
 		}
 		ai_chance = {
 			factor = 1
+			# have no resources
 			modifier = {
 				factor = 0
 				or = {
@@ -1970,6 +2230,15 @@ country_event = {
 					resource_stockpile_compare = {
 						resource = energy
 						value < 1000
+					}
+				}
+			}
+			# have no space
+			modifier = {
+				factor = 0
+				not = {
+					any_owned_planet = {
+						free_housing > 0
 					}
 				}
 			}
@@ -1986,22 +2255,9 @@ country_event = {
 				factor = 3
 				allows_slavery = yes
 			}
-			modifier = {
-				factor = 0
-				not = {
-					any_owned_planet = {
-						free_housing > 0
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				event_target:hfe_pirate_country = {
-					num_pops = 0
-				}
-			}
 		}
 	}
+	# deal offer block
 	option = {
 		name = hfe_pirate.101.traid_menu_deal_offer_block
 		custom_tooltip = hfe_pirate.101.traid_menu_deal_offer_block_tooltip
@@ -2018,6 +2274,7 @@ country_event = {
 			factor = 0
 		}
 	}
+	# flavor option
 	option = {
 		name = hfe_pirate.101.slave_menu.0
 		trigger = {
@@ -2028,6 +2285,7 @@ country_event = {
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.slave_menu.0.response
+		# is_dialog_only always have zero ai weight but sometimes it is not lol
 		ai_chance = {
 			factor = 0
 		}
@@ -2038,66 +2296,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_0
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_0
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.1.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
-				country = event_target:hfe_pirate_country
-				species = event_target:hfe_slave_target_0
-			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 0"
-			}
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_0
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 2
-				allows_slavery = yes
-			}
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_0.trigger:num_trait_points
-			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 0. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -2105,66 +2322,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_1
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_1
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.2.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
-				country = event_target:hfe_pirate_country
-				species = event_target:hfe_slave_target_1
-			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 1"
-			}
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_1
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 3
-				allows_slavery = yes
-			}
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_1.trigger:num_trait_points
-			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 1. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -2172,66 +2348,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_2
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_2
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.3.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
-				country = event_target:hfe_pirate_country
-				species = event_target:hfe_slave_target_2
-			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 2"
-			}
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_2
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 3
-				allows_slavery = yes
-			}
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_2.trigger:num_trait_points
-			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 2. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -2239,66 +2374,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_3
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_3
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.4.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
-				country = event_target:hfe_pirate_country
-				species = event_target:hfe_slave_target_3
-			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 3"
-			}
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_3
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 3
-				allows_slavery = yes
-			}
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_3.trigger:num_trait_points
-			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 3. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -2306,66 +2400,25 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_4
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_4
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.5.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
-				country = event_target:hfe_pirate_country
-				species = event_target:hfe_slave_target_4
-			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 4"
-			}
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_4
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
-		}
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
 			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 2
-				allows_slavery = yes
-			}
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_4.trigger:num_trait_points
-			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 4. Pirate: [hfe_pirate_country.GetName]"
 		}
 	}
 	option = {
@@ -2373,67 +2426,194 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			exists = event_target:hfe_slave_target_5
+			is_ai = no
 		}
 		allow = {
-			hfe_trigger_pirate_slave_cost = yes
-			hfe_trigger_pirate_slave_have_valid_planet = yes
-			hfe_trigger_pirate_count_slave = {
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_5
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.6.response
-		hfe_effect_pirate_slave_cost_shift = yes
-		hidden_effect = {
-			hfe_effect_select_slave_pop = {
+		response_text = hfe_pirate.101.slave_menu.response
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_5
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 5. Pirate: [hfe_pirate_country.GetName]"
+		}
+	}
+	# ai version
+	option = {
+		name = hfe_pirate.101.slave_menu.1
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_0
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
+				country = event_target:hfe_pirate_country
+				species = event_target:hfe_slave_target_0
+			}
+		}
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_0
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 0. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.slave_menu.2
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_1
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
+				country = event_target:hfe_pirate_country
+				species = event_target:hfe_slave_target_1
+			}
+		}
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_1
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 1. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.slave_menu.3
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_2
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
+				country = event_target:hfe_pirate_country
+				species = event_target:hfe_slave_target_2
+			}
+		}
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_2
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 2. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.slave_menu.4
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_3
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
+				country = event_target:hfe_pirate_country
+				species = event_target:hfe_slave_target_3
+			}
+		}
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_3
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 3. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.slave_menu.5
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_4
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
+				country = event_target:hfe_pirate_country
+				species = event_target:hfe_slave_target_4
+			}
+		}
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_4
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 4. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = hfe_pirate.101.slave_menu.6
+		trigger = {
+			has_country_flag = hfe_pirate.101.slave_menu
+			exists = event_target:hfe_slave_target_5
+			is_ai = yes
+			hfe_trigger_pirate_slave_buy = {
 				country = event_target:hfe_pirate_country
 				species = event_target:hfe_slave_target_5
 			}
-			if = {
-				limit = {
-					has_global_flag = hfe_pirate_logs
-				}
-				log = "[this.GetName] buy slaves 5"
-			}
 		}
-		hfe_effect_settle_pop = yes
-		hidden_effect = {
-			hfe_effect_settle_pop_from_slavery_buff = yes
+		hfe_effect_pirate_slave_buy = {
+			country = event_target:hfe_pirate_country
+			species = event_target:hfe_slave_target_5
+		}
+		if = {
+			limit = {
+				has_global_flag = hfe_pirate_logs
+			}
+			log = "Pirate diplo menu. [this.GetName] ai buy slaves 5. Pirate: [hfe_pirate_country.GetName]"
+		}
+		country_event = {
+			id = hfe_pirate.101
 		}
 		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				or = {
-					resource_stockpile_compare = {
-						resource = alloys
-						value < 500
-					}
-					resource_stockpile_compare = {
-						resource = energy
-						value < 1000
-					}
-				}
-			}
-			# ethics
-			modifier = {
-				factor = 2
-				is_authoritarian = yes
-			}
-			modifier = {
-				factor = 2
-				is_xenophile = yes
-			}
-			modifier = {
-				factor = 3
-				allows_slavery = yes
-			}
-			# pop
-			# pop traits
-			modifier = {
-				factor = event_target:hfe_slave_target_5.trigger:num_trait_points
-			}
+			factor = 3
 		}
 	}
 	# service menu
@@ -2951,9 +3131,15 @@ country_event = {
 			country_event = {
 				id = hfe_pirate.101
 			}
+			if = {
+				limit = {
+					has_global_flag = hfe_pirate_logs
+				}
+				log = "Pirate diplo menu. [this.GetName] use return. Pirate: [hfe_pirate_country.GetName]"
+			}
 		}
 		ai_chance = {
-			factor = 0
+			factor = 3
 		}
 	}
 	# exit
@@ -2967,8 +3153,11 @@ country_event = {
 				limit = {
 					has_global_flag = hfe_pirate_logs
 				}
-				log = "exiting pirate diplo [this.GetName]"
+				log = "Pirate diplo menu. [this.GetName] use exit. Pirate: [hfe_pirate_country.GetName]"
 			}
+		}
+		ai_chance = {
+			factor = 3
 		}
 	}
 }
@@ -3189,7 +3378,7 @@ country_event = {
 			limit = {
 				has_global_flag = hfe_pirate_logs
 			}
-			log = "[event_target:hfe_pirate_country.GetName] pirates offer protection for [root.GetName]"
+			log = "pirate [hfe_pirate_country.GetName] offers protection to [root.GetName]"
 		}
 	}
 	# agree
@@ -3236,6 +3425,20 @@ country_event = {
 		}
 		ai_chance = {
 			factor = 1
+			# have no resources
+			modifier = {
+				factor = 0
+				resource_stockpile_compare = {
+					resource = energy
+					value < @hfe_pirate_protect_cost_energy
+					mult = 5
+				}
+				resource_stockpile_compare = {
+					resource = alloys
+					value < @hfe_pirate_protect_cost_alloys
+					mult = 5
+				}
+			}
 			# politic situation
 			modifier = {
 				factor = 2
@@ -3244,10 +3447,11 @@ country_event = {
 			# ethics
 			modifier = {
 				factor = 0.5
-				or = {
-					is_militarist = yes
-					is_xenophobe = yes
-				}
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0.5
+				is_xenophobe = yes
 			}
 			modifier = {
 				factor = 2
@@ -3255,62 +3459,6 @@ country_event = {
 			}
 			# fleet power
 			mult = value:hfe_script_value_weight_relative_fleet_power|country0|event_target:hfe_pirate_country|country1|root|
-			# money
-			modifier = {
-				factor = 0.5
-				resource_stockpile_compare = {
-					resource = energy
-					value < 5000
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value < 2500
-				}
-			}
-			modifier = {
-				factor = 0.5
-				resource_stockpile_compare = {
-					resource = energy
-					value < 4000
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value < 2000
-				}
-			}
-			modifier = {
-				factor = 0.5
-				resource_stockpile_compare = {
-					resource = energy
-					value < 3000
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value < 1500
-				}
-			}
-			modifier = {
-				factor = 0.5
-				resource_stockpile_compare = {
-					resource = energy
-					value < 2000
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value < 1000
-				}
-			}
-			modifier = {
-				factor = 0.5
-				resource_stockpile_compare = {
-					resource = energy
-					value < 1000
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value < 500
-				}
-			}
 		}
 	}
 	# reject
@@ -3335,6 +3483,9 @@ country_event = {
 				set_neutral = no
 				# set_friendly = no
 			}
+		}
+		ai_chance = {
+			factor = 2
 		}
 	}
 }
@@ -3420,7 +3571,7 @@ country_event = {
 			limit = {
 				has_global_flag = hfe_pirate_logs
 			}
-			log = "[event_target:hfe_pirate_country.GetName] pirates offer investment pact for [root.GetName]"
+			log = "pirate [hfe_pirate_country.GetName] offers investment pact for [root.GetName]"
 		}
 	}
 	# agree
@@ -3459,10 +3610,11 @@ country_event = {
 			# ethics
 			modifier = {
 				factor = 0.5
-				or = {
-					is_militarist = yes
-					is_xenophobe = yes
-				}
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0.5
+				is_xenophobe = yes
 			}
 			modifier = {
 				factor = 2
@@ -3487,6 +3639,9 @@ country_event = {
 				flag = hfe_pirate.211_block
 				years = 3
 			}
+		}
+		ai_chance = {
+			factor = 2
 		}
 	}
 }
@@ -3528,8 +3683,13 @@ fleet_event = {
 				}
 				log = "pirate fleet logic for [this.GetName], owner [owner.GetName]"
 			}
-			set_fleet_bombardment_stance = hfe_stance_pirate_raid
 			hfe_effect_pirate_path_fleet_reset = yes
+			set_fleet_settings = {
+				garrison = yes
+				can_change_composition = no
+			}
+			set_fleet_bombardment_stance = hfe_stance_pirate_raid
+			set_fleet_stance = aggressive
 			fleet_event = {
 				id = hfe_pirate.301
 			}
@@ -3543,6 +3703,7 @@ fleet_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		hfe_trigger_pirate_pathfind_enabled = yes
 		is_in_combat = no
 		exists = solar_system
 	}
@@ -3558,16 +3719,14 @@ fleet_event = {
 				limit = {
 					has_fleet_flag = hfe_pirate_log_fleet
 				}
-				log = "pirate fleet [this.GetName] in [solar_system.GetName] in dangerous, try to go home"
+				log = "pirate fleet [this.GetName] in [solar_system.GetName] in dangerous, try to go home. Pirate: [owner.GetName]"
 			}
 			hfe_effect_pirate_path_target_home = yes
 		}
-		# plunder current system if have something to plunder
 		else = {
-			hfe_effect_pirate_path_target_planet = yes
+			# next action
+			hfe_effect_pirate_path_go_to_next = yes
 		}
-		# go next system
-		hfe_effect_pirate_path_go_to_next = yes
 	}
 }
 
@@ -3586,7 +3745,7 @@ fleet_event = {
 			limit = {
 				has_fleet_flag = hfe_pirate_log_fleet
 			}
-			log = "[this.GetName] in [solar_system.GetName] looking for targets"
+			log = "[this.GetName] in [solar_system.GetName] looking for targets. Pirate: [owner.GetName]"
 		}
 		remove_fleet_flag = hfe_pirate_fleet_move_to_target
 		if = {
@@ -3625,7 +3784,7 @@ fleet_event = {
 					limit = {
 						has_fleet_flag = hfe_pirate_log_fleet
 					}
-					log = "[this.GetName] in [solar_system.GetName] recalcing due to new fleet in system"
+					log = "[this.GetName] in [solar_system.GetName] recalcing due to new fleet in system. Pirate: [owner.GetName]"
 				}
 				fleet_event = {
 					id = hfe_pirate.302
@@ -3642,16 +3801,39 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		is_country_type = hfe_pirate
 		exists = fromfrom
-		fromfrom = {
-			has_fleet_flag = hfe_pirate_fleet_move_to_target
-		}
+		# fromfrom = {
+		# }
 	}
 	immediate = {
 		fromfrom = {
-			fleet_event = {
-				id = hfe_pirate.302
-				days = 1
+			if = {
+				limit = {
+					has_fleet_flag = hfe_pirate_fleet_move_to_target
+				}
+				if = {
+					limit = {
+						has_fleet_flag = hfe_pirate_log_fleet
+					}
+					log = "running on_space_battle_won delaying event 302 by 2 days [this.GetName] in [solar_system.GetName]. Pirate: [owner.GetName]"
+				}
+				fleet_event = {
+					id = hfe_pirate.302
+					days = 2
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						has_fleet_flag = hfe_pirate_log_fleet
+					}
+					log = "running on_space_battle_won delaying event 300 by 2 days [this.GetName] in [solar_system.GetName]. Pirate: [owner.GetName]"
+				}
+				fleet_event = {
+					id = hfe_pirate.300
+					days = 2
+				}
 			}
 		}
 	}
@@ -3670,9 +3852,38 @@ fleet_event = {
 			limit = {
 				has_fleet_flag = hfe_pirate_log_fleet
 			}
-			log = "pirate fleet [this.GetName] in [solar_system.GetName] emergency ftl"
+			log = "pirate fleet [this.GetName] in [solar_system.GetName] emergency ftl. Pirate: [owner.GetName]"
 		}
 		hfe_effect_pirate_path_fleet_reset = yes
+	}
+}
+
+# on_space_battle_lost
+# This = owner of fleet 1 (loser)
+# From = owner of fleet 2 (winner)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+# clean fleet actions after on lost battle 307 direct to 306
+country_event = {
+	id = hfe_pirate.307
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = fromfrom
+		fromfrom = {
+			has_fleet_flag = hfe_pirate_fleet_move_to_target
+		}
+	}
+	immediate = {
+		fromfrom = {
+			if = {
+				limit = {
+					has_fleet_flag = hfe_pirate_log_fleet
+				}
+				log = "pirate fleet [this.GetName] in [solar_system.GetName] on_space_battle_lost. Pirate: [owner.GetName]"
+			}
+			hfe_effect_pirate_path_fleet_reset = yes
+		}
 	}
 }
 

@@ -1720,91 +1720,97 @@ country_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	immediate = {
-		set_spawn_system_batch = begin
-		random_system = {
-			limit = {
-				hfe_trigger_system_in_free_space = yes
+		random_list = {
+			1 = {
 			}
-			weights = {
-				base = 1000
-				# heavy checks but system spawn heavy operation anyway
-				modifier = {
-					factor = 0.1
-					any_system = {
-						distance = {
-							source = prev
-							min_jumps = 0
-							max_jumps = 5
-							type = hyperlane
+			9 = {
+				set_spawn_system_batch = begin
+				random_system = {
+					limit = {
+						hfe_trigger_system_in_free_space = yes
+					}
+					weights = {
+						base = 1000
+						# heavy checks but system spawn heavy operation anyway
+						modifier = {
+							factor = 0.1
+							any_system = {
+								distance = {
+									source = prev
+									min_jumps = 0
+									max_jumps = 5
+									type = hyperlane
+								}
+								hfe_trigger_system_in_someones_space = yes
+							}
 						}
-						hfe_trigger_system_in_someones_space = yes
+						modifier = {
+							factor = 0.1
+							any_system = {
+								distance = {
+									source = prev
+									min_jumps = 0
+									max_jumps = 4
+									type = hyperlane
+								}
+								hfe_trigger_system_in_someones_space = yes
+							}
+						}
+						modifier = {
+							factor = 0.1
+							any_system = {
+								distance = {
+									source = prev
+									min_jumps = 0
+									max_jumps = 3
+									type = hyperlane
+								}
+								hfe_trigger_system_in_someones_space = yes
+							}
+						}
+					}
+					set_timed_star_flag = {
+						flag = hfe_star_spawn_block
+						days = 10
+					}
+					spawn_system = {
+						min_distance = 10
+						max_distance = 20
+						hyperlane = no
+						initializer = hfe_initializer_drone_sector_0
 					}
 				}
-				modifier = {
-					factor = 0.1
-					any_system = {
-						distance = {
-							source = prev
-							min_jumps = 0
-							max_jumps = 4
-							type = hyperlane
-						}
-						hfe_trigger_system_in_someones_space = yes
+				if = {
+					limit = {
+						has_global_flag = HFE_TSP_spawn_test
+					}
+					log = "Harvesting Marvel Core called by HFE INIT 112"
+				}
+				random_system = {
+					limit = {
+						has_star_flag = hfe_drone_home_system
+					}
+					spawn_system = {
+						min_distance = 10
+						max_distance = 20
+						hyperlane = no
+						initializer = hfe_initializer_drone_sector_1
 					}
 				}
-				modifier = {
-					factor = 0.1
-					any_system = {
-						distance = {
-							source = prev
-							min_jumps = 0
-							max_jumps = 3
-							type = hyperlane
-						}
-						hfe_trigger_system_in_someones_space = yes
+				random_system = {
+					limit = {
+						has_star_flag = hfe_drone_home_system
+					}
+					spawn_system = {
+						min_distance = 10
+						max_distance = 20
+						hyperlane = no
+						initializer = hfe_initializer_drone_sector_2
 					}
 				}
-			}
-			set_timed_star_flag = {
-				flag = hfe_star_spawn_block
-				days = 10
-			}
-			spawn_system = {
-				min_distance = 10
-				max_distance = 20
-				hyperlane = no
-				initializer = hfe_initializer_drone_sector_0
+				set_spawn_system_batch = end
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
-			}
-			log = "Harvesting Marvel Core called by HFE INIT 112"
-		}
-		random_system = {
-			limit = {
-				has_star_flag = hfe_drone_home_system
-			}
-			spawn_system = {
-				min_distance = 10
-				max_distance = 20
-				hyperlane = no
-				initializer = hfe_initializer_drone_sector_1
-			}
-		}
-		random_system = {
-			limit = {
-				has_star_flag = hfe_drone_home_system
-			}
-			spawn_system = {
-				min_distance = 10
-				max_distance = 20
-				hyperlane = no
-				initializer = hfe_initializer_drone_sector_2
-			}
-		}
-		set_spawn_system_batch = end
 		# expand borders and develop
 		if = {
 			limit = {
@@ -1816,15 +1822,20 @@ country_event = {
 					days = 1
 				}
 			}
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Harvesting Marvel clay acquired"
+			}
 		}
 		else = {
-			log = "Harvesting Marvel not spawned"
-		}
-		if = {
-			limit = {
-				has_global_flag = HFE_TSP_spawn_test
+			if = {
+				limit = {
+					has_global_flag = HFE_TSP_spawn_test
+				}
+				log = "Harvesting Marvel not spawned"
 			}
-			log = "Harvesting Marvel clay acquired"
 		}
 	}
 }

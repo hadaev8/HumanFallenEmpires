@@ -53,8 +53,8 @@ hfe_trigger_is_asteroid = {
 # for country
 hfe_trigger_is_clever_for_event = {
 	or = {
-		hfe_trigger_is_clever = yes
 		is_materialist = yes
+		hfe_trigger_is_clever_species = yes
 	}
 }
 
@@ -121,7 +121,7 @@ hfe_trigger_is_assimilator = {
 		hfe_trigger_brainworm_country = yes
 		AND = {
 			has_authority = auth_hive_mind
-			has_ascension_perk = ap_evolutionary_mastery
+			has_tradition = tr_genetics_finish
 		}
 	}
 }
@@ -279,10 +279,6 @@ hfe_trigger_leaders_enabled = {
 	}
 }
 
-hfe_trigger_leaders_recrutment_enabled = {
-	has_global_flag = hfe_leaders_recrutment
-}
-
 hfe_trigger_leaders_traits_enabled = {
 	not = {
 		has_global_flag = hfe_leaders_traits_disable
@@ -437,27 +433,29 @@ hfe_trigger_system_in_someones_space = {
 # 		}
 # 	}
 # }
-hfe_trigger_is_clever = {
-	OR = {
-		has_trait = trait_intelligent
-		has_trait = trait_natural_engineers
-		has_trait = trait_natural_physicists
-		has_trait = trait_natural_sociologists
-		has_trait = trait_presapient_natural_intellectuals
-		has_trait = trait_erudite
-		has_trait = hfe_species_trait_clever_beast
-		has_trait = hfe_species_trait_clever_beast_presapient_spawn
-		has_trait = trait_enigmatic_intelligence
-		has_trait = trait_enigmatic_intelligence_poor
-		has_trait = trait_uplifted
+# anything accepting check_modifier_value
+hfe_trigger_positive_jobs_science_modifier = {
+	or = {
+		check_modifier_value = {
+			modifier = planet_jobs_physics_research_produces_mult
+			value > 0
+		}
+		check_modifier_value = {
+			modifier = planet_jobs_society_research_produces_mult
+			value > 0
+		}
+		check_modifier_value = {
+			modifier = planet_jobs_engineering_research_produces_mult
+			value > 0
+		}
 	}
-	NOT = {
-		has_trait = trait_nerve_stapled
-		has_trait = hfe_species_trait_happy_slave
-		has_trait = trait_presapient_docile_livestock
-		has_trait = trait_enigmatic_intelligence_failed
-		has_trait = trait_syncretic_proles
-		has_trait = trait_presapient_proles
+}
+
+# for something with species, country/leader for example
+hfe_trigger_is_clever_species = {
+	exists = species
+	species = {
+		hfe_trigger_positive_jobs_science_modifier = yes
 	}
 }
 
@@ -469,6 +467,7 @@ hfe_trigger_is_robot = {
 	}
 }
 
+# for pop or species
 hfe_trigger_is_robot_or_hive = {
 	OR = {
 		hfe_trigger_is_robot = yes
@@ -514,16 +513,10 @@ hfe_trigger_terminator_event = {
 	capital_scope = {
 		or = {
 			habitable_structure = yes
-			is_planet_class = pc_tropical
-			is_planet_class = pc_continental
-			is_planet_class = pc_ocean
+			is_wet = yes
+			is_dry = yes
+			is_cold = yes
 			is_planet_class = pc_gaia
-			is_planet_class = pc_desert
-			is_planet_class = pc_arid
-			is_planet_class = pc_savannah
-			is_planet_class = pc_tundra
-			is_planet_class = pc_arctic
-			is_planet_class = pc_alpine
 			is_planet_class = pc_nuked
 		}
 	}
@@ -534,11 +527,7 @@ hfe_trigger_terminator_event = {
 		}
 	}
 	any_planet_within_border = {
-		or = {
-			is_planet_class = pc_desert
-			is_planet_class = pc_arid
-			is_planet_class = pc_savannah
-		}
+		is_dry = yes
 		not = {
 			is_planet = prev.capital_scope
 		}

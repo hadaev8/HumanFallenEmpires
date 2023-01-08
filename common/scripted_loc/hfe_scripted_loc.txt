@@ -160,25 +160,7 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_crew.3
 	}
-	text = {
-		trigger = {
-			or = {
-				and = {
-					exists = owner
-					owner = {
-						is_gestalt = no
-						is_militarist = no
-					}
-				}
-				and = {
-					is_scope_type = country
-					is_gestalt = no
-					is_militarist = no
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_crew.0
-	}
+	default = hfe_scripted_loc_crew.0
 }
 
 # should be scope robust, get scientist type
@@ -263,67 +245,10 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_scientist.4
 	}
-	text = {
-		trigger = {
-			nor = {
-				and = {
-					exists = owner
-					owner = {
-						has_authority = auth_hive_mind
-					}
-				}
-				and = {
-					is_scope_type = country
-					has_authority = auth_hive_mind
-				}
-				and = {
-					exists = owner
-					owner = {
-						has_authority = auth_machine_intelligence
-					}
-				}
-				and = {
-					is_scope_type = country
-					has_authority = auth_machine_intelligence
-				}
-				and = {
-					exists = owner
-					owner = {
-						is_authoritarian = yes
-					}
-				}
-				and = {
-					is_scope_type = country
-					is_authoritarian = yes
-				}
-				and = {
-					not = {
-						is_scope_type = country
-					}
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					exists = leader
-					leader = {
-						gender = female
-					}
-				}
-				and = {
-					is_scope_type = leader
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					gender = female
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist.0
-	}
+	default = hfe_scripted_loc_scientist.0
 }
 
-# capitilized version
+# capitalized version
 defined_text = {
 	name = hfe_scripted_loc_scientist_cap
 	text = {
@@ -405,64 +330,7 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_scientist_cap.4
 	}
-	text = {
-		trigger = {
-			nor = {
-				and = {
-					exists = owner
-					owner = {
-						has_authority = auth_hive_mind
-					}
-				}
-				and = {
-					is_scope_type = country
-					has_authority = auth_hive_mind
-				}
-				and = {
-					exists = owner
-					owner = {
-						has_authority = auth_machine_intelligence
-					}
-				}
-				and = {
-					is_scope_type = country
-					has_authority = auth_machine_intelligence
-				}
-				and = {
-					exists = owner
-					owner = {
-						is_authoritarian = yes
-					}
-				}
-				and = {
-					is_scope_type = country
-					is_authoritarian = yes
-				}
-				and = {
-					not = {
-						is_scope_type = country
-					}
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					exists = leader
-					leader = {
-						gender = female
-					}
-				}
-				and = {
-					is_scope_type = leader
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					gender = female
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist_cap.0
-	}
+	default = hfe_scripted_loc_scientist_cap.0
 }
 
 # get leader class
@@ -499,6 +367,9 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_leader_class.4
 	}
+	# do i need general admiral here?
+	# vanilla string for non vanilla leaders
+	default = LEADER
 }
 
 # country scope
@@ -521,23 +392,7 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_dolphin.1
 	}
-	text = {
-		trigger = {
-			nor = {
-				hfe_trigger_is_human = yes
-				and = {
-					exists = event_target:hfe_earth
-					event_target:hfe_earth = {
-						is_surveyed = {
-							who = prev
-							status = yes
-						}
-					}
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_dolphin.0
-	}
+	default = hfe_scripted_loc_dolphin.0
 }
 
 # country scope
@@ -545,12 +400,13 @@ defined_text = {
 	name = hfe_scripted_loc_zro
 	text = {
 		trigger = {
-			or = {
+			nor = {
 				resource_stockpile_compare = {
 					resource = sr_zro
 					value > 0
 				}
 				has_technology = tech_mine_zro
+				is_on_market = sr_zro
 			}
 		}
 		localization_key = hfe_scripted_loc_zro.1
@@ -568,31 +424,14 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_zro.2
 	}
-	text = {
-		trigger = {
-			nor = {
-				resource_stockpile_compare = {
-					resource = sr_zro
-					value > 0
-				}
-				has_technology = tech_mine_zro
-				is_on_market = sr_zro
-			}
-		}
-		localization_key = hfe_scripted_loc_zro.0
-	}
+	default = hfe_scripted_loc_zro.0
 }
 
 # get century
 # any scope
 defined_text = {
 	name = hfe_scripted_loc_get_century
-	text = {
-		trigger = {
-			years_passed < 1
-		}
-		localization_key = "22"
-	}
+	default = "22"
 	text = {
 		trigger = {
 			years_passed > 1
@@ -732,19 +571,77 @@ defined_text = {
 		}
 		localization_key = hfe_scripted_loc_get_habitability_enginering_research.0
 	}
+	default = hfe_scripted_loc_get_habitability_enginering_research.1
+}
+
+defined_text = {
+	name = hfe_scripted_loc_5091_0_tooltip
 	text = {
 		trigger = {
-			is_hive_empire = no
+			hfe_trigger_is_human = no
 			not = {
-				has_valid_civic = civic_machine_servitor
+				any_relation = {
+					hfe_trigger_is_human = yes
+				}
 			}
 		}
-		localization_key = hfe_scripted_loc_get_habitability_enginering_research.1
+		localization_key = hfe_scripted_loc_5091_0_tooltip.0
 	}
+	text = {
+		trigger = {
+			hfe_trigger_is_human = yes
+			nor = {
+				has_country_flag = hfe_egypt_contacted
+				has_country_flag = hfe_future_contacted
+			}
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.1
+	}
+	text = {
+		trigger = {
+			is_gestalt = no
+			not = {
+				has_country_flag = first_contact_event
+			}
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.2
+	}
+	text = {
+		trigger = {
+			is_xenophobe = yes
+			hfe_trigger_is_human = no
+			any_relation = {
+				hfe_trigger_is_human = yes
+			}
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.3
+	}
+	text = {
+		trigger = {
+			exists = federation
+			federation = {
+				has_federation_flag = hfe_future_federation
+			}
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.4
+	}
+	text = {
+		trigger = {
+			species_portrait = hfe_portrait_future
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.5
+	}
+	text = {
+		trigger = {
+			is_machine_empire = yes
+		}
+		localization_key = hfe_scripted_loc_5091_0_tooltip.6
+	}
+	default = hfe_nothing
 }
 
 # test
-# defined_text = {
-# 	name = hfe_script_value_test
-# 	value = value:hfe_script_value_weight_opposing_ethics_divergence_reduce|country|event_target:hfe_event_target_0|
-# }
+defined_text = {
+	name = hfe_script_value_test
+	value = trigger:num_traits
+}

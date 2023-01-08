@@ -48,7 +48,7 @@ hfe_effect_refuge_or_die = {
 				weights = {
 					base = 10
 					modifier = {
-						factor = 100
+						factor = 10000
 						has_country_flag = hfe_refuge_country_prior@prev
 					}
 					# policy
@@ -272,7 +272,7 @@ hfe_effect_settle_pop_from_slavery_buff = {
 }
 
 # for pop
-hfe_effect_add_random_trait = {
+hfe_effect_species_add_modded_trait = {
 	random_list = {
 		1 = {
 			modifier = {
@@ -332,6 +332,37 @@ hfe_effect_add_random_trait = {
 			modify_species = {
 				species = $species$
 				add_trait = hfe_species_trait_clever_beast
+			}
+		}
+	}
+}
+
+hfe_effect_leader_add_vanilla_or_modded_trait = {
+	random_list = {
+		# same as vanilla, but removed notification
+		1 = {
+			hfe_effect_vanilla_copy_past_add_random_leader_trait = yes
+		}
+		# mod's traits
+		1 = {
+			hfe_effect_leaders_add_random_trait = yes
+		}
+	}
+}
+
+hfe_effect_leader_add_trait_random = {
+	if = {
+		limit = {
+			num_traits < 3
+		}
+		random_list = {
+			90 = {
+			}
+			10 = {
+				modifier = {
+					factor = trigger:has_level
+				}
+				$trait_effect$ = yes
 			}
 		}
 	}
@@ -702,6 +733,16 @@ hfe_effect_varelse_fleet_find_new_home = {
 					is_country_type = hfe_pirate
 				}
 			}
+			hfe_trigger_pirate_fleet_power_in_system_check = yes
+			# TODO with current settings fleet doesnt have guardian as hostile, maybe try to fix from what side
+			not = {
+				any_fleet_in_system = {
+					exists = owner
+					owner = {
+						is_guardian_country = yes
+					}
+				}
+			}
 			any_system_planet = {
 				or = {
 					not = {
@@ -717,7 +758,6 @@ hfe_effect_varelse_fleet_find_new_home = {
 					value > 0.7
 				}
 			}
-			hfe_trigger_pirate_fleet_power_in_system_check = yes
 		}
 		random_system_planet = {
 			limit = {
@@ -746,6 +786,16 @@ hfe_effect_varelse_fleet_find_new_home = {
 		}
 		closest_system = {
 			limit = {
+				hfe_trigger_pirate_fleet_power_in_system_check = yes
+				# TODO with current settings fleet doesnt have guardian as hostile, maybe try to fix from what side
+				not = {
+					any_fleet_in_system = {
+						exists = owner
+						owner = {
+							is_guardian_country = yes
+						}
+					}
+				}
 				any_system_planet = {
 					nand = {
 						exists = owner
@@ -759,7 +809,6 @@ hfe_effect_varelse_fleet_find_new_home = {
 						value > 0.5
 					}
 				}
-				hfe_trigger_pirate_fleet_power_in_system_check = yes
 			}
 			random_system_planet = {
 				limit = {
@@ -847,8 +896,8 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 							owner = prev
 						}
 					}
-					# set_owner = prev
 				}
+				# transfer fleet
 				prevprev = {
 					set_owner = prev
 				}
