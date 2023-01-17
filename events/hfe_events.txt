@@ -45,6 +45,7 @@ country_event = {
 country_event = {
 	id = hfe.47
 	title = TRANSMISSION
+	# TODO is this sound even triggered each stage? Probably not good
 	show_sound = event_psionic
 	desc = {
 		trigger = {
@@ -357,6 +358,7 @@ country_event = {
 		hfe_effect_event_47_next = yes
 	}
 	# step 2
+	# human and own earth
 	option = {
 		name = hfe.47.2.0
 		trigger = {
@@ -369,6 +371,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# human 2 and not surveyed earth
 	option = {
 		name = hfe.47.2.1
 		trigger = {
@@ -386,6 +389,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# human and surveyed earth
 	option = {
 		name = hfe.47.2.2
 		trigger = {
@@ -404,6 +408,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# human, not human 2 and not surveyed earth
 	option = {
 		name = hfe.47.2.3
 		trigger = {
@@ -424,13 +429,16 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# not human, know default human
 	option = {
 		name = hfe.47.2.4
 		trigger = {
 			has_country_flag = hfe.47.step2
 			hfe_trigger_is_human = no
 			any_relation = {
-				is_country_type = default
+				not = {
+					is_country_type = primitive
+				}
 				hfe_trigger_is_human = yes
 				exists = event_target:hfe_earth
 				event_target:hfe_earth = {
@@ -440,6 +448,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# not human and not surveyed earth
 	option = {
 		name = hfe.47.2.5
 		trigger = {
@@ -457,17 +466,18 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# surveyed nuked earth
 	option = {
 		name = hfe.47.2.6
 		trigger = {
 			has_country_flag = hfe.47.step2
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
-				has_planet_flag = nuked_earth
 				is_surveyed = {
 					who = root
 					status = yes
 				}
+				has_planet_flag = nuked_earth
 			}
 		}
 		hidden_effect = {
@@ -475,24 +485,26 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# surveyed primitive earth
 	option = {
 		name = hfe.47.2.7
 		trigger = {
 			has_country_flag = hfe.47.step2
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
-				exists = owner
-				owner = {
-					is_country_type = primitive
-				}
 				is_surveyed = {
 					who = root
 					status = yes
+				}
+				exists = owner
+				owner = {
+					is_country_type = primitive
 				}
 			}
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# want to survey earth
 	option = {
 		name = hfe.47.2.8
 		trigger = {
@@ -530,15 +542,22 @@ country_event = {
 			}
 		}
 	}
+	# earth have not original owner but not root
 	option = {
 		name = hfe.47.2.9
 		trigger = {
 			has_country_flag = hfe.47.step2
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
+				is_surveyed = {
+					who = root
+					status = yes
+				}
 				exists = owner
 				nor = {
-					is_original_owner = owner
+					owner = {
+						hfe_trigger_is_human = yes
+					}
 					is_owned_by = root
 				}
 			}
@@ -548,14 +567,20 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# earth have no owner
 	option = {
 		name = hfe.47.2.10
 		trigger = {
 			has_country_flag = hfe.47.step2
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
-				not = {
+				is_surveyed = {
+					who = root
+					status = yes
+				}
+				nor = {
 					exists = owner
+					has_planet_flag = nuked_earth
 				}
 			}
 		}
@@ -564,6 +589,7 @@ country_event = {
 		}
 		hfe_effect_event_47_next = yes
 	}
+	# own earth, non human, not original owner eg took it by force
 	option = {
 		name = hfe.47.2.11
 		trigger = {
@@ -572,9 +598,10 @@ country_event = {
 			exists = event_target:hfe_earth
 			event_target:hfe_earth = {
 				is_owned_by = root
-				not = {
-					is_original_owner = owner
-				}
+				# should it block alien (non human portrait) started on earth?
+				# not = {
+				# 	is_original_owner = owner
+				# }
 			}
 		}
 		hfe_effect_event_47_next = yes
