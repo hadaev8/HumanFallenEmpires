@@ -74,6 +74,23 @@ can_build_branch_office_on_planet = {
 		}
 	}
 	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NO_OBSERVATION_OUTPOST
+		if = {
+			limit = {
+				root = {
+					is_criminal_syndicate = yes
+				}
+				owner = {
+					is_primitive = yes
+				}
+			}
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_same_value = root
+			}
+		}
+	}
+	custom_tooltip = {
 		fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
 		exists = owner
 		OR = {
@@ -91,6 +108,12 @@ can_build_branch_office_on_planet = {
 			}
 			owner = {
 				is_in_federation_with = root
+			}
+			AND = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_modifier = preftl_action_trade_pact
+				}
 			}
 			# allow branch offices in subsidiaries and vice versa (and fellow subjects)
 			root = {
