@@ -919,7 +919,7 @@ ship_event = {
 					set_friendly = no
 				}
 				create_leader = {
-					class = admiral
+					class = commander
 					species = event_target:hfe_varelse_species
 					skill = 8
 				}
@@ -1590,7 +1590,7 @@ country_event = {
 			event_target:hfe_varelse_colony_planet = {
 				owner = {
 					kill_leader = {
-						type = ruler
+						ruler = yes
 						show_notification = no
 					}
 					hfe_effect_primitive_down = yes
@@ -1648,7 +1648,7 @@ country_event = {
 		event_target:hfe_varelse_colony_planet = {
 			owner = {
 				kill_leader = {
-					type = ruler
+					ruler = yes
 					show_notification = no
 				}
 				set_name = "Immortal Institute"
@@ -1679,7 +1679,7 @@ country_event = {
 	title = hfe.108.name
 	desc = hfe.108.desc
 	picture = GFX_evt_hfe_varelse_planet
-	show_sound = event_primitive_civilization
+	show_sound = event_pre_ftl_civilization
 	location = event_target:hfe_varelse_colony_planet
 	is_triggered_only = yes
 	option = {
@@ -1844,7 +1844,7 @@ country_event = {
 		default_hide_option = yes
 		hidden_effect = {
 			create_leader = {
-				class = governor
+				class = official
 				species = event_target:hfe_egypt_species
 				leader_age_min = 50
 				leader_age_max = 650
@@ -1877,6 +1877,7 @@ country_event = {
 			remove_country_flag = hfe.152.0
 		}
 	}
+	# TODO fix option here
 	option = {
 		name = hfe.152.3
 		trigger = {
@@ -1884,7 +1885,7 @@ country_event = {
 		}
 		hidden_effect = {
 			create_leader = {
-				class = admiral
+				class = commander
 				species = event_target:hfe_egypt_species
 				leader_age_min = 50
 				leader_age_max = 650
@@ -1904,7 +1905,7 @@ country_event = {
 		}
 		hidden_effect = {
 			create_leader = {
-				class = general
+				class = commander
 				species = event_target:hfe_egypt_species
 				leader_age_min = 50
 				leader_age_max = 650
@@ -4019,7 +4020,7 @@ country_event = {
 	option = {
 		name = hfe.413.0
 		event_target:hfe_413_scientist = {
-			add_trait = leader_trait_maniacal
+			add_or_level_up_veteran_trait_effect = { TRAIT = leader_trait_maniacal }
 		}
 		if = {
 			limit = {
@@ -4830,7 +4831,7 @@ country_event = {
 						create_fleet_from_naval_cap = 0.3
 					}
 					create_leader = {
-						class = admiral
+						class = commander
 					}
 					last_created_fleet = {
 						set_owner = prev
@@ -4839,7 +4840,7 @@ country_event = {
 					}
 				}
 				create_leader = {
-					class = general
+					class = commander
 				}
 				create_fleet = {
 					effect = {
@@ -5871,7 +5872,7 @@ country_event = {
 			has_country_flag = hfe_556.2.0.0
 		}
 		kill_leader = {
-			type = ruler
+			ruler = yes
 		}
 		hidden_effect = {
 			remove_country_flag = hfe_556.2.0.0
@@ -5942,7 +5943,7 @@ country_event = {
 			has_country_flag = hfe_556.2.1.0.1
 		}
 		kill_leader = {
-			type = ruler
+			ruler = yes
 		}
 		hidden_effect = {
 			remove_country_flag = hfe_556.2.1.0.1
@@ -6020,7 +6021,7 @@ country_event = {
 				has_country_flag = hfe_556.3.0
 			}
 			kill_leader = {
-				type = ruler
+				ruler = yes
 			}
 		}
 		else = {
@@ -7909,12 +7910,13 @@ country_event = {
 							}
 							any_owned_leader = {
 								gender = male
-								leader_class = admiral
+								leader_class = commander
 							}
 						}
 					}
 					create_leader = {
-						class = admiral
+						class = commander
+						# TODO add gender
 						species = this
 						skill = 3
 					}
@@ -7928,7 +7930,7 @@ country_event = {
 				random_owned_leader = {
 					limit = {
 						gender = male
-						leader_class = admiral
+						leader_class = commander
 					}
 					save_event_target_as = hfe_male_leader
 				}
@@ -8596,11 +8598,11 @@ country_event = {
 			}
 		}
 		kill_leader = {
-			type = ruler
+			ruler = yes
 			show_notification = no
 		}
 		create_leader = {
-			class = ruler
+			class = random_ruler
 			skill = 5
 		}
 		assign_leader = last_created_leader
@@ -9496,11 +9498,11 @@ country_event = {
 					}
 					clone_leader = {
 						target = event_target:hfe_blight_remnants.ruler
-						class = ruler
+						class = random_ruler
 						traits = {
 							# immortal
 							trait = leader_trait_ruler_machine_intelligence
-							trait = leader_trait_ruler_cyborg
+							trait = leader_trait_cyborg
 						}
 						effect = {
 							# its already in ruler's title
@@ -9663,7 +9665,7 @@ country_event = {
 							is_machine_empire = no
 						}
 						kill_leader = {
-							type = ruler
+							ruler = yes
 						}
 					}
 					clear_variable = hfe_blight_counter
@@ -9848,11 +9850,11 @@ country_event = {
 # 		name = hfe_5083_jimmy_the_ender_option_a
 # 		hidden_effect = {
 # 			kill_leader = {
-# 				type = ruler
+# 				ruler = yes
 # 			}
 # 		}
 # 		create_leader = {
-# 			class = ruler
+# 			class = random_ruler
 # 			name = "[prev.GetSpeciesNameCompliment] the Ender"
 # 			gender = male
 # 			skill = 10
@@ -9861,7 +9863,7 @@ country_event = {
 # 			set_age = 21
 # 			immortal = yes
 # 			traits = {
-# 				trait = leader_trait_ruler_cyborg				# He survives the Blight
+# 				trait = leader_trait_cyborg				# He survives the Blight
 # 				trait = leader_trait_maimed
 # 				trait = hfe_generic_trait_nightmare
 # 				trait = trait_ruler_champion_of_the_people
@@ -10781,7 +10783,7 @@ ship_event = {
 			owner = {
 				create_saved_leader = {
 					key = hfe_5090_leader
-					class = admiral					#hfe_admiral_general
+					class = commander
 					species = event_target:hfe_future_species
 					gender = female
 					skill = 2
@@ -10930,7 +10932,7 @@ country_event = {
 		}
 		hidden_effect = {
 			event_target:hfe_5090_leader = {
-				add_trait = leader_trait_admiral_cyborg
+				add_trait = leader_trait_cyborg
 			}
 		}
 		default_hide_option = yes
