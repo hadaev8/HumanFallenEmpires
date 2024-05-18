@@ -1,0 +1,2 @@
+python generate_gfx_for_event_pics.py
+python generate_gfx_for_icons.py
