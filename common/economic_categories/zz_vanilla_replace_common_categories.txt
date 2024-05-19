@@ -93,7 +93,23 @@ planet_jobs = {
 			mult
 		}
 		trigger = {
-			has_trait = trait_psionic
+			OR = {
+				has_trait = trait_psionic
+				has_trait = trait_latent_psionic
+			}
+		}
+	}
+	triggered_produces_modifier = {
+		key = planet_worker_ownership_jobs
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			exists = owner
+			has_living_standard = {
+				country = owner
+				type = living_standard_worker_ownership
+			}
 		}
 	}
 	triggered_produces_modifier = {
@@ -106,15 +122,22 @@ planet_jobs = {
 		}
 	}
 	triggered_produces_modifier = {
+		key = planet_virtual_jobs
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			has_virtual_species_trait = yes
+		}
+	}
+	triggered_produces_modifier = {
 		key = habitat_jobs
 		modifier_types = {
 			mult
 		}
 		trigger = {
 			exists = planet
-			planet = {
-				is_planet_class = pc_habitat
-			}
+			planet = { is_planet_class = pc_habitat }
 		}
 	}
 	triggered_produces_modifier = {
@@ -124,9 +147,7 @@ planet_jobs = {
 		}
 		trigger = {
 			exists = planet
-			planet = {
-				is_artificial = no
-			}
+			planet = { is_artificial = no }
 		}
 	}
 	triggered_produces_modifier = {
@@ -138,7 +159,7 @@ planet_jobs = {
 			OR = {
 				is_pop_category = worker
 				AND = {
-					is_pop_category = slave					# Yes, slave should count towards both worker and slave
+					is_pop_category = slave # Yes, slave should count towards both worker and slave
 					has_job_category = worker
 				}
 				is_pop_category = simple_drone
@@ -146,7 +167,36 @@ planet_jobs = {
 		}
 	}
 	triggered_produces_modifier = {
-		#use this one if deliberately excluding worker drones
+		key = planet_jobs_cyborg_worker
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			has_trait = trait_cybernetic
+			OR = {
+				is_pop_category = worker
+				AND = {
+					is_pop_category = slave # Yes, slave should count towards both worker and slave
+					has_job_category = worker
+				}
+				is_pop_category = simple_drone
+			}
+		}
+	}
+	triggered_produces_modifier = {
+		key = planet_jobs_robot_worker
+		modifier_types = {
+			mult
+		}
+		trigger = {
+			OR = {
+				is_pop_category = worker
+				is_pop_category = simple_drone
+				is_pop_category = robot_servant
+			}
+		}
+	}
+	triggered_produces_modifier = { #use this one if deliberately excluding worker drones
 		key = planet_jobs_worker_only
 		modifier_types = {
 			mult
@@ -155,7 +205,7 @@ planet_jobs = {
 			OR = {
 				is_pop_category = worker
 				AND = {
-					is_pop_category = slave					# Yes, slave should count towards both worker and slave
+					is_pop_category = slave # Yes, slave should count towards both worker and slave
 					has_job_category = worker
 				}
 			}
@@ -169,7 +219,7 @@ planet_jobs = {
 		trigger = {
 			OR = {
 				is_pop_category = specialist
-				is_pop_category = complex_drone				#planet_jobs_complex_drone is preferable for stuff visible during galaxy setup
+				is_pop_category = complex_drone #planet_jobs_complex_drone is preferable for stuff visible during galaxy setup
 				AND = {
 					is_pop_category = slave
 					has_job_category = specialist
@@ -177,8 +227,7 @@ planet_jobs = {
 			}
 		}
 	}
-	triggered_produces_modifier = {
-		#use this one if deliberately excluding complex drones
+	triggered_produces_modifier = { #use this one if deliberately excluding complex drones
 		key = planet_jobs_specialist_only
 		modifier_types = {
 			mult
