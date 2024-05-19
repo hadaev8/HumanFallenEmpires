@@ -9858,6 +9858,7 @@ planet_event = {
 }
 
 # instant assimilation event pop
+# folowwing action.64
 pop_event = {
 	id = hfe.5085
 	hide_window = yes
@@ -9875,40 +9876,18 @@ pop_event = {
 	}
 	immediate = {
 		modify_species = {
-			remove_trait = trait_hive_mind
 			add_trait = trait_cybernetic
+			add_trait = trait_hive_mind
+			add_traits_at_start_of_list = yes
+			remove_trait = trait_self_modified
+			remove_trait = trait_latent_psionic
+			remove_trait = trait_psionic
 		}
 		remove_modifier = pop_recently_conquered
 		# TODO better integration with vanilla scripted effects
 		# from apply_post_assimilation_effects
-		if = {
-			# assimilator empire
-			limit = {
-				root.owner = {
-					has_authority = auth_machine_intelligence
-					has_civic = civic_machine_assimilator
-					NOT = {
-						has_tradition = tr_cybernetics_assimilator_adopt
-					}
-				}
-			}
-			root.owner = {
-				generate_cyborg_treats = yes
-			}
-			# scripted effect
-		}
-		else_if = {
-			limit = {
-				root.owner = {
-					has_authority = auth_machine_intelligence
-					has_civic = civic_machine_assimilator
-					has_tradition = tr_cybernetics_assimilator_adopt
-				}
-			}
-			root.owner = {
-				generate_cyborg_extra_treats = yes
-			}
-			# scripted effect
+		root.owner = {
+			generate_cyborg_treats = yes
 		}
 	}
 }
