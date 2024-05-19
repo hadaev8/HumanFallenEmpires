@@ -588,34 +588,6 @@ hfe_official_trait_civil_economy = {
 	}
 }
 
-hfe_official_trait_satanist = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_satanist.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic_species = yes
-		exists = from
-		from = {
-			has_country_flag = has_shroud_patron
-			is_gestalt = no
-		}
-	}
-	self_modifier = {
-		leader_lifespan_add = -20
-	}
-	modifier = {
-		planet_jobs_produces_mult = 0.1
-		planet_stability_add = 10
-		planet_crime_add = 20
-		# job_telepath_per_crime = 0.05
-	}
-	leader_class = {
-		official
-	}
-}
-
 # scientist
 # hfe_scientist_trait_diligent = {
 # 	cost = 1
@@ -679,33 +651,6 @@ hfe_scientist_trait_wary = {
 	# }
 }
 
-hfe_scientist_trait_satanist = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_satanist.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic_species = yes
-		exists = from
-		from = {
-			has_country_flag = has_shroud_patron
-			is_gestalt = no
-		}
-	}
-	self_modifier = {
-		leader_lifespan_add = -20
-	}
-	modifier = {
-	}
-	leader_class = {
-		scientist
-	}
-	ai_weight = {
-		weight = 200
-	}
-}
-
 # commander
 hfe_commander_trait_envious_to_fallen = {
 	cost = 1
@@ -722,7 +667,7 @@ hfe_commander_trait_envious_to_fallen = {
 			}
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		damage_vs_country_type_fallen_empire_mult = 0.1
 		damage_vs_country_type_awakened_fallen_empire_mult = 0.1
 		#damage_vs_ai_personality_type_democratic_crusaders_mult = 0.1
@@ -740,7 +685,7 @@ hfe_commander_trait_laser_lover = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		weapon_type_energy_weapon_damage_mult = 0.1
 	}
 	leader_class = {
@@ -781,7 +726,7 @@ hfe_commander_trait_pirate_hunter = {
 			}
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		damage_vs_country_type_hfe_pirate_mult = 0.2
 		damage_vs_country_type_dormant_marauders_mult = 0.2
 		damage_vs_country_type_awakened_marauders_mult = 0.2
@@ -808,7 +753,7 @@ hfe_commander_trait_robot_hunter = {
 			}
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		damage_vs_country_type_ai_empire_mult = 0.2
 	}
 	leader_class = {
@@ -828,7 +773,7 @@ hfe_commander_trait_afraid_demons = {
 			has_global_flag = extradimensional_invasion_happened
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		damage_vs_country_type_extradimensional_mult = -0.2
 		damage_vs_country_type_extradimensional_2_mult = -0.2
 		damage_vs_country_type_extradimensional_3_mult = -0.2
@@ -847,7 +792,7 @@ hfe_commander_trait_former_fighter = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		weapon_type_strike_craft_weapon_fire_rate_mult = 0.1
 		weapon_type_strike_craft_weapon_damage_mult = 0.1
 		weapon_type_strike_craft_speed_mult = 0.1
@@ -870,6 +815,8 @@ hfe_commander_trait_former_fighter = {
 			}
 		}
 	}
+	# TODO
+	# fleet_specialization_tag = carrier
 }
 
 hfe_commander_trait_extramundane = {
@@ -883,17 +830,12 @@ hfe_commander_trait_extramundane = {
 		hfe_trigger_is_psionic_species = yes
 		exists = from
 		from = {
-			nor = {
-				any_owned_leader = {
-					has_trait = hfe_commander_trait_extramundane
-				}
-				any_pool_leader = {
-					has_trait = hfe_commander_trait_extramundane
-				}
+			hfe_trigger_country_have_no_leader_trait = {
+				hfe_trait = hfe_commander_trait_extramundane
 			}
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_fire_rate_mult = 0.3
 	}
 	leader_class = {
@@ -914,7 +856,7 @@ hfe_commander_trait_pirate = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_emergency_ftl_mult = -0.1
 		ship_disengage_chance_mult = 0.2
 	}
@@ -935,7 +877,7 @@ hfe_commander_trait_protector = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_home_territory_fire_rate_mult = 0.1
 		ship_hull_mult = 0.1
 	}
@@ -956,7 +898,7 @@ hfe_commander_trait_energy_expert = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_shield_mult = 0.1
 		ship_shield_regen_add_perc = 0.1
 		ships_upkeep_mult = 0.1
@@ -972,7 +914,7 @@ hfe_commander_trait_dolphin = {
 	randomized = no
 	#not allow on lvl up
 	icon = gfx/interface/icons/other/hfe_dolphin.dds
-	modifier = {
+	fleet_modifier = {
 		ship_evasion_mult = 0.1
 	}
 	leader_class = {
@@ -984,35 +926,6 @@ hfe_commander_trait_dolphin = {
 	}
 }
 
-hfe_commander_trait_satanist = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_satanist.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic_species = yes
-		exists = from
-		from = {
-			has_country_flag = has_shroud_patron
-			is_gestalt = no
-		}
-	}
-	self_modifier = {
-		leader_lifespan_add = 20
-	}
-	modifier = {
-		ship_orbital_bombardment_mult = 0.2
-		# event effect
-	}
-	leader_class = {
-		commander
-	}
-	ai_weight = {
-		# i guess 100 is default
-		weight = 200
-	}
-}
 
 hfe_commander_trait_melee = {
 	cost = 0
@@ -1026,7 +939,7 @@ hfe_commander_trait_melee = {
 			hfe_trigger_insane_admiral_trait = yes
 		}
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_weapon_range_mult = -0.5
 		ship_speed_mult = 0.1
 		ship_weapon_damage = 0.15
@@ -1047,9 +960,12 @@ hfe_commander_trait_future_train = {
 	randomized = no
 	#not allow on lvl up
 	icon = gfx/interface/icons/other/hfe_future.dds
-	modifier = {
+	fleet_modifier = {
 		ship_fire_rate_mult = 0.1
 		ship_orbital_bombardment_mult = 0.1
+	}
+	army_modifier = {
+		army_damage_mult = 0.1
 	}
 	leader_class = {
 		commander
@@ -1068,7 +984,7 @@ hfe_commander_trait_engineer = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	army_modifier = {
 		army_defense_damage_mult = 0.3
 		army_disengage_chance_mult = 0.1
 	}
@@ -1088,17 +1004,12 @@ hfe_commander_trait_gravity_control = {
 		hfe_trigger_is_psionic_species = yes
 		exists = from
 		from = {
-			nor = {
-				any_owned_leader = {
-					has_trait = hfe_commander_trait_gravity_control
-				}
-				any_pool_leader = {
-					has_trait = hfe_commander_trait_gravity_control
-				}
+			hfe_trigger_country_have_no_leader_trait = {
+				hfe_trait = hfe_commander_trait_gravity_control
 			}
 		}
 	}
-	modifier = {
+	army_modifier = {
 		army_damage_mult = 0.5
 		army_collateral_damage_mult = 0.5
 	}
@@ -1119,7 +1030,7 @@ hfe_commander_trait_total_war = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	army_modifier = {
 		army_damage_mult = 0.5
 		army_collateral_damage_mult = 1
 		army_disengage_chance_mult = -0.2
@@ -1142,39 +1053,13 @@ hfe_commander_trait_elite_ops = {
 			is_gestalt = no
 		}
 	}
-	modifier = {
+	army_modifier = {
 		army_damage_mult = 0.1
 		army_experience_gain_mult = 0.2
 		armies_upkeep_mult = 0.25
 	}
 	leader_class = {
 		commander
-	}
-}
-
-hfe_commander_trait_satanist = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_satanist.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		hfe_trigger_is_psionic_species = yes
-		exists = from
-		from = {
-			has_country_flag = has_shroud_patron
-			is_gestalt = no
-		}
-	}
-	modifier = {
-		army_morale_damage_mult = 0.5
-	}
-	leader_class = {
-		commander
-	}
-	ai_weight = {
-		# i guess 100 is default
-		weight = 200
 	}
 }
 
@@ -1186,7 +1071,7 @@ hfe_commander_trait_tactician = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	army_modifier = {
 		army_health = 0.1
 		army_disengage_chance_mult = 1
 	}
@@ -1207,7 +1092,19 @@ hfe_commander_trait_teachable = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
+	# TODO check if this gating nessesary, probably not
+	# triggered_army_modifier = {
+	# 	potential = {
+	# 		not = {
+	# 			is_variable_set = hfe_leaders_teachable_victory_count
+	# 		}
+	# 	}
+	# 	army_damage_mult = 0.02
+	# }
 	triggered_army_modifier = {
+		# potential = {
+		# 	is_variable_set = hfe_leaders_teachable_victory_count
+		# }
 		army_damage_mult = 0.02
 		mult = hfe_leaders_teachable_victory_count
 	}
@@ -1223,38 +1120,31 @@ hfe_commander_trait_teachable = {
 }
 
 # all
-# hfe_generic_trait_talented = {
-# 	cost = 1
-# 	initial = yes
-# 	randomized = yes
-# 	modification = no
-# 	#not allow on lvl up
-# 	icon = gfx/interface/icons/other/hfe_talented.dds
-# 	leader_potential_add = {
-# 		hfe_trigger_leaders_traits_enabled = yes
-# 		exists = from
-# 		from = {
-# 			is_gestalt = no
-# 		}
-# 		
-# 	}
-# 	self_modifier = {
-# 		leader_skill_levels = 1
-# 		species_leader_exp_gain = 0.1
-# 	}
-# 	leader_trait = {
-# 		commander
-# 		scientist
-# 		commander
-# 		governor
-# 	}
-# 	leader_class = {
-# 		commander
-# 		scientist
-# 		commander
-# 		governor
-# 	}
-# }
+hfe_generic_trait_talented = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	#not allow on lvl up
+	icon = gfx/interface/icons/other/hfe_talented.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			is_gestalt = no
+		}
+		
+	}
+	self_modifier = {
+		leader_skill_levels = 2
+		species_leader_exp_gain = 0.2
+	}
+	leader_class = {
+		official
+		commander
+		scientist
+	}
+}
+
 hfe_generic_trait_noble = {
 	cost = 1
 	initial = yes
@@ -1310,6 +1200,61 @@ hfe_generic_trait_noble_good = {
 	self_modifier = {
 		species_leader_exp_gain = 0.3
 		leaders_upkeep_mult = -0.8
+	}
+	leader_class = {
+		official
+		commander
+		scientist
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 200
+	}
+}
+
+# maybe add effect based on shroud patron type?
+hfe_generic_trait_satanist = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_satanist.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		hfe_trigger_is_psionic_species = yes
+		exists = from
+		from = {
+			has_country_flag = has_shroud_patron
+			is_gestalt = no
+		}
+	}
+	self_modifier = {
+		leader_lifespan_add = -20
+	}
+	planet_modifier = {
+		planet_jobs_produces_mult = 0.1
+		planet_stability_add = 10
+		planet_crime_add = 20
+		# job_telepath_per_crime = 0.05
+	}
+	fleet_modifier = {
+		ship_orbital_bombardment_mult = 0.2
+		# event effect
+	}
+	army_modifier = {
+		army_morale_damage_mult = 0.5
+	}
+	# scientis bonus is event based
+	# TODO revisit in the future, need to make it trigger only for scientist in council interface
+	# triggered_councilor_modifier = {
+	# 	potential = {
+	# 		leader_class = scientist
+	# 	}
+	# }
+	triggered_desc = {
+		trigger = {
+			leader_class = scientist
+		}
+		text = hfe_generic_trait_satanist_scientist_effect
 	}
 	leader_class = {
 		official
