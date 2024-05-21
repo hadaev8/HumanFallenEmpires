@@ -12,25 +12,24 @@ hfe_effect_refuge_20 = {
 # for pop
 hfe_effect_refuge_or_die = {
 	#	log = "pop refuge effect $thisgetname$"
+	save_event_target_as = hfe_refuge_pop_target
 	if = {
 		limit = {
-			hfe_trigger_is_robot = no
-			nor = {
-				has_trait = trait_hive_mind
-				has_trait = trait_nerve_stapled
-			}
+			hfe_trigger_is_robot_or_hive = no
+			can_think = yes
 			exists = owner
 			owner = {
 				any_relation = {
 					num_pops > 0
 					hfe_trigger_is_awake = yes
 					any_owned_planet = {
-						hfe_trigger_planet_valid_for_settle = yes
+						hfe_trigger_planet_valid_for_settle_for_pop = {
+							hfe_pop = event_target:hfe_refuge_pop_target
+						}
 					}
 				}
 			}
 		}
-		save_event_target_as = hfe_refuge_pop_target
 		owner = {
 			save_event_target_as = hfe_refuge_pop_target_owner
 			random_relation = {
@@ -38,11 +37,9 @@ hfe_effect_refuge_or_die = {
 					num_pops > 0
 					hfe_trigger_is_awake = yes
 					any_owned_planet = {
-						hfe_trigger_planet_valid_for_settle = yes
-						# habitability = {
-						# 	who = event_target:hfe_refuge_pop_target
-						# 	value >= 0.2
-						# }
+						hfe_trigger_planet_valid_for_settle_for_pop = {
+							hfe_pop = event_target:hfe_refuge_pop_target
+						}
 					}
 				}
 				weights = {
@@ -119,30 +116,24 @@ hfe_effect_refuge_or_die = {
 					modifier = {
 						factor = 2
 						any_owned_planet = {
-							hfe_trigger_planet_valid_for_settle = yes
-							habitability = {
-								who = event_target:hfe_refuge_pop_target
-								value >= 0.8
+							hfe_trigger_planet_valid_for_settle_for_pop = {
+								hfe_pop = event_target:hfe_refuge_pop_target
 							}
 						}
 					}
 					modifier = {
 						factor = 2
 						any_owned_planet = {
-							hfe_trigger_planet_valid_for_settle = yes
-							habitability = {
-								who = event_target:hfe_refuge_pop_target
-								value >= 0.6
+							hfe_trigger_planet_valid_for_settle_for_pop = {
+								hfe_pop = event_target:hfe_refuge_pop_target
 							}
 						}
 					}
 					modifier = {
 						factor = 2
 						any_owned_planet = {
-							hfe_trigger_planet_valid_for_settle = yes
-							habitability = {
-								who = event_target:hfe_refuge_pop_target
-								value >= 0.4
+							hfe_trigger_planet_valid_for_settle_for_pop = {
+								hfe_pop = event_target:hfe_refuge_pop_target
 							}
 						}
 					}
@@ -178,7 +169,9 @@ hfe_effect_settle_pop = {
 		limit = {
 			not = {
 				any_owned_planet = {
-					hfe_trigger_planet_valid_for_settle = yes
+					hfe_trigger_planet_valid_for_settle_for_pop = {
+						hfe_pop = event_target:hfe_settle_pop_target
+					}
 				}
 			}
 		}
@@ -191,10 +184,22 @@ hfe_effect_settle_pop = {
 	else = {
 		random_owned_planet = {
 			limit = {
-				hfe_trigger_planet_valid_for_settle = yes
+				hfe_trigger_planet_valid_for_settle_for_pop = {
+					hfe_pop = event_target:hfe_settle_pop_target
+				}
 			}
 			weights = {
 				base = 10
+				complex_trigger_modifier = {
+					trigger = habitability
+					parameters = {
+						who = event_target:hfe_settle_pop_target
+					}
+					# TODO check how it works is it mul to base above or some inner value?
+					mode = factor
+				}
+				# TODO seems like trigger above mul it to zero sometimes and it raise error in the log, probably should edit hfe_trigger_planet_valid_for_settle_for_pop
+				min = 0.01
 				modifier = {
 					factor = 10
 					has_modifier = slave_colony
@@ -204,14 +209,6 @@ hfe_effect_settle_pop = {
 							country = prevprev
 						}
 					}
-				}
-				complex_trigger_modifier = {
-					trigger = habitability
-					parameters = {
-						who = event_target:hfe_settle_pop_target
-					}
-					# TODO check how it works is it mul to base above or some inner value?
-					mode = factor
 				}
 				mult = value:hfe_script_value_free_jobs
 				modifier = {
@@ -233,25 +230,31 @@ hfe_effect_settle_pop = {
 						has_modifier = recent_refugee
 					}
 					clear_pop_category = yes
-					create_message = {
-						type = MESSAGE_TYPE_REFUGEES_ARRIVED
-						localization = MESSAGE_REFUGEES_ARRIVED
-						days = 10
-						target = prev
-						variable = {
-							type = name
-							localization = SPECIES
-							scope = this.species
+					# then event target doesnt exists?
+					if = {
+						limit = {
+							exists = event_target:hfe_refuge_pop_target_owner
 						}
-						variable = {
-							type = name
-							localization = PLANET
-							scope = prev
-						}
-						variable = {
-							type = name
-							localization = COUNTRY
-							scope = event_target:hfe_refuge_pop_target_owner
+						create_message = {
+							type = MESSAGE_TYPE_REFUGEES_ARRIVED
+							localization = MESSAGE_REFUGEES_ARRIVED
+							days = 10
+							target = prev
+							variable = {
+								type = name
+								localization = SPECIES
+								scope = this.species
+							}
+							variable = {
+								type = name
+								localization = PLANET
+								scope = prev
+							}
+							variable = {
+								type = name
+								localization = COUNTRY
+								scope = event_target:hfe_refuge_pop_target_owner
+							}
 						}
 					}
 				}
@@ -277,60 +280,60 @@ hfe_effect_species_add_modded_trait = {
 		1 = {
 			modifier = {
 				factor = 0
-				$species$ = {
+				$hfe_species$ = {
 					has_trait = hfe_species_trait_hucksters
 				}
 			}
 			modify_species = {
-				species = $species$
+				species = $hfe_species$
 				add_trait = hfe_species_trait_hucksters
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				$species$ = {
+				$hfe_species$ = {
 					has_trait = hfe_species_trait_war_fans
 				}
 			}
 			modify_species = {
-				species = $species$
+				species = $hfe_species$
 				add_trait = hfe_species_trait_war_fans
 			}
 		}
 		2 = {
 			modifier = {
 				factor = 0
-				$species$ = {
+				$hfe_species$ = {
 					has_trait = hfe_species_trait_error
 				}
 			}
 			modify_species = {
-				species = $species$
+				species = $hfe_species$
 				add_trait = hfe_species_trait_error
 			}
 		}
 		2 = {
 			modifier = {
 				factor = 0
-				$species$ = {
+				$hfe_species$ = {
 					has_trait = hfe_species_trait_happy_slave
 				}
 			}
 			modify_species = {
-				species = $species$
+				species = $hfe_species$
 				add_trait = hfe_species_trait_happy_slave
 			}
 		}
 		1 = {
 			modifier = {
 				factor = 0
-				$species$ = {
+				$hfe_species$ = {
 					has_trait = hfe_species_trait_clever_beast
 				}
 			}
 			modify_species = {
-				species = $species$
+				species = $hfe_species$
 				add_trait = hfe_species_trait_clever_beast
 			}
 		}

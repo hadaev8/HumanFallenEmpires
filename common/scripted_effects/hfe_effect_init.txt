@@ -189,63 +189,10 @@ hfe_effect_init_make_colony = {
 	}
 }
 
-hfe_effect_init_set_pops_10 = {
-	while = {
-		count = 10
-		create_pop = {
-			species = owner
-		}
-	}
-}
 
-hfe_effect_init_set_pops_30 = {
+hfe_effect_init_set_pops = {
 	while = {
-		count = 30
-		create_pop = {
-			species = owner
-		}
-	}
-}
-
-hfe_effect_init_set_pops_40 = {
-	while = {
-		count = 40
-		create_pop = {
-			species = owner
-		}
-	}
-}
-
-hfe_effect_init_set_pops_50 = {
-	while = {
-		count = 50
-		create_pop = {
-			species = owner
-		}
-	}
-}
-
-hfe_effect_init_set_pops_75 = {
-	while = {
-		count = 75
-		create_pop = {
-			species = owner
-		}
-	}
-}
-
-hfe_effect_init_set_pops_80 = {
-	while = {
-		count = 80
-		create_pop = {
-			species = owner
-		}
-	}
-}
-
-hfe_effect_init_set_pops_100 = {
-	while = {
-		count = 100
+		count = $hfe_num_pops$
 		create_pop = {
 			species = owner
 		}
@@ -455,7 +402,9 @@ hfe_effect_init_set_all_buildings = {
 }
 
 hfe_effect_init_develop_planet = {
-	hfe_effect_init_set_pops_30 = yes
+	hfe_effect_init_set_pops = {
+		hfe_num_pops = 30
+	}
 	hfe_effect_init_set_starbase = yes
 	# hfe_effect_init_set_all_buildings = yes
 	hfe_effect_init_set_all_districs = yes
@@ -522,4 +471,29 @@ hfe_effect_init_expand_borders = {
 hfe_effect_init_make_fleet = {
 	create_fleet_from_naval_cap = 0.2
 	# create admiral?
+}
+
+
+hfe_effect_init_add_deposit = {
+	random_system_within_border = {
+		limit = {
+			any_system_planet = {
+				has_deposit = no
+				habitable_planet = no
+				not = {
+					exists = owner
+				}
+			}
+		}
+		random_system_planet = {
+			limit = {
+				has_deposit = no
+				habitable_planet = no
+				not = {
+					exists = owner
+				}
+			}
+			set_deposit = $hfe_deposit$
+		}
+	}
 }
