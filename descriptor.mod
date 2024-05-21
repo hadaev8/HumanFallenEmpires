@@ -12,4 +12,3 @@ tags={
 name="Human Fallen Empires Dev"
 picture="thumbnail.jpg"
 supported_version="3.12.*"
-remote_file_id="901039859"
