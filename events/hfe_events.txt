@@ -5849,8 +5849,13 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_556.2.0.1
 		}
+		if = {
+			limit = {
+				exists = ruler
+		}
 		ruler = {
 			add_trait = hfe_leader_trait_imperialist
+			}
 		}
 		hidden_effect = {
 			remove_country_flag = hfe_556.2.0.1
@@ -5920,8 +5925,13 @@ country_event = {
 		trigger = {
 			has_country_flag = hfe_556.2.1.1
 		}
+		if = {
+			limit = {
+				exists = ruler
+		}
 		ruler = {
 			add_trait = hfe_leader_trait_jean_luc
+			}
 		}
 		hidden_effect = {
 			remove_country_flag = hfe_556.2.1.1
@@ -5986,7 +5996,10 @@ country_event = {
 				ruler = yes
 			}
 		}
-		else = {
+		else_if = {
+			limit = {
+				exists = ruler
+			}
 			ruler = {
 				add_trait = hfe_leader_trait_jean_luc
 			}
@@ -9522,7 +9535,16 @@ country_event = {
 								# this rename every fleet including mining stations but why not
 								set_name = "Directive 666 Drones"
 								set_owner = event_target:hfe_blight
-								hfe_effect_add_cyborg_trait_to_leader = yes
+								if = {
+									limit = {
+										exists = leader
+									}
+									leader = {
+										# TODO test set owner on fleet should cover it?
+										# set_owner = prev.owner
+										add_trait_no_notify = leader_trait_cyborg
+									}
+								}
 							}
 							starbase = {
 								set_owner = event_target:hfe_blight
@@ -9532,7 +9554,7 @@ country_event = {
 				}
 				# upgrade taken leaders
 				every_owned_leader = {
-					hfe_effect_add_cyborg_trait = yes
+					add_trait_no_notify = leader_trait_cyborg
 				}
 				# ai need machine pop to build machine armies and it take too much time			
 				create_fleet = {
@@ -10627,7 +10649,16 @@ country_event = {
 			1 = {
 				fromfromfrom = {
 					set_owner = root
-					hfe_effect_add_cyborg_trait_to_leader = yes
+					if = {
+						limit = {
+							exists = leader
+						}
+						leader = {
+							# TODO test set owner on fleet should cover it?
+							# set_owner = prev.owner
+							add_trait_no_notify = leader_trait_cyborg
+						}
+					}
 				}
 				create_message = {
 					type = hfe_message_type_blight_assimilation
@@ -10872,7 +10903,7 @@ country_event = {
 		}
 		hidden_effect = {
 			event_target:hfe_5090_leader = {
-				add_trait = leader_trait_cyborg
+				add_trait_no_notify = leader_trait_cyborg
 			}
 		}
 		default_hide_option = yes
