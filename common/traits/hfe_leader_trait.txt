@@ -2,56 +2,41 @@
 # generally officials traits
 
 hfe_leader_trait_imperialist = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_imperialist.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		exists = from
-		from = {
-			is_gestalt = no
-			is_pacifist = no
-		}
-	}
-	modifier = {
-		# opinion effect
-		pop_ethic_xenophobe_attraction_mult = 0.1
-		starbase_shipyard_build_cost_mult = -0.1
-		intel_encryption_add = 1
-		# rivalries_produces_mult = 0.5
-	}
-	leader_class = {
-		official
+    cost = 1
+    initial = yes
+    randomized = yes
+    icon = gfx/interface/icons/other/hfe_imperialist.dds
+    leader_potential_add = {
+        hfe_trigger_leaders_traits_enabled = yes
+        exists = from
+        from = {
+            is_gestalt = no
+            is_pacifist = no
+        }
+    }
+    army_modifier = {
+        army_damage_mult = 0.1
+    }
+    planet_modifier = {
+        pop_ethic_xenophobe_attraction_mult = 0.1
+    }
+    sector_modifier = {
+        pop_ethic_xenophobe_attraction_mult = 0.1
+    }
+    councilor_modifier = {
+        intel_encryption_add = 1
+    }
+    triggered_councilor_modifier = {
+        pop_ethic_xenophobe_attraction_mult = 0.1
+        starbase_shipyard_build_cost_mult = -0.05
+		rivalries_influence_produces_mult = 0.1
+        mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+    }
+	# diplo opinion effect if trait belongs to ruler
+    leader_class = {
+        official
         commander
-	}
-}
-
-hfe_leader_trait_warriror_honor = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_warriror_honor.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		exists = from
-		from = {
-			has_militarist_government = yes
-			num_communications > 3
-			is_gestalt = no
-		}
-	}
-	modifier = {
-		# opinion effect
-		pop_ethic_militarist_attraction_mult = 0.1
-		max_rivalries = 1
-		hfe_planet_jobs_war_militarist_produces_mult = 0.15
-		# TODO
-		# rivalries_influence_produces_mult = 0.5
-	}
-	leader_class = {
-		official
-	}
+    }
 }
 
 hfe_leader_trait_manipulative = {
@@ -63,20 +48,24 @@ hfe_leader_trait_manipulative = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			OR = {
-				has_civic = civic_cutthroat_politics
-				has_civic = civic_criminal_heritage
-				has_civic = hfe_civic_godforge
-				has_civic = hfe_civic_godforge_mat
+			or = {
+				has_valid_civic = civic_cutthroat_politics
+				has_valid_civic = civic_criminal_heritage
+				has_valid_civic = civic_shadow_council
+				has_valid_civic = hfe_civic_godforge
+				has_valid_civic = hfe_civic_godforge_mat
 			}
 			is_gestalt = no
 		}
 	}
-	modifier = {
-		# opinion effect
-		intel_decryption_add = 1
-		intel_decryption_mult = 0.25
+	galcom_modifier = {
+		diplo_weight_mult = 0.1
 	}
+	triggered_councilor_modifier = {
+		intel_decryption_add = 1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
 	leader_class = {
 		official
 	}
@@ -91,10 +80,10 @@ hfe_leader_trait_puppet = {
 		hfe_trigger_leaders_traits_enabled = yes
 		exists = from
 		from = {
-			OR = {
+			or = {
 				has_valid_civic = civic_shadow_council
-				has_civic = civic_meritocracy
-				is_country_type = primitive
+				has_valid_civic = civic_meritocracy
+				# is_country_type = primitive
 				is_subject = yes
 			}
 			is_gestalt = no
@@ -102,12 +91,17 @@ hfe_leader_trait_puppet = {
 		# too clever to be puppet
 		hfe_trigger_is_clever_species = no
 	}
-	modifier = {
-		# opinion effect
-		country_base_influence_produces_add = -0.5
-		pop_factions_influence_produces_mult = 0.75
-		diplo_weight_pops_mult = -0.1
+	galcom_modifier = {
+		diplo_weight_mult = -0.05
 	}
+	councilor_modifier = {
+		country_base_influence_produces_add = -0.5
+	}
+	triggered_councilor_modifier = {
+		pop_factions_influence_produces_mult = 0.5
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
 	leader_class = {
 		official
 	}
@@ -164,9 +158,19 @@ hfe_leader_trait_lovable_buffoon = {
 		# too clever to be buffoon
 		hfe_trigger_is_clever_species = no
 	}
+	planet_modifier = {
+		pop_citizen_happiness = 0.05
+	}
+	triggered_councilor_modifier = {
+		country_base_influence_produces_add = -0.25
+		pop_citizen_happiness = 0.05
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	leader_class = {
+		official
+	}
 	opposites = {
 		trait_ruler_champion_of_the_people
-		# TODO does usual traits even work here?
 		leader_trait_bureaucrat
 		leader_trait_intellectual
 		leader_trait_ruler_great_khan
@@ -174,15 +178,7 @@ hfe_leader_trait_lovable_buffoon = {
 		leader_trait_chosen
 		hfe_leader_trait_manipulative
 		hfe_leader_trait_warriror_honor
-		hfe_leader_trait_bureaucrat
-	}
-	modifier = {
-		country_base_influence_produces_add = -0.5
-		pop_citizen_happiness = 0.1
-		# TODO country_piracy_risk_mult = -0.1
-	}
-	leader_class = {
-		official
+		# hfe_leader_trait_bureaucrat
 	}
 }
 
@@ -198,10 +194,19 @@ hfe_leader_trait_greedy = {
 			is_gestalt = no
 		}
 	}
-	modifier = {
-		country_energy_produces_mult = 0.2
-		planet_crime_add = 20
-		intel_encryption_add = -1
+	planet_modifier = {
+		planet_crime_add = 10
+		planet_jobs_energy_produces_mult = 0.05
+	}
+	triggered_background_planet_modifier = {
+		planet_stability_add = 1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|5|
+	}
+	triggered_councilor_modifier = {
+		country_energy_produces_mult = 0.1
+		planet_crime_add = 10
+		intel_encryption_add = -0.5
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
 	}
 	leader_class = {
 		official
@@ -221,13 +226,23 @@ hfe_leader_trait_cult_of_personality = {
 			is_authoritarian = yes
 		}
 	}
-	modifier = {
+	triggered_councilor_modifier = {
+		potential = {
+			is_ruler = yes
+		}
 		pop_citizen_happiness = 0.05
 		planet_jobs_slave_produces_mult = 0.05
 		intel_encryption_add = 1
 	}
 	leader_class = {
 		official
+	}
+	selectable_weight = {
+		weight = @shared_trait_weight
+		modifier = {
+			factor = 0
+			is_ruler = no
+		}
 	}
 }
 
@@ -243,14 +258,21 @@ hfe_leader_trait_terraforming = {
 			is_gestalt = no
 		}
 	}
-	modifier = {
+	planet_modifier = {
+		pop_environment_tolerance = 0.05
+	}
+	councilor_modifier = {
 		pop_environment_tolerance = 0.1
 	}
+	# event effect if trait belongs to ruler
 	leader_class = {
 		official
 	}
 	prerequisites = {
 		tech_climate_restoration
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -267,13 +289,18 @@ hfe_leader_trait_army_lover = {
 			num_communications > 3
 		}
 	}
-	modifier = {
+	background_planet_modifier = {
 		planet_soldiers_unity_produces_add = 1
-		army_experience_gain_mult = 0.2
-		# event effect
 	}
+	triggered_councilor_modifier = {
+		planet_soldiers_unity_produces_add = 1
+		army_experience_gain_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# event effect if trait belongs to ruler
 	leader_class = {
 		official
+		scientist
 	}
 }
 
@@ -289,36 +316,45 @@ hfe_leader_trait_lobby = {
 			is_gestalt = no
 		}
 	}
-	modifier = {
+	planet_modifier = {
+		pop_cat_ruler_political_power = 0.1
+	}
+	sector_modifier = {
+		pop_cat_ruler_political_power = 0.05
+	}
+	councilor_modifier = {
 		pop_cat_ruler_political_power = 0.1
 		pop_factions_produces_mult = 1
 	}
 	leader_class = {
 		official
 	}
+	selectable_weight = {
+		weight = 0
+	}
 }
 
-hfe_leader_trait_bureaucrat = {
-	cost = 1
-	initial = yes
-	randomized = yes
-	icon = gfx/interface/icons/other/hfe_bureaucrat.dds
-	leader_potential_add = {
-		hfe_trigger_leaders_traits_enabled = yes
-		exists = from
-		from = {
-			is_gestalt = no
-		}
-	}
-	modifier = {
-		country_admin_cap_add = 10
-		empire_size_penalty_mult = -0.1
-		# job_bureaucrat_add = 1
-	}
-	leader_class = {
-		official
-	}
-}
+# hfe_leader_trait_bureaucrat = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	icon = gfx/interface/icons/other/hfe_bureaucrat.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		exists = from
+# 		from = {
+# 			is_gestalt = no
+# 		}
+# 	}
+# 	modifier = {
+# 		country_admin_cap_add = 10
+# 		empire_size_penalty_mult = -0.1
+# 		# job_bureaucrat_add = 1
+# 	}
+# 	leader_class = {
+# 		official
+# 	}
+# }
 
 hfe_leader_trait_warcrime_tourism = {
 	cost = 1
@@ -332,9 +368,10 @@ hfe_leader_trait_warcrime_tourism = {
 			has_valid_civic = hfe_civic_features_aggressive_diplomacy
 		}
 	}
-	modifier = {
+	councilor_modifier = {
 		ship_fire_rate_mult = 0.05
 	}
+	# event effect if trait belongs to ruler
 	leader_class = {
 		official
 	}
@@ -359,9 +396,6 @@ hfe_leader_trait_freedom_crusader = {
 			}
 		}
 	}
-	# fleet_modifier = {
-	# 	ship_fire_rate_mult = 0.05
-	# }
 	army_modifier = {
 		army_morale = 0.1
 	}
@@ -478,6 +512,9 @@ hfe_leader_trait_telepath = {
 	}
 	leader_class = {
 		official
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -727,6 +764,9 @@ hfe_leader_trait_former_fighter = {
 	}
 	# TODO
 	# fleet_specialization_tag = carrier
+	selectable_weight = {
+		weight = 0
+	}
 }
 
 hfe_leader_trait_extramundane = {
@@ -749,6 +789,9 @@ hfe_leader_trait_extramundane = {
 	}
 	leader_class = {
 		commander
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -840,6 +883,53 @@ hfe_leader_trait_melee = {
 	}
 }
 
+hfe_leader_trait_warriror_honor = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_warriror_honor.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			has_militarist_government = yes
+			num_communications > 3
+			is_gestalt = no
+		}
+	}
+	modifier = {
+		# opinion effect
+		pop_ethic_militarist_attraction_mult = 0.1
+		max_rivalries = 1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.15
+		# TODO
+		# rivalries_influence_produces_mult = 0.5
+	}
+	planet_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.15
+		hfe_planet_jobs_war_militarist_produces_mult = 0.15
+	}
+	sector_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+	}
+	galcom_modifier = {
+		diplo_weight_naval_mult = 0.1
+	}
+	councilor_modifier = {
+		max_rivalries = 1
+	}
+	triggered_councilor_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# ruler opinion effect
+	leader_class = {
+        commander
+	}
+}
+
 # event related
 hfe_leader_trait_future_train = {
 	cost = 1
@@ -896,6 +986,9 @@ hfe_leader_trait_gravity_control = {
 	}
 	leader_class = {
 		commander
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -969,7 +1062,7 @@ hfe_leader_trait_teachable = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
 	triggered_fleet_modifier = {
-		
+		ship_fire_rate_mult = 0.01
 		mult = hfe_leaders_teachable_fleet_victory_count
 	}
 	triggered_army_modifier = {
@@ -979,11 +1072,11 @@ hfe_leader_trait_teachable = {
 	on_gained_effect = {
 		set_variable = {
 			which = hfe_leaders_teachable_fleet_victory_count
-			value = 1
+			value = 0
 		}
 		set_variable = {
 			which = hfe_leaders_teachable_army_victory_count
-			value = 1
+			value = 0
 		}
 	}
 	leader_class = {
@@ -1003,7 +1096,7 @@ hfe_leader_trait_talented = {
 		from = {
 			is_gestalt = no
 		}
-		
+
 	}
 	self_modifier = {
 		leader_skill_levels = 2
@@ -1013,6 +1106,9 @@ hfe_leader_trait_talented = {
 		official
 		commander
 		scientist
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -1027,7 +1123,7 @@ hfe_leader_trait_noble = {
 		exists = species
 		from = {
 			is_gestalt = no
-			OR = {
+			or = {
 				has_authority = auth_imperial
 				has_valid_civic = civic_aristocratic_elite
 				has_valid_civic = civic_great_khans_vision
@@ -1049,6 +1145,9 @@ hfe_leader_trait_noble = {
 		scientist
 	}
 	ai_weight = 50
+	selectable_weight = {
+		weight = 0
+	}
 }
 
 hfe_leader_trait_noble_good = {
@@ -1071,6 +1170,9 @@ hfe_leader_trait_noble_good = {
 		official
 		commander
 		scientist
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
@@ -1157,6 +1259,9 @@ hfe_leader_trait_genomod = {
 		official
 		commander
 		scientist
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 

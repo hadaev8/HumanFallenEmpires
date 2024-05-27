@@ -1,141 +1,53 @@
 #
 
-# for war scope, total war name
-defined_text = {
-	name = hfe_total_war_name
-	text = {
-		trigger = {
-			attacker = {
-				or = {
-					hfe_trigger_is_fallen = yes
-					and = {
-						exists = federation
-						federation = {
-							has_federation_flag = non_aligned_league
-						}
-					}
-				}
-			}
-			defender = {
-				or = {
-					hfe_trigger_is_fallen = yes
-					and = {
-						exists = federation
-						federation = {
-							has_federation_flag = non_aligned_league
-						}
-					}
-				}
-			}
-		}
-		localization_key = "The War In Heaven"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				hfe_trigger_is_fallen = yes
-				is_xenophile = yes
-			}
-			defender = {
-				hfe_trigger_is_fallen = no
-			}
-		}
-		localization_key = "Total Pacification"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				hfe_trigger_is_fallen = yes
-			}
-			defender = {
-				hfe_trigger_is_fallen = no
-			}
-		}
-		localization_key = "Total Punishment"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				is_homicidal = yes
-			}
-		}
-		localization_key = "Total Extermination"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				hfe_trigger_is_assimilator = yes
-			}
-		}
-		localization_key = "Total Assimilation"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				is_pacifist = yes
-			}
-		}
-		localization_key = "Total Pacification"
-	}
-	text = {
-		trigger = {
-			attacker = {
-				is_spiritualist = yes
-			}
-		}
-		localization_key = "Total Crusade"
-	}
-	default = "Total War"
-}
-
-# should be scope robust, get crew type
+# country or something with owner, get crew type
 defined_text = {
 	name = hfe_scripted_loc_crew
 	text = {
 		trigger = {
 			or = {
-				hfe_trigger_owner_is_biohive = yes
 				and = {
 					is_scope_type = country
 					is_hive_empire = yes
 				}
+				hfe_trigger_owner_is_biohive = yes
 			}
 		}
-		localization_key = hfe_scripted_loc_crew.1
+		localization_key = drones_key
 	}
 	text = {
 		trigger = {
 			or = {
-				hfe_trigger_owner_is_robohive = yes
 				and = {
 					is_scope_type = country
 					is_machine_empire = yes
 				}
+				hfe_trigger_owner_is_robohive = yes
 			}
 		}
-		localization_key = hfe_scripted_loc_crew.2
+		localization_key = units_key
 	}
 	text = {
 		trigger = {
 			or = {
+				and = {
+					is_scope_type = country
+					is_militarist = yes
+				}
 				and = {
 					exists = owner
 					owner = {
 						is_militarist = yes
 					}
 				}
-				and = {
-					is_scope_type = country
-					is_militarist = yes
-				}
 			}
 		}
-		localization_key = hfe_scripted_loc_crew.3
+		localization_key = hfe_scripted_loc_crew.0
 	}
-	default = hfe_scripted_loc_crew.0
+	default = crew_key
 }
 
-# should be scope robust, get scientist type
+# country or leader, get scientist type
 defined_text = {
 	name = hfe_scripted_loc_scientist
 	text = {
@@ -148,7 +60,7 @@ defined_text = {
 				}
 			}
 		}
-		localization_key = hfe_scripted_loc_scientist.1
+		localization_key = getscientist_hive
 	}
 	text = {
 		trigger = {
@@ -160,54 +72,26 @@ defined_text = {
 				}
 			}
 		}
-		localization_key = hfe_scripted_loc_scientist.2
+		localization_key = getscientist_machine
 	}
-	text = {
-		trigger = {
-			or = {
-				and = {
-					exists = owner
-					owner = {
-						is_authoritarian = yes
-					}
-				}
-				and = {
-					is_scope_type = country
-					is_authoritarian = yes
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist.3
-	}
-	text = {
-		trigger = {
-			or = {
-				and = {
-					not = {
-						is_scope_type = country
-					}
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					exists = leader
-					leader = {
-						gender = female
-					}
-				}
-				and = {
-					is_scope_type = leader
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					gender = female
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist.4
-	}
-	default = hfe_scripted_loc_scientist.0
+	# text = {
+	# 	trigger = {
+	# 		or = {
+	# 			and = {
+	# 				exists = owner
+	# 				owner = {
+	# 					is_authoritarian = yes
+	# 				}
+	# 			}
+	# 			and = {
+	# 				is_scope_type = country
+	# 				is_authoritarian = yes
+	# 			}
+	# 		}
+	# 	}
+	# 	localization_key = hfe_scripted_loc_scientist_variation.0
+	# }
+	default = getscientist_normal
 }
 
 # capitalized version
@@ -223,7 +107,7 @@ defined_text = {
 				}
 			}
 		}
-		localization_key = hfe_scripted_loc_scientist_cap.1
+		localization_key = getscientist_hive
 	}
 	text = {
 		trigger = {
@@ -235,54 +119,26 @@ defined_text = {
 				}
 			}
 		}
-		localization_key = hfe_scripted_loc_scientist_cap.2
+		localization_key = getscientist_machine
 	}
-	text = {
-		trigger = {
-			or = {
-				and = {
-					exists = owner
-					owner = {
-						is_authoritarian = yes
-					}
-				}
-				and = {
-					is_scope_type = country
-					is_authoritarian = yes
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist_cap.3
-	}
-	text = {
-		trigger = {
-			or = {
-				and = {
-					not = {
-						is_scope_type = country
-					}
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					exists = leader
-					leader = {
-						gender = female
-					}
-				}
-				and = {
-					is_scope_type = leader
-					exists = owner
-					owner = {
-						is_egalitarian = yes
-					}
-					gender = female
-				}
-			}
-		}
-		localization_key = hfe_scripted_loc_scientist_cap.4
-	}
-	default = hfe_scripted_loc_scientist_cap.0
+	# text = {
+	# 	trigger = {
+	# 		or = {
+	# 			and = {
+	# 				exists = owner
+	# 				owner = {
+	# 					is_authoritarian = yes
+	# 				}
+	# 			}
+	# 			and = {
+	# 				is_scope_type = country
+	# 				is_authoritarian = yes
+	# 			}
+	# 		}
+	# 	}
+	# 	localization_key = hfe_scripted_loc_scientist_cap_variation.0
+	# }
+	default = getscientist_normal
 }
 
 # get leader class
@@ -573,17 +429,6 @@ defined_text = {
 			is_machine_empire = yes
 		}
 		localization_key = hfe_scripted_loc_5091_0_tooltip.6
-	}
-	default = hfe_nothing
-}
-
-defined_text = {
-	name = hfe_leader_trait_freedom_crusader_desc_extra_0
-	text = {
-		trigger = {
-			leader_class = commander
-		}
-		localization_key = hfe_leader_trait_freedom_crusader_desc_extra.0
 	}
 	default = hfe_nothing
 }
