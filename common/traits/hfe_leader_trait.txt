@@ -33,6 +33,9 @@ hfe_leader_trait_imperialist = {
         mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
     }
 	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_imperialist_desc_ruler
+	}
     leader_class = {
         official
         commander
@@ -66,6 +69,9 @@ hfe_leader_trait_manipulative = {
 		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
 	}
 	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_manipulative_desc_ruler
+	}
 	leader_class = {
 		official
 	}
@@ -102,6 +108,9 @@ hfe_leader_trait_puppet = {
 		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
 	}
 	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_manipulative_desc_ruler
+	}
 	leader_class = {
 		official
 	}
@@ -265,6 +274,9 @@ hfe_leader_trait_terraforming = {
 		pop_environment_tolerance = 0.1
 	}
 	# event effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_terraforming_desc_ruler
+	}
 	leader_class = {
 		official
 	}
@@ -298,6 +310,9 @@ hfe_leader_trait_army_lover = {
 		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
 	}
 	# event effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_army_lover_desc_ruler
+	}
 	leader_class = {
 		official
 		scientist
@@ -428,7 +443,6 @@ hfe_leader_trait_freedom_crusader = {
 	}
 }
 
-
 hfe_leader_trait_sympathizes_slaves = {
 	cost = 1
 	initial = yes
@@ -451,9 +465,13 @@ hfe_leader_trait_sympathizes_slaves = {
 			}
 		}
 	}
-	modifier = {
+	planet_modifier = {
 		planet_jobs_slave_produces_mult = -0.05
 		pop_cat_slave_happiness = 0.1
+	}
+	sector_modifier = {
+		planet_jobs_slave_produces_mult = -0.025
+		pop_cat_slave_happiness = 0.05
 	}
 	leader_class = {
 		official
@@ -472,9 +490,13 @@ hfe_leader_trait_pious = {
 			is_spiritualist = yes
 		}
 	}
-	modifier = {
+	planet_modifier = {
 		pop_government_ethic_attraction = 0.1
 		planet_jobs_unity_produces_mult = 0.1
+	}
+	sector_modifier = {
+		pop_government_ethic_attraction = 0.05
+		planet_jobs_unity_produces_mult = 0.05
 	}
 	leader_class = {
 		official
@@ -489,9 +511,13 @@ hfe_leader_trait_manager = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	planet_modifier = {
 		planet_buildings_upkeep_mult = -0.1
 		empire_size_districts_mult = -0.1
+	}
+	sector_modifier = {
+		planet_buildings_upkeep_mult = -0.05
+		empire_size_districts_mult = -0.05
 	}
 	leader_class = {
 		official
@@ -507,7 +533,7 @@ hfe_leader_trait_telepath = {
 		hfe_trigger_leaders_traits_enabled = yes
 		hfe_trigger_is_psionic_species = yes
 	}
-	modifier = {
+	planet_modifier = {
 		pop_happiness = 0.05
 	}
 	leader_class = {
@@ -531,9 +557,13 @@ hfe_leader_trait_xenolover = {
 			has_encountered_other_species = yes
 		}
 	}
-	modifier = {
+	planet_modifier = {
 		pop_ethic_xenophile_attraction_mult = 0.1
 		planet_immigration_pull_mult = 0.1
+	}
+	sector_modifier = {
+		pop_ethic_xenophile_attraction_mult = 0.05
+		planet_immigration_pull_mult = 0.05
 	}
 	leader_class = {
 		official
@@ -552,9 +582,13 @@ hfe_leader_trait_civil_economy = {
 			is_gestalt = no
 		}
 	}
-	modifier = {
+	planet_modifier = {
 		planet_jobs_alloys_produces_mult = -0.1
 		planet_jobs_consumer_goods_produces_mult = 0.1
+	}
+	sector_modifier = {
+		planet_jobs_alloys_produces_mult = -0.05
+		planet_jobs_consumer_goods_produces_mult = 0.05
 	}
 	leader_class = {
 		official
@@ -573,7 +607,7 @@ hfe_leader_trait_thoughtful = {
 	self_modifier = {
 		species_leader_exp_gain = 0.2
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_anomaly_research_speed_mult = -0.1
 	}
 	leader_class = {
@@ -590,7 +624,7 @@ hfe_leader_trait_wary = {
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
 	}
-	modifier = {
+	fleet_modifier = {
 		ship_sensor_range_add = 1
 		ship_base_speed_mult = -0.2
 	}
@@ -635,6 +669,9 @@ hfe_leader_trait_laser_lover = {
 	}
 	fleet_modifier = {
 		weapon_type_energy_weapon_damage_mult = 0.1
+	}
+	councilor_modifier = {
+		category_particles_research_speed_mult = 0.05
 	}
 	leader_class = {
 		commander
@@ -842,6 +879,9 @@ hfe_leader_trait_energy_expert = {
 		ship_shield_regen_add_perc = 0.1
 		ships_upkeep_mult = 0.1
 	}
+	councilor_modifier = {
+		category_particles_research_speed_mult = 0.05
+	}
 	leader_class = {
 		commander
 	}
@@ -896,14 +936,6 @@ hfe_leader_trait_warriror_honor = {
 			num_communications > 3
 			is_gestalt = no
 		}
-	}
-	modifier = {
-		# opinion effect
-		pop_ethic_militarist_attraction_mult = 0.1
-		max_rivalries = 1
-		hfe_planet_jobs_war_militarist_produces_mult = 0.15
-		# TODO
-		# rivalries_influence_produces_mult = 0.5
 	}
 	planet_modifier = {
 		pop_ethic_militarist_attraction_mult = 0.15
@@ -1096,7 +1128,6 @@ hfe_leader_trait_talented = {
 		from = {
 			is_gestalt = no
 		}
-
 	}
 	self_modifier = {
 		leader_skill_levels = 2
@@ -1299,6 +1330,9 @@ hfe_leader_trait_transcendent = {
 		official
 		commander
 		scientist
+	}
+	selectable_weight = {
+		weight = 0
 	}
 }
 
