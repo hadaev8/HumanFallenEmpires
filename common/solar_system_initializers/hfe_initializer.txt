@@ -147,8 +147,6 @@ hfe_initializer_egypt_main = {
 				adjective = "Slave Ahet"
 				class = REP
 				portrait = rep12
-				# why ahets should have human names?
-				# namelist = cybrxkhan_fantasy_egyptian
 				# TODO revisit this
 				#pops_can_be_colonizers = yes
 				#can_generate_leaders = no
@@ -177,8 +175,6 @@ hfe_initializer_egypt_main = {
 				adjective = "Delicious Ahet"
 				class = REP
 				portrait = rep12
-				# why ahets should have human names?
-				# namelist = cybrxkhan_fantasy_egyptian
 				# TODO revisit this
 				#pops_can_be_colonizers = yes
 				#can_generate_leaders = no
@@ -722,27 +718,27 @@ hfe_initializer_ahet_0 = {
 					ethic = ethic_authoritarian
 					ethic = ethic_pacifist
 				}
-				civics = {
-					civic = hfe_civic_primitive_was_default
-					civic = hfe_civic_primitive_fem_rept_lobby
-				}
 				species = event_target:hfe_ahet_species
 				# not sure if it good idea
 				origin = origin_lost_colony
 				effect = {
-					hfe_effect_primitive_set_late_medieval_age = yes
+					prev = {
+						create_colony = {
+							owner = prev
+						}
+					}
+					# this effect needs capital, setups primitive flag, country flags and buildings
+					set_pre_ftl_age_effect = {
+						PRE_FTL_AGE = late_medieval_age
+					}
+					force_add_civic = hfe_civic_primitive_was_default
+					force_add_civic = hfe_civic_primitive_fem_rept_lobby
 					set_country_flag = hfe_ahet_primitive_0
 					if = {
 						limit = {
 							has_global_flag = HFE_TSP_spawn_test
 						}
 						log = "created ahets primitive 0"
-					}
-					prev = {
-						# create_colony = {
-						# 	owner = prev
-						# }
-						set_owner = prev
 					}
 					create_leader = {
 						class = commander
@@ -764,12 +760,7 @@ hfe_initializer_ahet_0 = {
 			event_target:hfe_ahet_species = {
 				set_species_homeworld = prev
 			}
-			# to fix create colony spawn pop of root species bug
-			every_owned_pop = {
-				kill_pop = yes
-			}
-			hfe_effect_primitive_add_buildings = yes
-			hfe_effect_primitive_add_pops = yes
+			hfe_effect_primitive_init_pops = yes
 			# TODO something wrong with it
 			create_army = {
 				name = "National Army of Pluan Zialeo"
@@ -888,7 +879,7 @@ hfe_initializer_ahet_1 = {
 		}
 	}
 	planet = {
-		name = Raarwr
+		#name = Raarwr
 		orbit_distance = 20
 		class = pc_ocean
 		entity = hfe_ocean_orange_03_entity
@@ -903,12 +894,7 @@ hfe_initializer_ahet_1 = {
 				name = Eterfoundite
 				plural = Eterfoundites
 				adjective = Eterfoundite
-				class = random
-				blocked_archetypes = {
-					MACHINE
-					ROBOT
-					PRESAPIENT
-				}
+				class = random_non_machine
 				homeworld = this
 				species_bio = "The Eterfoundites got their name from the Ahet refugees that they share the planet with. After the fall of the Ahet dominions in their species' apocalyptic war, or maybe plague, the Ahets that survived desparately fled in ships and cargo holds to find somewhere, anywhere to go. The Ahets that landed on Raarwr were in luck: the kind Eterfoundites welcomed them with open arms and accepted them as equals. They now live peacefully together in a quaint, primitive democracy of elders and nobles."
 				traits = {
@@ -924,21 +910,22 @@ hfe_initializer_ahet_1 = {
 					ethic = ethic_fanatic_xenophile
 					ethic = ethic_pacifist
 				}
-				civics = {
-					civic = hfe_civic_primitive_degraded_tech
-					civic = hfe_civic_primitive_was_default
-				}
 				species = last_created_species
 				origin = origin_lost_colony
 				effect = {
-					hfe_effect_primitive_set_steam_age = yes
-					set_country_flag = hfe_ahet_primitive_1
 					prev = {
-						# create_colony = {
-						# 	owner = prev
-						# }
-						set_owner = prev
+						create_colony = {
+							owner = prev
+						}
+						set_name = "Eternal Foundation"
 					}
+					# this effect needs capital, setups primitive flag, country flags and buildings
+					set_pre_ftl_age_effect = {
+						PRE_FTL_AGE = steam_age
+					}
+					force_add_civic = hfe_civic_primitive_degraded_tech
+					force_add_civic = hfe_civic_primitive_was_default
+					set_country_flag = hfe_ahet_primitive_1
 					create_leader = {
 						class = commander
 						species = this
@@ -949,12 +936,7 @@ hfe_initializer_ahet_1 = {
 					}
 				}
 			}
-			# to fix create colony spawn pop of root species bug
-			every_owned_pop = {
-				kill_pop = yes
-			}
-			hfe_effect_primitive_add_buildings = yes
-			hfe_effect_primitive_add_pops = yes
+			hfe_effect_primitive_init_pops = yes
 			every_owned_pop = {
 				random = {
 					chance = 50
@@ -1044,7 +1026,6 @@ hfe_initializer_varelse = {
 	}
 	change_orbit = 36
 	planet = {
-		name = "Colony Beta"
 		orbit_distance = 0
 		class = pc_desert
 		entity = hfe_arid_brown_01_entity
@@ -1070,28 +1051,25 @@ hfe_initializer_varelse = {
 					ethic = ethic_xenophobe
 					ethic = ethic_spiritualist
 				}
-				civics = {
-					# Later changed by Event
-					civic = hfe_civic_primitive_was_default
-					civic = hfe_civic_godforge
-				}
 				effect = {
-					hfe_effect_primitive_set_machine_age = yes
+					prev = {
+						create_colony = {
+							owner = prev
+						}
+						set_name = "Colony Beta"
+					}
+					# this effect needs capital, setups primitive flag, country flags and buildings
+					set_pre_ftl_age_effect = {
+						PRE_FTL_AGE = machine_age
+					}
+					force_add_civic = hfe_civic_primitive_was_default
+					force_add_civic = hfe_civic_godforge
 					set_country_flag = hfe_varelse_primitive_0
 					set_country_flag = hfe_varelse
-					prev = {
-						set_owner = prev
-					}
-					set_policy = {
-						policy = robot_pop_policy
-						option = robot_pops_allowed
-						cooldown = no
-					}
-					#set_built_species = event_target:hfe_varelse_leftover_robots
-					# really neeed it?
-					# kill_leader = {
-					# 	ruler = yes
-					# 	show_notification = no
+					# set_policy = {
+					# 	policy = robot_pop_policy
+					# 	option = robot_pops_allowed
+					# 	cooldown = no
 					# }
 					create_leader = {
 						class = random_ruler
@@ -1119,6 +1097,8 @@ hfe_initializer_varelse = {
 						portrait = sd_pla_robot
 						species_bio = "These ugly, huge machines are the result of imperfect, ancient manufacturing processes deep within the Godforge. For some reason, the complex constantly spits out drones for its use."
 						# extra_trait_points = 2
+						homeworld = this
+						namelist = this
 						traits = {
 							trait = trait_mechanical
 							trait = trait_robot_bulky
@@ -1136,6 +1116,7 @@ hfe_initializer_varelse = {
 							# }
 						}
 					}
+					set_built_species = event_target:hfe_varelse_leftover_robots
 					create_leader = {
 						name = "Damaged Godforge Core"
 						class = commander
@@ -1162,7 +1143,6 @@ hfe_initializer_varelse = {
 			add_building = hfe_building_godforge_main
 			add_building = hfe_building_godforge_stronghold
 			add_building = hfe_building_godforge_temple
-			hfe_effect_primitive_add_buildings = yes
 			# remove_building = building_primitive_capital
 			# add_building = hfe_building_mechanicus_pseudo_capital
 			add_deposit = hfe_deposit_godforge_farm
@@ -1180,8 +1160,11 @@ hfe_initializer_varelse = {
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
 			# add_random_non_blocker_deposit = yes
-			hfe_effect_primitive_add_pops = yes
+			hfe_effect_primitive_init_pops = yes
 			# extra pops
+			hfe_effect_init_set_pops = {
+				hfe_num_pops = 10
+			}
 			while = {
 				count = 10
 				create_pop = {
@@ -1824,7 +1807,6 @@ hfe_initializer_copernicus = {
 		}
 	}
 	planet = {
-		name = "Copernicus A"
 		orbit_distance = -12
 		orbit_angle = 30
 		class = pc_gaia
@@ -1845,10 +1827,6 @@ hfe_initializer_copernicus = {
 				plural = "Blessoxen"
 				adjective = "Blessed"
 				class = random_non_machine
-				blocked_archetypes = {
-					MACHINE
-					ROBOT
-				}
 				homeworld = this
 				namelist = ART4				# Same as Ahets
 				traits = random
@@ -1865,33 +1843,28 @@ hfe_initializer_copernicus = {
 				authority = auth_dictatorial
 				name_list = REP1
 				ship_prefix = "Geocentric"
-				civics = {
-					civic = civic_secret_of_fire
-					civic = civic_the_wheel
-				}
 				ethos = {
 					ethic = ethic_fanatic_spiritualist
 					ethic = ethic_xenophile
 				}
 				species = last_created_species
 				type = primitive
+				# TODO revisit it
 				origin = origin_enlightened
 				effect = {
-					hfe_effect_primitive_set_stone_age = yes
 					prev = {
-						# create_colony = {
-						# 	owner = prev
-						# }
-						set_owner = prev
+						create_colony = {
+							owner = prev
+						}
+						set_name = "Copernicus A"
+					}
+					# this effect needs capital, setups primitive flag, country flags and buildings
+					set_pre_ftl_age_effect = {
+						PRE_FTL_AGE = stone_age
 					}
 				}
 			}
-			# to fix create colony spawn pop of root species bug
-			every_owned_pop = {
-				kill_pop = yes
-			}
-			hfe_effect_primitive_add_buildings = yes
-			hfe_effect_primitive_add_pops = yes
+			hfe_effect_primitive_init_pops = yes
 			if = {
 				limit = {
 					has_global_flag = HFE_TSP_spawn_test
