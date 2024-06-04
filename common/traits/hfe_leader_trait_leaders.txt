@@ -1,0 +1,1256 @@
+# generally officials traits
+hfe_leader_trait_imperialist = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_imperialist.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_xenophobe
+	}
+	army_modifier = {
+		army_damage_mult = 0.1
+	}
+	planet_modifier = {
+		pop_ethic_xenophobe_attraction_mult = 0.1
+	}
+	sector_modifier = {
+		pop_ethic_xenophobe_attraction_mult = 0.1
+	}
+	councilor_modifier = {
+		intel_encryption_add = 1
+	}
+	triggered_councilor_modifier = {
+		pop_ethic_xenophobe_attraction_mult = 0.1
+		starbase_shipyard_build_cost_mult = -0.05
+		rivalries_influence_produces_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_imperialist_desc_ruler
+	}
+	leader_class = {
+		official
+		commander
+	}
+}
+
+hfe_leader_trait_manipulative = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_manipulative.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			or = {
+				has_valid_civic = civic_cutthroat_politics
+				has_valid_civic = civic_criminal_heritage
+				has_valid_civic = civic_shadow_council
+				has_valid_civic = hfe_civic_godforge
+				has_valid_civic = hfe_civic_godforge_mat
+			}
+		}
+	}
+	galcom_modifier = {
+		diplo_weight_mult = 0.1
+	}
+	triggered_councilor_modifier = {
+		intel_decryption_add = 1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_manipulative_desc_ruler
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_puppet = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_puppet.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		# too clever to be puppet
+		hfe_trigger_is_clever_species = no
+		is_gestalt = no
+		exists = from
+		from = {
+			or = {
+				has_valid_civic = civic_shadow_council
+				has_valid_civic = civic_meritocracy
+				is_subject = yes
+			}
+		}
+	}
+	galcom_modifier = {
+		diplo_weight_mult = -0.05
+	}
+	councilor_modifier = {
+		country_base_influence_produces_add = -0.5
+	}
+	triggered_councilor_modifier = {
+		pop_factions_influence_produces_mult = 0.5
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_manipulative_desc_ruler
+	}
+	leader_class = {
+		official
+	}
+	opposites = {
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_chosen
+		hfe_leader_trait_lovable_buffoon
+	}
+}
+
+# hfe_leader_trait_corrupted = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	icon = gfx/interface/icons/other/hfe_corrupted.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		is_gestalt = no
+# 		exists = from
+# 		from = {
+# 			is_gestalt = no
+# 		}
+# 	}
+# 	modifier = {
+# 		pop_cat_ruler_political_power = 0.15
+# 		country_base_influence_produces_add = 0.5
+# 		country_energy_produces_mult = -0.1
+# 		planet_crime_add = 10
+# 		job_criminal_per_crime = 0.03
+# 		# TODO country_piracy_risk_mult = 0.1
+# 	}
+# 	opposites = {
+# 		leader_trait_ruler_great_khan
+# 		leader_trait_great_khan
+# 		leader_trait_chosen
+# 	}
+# 	leader_class = {
+# 		official
+# 	}
+# }
+hfe_leader_trait_lovable_buffoon = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_lovable_buffoon.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		# too clever to be buffoon
+		hfe_trigger_is_clever_species = no
+		is_gestalt = no
+		exists = from
+		from = {
+			hfe_trigger_is_fallen = no
+		}
+	}
+	planet_modifier = {
+		pop_citizen_happiness = 0.05
+	}
+	triggered_councilor_modifier = {
+		country_base_influence_produces_add = -0.25
+		pop_citizen_happiness = 0.05
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	leader_class = {
+		official
+	}
+	opposites = {
+		trait_ruler_champion_of_the_people
+		leader_trait_bureaucrat
+		leader_trait_intellectual
+		leader_trait_ruler_great_khan
+		leader_trait_great_khan
+		leader_trait_chosen
+		hfe_leader_trait_manipulative
+		hfe_leader_trait_warriror_honor
+		# hfe_leader_trait_bureaucrat
+	}
+}
+
+hfe_leader_trait_greedy = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_greedy.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	planet_modifier = {
+		planet_crime_add = 10
+		planet_jobs_energy_produces_mult = 0.05
+	}
+	triggered_background_planet_modifier = {
+		planet_stability_add = 1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|5|
+	}
+	triggered_councilor_modifier = {
+		country_energy_produces_mult = 0.1
+		planet_crime_add = 10
+		intel_encryption_add = -0.5
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_cult_of_personality = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_cult_of_personality.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_authoritarian
+	}
+	triggered_councilor_modifier = {
+		potential = {
+			is_ruler = yes
+		}
+		pop_citizen_happiness = 0.05
+		planet_jobs_slave_produces_mult = 0.05
+		intel_encryption_add = 1
+	}
+	leader_class = {
+		official
+	}
+	selectable_weight = {
+		weight = @class_trait_weight
+		modifier = {
+			factor = 0
+			is_ruler = no
+		}
+	}
+}
+
+hfe_leader_trait_terraforming = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_terraforming.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	planet_modifier = {
+		pop_environment_tolerance = 0.05
+	}
+	councilor_modifier = {
+		pop_environment_tolerance = 0.1
+	}
+	# event effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_terraforming_desc_ruler
+	}
+	leader_class = {
+		official
+	}
+	prerequisites = {
+		tech_climate_restoration
+	}
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_army_lover = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_army_lover.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_militarist
+		exists = from
+		from = {
+			num_communications > 3
+		}
+	}
+	background_planet_modifier = {
+		planet_soldiers_unity_produces_add = 1
+	}
+	triggered_councilor_modifier = {
+		planet_soldiers_unity_produces_add = 1
+		army_experience_gain_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# event effect if trait belongs to ruler
+	triggered_desc = {
+		text = hfe_leader_trait_army_lover_desc_ruler
+	}
+	leader_class = {
+		official
+		scientist
+	}
+}
+
+hfe_leader_trait_lobby = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_lobby.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	planet_modifier = {
+		pop_cat_ruler_political_power = 0.1
+	}
+	sector_modifier = {
+		pop_cat_ruler_political_power = 0.05
+	}
+	councilor_modifier = {
+		pop_cat_ruler_political_power = 0.1
+		pop_factions_produces_mult = 1
+	}
+	leader_class = {
+		official
+	}
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+# hfe_leader_trait_bureaucrat = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	icon = gfx/interface/icons/other/hfe_bureaucrat.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 		is_gestalt = no
+# 		exists = from
+# 		from = {
+# 			is_gestalt = no
+# 		}
+# 	}
+# 	modifier = {
+# 		country_admin_cap_add = 10
+# 		empire_size_penalty_mult = -0.1
+# 		# job_bureaucrat_add = 1
+# 	}
+# 	leader_class = {
+# 		official
+# 	}
+# }
+hfe_leader_trait_warcrime_tourism = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_warcrime_tourism.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		exists = from
+		from = {
+			has_valid_civic = hfe_civic_features_aggressive_diplomacy
+		}
+	}
+	councilor_modifier = {
+		ship_fire_rate_mult = 0.05
+	}
+	# event effect if trait belongs to ruler
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_freedom_crusader = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_freedom_crusader.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_militarist
+		exists = from
+		from = {
+			is_democracy = yes
+			any_relation = {
+				is_country_type = default
+				is_democracy = no
+			}
+		}
+	}
+	army_modifier = {
+		army_morale = 0.1
+	}
+	planet_modifier = {
+		pop_ethic_egalitarian_attraction_mult = 0.2
+		pop_cat_ruler_political_power = -0.2
+		planet_administrators_upkeep_mult = -0.2
+		job_criminal_per_crime = -0.03
+	}
+	sector_modifier = {
+		pop_ethic_egalitarian_attraction_mult = 0.1
+		pop_cat_ruler_political_power = -0.1
+		planet_administrators_upkeep_mult = -0.1
+		job_criminal_per_crime = -0.03
+	}
+	councilor_modifier = {
+		job_criminal_per_crime = -0.03
+	}
+	triggered_councilor_modifier = {
+		pop_ethic_egalitarian_attraction_mult = 0.1
+		pop_cat_ruler_political_power = -0.1
+		planet_administrators_upkeep_mult = -0.1
+		hfe_planet_jobs_war_with_wg_force_ideology_produces_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# diplo opinion effect if trait belongs to ruler
+	leader_class = {
+		official
+		commander
+	}
+}
+
+hfe_leader_trait_sympathizes_slaves = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_sympathizes_slaves.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_egalitarian
+		exists = from
+		from = {
+			allows_slavery = yes
+			or = {
+				check_modifier_value = {
+					modifier = country_pop_enslaved_mult
+					value > 0
+				}
+				count_enslaved_species = {
+					count > 0
+				}
+			}
+		}
+	}
+	planet_modifier = {
+		planet_jobs_slave_produces_mult = -0.05
+		pop_cat_slave_happiness = 0.1
+		pop_ethic_egalitarian_attraction_mult = 0.1
+	}
+	sector_modifier = {
+		planet_jobs_slave_produces_mult = -0.025
+		pop_cat_slave_happiness = 0.05
+		pop_ethic_egalitarian_attraction_mult = 0.05
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_pious = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_pious.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_spiritualist
+	}
+	planet_modifier = {
+		pop_government_ethic_attraction = 0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+	sector_modifier = {
+		pop_government_ethic_attraction = 0.05
+		planet_jobs_unity_produces_mult = 0.05
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_manager = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_manager.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	planet_modifier = {
+		planet_buildings_upkeep_mult = -0.1
+		empire_size_districts_mult = -0.1
+	}
+	sector_modifier = {
+		planet_buildings_upkeep_mult = -0.05
+		empire_size_districts_mult = -0.05
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_telepath = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_telepath.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		hfe_trigger_is_psionic_species = yes
+	}
+	planet_modifier = {
+		pop_happiness = 0.05
+	}
+	leader_class = {
+		official
+	}
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_xenolover = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_xenolover.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_xenophile
+		exists = from
+		from = {
+			has_encountered_other_species = yes
+		}
+	}
+	planet_modifier = {
+		pop_ethic_xenophile_attraction_mult = 0.1
+		planet_immigration_pull_mult = 0.1
+	}
+	sector_modifier = {
+		pop_ethic_xenophile_attraction_mult = 0.05
+		planet_immigration_pull_mult = 0.05
+	}
+	leader_class = {
+		official
+	}
+}
+
+hfe_leader_trait_civil_economy = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_civil_economy.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_pacifist
+	}
+	planet_modifier = {
+		planet_jobs_alloys_produces_mult = -0.1
+		planet_jobs_consumer_goods_produces_mult = 0.1
+	}
+	sector_modifier = {
+		planet_jobs_alloys_produces_mult = -0.05
+		planet_jobs_consumer_goods_produces_mult = 0.05
+	}
+	leader_class = {
+		official
+	}
+}
+
+# commander
+hfe_leader_trait_envious_to_fallen = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_envious_to_fallen.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		# can hive be envious?
+		exists = from
+		from = {
+			is_fallen_empire = no
+			any_relation = {
+				is_fallen_empire = yes
+			}
+		}
+	}
+	fleet_modifier = {
+		damage_vs_country_type_fallen_empire_mult = 0.1
+		damage_vs_country_type_awakened_fallen_empire_mult = 0.1
+		#damage_vs_ai_personality_type_democratic_crusaders_mult = 0.1
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_laser_lover = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_laser_lover.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	fleet_modifier = {
+		weapon_type_energy_weapon_damage_mult = 0.1
+	}
+	councilor_modifier = {
+		category_particles_research_speed_mult = 0.05
+	}
+	leader_class = {
+		commander
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 50
+		modifier = {
+			factor = 4
+			# TODO check it works
+			exists = owner
+			owner = {
+				is_preferred_weapons = weapon_type_energy
+			}
+		}
+	}
+}
+
+hfe_leader_trait_pirate_hunter = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_pirate_hunter.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			nor = {
+				is_country_type = hfe_pirate
+				is_country_type = dormant_marauders
+				is_country_type = awakened_marauders
+			}
+			any_relation = {
+				is_country_type = hfe_pirate
+				is_country_type = dormant_marauders
+				is_country_type = awakened_marauders
+			}
+		}
+	}
+	fleet_modifier = {
+		damage_vs_country_type_hfe_pirate_mult = 0.2
+		damage_vs_country_type_dormant_marauders_mult = 0.2
+		damage_vs_country_type_awakened_marauders_mult = 0.2
+	}
+	leader_class = {
+		commander
+	}
+	opposites = {
+		hfe_leader_trait_pirate
+	}
+}
+
+hfe_leader_trait_robot_hunter = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_robot_hunter.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			any_relation = {
+				is_country_type = ai_empire
+			}
+		}
+	}
+	fleet_modifier = {
+		damage_vs_country_type_ai_empire_mult = 0.2
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_afraid_demons = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_afraid_demons.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			has_global_flag = extradimensional_invasion_happened
+		}
+	}
+	fleet_modifier = {
+		damage_vs_country_type_extradimensional_mult = -0.2
+		damage_vs_country_type_extradimensional_2_mult = -0.2
+		damage_vs_country_type_extradimensional_3_mult = -0.2
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_former_fighter = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_fighter.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	fleet_modifier = {
+		weapon_type_strike_craft_weapon_fire_rate_mult = 0.1
+		weapon_type_strike_craft_weapon_damage_mult = 0.1
+		weapon_type_strike_craft_speed_mult = 0.1
+	}
+	leader_class = {
+		commander
+	}
+	prerequisites = {
+		tech_strike_craft_1
+	}
+	ai_weight = {
+		# i guess 100 is default
+		weight = 50
+		modifier = {
+			factor = 4
+			# TODO check it works
+			exists = owner
+			owner = {
+				is_preferred_weapons = weapon_type_strike_craft
+			}
+		}
+	}
+	# TODO
+	fleet_specialization_tag = carrier
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_extramundane = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_extramundane.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		hfe_trigger_is_psionic_species = yes
+		exists = from
+		from = {
+			hfe_trigger_country_have_no_leader_trait = {
+				hfe_trait = hfe_leader_trait_extramundane
+			}
+		}
+	}
+	fleet_modifier = {
+		ship_fire_rate_mult = 0.3
+	}
+	leader_class = {
+		commander
+	}
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_gravity_control = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_gravity_control.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		hfe_trigger_is_psionic_species = yes
+		exists = from
+		from = {
+			hfe_trigger_country_have_no_leader_trait = {
+				hfe_trait = hfe_leader_trait_gravity_control
+			}
+		}
+	}
+	army_modifier = {
+		army_damage_mult = 0.5
+		army_collateral_damage_mult = 0.5
+	}
+	fleet_modifier = {
+		ship_speed_mult = 0.1
+	}
+	leader_class = {
+		commander
+	}
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_protector = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_protector.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	fleet_modifier = {
+		ship_home_territory_fire_rate_mult = 0.1
+		ship_hull_mult = 0.1
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_energy_expert = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_energy_expert.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	fleet_modifier = {
+		ship_shield_mult = 0.1
+		ship_shield_regen_add_perc = 0.1
+		ships_upkeep_mult = 0.1
+	}
+	councilor_modifier = {
+		category_field_manipulation_research_speed_mult = 0.05
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_melee = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_melee.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			hfe_trigger_insane_admiral_trait = yes
+		}
+	}
+	army_modifier = {
+		army_damage_mult = 0.1
+		army_health = -0.1
+	}
+	fleet_modifier = {
+		ship_weapon_range_mult = -0.5
+		ship_speed_mult = 0.1
+		ship_weapon_damage = 0.2
+	}
+	leader_class = {
+		commander
+	}
+}
+
+# hfe_leader_trait_engineer = {
+# 	cost = 1
+# 	initial = yes
+# 	randomized = yes
+# 	icon = gfx/interface/icons/other/hfe_engineer.dds
+# 	leader_potential_add = {
+# 		hfe_trigger_leaders_traits_enabled = yes
+# 	}
+# 	army_modifier = {
+# 		army_defense_damage_mult = 0.3
+# 		army_disengage_chance_mult = 0.1
+# 	}
+# 	leader_class = {
+# 		commander
+# 	}
+# }
+hfe_leader_trait_total_war = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_total_war.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	army_modifier = {
+		army_damage_mult = 0.5
+		army_collateral_damage_mult = 1
+		army_disengage_chance_mult = -0.2
+		army_health = -0.2
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_elite_ops = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_elite_ops.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	army_modifier = {
+		army_damage_mult = 0.1
+		army_experience_gain_mult = 0.2
+		armies_upkeep_mult = 0.2
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_tactician = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_tactician.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	fleet_modifier = {
+		ship_disengage_chance_mult = 0.1
+	}
+	army_modifier = {
+		army_health = 0.1
+		army_disengage_chance_mult = 1
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_teachable = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_teachable.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	triggered_fleet_modifier = {
+		ship_fire_rate_mult = 0.01
+		mult = hfe_leaders_teachable_fleet_victory_count
+	}
+	triggered_army_modifier = {
+		army_damage_mult = 0.02
+		mult = hfe_leaders_teachable_army_victory_count
+	}
+	on_gained_effect = {
+		set_variable = {
+			which = hfe_leaders_teachable_fleet_victory_count
+			value = 0
+		}
+		set_variable = {
+			which = hfe_leaders_teachable_army_victory_count
+			value = 0
+		}
+	}
+	leader_class = {
+		commander
+	}
+}
+
+hfe_leader_trait_warriror_honor = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_warriror_honor.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		has_ethic = ethic_militarist
+		exists = from
+		from = {
+			num_communications > 3
+		}
+	}
+	planet_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.15
+		hfe_planet_jobs_war_militarist_produces_mult = 0.15
+	}
+	sector_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+	}
+	galcom_modifier = {
+		diplo_weight_naval_mult = 0.1
+	}
+	councilor_modifier = {
+		max_rivalries = 1
+	}
+	triggered_councilor_modifier = {
+		pop_ethic_militarist_attraction_mult = 0.1
+		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# ruler opinion effect
+	leader_class = {
+		commander
+	}
+}
+
+# scientist
+hfe_leader_trait_thoughtful = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_thoughtful.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.2
+	}
+	fleet_modifier = {
+		ship_anomaly_research_speed_mult = -0.1
+	}
+	leader_class = {
+		scientist
+	}
+	ai_weight = 50
+}
+
+hfe_leader_trait_wary = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_wary.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	fleet_modifier = {
+		ship_sensor_range_add = 1
+		ship_speed_mult = -0.2
+	}
+	leader_class = {
+		scientist
+	}
+}
+
+# all classes
+hfe_leader_trait_talented = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_talented.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+	}
+	self_modifier = {
+		leader_skill_levels = 2
+		species_leader_exp_gain = 0.2
+	}
+	leader_class = all
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_noble = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_noble.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		exists = species
+		from = {
+			or = {
+				has_authority = auth_imperial
+				has_valid_civic = civic_aristocratic_elite
+				has_valid_civic = civic_great_khans_vision
+				has_valid_civic = civic_great_khans_legacy
+				has_valid_civic = civic_diadochi
+			}
+			not = {
+				has_valid_civic = hfe_civic_features_designed_aristocracy
+			}
+		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = -0.3
+		leaders_upkeep_mult = -0.8
+	}
+	leader_class = all
+	ai_weight = 50
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_noble_good = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_noble.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			has_valid_civic = hfe_civic_features_designed_aristocracy
+		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.3
+		leaders_upkeep_mult = -0.8
+	}
+	leader_class = all
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+# maybe add effect based on shroud patron type?
+hfe_leader_trait_satanist = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_satanist.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		hfe_trigger_is_psionic_species = yes
+		is_gestalt = no
+		exists = from
+		from = {
+			has_country_flag = has_shroud_patron
+		}
+	}
+	self_modifier = {
+		leader_lifespan_add = -20
+	}
+	planet_modifier = {
+		planet_jobs_produces_mult = 0.1
+		planet_stability_add = 10
+		planet_crime_add = 20
+		# job_telepath_per_crime = 0.05
+	}
+	fleet_modifier = {
+		ship_orbital_bombardment_mult = 0.2
+		# event effect
+	}
+	army_modifier = {
+		army_morale_damage_mult = 0.5
+	}
+	# scientis bonus is event based
+	# TODO revisit in the future, need to make it trigger only for scientist in council interface
+	# triggered_councilor_modifier = {
+	# 	potential = {
+	# 		leader_class = scientist
+	# 	}
+	# }
+	triggered_desc = {
+		trigger = {
+			leader_class = scientist
+		}
+		text = hfe_leader_trait_satanist_scientist_effect
+	}
+	leader_class = all
+}
+
+hfe_leader_trait_genomod = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_genomod.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		exists = from
+		# exists = species
+		from = {
+			any_owned_species = {
+				prevprev = {
+					is_subspecies = prev
+					not = {
+						is_exact_same_species = prev
+					}
+				}
+			}
+		}
+	}
+	self_modifier = {
+		species_leader_exp_gain = 0.1
+		leader_lifespan_add = 20
+	}
+	councilor_modifier = {
+		modify_species_cost_mult = -0.1
+	}
+	leader_class = all
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_transcendent = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_transcendent.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+		is_gestalt = no
+		hfe_trigger_is_psionic_species = yes
+	}
+	triggered_self_modifier = {
+		potential = {
+			is_ruler = yes
+			exists = owner
+		}
+		leader_lifespan_add = 100
+		mult = owner.value:hfe_script_value_pop_percentage_spiritualist
+	}
+	triggered_councilor_modifier = {
+		potential = {
+			is_ruler = yes
+			exists = owner
+		}
+		edict_length_mult = 1
+		planet_jobs_unity_produces_mult = 0.25
+		mult = owner.value:hfe_script_value_pop_percentage_spiritualist
+	}
+	leader_class = all
+	selectable_weight = {
+		weight = 0
+	}
+}
+
+hfe_leader_trait_diligent = {
+	cost = 1
+	initial = yes
+	randomized = yes
+	icon = gfx/interface/icons/other/hfe_diligent.dds
+	leader_potential_add = {
+		hfe_trigger_leaders_traits_enabled = yes
+	}
+	self_modifier = {
+		leader_skill_levels = 5
+	}
+	leader_class = all
+	selectable_weight = @shared_trait_weight
+}
