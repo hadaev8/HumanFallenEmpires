@@ -267,9 +267,38 @@ hfe_effect_settle_pop = {
 
 # for country need hfe_settle_pop_target
 hfe_effect_settle_pop_from_slavery_buff = {
+	# this is strange
 	event_target:hfe_settle_pop_target = {
-		pop_event = {
-			id = hfe_maintenance.6
+		if = {
+			limit = {
+				or = {
+					has_citizenship_type = {
+						country = owner
+						type = citizenship_slavery
+					}
+					has_citizenship_type = {
+						country = owner
+						type = citizenship_purge
+					}
+					has_citizenship_type = {
+						country = owner
+						type = citizenship_purge_machine
+					}
+				}
+			}
+			add_modifier = {
+				modifier = hfe_pirate_pop_purchased
+				years = 10
+			}
+		}
+		else_if = {
+			limit = {
+				is_sapient = yes
+			}
+			add_modifier = {
+				modifier = pop_saved_from_slavery
+				years = 10
+			}
 		}
 	}
 }
@@ -877,6 +906,7 @@ hfe_effect_varelse_fleet_find_new_home_make_colony = {
 					repair_ship = yes
 					add_modifier = {
 						modifier = hfe_unkeep
+						years = 20
 					}
 				}
 			}
@@ -1504,97 +1534,15 @@ hfe_effect_random_roll_flags_6_country = {
 	}
 }
 
-hfe_effect_root_this_change_pc_to_ideal = {
-	change_pc = rl_habitable_normal
-	root = {
-		switch = {
-			trigger = ideal_planet_class
-			pc_desert = {
-				prev = {
-					change_pc = pc_desert
-				}
-			}
-			pc_tropical = {
-				prev = {
-					change_pc = pc_tropical
-				}
-			}
-			pc_arid = {
-				prev = {
-					change_pc = pc_arid
-				}
-			}
-			pc_continental = {
-				prev = {
-					change_pc = pc_continental
-				}
-			}
-			pc_ocean = {
-				prev = {
-					change_pc = pc_ocean
-				}
-			}
-			pc_tundra = {
-				prev = {
-					change_pc = pc_tundra
-				}
-			}
-			pc_arctic = {
-				prev = {
-					change_pc = pc_arctic
-				}
-			}
-			pc_alpine = {
-				prev = {
-					change_pc = pc_alpine
-				}
-			}
-			pc_savannah = {
-				prev = {
-					change_pc = pc_savannah
-				}
-			}
-			pc_gaia = {
-				prev = {
-					change_pc = pc_gaia
-				}
-			}
-			pc_nuked = {
-				prev = {
-					change_pc = pc_nuked
-				}
-			}
-		}
-	}
-	reroll_planet = yes
-}
-
-hfe_effect_leader_add_exp_100 = {
+hfe_effect_leader_add_exp = {
 	if = {
 		limit = {
 			exists = leader
 		}
 		leader = {
-			add_experience = 100
+			add_experience = $hfe_exp$
 		}
 	}
-	#	else = {
-	#		log = "ERROR: EXP gaining leader not exists"
-	#	}
-}
-
-hfe_effect_leader_add_exp_200 = {
-	if = {
-		limit = {
-			exists = leader
-		}
-		leader = {
-			add_experience = 200
-		}
-	}
-	#	else = {
-	#		log = "ERROR: EXP gaining leader not exists"
-	#	}
 }
 
 hfe_effect_this_make_overlord_of_prev = {
@@ -1715,41 +1663,6 @@ hfe_effect_advisor_future_on = {
 			}
 		}
 		#		log = "FINALLY GOT THAT FRICKING ADVISOR"
-	}
-}
-
-# need root.species
-hfe_effect_remove_prescripted_ideal = {
-	while = {
-		count = 3
-		closest_system = {
-			limit = {
-				any_system_planet = {
-					not = {
-						exists = owner
-					}
-					habitable_planet = yes
-					habitability = {
-						who = root.species
-						value > 0.2
-					}
-				}
-			}
-			max_steps = 3
-			random_system_planet = {
-				limit = {
-					not = {
-						exists = owner
-					}
-					habitability = {
-						who = root.species
-						value > 0.2
-					}
-				}
-				change_pc = pc_broken
-				hfe_effect_set_mineral_orbital_deposit = yes
-			}
-		}
 	}
 }
 
@@ -2217,207 +2130,206 @@ hfe_effect_spawn_space_monster = {
 }
 
 # country scope
-hfe_effect_transfer_resources_from_root_to_this = {
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = energy
-					value >= 100
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				energy = -100
-			}
-		}
-		add_resource = {
-			energy = 100
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = minerals
-					value >= 100
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				minerals = -100
-			}
-		}
-		add_resource = {
-			minerals = 100
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = food
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				food = -10
-			}
-		}
-		add_resource = {
-			food = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = alloys
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				alloys = -10
-			}
-		}
-		add_resource = {
-			alloys = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = consumer_goods
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				consumer_goods = -10
-			}
-		}
-		add_resource = {
-			consumer_goods = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = volatile_motes
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				volatile_motes = -10
-			}
-		}
-		add_resource = {
-			volatile_motes = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = exotic_gases
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				exotic_gases = -10
-			}
-		}
-		add_resource = {
-			exotic_gases = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = rare_crystals
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				rare_crystals = -10
-			}
-		}
-		add_resource = {
-			rare_crystals = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = sr_living_metal
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				sr_living_metal = -10
-			}
-		}
-		add_resource = {
-			sr_living_metal = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = sr_zro
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				sr_zro = -10
-			}
-		}
-		add_resource = {
-			sr_zro = 10
-		}
-	}
-	while = {
-		limit = {
-			root = {
-				resource_stockpile_compare = {
-					resource = sr_dark_matter
-					value >= 10
-				}
-			}
-		}
-		root = {
-			add_resource = {
-				sr_dark_matter = -10
-			}
-		}
-		add_resource = {
-			sr_dark_matter = 10
-		}
-	}
-}
-
+# hfe_effect_transfer_resources_from_root_to_this = {
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = energy
+# 					value >= 100
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				energy = -100
+# 			}
+# 		}
+# 		add_resource = {
+# 			energy = 100
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = minerals
+# 					value >= 100
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				minerals = -100
+# 			}
+# 		}
+# 		add_resource = {
+# 			minerals = 100
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = food
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				food = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			food = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = alloys
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				alloys = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			alloys = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = consumer_goods
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				consumer_goods = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			consumer_goods = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = volatile_motes
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				volatile_motes = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			volatile_motes = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = exotic_gases
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				exotic_gases = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			exotic_gases = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = rare_crystals
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				rare_crystals = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			rare_crystals = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = sr_living_metal
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				sr_living_metal = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			sr_living_metal = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = sr_zro
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				sr_zro = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			sr_zro = 10
+# 		}
+# 	}
+# 	while = {
+# 		limit = {
+# 			root = {
+# 				resource_stockpile_compare = {
+# 					resource = sr_dark_matter
+# 					value >= 10
+# 				}
+# 			}
+# 		}
+# 		root = {
+# 			add_resource = {
+# 				sr_dark_matter = -10
+# 			}
+# 		}
+# 		add_resource = {
+# 			sr_dark_matter = 10
+# 		}
+# 	}
+# }
 hfe_effect_ruin_megastructure = {
 	if = {
 		limit = {

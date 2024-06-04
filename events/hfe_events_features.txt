@@ -417,7 +417,6 @@ country_event = {
 		capital_scope = {
 			set_name = "The End"
 			save_event_target_as = hfe_former_exodus_capital
-			# hfe_effect_remove_prescripted_ideal = yes
 			change_pc = pc_broken
 			# play_sound = shattered_planet_explosion
 			set_planet_flag = hfe_exodus_happened_here
@@ -639,7 +638,7 @@ country_event = {
 	}
 }
 
-# early colonization civic 10
+# early colonization origin 10
 country_event = {
 	id = hfe_features.10
 	hide_window = yes
@@ -659,7 +658,7 @@ country_event = {
 						exists = owner
 					}
 				}
-				hfe_effect_root_this_change_pc_to_ideal = yes
+				change_pc = root.species
 				while = {
 					limit = {
 						planet_size > 20
@@ -668,7 +667,7 @@ country_event = {
 				}
 				while = {
 					limit = {
-						planet_size < 12
+						planet_size < 16
 					}
 					change_planet_size = 1
 				}
@@ -684,7 +683,7 @@ country_event = {
 	}
 }
 
-# early contact civic 11
+# early contact origin 11
 country_event = {
 	id = hfe_features.11
 	hide_window = yes
@@ -725,7 +724,7 @@ country_event = {
 	}
 }
 
-# sanctuary civic 12
+# sanctuary origin 12
 country_event = {
 	id = hfe_features.12
 	hide_window = yes
@@ -773,10 +772,12 @@ country_event = {
 			reroll_planet = yes
 		}
 		event_target:hfe_features_sanctuary_planet = {
-			set_name = hfe_features_sanctuary_rename
+			# doesnt work
+			# set_name = hfe_features_sanctuary_rename
 			set_owner = root
 			set_capital = yes
-			hfe_effect_root_this_change_pc_to_ideal = yes
+			change_pc = owner.species
+			reroll_planet = yes
 			clear_deposits = yes
 			generate_start_deposits_and_blockers = yes
 			clear_blockers = yes
@@ -818,11 +819,8 @@ country_event = {
 	desc = hfe_features.14.desc
 	picture = GFX_evt_landing_ship_2
 	show_sound = event_airlock
-	show_sound = amb_colony_ship_hum
+	# show_sound = amb_colony_ship_hum
 	is_triggered_only = yes
-	immediate = {
-		play_sound = event_celebration
-	}
 	option = {
 		name = hfe_features.14.0
 	}
@@ -894,6 +892,7 @@ country_event = {
 		}
 	}
 	after = {
+		play_sound = event_celebration
 		add_resource = {
 			minerals = 1000
 			energy = 1000
