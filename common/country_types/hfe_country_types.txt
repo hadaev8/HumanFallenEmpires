@@ -1,15 +1,16 @@
-#
 # Country types specify the rules by which a country plays the game.
 # Example:
 #name_of_country_type = {
 #	can_own_empty_planets					#no by default, decides if empty planets belonging to country are automatically removed from the country.
 #	playable = yes							#if this type is available for players. used when listing countries for hot-joining players
-# 	randomize_ethos = no					#does this empire have a randomly generated ethos?
+#	has_pulse_events = no					#if this type gets checked for country-specific pulse events from on_action
+#	has_deficits = yes						#if this type suffers from resource deficits
+#	randomize_ethos = no					#does this empire have a randomly generated ethos?
 #	shuffle_pop_ethos = no					#if pops belonging to this country type should mutate their ethos every now and then
 #	sub_title = "EXAMPLE_COUNTRY"			#sub title that will be shown for this empire. Like "Example Federation - Fallen Empire"
 #	sub_title_desc = "EXAMPLE_COUNTRY_DESC" #description for the sub title. used in tooltips
 #	needs_survey = no						#default no, if yes then planets must be surveyed before they can be colonized, also if yes a science ship is needed for exploration.
-# 	has_complete_sensor = no				#default no, if yes then empire has complete sensor of the galaxy
+#	has_complete_sensor = no				#default no, if yes then empire has complete sensor of the galaxy
 #	has_capital = yes						#default is yes, capital always exists but toggling this no hides any mention of the capital planet being a capital.
 #	enforces_borders = yes					#default is yes, if the country doesn't enforce it's borders people are always free to enter.
 #	can_planets_be_attacked = yes			#default yes, if no then planets owned by this country type can not be attacked
@@ -21,19 +22,21 @@
 #	ship_disengagement = no					#default no, decides if the country's ships can flee from battle instead of fighting to the death
 #	army_disengagement = no					#default no, decides if the country's armies can flee from battle instead of fighting to the death
 #	min_navy_for_wars = 0					#default 0, decides how large a navy this country wants (out of desired size) before declaring any wars
-# 	min_assault_armies_for_wars = 1			#default 1, deciades how many assault armies the country wants before declaring any wars
-# 	share_communications = no				#default yes, decides if they share communciations with anyone you have contact with
-#	relations = no							#default no, this controls whether the country makes use of opinion
+#	min_assault_armies_for_wars = 1			#default 1, deciades how many assault armies the country wants before declaring any wars
+#	share_communications = no				#default yes, decides if they share communciations with anyone you have contact with
+#	relations = no							#default no, this controls whether the country makes us of opinion
 #	fallen_empire = no						#default no, this controls whether the empire uses the special Fallen Empire AI
 #	awakened_fallen_empire = no				#default no, this controls whether the empire uses the special Awakened Fallen Empire AI
 #	piracy_risk	= no						#default no, this controls whether the empire has piracy risk
-# 	uses_special_buildables = no			#default no, this controls whether this empire builds global ship designs that are defined as special buildables instead of normal designable ships
+#	uses_special_buildables = no			#default no, this controls whether this empire builds global ship designs that are defined as special buildables instead of normal designable ships
 #	show_in_contacts_list = yes				#default yes, whether to show an entry in the contacts list
 #	minimalist_contacts_list_profile = no	#default no, whether to show only empire name and flag in diplomacy panel in the contacts list
 #	government = no							#default yes, if yes then the country has a government
-# 	custom_starbase = x						#if this is set, country will defined ship size for constructed starbases instead of building outposts
+#	custom_starbase = x						#if this is set, country will defined ship size for constructed starbases instead of building outposts
 #	destroys_starbases = no					#if this is set to yes, country will destroy starbases instead of disabling them
 #	can_have_their_comms_shared				#if this is set to yes, other countries in contact with this one will be able to share that contact (for countries that use custom_diplomacy)
+#	observable = no						#Fairly self explanatory. Will not show up in list of observable countries, and cannot be tagged to as observer.
+#	can_use_invalid_technology = yes		#this this is set to no, there will be a hardcoded block on assigning tech whose potential trigger does not evaluate to the country
 #
 #	faction = {							#these values are copied to the country and can be changed during the game
 #		neutral = no						#if yes, fleets will never attack anything and will never be attacked
@@ -47,23 +50,36 @@
 #		primitive_age = "STONE_AGE"			#if primitive = yes, localization string. Remember that these values are dynamic and this value will most likely be overwritten instantly by the same event that created the country. This field can probably be left empty
 #		hostile_when_attacked = yes			#toggles if country turns hostile against attacker.
 #		show_borders_in_us = yes			#if no, borders for countries of this type will not be shown if in uncharted space
+#		intel_effects_surveyed = yes			# toggle if the intel system is allowed to change any surveyed planets to unsurveyed depending on intel level with this country
 #	}
 #
 #	ai = {								#block of AI settings
 #		enabled = yes						#run ai for this country type? default no
 #		declare_war = yes					#should AI declare wars? default yes
 #		colonizer = yes						#should AI colonize? default yes
-#		internal_policies = yes				#should AI update internal policies? such as edicts, changing government types etc.  default yes
+#		internal_policies = yes				#should AI update internal policies? such as edicts, changing government types etc. default yes
 #		modification = yes					#should AI genemod & terraform? default yes
 #		construction = yes					#should AI build ships and buildings? default yes
 #		tech = yes							#should AI advance its technology? default yes
-#		ship_data							#highest fleet slot size first for military ship sizes
+#		espionage = yes					#should AI use espionage? default yes
 #
 #		modules = {							#List of diferent ai modules this country type should have
 #			military_minister_module
 #			foreign_minister_module
 #			interior_minister_module
 #		}
+#	}
+#
+# 							#Note: these effects are also covered by on_actions on_fleet_contract_started, on_fleet_contract_expired, on_fleet_contract_cancelled and on_fleet_contract_broken
+#	fleet_manager = {								#block of Country Fleet Manager settings
+#		on_contract_started = {						#effect fired when fleet owned by country is hired
+#		}											#Scope - Fleet, From - Country that hired the fleet, FromFrom - Country that owns fleet, FromFromFrom - Country that initiated the ending of the contract
+#		on_contract_expired = {						#effect fired when hire contract of a fleet owned by country is expired
+#		}											#Scope - Fleet, From - Country that hired the fleet, FromFrom - Country that owns fleet, FromFromFrom - Country that initiated the ending of the contract
+#		on_contract_cancelled = {					#effect fired when hire contract of a fleet owned by country is cancelled (when controller prematurely finishes the contract or when the contract cancellation is a part of trade deal)
+#		}											#Scope - Fleet, From - Country that hired the fleet, FromFrom - Country that owns fleet, FromFromFrom - Country that initiated the ending of the contract (trade deal actor when the contract cancellation is a part of trade deal)
+#		on_contract_broken = {						#effect fired when hire contract of a fleet owned by country is broken (when country is attacked by someone of when a war is started)
+#		}											#Scope - Fleet, From - Country that hired the fleet, FromFrom - Country that owns fleet, FromFromFrom - Country that initiated the ending of the contract (main attacker in a case of war)
 #	}
 #
 #	modules = {							#List of modules countries of this should have.
@@ -73,42 +89,49 @@
 #		standard_economy_module = {}
 #		standard_leader_module = {}
 #		standard_diplomacy_module = {}
+#				#contact_rule: auto (default: has first contact sites formed upon); does_first_contact_sites (uses first contact sites on others); on_action_only (no first contact site on this country, only on_first_contact event); never; always (fires on_first_contact immediately, but no site formed)
 #		standard_technology_module = {}
+#		standard_trade_routes_module = {}
 #		standard_pop_factions_module = {}
 #		standard_expansion_module = {}
 #	}
 #}
 hfe_fallen = {
-	has_difficulty_bonuses = yes
-	counts_for_victory = yes
+	# sorted by order in docs in 00_country_types
+	playable = no
+	# randomize_ethos = no
+	shuffle_pop_ethos = yes
 	sub_title = "COUNTRY_FALLEN_EMPIRE"
 	sub_title_desc = "COUNTRY_FALLEN_EMPIRE_DESC"
-	share_survey_data = no
-	relations = yes
-	fallen_empire = yes
+	# needs_survey = no
+	has_complete_sensor = yes
 	diplomatic_wars = yes
 	ship_disengagement = yes
 	army_disengagement = yes
+	share_communications = no
+	relations = yes
+	fallen_empire = yes
 	observable = yes
-	can_receive_envoys = yes
-	has_complete_sensor = yes
-	needs_survey = no
-	randomize_ethos = no
-	shuffle_pop_ethos = no
+	# unsorted
+	has_difficulty_bonuses = yes
+	counts_for_victory = yes
+	share_survey_data = no
+	# can_receive_envoys = yes
 	ai = {
 		enabled = yes
 		declare_war = no
 		colonizer = no
 		internal_policies = no
 		modification = no
+		# construction = yes
+		tech = no
+		espionage = no
+		# unsorted
 		government = yes
 		traditions = no
 		ascension_perks = no
-		construction = yes
-		tech = no
 		follow = no
 		can_use_market = yes
-		espionage = no
 		modules = {
 			military_minister_module
 			foreign_minister_module
@@ -116,17 +139,11 @@ hfe_fallen = {
 		}
 	}
 	modules = {
-		tiered_technology_module = {
-			tier = 5
-			rare = no
-		}
 		standard_event_module = {
-		}
-		standard_leader_module = {
 		}
 		standard_economy_module = {
 		}
-		standard_species_rights_module = {
+		standard_leader_module = {
 		}
 		exclusive_diplomacy_module = {
 			contact_rule = on_action_only
@@ -147,47 +164,61 @@ hfe_fallen = {
 				action_close_borders
 			}
 		}
+		tiered_technology_module = {
+			tier = 5
+			rare = no
+		}
+		# standard_trade_routes_module = {}
+		# standard_pop_factions_module = {}
+		# standard_expansion_module = {}
+		standard_species_rights_module = {
+		}
 	}
 }
 
 hfe_drone = {
-	has_difficulty_bonuses = yes
-	has_deficits = no
-	relations = yes	# ??? ????? ?? ?????? ??????? ???
-	observable = yes
-	playable = no
-	needs_survey = yes
-	has_complete_sensor = no
-	share_survey_data = no
-	destroys_starbases = yes
-	is_space_critter = yes	# This fixes a bug where the Drones can capture Habtiable Planets and have a primary ruling species
+	# sorted by order in docs in 00_country_types
 	# can_own_empty_planets = no
-	government = no
-	has_capital = no
-	enforces_borders = no
-	attack_unarmed_orbital_stations = yes
-	share_communications = no
-	can_have_their_comms_shared = no
-	mid_game_crisis = yes
+	playable = no
+	# has_deficits = no
 	sub_title = personality_hfe_personality_drone
 	sub_title_desc = personality_hfe_personality_drone_desc
+	needs_survey = yes
+	# has_complete_sensor = no
+	has_capital = no
+	enforces_borders = no
+	# seems this is nessesary for fleets to have comand limit lol
+	# diplomatic_wars = yes
+	attack_unarmed_orbital_stations = yes
+	share_communications = no
+	relations = yes	# ??? ????? ?? ?????? ??????? ???
+	government = no
+	destroys_starbases = yes
+	can_have_their_comms_shared = no
+	observable = yes
+	# unsorted
+	has_difficulty_bonuses = yes
+	share_survey_data = no
+	is_space_critter = yes	# This fixes a bug where the Drones can capture Habtiable Planets and have a primary ruling species
+	# mid_game_crisis = yes
 	# targets = {
 	# 	default
 	# }
 	ai = {
 		enabled = yes
 		declare_war = no
-		colonizer = yes
-		internal_policies = yes
+		# colonizer = yes
+		# internal_policies = yes
 		modification = no
+		# construction = yes
+		# tech = yes
+		espionage = no
+		# unsorted
 		government = no
 		traditions = no
 		ascension_perks = no
-		construction = yes
-		tech = yes
 		follow = no
 		can_use_market = yes
-		espionage = no
 		modules = {
 			military_minister_module
 			interior_minister_module			# ?? ??????? ?? ? ???? ??????, ????? ??? ????????? ????????
@@ -203,26 +234,28 @@ hfe_drone = {
 		space_creatures = yes
 	}
 	modules = {
+		standard_event_module = {
+		}
+		standard_economy_module = {
+		}
+		#standard_leader_module = {}
 		# Nothing is allowed, but we need this for relationships.
 		exclusive_diplomacy_module = {
 		}
 		standard_technology_module = {
 		}
-		standard_economy_module = {
-		}
+		# standard_trade_routes_module = {}
+		# standard_pop_factions_module = {}
 		standard_expansion_module = {
 		}
-		standard_event_module = {
-		}
+		# need this to avoid error log spam
 		standard_species_rights_module = {
 		}
-		#standard_pop_factions_module = {}
-		#standard_leader_module = {}
 	}
 	resources = {
 		category = country_base
 		produces = {
-			influence = 1
+			# influence = 1
 			physics_research = 10
 			society_research = 10
 			engineering_research = 10
@@ -233,42 +266,48 @@ hfe_drone = {
 }
 
 hfe_thoth = {
-	is_space_critter = yes
-	blocks_piracy = yes
-	show_in_contacts_list = yes
-	minimalist_contacts_list_profile = yes
-	government = yes	# So that Thoth can have Ethics and vote
-	randomize_ethos = no
-	# wonder if it work
-	share_communications = yes
-	can_have_their_comms_shared = yes
-	default_ships = no	# mean ship 
-	enforces_borders = no
-	needs_survey = no
-	has_complete_sensor = yes
-	observable = yes
-	can_receive_envoys = no
-	can_use_invalid_technology = yes
+	# sorted by order in docs in 00_country_types
+	playable = no
+	# randomize_ethos = no
 	# is it shown in the game?
 	# sub_title = "THOTH_TITLE"
 	# sub_title_desc = "THOTH_DESC"
+	# needs_survey = no
+	# has_complete_sensor = yes
+	# has_capital = no
+	enforces_borders = no
+	# wonder if sharing works
+	share_communications = no
+	can_have_their_comms_shared = no
+	# show_in_contacts_list = yes
+	minimalist_contacts_list_profile = yes
+	government = no
+	observable = yes
+	# can_use_invalid_technology = yes
+	# unsorted
+	share_survey_data = no
+	# wonder what it do
+	# is_enclave = yes
 	pre_communications_fleet_name = hfe.700.name
-	is_enclave = yes
 	# TODO remove it then log not gonna mark it as error
-	uses_origins = yes
+	uses_origins = no
+	blocks_piracy = yes
+	default_ships = no	# mean ship designs
+	is_space_critter = yes
 	ai = {
-		enabled = yes
-		construction = no
-		can_use_market = no
-		colonizer = no
-		follow = no
-		modification = no
-		government = yes
-		tech = no
-		traditions = no
-		modules = {
-			foreign_minister_module
-		}
+		enabled = no
+		# enabled = yes
+		# construction = no
+		# can_use_market = no
+		# colonizer = no
+		# follow = no
+		# modification = no
+		# government = yes
+		# tech = no
+		# traditions = no
+		# modules = {
+		# 	foreign_minister_module
+		# }
 	}
 	faction = {
 		hostile_when_attacked = yes
@@ -370,35 +409,38 @@ hfe_placeholder_t5_tech = {
 }
 
 hfe_berserk = {
-	share_communications = no
-	is_space_critter = yes
-	blocks_piracy = yes
-	observable = no
-	attack_unarmed_orbital_stations = yes
-	scaled_difficulty_bonuses = 2
-	can_receive_envoys = no
-	army_disengagement = no
-	ship_disengagement = no
-	destroys_starbases = no
-	show_in_contacts_list = no
-	share_survey_data = no
-	enforces_borders = no
-	needs_survey = no
-	government = no
-	uses_origins = no
-	orbital_bombardment = yes
+	# sorted by order in docs in 00_country_types
+	playable = no
 	sub_title = personality_hfe_personality_berserker
 	sub_title_desc = personality_hfe_personality_berserker_desc
+	# needs_survey = no
 	has_complete_sensor = yes
+	has_capital = no
+	enforces_borders = no
+	# orbital_bombardment = yes
+	attack_unarmed_orbital_stations = yes
+	share_communications = no
+	show_in_contacts_list = no
+	government = no
+	# destroys_starbases = no
 	can_have_their_comms_shared = no
+	observable = no
+	# unsorted
+	scaled_difficulty_bonuses = 2
+	share_survey_data = no
+	uses_origins = no
+	blocks_piracy = yes
+	default_ships = no	# mean ship designs
+	is_space_critter = yes
 	ai = {
+		# follow gray_goo here
 		enabled = yes
-		avoid_enemies = no
-		construction = no
-		traditions = no
-		tech = no
-		can_use_market = no
-		internal_policies = no
+		# avoid_enemies = no
+		# construction = no
+		# traditions = no
+		# tech = no
+		# can_use_market = no
+		# internal_policies = no
 		modules = {
 			berserk_military_minister_module
 		}
@@ -409,14 +451,14 @@ hfe_berserk = {
 		generate_borders = no
 		needs_colony = no
 		space_creatures = yes
-		auto_delete = no		# Had knows what he is doing
+		auto_delete = no
 	}
 	modules = {
 		basic_technology_module = {
 		}
+		# Nothing is allowed, but we need this for relationships.
 		exclusive_diplomacy_module = {
 			contact_rule = on_action_only
 		}
-		# Nothing is allowed, but we need this for relationships.
 	}
 }

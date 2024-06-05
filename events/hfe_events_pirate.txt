@@ -743,7 +743,7 @@ planet_event = {
 			limit = {
 				has_global_flag = hfe_pirate_logs
 			}
-			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by pirate"
+			log = "pirate bombarding [this.GetName] in [solar_system.GetName] by [from.GetName]"
 		}
 	}
 }
@@ -978,10 +978,7 @@ ship_event = {
 					save_event_target_as = pirate_slayers
 				}
 				event_target:hfe_pirate_starbase_att = {
-					if = {
-						limit = {
-							has_event_chain = l_cluster_chain
-						}
+					# from pirate.24
 						random_list = {
 							85 = {
 								country_event = {
@@ -989,15 +986,15 @@ ship_event = {
 								}
 							}
 							15 = {
-								country_event = {
-									id = pirate.26
-								}
-							}
+							modifier = {
+								factor = 0
+								not = {
+									has_event_chain = l_cluster_chain
 						}
 					}
-					else = {
 						country_event = {
-							id = pirate.25
+								id = pirate.26
+							}
 						}
 					}
 				}
@@ -1006,10 +1003,14 @@ ship_event = {
 				every_system_planet = {
 					limit = {
 						is_owned_by = event_target:hfe_pirate_starbase_def
-						# pirate base or every normal planet with zero pops
+						# pirate base or every normal planet with zero sapient pops
 						or = {
 							is_planet_class = hfe_pc_pirate_base
-							num_pops = 0
+							not = {
+								any_owned_pop = {
+									is_sapient = yes
+								}
+							}
 						}
 					}
 					event_target:hfe_pirate_starbase_att = {
@@ -1019,6 +1020,9 @@ ship_event = {
 						}
 					}
 					every_owned_pop = {
+						limit = {
+							is_sapient = yes
+						}
 						hfe_effect_refuge_or_die = yes
 					}
 					destroy_colony = yes
@@ -1030,19 +1034,47 @@ ship_event = {
 							event_target:hfe_pirate_starbase_att = {
 								has_claim = prev
 							}
+							}
 						}
 						event_target:hfe_pirate_starbase_att = {
-							any_federation_ally = {
+						if = {
+							limit = {
+								exists = overlord
+								overlord = {
 								has_claim = prevprev
 							}
 						}
-					}
-					event_target:hfe_pirate_starbase_att = {
+							overlord = {
+								save_event_target_as = hfe_pirate_starbase_att
+							}
+						}
+						else_if = {
+							limit = {
+								is_overlord = yes
+								any_subject = {
+									has_claim = prevprev
+								}
+							}
+							random_subject = {
+								limit = {
+									has_claim = prevprev
+								}
+								save_event_target_as = hfe_pirate_starbase_att
+							}
+						}
+						else_if = {
+							limit = {
+								exists = federation
+								any_federation_ally = {
+									has_claim = prevprev
+								}
+							}
 						random_federation_ally = {
 							limit = {
 								has_claim = prevprev
 							}
 							save_event_target_as = hfe_pirate_starbase_att
+							}
 						}
 					}
 				}
@@ -1087,34 +1119,55 @@ ship_event = {
 					}
 				}
 				else = {
-					every_system_planet = {
+					random_system_planet = {
 						limit = {
 							is_owned_by = event_target:hfe_pirate_starbase_def
 							# bad colonies should be killed by code above TODO check if it is fine
 							# not = {
 							# 	is_planet_class = hfe_pc_pirate_base
 							# }
-							num_pops > 0
+							any_owned_pop = {
+								is_sapient = yes
 						}
-						log = "creating new country from pirate planet [this.GetName] solar system [solar_system.GetName]"
+						}
 						random_owned_pop = {
+							limit = {
+								is_sapient = yes
+								exists = species
+							}
+							species = {
+								save_event_target_as = hfe_pirate_new_country_species
+							}
+						}
 							create_country = {
 								type = default
-								species = this.species
+							species = event_target:hfe_pirate_new_country_species
 								origin = origin_separatists
 								released_from_country = event_target:hfe_pirate_starbase_def
 								effect = {
-									prevprev = {
-										set_owner = prev
-									}
-								}
+								save_event_target_as = hfe_pirate_new_country
 							}
 						}
+						set_owner = event_target:hfe_pirate_new_country
+						if = {
+							limit = {
+								has_global_flag = hfe_pirate_logs
+							}
+							log = "creating new country from pirate planet [this.GetName] solar system [solar_system.GetName] new country name [hfe_pirate_new_country.GetName]"
+						}
+								}
+					# if where is 2+ planets
+					every_system_planet = {
+						limit = {
+							is_owned_by = event_target:hfe_pirate_starbase_def
+						}
+						set_owner = event_target:hfe_pirate_new_country
 					}
 					# should spawn outpost by vanilla event
-					starbase = {
-						destroy_fleet = fleet
-					}
+					# starbase = {
+					# 	destroy_fleet = fleet
+					# }
+					destroy_fleet = starbase.fleet
 				}
 			}
 		}
@@ -1165,12 +1218,12 @@ planet_event = {
 		# NOT = {
 		# 	has_planet_flag = hfe_permanent_pirate_hall
 		# }
-		nand = {
-			exists = owner
-			owner = {
-				is_country_type = hfe_pirate
-			}
-		}
+		# nand = {
+		# 	exists = owner
+		# 	owner = {
+		# 		is_country_type = hfe_pirate
+		# 	}
+		# }
 	}
 	immediate = {
 		if = {
@@ -1178,6 +1231,9 @@ planet_event = {
 				has_global_flag = hfe_pirate_logs
 			}
 			log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_transfer on_planet_bombarded"
+		}
+		every_owned_pop = {
+			hfe_effect_refuge_or_die = yes
 		}
 		hfe_effect_pirate_change_to_pc_asteroid = yes
 	}
