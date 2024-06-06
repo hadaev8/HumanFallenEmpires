@@ -48,47 +48,40 @@ hfe_trigger_pirate_protect_cost = {
 	resource_stockpile_compare = {
 		resource = energy
 		value >= @hfe_pirate_protect_cost_energy
-		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$hfe_pirate$|country1|$hfe_target$|
 	}
 	resource_stockpile_compare = {
 		resource = alloys
 		value >= @hfe_pirate_protect_cost_alloys
-		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$pirate$|country1|$target$|
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$hfe_pirate$|country1|$hfe_target$|
 	}
 }
 
 hfe_trigger_pirate_raid_buy = {
-	hfe_trigger_pirate_raid_cost = {
-		pirate = $pirate$
-		target = $target$
-	}
-	hfe_trigger_pirate_raid_have_no_flag_tooltip = {
-		pirate = $pirate$
-		target = $target$
-	}
-}
-
-hfe_trigger_pirate_raid_cost = {
 	resource_stockpile_compare = {
 		resource = energy
 		value >= @hfe_pirate_raid_cost_energy
-		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$hfe_target$|country1|$hfe_pirate$|
 	}
 	resource_stockpile_compare = {
 		resource = alloys
 		value >= @hfe_pirate_raid_cost_alloys
-		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$target$|country1|$pirate$|
+		mult = value:hfe_script_value_weight_relative_fleet_power|country0|$hfe_target$|country1|$hfe_pirate$|
+	}
+	hfe_trigger_pirate_raid_have_no_flag_tooltip = {
+		hfe_pirate = $hfe_pirate$
+		hfe_target = $hfe_target$
 	}
 }
 
 hfe_trigger_pirate_energy_buy = {
-	$target$ = {
+	$hfe_target$ = {
 		resource_stockpile_compare = {
 			resource = minerals
 			value >= 150
 		}
 	}
-	$pirate$ = {
+	$hfe_pirate$ = {
 		resource_stockpile_compare = {
 			resource = energy
 			value >= 100
@@ -97,7 +90,7 @@ hfe_trigger_pirate_energy_buy = {
 }
 
 hfe_trigger_pirate_admiral_buy = {
-	$target$ = {
+	$hfe_target$ = {
 		resource_stockpile_compare = {
 			resource = energy
 			value >= 1000
@@ -105,7 +98,7 @@ hfe_trigger_pirate_admiral_buy = {
 	}
 	custom_tooltip = {
 		text = hfe_pirate.101.traid_menu.2.fail
-		$pirate$ = {
+		$hfe_pirate$ = {
 			any_pool_leader = {
 				leader_class = commander
 				not = {
@@ -121,7 +114,7 @@ hfe_trigger_pirate_slave_buy = {
 	custom_tooltip = {
 		text = hfe_pirate.101.slave_menu.fail_havent_space
 		any_owned_planet = {
-			hfe_trigger_planet_valid_for_settle_for_pop = {
+			hfe_trigger_planet_valid_for_settle = {
 				# not really a pop, but should be fine
 				hfe_pop = $hfe_species$
 			}
@@ -135,7 +128,7 @@ hfe_trigger_pirate_slave_buy = {
 					has_job = hfe_job_pirate_slave
 					is_exact_same_species = $hfe_species$
 				}
-				count > 0
+				count > 1
 			}
 		}
 	}
@@ -154,9 +147,9 @@ hfe_trigger_pirate_slave_cost = {
 
 hfe_trigger_pirate_raid_have_no_flag = {
 	not = {
-		$target$ = {
+		$hfe_target$ = {
 			has_opinion_modifier = {
-				who = $pirate$
+				who = $hfe_pirate$
 				modifier = hfe_opinion_pirate_prior_target
 			}
 		}
@@ -167,40 +160,36 @@ hfe_trigger_pirate_raid_have_no_flag_tooltip = {
 	custom_tooltip = {
 		fail_text = hfe_pirate.101.raid_menu.fail_prior_target
 		hfe_trigger_pirate_raid_have_no_flag = {
-			pirate = $pirate$
-			target = $target$
+			hfe_pirate = $hfe_pirate$
+			hfe_target = $hfe_target$
 		}
 	}
 }
 
 # root fleet, this system
 # hfe_trigger_pirate_path_check = {
-# 	root = {
-# 		log = "[prev.GetName]"
-# 	}
+# 	# root = {
+# 	# 	log = "[prev.GetName]"
+# 	# }
 # 	or = {
 # 		is_same_value = root.solar_system
 # 		root = {
 # 			closest_system = {
+# 				max_steps = $hfe_steps$
 # 				limit = {
-# 					not = {
-# 						is_same_value = prevprevprevprev
-# 					}
 # 					has_hyperlane_to = prevprev
-# 					hfe_trigger_pirate_fleet_power_in_system_check = yes
-# 					root = {
-# 						log = "looping warning"
+# 					hfe_trigger_pirate_fleet_power_in_system_check = {
+# 						hfe_fleet = root
 # 					}
-# 					hfe_trigger_pirate_path_check = yes
+# 					hfe_trigger_pirate_path_check = {
+# 						hfe_steps = @\[ $hfe_steps$ - 1 ]
+# 					}
 # 				}
 # 			}
 # 		}
 # 	}
 # }
 hfe_trigger_pirate_path_check = {
-	# root = {
-	# log = "check path for [prev.GetName]"
-	# }
 	or = {
 		is_same_value = root.solar_system
 		root = {
@@ -329,20 +318,22 @@ hfe_trigger_pirate_fleet_power_in_system_check = {
 		any_fleet_in_system = {
 			exists = owner
 			owner = {
-				is_hostile = root.owner
+				is_hostile = $hfe_fleet$.owner
 			}
 			fleet_power > 100
-			hfe_trigger_pirate_this_fleet_more_power_then_root = yes
+			hfe_trigger_pirate_this_fleet_more_power_than = {
+				hfe_fleet = $hfe_fleet$
+			}
 		}
 	}
 }
 
-hfe_trigger_pirate_this_fleet_more_power_then_root = {
+hfe_trigger_pirate_this_fleet_more_power_than = {
 	check_variable_arithmetic = {
 		which = trigger:fleet_power
 		# pirate need some advantage
 		multiply = 1.2
-		value > root.trigger:fleet_power
+		value > $hfe_fleet$.trigger:fleet_power
 	}
 }
 

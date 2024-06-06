@@ -518,10 +518,18 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
-		any_owned_planet = {
-			free_housing < 0
-			any_owned_pop = {
-				has_job = hfe_job_pirate_slave
+		# any_owned_planet = {
+		# 	free_housing < 0
+		# 	any_owned_pop = {
+		# 		has_job = hfe_job_pirate_slave
+		# 	}
+		# }
+		any_owned_pop_species = {
+			count_species_pop = {
+				limit = {
+					has_job = hfe_job_pirate_slave
+				}
+				count > 1
 			}
 		}
 	}
@@ -754,6 +762,7 @@ planet_event = {
 # FromFrom = ship 1
 # FromFromFrom = ship 2
 # on_ship_destroyed_perp
+# TODO pirate is from here?
 country_event = {
 	id = hfe_pirate.54
 	hide_window = yes
@@ -857,6 +866,7 @@ ship_event = {
 						is_owned_by = event_target:hfe_pirate_starbase_def
 					}
 					set_owner = event_target:hfe_pirate_starbase_att
+					set_controller = event_target:hfe_pirate_starbase_att
 				}
 			}
 			starbase = {
@@ -930,6 +940,7 @@ ship_event = {
 								log = "[hfe_pirate_starbase_att.GetName] pirate get planet [this.GetName] in [solar_system.GetName] from [owner.GetName]"
 							}
 							set_owner = event_target:hfe_pirate_starbase_att
+							set_controller = event_target:hfe_pirate_starbase_att
 						}
 						starbase = {
 							set_owner = event_target:hfe_pirate_starbase_att
@@ -979,20 +990,20 @@ ship_event = {
 				}
 				event_target:hfe_pirate_starbase_att = {
 					# from pirate.24
-						random_list = {
-							85 = {
-								country_event = {
-									id = pirate.25
-								}
+					random_list = {
+						85 = {
+							country_event = {
+								id = pirate.25
 							}
-							15 = {
+						}
+						15 = {
 							modifier = {
 								factor = 0
 								not = {
 									has_event_chain = l_cluster_chain
-						}
-					}
-						country_event = {
+								}
+							}
+							country_event = {
 								id = pirate.26
 							}
 						}
@@ -1004,14 +1015,14 @@ ship_event = {
 					limit = {
 						is_owned_by = event_target:hfe_pirate_starbase_def
 						# pirate base or every normal planet with zero sapient pops
-						or = {
-							is_planet_class = hfe_pc_pirate_base
-							not = {
-								any_owned_pop = {
-									is_sapient = yes
-								}
-							}
-						}
+						# or = {
+						is_planet_class = hfe_pc_pirate_base
+						# 	not = {
+						# 		any_owned_pop = {
+						# 			is_sapient = yes
+						# 		}
+						# 	}
+						# }
 					}
 					event_target:hfe_pirate_starbase_att = {
 						set_timed_country_flag = {
@@ -1034,16 +1045,16 @@ ship_event = {
 							event_target:hfe_pirate_starbase_att = {
 								has_claim = prev
 							}
-							}
 						}
-						event_target:hfe_pirate_starbase_att = {
+					}
+					event_target:hfe_pirate_starbase_att = {
 						if = {
 							limit = {
 								exists = overlord
 								overlord = {
-								has_claim = prevprev
+									has_claim = prevprev
+								}
 							}
-						}
 							overlord = {
 								save_event_target_as = hfe_pirate_starbase_att
 							}
@@ -1069,11 +1080,11 @@ ship_event = {
 									has_claim = prevprev
 								}
 							}
-						random_federation_ally = {
-							limit = {
-								has_claim = prevprev
-							}
-							save_event_target_as = hfe_pirate_starbase_att
+							random_federation_ally = {
+								limit = {
+									has_claim = prevprev
+								}
+								save_event_target_as = hfe_pirate_starbase_att
 							}
 						}
 					}
@@ -1095,12 +1106,14 @@ ship_event = {
 							# num_pops > 0
 						}
 						set_owner = event_target:hfe_pirate_starbase_att
+						set_controller = event_target:hfe_pirate_starbase_att
 					}
 					# replace starbase with outpost
-					starbase = {
-						destroy_fleet = fleet
-						#set_owner = event_target:hfe_pirate_starbase_att
-					}
+					# starbase = {
+					# 	destroy_fleet = fleet
+					# 	#set_owner = event_target:hfe_pirate_starbase_att
+					# }
+					destroy_fleet = starbase.fleet
 					create_starbase = {
 						size = starbase_outpost
 						owner = event_target:hfe_pirate_starbase_att
@@ -1128,7 +1141,7 @@ ship_event = {
 							# }
 							any_owned_pop = {
 								is_sapient = yes
-						}
+							}
 						}
 						random_owned_pop = {
 							limit = {
@@ -1139,29 +1152,31 @@ ship_event = {
 								save_event_target_as = hfe_pirate_new_country_species
 							}
 						}
-							create_country = {
-								type = default
+						create_country = {
+							type = default
 							species = event_target:hfe_pirate_new_country_species
-								origin = origin_separatists
-								released_from_country = event_target:hfe_pirate_starbase_def
-								effect = {
+							origin = origin_separatists
+							released_from_country = event_target:hfe_pirate_starbase_def
+							effect = {
 								save_event_target_as = hfe_pirate_new_country
 							}
 						}
 						set_owner = event_target:hfe_pirate_new_country
+						set_controller = event_target:hfe_pirate_new_country
 						if = {
 							limit = {
 								has_global_flag = hfe_pirate_logs
 							}
 							log = "creating new country from pirate planet [this.GetName] solar system [solar_system.GetName] new country name [hfe_pirate_new_country.GetName]"
 						}
-								}
+					}
 					# if where is 2+ planets
 					every_system_planet = {
 						limit = {
 							is_owned_by = event_target:hfe_pirate_starbase_def
 						}
 						set_owner = event_target:hfe_pirate_new_country
+						set_controller = event_target:hfe_pirate_new_country
 					}
 					# should spawn outpost by vanilla event
 					# starbase = {
@@ -1200,9 +1215,10 @@ ship_event = {
 					destroy_colony = yes
 				}
 			}
-			starbase = {
-				destroy_fleet = fleet
-			}
+			# starbase = {
+			# 	destroy_fleet = fleet
+			# }
+			destroy_fleet = starbase.fleet
 		}
 	}
 }
@@ -1230,7 +1246,7 @@ planet_event = {
 			limit = {
 				has_global_flag = hfe_pirate_logs
 			}
-			log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_transfer on_planet_bombarded"
+			log = "working event hfe_pirate.57 for planet [this.GetName] solar system [solar_system.GetName] converting pirate base to asteroid on_planet_ownerless on_planet_bombarded"			# on_planet_transfer
 		}
 		every_owned_pop = {
 			hfe_effect_refuge_or_die = yes
@@ -1580,19 +1596,19 @@ country_event = {
 				}
 			}
 			hfe_trigger_pirate_raid_have_no_flag_tooltip = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 			hfe_trigger_pirate_protect_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.0.response
 		hfe_effect_pirate_protect_cost_shift = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		hidden_effect = {
 			# i hope its temporal fix
@@ -1649,8 +1665,8 @@ country_event = {
 					limit = {
 						is_country_type = default
 						hfe_trigger_pirate_raid_have_no_flag = {
-							pirate = event_target:hfe_pirate_country
-							target = this
+							hfe_pirate = event_target:hfe_pirate_country
+							hfe_target = this
 						}
 						is_hostile = event_target:hfe_pirate_country
 						hfe_trigger_is_event_target = no
@@ -1718,330 +1734,78 @@ country_event = {
 		}
 	}
 	# select target menu
-	option = {
-		name = hfe_pirate.101.raid_menu.0
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_0
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_0
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_0
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_0.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 0
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.1
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_1
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_1
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_1
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_1.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 1
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.2
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_2
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_2
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_2
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_2.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 2
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.3
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_3
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_3
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_3
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_3.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 3
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.4
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_4
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_4
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_4
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_4.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 4
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.5
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_5
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_5
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.raid_menu.response
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_5
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai paid for raid target [hfe_event_target_5.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target
+		hfe_index = 5
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
 	# copy of options above for ai, removed is_dialog_only because it zero outs ai weights, but rendering event on each click is bad for human so mess with it
-	option = {
-		name = hfe_pirate.101.raid_menu.0
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_0
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_0
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_0
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_0.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 0
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.1
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_1
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_1
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_1
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_1.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 1
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.2
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_2
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_2
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_2
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_2.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 2
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.3
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_3
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_3
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_3
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_3.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 3
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.4
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_4
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_4
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_4
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_4.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 4
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
-	option = {
-		name = hfe_pirate.101.raid_menu.5
-		trigger = {
-			has_country_flag = hfe_pirate.101.raid_menu
-			exists = event_target:hfe_event_target_5
-			is_ai = yes
-			hfe_trigger_pirate_raid_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = event_target:hfe_event_target_5
-			}
-		}
-		hfe_effect_pirate_raid_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = event_target:hfe_event_target_5
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai paid for raid target [hfe_event_target_5.GetName]. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_raid_target_ai
+		hfe_index = 5
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_event_target_
 	}
 	# trade menu
 	option = {
@@ -2075,15 +1839,15 @@ country_event = {
 		}
 		allow = {
 			hfe_trigger_pirate_energy_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.0.response
 		hfe_effect_pirate_energy_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		if = {
 			limit = {
@@ -2099,13 +1863,13 @@ country_event = {
 			has_country_flag = hfe_pirate.101.traid_menu
 			is_ai = yes
 			hfe_trigger_pirate_energy_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		hfe_effect_pirate_energy_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		if = {
 			limit = {
@@ -2167,15 +1931,15 @@ country_event = {
 		}
 		allow = {
 			hfe_trigger_pirate_admiral_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		is_dialog_only = yes
 		response_text = hfe_pirate.101.traid_menu.2.response
 		hfe_effect_pirate_admiral_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		if = {
 			limit = {
@@ -2191,13 +1955,13 @@ country_event = {
 			has_country_flag = hfe_pirate.101.traid_menu
 			is_ai = yes
 			hfe_trigger_pirate_admiral_buy = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		hfe_effect_pirate_admiral_buy = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		if = {
 			limit = {
@@ -2339,7 +2103,7 @@ country_event = {
 	}
 	# flavor option
 	option = {
-		name = hfe_pirate.101.slave_menu.0
+		name = hfe_pirate.101.slave_menu.6
 		trigger = {
 			has_country_flag = hfe_pirate.101.slave_menu
 			event_target:hfe_pirate_country = {
@@ -2347,337 +2111,85 @@ country_event = {
 			}
 		}
 		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.0.response
+		response_text = hfe_pirate.101.slave_menu.6.response
 		# is_dialog_only always have zero ai weight but sometimes it is not lol
 		ai_chance = {
 			factor = 0
 		}
 	}
 	# select slave menu
-	option = {
-		name = hfe_pirate.101.slave_menu.1
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_0
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_0
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_0
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 0. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 0
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.2
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_1
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_1
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_1
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 1. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 1
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.3
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_2
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_2
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_2
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 2. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 2
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.4
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_3
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_3
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_3
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 3. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 3
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.5
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_4
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_4
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_4
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 4. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 4
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.6
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_5
-			is_ai = no
-		}
-		allow = {
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_5
-			}
-		}
-		is_dialog_only = yes
-		response_text = hfe_pirate.101.slave_menu.response
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_5
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] non ai buy slaves 5. Pirate: [hfe_pirate_country.GetName]"
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave
+		hfe_index = 5
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
 	# ai version
-	option = {
-		name = hfe_pirate.101.slave_menu.1
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_0
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_0
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_0
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 0. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 0
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.2
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_1
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_1
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_1
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 1. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 1
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.3
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_2
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_2
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_2
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 2. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 2
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.4
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_3
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_3
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_3
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 3. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 3
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.5
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_4
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_4
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_4
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 4. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 4
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
-	option = {
-		name = hfe_pirate.101.slave_menu.6
-		trigger = {
-			has_country_flag = hfe_pirate.101.slave_menu
-			exists = event_target:hfe_slave_target_5
-			is_ai = yes
-			hfe_trigger_pirate_slave_buy = {
-				hfe_country = event_target:hfe_pirate_country
-				hfe_species = event_target:hfe_slave_target_5
-			}
-		}
-		hfe_effect_pirate_slave_buy = {
-			hfe_country = event_target:hfe_pirate_country
-			hfe_species = event_target:hfe_slave_target_5
-		}
-		if = {
-			limit = {
-				has_global_flag = hfe_pirate_logs
-			}
-			log = "Pirate diplo menu. [this.GetName] ai buy slaves 5. Pirate: [hfe_pirate_country.GetName]"
-		}
-		country_event = {
-			id = hfe_pirate.101
-		}
-		ai_chance = {
-			factor = 3
-		}
+	inline_script = {
+		script = hfe_inline_script_event_pirate_diplomacy_select_slave_ai
+		hfe_index = 5
+		hfe_pirate = event_target:hfe_pirate_country
+		hfe_target = event_target:hfe_slave_target_
 	}
 	# service menu
 	option = {
@@ -2696,6 +2208,7 @@ country_event = {
 			factor = 0
 		}
 	}
+	# move to another event maybe?
 	# psi test menu
 	option = {
 		name = hfe_pirate.101.psi_test_menu
@@ -3418,8 +2931,8 @@ country_event = {
 	trigger = {
 		exists = event_target:hfe_pirate_country.ruler
 		hfe_trigger_pirate_raid_have_no_flag = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		event_target:hfe_pirate_country = {
 			not = {
@@ -3440,13 +2953,13 @@ country_event = {
 		name = hfe_pirate.200.0
 		allow = {
 			hfe_trigger_pirate_protect_cost = {
-				pirate = event_target:hfe_pirate_country
-				target = root
+				hfe_pirate = event_target:hfe_pirate_country
+				hfe_target = root
 			}
 		}
 		hfe_effect_pirate_protect_cost_shift = {
-			pirate = event_target:hfe_pirate_country
-			target = root
+			hfe_pirate = event_target:hfe_pirate_country
+			hfe_target = root
 		}
 		hidden_effect = {
 			if = {
@@ -3766,7 +3279,11 @@ fleet_event = {
 		if = {
 			limit = {
 				solar_system = {
-					hfe_trigger_pirate_fleet_power_in_system_check = no
+					not = {
+						hfe_trigger_pirate_fleet_power_in_system_check = {
+							hfe_fleet = root
+						}
+					}
 				}
 			}
 			if = {
@@ -3832,7 +3349,11 @@ fleet_event = {
 			every_fleet_in_system = {
 				limit = {
 					has_fleet_flag = hfe_pirate_fleet_move_to_target
-					hfe_trigger_pirate_this_fleet_more_power_then_root = no
+					not = {
+						hfe_trigger_pirate_this_fleet_more_power_than = {
+							hfe_fleet = root
+						}
+					}
 				}
 				if = {
 					limit = {
