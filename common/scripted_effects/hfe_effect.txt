@@ -1007,31 +1007,23 @@ hfe_effect_save_event_target = {
 }
 
 # for country
-hfe_effect_create_admirals = {
-	while = {
-		count = 5
-		create_leader = {
-			class = commander
-			species = this
-			skill = 5
-			leader_age_min = 100
-			leader_age_max = 300
-		}
+hfe_effect_human_fallen_country_init_modifiers = {
+	add_modifier = {
+		modifier = hfe_idustrial_boom
+		years = 20
+		multiplier = 10
 	}
-}
-
-hfe_effect_create_fleet = {
-	hfe_effect_create_admirals = yes
 	add_modifier = {
 		modifier = hfe_space_boom
-		years = 10
+		years = 20
 	}
 	add_modifier = {
 		modifier = hfe_navy_size
 		years = 200
 	}
-	add_resource = {
-		alloys = 100000
+	add_modifier = {
+		modifier = hfe_block_megastructure
+		years = 200
 	}
 }
 
@@ -1730,23 +1722,36 @@ hfe_effect_stargate_remove = {
 hfe_effect_give_random_tech = {
 	add_random_research_option = {
 		tier = 1
-		add_progress = 1
+		add_progress = 0.5
 		fail_effects = {
 			add_random_research_option = {
 				tier = 2
-				add_progress = 1
+				add_progress = 0.5
 				fail_effects = {
 					add_random_research_option = {
 						tier = 3
-						add_progress = 1
+						add_progress = 0.5
 						fail_effects = {
 							add_random_research_option = {
 								tier = 4
-								add_progress = 1
+								add_progress = 0.5
 								fail_effects = {
 									add_random_research_option = {
 										tier = 5
-										add_progress = 1
+										add_progress = 0.5
+										fail_effects = {
+											random_list = {
+												10 = {
+													hfe_effect_add_physics_research.3 = yes
+												}
+												10 = {
+													hfe_effect_add_society_research.3 = yes
+												}
+												10 = {
+													hfe_effect_add_engineering_research.3 = yes
+												}
+											}
+										}
 									}
 								}
 							}
@@ -1755,6 +1760,27 @@ hfe_effect_give_random_tech = {
 				}
 			}
 		}
+	}
+}
+
+hfe_effect_give_tech_option_or_progress = {
+	if = {
+		limit = {
+			has_technology = $hfe_tech$
+		}
+		# do nothing
+	}
+	else_if = {
+		limit = {
+			has_tech_option = $hfe_tech$
+		}
+		add_tech_progress = {
+			tech = $hfe_tech$
+			progress = $hfe_progress$
+		}
+	}
+	else = {
+		add_research_option = $hfe_tech$
 	}
 }
 
