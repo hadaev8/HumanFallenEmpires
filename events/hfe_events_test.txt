@@ -5,72 +5,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > -2
-		# 	}
-		# 	log = "is_difficulty > -2"
-		# }
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > -1
-		# 	}
-		# 	log = "is_difficulty > -1"
-		# }
-		if = {
-			limit = {
-				is_difficulty > 0
-			}
-			log = "is_difficulty > 0"
-		}
-		if = {
-			limit = {
-				is_difficulty > 1
-			}
-			log = "is_difficulty > 1"
-		}
-		if = {
-			limit = {
-				is_difficulty > 2
-			}
-			log = "is_difficulty > 2"
-		}
-		if = {
-			limit = {
-				is_difficulty > 3
-			}
-			log = "is_difficulty > 3"
-		}
-		if = {
-			limit = {
-				is_difficulty > 4
-			}
-			log = "is_difficulty > 4"
-		}
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > 5
-		# 	}
-		# 	log = "is_difficulty > 5"
-		# }
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > 6
-		# 	}
-		# 	log = "is_difficulty > 6"
-		# }
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > 7
-		# 	}
-		# 	log = "is_difficulty > 7"
-		# }
-		# if = {
-		# 	limit = {
-		# 		is_difficulty > 8
-		# 	}
-		# 	log = "is_difficulty > 8"
-		# }
+		log = "difficulty is [this.hfe_scripted_loc_get_difficulty]"
 	}
 }
 
@@ -957,41 +892,8 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		# random_owned_pop = {
-		# 	save_event_target_as = hfe_event_target_0
-		# 	log = "[this.GetName]"
-		# }
-		# log = "[this.hfe_script_value_test]"
-		# random_owned_leader = {
-		# 	limit = {
-		# 		leader_class = commander
-		# 	}
-		# 	log = "0 [this.hfe_script_value_test]"
-		# 	add_trait = hfe_leader_trait_future_train
-		# 	log = "1 [this.hfe_script_value_test]"
-		# 	while = {
-		# 		count = 1000
-		# 		hfe_effect_leader_add_trait_random = {
-		# 			trait_effect = hfe_effect_leaders_add_random_trait
-		# 		}
-		# 	}
-		# 	log = "2 [this.hfe_script_value_test]"
-		# }
-		# random_owned_leader = {
-		# 	limit = {
-		# 		leader_class = commander
-		# 		not = {
-		# 			has_trait = hfe_leader_trait_future_train
-		# 		}
-		# 	}
-		# 	log = "3 [this.hfe_script_value_test]"
-		# 	while = {
-		# 		count = 1000
-		# 		hfe_effect_leader_add_trait_random = {
-		# 			trait_effect = hfe_effect_leaders_add_random_trait
-		# 		}
-		# 	}
-		# 	log = "4 [this.hfe_script_value_test]"
+		# every_owned_pop = {
+		# 	log = "[this.GetName] [this.hfe_scripted_loc_test]"
 		# }
 	}
 }
@@ -1089,16 +991,48 @@ country_event = {
 # 		custom_tooltip = HFE_TSP_SPAWN_TEST_GLOBAL_FLAG_TOOLTIP_REMOVE
 # 	}
 # }
-country_event = {
+planet_event = {
 	id = hfe_test.41
 	title = hfe_nothing
 	desc = hfe_nothing
 	picture = GFX_evt_hfe_satellite_in_orbit
 	is_triggered_only = yes
 	immediate = {
-		every_owned_leader = {
-			add_skill = 10
+		set_variable = {
+			which = hfe_test_var
+			value = value:hfe_script_value_plague_planet_resistance
 		}
+		log = "plague var [this.hfe_test_var]"
+		create_species = {
+			class = random_non_machine
+			traits = {
+				trait = trait_pc_habitat_preference
+			}
+		}
+		while = {
+			count = 1000
+			create_pop = {
+				species = last_created_species
+			}
+		}
+		last_created_pop = {
+			save_event_target_as = hfe_settle_pop_target
+		}
+		set_variable = {
+			which = hfe_test_var
+			value = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_free_jobs|
+		}
+		log = "test1 [this.hfe_test_var]"
+		set_variable = {
+			which = hfe_test_var
+			value = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_free_housing|
+		}
+		log = "test2 [this.hfe_test_var]"
+		set_variable = {
+			which = hfe_test_var
+			value = value:hfe_script_value_plague_planet_resistance
+		}
+		log = "plague var [this.hfe_test_var]"
 	}
 	option = {
 		name = hfe_nothing

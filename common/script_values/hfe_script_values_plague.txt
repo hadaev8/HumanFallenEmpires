@@ -1,0 +1,113 @@
+hfe_script_value_plague_num_starting_planets = {
+	set = trigger:num_galaxy_systems
+	complex_trigger_modifier = {
+		trigger = check_galaxy_setup_value
+		parameters = {
+			setting = habitable_worlds_scale
+		}
+		mode = mult
+	}
+	complex_trigger_modifier = {
+		trigger = check_galaxy_setup_value
+		parameters = {
+			setting = crisis_strength_scale
+		}
+		mode = mult
+	}
+	# for now use twice scale
+	mult = value:hfe_script_value_difficulty_twice_scale
+	# lets say we have 1k stars galaxy, x2 habitable planets, x5 crisis and max difficulty, should translate to 20k ponts or 80 planets
+	# but normal peoples have something like 1k planets and 1.75 difficulty and this is 7 planets
+	divide = 250
+	round = yes
+	min = 4
+}
+
+hfe_script_value_plague_planet_crime = {
+	set = trigger:planet_crime
+	mult = 0.02
+	mult = -1
+}
+
+hfe_script_value_plague_free_amenities = {
+	set = trigger:free_amenities
+	max = 100
+	min = -100
+	mult = 0.03
+}
+
+hfe_script_value_plague_count_owned_pop = {
+	complex_trigger_modifier = {
+		trigger = count_owned_pop
+		parameters = {
+			limit = {
+				hfe_trigger_plague_is_immune = no
+			}
+		}
+		mode = add
+	}
+	mult = 0.05
+	# prevent overflow
+	max = 5
+	mult = -1
+}
+
+hfe_script_value_plague_planet_resistance = {
+	base = 1
+	# buildings
+	modifier = {
+		has_building = building_clinic
+		mult = 2
+	}
+	modifier = {
+		has_building = building_hospital
+		mult = 4
+	}
+	modifier = {
+		has_building = building_psi_corps
+		mult = 2
+	}
+	# good planet type
+	modifier = {
+		or = {
+			is_planet_class = pc_hive
+			is_planet_class = pc_gaia
+			habitable_structure = yes
+		}
+		mult = 2
+	}
+	# edict
+	modifier = {
+		exists = owner
+		owner = {
+			has_edict = hfe_plague_quarantine
+		}
+		mult = 2
+	}
+	# ai bonus
+	modifier = {
+		exists = owner
+		owner = {
+			is_ai = yes
+		}
+		mult = 2
+	}
+	# tech
+	modifier = {
+		exists = owner
+		owner = {
+			has_technology = hfe_tech_plague_immune
+		}
+		mult = 2
+	}
+	modifier = {
+		exists = owner
+		owner = {
+			has_technology = hfe_tech_plague_immune_2
+		}
+		mult = 2
+	}
+	mult = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_plague_planet_crime|
+	mult = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_plague_free_amenities|
+	mult = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_plague_count_owned_pop|
+}

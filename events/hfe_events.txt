@@ -1310,38 +1310,73 @@ ship_event = {
 	immediate = {
 		from = {
 			hfe_effect_remove_signal_object_from_this = yes
-			if = {
-				limit = {
-					root.owner = {
-						hfe_trigger_is_human = yes
-					}
+			create_species = {
+				# name = random
+				class = PRE_MAM
+				traits = {
+					trait = trait_presapient_starborn
+					trait = hfe_species_trait_dolphin
 				}
-				# root = {
-				# 	set_name = "[solar_system.GetName] Delphinidae"
-				# }
-				# TODO check if it work
-				create_species = {
-					name = "[solar_system.GetName] Delphinidae"
-					class = PRE_MAM
-					traits = {
-						trait = hfe_species_trait_dolphin
-					}
-					homeworld = this
-					sapient = no
-				}
-				# root = {
-				# 	set_name = random
-				# }
+				homeworld = this
+				sapient = no
 			}
-			else = {
-				create_species = {
-					name = "Ksotry"
-					class = PRE_MAM
-					traits = {
-						trait = hfe_species_trait_dolphin
+			last_created_species = {
+				if = {
+					limit = {
+						has_aquatics = yes
 					}
-					homeworld = this
-					sapient = no
+					modify_species = {
+						add_trait = trait_aquatic
+					}
+				}
+				if = {
+					limit = {
+						root.owner = {
+							hfe_trigger_is_human = yes
+							is_materialist = yes
+						}
+					}
+					rename_species = {
+						name = hfe_species_names_dolphin.1
+					}
+				}
+				else_if = {
+					limit = {
+						root.owner = {
+							hfe_trigger_is_human = yes
+							is_xenophile = yes
+						}
+					}
+					rename_species = {
+						name = hfe_species_names_dolphin.2
+					}
+				}
+				else_if = {
+					limit = {
+						root.owner = {
+							hfe_trigger_is_human = no
+							is_xenophile = yes
+						}
+					}
+					rename_species = {
+						name = hfe_species_names_dolphin.3
+					}
+				}
+				else_if = {
+					limit = {
+						root.owner = {
+							hfe_trigger_is_human = yes
+							is_militarist = yes
+						}
+					}
+					rename_species = {
+						name = hfe_species_names_dolphin.4
+					}
+				}
+				else = {
+					rename_species = {
+						name = hfe_species_names_dolphin.0
+					}
 				}
 			}
 			while = {

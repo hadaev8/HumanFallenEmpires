@@ -411,9 +411,123 @@ country_event = {
 	}
 }
 
-# refuge leaders
+# hfe_leader_trait_transcendent heir asks for rule
 country_event = {
 	id = hfe_leaders.110
+	title = hfe_leaders.110.name
+	desc = hfe_leaders.110.desc
+	show_sound = event_conversation
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:hfe_leaders_priest
+		planet_background = event_target:hfe_leaders_priest_location
+		graphical_culture = event_target:hfe_leaders_priest_location
+		city_level = event_target:hfe_leaders_priest_location
+		room = event_target:hfe_leaders_priest_location
+	}
+	trigger = {
+		exists = ruler
+		ruler = {
+			# in current if anyone have heir trait and not ruler, it should be imperial authority
+			not = {
+				has_trait = hfe_leader_trait_transcendent
+			}
+		}
+		# our contender
+		any_owned_leader = {
+			has_trait = hfe_leader_trait_transcendent
+			has_trait = trait_imperial_heir
+			is_ruler = no
+			not = {
+				has_leader_flag = hfe_has_event_leaders.110
+			}
+		}
+		any_pop_faction = {
+			has_ethic = ethic_spiritualist
+		}
+		any_owned_leader = {
+			has_ethic = ethic_spiritualist
+		}
+		pop_percentage = {
+			percentage > 0.3
+			limit = {
+				has_ethic = ethic_spiritualist
+				exists = pop_faction
+				pop_faction = {
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+	}
+	immediate = {
+		random_pop_faction = {
+			limit = {
+				has_ethic = ethic_spiritualist
+			}
+			save_event_target_as = hfe_leaders_priest_faction
+		}
+		random_owned_leader = {
+			limit = {
+				has_ethic = ethic_spiritualist
+			}
+			save_event_target_as = hfe_leaders_priest
+			# try to get leader location, getting ship image would be too inconvinient
+			if = {
+				limit = {
+					exists = planet
+				}
+				planet = {
+					save_event_target_as = hfe_leaders_priest_location
+				}
+			}
+			else = {
+				root = {
+					save_event_target_as = hfe_leaders_priest_location
+				}
+			}
+		}
+		random_owned_leader = {
+			limit = {
+				has_trait = hfe_leader_trait_transcendent
+				has_trait = trait_imperial_heir
+				is_ruler = no
+			}
+			set_leader_flag = hfe_has_event_leaders.110
+			save_event_target_as = hfe_leaders_transcendent_heir
+		}
+	}
+	option = {
+		name = hfe_leaders.110.0
+		kill_leader = {
+			ruler = yes
+			fire = yes
+		}
+	}
+	option = {
+		name = hfe_leaders.110.1
+		exclusive_trigger = {
+			ruler = {
+				has_trait = leader_trait_chosen
+			}
+		}
+		ruler = {
+			add_trait = hfe_leader_trait_transcendent
+		}
+		event_target:hfe_leaders_transcendent_heir = {
+			kill_leader = {
+			}
+		}
+	}
+	option = {
+		name = hfe_leaders.110.2
+		default_hide_option = yes
+	}
+}
+
+# refuge leaders
+country_event = {
+	id = hfe_leaders.150
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
@@ -489,7 +603,7 @@ country_event = {
 								value = 1
 							}
 							set_timed_country_flag = {
-								flag = hfe_leaders.111
+								flag = hfe_leaders.151
 								days = 1
 							}
 							if = {
@@ -498,7 +612,7 @@ country_event = {
 										is_country_type = hfe_pirate
 									}
 								}
-								set_country_flag = hfe_leaders.111_from_pirate
+								set_country_flag = hfe_leaders.151_from_pirate
 							}
 						}
 					}
@@ -543,7 +657,7 @@ country_event = {
 		}
 		every_country = {
 			country_event = {
-				id = hfe_leaders.111
+				id = hfe_leaders.151
 				days = 1
 			}
 		}
@@ -552,25 +666,25 @@ country_event = {
 
 # refuge leaders notification
 country_event = {
-	id = hfe_leaders.111
-	title = hfe_leaders.111.name
+	id = hfe_leaders.151
+	title = hfe_leaders.151.name
 	desc = {
 		trigger = {
 			success_text = {
-				text = hfe_leaders.111.desc.0.0
+				text = hfe_leaders.151.desc.0.0
 				check_variable = {
 					which = hfe_leaders_refuge
 					value = 1
 				}
 			}
 			success_text = {
-				text = hfe_leaders.111.desc.0.1
+				text = hfe_leaders.151.desc.0.1
 				check_variable = {
 					which = hfe_leaders_refuge
 					value > 1
 				}
 			}
-			text = hfe_leaders.111.desc.1
+			text = hfe_leaders.151.desc.1
 		}
 	}
 	picture = GFX_evt_galactic_senate
@@ -592,18 +706,18 @@ country_event = {
 		}
 	}
 	option = {
-		name = hfe_leaders.111.1
+		name = hfe_leaders.151.1
 		exclusive_trigger = {
-			has_country_flag = hfe_leaders.111_from_pirate
+			has_country_flag = hfe_leaders.151_from_pirate
 		}
 	}
 	option = {
-		name = hfe_leaders.111.0
+		name = hfe_leaders.151.0
 	}
 	after = {
 		hidden_effect = {
 			clear_variable = hfe_leaders_refuge
-			remove_country_flag = hfe_leaders.111_from_pirate
+			remove_country_flag = hfe_leaders.151_from_pirate
 		}
 	}
 }

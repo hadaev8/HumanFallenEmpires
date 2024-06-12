@@ -56,55 +56,73 @@ hfe_script_value_capital_lvl = {
 	}
 }
 
-# up to 200 years
-hfe_script_value_years_passed_1_to_10 = {
-	set = trigger:years_passed
-	divide = 20
+hfe_script_value_years_passed_1_to = {
+	add = trigger:years_passed
+	[[hfe_scale]
+	mult = $hfe_scale$
+	]
+	[[!hfe_scale]
+	mult = 0.1
+	]
 	round = yes
 	min = 1
-	max = 10
-}
-
-hfe_script_value_years_passed_1_to_20 = {
-	set = trigger:years_passed
-	divide = 10
-	round = yes
-	min = 1
-	max = 20
+	[[hfe_max]
+	max = $hfe_max$
+	]
 }
 
 hfe_script_value_difficulty_twice_scale = {
+	base = 1
 	add = trigger:is_difficulty
-	divide = 6
+	# from 0 to 6 in current vanilla
+	divide = 7
 	add = 1
 }
 
 hfe_script_value_difficulty_scale = {
+	base = 1
 	add = trigger:is_difficulty
-	add = 1
 }
 
+# 2**16 is fine, kind of accurate at 2**-6, on 2**-8 difference with right answer is 0,93
+# 2**-6 * 2**-6 is kind of ok
+hfe_script_value_pow_2 = {
+	base = 2
+	pow = $hfe_val$
+	# add rounding optional arg for discovery costs
+}
+
+# its sound like i cant pass script value with args as script value arg
+# hfe_script_value_mult = {
+# 	set = $hfe_number$
+# 	[[!hfe_scale]
+# 	mult = $hfe_scale$
+# 	]
+# }
+# free jobs only can be positive
 hfe_script_value_free_jobs = {
 	add = trigger:free_jobs
-	divide = 2
-	min = 1
+	# just in case
+	min = 0
+	mult = 0.5
+	max = 6
 }
 
-# need exp here
-# hfe_script_value_free_housing = {
-# 	add = trigger:free_housing
-# 	divide = 2
-# 	min = -5
-# 	max = 5
-# 	pow = 2
-# }
+hfe_script_value_free_housing = {
+	add = trigger:free_housing
+	# its easy to get free housing, so reduce its relative importance
+	mult = 0.25
+	# prevent overflow
+	max = 6
+	min = -6
+}
+
 hfe_script_value_job_weights_army_modifier = {
-	set = 1
 	add = modifier:army_defense_damage_mult
 	add = modifier:army_damage_mult
-	# change it latter to put in line with other weights
-	mult = 4
-	min = 1
+	# in vanilla very strong trait gives 0.4 damage and have x2 weight
+	mult = 2.5
+	# 2 ** (0.4*2.5) = 2
 }
 
 hfe_script_value_weight_num_planets_with_deposit_in_system = {
@@ -144,15 +162,9 @@ hfe_script_value_opinion = {
 	}
 }
 
-hfe_script_value_pow_2 = {
-	set = 2
-	pow = $val$
-	floor = yes
-}
-
 # less weight if country1 weakier
 hfe_script_value_weight_relative_fleet_power = {
-	set = 1
+	base = 1
 	modifier = {
 		$country0$ = {
 			relative_power = {
@@ -196,7 +208,7 @@ hfe_script_value_weight_relative_fleet_power = {
 }
 
 hfe_script_value_weight_opposing_ethics_divergence_reduce = {
-	set = 1
+	base = 1
 	divide = value:hfe_script_value_weight_opposing_ethics_divergence|country|$country$|
 }
 
@@ -237,9 +249,9 @@ hfe_script_value_scale_for_every_thousand_in_stockpile = {
 	floor = yes
 }
 
-hfe_script_value_mul_two_values = {
-	set = $val0$
-	mult = $val1$
+hfe_script_value_mult_two_values = {
+	set = $hfe_val0$
+	mult = $hfe_val1$
 }
 
 hfe_script_value_pop_percentage_spiritualist = {
@@ -250,7 +262,7 @@ hfe_script_value_pop_percentage_spiritualist = {
 				has_ethic = ethic_spiritualist
 			}
 		}
-		mode = set
+		mode = add
 	}
 }
 
@@ -299,13 +311,3 @@ hfe_script_value_job_weights_triple_resources_modifier = {
 		mult = @\[ 10 * $WEIGHT3$ ]
 	}
 }
-
-# hfe_script_value_test = {
-# 	complex_trigger_modifier = {
-# 		trigger = opposing_ethics_divergence
-# 		parameters = {
-# 			who = event_target:hfe_event_target_0
-# 		}
-# 		mode = add
-# 	}
-# }

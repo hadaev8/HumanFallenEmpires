@@ -195,10 +195,10 @@ hfe_effect_settle_pop = {
 					parameters = {
 						who = event_target:hfe_settle_pop_target
 					}
-					# TODO check how it works is it mul to base above or some inner value?
-					mode = factor
+					# TODO check how it works is it mul to base above or some inner value? but really should work as it seems it should
+					mode = mult
 				}
-				# TODO seems like trigger above mul it to zero sometimes and it raise error in the log, probably should edit hfe_trigger_planet_valid_for_settle
+				# pop with habitability 0 still can live on planet
 				min = 0.01
 				modifier = {
 					factor = 10
@@ -210,15 +210,8 @@ hfe_effect_settle_pop = {
 						}
 					}
 				}
-				mult = value:hfe_script_value_free_jobs
-				modifier = {
-					factor = 0.5
-					free_housing < 0
-				}
-				modifier = {
-					factor = 0.1
-					free_housing < -5
-				}
+				mult = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_free_jobs|
+				mult = value:hfe_script_value_pow_2|hfe_val|value:hfe_script_value_free_housing|
 			}
 			resettle_pop = {
 				pop = event_target:hfe_settle_pop_target
@@ -364,6 +357,18 @@ hfe_effect_species_add_modded_trait = {
 			modify_species = {
 				species = $hfe_species$
 				add_trait = hfe_species_trait_clever_beast
+			}
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				$hfe_species$ = {
+					has_trait = hfe_species_trait_tough
+				}
+			}
+			modify_species = {
+				species = $hfe_species$
+				add_trait = hfe_species_trait_tough
 			}
 		}
 	}

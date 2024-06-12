@@ -80,57 +80,8 @@ country_event = {
 				value = 0
 			}
 		}
-		set_variable = {
-			which = hfe_plague_power
-			value = 4
-		}
-		if = {
-			limit = {
-				is_difficulty > 0
-			}
-			change_variable = {
-				which = hfe_plague_power
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				is_difficulty > 1
-			}
-			change_variable = {
-				which = hfe_plague_power
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				is_difficulty > 2
-			}
-			change_variable = {
-				which = hfe_plague_power
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				is_difficulty > 3
-			}
-			change_variable = {
-				which = hfe_plague_power
-				value = 1
-			}
-		}
-		if = {
-			limit = {
-				is_difficulty > 4
-			}
-			change_variable = {
-				which = hfe_plague_power
-				value = 1
-			}
-		}
 		while = {
-			count = hfe_plague_power
+			count = value:hfe_script_value_plague_num_starting_planets
 			random_galaxy_planet = {
 				limit = {
 					hfe_trigger_plague_valid_planet = yes
@@ -142,7 +93,6 @@ country_event = {
 				}
 			}
 		}
-		clear_variable = hfe_plague_power
 	}
 }
 
@@ -241,7 +191,7 @@ planet_event = {
 				event_target:global_event_country = {
 					check_variable = {
 						which = hfe_plague_planet_num
-						value > 45
+						value > 50
 					}
 				}
 			}
@@ -252,6 +202,12 @@ planet_event = {
 					days = 1
 				}
 			}
+			if = {
+				limit = {
+					has_global_flag = hfe_plague_logs
+				}
+				log = "Plague. lvl 2"
+			}
 		}
 		else_if = {
 			limit = {
@@ -261,7 +217,7 @@ planet_event = {
 				event_target:global_event_country = {
 					check_variable = {
 						which = hfe_plague_planet_num
-						value > 90
+						value > 100
 					}
 				}
 			}
@@ -272,6 +228,12 @@ planet_event = {
 					days = 1
 				}
 			}
+			if = {
+				limit = {
+					has_global_flag = hfe_plague_logs
+				}
+				log = "Plague. lvl 3"
+			}
 		}
 		# pulse events
 		# kill pop
@@ -280,7 +242,7 @@ planet_event = {
 			days = 90
 			random = 180
 		}
-		# send plague
+		# spread plague
 		planet_event = {
 			id = hfe_plague.3
 			days = 180
@@ -337,71 +299,8 @@ planet_event = {
 				random_list = {
 					# not die
 					10 = {
-						# crime
 						modifier = {
-							factor = 1.25
-							planet_crime < 10
-						}
-						# amenities
-						modifier = {
-							factor = 1.25
-							free_amenities > 0
-						}
-						modifier = {
-							factor = 1.25
-							free_amenities > 10
-						}
-						modifier = {
-							factor = 1.25
-							free_amenities > 20
-						}
-						# buildings
-						modifier = {
-							factor = 2
-							has_building = building_clinic
-						}
-						modifier = {
-							factor = 4
-							has_building = building_hospital
-						}
-						modifier = {
-							factor = 2
-							has_building = building_psi_corps
-						}
-						# good planet type
-						modifier = {
-							factor = 2
-							or = {
-								is_planet_class = pc_gaia
-								habitable_structure = yes
-							}
-						}
-						# edict
-						modifier = {
-							factor = 2
-							owner = {
-								has_edict = hfe_plague_quarantine
-							}
-						}
-						# ai bonus
-						modifier = {
-							factor = 2
-							owner = {
-								is_ai = yes
-							}
-						}
-						# tech
-						modifier = {
-							factor = 2
-							owner = {
-								has_technology = hfe_tech_plague_immune
-							}
-						}
-						modifier = {
-							factor = 2
-							owner = {
-								has_technology = hfe_tech_plague_immune_2
-							}
+							mult = value:hfe_script_value_plague_planet_resistance
 						}
 						if = {
 							limit = {
@@ -443,147 +342,6 @@ planet_event = {
 					}
 					# die
 					30 = {
-						# amenities
-						modifier = {
-							factor = 1.25
-							free_amenities < 0
-						}
-						modifier = {
-							factor = 1.25
-							free_amenities < -10
-						}
-						modifier = {
-							factor = 1.25
-							free_amenities < -20
-						}
-						# crime
-						modifier = {
-							factor = 1.25
-							planet_crime > 10
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 20
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 30
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 40
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 50
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 60
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 70
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 80
-						}
-						modifier = {
-							factor = 1.25
-							planet_crime > 90
-						}
-						# pop ammount scale
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 100
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 90
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 80
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 70
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 60
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 50
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 40
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 30
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 20
-							}
-						}
-						modifier = {
-							factor = 2
-							count_owned_pop = {
-								limit = {
-									hfe_trigger_plague_is_immune = no
-								}
-								count > 10
-							}
-						}
 						random_owned_pop = {
 							limit = {
 								hfe_trigger_plague_is_immune = no
@@ -594,10 +352,10 @@ planet_event = {
 									factor = 0.5
 									has_citizenship_rights = yes
 								}
-								modifier = {
-									factor = 0.5
-									hfe_trigger_plague_is_resist = yes
-								}
+								# modifier = {
+								# 	factor = 0.5
+								# 	hfe_trigger_plague_is_resist = yes
+								# }
 								modifier = {
 									factor = 2
 									is_enslaved = yes
@@ -743,71 +501,8 @@ planet_event = {
 					random_list = {
 						# not send plague
 						10 = {
-							# crime
 							modifier = {
-								factor = 1.25
-								planet_crime < 10
-							}
-							# amenities
-							modifier = {
-								factor = 1.25
-								free_amenities > 0
-							}
-							modifier = {
-								factor = 1.25
-								free_amenities > 10
-							}
-							modifier = {
-								factor = 1.25
-								free_amenities > 20
-							}
-							# buildings
-							modifier = {
-								factor = 2
-								has_building = building_clinic
-							}
-							modifier = {
-								factor = 4
-								has_building = building_hospital
-							}
-							modifier = {
-								factor = 2
-								has_building = building_psi_corps
-							}
-							# good planet type
-							modifier = {
-								factor = 2
-								or = {
-									is_planet_class = pc_gaia
-									habitable_structure = yes
-								}
-							}
-							# edict
-							modifier = {
-								factor = 2
-								owner = {
-									has_edict = hfe_plague_quarantine
-								}
-							}
-							# ai bonus
-							modifier = {
-								factor = 2
-								owner = {
-									is_ai = yes
-								}
-							}
-							# tech
-							modifier = {
-								factor = 2
-								owner = {
-									has_technology = hfe_tech_plague_immune
-								}
-							}
-							modifier = {
-								factor = 2
-								owner = {
-									has_technology = hfe_tech_plague_immune_2
-								}
+								mult = value:hfe_script_value_plague_planet_resistance
 							}
 							# lvl 3 have worse spread
 							modifier = {
@@ -849,147 +544,6 @@ planet_event = {
 						}
 						# send plague
 						30 = {
-							# amenities
-							modifier = {
-								factor = 1.25
-								free_amenities < 0
-							}
-							modifier = {
-								factor = 1.25
-								free_amenities < -10
-							}
-							modifier = {
-								factor = 1.25
-								free_amenities < -20
-							}
-							# crime
-							modifier = {
-								factor = 1.25
-								planet_crime > 10
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 20
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 30
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 40
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 50
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 60
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 70
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 80
-							}
-							modifier = {
-								factor = 1.25
-								planet_crime > 90
-							}
-							# pop ammount scale
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 100
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 90
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 80
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 70
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 60
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 50
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 40
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 30
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 20
-								}
-							}
-							modifier = {
-								factor = 2
-								count_owned_pop = {
-									limit = {
-										hfe_trigger_plague_is_immune = no
-									}
-									count > 10
-								}
-							}
 							if = {
 								limit = {
 									has_global_flag = hfe_plague_logs
@@ -1289,9 +843,7 @@ country_event = {
 			}
 			success_text = {
 				text = hfe_plague.9.desc.2
-				any_owned_planet = {
-					is_planet_class = pc_gaia
-				}
+				exists = event_target:hfe_plague_gaia
 			}
 			success_text = {
 				text = hfe_plague.9.desc.3
@@ -1302,6 +854,10 @@ country_event = {
 				has_tradition = tr_psionics_psionic_assimilation
 			}
 			text = hfe_plague.9.desc.5
+			success_text = {
+				text = hfe_plague.9.desc.6
+				is_gestalt = no
+			}
 		}
 	}
 	show_sound = event_laboratory_sound
@@ -1315,7 +871,10 @@ country_event = {
 		# for localisation
 		random_owned_planet = {
 			limit = {
-				is_planet_class = pc_gaia
+				or = {
+					is_planet_class = pc_hive
+					is_planet_class = pc_gaia
+				}
 			}
 			save_event_target_as = hfe_plague_gaia
 		}
@@ -1429,9 +988,6 @@ country_event = {
 	picture = GFX_evt_news_room
 	show_sound = event_laboratory_sound
 	is_triggered_only = yes
-	option = {
-		name = hfe_plague.50.0
-	}
 	# robots
 	option = {
 		name = hfe_plague.50.1.0
@@ -1487,6 +1043,10 @@ country_event = {
 			}
 		}
 	}
+	# fallback option
+	option = {
+		name = hfe_plague.50.0
+	}
 }
 
 # plague lvl 2 inform
@@ -1513,9 +1073,6 @@ country_event = {
 		remove_country_flag = hfe_plague_meet
 	}
 	option = {
-		name = CURSES
-	}
-	option = {
 		name = hfe_plague.51.0
 		exclusive_trigger = {
 			is_spiritualist = yes
@@ -1526,6 +1083,10 @@ country_event = {
 		exclusive_trigger = {
 			is_materialist = yes
 		}
+	}
+	# fallback option
+	option = {
+		name = CURSES
 	}
 	after = {
 		if = {
