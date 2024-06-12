@@ -402,8 +402,25 @@ hfe_leader_trait_freedom_crusader = {
 		pop_ethic_egalitarian_attraction_mult = 0.1
 		pop_cat_ruler_political_power = -0.1
 		planet_administrators_upkeep_mult = -0.1
-		hfe_planet_jobs_war_with_wg_force_ideology_produces_mult = 0.1
 		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
+	}
+	# todo triggered desc
+	triggered_councilor_modifier = {
+		potential = {
+			is_ruler = yes
+			exists = owner
+			owner = {
+				is_at_war = yes
+				any_war = {
+					using_war_goal = {
+						type = wg_force_ideology
+						owner = prev
+					}
+				}
+			}
+		}
+		country_war_exhaustion_mult = -0.1
+		planet_jobs_produces_mult = 0.1
 	}
 	# diplo opinion effect if trait belongs to ruler
 	leader_class = {
@@ -971,11 +988,23 @@ hfe_leader_trait_warriror_honor = {
 			num_communications > 3
 		}
 	}
-	planet_modifier = {
-		hfe_planet_jobs_war_militarist_produces_mult = 0.15
+	triggered_desc = {
+		trigger = {
+			hfe_trigger_owner_at_war_or_crisis = no
+		}
+		text = hfe_leader_trait_warriror_honor_desc.0
 	}
-	sector_modifier = {
-		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+	triggered_planet_modifier = {
+		potential = {
+			hfe_trigger_owner_at_war_or_crisis = yes
+		}
+		planet_jobs_produces_mult = 0.2
+	}
+	triggered_sector_modifier = {
+		potential = {
+			hfe_trigger_owner_at_war_or_crisis = yes
+		}
+		planet_jobs_produces_mult = 0.1
 	}
 	galcom_modifier = {
 		diplo_weight_naval_mult = 0.1
@@ -983,11 +1012,23 @@ hfe_leader_trait_warriror_honor = {
 	councilor_modifier = {
 		max_rivalries = 1
 	}
+	triggered_desc = {
+		trigger = {
+			hfe_trigger_owner_at_war_or_crisis = no
+		}
+		text = hfe_leader_trait_warriror_honor_desc.1
+	}
 	triggered_councilor_modifier = {
-		hfe_planet_jobs_war_militarist_produces_mult = 0.1
+		potential = {
+			hfe_trigger_owner_at_war_or_crisis = yes
+		}
+		planet_jobs_produces_mult = 0.1
 		mult = value:hfe_script_value_scale_if_ruler|hfe_val|2|
 	}
 	# ruler opinion effect
+	triggered_desc = {
+		text = hfe_leader_trait_warriror_honor_desc_ruler
+	}
 	leader_class = {
 		commander
 	}
@@ -1196,11 +1237,9 @@ hfe_leader_trait_transcendent = {
 	icon = gfx/interface/icons/other/hfe_transcendent.dds
 	leader_potential_add = {
 		hfe_trigger_leaders_traits_enabled = yes
-		# is_gestalt = no
 		hfe_trigger_is_psionic_species = yes
 		# ruler or heir
 		has_trait = trait_imperial_heir
-		# TODO add abdication event ro replace ruler with heir with this trait
 	}
 	triggered_self_modifier = {
 		potential = {
