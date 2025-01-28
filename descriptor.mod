@@ -11,4 +11,4 @@ tags={
 }
 name="Human Fallen Empires Dev"
 picture="thumbnail.jpg"
-supported_version="3.12.*"
+supported_version="v3.14.*"
