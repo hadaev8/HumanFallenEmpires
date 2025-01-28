@@ -313,3 +313,179 @@ hfe_script_value_job_weights_triple_resources_modifier = {
 		mult = @\[ 10 * $WEIGHT3$ ]
 	}
 }
+
+hfe_script_value_resource_deposit_proxy = {
+	complex_trigger_modifier = {
+		trigger = count_deposit
+		parameters = {
+			limit = {
+				has_resource = {
+					type = $hfe_resource$
+					amount = $hfe_amount$
+				}
+			}
+		}
+		mode = add
+	}
+	mult = $hfe_amount$
+}
+
+hfe_script_value_resource = {
+	# oh my
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|1|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|2|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|3|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|4|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|5|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|6|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|7|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|8|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|9|
+	add = value:hfe_script_value_resource_deposit_proxy|hfe_resource|$hfe_resource$|hfe_amount|10|
+	mult = $hfe_mult$
+}
+
+hfe_script_value_arc_furnace_rating_planet = {
+	add = value:hfe_script_value_resource|hfe_resource|minerals|hfe_mult|1|
+	add = value:hfe_script_value_resource|hfe_resource|alloys|hfe_mult|2|
+	add = value:hfe_script_value_resource|hfe_resource|volatile_motes|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|exotic_gases|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|rare_crystals|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|sr_living_metal|hfe_mult|8|
+}
+
+hfe_script_value_science_rating = {
+	add = value:hfe_script_value_resource|hfe_resource|physics_research|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|society_research|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|engineering_research|hfe_mult|4|
+}
+
+hfe_script_value_everything_rating = {
+	add = value:hfe_script_value_science_rating
+	add = value:hfe_script_value_resource|hfe_resource|energy|hfe_mult|1|
+	add = value:hfe_script_value_resource|hfe_resource|minerals|hfe_mult|1|
+	add = value:hfe_script_value_resource|hfe_resource|food|hfe_mult|1|
+	add = value:hfe_script_value_resource|hfe_resource|consumer_goods|hfe_mult|2|
+	add = value:hfe_script_value_resource|hfe_resource|alloys|hfe_mult|4|
+	add = value:hfe_script_value_resource|hfe_resource|volatile_motes|hfe_mult|8|
+	add = value:hfe_script_value_resource|hfe_resource|exotic_gases|hfe_mult|8|
+	add = value:hfe_script_value_resource|hfe_resource|rare_crystals|hfe_mult|8|
+	add = value:hfe_script_value_resource|hfe_resource|sr_living_metal|hfe_mult|16|
+	add = value:hfe_script_value_resource|hfe_resource|sr_zro|hfe_mult|16|
+	add = value:hfe_script_value_resource|hfe_resource|sr_dark_matter|hfe_mult|16|
+	add = value:hfe_script_value_resource|hfe_resource|minor_artifacts|hfe_mult|32|
+}
+
+hfe_script_value_system_star_proxy = {
+	add = system_star.$hfe_val$
+}
+
+hfe_script_value_worm_system_rating = {
+	complex_trigger_modifier = {
+		trigger = count_system_planet
+		parameters = {
+			limit = {
+				NOR = {
+					is_planet_class = pc_gas_giant
+					is_planet_class = pc_shattered_ring_habitable
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_ringworld_habitable_damaged
+					is_planet_class = pc_ringworld_tech
+					is_planet_class = pc_ringworld_tech_damaged
+					is_planet_class = pc_ringworld_seam
+					is_planet_class = pc_ringworld_seam_damaged
+					is_planet_class = pc_habitat
+					is_planet_class = pc_asteroid
+					is_planet_class = pc_ice_asteroid
+					is_planet_class = pc_city
+					is_planet_class = pc_relic
+					is_star = yes
+				}
+			}
+		}
+		mode = add
+	}
+}
+
+hfe_script_value_habitat_planet_system_rating = {
+	complex_trigger_modifier = {
+		trigger = count_system_planet
+		parameters = {
+			limit = {
+				is_star = no
+				is_astral_scar = no
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						OR = {
+							has_star_flag = ring_world_built
+							has_star_flag = ithomes_gate
+						}
+					}
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_ringworld_habitable_damaged
+					is_planet_class = pc_ringworld_tech
+					is_planet_class = pc_ringworld_tech_damaged
+					is_planet_class = pc_ringworld_seam
+					is_planet_class = pc_ringworld_seam_damaged
+					is_planet_class = pc_habitat
+					has_planet_flag = has_orbital_debris
+				}
+				OR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+		}
+		mult = 0.5
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = count_system_planet
+		parameters = {
+			limit = {
+				is_star = no
+				is_astral_scar = no
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						OR = {
+							has_star_flag = ring_world_built
+							has_star_flag = ithomes_gate
+						}
+					}
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_ringworld_habitable_damaged
+					is_planet_class = pc_ringworld_tech
+					is_planet_class = pc_ringworld_tech_damaged
+					is_planet_class = pc_ringworld_seam
+					is_planet_class = pc_ringworld_seam_damaged
+					is_planet_class = pc_habitat
+					has_planet_flag = has_orbital_debris
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+		}
+		mode = add
+	}
+}
+
+hfe_script_value_pop_percentage_with_trait = {
+	complex_trigger_modifier = {
+		trigger = pop_percentage
+		parameters = {
+			limit = {
+				has_trait = $hfe_trait$
+			}
+		}
+		mode = add
+	}
+}
+
+hfe_script_value_pop_percentage_with_trait_weight = {
+	set = value:hfe_script_value_pop_percentage_with_trait|hfe_trait|$hfe_trait$|
+	add = -0.5
+}

@@ -802,71 +802,6 @@ country_event = {
 }
 
 country_event = {
-	id = hfe_test.34
-	hide_window = yes
-	is_triggered_only = yes
-	immediate = {
-		set_variable = {
-			which = max_count
-			value = 0
-		}
-		every_system_within_border = {
-			limit = {
-				any_system_planet = {
-					habitable_planet = yes
-				}
-			}
-			root = {
-				set_variable = {
-					which = current_count
-					value = 0
-				}
-			}
-			every_system_planet = {
-				limit = {
-					NOR = {
-						is_planet_class = pc_gas_giant
-						is_planet_class = pc_ringworld_habitable
-						is_planet_class = pc_ringworld_habitable_damaged
-						is_planet_class = pc_ringworld_tech
-						is_planet_class = pc_ringworld_tech_damaged
-						is_planet_class = pc_ringworld_seam
-						is_planet_class = pc_ringworld_seam_damaged
-						is_planet_class = pc_habitat
-						is_planet_class = pc_asteroid
-						is_planet_class = pc_ice_asteroid
-						is_planet_class = pc_city
-						is_planet_class = pc_relic
-						is_star = yes
-					}
-				}
-				root = {
-					change_variable = {
-						which = current_count
-						value = 1
-					}
-				}
-			}
-			root = {
-				if = {
-					limit = {
-						check_variable = {
-							which = current_count
-							value >= max_count
-						}
-					}
-					set_variable = {
-						which = max_count
-						value = current_count
-					}
-					log = "[root.current_count] planets in system [prev.GetName]"
-				}
-			}
-		}
-	}
-}
-
-country_event = {
 	id = hfe_test.35
 	hide_window = yes
 	is_triggered_only = yes
@@ -1064,6 +999,385 @@ country_event = {
 				value = modifier:pop_political_power
 			}
 			log = "power var [this.hfe_test_var] [this.GetName]"
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.44
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_system = {
+			limit = {
+				system_has_arc_furnace = no
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+			}
+			set_variable = {
+				which = hfe_rating
+				value = 0
+			}
+			every_system_planet = {
+				limit = {
+					NOT = {
+						has_deposit_for = shipclass_research_station
+					}
+					is_star = no
+					is_astral_scar = no
+					colonizable_planet = no
+				}
+				prev = {
+					change_variable = {
+						which = hfe_rating
+						value = prev.value:hfe_script_value_arc_furnace_rating_planet
+					}
+				}
+			}
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 0
+			order_by = hfe_rating
+			log = "0 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 1
+			order_by = hfe_rating
+			log = "1 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 2
+			order_by = hfe_rating
+			log = "2 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 3
+			order_by = hfe_rating
+			log = "3 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 4
+			order_by = hfe_rating
+			log = "4 [this.GetName] [this.hfe_rating]"
+		}
+		every_system = {
+			clear_variable = hfe_rating
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.45
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+				NOR = {
+					is_star_class = sc_binary_1
+					is_star_class = sc_binary_2
+					is_star_class = sc_binary_3
+					is_star_class = sc_binary_4
+					is_star_class = sc_binary_5
+					is_star_class = sc_binary_6
+					is_star_class = sc_binary_7
+					is_star_class = sc_binary_8
+					is_star_class = sc_binary_9
+					is_star_class = sc_binary_10
+					is_star_class = sc_trinary_1
+					is_star_class = sc_trinary_2
+					is_star_class = sc_trinary_3
+					is_star_class = sc_trinary_4
+					is_star_class = sc_black_hole
+					is_star_class = sc_neutron_star
+					is_star_class = sc_pulsar
+				}
+			}
+			position = 0
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			}
+			log = "0 [this.GetName] [this.hfe_test]"
+		}
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+				NOR = {
+					is_star_class = sc_binary_1
+					is_star_class = sc_binary_2
+					is_star_class = sc_binary_3
+					is_star_class = sc_binary_4
+					is_star_class = sc_binary_5
+					is_star_class = sc_binary_6
+					is_star_class = sc_binary_7
+					is_star_class = sc_binary_8
+					is_star_class = sc_binary_9
+					is_star_class = sc_binary_10
+					is_star_class = sc_trinary_1
+					is_star_class = sc_trinary_2
+					is_star_class = sc_trinary_3
+					is_star_class = sc_trinary_4
+					is_star_class = sc_black_hole
+					is_star_class = sc_neutron_star
+					is_star_class = sc_pulsar
+				}
+			}
+			position = 1
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			}
+			log = "1 [this.GetName] [this.hfe_test]"
+		}
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+				NOR = {
+					is_star_class = sc_binary_1
+					is_star_class = sc_binary_2
+					is_star_class = sc_binary_3
+					is_star_class = sc_binary_4
+					is_star_class = sc_binary_5
+					is_star_class = sc_binary_6
+					is_star_class = sc_binary_7
+					is_star_class = sc_binary_8
+					is_star_class = sc_binary_9
+					is_star_class = sc_binary_10
+					is_star_class = sc_trinary_1
+					is_star_class = sc_trinary_2
+					is_star_class = sc_trinary_3
+					is_star_class = sc_trinary_4
+					is_star_class = sc_black_hole
+					is_star_class = sc_neutron_star
+					is_star_class = sc_pulsar
+				}
+			}
+			position = 2
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			}
+			log = "2 [this.GetName] [this.hfe_test]"
+		}
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+				NOR = {
+					is_star_class = sc_binary_1
+					is_star_class = sc_binary_2
+					is_star_class = sc_binary_3
+					is_star_class = sc_binary_4
+					is_star_class = sc_binary_5
+					is_star_class = sc_binary_6
+					is_star_class = sc_binary_7
+					is_star_class = sc_binary_8
+					is_star_class = sc_binary_9
+					is_star_class = sc_binary_10
+					is_star_class = sc_trinary_1
+					is_star_class = sc_trinary_2
+					is_star_class = sc_trinary_3
+					is_star_class = sc_trinary_4
+					is_star_class = sc_black_hole
+					is_star_class = sc_neutron_star
+					is_star_class = sc_pulsar
+				}
+			}
+			position = 3
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_everything_rating|
+			}
+			log = "3 [this.GetName] [this.hfe_test]"
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.46
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+			}
+			position = 0
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_worm_system_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_worm_system_rating|
+			}
+			log = "0 [this.GetName] [this.hfe_test]"
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.47
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		ordered_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+			}
+			position = 0
+			order_by = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_science_rating|
+			set_variable = {
+				which = hfe_test
+				value = value:hfe_script_value_system_star_proxy|hfe_val|value:hfe_script_value_science_rating|
+			}
+			log = "0 [this.GetName] [this.hfe_test]"
+		}
+	}
+}
+
+country_event = {
+	id = hfe_test.48
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_system = {
+			limit = {
+				root = {
+					intel_level = {
+						system = prev
+						level = full
+					}
+				}
+			}
+			set_variable = {
+				which = hfe_rating
+				value = value:hfe_script_value_habitat_planet_system_rating
+			}
+			every_system_planet = {
+				limit = {
+					is_star = no
+					is_astral_scar = no
+					NOR = {
+						has_planet_flag = megastructure
+						has_planet_flag = has_megastructure
+						solar_system = {
+							OR = {
+								has_star_flag = ring_world_built
+								has_star_flag = ithomes_gate
+							}
+						}
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_ringworld_habitable_damaged
+						is_planet_class = pc_ringworld_tech
+						is_planet_class = pc_ringworld_tech_damaged
+						is_planet_class = pc_ringworld_seam
+						is_planet_class = pc_ringworld_seam_damaged
+						is_planet_class = pc_habitat
+						has_planet_flag = has_orbital_debris
+					}
+				}
+				prev = {
+					change_variable = {
+						which = hfe_rating
+						value = prev.value:hfe_script_value_science_rating
+					}
+				}
+			}
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 0
+			order_by = hfe_rating
+			log = "0 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 1
+			order_by = hfe_rating
+			log = "1 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 2
+			order_by = hfe_rating
+			log = "2 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 3
+			order_by = hfe_rating
+			log = "3 [this.GetName] [this.hfe_rating]"
+		}
+		ordered_system = {
+			limit = {
+				is_variable_set = hfe_rating
+			}
+			position = 4
+			order_by = hfe_rating
+			log = "4 [this.GetName] [this.hfe_rating]"
+		}
+		every_system = {
+			clear_variable = hfe_rating
 		}
 	}
 }
