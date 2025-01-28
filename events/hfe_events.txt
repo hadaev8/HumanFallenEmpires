@@ -5183,6 +5183,7 @@ country_event = {
 	option = {
 		name = hfe.528.0
 		custom_tooltip = hfe.528.0.tooltip
+		sound = event_mystic_reveal_light
 		if = {
 			limit = {
 				has_ethic = ethic_fanatic_spiritualist
@@ -5213,6 +5214,7 @@ country_event = {
 	option = {
 		name = hfe.528.1
 		custom_tooltip = hfe.528.1.tooltip
+		sound = amb_super_explosion
 		exclusive_trigger = {
 			is_materialist = yes
 		}
@@ -5225,13 +5227,13 @@ country_event = {
 					show_notification = yes
 				}
 			}
-			play_sound = amb_super_explosion
 			hfe_effect_stargate_off = yes
 		}
 	}
 	option = {
 		name = hfe.528.2
 		custom_tooltip = hfe.528.2.tooltip
+		sound = amb_super_explosion
 		exclusive_trigger = {
 			is_xenophobe = yes
 		}
@@ -5244,7 +5246,6 @@ country_event = {
 					show_notification = yes
 				}
 			}
-			play_sound = amb_super_explosion
 			hfe_effect_stargate_off = yes
 		}
 	}
@@ -8696,13 +8697,13 @@ country_event = {
 	}
 	option = {
 		name = hfe.5012.0
+		sound = event_celebration
 		join_alliance = {
 			who = event_target:hfe_future_country
 			name = hfe_future_federation_name
 			override_requirements = yes
 		}
 		hfe_effect_advisor_future_on = yes
-		play_sound = event_celebration
 		ai_chance = {
 			modifier = {
 				factor = 4
@@ -9139,6 +9140,7 @@ country_event = {
 	is_triggered_only = yes
 	diplomatic = yes
 	immediate = {
+		# play_sound to make it non interuptable
 		play_sound = olafur_arnalds_only_the_winds
 	}
 	picture_event_data = {
@@ -10888,12 +10890,10 @@ country_event = {
 		portrait = event_target:hfe_5090_leader
 		room = ship_room
 	}
-	immediate = {
-		if = {
-			limit = {
-				has_country_flag = hfe.5091.step0
-			}
-			play_sound = event_alien_signal
+	show_sound = {
+		sound = event_alien_signal
+		trigger = {
+			has_country_flag = hfe.5091.step0
 		}
 	}
 	option = {
@@ -11002,6 +11002,14 @@ country_event = {
 		portrait = event_target:hfe_future_country
 		room = hfe_future_room
 	}
+	show_sound = {
+		sound = event_alien_signal
+		trigger = {
+			not = {
+				has_country_flag = hfe_future_try_take_robot
+			}
+		}
+	}
 	trigger = {
 		any_owned_species = {
 			has_trait = trait_mechanical
@@ -11015,7 +11023,6 @@ country_event = {
 					has_country_flag = hfe_future_try_take_robot
 				}
 			}
-			play_sound = event_alien_signal
 			set_country_flag = hfe_future_try_take_robot
 		}
 	}
