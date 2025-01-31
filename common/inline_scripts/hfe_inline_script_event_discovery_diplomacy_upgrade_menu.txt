@@ -1,0 +1,108 @@
+option = {
+	name = $hfe_type$_$hfe_tier$
+	sound = event_ai_started
+	trigger = {
+		has_country_flag = hfe_discovery.151.$hfe_menu$
+		event_target:hfe_discovery_docking_planet = {
+			hfe_trigger_has_starbase_t$hfe_tier$ = yes
+		}
+		event_target:hfe_discovery_docking_ship = {
+			not = {
+				has_modifier = $hfe_type$_$hfe_tier$
+			}
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			text = hfe_discovery.151.have_enough_resources
+			or = {
+				and = {
+					event_target:hfe_discovery_docking_planet.owner = {
+						not = {
+							is_country = root
+						}
+					}
+					resource_stockpile_compare = {
+						resource = minerals
+						value >= @hfe_discovery_docking_update_minerals_cost
+						mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value >= @hfe_discovery_docking_update_energy_cost
+						mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+					}
+				}
+				and = {
+					event_target:hfe_discovery_docking_planet.owner = {
+						is_country = root
+					}
+					resource_stockpile_compare = {
+						resource = minerals
+						value >= @hfe_discovery_docking_update_minerals_cost_owner
+						mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+					}
+					resource_stockpile_compare = {
+						resource = energy
+						value >= @hfe_discovery_docking_update_minerals_cost_owner
+						mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = hfe_discovery.151.fail_already_installed
+			event_target:hfe_discovery_docking_ship = {
+				not = {
+					has_modifier = $hfe_type$_$hfe_tier$
+				}
+			}
+		}
+	}
+	is_dialog_only = yes
+	response_text = $hfe_type$_$hfe_tier$.response
+	event_target:hfe_discovery_docking_ship = {
+		add_modifier = {
+			modifier = $hfe_type$_$hfe_tier$
+		}
+	}
+	if = {
+		limit = {
+			event_target:hfe_discovery_docking_planet.owner = {
+				is_country = root
+			}
+		}
+		add_resource = {
+			minerals = @hfe_discovery_docking_update_minerals_cost_owner_minus
+			energy = @hfe_discovery_docking_update_energy_cost_owner_minus
+			mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+		}
+	}
+	else = {
+		add_resource = {
+			minerals = @hfe_discovery_docking_update_minerals_cost_minus
+			energy = @hfe_discovery_docking_update_energy_cost_minus
+			mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+		}
+		event_target:hfe_discovery_docking_planet.owner = {
+			add_resource = {
+				minerals = @hfe_discovery_docking_update_minerals_cost_owner
+				energy = @hfe_discovery_docking_update_energy_cost_owner
+				mult = value:hfe_script_value_pow_2|hfe_val|$hfe_tier$|
+			}
+		}
+		custom_tooltip = hfe_discovery.151.trust.tooltip
+		hidden_effect = {
+			event_target:hfe_discovery_docking_planet.owner = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}
+			add_trust = {
+				who = event_target:hfe_discovery_docking_planet.owner
+				amount = 5
+			}
+		}
+	}
+}
