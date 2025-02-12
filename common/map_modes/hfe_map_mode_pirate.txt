@@ -18,18 +18,55 @@
 hfe_map_mode_pirate = {
 	icon = GFX_hfe_map_mode_pirate
 	enable_terra_incognita = yes
-	# same country
 	color = {
-		value = country
+		value = {
+			0
+			0
+			0.8
+			0.7
+		}
 		condition = {
-			hidden_trigger = {
-				is_country = from
+			NOT = {
+				exists = FROM
 			}
+		}
+		custom_tooltip = "MAP_MODE_OBSERVER"
+	}
+	color = {
+		value = {
+			0.58
+			1
+			0.8
+			1
+		}
+		custom_tooltip = "DIPLOMATIC_MAP_MODE_SAME_EMPIRE"
+		condition = {
+			is_same_empire = from
+		}
+	}
+	color = {
+		value = {
+			0
+			0
+			0.8
+			0.7
+		}
+		custom_tooltip = "MAP_MODE_NO_CONTACT"
+		condition = {
+			NOT = {
+				has_established_contact = FROM
+			}
+			#always = no
 		}
 	}
 	# non pirate and non pirate
 	color = {
-		value = hsv { 0.0 0.0 0.8 0.7 }
+		value = {
+			0
+			0
+			0.8
+			0.7
+		}
 		condition = {
 			hidden_trigger = {
 				nor = {
@@ -43,7 +80,12 @@ hfe_map_mode_pirate = {
 	}
 	# pirate raid target
 	color = {
-		value = hsv { 0.0 1.0 0.6 1.0 }
+		value = {
+			0
+			1
+			0.6
+			1
+		}
 		custom_tooltip = hfe_map_mode_pirate_prior
 		condition = {
 			or = {
@@ -62,7 +104,12 @@ hfe_map_mode_pirate = {
 	}
 	# pirate protect
 	color = {
-		value = hsv { 0.4 0.5 1.0 1.0 }
+		value = {
+			0.4
+			0.5
+			1
+			1
+		}
 		custom_tooltip = hfe_map_mode_pirate_protect
 		condition = {
 			or = {
@@ -76,7 +123,12 @@ hfe_map_mode_pirate = {
 	}
 	# pirate investment pact
 	color = {
-		value = hsv { 0.37 0.8 1.0 1.0 }
+		value = {
+			0.37
+			0.8
+			1
+			1
+		}
 		custom_tooltip = hfe_map_mode_pirate_investment_pact
 		condition = {
 			or = {
@@ -90,13 +142,18 @@ hfe_map_mode_pirate = {
 	}
 	# hostile
 	color = {
-		value = hsv { 0.05 0.6 0.8 1.0 }
+		value = {
+			0.05
+			0.6
+			0.8
+			1
+		}
 		custom_tooltip = hfe_map_mode_pirate_attack
 		condition = {
 			or = {
-				is_country_type = hfe_pirate
+				hfe_trigger_pirate_map = yes
 				from = {
-					is_country_type = hfe_pirate
+					hfe_trigger_pirate_map = yes
 				}
 			}
 			nor = {
