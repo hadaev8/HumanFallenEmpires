@@ -1,8 +1,8 @@
 #
 namespace = hfe_features
-# biobomb feature 1
+# biobomb feature 0-1
 planet_event = {
-	id = hfe_features.1
+	id = hfe_features.0
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
@@ -13,39 +13,81 @@ planet_event = {
 		}
 	}
 	immediate = {
-		create_species = {
-			class = random_non_machine
-			homeworld = root
+		if = {
+			limit = {
+				owner = {
+					is_guided_sapience_empire = yes
+				}
+			}
+			planet_event = {
+				id = hfe_features.1
+				days = 1
+			}
 		}
-		owner = {
-			if = {
-				limit = {
-					has_trait = trait_hive_mind
-				}
-				modify_species = {
-					species = last_created_species
-					add_trait = trait_hive_mind
-				}
-				last_created_species = {
-					set_citizenship_type = {
-						country = prev
-						type = citizenship_full
-						cooldown = no
+		else = {
+			create_species = {
+				class = random_non_machine
+				homeworld = root
+			}
+			owner = {
+				if = {
+					limit = {
+						has_trait = trait_hive_mind
+					}
+					modify_species = {
+						species = last_created_species
+						add_trait = trait_hive_mind
+					}
+					last_created_species = {
+						set_citizenship_type = {
+							country = prev
+							type = citizenship_full
+							cooldown = no
+						}
 					}
 				}
 			}
-		}
-		random_list = {
-			60 = {
-			}
-			40 = {
-				hfe_effect_species_add_modded_trait = {
-					hfe_species = last_created_species
+			random_list = {
+				60 = {
+				}
+				40 = {
+					hfe_effect_species_add_modded_trait = {
+						hfe_species = last_created_species
+					}
 				}
 			}
+			create_pop = {
+				species = last_created_species
+			}
 		}
-		create_pop = {
-			species = last_created_species
+	}
+}
+
+# if guided_sapience_empire add more pops and apply random trait
+planet_event = {
+	id = hfe_features.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_species = {
+			limit = {
+				is_sapient = no
+			}
+			random_list = {
+				60 = {
+				}
+				40 = {
+					hfe_effect_species_add_modded_trait = {
+						hfe_species = last_created_species
+					}
+				}
+			}
+			prev = {
+				create_pop = {
+					species = prev
+					count = 3
+				}
+			}
 		}
 	}
 }
