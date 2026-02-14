@@ -1,5 +1,5 @@
 #
-# 
+#
 hfe_effect_features_designed_aristocracy = {
 	random_list = {
 		36 = {
@@ -17,6 +17,102 @@ hfe_effect_features_designed_aristocracy = {
 				has_trait = hfe_leader_trait_noble_good
 			}
 			add_skill = 2
+		}
+	}
+}
+
+hfe_effect_features_exodus_setup = {
+	# colony ship
+	create_fleet = {
+		name = "New Hope"
+		settings = {
+			can_disband = no
+		}
+		effect = {
+			set_owner = event_target:hfe_features_exodus_country
+			if = {
+				limit = {
+					owner = {
+						is_capitalist = yes
+					}
+				}
+				set_name = "Phat Lewtz"
+				create_ship = {
+					name = "Phat Lewtz"
+					random_existing_design = sponsored_colonizer
+					# graphical_culture = hfe_graphical_culture_pirate
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						is_lithoid = yes
+					}
+				}
+				set_name = "Rock Lobster"
+				create_ship = {
+					name = "We Will Rock You"
+					random_existing_design = lithoid_colonizer
+					# graphical_culture = lithoid_01
+				}
+			}
+			else = {
+				create_ship = {
+					name = "New Hope"
+					random_existing_design = colonizer
+					# graphical_culture = hfe_graphical_culture_pirate_full_color
+				}
+			}
+			save_event_target_as = hfe_exodus_colony_ship
+			set_fleet_stance = evasive
+			set_location = event_target:hfe_features_exodus_capital
+		}
+	}
+	hidden_effect = {
+		set_planet_flag = hfe_features_exodus_from@event_target:hfe_features_exodus_country
+		event_target:hfe_features_exodus_country = {
+			set_country_flag = first_colony
+			set_country_flag = hfe_features_exodus
+			set_country_type = hfe_features_exodus
+			# TODO check if need this flag
+			set_country_flag = use_default_ships
+			add_modifier = {
+				modifier = tsp_hfe_features_exodus_game_over_prevention
+			}
+			every_owned_pop = {
+				owner = {
+					change_variable = {
+						which = hfe_features_exodus_pop
+						value = 1
+					}
+				}
+				# kill_pop = yes
+			}
+		}
+	}
+	hfe_effect_clear_buildings_and_destroy_colony = yes
+	# hidden_effect = {
+	# 	event_target:hfe_features_exodus_country = {
+	# 		set_custom_capital_location = event_target:hfe_exodus_colony_ship
+	# 	}
+	# }
+}
+
+hfe_effect_features_honored_elders_visit = {
+	add_modifier = {
+		modifier = hfe_modifier_features_honored_elders_visit_cooldown
+		years = 1
+	}
+	hidden_effect = {
+		owner = {
+			country_event = {
+				id = hfe_features_honored_elders.10
+			}
+		}
+		# loop event for convenience
+		planet_event = {
+			id = hfe_features_honored_elders.2
+			days = [365+1]
 		}
 	}
 }

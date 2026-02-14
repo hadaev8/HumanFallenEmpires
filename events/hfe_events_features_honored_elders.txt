@@ -1,0 +1,2242 @@
+#
+namespace = hfe_features_honored_elders
+# setup
+# on_game_start_country
+country_event = {
+	id = hfe_features_honored_elders.0
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_valid_civic = hfe_civic_features_honored_elders
+		exists = capital_scope
+	}
+	immediate = {
+		capital_scope = {
+			add_building = hfe_building_features_honored_elders_chambers
+		}
+		set_variable = {
+			which = hfe_features_honored_elders_experience
+			value = 0
+		}
+		# previous rulers
+		set_variable = {
+			which = hfe_features_honored_elders_num
+			value = 3
+		}
+		create_leader = {
+			class = official
+			species = this
+			skill = 1
+			effect = {
+				add_experience = 1000
+				freeze_leader_age = yes
+				set_leader_flag = hfe_features_honored_elders@root
+				root = {
+					change_variable = {
+						which = hfe_features_honored_elders_experience
+						value = prev.trigger:has_experience
+					}
+				}
+				set_owner = event_target:global_event_country
+			}
+		}
+		create_leader = {
+			class = commander
+			species = this
+			skill = 1
+			effect = {
+				add_experience = 1000
+				freeze_leader_age = yes
+				set_leader_flag = hfe_features_honored_elders@root
+				root = {
+					change_variable = {
+						which = hfe_features_honored_elders_experience
+						value = prev.trigger:has_experience
+					}
+				}
+				set_owner = event_target:global_event_country
+			}
+		}
+		create_leader = {
+			class = scientist
+			species = this
+			skill = 1
+			effect = {
+				add_experience = 1000
+				freeze_leader_age = yes
+				set_leader_flag = hfe_features_honored_elders@root
+				root = {
+					change_variable = {
+						which = hfe_features_honored_elders_experience
+						value = prev.trigger:has_experience
+					}
+				}
+				set_owner = event_target:global_event_country
+			}
+		}
+	}
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+country_event = {
+	id = hfe_features_honored_elders.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_valid_civic = hfe_civic_features_honored_elders
+		exists = from
+		from = {
+			is_ruler = yes
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = hfe_features_honored_elders_experience
+			value = from.trigger:has_experience
+		}
+		change_variable = {
+			which = hfe_features_honored_elders_num
+			value = 1
+		}
+		event_target:global_event_country = {
+			clone_leader = {
+				target = from
+				effect = {
+					freeze_leader_age = yes
+					set_leader_flag = hfe_features_honored_elders@root
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = hfe_features_honored_elders.2
+	title = hfe_features_honored_elders.2.name
+	desc = hfe_features_honored_elders.2.desc
+	is_triggered_only = yes
+	trigger = {
+		not = {
+			has_modifier = hfe_modifier_features_honored_elders_visit_cooldown
+		}
+		exists = owner
+		owner = {
+			is_ai = no
+			has_valid_civic = hfe_civic_features_honored_elders
+			check_variable = {
+				which = hfe_features_honored_elders_experience
+				value >= 500
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.2.0
+		hfe_effect_features_honored_elders_visit = yes
+	}
+	option = {
+		name = hfe_features_honored_elders.2.1
+	}
+}
+
+# gate advice event
+country_event = {
+	id = hfe_features_honored_elders.10
+	title = hfe_features_honored_elders.10.name
+	desc = hfe_features_honored_elders.10.desc.0
+	desc = {
+		trigger = {
+			is_militarist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.1
+	}
+	desc = {
+		trigger = {
+			is_militarist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.2
+	}
+	desc = {
+		trigger = {
+			is_pacifist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.3
+	}
+	desc = {
+		trigger = {
+			is_xenophile = yes
+		}
+		text = hfe_features_honored_elders.10.desc.4
+	}
+	desc = {
+		trigger = {
+			is_xenophobe = yes
+		}
+		text = hfe_features_honored_elders.10.desc.5
+	}
+	desc = {
+		trigger = {
+			is_spiritualist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.6
+	}
+	desc = {
+		trigger = {
+			is_spiritualist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.7
+	}
+	desc = {
+		trigger = {
+			is_materialist = yes
+		}
+		text = hfe_features_honored_elders.10.desc.8
+	}
+	desc = {
+		trigger = {
+			has_psionic_species_trait = yes
+		}
+		text = hfe_features_honored_elders.10.desc.9
+	}
+	desc = {
+		trigger = {
+			is_cyborg_empire = yes
+		}
+		text = hfe_features_honored_elders.10.desc.10
+	}
+	desc = {
+		trigger = {
+			has_crisis = yes
+		}
+		text = hfe_features_honored_elders.10.desc.11
+	}
+	desc = {
+		trigger = {
+			exists = capital_scope
+			capital_scope = {
+				planet_stability < @stabilitylevel2
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.12
+	}
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:global_event_country
+	}
+	immediate = {
+		event_target:global_event_country = {
+			while = {
+				count = 6
+				random_owned_leader = {
+					limit = {
+						has_leader_flag = hfe_features_honored_elders@root
+						not = {
+							has_leader_flag = hfe_features_honored_elders_ignore
+						}
+						or = {
+							leader_class = official
+							leader_class = commander
+							leader_class = scientist
+						}
+					}
+					weights = {
+						base = 10
+						mult = trigger:has_skill
+						modifier = {
+							mult = 2
+							leader_class = commander
+							root = {
+								or = {
+									is_at_war = yes
+									has_crisis = yes
+								}
+							}
+						}
+					}
+					set_timed_leader_flag = {
+						flag = hfe_features_honored_elders_ignore
+						days = 1
+					}
+					hfe_effect_save_event_target = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.0
+		trigger = {
+			exists = event_target:hfe_event_target_0
+		}
+		event_target:hfe_event_target_0 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_0 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.1
+		trigger = {
+			exists = event_target:hfe_event_target_1
+		}
+		event_target:hfe_event_target_1 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_1 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.2
+		trigger = {
+			exists = event_target:hfe_event_target_2
+		}
+		event_target:hfe_event_target_2 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_2 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.3
+		trigger = {
+			exists = event_target:hfe_event_target_3
+		}
+		event_target:hfe_event_target_3 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_3 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.4
+		trigger = {
+			exists = event_target:hfe_event_target_4
+		}
+		event_target:hfe_event_target_4 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_4 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.5
+		trigger = {
+			exists = event_target:hfe_event_target_5
+		}
+		event_target:hfe_event_target_5 = {
+			save_event_target_as = hfe_features_honored_elders_ruler
+		}
+		ai_chance = {
+			factor = 0
+			modifier = {
+				add = 10
+				or = {
+					is_at_war = yes
+					not = {
+						event_target:hfe_event_target_5 = {
+							leader_class = commander
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders.10.6
+		kill_leader = {
+			ruler = yes
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = hfe_features_honored_elders.11
+			}
+		}
+	}
+}
+
+# main advice event
+country_event = {
+	id = hfe_features_honored_elders.11
+	title = hfe_features_honored_elders.11.name
+	desc = hfe_features_honored_elders.11.desc.0.0
+	# official
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = official
+				is_egalitarian = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.1.0
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = official
+				is_xenophobe = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.1.1
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = official
+				or = {
+					is_egalitarian = yes
+					is_pacifist = yes
+				}
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.1.2
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = official
+				is_authoritarian = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.1.3
+	}
+	# commander
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = commander
+				is_militarist = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.2.0
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = commander
+				is_xenophobe = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.2.1
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = commander
+				or = {
+					is_militarist = yes
+					is_authoritarian = yes
+				}
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.2.2
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = commander
+				is_xenophobe = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.2.3
+	}
+	# scientist
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = scientist
+				is_materialist = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.3.0
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = scientist
+				is_xenophile = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.3.1
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				leader_class = scientist
+				is_spiritualist = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.3.2
+	}
+	# other
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler.species
+			event_target:hfe_features_honored_elders_ruler.species = {
+				has_cyborg_trait = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.0
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler.species
+			event_target:hfe_features_honored_elders_ruler.species = {
+				has_cyborg_trait = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.1
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				has_chosen_one_leader_trait = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.2
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				has_psionic_leader_trait = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.3
+	}
+	desc = {
+		trigger = {
+			has_crisis = yes
+		}
+		text = hfe_features_honored_elders.10.desc.4.4
+	}
+	desc = {
+		trigger = {
+			has_crisis = yes
+		}
+		text = hfe_features_honored_elders.10.desc.4.5
+	}
+	desc = {
+		trigger = {
+			exists = capital_scope
+			capital_scope = {
+				planet_stability < @stabilitylevel2
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.6
+	}
+	desc = {
+		trigger = {
+			exists = event_target:hfe_features_honored_elders_ruler
+			event_target:hfe_features_honored_elders_ruler = {
+				is_spiritualist = yes
+			}
+		}
+		text = hfe_features_honored_elders.10.desc.4.7
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+	force_open = yes
+	trigger = {
+		exists = event_target:hfe_features_honored_elders_ruler
+	}
+	picture_event_data = {
+		portrait = event_target:hfe_features_honored_elders_ruler
+		room = ethic_spaceship_room
+	}
+	immediate = {
+		# if = {
+		# 	limit = {
+		# 		event_target:hfe_features_honored_elders_ruler = {
+		# 			leader_class = official
+		# 		}
+		# 	}
+		# 	log = "official"
+		# }
+		# if = {
+		# 	limit = {
+		# 		event_target:hfe_features_honored_elders_ruler = {
+		# 			leader_class = commander
+		# 		}
+		# 	}
+		# 	log = "commander"
+		# }
+		# if = {
+		# 	limit = {
+		# 		event_target:hfe_features_honored_elders_ruler = {
+		# 			leader_class = scientist
+		# 		}
+		# 	}
+		# 	log = "scientist"
+		# }
+		change_variable = {
+			which = hfe_features_honored_elders_experience
+			value = -500
+		}
+		while = {
+			count = 3
+			random_list = {
+				# official
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.0
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.0
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.1
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.1
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.2
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.2
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.3
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.3
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.4
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.4
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.5
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.5
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.6
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.6
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.7
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.7
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.8
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.8
+						days = 1
+					}
+				}
+				# genomod option, also unlocks with scientist class
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.9
+						nor = {
+							has_technology = tech_epigenetic_triggers
+							event_target:hfe_features_honored_elders_ruler = {
+								or = {
+									leader_class = official
+									leader_class = scientist
+								}
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.9
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.10
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.10
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.11
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.11
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.12
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.12
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.13
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.13
+						days = 1
+					}
+				}
+				# megas option, also unlocks with scientist class
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.14
+						nor = {
+							has_technology = tech_mega_engineering
+							event_target:hfe_features_honored_elders_ruler = {
+								or = {
+									leader_class = official
+									leader_class = scientist
+								}
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.14
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.15
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.15
+						days = 1
+					}
+				}
+				# terraform option, also unlocks with scientist class
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.16
+						nor = {
+							has_technology = tech_climate_restoration
+							event_target:hfe_features_honored_elders_ruler = {
+								or = {
+									leader_class = official
+									leader_class = scientist
+								}
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.16
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.17
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.17
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.18
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.18
+						days = 1
+					}
+				}
+				# federation special case
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_official_bonus.19
+						nor = {
+							exists = federation
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = official
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_official_bonus.19
+						days = 1
+					}
+				}
+				# commander
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.0
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.0
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.1
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.1
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.2
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.2
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.3
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.3
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.4
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.4
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.5
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.5
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.6
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.6
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.7
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.7
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.8
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.8
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.9
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.9
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.10
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.10
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.11
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.11
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.12
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.12
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.13
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.13
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.14
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.14
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.15
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.15
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.16
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.16
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.17
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.17
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.18
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.18
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_commander_bonus.19
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = commander
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_commander_bonus.19
+						days = 1
+					}
+				}
+				# scientist
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.0
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.0
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.1
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.1
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.2
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.2
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.3
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.3
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.4
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.4
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.5
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.5
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.6
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.6
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.7
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.7
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.8
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.8
+						days = 1
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = hfe_features_honored_elders_scientist_bonus.9
+						not = {
+							event_target:hfe_features_honored_elders_ruler = {
+								leader_class = scientist
+							}
+						}
+					}
+					set_timed_country_flag = {
+						flag = hfe_features_honored_elders_scientist_bonus.9
+						days = 1
+					}
+				}
+				# no idea what bonuses to add lol
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.10
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.10
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.11
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.11
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.12
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.12
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.13
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.13
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.14
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.14
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.15
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.15
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.16
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.16
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.17
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.17
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.18
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.18
+				# 		days = 1
+				# 	}
+				# }
+				# 10 = {
+				# 	modifier = {
+				# 		factor = 0
+				# 		has_country_flag = hfe_features_honored_elders_scientist_bonus.19
+				# 		not = {
+				# 			event_target:hfe_features_honored_elders_ruler = {
+				# 				leader_class = scientist
+				# 			}
+				# 		}
+				# 	}
+				# 	set_timed_country_flag = {
+				# 		flag = hfe_features_honored_elders_scientist_bonus.19
+				# 		days = 1
+				# 	}
+				# }
+				# special
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.0
+		custom_tooltip = hfe_features_honored_elders_official_bonus.0_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.0
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.0
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.1
+		custom_tooltip = hfe_features_honored_elders_official_bonus.1_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.1
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.1
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.2
+		custom_tooltip = hfe_features_honored_elders_official_bonus.2_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.2
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.2
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.3
+		custom_tooltip = hfe_features_honored_elders_official_bonus.3_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.3
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.3
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.4
+		custom_tooltip = hfe_features_honored_elders_official_bonus.4_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.4
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.4
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.5
+		custom_tooltip = hfe_features_honored_elders_official_bonus.5_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.5
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.5
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.6
+		custom_tooltip = hfe_features_honored_elders_official_bonus.6_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.6
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.6
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.7
+		custom_tooltip = hfe_features_honored_elders_official_bonus.7_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.7
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.7
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.8
+		custom_tooltip = hfe_features_honored_elders_official_bonus.8_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.8
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.8
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.9
+		custom_tooltip = hfe_features_honored_elders_official_bonus.9_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.9
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.9
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.10
+		custom_tooltip = hfe_features_honored_elders_official_bonus.10_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.10
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.10
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.11
+		custom_tooltip = hfe_features_honored_elders_official_bonus.11_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.11
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.11
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.12
+		custom_tooltip = hfe_features_honored_elders_official_bonus.12_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.12
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.12
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.13
+		custom_tooltip = hfe_features_honored_elders_official_bonus.13_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.13
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.13
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.14
+		custom_tooltip = hfe_features_honored_elders_official_bonus.14_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.14
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.14
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.15
+		custom_tooltip = hfe_features_honored_elders_official_bonus.15_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.15
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.15
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.16
+		custom_tooltip = hfe_features_honored_elders_official_bonus.16_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.16
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.16
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.17
+		custom_tooltip = hfe_features_honored_elders_official_bonus.17_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.17
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.17
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.18
+		custom_tooltip = hfe_features_honored_elders_official_bonus.18_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.18
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_official_bonus.18
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_official_bonus.19
+		custom_tooltip = hfe_features_honored_elders_official_bonus.19_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_official_bonus.19
+		}
+		federation = {
+			add_modifier = {
+				modifier = hfe_features_honored_elders_official_bonus.19
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.0
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.0_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.0
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.0
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.1
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.1_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.1
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.1
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.2
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.2_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.2
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.2
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.3
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.3_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.3
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.3
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.4
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.4_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.4
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.4
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.5
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.5_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.5
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.5
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.6
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.6_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.6
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.6
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.7
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.7_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.7
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.7
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.8
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.8_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.8
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.8
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.9
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.9_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.9
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.9
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.10
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.10_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.10
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.10
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.11
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.11_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.11
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.11
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.12
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.12_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.12
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.12
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.13
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.13_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.13
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.13
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.14
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.14_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.14
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.14
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.15
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.15_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.15
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.15
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.16
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.16_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.16
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.16
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.17
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.17_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.17
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.17
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.18
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.18_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.18
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.18
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_commander_bonus.19
+		custom_tooltip = hfe_features_honored_elders_commander_bonus.19_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_commander_bonus.19
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_commander_bonus.19
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.0
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.0_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.0
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.0
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.1
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.1_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.1
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.1
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.2
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.2_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.2
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.2
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.3
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.3_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.3
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.3
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.4
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.4_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.4
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.4
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.5
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.5_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.5
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.5
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.6
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.6_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.6
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.6
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.7
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.7_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.7
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.7
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.8
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.8_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.8
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.8
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.9
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.9_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.9
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.9
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.10
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.10_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.10
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.10
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.11
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.11_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.11
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.11
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.12
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.12_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.12
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.12
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.13
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.13_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.13
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.13
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.14
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.14_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.14
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.14
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.15
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.15_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.15
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.15
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.16
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.16_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.16
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.16
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.17
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.17_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.17
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.17
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.18
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.18_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.18
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.18
+			years = 2
+		}
+	}
+	option = {
+		name = hfe_features_honored_elders_scientist_bonus.19
+		custom_tooltip = hfe_features_honored_elders_scientist_bonus.19_desc
+		trigger = {
+			has_country_flag = hfe_features_honored_elders_scientist_bonus.19
+		}
+		add_modifier = {
+			modifier = hfe_features_honored_elders_scientist_bonus.19
+			years = 2
+		}
+	}
+}

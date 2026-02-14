@@ -117,13 +117,18 @@ planet_event = {
 	trigger = {
 		exists = owner
 		owner = {
-			is_country_type = hfe_features_exodus
+			has_country_flag = hfe_features_exodus
 		}
 	}
 	immediate = {
-		add_deposit = hfe_exodus_new_starting_planet
 		owner = {
-			set_country_type = default
+			remove_country_flag = hfe_features_exodus
+			if = {
+				limit = {
+					is_country_type = hfe_features_exodus
+				}
+				set_country_type = default
+			}
 			remove_modifier = tsp_hfe_features_exodus_game_over_prevention
 			add_modifier = {
 				modifier = hfe_colonisation_cheat
@@ -142,88 +147,82 @@ planet_event = {
 				}
 				root = {
 					create_pop = {
-						species = root.owner
+						species = owner
 					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				owner = {
-					has_origin = hfe_origin_features_exodus
-					has_global_flag = hfe_hardcore_disable
-				}
-			}
-			owner = {
-				add_modifier = {
-					modifier = tsp_hfe_post_exodus_1
-				}
-				add_modifier = {
-					modifier = tsp_hfe_post_exodus_2
-				}
-				add_modifier = {
-					modifier = tsp_hfe_post_exodus_3
 				}
 			}
 			if = {
 				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Exodus modifiers for Origin accepted"
-			}
-		}
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						NOT = {
-							has_origin = hfe_origin_features_exodus
+					root = {
+						not = {
+							has_planet_flag = hfe_features_exodus_from@owner
 						}
-						has_country_flag = hfe_chosen_to_exodus
 					}
-					has_global_flag = hfe_hardcore_disable
 				}
-			}
-			owner = {
 				add_modifier = {
 					modifier = tsp_hfe_post_exodus_3
+					years = 10
+				}
+				if = {
+					limit = {
+						has_origin = hfe_origin_features_exodus
+					}
+					add_modifier = {
+						modifier = tsp_hfe_post_exodus_1
+						years = 10
+					}
+					add_modifier = {
+						modifier = tsp_hfe_post_exodus_2
+						years = 10
+					}
+					if = {
+						limit = {
+							has_global_flag = HFE_TSP_spawn_test
+						}
+						log = "Exodus modifiers for Origin accepted"
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							has_global_flag = HFE_TSP_spawn_test
+						}
+						log = "Exodus modifiers for Decision added"
+					}
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = HFE_TSP_spawn_test
-				}
-				log = "Exodus modifiers for Decision added"
-			}
-		}
-		owner = {
-			remove_country_flag = hfe_is_government_in_exile
-			set_country_flag = hfe_was_government_in_exile
 		}
 		set_capital = yes
-		set_name = "New Hope"
-		set_planet_flag = hfe_features_exodus_planet
-		hfe_effect_create_starbase_starport_from_planet = yes
-		add_modifier = {
-			modifier = tsp_hfe_exodus_happy_ending
+		if = {
+			limit = {
+				not = {
+					has_planet_flag = hfe_features_exodus_from@owner
+				}
+			}
+			set_name = "New Hope"
+			add_deposit = hfe_exodus_new_starting_planet
+			hfe_effect_create_starbase_starport_from_planet = yes
+			add_modifier = {
+				modifier = tsp_hfe_exodus_happy_ending
+				years = 20
+			}
+			add_modifier = {
+				modifier = hfe_unity
+				years = 20
+			}
+			add_modifier = {
+				modifier = hfe_population_boom
+				years = 15
+			}
+			add_modifier = {
+				modifier = hfe_idustrial_boom
+				years = 3
+			}
+			add_modifier = {
+				modifier = hfe_improvised_housing
+				years = 2
+			}
 		}
-		add_modifier = {
-			modifier = hfe_unity
-			years = 20
-		}
-		add_modifier = {
-			modifier = hfe_population_boom
-			years = 15
-		}
-		add_modifier = {
-			modifier = hfe_idustrial_boom
-			years = 3
-		}
-		add_modifier = {
-			modifier = hfe_improvised_housing
-			years = 2
-		}
-		set_planet_flag = hfe_features_exodus_planet
 		# separate info event, maybe merge into this
 		owner = {
 			country_event = {
@@ -251,17 +250,40 @@ country_event = {
 	}
 	immediate = {
 		set_country_flag = custom_start_screen
-		set_country_flag = first_colony
-		set_country_flag = hfe_is_government_in_exile
-		set_country_type = hfe_features_exodus
-		# TODO check if need this flag
-		# set_country_flag = use_default_ships
 		give_technology = {
-			message = yes
+			message = no
 			tech = hfe_tech_features_exodus
 		}
-		add_modifier = {
-			modifier = tsp_hfe_features_exodus_game_over_prevention
+		save_event_target_as = hfe_features_exodus_country
+		# change capital
+		capital_scope = {
+			set_name = NAME_The_End
+			save_event_target_as = hfe_features_exodus_capital
+			hfe_effect_features_exodus_setup = yes
+			add_modifier = {
+				modifier = tsp_hfe_exodus_start_planet_modifier
+			}
+			# Orbital deposit
+			set_deposit = hfe_exodus_start_point
+			change_pc = pc_broken
+			# play_sound = shattered_planet_explosion
+		}
+		# remove constructors
+		every_owned_fleet = {
+			if = {
+				limit = {
+					or = {
+						is_ship_class = shipclass_constructor
+						is_ship_class = shipclass_mining_station
+						is_ship_class = shipclass_research_station
+						is_ship_class = shipclass_starbase
+					}
+				}
+				delete_fleet = this
+			}
+			else = {
+				set_location = event_target:hfe_features_exodus_capital
+			}
 		}
 		create_fleet = {
 			name = "Extra Survey Unit"
@@ -271,7 +293,7 @@ country_event = {
 					random_existing_design = science
 				}
 				set_fleet_stance = evasive
-				set_location = root.capital_scope.star
+				set_location = event_target:hfe_features_exodus_capital
 				root = {
 					create_leader = {
 						class = scientist
@@ -280,7 +302,6 @@ country_event = {
 					}
 				}
 				assign_leader = last_created_leader
-				# set_leader = last_created_leader
 			}
 		}
 		# ethic bonuses
@@ -293,14 +314,13 @@ country_event = {
 				name = "The Wanderer"
 				effect = {
 					set_owner = root
-					# set_name = random
 					create_ship = {
 						name = "Ponderer Wanderer"
 						random_existing_design = science
 						graphical_culture = "hfe_graphical_culture_pirate"
 					}
 					set_fleet_stance = evasive
-					set_location = root.capital_scope.star
+					set_location = event_target:hfe_features_exodus_capital
 					root = {
 						create_leader = {
 							class = scientist
@@ -312,7 +332,6 @@ country_event = {
 						}
 					}
 					assign_leader = last_created_leader
-					# set_leader = last_created_leader
 				}
 			}
 		}
@@ -334,181 +353,87 @@ country_event = {
 							species = owner.species
 						}
 					}
-					set_fleet_stance = passive
-					set_location = root.capital_scope
-				}
-			}
-		}
-		# more army for militarist
-		if = {
-			limit = {
-				is_militarist = yes
-			}
-			create_fleet = {
-				name = "Real Estate Agents 2"
-				effect = {
-					set_owner = root
-					while = {
-						count = 3
+					# more army for militarist
+					if = {
+						limit = {
+							owner = {
+								is_militarist = yes
+							}
+						}
+						while = {
+							count = 3
+							create_army_transport = {
+								army_name = "Free Real Estate Scouts"
+								ship_name = "Free Real Estate Agent Transport"
+								army_type = assault_army
+								species = owner.species
+							}
+						}
 						create_army_transport = {
-							army_name = "Free Real Estate Scouts"
-							ship_name = "Free Real Estate Agent Transport"
-							army_type = assault_army
+							army_name = "Basic Combat Assistance"
+							ship_name = "Basic Combat Transport"
+							army_type = robotic_army
 							species = owner.species
 						}
 					}
-					create_army_transport = {
-						army_name = "Basic Combat Assistance"
-						ship_name = "Basic Combat Transport"
-						army_type = robotic_army
-						species = owner.species
-					}
 					set_fleet_stance = passive
-					set_location = root.capital_scope
+					set_location = event_target:hfe_features_exodus_capital
 				}
 			}
 		}
 		# some fleet
-		if = {
-			limit = {
-				is_pacifist = no
-			}
-			create_fleet = {
-				name = "Great White Hope"
-				effect = {
-					set_owner = root
-					create_ship = {
-						name = "Great White Hope"
-						random_existing_design = destroyer
-						graphical_culture = hfe_graphical_culture_pirate
-					}
-					create_ship = {
-						name = "Great Blue Hope"
-						random_existing_design = corvette
-						graphical_culture = hfe_graphical_culture_pirate
-					}
-					create_ship = {
-						name = "Great Yellow Hope"
-						random_existing_design = corvette
-						graphical_culture = hfe_graphical_culture_pirate
-					}
-					set_fleet_stance = passive
-					set_location = root.capital_scope.star
-				}
-			}
-		}
-		# colony ship
-		create_fleet = {
-			name = "New Hope"
-			settings = {
-				can_disband = no
-			}
-			effect = {
-				set_owner = root
-				if = {
-					limit = {
-						owner = {
-							OR = {
-								is_megacorp = yes
-								has_civic = civic_corporate_dominion
-								has_civic = civic_merchant_guilds
-							}
-						}
-					}
-					set_name = "Phat Lewtz"
-					create_ship = {
-						name = "Phat Lewtz"
-						random_existing_design = sponsored_colonizer
-						graphical_culture = hfe_graphical_culture_pirate
-					}
-				}
-				else_if = {
-					limit = {
-						owner = {
-							is_lithoid = yes
-						}
-					}
-					set_name = "Rock Lobster"
-					create_ship = {
-						name = "We Will Rock You"
-						random_existing_design = lithoid_colonizer
-						graphical_culture = lithoid_01
-					}
-				}
-				else = {
-					create_ship = {
-						name = "New Hope"
-						random_existing_design = colonizer
-						graphical_culture = hfe_graphical_culture_pirate_full_color
-					}
-				}
-				save_event_target_as = hfe_exodus_colony_ship
-				set_fleet_stance = evasive
-				set_location = root.capital_scope.star
-			}
-		}
-		# kill pops
-		every_owned_pop = {
-			prevprev = {
-				change_variable = {
-					which = hfe_features_exodus_pop
-					value = 1
-				}
-			}
-			kill_pop = yes
-		}
-		# change capital
-		capital_scope = {
-			set_name = "The End"
-			save_event_target_as = hfe_former_exodus_capital
-			change_pc = pc_broken
-			# play_sound = shattered_planet_explosion
-			set_planet_flag = hfe_exodus_happened_here
-			add_modifier = {
-				modifier = tsp_hfe_exodus_start_planet_modifier
-			}
-			# Orbital deposit
-			set_deposit = hfe_exodus_start_point
-		}
-		# remove constructors
-		every_owned_fleet = {
-			limit = {
-				or = {
-					is_ship_class = shipclass_constructor
-					is_ship_class = shipclass_mining_station
-					is_ship_class = shipclass_research_station
-					is_ship_class = shipclass_starbase
-				}
-			}
-			delete_fleet = this
-		}
-		every_owned_fleet = {
-			limit = {
-				is_ship_class = shipclass_military
-			}
-			auto_follow_fleet = {
-				target = event_target:hfe_exodus_colony_ship
-				attack_fleet = no
-			}
-		}
+		# 	create_fleet = {
+		# 		name = "Great White Hope"
+		# 		effect = {
+		# 			set_owner = root
+		# 			create_ship = {
+		# 				name = "Great White Hope"
+		# 				random_existing_design = destroyer
+		# 				graphical_culture = hfe_graphical_culture_pirate
+		# 			}
+		# 			create_ship = {
+		# 				name = "Great Blue Hope"
+		# 				random_existing_design = corvette
+		# 				graphical_culture = hfe_graphical_culture_pirate
+		# 			}
+		# 			create_ship = {
+		# 				name = "Great Yellow Hope"
+		# 				random_existing_design = corvette
+		# 				graphical_culture = hfe_graphical_culture_pirate
+		# 			}
+		# 			set_fleet_stance = passive
+		# 			set_location = event_target:hfe_features_exodus_capital
+		# 		}
+		# 	}
+		# }
 		# flavor
-		create_fleet = {
-			name = "Central Command"
-			set_take_point = yes
-			effect = {
-				set_owner = root
-				create_ship = {
-					name = "Flagship"
-					prefix = yes
-					design = "NAME_Diaspora"
-					effect = {
-						save_event_target_as = exodus_flavor_custom_capital
-					}
-				}
-				set_location = root.capital_scope.star
-			}
-		}
-		set_custom_capital_location = event_target:exodus_flavor_custom_capital
+		# create_fleet = {
+		# 	name = "Central Command"
+		# 	set_take_point = yes
+		# 	effect = {
+		# 		set_owner = root
+		# 		create_ship = {
+		# 			name = "Flagship"
+		# 			prefix = yes
+		# 			design = "NAME_Diaspora"
+		# 			effect = {
+		# 				save_event_target_as = exodus_flavor_custom_capital
+		# 			}
+		# 		}
+		# 		set_location = event_target:hfe_features_exodus_capital
+		# 	}
+		# }
+		# set_custom_capital_location = event_target:exodus_flavor_custom_capital
+		# disabled because they still follow even after interuption
+		# every_owned_fleet = {
+		# 	limit = {
+		# 		is_ship_class = shipclass_military
+		# 	}
+		# 	auto_follow_fleet = {
+		# 		target = event_target:hfe_exodus_colony_ship
+		# 		attack_fleet = no
+		# 	}
+		# }
 		if = {
 			limit = {
 				has_global_flag = HFE_TSP_spawn_test
@@ -869,6 +794,17 @@ country_event = {
 	show_sound = event_airlock
 	# show_sound = amb_colony_ship_hum
 	is_triggered_only = yes
+	trigger = {
+		exists = from
+	}
+	option = {
+		name = hfe_features.14.same_planet
+		exclusive_trigger = {
+			from = {
+				has_planet_flag = hfe_features_exodus_from@owner
+			}
+		}
+	}
 	option = {
 		name = hfe_features.14.0
 	}
@@ -940,13 +876,22 @@ country_event = {
 		}
 	}
 	after = {
-		play_sound = event_celebration
-		add_resource = {
-			minerals = 1000
-			energy = 1000
-			food = 1000
-			unity = 3000
-			influence = 200
+		if = {
+			limit = {
+				not = {
+					from = {
+						has_planet_flag = hfe_features_exodus_from@owner
+					}
+				}
+			}
+			play_sound = event_celebration
+			add_resource = {
+				minerals = 1000
+				energy = 1000
+				food = 1000
+				unity = 3000
+				influence = 200
+			}
 		}
 		if = {
 			limit = {
@@ -971,7 +916,7 @@ country_event = {
 	is_triggered_only = yes
 	show_sound = ship_destroyed_big_explosion
 	trigger = {
-		is_country_type = hfe_features_exodus
+		has_country_flag = hfe_features_exodus
 		exists = fromfrom
 		fromfrom = {
 			is_ship_class = shipclass_colonizer
@@ -1062,6 +1007,7 @@ planet_event = {
 	is_triggered_only = yes
 	trigger = {
 		exists = solar_system
+		exists = owner
 	}
 	immediate = {
 		set_planet_flag = hfe_features_human_2_extended
